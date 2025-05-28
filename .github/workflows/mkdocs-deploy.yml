@@ -3,7 +3,7 @@ name: Deploy MkDocs to GitHub Pages
 on:
   push:
     branches:
-      - main # Change to 'master' if your default branch is 'master'
+      - main  # Or 'master' if that's your default branch
 
 jobs:
   deploy:
@@ -20,12 +20,13 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install mkdocs mkdocs-material  # Add other plugins if needed
+          pip install mkdocs mkdocs-material
+
+      - name: Build MkDocs
+        run: mkdocs build --strict
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site
-      - name: Build MkDocs
-        run: mkdocs build --strict
