@@ -1,6 +1,7 @@
 site_name: My Wiki
 site_url: https://adi14041999.github.io/my_wiki/
 site_description: A personal wiki for notes, ideas, and projects.
+use_directory_urls: true
 theme:
   name: material
   features:
