@@ -9,7 +9,7 @@ When the sample space is finite, we can visualize it as Pebble World (figure abo
 
 Set theory is very useful in probability, since it provides a rich language for express_ing and working with events. Set operations, especially unions, intersections, and complements, make it easy to build new events in terms of already defined events.
 
-### Example: 
+**Example**: 
 A coin is flipped 10 times. Writing Heads as **H** and Tails as **T**, a possible outcome is: HHHTHHTTHT.
 The sample space is the set of all possible strings of length 10 consisting of **H**'s and **T**'s.
 We can (and will) encode **H** as `1` and **T** as `0`, so that an outcome is a sequence:
