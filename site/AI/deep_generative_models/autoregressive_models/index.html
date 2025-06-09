@@ -508,6 +508,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#learning-and-inference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Learning and inference
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -749,6 +758,152 @@ This function takes in a vector of size (i-1) where each element is a 0 or a 1, 
 <div class="arithmatex">\[
 \sum_{i=1}^n \left| \theta_i \right|
 \]</div>
+<p>In the simplest case, we can specify the function as a linear combination of the input elements followed by a sigmoid non-linearity (to restrict the output to lie between 0 and 1). This gives us the formulation of a fully-visible sigmoid belief network (FVSBN).</p>
+<div class="arithmatex">\[
+f_i(x_1, x_2, \dots, x_{i-1}) = \sigma(\alpha^{(i)}_0 + \alpha^{(i)}_1 x_1 + \dots + \alpha^{(i)}_{i-1} x_{i-1})
+\]</div>
+<p>where <span class="arithmatex">\(\sigma\)</span> denotes the sigmoid function and <span class="arithmatex">\(\theta_i = \{\alpha^{(i)}_0, \alpha^{(i)}_1, \dots, \alpha^{(i)}_{i-1}\}\)</span> denote the parameters of the mean function. The conditional for variable <span class="arithmatex">\(i\)</span> requires <span class="arithmatex">\(i\)</span> parameters, and hence the total number of parameters in the model is given by <span class="arithmatex">\(\sum_{i=1}^n i = O(n^2)\)</span>. Note that the number of parameters are much fewer than the exponential complexity of the tabular case.</p>
+<p>A natural way to increase the expressiveness of an autoregressive generative model is to use more flexible parameterizations for the mean function e.g., multi-layer perceptrons (MLP). For example, consider the case of a neural network with 1 hidden layer. The mean function for variable <span class="arithmatex">\(i\)</span> can be expressed as</p>
+<div class="arithmatex">\[
+\begin{align}
+\mathbf{h}_i &amp;= \sigma(\mathbf{A}_i \mathbf{x}_{&lt;i} + \mathbf{c}_i) \\
+f_i(x_1, x_2, \dots, x_{i-1}) &amp;= \sigma(\boldsymbol{\alpha}^{(i)} \mathbf{h}_i + b_i)
+\end{align}
+\]</div>
+<p>where <span class="arithmatex">\(\mathbf{h}_i \in \mathbb{R}^d\)</span> denotes the hidden layer activations for the MLP and <span class="arithmatex">\(\theta_i = \{\mathbf{A}_i \in \mathbb{R}^{d \times (i-1)}, \mathbf{c}_i \in \mathbb{R}^d, \boldsymbol{\alpha}^{(i)} \in \mathbb{R}^d, b_i \in \mathbb{R}\}\)</span> are the set of parameters for the mean function <span class="arithmatex">\(\mu_i(\cdot)\)</span>. The total number of parameters in this model is dominated by the matrices <span class="arithmatex">\(\mathbf{A}_i\)</span> and given by <span class="arithmatex">\(O(n^2d)\)</span>.</p>
+<blockquote>
+<p><strong>Note</strong>: The term "mean function" here refers to the function that determines the mean (expected value) of the Bernoulli distribution for each variable. Since we're modeling binary variables, the mean of the Bernoulli distribution is the probability of the variable being 1. The sigmoid function <span class="arithmatex">\(\sigma\)</span> ensures that this probability lies between 0 and 1.</p>
+</blockquote>
+<p>For a Bernoulli random variable <span class="arithmatex">\(X\)</span> with parameter <span class="arithmatex">\(p\)</span>, the expectation (mean) is given by:</p>
+<div class="arithmatex">\[
+\mathbb{E}[X] = 1 \cdot p + 0 \cdot (1-p) = p
+\]</div>
+<p>This is because:
+- <span class="arithmatex">\(X\)</span> takes value 1 with probability <span class="arithmatex">\(p\)</span>
+- <span class="arithmatex">\(X\)</span> takes value 0 with probability <span class="arithmatex">\((1-p)\)</span>
+- The expectation is the weighted sum of all possible values, where the weights are their respective probabilities</p>
+<p>Therefore, when we say the mean function determines the mean of the Bernoulli distribution, we're saying it determines the probability <span class="arithmatex">\(p\)</span> of the variable being 1.</p>
+<p>The Neural Autoregressive Density Estimator (NADE) provides an alternate MLP-based parameterization that is more statistically and computationally efficient than the vanilla approach. In NADE, parameters are shared across the functions used for evaluating the conditionals. In particular, the hidden layer activations are specified as</p>
+<div class="arithmatex">\[
+\begin{align}
+\mathbf{h}_i &amp;= \sigma(\mathbf{W}_{.,&lt;i} \mathbf{x}_{&lt;i} + \mathbf{c}) \\
+f_i(x_1, x_2, \dots, x_{i-1}) &amp;= \sigma(\boldsymbol{\alpha}^{(i)} \mathbf{h}_i + b_i)
+\end{align}
+\]</div>
+<p>where <span class="arithmatex">\(\theta = \{\mathbf{W} \in \mathbb{R}^{d \times n}, \mathbf{c} \in \mathbb{R}^d, \{\boldsymbol{\alpha}^{(i)} \in \mathbb{R}^d\}_{i=1}^n, \{b_i \in \mathbb{R}\}_{i=1}^n\}\)</span> is the full set of parameters for the mean functions <span class="arithmatex">\(f_1(\cdot), f_2(\cdot), \dots, f_n(\cdot)\)</span>. The weight matrix <span class="arithmatex">\(\mathbf{W}\)</span> and the bias vector <span class="arithmatex">\(\mathbf{c}\)</span> are shared across the conditionals. Sharing parameters offers two benefits:</p>
+<ol>
+<li>
+<p>The total number of parameters gets reduced from <span class="arithmatex">\(O(n^2d)\)</span> to <span class="arithmatex">\(O(nd)\)</span>.</p>
+</li>
+<li>
+<p>The hidden unit activations can be evaluated in <span class="arithmatex">\(O(nd)\)</span> time via the following recursive strategy:</p>
+</li>
+</ol>
+<div class="arithmatex">\[
+\begin{align}
+\mathbf{h}_i &amp;= \sigma(\mathbf{a}_i) \\
+\mathbf{a}_{i+1} &amp;= \mathbf{a}_i + \mathbf{W}_{[.,i]} x_i
+\end{align}
+\]</div>
+<p>with the base case given by <span class="arithmatex">\(\mathbf{a}_1 = \mathbf{c}\)</span>.</p>
+<p>The RNADE algorithm extends NADE to learn generative models over real-valued data. Here, the conditionals are modeled via a continuous distribution such as a equi-weighted mixture of <span class="arithmatex">\(K\)</span> Gaussians. Instead of learning a mean function, we now learn the means <span class="arithmatex">\(\mu_{i,1}, \mu_{i,2}, \dots, \mu_{i,K}\)</span> and variances <span class="arithmatex">\(\Sigma_{i,1}, \Sigma_{i,2}, \dots, \Sigma_{i,K}\)</span> of the <span class="arithmatex">\(K\)</span> Gaussians for every conditional. For statistical and computational efficiency, a single function <span class="arithmatex">\(g_i: \mathbb{R}^{i-1} \to \mathbb{R}^{2K}\)</span> outputs all the means and variances of the <span class="arithmatex">\(K\)</span> Gaussians for the <span class="arithmatex">\(i\)</span>-th conditional distribution.</p>
+<p>The conditional distribution <span class="arithmatex">\(p_{\theta_i}(x_i \mid \mathbf{x}_{&lt;i})\)</span> in RNADE is given by:</p>
+<div class="arithmatex">\[
+p_{\theta_i}(x_i \mid \mathbf{x}_{&lt;i}) = \frac{1}{K} \sum_{k=1}^K \mathcal{N}(x_i; \mu_{i,k}, \Sigma_{i,k})
+\]</div>
+<p>where <span class="arithmatex">\(\mathcal{N}(x; \mu, \Sigma)\)</span> denotes the probability density of a Gaussian distribution with mean <span class="arithmatex">\(\mu\)</span> and variance <span class="arithmatex">\(\Sigma\)</span> evaluated at <span class="arithmatex">\(x\)</span>. The parameters <span class="arithmatex">\(\{\mu_{i,k}, \Sigma_{i,k}\}_{k=1}^K\)</span> are the outputs of the function <span class="arithmatex">\(g_i(\mathbf{x}_{&lt;i})\)</span>.</p>
+<p>This is how RNADE is autoregressive. Example sequence showing autoregressive dependencies:</p>
+<p><span class="arithmatex">\(x_1\)</span>: 
+  - Input to <span class="arithmatex">\(g_1\)</span>: <span class="arithmatex">\(\mathbf{x}_{&lt;1} = []\)</span> (empty)
+  - Output: <span class="arithmatex">\(\{\mu_{1,k}, \Sigma_{1,k}\}_{k=1}^K\)</span> for <span class="arithmatex">\(p(x_1)\)</span></p>
+<p><span class="arithmatex">\(x_2\)</span>: 
+  - Input to <span class="arithmatex">\(g_2\)</span>: <span class="arithmatex">\(\mathbf{x}_{&lt;2} = [x_1]\)</span>
+  - Output: <span class="arithmatex">\(\{\mu_{2,k}, \Sigma_{2,k}\}_{k=1}^K\)</span> for <span class="arithmatex">\(p(x_2 \mid x_1)\)</span></p>
+<p><span class="arithmatex">\(x_3\)</span>: 
+  - Input to <span class="arithmatex">\(g_3\)</span>: <span class="arithmatex">\(\mathbf{x}_{&lt;3} = [x_1, x_2]\)</span>
+  - Output: <span class="arithmatex">\(\{\mu_{3,k}, \Sigma_{3,k}\}_{k=1}^K\)</span> for <span class="arithmatex">\(p(x_3 \mid x_1, x_2)\)</span></p>
+<p><span class="arithmatex">\(x_4\)</span>: 
+  - Input to <span class="arithmatex">\(g_4\)</span>: <span class="arithmatex">\(\mathbf{x}_{&lt;4} = [x_1, x_2, x_3]\)</span>
+  - Output: <span class="arithmatex">\(\{\mu_{4,k}, \Sigma_{4,k}\}_{k=1}^K\)</span> for <span class="arithmatex">\(p(x_4 \mid x_1, x_2, x_3)\)</span></p>
+<p>This sequential, conditional generation process is what makes RNADE an autoregressive model. The mixture of Gaussians is just the form of the conditional distribution, but the autoregressive property comes from how these distributions are parameterized based on previous variables.</p>
+<h2 id="learning-and-inference">Learning and inference</h2>
+<p>Recall that learning a generative model involves optimizing the closeness between the data and model distributions. One commonly used notion of closeness is the KL divergence between the data and the model distributions:</p>
+<div class="arithmatex">\[
+\min_{\theta \in \Theta} d_{KL}(p_{data}, p_{\theta}) = \min_{\theta \in \Theta} \mathbb{E}_{x \sim p_{data}}[\log p_{data}(x) - \log p_{\theta}(x)]
+\]</div>
+<p>where:
+- <span class="arithmatex">\(p_{data}\)</span> is the true data distribution
+- <span class="arithmatex">\(p_{\theta}\)</span> is our model distribution parameterized by <span class="arithmatex">\(\theta\)</span>
+- <span class="arithmatex">\(\Theta\)</span> is the set of all possible parameter values
+- <span class="arithmatex">\(d_{KL}\)</span> is the Kullback-Leibler divergence</p>
+<p>Let's break down how this minimization works:</p>
+<ol>
+<li>For a fixed value of <span class="arithmatex">\(\theta\)</span>, we compute:</li>
+<li>The expectation over all possible data points <span class="arithmatex">\(x\)</span> from <span class="arithmatex">\(p_{data}\)</span></li>
+<li>For each <span class="arithmatex">\(x\)</span>, we compute <span class="arithmatex">\(\log p_{data}(x) - \log p_{\theta}(x)\)</span></li>
+<li>
+<p>This gives us a single scalar value for this particular <span class="arithmatex">\(\theta\)</span></p>
+</li>
+<li>
+<p>The minimization operator <span class="arithmatex">\(\min_{\theta \in \Theta}\)</span> then:</p>
+</li>
+<li>Tries different values of <span class="arithmatex">\(\theta\)</span> in the parameter space <span class="arithmatex">\(\Theta\)</span></li>
+<li>
+<p>Finds the <span class="arithmatex">\(\theta\)</span> that gives the smallest expected value</p>
+</li>
+<li>
+<p>Since <span class="arithmatex">\(p_{data}\)</span> is constant with respect to <span class="arithmatex">\(\theta\)</span>, minimizing the KL divergence is equivalent to maximizing the expected log-likelihood of the data under our model:</p>
+</li>
+</ol>
+<div class="arithmatex">\[
+\max_{\theta \in \Theta} \mathbb{E}_{x \sim p_{data}}[\log p_{\theta}(x)]
+\]</div>
+<p>This is because <span class="arithmatex">\(\log p_{data}(x)\)</span> doesn't depend on <span class="arithmatex">\(\theta\)</span>, so it can be treated as a constant. Minimizing <span class="arithmatex">\(-\log p_{\theta}(x)\)</span> is the same as maximizing <span class="arithmatex">\(\log p_{\theta}(x)\)</span></p>
+<p>To approximate the expectation over the unknown <span class="arithmatex">\(p_{data}\)</span>, we make an assumption: points in the dataset <span class="arithmatex">\(\mathcal{D}\)</span> are sampled i.i.d. from <span class="arithmatex">\(p_{data}\)</span>. This allows us to obtain an unbiased Monte Carlo estimate of the objective as:</p>
+<div class="arithmatex">\[
+\max_{\theta \in \Theta} \frac{1}{|\mathcal{D}|} \sum_{x \in \mathcal{D}} \log p_{\theta}(x) = \mathcal{L}(\theta | \mathcal{D})
+\]</div>
+<p>The maximum likelihood estimation (MLE) objective has an intuitive interpretation: pick the model parameters <span class="arithmatex">\(\theta \in \Theta\)</span> that maximize the log-probability of the observed datapoints in <span class="arithmatex">\(\mathcal{D}\)</span>.</p>
+<p>In practice, we optimize the MLE objective using mini-batch gradient ascent. The algorithm operates in iterations. At every iteration <span class="arithmatex">\(t\)</span>, we sample a mini-batch <span class="arithmatex">\(\mathcal{B}_t\)</span> of datapoints sampled randomly from the dataset (<span class="arithmatex">\(|\mathcal{B}_t| &lt; |\mathcal{D}|\)</span>) and compute gradients of the objective evaluated for the mini-batch. These parameters at iteration <span class="arithmatex">\(t+1\)</span> are then given via the following update rule:</p>
+<div class="arithmatex">\[
+\theta^{(t+1)} = \theta^{(t)} + r_t \nabla_{\theta} \mathcal{L}(\theta^{(t)} | \mathcal{B}_t)
+\]</div>
+<p>where <span class="arithmatex">\(\theta^{(t+1)}\)</span> and <span class="arithmatex">\(\theta^{(t)}\)</span> are the parameters at iterations <span class="arithmatex">\(t+1\)</span> and <span class="arithmatex">\(t\)</span> respectively, and <span class="arithmatex">\(r_t\)</span> is the learning rate at iteration <span class="arithmatex">\(t\)</span>. Typically, we only specify the initial learning rate <span class="arithmatex">\(r_1\)</span> and update the rate based on a schedule.</p>
+<p>Now that we have a well-defined objective and optimization procedure, the only remaining task is to evaluate the objective in the context of an autoregressive generative model. To this end, we first write the MLE objective in terms of the joint probability:</p>
+<div class="arithmatex">\[
+\max_{\theta \in \Theta} \frac{1}{|\mathcal{D}|} \sum_{x \in \mathcal{D}} \log p_{\theta}(x)
+\]</div>
+<p>Then, we substitute the factorized joint distribution of an autoregressive model. Since <span class="arithmatex">\(p_{\theta}(x) = \prod_{i=1}^n p_{\theta_i}(x_i | x_{&lt;i})\)</span>, we have:</p>
+<div class="arithmatex">\[
+\log p_{\theta}(x) = \log \prod_{i=1}^n p_{\theta_i}(x_i | x_{&lt;i}) = \sum_{i=1}^n \log p_{\theta_i}(x_i | x_{&lt;i})
+\]</div>
+<p>Substituting this into the MLE objective, we get:</p>
+<div class="arithmatex">\[
+\max_{\theta \in \Theta} \frac{1}{|\mathcal{D}|} \sum_{x \in \mathcal{D}} \sum_{i=1}^n \log p_{\theta_i}(x_i | x_{&lt;i})
+\]</div>
+<p>where <span class="arithmatex">\(\theta = \{\theta_1, \theta_2, \dots, \theta_n\}\)</span> now denotes the collective set of parameters for the conditionals.</p>
+<p>Inference in an autoregressive model is straightforward. For density estimation of an arbitrary point <span class="arithmatex">\(x\)</span>, we simply evaluate the log-conditionals <span class="arithmatex">\(\log p_{\theta_i}(x_i | x_{&lt;i})\)</span> for each <span class="arithmatex">\(i\)</span> and add these up to obtain the log-likelihood assigned by the model to <span class="arithmatex">\(x\)</span>. Since we have the complete vector <span class="arithmatex">\(x = [x_1, x_2, \dots, x_n]\)</span>, we know all the values needed for each conditional <span class="arithmatex">\(x_{&lt;i}\)</span>, so each of the conditionals can be evaluated in parallel. Hence, density estimation is efficient on modern hardware.</p>
+<p>For example, given a 4-dimensional vector <span class="arithmatex">\(x = [x_1, x_2, x_3, x_4]\)</span>, we can compute all conditionals in parallel:</p>
+<ul>
+<li><span class="arithmatex">\(\log p_{\theta_1}(x_1)\)</span> (no conditioning needed)</li>
+<li><span class="arithmatex">\(\log p_{\theta_2}(x_2 | x_1)\)</span> (using known <span class="arithmatex">\(x_1\)</span>)</li>
+<li><span class="arithmatex">\(\log p_{\theta_3}(x_3 | x_1, x_2)\)</span> (using known <span class="arithmatex">\(x_1, x_2\)</span>)</li>
+<li><span class="arithmatex">\(\log p_{\theta_4}(x_4 | x_1, x_2, x_3)\)</span> (using known <span class="arithmatex">\(x_1, x_2, x_3\)</span>)</li>
+</ul>
+<p>Then sum them to get the total log-likelihood: <span class="arithmatex">\(\log p_{\theta}(x) = \sum_{i=1}^4 \log p_{\theta_i}(x_i | x_{&lt;i})\)</span></p>
+<p>Sampling from an autoregressive model is a sequential procedure. Here, we first sample <span class="arithmatex">\(x_1\)</span>, then we sample <span class="arithmatex">\(x_2\)</span> conditioned on the sampled <span class="arithmatex">\(x_1\)</span>, followed by <span class="arithmatex">\(x_3\)</span> conditioned on both <span class="arithmatex">\(x_1\)</span> and <span class="arithmatex">\(x_2\)</span> and so on until we sample <span class="arithmatex">\(x_n\)</span> conditioned on the previously sampled <span class="arithmatex">\(x_{&lt;n}\)</span>. For applications requiring real-time generation of high-dimensional data such as audio synthesis, the sequential sampling can be an expensive process.</p>
+<p>Finally, an autoregressive model does not directly learn unsupervised representations of the data. This is because:</p>
+<ol>
+<li>The model directly models the data distribution <span class="arithmatex">\(p(x)\)</span> through a sequence of conditional distributions <span class="arithmatex">\(p(x_i | x_{&lt;i})\)</span></li>
+<li>There is no explicit latent space or bottleneck that forces the model to learn a compressed representation</li>
+<li>Each variable is modeled based on previous variables, but there's no mechanism to learn a global, compressed representation of the entire data point</li>
+<li>The model's parameters <span class="arithmatex">\(\theta_i\)</span> are specific to each conditional distribution and don't encode a meaningful representation of the data</li>
+</ol>
+<p>In contrast, latent variable models like variational autoencoders explicitly learn a compressed representation by:
+1. Introducing a latent space <span class="arithmatex">\(z\)</span> that captures the essential features of the data
+2. Learning an encoder that maps data to this latent space
+3. Learning a decoder that reconstructs data from the latent space
+4. Using a bottleneck that forces the model to learn meaningful representations</p>
 
 
 
