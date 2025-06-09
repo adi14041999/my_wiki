@@ -743,7 +743,8 @@ p_{\theta_i}(x_i \mid x_{&lt;i}) = \text{Bern} \left( f_i(x_1, x_2, \dots, x_{i-
 <div class="arithmatex">\[
 f_i : \{0,1\}^{i-1} \to [0,1]
 \]</div>
-<p>and theta_i denotes the set of parameters used to specify this function.</p>
+<p>and theta_i denotes the set of parameters used to specify this function.
+This function takes in a vector of size (i-1) where each element is a 0 or a 1, and outputs a scalar bit.</p>
 <p>The total number of parameters in an autoregressive generative model is given by:</p>
 <div class="arithmatex">\[
 \sum_{i=1}^n \left| \theta_i \right|
