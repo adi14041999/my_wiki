@@ -104,3 +104,83 @@ This optimization objective can be broken down into two parts:
 2. **Outer Optimization**: Across all datapoints in the dataset $\mathcal{D}$, we find the best model parameters $\theta$ that maximize the average ELBO. This improves the generative model's ability to explain the data.
 
 The outer sum $\sum_{x \in \mathcal{D}}$ is necessary because we want to learn a model that works well for all datapoints in our dataset, not just a single example. This is equivalent to maximizing the average ELBO across all datapoints.
+
+## Black-Box Variational Inference
+We shall focus on first-order stochastic gradient methods for optimizing the ELBO.
+This inspires Black-Box Variational Inference (BBVI), a general-purpose Expectation-Maximization-like algorithm for variational learning of latent variable models, where, for each mini-batch $\mathcal{B} = \{x^{(1)}, \ldots, x^{(m)}\}$, the following two steps are performed.
+
+**Step 1**
+
+We first do per-sample optimization of $q$ by iteratively applying the update
+
+$$\lambda^{(i)} \leftarrow \lambda^{(i)} + \tilde{\nabla}_\lambda \text{ELBO}(x^{(i)}; \theta, \lambda^{(i)}),$$
+
+where $\text{ELBO}(x; \theta, \lambda) = \mathbb{E}_{q_\lambda(z)}\left[\log\frac{p_\theta(x,z)}{q_\lambda(z)}\right]$, and $\tilde{\nabla}_\lambda$ denotes an unbiased estimate of the ELBO gradient. This step seeks to approximate the log-likelihood $\log p_\theta(x^{(i)})$.
+
+**Step 2**
+
+We then perform a single update step based on the mini-batch
+
+$$\theta \leftarrow \theta + \tilde{\nabla}_\theta \sum_i \text{ELBO}(x^{(i)}; \theta, \lambda^{(i)}),$$
+
+which corresponds to the step that hopefully moves $p_\theta$ closer to $p_{data}$.
+
+## Gradient Estimation
+
+The gradients $\nabla_\lambda \text{ELBO}$ and $\nabla_\theta \text{ELBO}$ can be estimated via Monte Carlo sampling. While it is straightforward to construct an unbiased estimate of $\nabla_\theta \text{ELBO}$ by simply pushing $\nabla_\theta$ through the expectation operator, the same cannot be said for $\nabla_\lambda$. Instead, we see that
+
+$$\nabla_\lambda \mathbb{E}_{q_\lambda(z)}\left[\log\frac{p_\theta(x,z)}{q_\lambda(z)}\right] = \mathbb{E}_{q_\lambda(z)}\left[\left(\log\frac{p_\theta(x,z)}{q_\lambda(z)}\right) \cdot \nabla_\lambda \log q_\lambda(z)\right].$$
+
+This equality follows from the log-derivative trick (also commonly referred to as the REINFORCE trick). To derive this, we start with the gradient of the expectation:
+
+$$\nabla_\lambda \mathbb{E}_{q_\lambda(z)}\left[\log\frac{p_\theta(x,z)}{q_\lambda(z)}\right] = \nabla_\lambda \int q_\lambda(z) \log\frac{p_\theta(x,z)}{q_\lambda(z)} dz$$
+
+Using the product rule and chain rule:
+
+$$= \int \nabla_\lambda q_\lambda(z) \cdot \log\frac{p_\theta(x,z)}{q_\lambda(z)} + q_\lambda(z) \cdot \nabla_\lambda \log\frac{p_\theta(x,z)}{q_\lambda(z)} dz$$
+
+The second term vanishes because:
+$\nabla_\lambda \log\frac{p_\theta(x,z)}{q_\lambda(z)} = \nabla_\lambda [\log p_\theta(x,z) - \log q_\lambda(z)]$.
+Since $p_\theta(x,z)$ doesn't depend on $\lambda$, $\nabla_\lambda \log p_\theta(x,z) = 0$. Therefore, $\nabla_\lambda \log\frac{p_\theta(x,z)}{q_\lambda(z)} = -\nabla_\lambda \log q_\lambda(z)$. 
+When we multiply by $q_\lambda(z)$ and integrate, we get:
+
+$$\int q_\lambda(z) \cdot (-\nabla_\lambda \log q_\lambda(z)) dz = -\int \nabla_\lambda q_\lambda(z) dz = -\nabla_\lambda \int q_\lambda(z) dz = -\nabla_\lambda 1 = 0$$
+
+where we used the fact that $\int q_\lambda(z) dz = 1$ for any valid probability distribution.
+
+For the first term, we use the identity $\nabla_\lambda q_\lambda(z) = q_\lambda(z) \nabla_\lambda \log q_\lambda(z)$:
+
+$$= \int q_\lambda(z) \nabla_\lambda \log q_\lambda(z) \cdot \log\frac{p_\theta(x,z)}{q_\lambda(z)} dz$$
+
+This can be rewritten as an expectation:
+
+$$= \mathbb{E}_{q_\lambda(z)}\left[\left(\log\frac{p_\theta(x,z)}{q_\lambda(z)}\right) \cdot \nabla_\lambda \log q_\lambda(z)\right]$$
+
+The gradient estimator $\tilde{\nabla}_\lambda \text{ELBO}$ is thus
+
+$$\frac{1}{k}\sum_{i=1}^k \left[\left(\log\frac{p_\theta(x,z^{(i)})}{q_\lambda(z^{(i)})}\right) \cdot \nabla_\lambda \log q_\lambda(z^{(i)})\right], \text{ where } z^{(i)} \sim q_\lambda(z).$$
+
+However, it is often noted that this estimator suffers from high variance. One of the key contributions of the variational autoencoder paper is the reparameterization trick, which introduces a fixed, auxiliary distribution $p(\epsilon)$ and a differentiable function $T(\epsilon; \lambda)$ such that the procedure
+
+$$\epsilon \sim p(\epsilon)$$
+
+$$z \leftarrow T(\epsilon; \lambda),$$
+
+is equivalent to sampling from $q_\lambda(z)$. This two-step procedure works as follows:
+
+1. First, we sample $\epsilon$ from a fixed distribution $p(\epsilon)$ that doesn't depend on $\lambda$ (e.g., standard normal)
+2. Then, we transform this sample using a deterministic function $T(\epsilon; \lambda)$ that depends on $\lambda$
+
+The key insight is that if we choose $T$ appropriately, the distribution of $z = T(\epsilon; \lambda)$ will be exactly $q_\lambda(z)$. For example, if $q_\lambda(z)$ is a normal distribution with mean $\mu_\lambda$ and standard deviation $\sigma_\lambda$, we can use:
+
+$p(\epsilon) = \mathcal{N}(0, 1)$
+
+$T(\epsilon; \lambda) = \mu_\lambda + \sigma_\lambda \cdot \epsilon$
+
+By the Law of the Unconscious Statistician, we can see that
+
+$$\nabla_\lambda \mathbb{E}_{q_\lambda(z)}\left[\log\frac{p_\theta(x,z)}{q_\lambda(z)}\right] = \mathbb{E}_{p(\epsilon)}\left[\nabla_\lambda \log\frac{p_\theta(x,T(\epsilon; \lambda))}{q_\lambda(T(\epsilon; \lambda))}\right].$$
+
+In contrast to the REINFORCE trick, the reparameterization trick is often noted empirically to have lower variance and thus results in more stable training.
+
+
