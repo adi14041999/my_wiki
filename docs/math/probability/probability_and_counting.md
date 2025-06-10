@@ -22,7 +22,7 @@ Some Events:
 
 1. Event A_1: the first flip is Heads. As a set:
 $$
-A_1 =  (1, s_2, \dots, s_{10}) \; \mid \; s_j \in \{0,1\}, \; 2 \leq j \leq 10 
+A_1 =  (1, s_2, \dots, s_{10}) \; \mid \; s_j \in \{0,1\} \; \text{and } 2 \leq j \leq 10 
 $$
 This is a subset of the sample space, so it is indeed an event. Saying that A_1 occurs is equivalent to saying that the first flip is Heads. Similarly, let A_j be the event that the j-th flip is Heads, for:
 $$
@@ -41,3 +41,16 @@ $$
 D = \bigcup_{j=1}^{9} \left( A_j \cap A_{j+1} \right)
 $$
 ![image](english_to_sets.png)
+
+## Naive definition of probability
+
+(Naive definition of probability). Let \( A \) be an event for an experiment with a finite sample space \( S \). The naive probability of \( A \) is
+
+\[
+P_{\text{naive}}(A) = \frac{|A|}{|S|} = \frac{\text{number of outcomes favorable to } A}{\text{total number of outcomes in } S}
+\]
+
+The naive definition is very restrictive in that it requires S to be finite, with equal
+mass for each pebble. It has often been misapplied by people who assume equally
+likely outcomes without justification and make arguments to the eﬀect of “either
+it will happen or it won’t, and we don’t know which, so it’s 50-50”.
