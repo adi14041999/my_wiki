@@ -581,6 +581,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#parameterizing-distributions-via-deep-neural-networks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameterizing Distributions via Deep Neural Networks
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -858,6 +867,40 @@ When we multiply by <span class="arithmatex">\(q_\lambda(z)\)</span> and integra
 <p>By the Law of the Unconscious Statistician, we can see that</p>
 <div class="arithmatex">\[\nabla_\lambda \mathbb{E}_{q_\lambda(z)}\left[\log\frac{p_\theta(x,z)}{q_\lambda(z)}\right] = \mathbb{E}_{p(\epsilon)}\left[\nabla_\lambda \log\frac{p_\theta(x,T(\epsilon; \lambda))}{q_\lambda(T(\epsilon; \lambda))}\right].\]</div>
 <p>In contrast to the REINFORCE trick, the reparameterization trick is often noted empirically to have lower variance and thus results in more stable training.</p>
+<h2 id="parameterizing-distributions-via-deep-neural-networks">Parameterizing Distributions via Deep Neural Networks</h2>
+<p>So far, we have described <span class="arithmatex">\(p_\theta(x,z)\)</span> and <span class="arithmatex">\(q_\lambda(z)\)</span> in the abstract. To instantiate these objects, we consider choices of parametric distributions for <span class="arithmatex">\(p_\theta(z)\)</span>, <span class="arithmatex">\(p_\theta(x|z)\)</span>, and <span class="arithmatex">\(q_\lambda(z)\)</span>. A popular choice for <span class="arithmatex">\(p_\theta(z)\)</span> is the unit Gaussian</p>
+<div class="arithmatex">\[p_\theta(z) = \mathcal{N}(z|0,I),\]</div>
+<p>in which case <span class="arithmatex">\(\theta\)</span> is simply the empty set since the prior is a fixed distribution.</p>
+<p>In the case where <span class="arithmatex">\(p_\theta(x|z)\)</span> is a Gaussian distribution, we can thus represent it as</p>
+<div class="arithmatex">\[p_\theta(x|z) = \mathcal{N}(x|\mu_\theta(z), \Sigma_\theta(z)),\]</div>
+<p>where <span class="arithmatex">\(\mu_\theta(z)\)</span> and <span class="arithmatex">\(\Sigma_\theta(z)\)</span> are neural networks that specify the mean and covariance matrix for the Gaussian distribution over <span class="arithmatex">\(x\)</span> when conditioned on <span class="arithmatex">\(z\)</span>.</p>
+<p>Finally, the variational family for the proposal distribution <span class="arithmatex">\(q_\lambda(z)\)</span> needs to be chosen judiciously so that the reparameterization trick is possible. Many continuous distributions in the location-scale family can be reparameterized. In practice, a popular choice is again the Gaussian distribution, where</p>
+<div class="arithmatex">\[\begin{align*}
+\lambda &amp;= (\mu, \Sigma) \\
+q_\lambda(z) &amp;= \mathcal{N}(z|\mu, \Sigma) \\
+p(\varepsilon) &amp;= \mathcal{N}(z|0,I) \\
+T(\varepsilon; \lambda) &amp;= \mu + \Sigma^{1/2}\varepsilon,
+\end{align*}\]</div>
+<p>where <span class="arithmatex">\(\Sigma^{1/2}\)</span> is the Cholesky decomposition of <span class="arithmatex">\(\Sigma\)</span>. For simplicity, practitioners often restrict <span class="arithmatex">\(\Sigma\)</span> to be a diagonal matrix (which restricts the distribution family to that of factorized Gaussians).</p>
+<p>The reparameterization trick consists of four key steps:</p>
+<ol>
+<li>
+<p><strong>Parameter Definition</strong>: We define the variational parameters <span class="arithmatex">\(\lambda\)</span> as a tuple containing the mean vector <span class="arithmatex">\(\mu\)</span> and covariance matrix <span class="arithmatex">\(\Sigma\)</span> of our Gaussian distribution. These parameters will be learned during training.</p>
+</li>
+<li>
+<p><strong>Variational Distribution</strong>: We specify that our variational distribution <span class="arithmatex">\(q_\lambda(z)\)</span> is a Gaussian distribution parameterized by <span class="arithmatex">\(\mu\)</span> and <span class="arithmatex">\(\Sigma\)</span>. This is the distribution we ideally want to sample from.</p>
+</li>
+<li>
+<p><strong>Auxiliary Distribution</strong>: Instead of sampling directly from <span class="arithmatex">\(q_\lambda(z)\)</span>, we introduce a fixed auxiliary distribution <span class="arithmatex">\(p(\varepsilon)\)</span> which is a standard normal distribution (mean 0, identity covariance). This distribution doesn't depend on our parameters <span class="arithmatex">\(\lambda\)</span>.</p>
+</li>
+<li>
+<p><strong>Transformation Function</strong>: We define a deterministic function <span class="arithmatex">\(T(\varepsilon; \lambda)\)</span> that transforms samples from the auxiliary distribution into samples from our variational distribution. The transformation is given by <span class="arithmatex">\(\mu + \Sigma^{1/2}\varepsilon\)</span>, where <span class="arithmatex">\(\Sigma^{1/2}\)</span> is the Cholesky decomposition of <span class="arithmatex">\(\Sigma\)</span>.</p>
+</li>
+</ol>
+<p>The key insight is that instead of sampling directly from <span class="arithmatex">\(q_\lambda(z)\)</span>, we can:
+1. Sample <span class="arithmatex">\(\varepsilon\)</span> from the standard normal distribution <span class="arithmatex">\(p(\varepsilon)\)</span>
+2. Transform it using <span class="arithmatex">\(T(\varepsilon; \lambda)\)</span> to make it seem like we're getting a sample from <span class="arithmatex">\(q_\lambda(z)\)</span></p>
+<p>This trick is crucial because it allows us to compute gradients with respect to <span class="arithmatex">\(\lambda\)</span> through the sampling process. Since the transformation <span class="arithmatex">\(T\)</span> is differentiable, we can backpropagate through it to update the parameters <span class="arithmatex">\(\lambda\)</span> during training. This is why the reparameterization trick often leads to lower variance in gradient estimates compared to the REINFORCE trick.</p>
 
 
 

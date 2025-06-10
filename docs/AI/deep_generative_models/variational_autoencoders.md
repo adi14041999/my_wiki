@@ -183,4 +183,45 @@ $$\nabla_\lambda \mathbb{E}_{q_\lambda(z)}\left[\log\frac{p_\theta(x,z)}{q_\lamb
 
 In contrast to the REINFORCE trick, the reparameterization trick is often noted empirically to have lower variance and thus results in more stable training.
 
+## Parameterizing Distributions via Deep Neural Networks
+
+So far, we have described $p_\theta(x,z)$ and $q_\lambda(z)$ in the abstract. To instantiate these objects, we consider choices of parametric distributions for $p_\theta(z)$, $p_\theta(x|z)$, and $q_\lambda(z)$. A popular choice for $p_\theta(z)$ is the unit Gaussian
+
+$$p_\theta(z) = \mathcal{N}(z|0,I),$$
+
+in which case $\theta$ is simply the empty set since the prior is a fixed distribution.
+
+In the case where $p_\theta(x|z)$ is a Gaussian distribution, we can thus represent it as
+
+$$p_\theta(x|z) = \mathcal{N}(x|\mu_\theta(z), \Sigma_\theta(z)),$$
+
+where $\mu_\theta(z)$ and $\Sigma_\theta(z)$ are neural networks that specify the mean and covariance matrix for the Gaussian distribution over $x$ when conditioned on $z$.
+
+Finally, the variational family for the proposal distribution $q_\lambda(z)$ needs to be chosen judiciously so that the reparameterization trick is possible. Many continuous distributions in the location-scale family can be reparameterized. In practice, a popular choice is again the Gaussian distribution, where
+
+$$\begin{align*}
+\lambda &= (\mu, \Sigma) \\
+q_\lambda(z) &= \mathcal{N}(z|\mu, \Sigma) \\
+p(\varepsilon) &= \mathcal{N}(z|0,I) \\
+T(\varepsilon; \lambda) &= \mu + \Sigma^{1/2}\varepsilon,
+\end{align*}$$
+
+where $\Sigma^{1/2}$ is the Cholesky decomposition of $\Sigma$. For simplicity, practitioners often restrict $\Sigma$ to be a diagonal matrix (which restricts the distribution family to that of factorized Gaussians).
+
+The reparameterization trick consists of four key steps:
+
+1. **Parameter Definition**: We define the variational parameters $\lambda$ as a tuple containing the mean vector $\mu$ and covariance matrix $\Sigma$ of our Gaussian distribution. These parameters will be learned during training.
+
+2. **Variational Distribution**: We specify that our variational distribution $q_\lambda(z)$ is a Gaussian distribution parameterized by $\mu$ and $\Sigma$. This is the distribution we ideally want to sample from.
+
+3. **Auxiliary Distribution**: Instead of sampling directly from $q_\lambda(z)$, we introduce a fixed auxiliary distribution $p(\varepsilon)$ which is a standard normal distribution (mean 0, identity covariance). This distribution doesn't depend on our parameters $\lambda$.
+
+4. **Transformation Function**: We define a deterministic function $T(\varepsilon; \lambda)$ that transforms samples from the auxiliary distribution into samples from our variational distribution. The transformation is given by $\mu + \Sigma^{1/2}\varepsilon$, where $\Sigma^{1/2}$ is the Cholesky decomposition of $\Sigma$.
+
+The key insight is that instead of sampling directly from $q_\lambda(z)$, we can:
+1. Sample $\varepsilon$ from the standard normal distribution $p(\varepsilon)$
+2. Transform it using $T(\varepsilon; \lambda)$ to make it seem like we're getting a sample from $q_\lambda(z)$
+
+This trick is crucial because it allows us to compute gradients with respect to $\lambda$ through the sampling process. Since the transformation $T$ is differentiable, we can backpropagate through it to update the parameters $\lambda$ during training. This is why the reparameterization trick often leads to lower variance in gradient estimates compared to the REINFORCE trick.
+
 
