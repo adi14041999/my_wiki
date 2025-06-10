@@ -1,1 +1,106 @@
 # Variational autoencoders
+## Representation
+Consider a directed, latent variable model as shown below.
+
+![Graphical model for a directed, latent variable model.](vae_zx.png)
+
+In the model above, $z$ and $x$ denote the latent and observed variables respectively. The joint distribution expressed by this model is given as
+
+$$p(x,z) = p(x|z)p(z).$$
+
+From a generative modeling perspective, this model describes a generative process for the observed data $x$ using the following procedure:
+
+$$z \sim p(z)$$
+
+$$x \sim p(x|z)$$
+
+If one adopts the belief that the latent variables $z$ somehow encode semantically meaningful information about $x$, it is natural to view this generative process as first generating the "high-level" semantic information about $x$ first before fully generating $x$.
+
+We now consider a family of distributions $\mathcal{Z}$ where $p(z) \in \mathcal{Z}$ describes a probability distribution over $z$. Next, consider a family of conditional distributions $\mathcal{X|Z}$ where $p(x|z) \in \mathcal{X|Z}$ describes a conditional probability distribution over $x$ given $z$. Then our hypothesis class of generative models is the set of all possible combinations
+
+$$\mathcal{X,Z} = \{p(x,z) \mid p(z) \in \mathcal{Z}, p(x|z) \in \mathcal{X|Z}\}.$$
+
+Given a dataset $\mathcal{D} = \{x^{(1)}, \ldots, x^{(n)}\}$, we are interested in the following learning and inference tasks:
+
+1. Selecting $p \in \mathcal{X,Z}$ that "best" fits $\mathcal{D}$.
+2. Given a sample $x$ and a model $p \in \mathcal{X,Z}$, what is the posterior distribution over the latent variables $z$?
+
+The posterior distribution $p(z|x)$ represents our updated beliefs about the latent variables $z$ after observing the data $x$. In other words, it tells us what values of $z$ are most likely to have generated the observed $x$. This is particularly useful for tasks like feature extraction, where we want to understand what latent factors might have generated our observed data.
+
+## Learning Directed Latent Variable Models
+
+One way to measure how closely $p(x,z)$ fits the observed dataset $\mathcal{D}$ is to measure the Kullback-Leibler (KL) divergence between the data distribution (which we denote as $p_{data}(x)$) and the model's marginal distribution $p(x) = \int p(x,z)dz$. The distribution that "best" fits the data is thus obtained by minimizing the KL divergence.
+
+$$\min_{p \in \mathcal{X,Z}} D_{KL}(p_{data}(x) \| p(x)).$$
+
+As we have seen previously, optimizing an empirical estimate of the KL divergence is equivalent to maximizing the marginal log-likelihood $\log p(x)$ over $\mathcal{D}$:
+
+$$\max_{p \in \mathcal{X,Z}} \sum_{x \in \mathcal{D}} \log p(x) = \max_{p \in \mathcal{X,Z}} \sum_{x \in \mathcal{D}} \log \int p(x,z)dz.$$
+
+However, it turns out this problem is generally intractable for high-dimensional $z$ as it involves an integration (or sums in the case $z$ is discrete) over all the possible latent sources of variation $z$. This intractability arises from several challenges:
+
+1. **Computational Complexity**: The integral $\int p(x,z)dz$ requires evaluating the joint distribution $p(x,z)$ for all possible values of $z$. In high-dimensional spaces, this becomes computationally prohibitive as the number of points to evaluate grows exponentially with the dimension of $z$.
+
+2. **Numerical Integration**: Even if we could evaluate the integrand at all points, computing the integral numerically becomes increasingly difficult as the dimension of $z$ grows. Traditional numerical integration methods like quadrature become impractical in high dimensions.
+
+3. **Posterior Inference**: The intractability of the marginal likelihood also makes it difficult to compute the posterior distribution $p(z|x)$, which is crucial for tasks like feature extraction and data generation.
+
+This intractability motivates the need for approximate inference methods, such as variational inference. One option is to estimate the objective via Monte Carlo. For any given datapoint $x$, we can obtain the following estimate for its marginal log-likelihood:
+
+$$\log p(x) \approx \log \frac{1}{k} \sum_{i=1}^k p(x|z^{(i)}), \text{ where } z^{(i)} \sim p(z)$$
+
+This Monte Carlo estimate is derived as follows:
+
+First, recall that the marginal likelihood $p(x)$ can be written as an expectation:
+
+$$p(x) = \int p(x|z)p(z)dz = \mathbb{E}_{z \sim p(z)}[p(x|z)]$$
+
+The Monte Carlo method approximates this expectation by drawing $k$ samples from $p(z)$ and computing their average:
+
+$$\mathbb{E}_{z \sim p(z)}[p(x|z)] \approx \frac{1}{k} \sum_{i=1}^k p(x|z^{(i)}), \text{ where } z^{(i)} \sim p(z)$$
+
+Taking the logarithm of both sides gives us our final estimate:
+
+$$\log p(x) \approx \log \frac{1}{k} \sum_{i=1}^k p(x|z^{(i)}), \text{ where } z^{(i)} \sim p(z)$$
+
+This approximation becomes more accurate as $k$ increases, but at the cost of more computational resources. The key insight is that we're using random sampling to approximate the intractable integral, trading exact computation for statistical estimation.
+
+Rather than maximizing the log-likelihood directly, an alternate is to instead construct a lower bound that is more amenable to optimization. To do so, we note that evaluating the marginal likelihood $p(x)$ is at least as difficult as as evaluating the posterior $p(z|x)$ for any latent vector $z$ since by definition $p(z|x) = p(x,z)/p(x)$.
+
+Next, we introduce a variational family $\mathcal{Q}$ of distributions that approximate the true, but intractable posterior $p(z|x)$. Further henceforth, we will assume a parameteric setting where any distribution in the model family $\mathcal{X,Z}$ is specified via a set of parameters $\theta \in \Theta$ and distributions in the variational family $\mathcal{Q}$ are specified via a set of parameters $\lambda \in \Lambda$.
+
+Given $\mathcal{X,Z}$ and $\mathcal{Q}$, we note that the following relationships hold true for any $x$ and all variational distributions $q_\lambda(z) \in \mathcal{Q}$:
+
+$$\log p_\theta(x) = \log \int p_\theta(x,z)dz = \log \int \frac{q_\lambda(z)}{q_\lambda(z)}p_\theta(x,z)dz \geq \mathbb{E}_{q_\lambda(z)}\left[\log\frac{p_\theta(x,z)}{q_\lambda(z)}\right] := \text{ELBO}(x;\theta,\lambda)$$
+
+where we have used Jensen's inequality in the final step. The key insight here is that since the logarithm function is concave, Jensen's inequality tells us that for any random variable $X$ and concave function $f$, we have $\mathbb{E}[f(X)] \leq f(\mathbb{E}[X])$. In our case:
+
+We first multiply and divide by $q_\lambda(z)$ inside the integral to get:
+
+$$\log \int \frac{q_\lambda(z)}{q_\lambda(z)}p_\theta(x,z)dz = \log \int q_\lambda(z)\frac{p_\theta(x,z)}{q_\lambda(z)}dz$$
+
+The integral $\int q_\lambda(z)\frac{p_\theta(x,z)}{q_\lambda(z)}dz$ can be seen as an expectation $\mathbb{E}_{q_\lambda(z)}\left[\frac{p_\theta(x,z)}{q_\lambda(z)}\right]$
+
+Since $\log$ is a concave function, Jensen's inequality gives us:
+
+$$\log \mathbb{E}_{q_\lambda(z)}\left[\frac{p_\theta(x,z)}{q_\lambda(z)}\right] \geq \mathbb{E}_{q_\lambda(z)}\left[\log\frac{p_\theta(x,z)}{q_\lambda(z)}\right]$$
+
+This inequality is what allows us to obtain a lower bound on the log-likelihood, which we call the Evidence Lower BOund (ELBO). The ELBO admits a tractable unbiased Monte Carlo estimator
+
+$$\frac{1}{k}\sum_{i=1}^k \log\frac{p_\theta(x,z^{(i)})}{q_\lambda(z^{(i)})}, \text{ where } z^{(i)} \sim q_\lambda(z),$$
+
+so long as it is easy to sample from and evaluate densities for $q_\lambda(z)$.
+
+In summary, we can learn a latent variable model by maximizing the ELBO with respect to both the model parameters $\theta$ and the variational parameters $\lambda$ for any given datapoint $x$:
+
+$$\max_\theta \sum_{x \in \mathcal{D}} \max_\lambda \mathbb{E}_{q_\lambda(z)}\left[\log\frac{p_\theta(x,z)}{q_\lambda(z)}\right].$$
+
+This optimization objective can be broken down into two parts:
+
+1. **Inner Optimization**: For each datapoint $x$, we find the best variational parameters $\lambda$ that make $q_\lambda(z)$ as close as possible to the true posterior $p(z|x)$. This is done by maximizing the ELBO with respect to $\lambda$. 
+
+   Why do we need $q_\lambda(z)$ to approximate $p(z|x)$? Since $p(x) = p(x,z)/p(z|x)$, as $q_\lambda(z)$ tends to $p(z|x)$, the ratio $p(x,z)/q_\lambda(z)$ tends to $p(x)$. This means that by making our variational approximation closer to the true posterior, we get a better estimate of the marginal likelihood $p(x)$.
+
+2. **Outer Optimization**: Across all datapoints in the dataset $\mathcal{D}$, we find the best model parameters $\theta$ that maximize the average ELBO. This improves the generative model's ability to explain the data.
+
+The outer sum $\sum_{x \in \mathcal{D}}$ is necessary because we want to learn a model that works well for all datapoints in our dataset, not just a single example. This is equivalent to maximizing the average ELBO across all datapoints.

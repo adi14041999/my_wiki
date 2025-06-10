@@ -505,6 +505,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Variational autoencoders
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -516,6 +529,43 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#representation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Representation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-directed-latent-variable-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Learning Directed Latent Variable Models
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -678,6 +728,74 @@
 
 
 <h1 id="variational-autoencoders">Variational autoencoders</h1>
+<h2 id="representation">Representation</h2>
+<p>Consider a directed, latent variable model as shown below.</p>
+<p><img alt="Graphical model for a directed, latent variable model." src="../vae_zx.png" /></p>
+<p>In the model above, <span class="arithmatex">\(z\)</span> and <span class="arithmatex">\(x\)</span> denote the latent and observed variables respectively. The joint distribution expressed by this model is given as</p>
+<div class="arithmatex">\[p(x,z) = p(x|z)p(z).\]</div>
+<p>From a generative modeling perspective, this model describes a generative process for the observed data <span class="arithmatex">\(x\)</span> using the following procedure:</p>
+<div class="arithmatex">\[z \sim p(z)\]</div>
+<div class="arithmatex">\[x \sim p(x|z)\]</div>
+<p>If one adopts the belief that the latent variables <span class="arithmatex">\(z\)</span> somehow encode semantically meaningful information about <span class="arithmatex">\(x\)</span>, it is natural to view this generative process as first generating the "high-level" semantic information about <span class="arithmatex">\(x\)</span> first before fully generating <span class="arithmatex">\(x\)</span>.</p>
+<p>We now consider a family of distributions <span class="arithmatex">\(\mathcal{Z}\)</span> where <span class="arithmatex">\(p(z) \in \mathcal{Z}\)</span> describes a probability distribution over <span class="arithmatex">\(z\)</span>. Next, consider a family of conditional distributions <span class="arithmatex">\(\mathcal{X|Z}\)</span> where <span class="arithmatex">\(p(x|z) \in \mathcal{X|Z}\)</span> describes a conditional probability distribution over <span class="arithmatex">\(x\)</span> given <span class="arithmatex">\(z\)</span>. Then our hypothesis class of generative models is the set of all possible combinations</p>
+<div class="arithmatex">\[\mathcal{X,Z} = \{p(x,z) \mid p(z) \in \mathcal{Z}, p(x|z) \in \mathcal{X|Z}\}.\]</div>
+<p>Given a dataset <span class="arithmatex">\(\mathcal{D} = \{x^{(1)}, \ldots, x^{(n)}\}\)</span>, we are interested in the following learning and inference tasks:</p>
+<ol>
+<li>Selecting <span class="arithmatex">\(p \in \mathcal{X,Z}\)</span> that "best" fits <span class="arithmatex">\(\mathcal{D}\)</span>.</li>
+<li>Given a sample <span class="arithmatex">\(x\)</span> and a model <span class="arithmatex">\(p \in \mathcal{X,Z}\)</span>, what is the posterior distribution over the latent variables <span class="arithmatex">\(z\)</span>?</li>
+</ol>
+<p>The posterior distribution <span class="arithmatex">\(p(z|x)\)</span> represents our updated beliefs about the latent variables <span class="arithmatex">\(z\)</span> after observing the data <span class="arithmatex">\(x\)</span>. In other words, it tells us what values of <span class="arithmatex">\(z\)</span> are most likely to have generated the observed <span class="arithmatex">\(x\)</span>. This is particularly useful for tasks like feature extraction, where we want to understand what latent factors might have generated our observed data.</p>
+<h2 id="learning-directed-latent-variable-models">Learning Directed Latent Variable Models</h2>
+<p>One way to measure how closely <span class="arithmatex">\(p(x,z)\)</span> fits the observed dataset <span class="arithmatex">\(\mathcal{D}\)</span> is to measure the Kullback-Leibler (KL) divergence between the data distribution (which we denote as <span class="arithmatex">\(p_{data}(x)\)</span>) and the model's marginal distribution <span class="arithmatex">\(p(x) = \int p(x,z)dz\)</span>. The distribution that "best" fits the data is thus obtained by minimizing the KL divergence.</p>
+<div class="arithmatex">\[\min_{p \in \mathcal{X,Z}} D_{KL}(p_{data}(x) \| p(x)).\]</div>
+<p>As we have seen previously, optimizing an empirical estimate of the KL divergence is equivalent to maximizing the marginal log-likelihood <span class="arithmatex">\(\log p(x)\)</span> over <span class="arithmatex">\(\mathcal{D}\)</span>:</p>
+<div class="arithmatex">\[\max_{p \in \mathcal{X,Z}} \sum_{x \in \mathcal{D}} \log p(x) = \max_{p \in \mathcal{X,Z}} \sum_{x \in \mathcal{D}} \log \int p(x,z)dz.\]</div>
+<p>However, it turns out this problem is generally intractable for high-dimensional <span class="arithmatex">\(z\)</span> as it involves an integration (or sums in the case <span class="arithmatex">\(z\)</span> is discrete) over all the possible latent sources of variation <span class="arithmatex">\(z\)</span>. This intractability arises from several challenges:</p>
+<ol>
+<li>
+<p><strong>Computational Complexity</strong>: The integral <span class="arithmatex">\(\int p(x,z)dz\)</span> requires evaluating the joint distribution <span class="arithmatex">\(p(x,z)\)</span> for all possible values of <span class="arithmatex">\(z\)</span>. In high-dimensional spaces, this becomes computationally prohibitive as the number of points to evaluate grows exponentially with the dimension of <span class="arithmatex">\(z\)</span>.</p>
+</li>
+<li>
+<p><strong>Numerical Integration</strong>: Even if we could evaluate the integrand at all points, computing the integral numerically becomes increasingly difficult as the dimension of <span class="arithmatex">\(z\)</span> grows. Traditional numerical integration methods like quadrature become impractical in high dimensions.</p>
+</li>
+<li>
+<p><strong>Posterior Inference</strong>: The intractability of the marginal likelihood also makes it difficult to compute the posterior distribution <span class="arithmatex">\(p(z|x)\)</span>, which is crucial for tasks like feature extraction and data generation.</p>
+</li>
+</ol>
+<p>This intractability motivates the need for approximate inference methods, such as variational inference. One option is to estimate the objective via Monte Carlo. For any given datapoint <span class="arithmatex">\(x\)</span>, we can obtain the following estimate for its marginal log-likelihood:</p>
+<div class="arithmatex">\[\log p(x) \approx \log \frac{1}{k} \sum_{i=1}^k p(x|z^{(i)}), \text{ where } z^{(i)} \sim p(z)\]</div>
+<p>This Monte Carlo estimate is derived as follows:</p>
+<p>First, recall that the marginal likelihood <span class="arithmatex">\(p(x)\)</span> can be written as an expectation:</p>
+<div class="arithmatex">\[p(x) = \int p(x|z)p(z)dz = \mathbb{E}_{z \sim p(z)}[p(x|z)]\]</div>
+<p>The Monte Carlo method approximates this expectation by drawing <span class="arithmatex">\(k\)</span> samples from <span class="arithmatex">\(p(z)\)</span> and computing their average:</p>
+<div class="arithmatex">\[\mathbb{E}_{z \sim p(z)}[p(x|z)] \approx \frac{1}{k} \sum_{i=1}^k p(x|z^{(i)}), \text{ where } z^{(i)} \sim p(z)\]</div>
+<p>Taking the logarithm of both sides gives us our final estimate:</p>
+<div class="arithmatex">\[\log p(x) \approx \log \frac{1}{k} \sum_{i=1}^k p(x|z^{(i)}), \text{ where } z^{(i)} \sim p(z)\]</div>
+<p>This approximation becomes more accurate as <span class="arithmatex">\(k\)</span> increases, but at the cost of more computational resources. The key insight is that we're using random sampling to approximate the intractable integral, trading exact computation for statistical estimation.</p>
+<p>Rather than maximizing the log-likelihood directly, an alternate is to instead construct a lower bound that is more amenable to optimization. To do so, we note that evaluating the marginal likelihood <span class="arithmatex">\(p(x)\)</span> is at least as difficult as as evaluating the posterior <span class="arithmatex">\(p(z|x)\)</span> for any latent vector <span class="arithmatex">\(z\)</span> since by definition <span class="arithmatex">\(p(z|x) = p(x,z)/p(x)\)</span>.</p>
+<p>Next, we introduce a variational family <span class="arithmatex">\(\mathcal{Q}\)</span> of distributions that approximate the true, but intractable posterior <span class="arithmatex">\(p(z|x)\)</span>. Further henceforth, we will assume a parameteric setting where any distribution in the model family <span class="arithmatex">\(\mathcal{X,Z}\)</span> is specified via a set of parameters <span class="arithmatex">\(\theta \in \Theta\)</span> and distributions in the variational family <span class="arithmatex">\(\mathcal{Q}\)</span> are specified via a set of parameters <span class="arithmatex">\(\lambda \in \Lambda\)</span>.</p>
+<p>Given <span class="arithmatex">\(\mathcal{X,Z}\)</span> and <span class="arithmatex">\(\mathcal{Q}\)</span>, we note that the following relationships hold true for any <span class="arithmatex">\(x\)</span> and all variational distributions <span class="arithmatex">\(q_\lambda(z) \in \mathcal{Q}\)</span>:</p>
+<div class="arithmatex">\[\log p_\theta(x) = \log \int p_\theta(x,z)dz = \log \int \frac{q_\lambda(z)}{q_\lambda(z)}p_\theta(x,z)dz \geq \mathbb{E}_{q_\lambda(z)}\left[\log\frac{p_\theta(x,z)}{q_\lambda(z)}\right] := \text{ELBO}(x;\theta,\lambda)\]</div>
+<p>where we have used Jensen's inequality in the final step. The key insight here is that since the logarithm function is concave, Jensen's inequality tells us that for any random variable <span class="arithmatex">\(X\)</span> and concave function <span class="arithmatex">\(f\)</span>, we have <span class="arithmatex">\(\mathbb{E}[f(X)] \leq f(\mathbb{E}[X])\)</span>. In our case:</p>
+<p>We first multiply and divide by <span class="arithmatex">\(q_\lambda(z)\)</span> inside the integral to get:</p>
+<div class="arithmatex">\[\log \int \frac{q_\lambda(z)}{q_\lambda(z)}p_\theta(x,z)dz = \log \int q_\lambda(z)\frac{p_\theta(x,z)}{q_\lambda(z)}dz\]</div>
+<p>The integral <span class="arithmatex">\(\int q_\lambda(z)\frac{p_\theta(x,z)}{q_\lambda(z)}dz\)</span> can be seen as an expectation <span class="arithmatex">\(\mathbb{E}_{q_\lambda(z)}\left[\frac{p_\theta(x,z)}{q_\lambda(z)}\right]\)</span></p>
+<p>Since <span class="arithmatex">\(\log\)</span> is a concave function, Jensen's inequality gives us:</p>
+<div class="arithmatex">\[\log \mathbb{E}_{q_\lambda(z)}\left[\frac{p_\theta(x,z)}{q_\lambda(z)}\right] \geq \mathbb{E}_{q_\lambda(z)}\left[\log\frac{p_\theta(x,z)}{q_\lambda(z)}\right]\]</div>
+<p>This inequality is what allows us to obtain a lower bound on the log-likelihood, which we call the Evidence Lower BOund (ELBO). The ELBO admits a tractable unbiased Monte Carlo estimator</p>
+<div class="arithmatex">\[\frac{1}{k}\sum_{i=1}^k \log\frac{p_\theta(x,z^{(i)})}{q_\lambda(z^{(i)})}, \text{ where } z^{(i)} \sim q_\lambda(z),\]</div>
+<p>so long as it is easy to sample from and evaluate densities for <span class="arithmatex">\(q_\lambda(z)\)</span>.</p>
+<p>In summary, we can learn a latent variable model by maximizing the ELBO with respect to both the model parameters <span class="arithmatex">\(\theta\)</span> and the variational parameters <span class="arithmatex">\(\lambda\)</span> for any given datapoint <span class="arithmatex">\(x\)</span>:</p>
+<div class="arithmatex">\[\max_\theta \sum_{x \in \mathcal{D}} \max_\lambda \mathbb{E}_{q_\lambda(z)}\left[\log\frac{p_\theta(x,z)}{q_\lambda(z)}\right].\]</div>
+<p>This optimization objective can be broken down into two parts:</p>
+<ol>
+<li><strong>Inner Optimization</strong>: For each datapoint <span class="arithmatex">\(x\)</span>, we find the best variational parameters <span class="arithmatex">\(\lambda\)</span> that make <span class="arithmatex">\(q_\lambda(z)\)</span> as close as possible to the true posterior <span class="arithmatex">\(p(z|x)\)</span>. This is done by maximizing the ELBO with respect to <span class="arithmatex">\(\lambda\)</span>. </li>
+</ol>
+<p>Why do we need <span class="arithmatex">\(q_\lambda(z)\)</span> to approximate <span class="arithmatex">\(p(z|x)\)</span>? Since <span class="arithmatex">\(p(x) = p(x,z)/p(z|x)\)</span>, as <span class="arithmatex">\(q_\lambda(z)\)</span> tends to <span class="arithmatex">\(p(z|x)\)</span>, the ratio <span class="arithmatex">\(p(x,z)/q_\lambda(z)\)</span> tends to <span class="arithmatex">\(p(x)\)</span>. This means that by making our variational approximation closer to the true posterior, we get a better estimate of the marginal likelihood <span class="arithmatex">\(p(x)\)</span>.</p>
+<ol>
+<li><strong>Outer Optimization</strong>: Across all datapoints in the dataset <span class="arithmatex">\(\mathcal{D}\)</span>, we find the best model parameters <span class="arithmatex">\(\theta\)</span> that maximize the average ELBO. This improves the generative model's ability to explain the data.</li>
+</ol>
+<p>The outer sum <span class="arithmatex">\(\sum_{x \in \mathcal{D}}\)</span> is necessary because we want to learn a model that works well for all datapoints in our dataset, not just a single example. This is equivalent to maximizing the average ELBO across all datapoints.</p>
 
 
 
