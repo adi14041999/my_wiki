@@ -224,4 +224,77 @@ The key insight is that instead of sampling directly from $q_\lambda(z)$, we can
 
 This trick is crucial because it allows us to compute gradients with respect to $\lambda$ through the sampling process. Since the transformation $T$ is differentiable, we can backpropagate through it to update the parameters $\lambda$ during training. This is why the reparameterization trick often leads to lower variance in gradient estimates compared to the REINFORCE trick.
 
+## Amortized Variational Inference
+
+A noticeable limitation of black-box variational inference is that Step 1 executes an optimization subroutine that is computationally expensive. Recall that the goal of Step 1 is to find
+
+$$\lambda^* = \arg\max_{\lambda \in \Lambda} \text{ELBO}(x; \theta, \lambda).$$
+
+For a given choice of $\theta$, there is a well-defined mapping from $x \mapsto \lambda^*$. A key realization is that this mapping can be learned. In particular, one can train an encoding function (parameterized by $\phi$) $f_\phi: \mathcal{X} \to \Lambda$ (where $\Lambda$ is the space of $\lambda$ parameters) on the following objective
+
+$$\max_\phi \sum_{x \in \mathcal{D}} \text{ELBO}(x; \theta, f_\phi(x)).$$
+
+It is worth noting at this point that $f_\phi(x)$ can be interpreted as defining the conditional distribution $q_\phi(z|x)$. With a slight abuse of notation, we define
+
+$$\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}\left[\log\frac{p_\theta(x,z)}{q_\phi(z|x)}\right],$$
+
+and rewrite the optimization problem as
+
+$$\max_\phi \sum_{x \in \mathcal{D}} \text{ELBO}(x; \theta, \phi).$$
+
+It is also worth noting that optimizing $\phi$ over the entire dataset as a subroutine every time we sample a new mini-batch is clearly not reasonable. However, if we believe that $f_\phi$ is capable of quickly adapting to a close-enough approximation of $\lambda^*$ given the current choice of $\theta$, then we can interleave the optimization of $\phi$ and $\theta$. This yields the following procedure, where for each mini-batch $\mathcal{B} = \{x^{(1)}, \ldots, x^{(m)}\}$, we perform the following two updates jointly:
+
+$$\begin{align*}
+\phi &\leftarrow \phi + \tilde{\nabla}_\phi \sum_{x \in \mathcal{B}} \text{ELBO}(x; \theta, \phi) \\
+\theta &\leftarrow \theta + \tilde{\nabla}_\theta \sum_{x \in \mathcal{B}} \text{ELBO}(x; \theta, \phi),
+\end{align*}$$
+
+rather than running BBVI's Step 1 as a subroutine. By leveraging the learnability of $x \mapsto \lambda^*$, this optimization procedure amortizes the cost of variational inference. If one further chooses to define $f_\phi$ as a neural network, the result is the variational autoencoder.
+
+### Steps of Amortized Variational Inference
+
+Let's break down the amortized variational inference procedure in detail:
+
+1. **Initial Setup**:
+   - We have a dataset $\mathcal{D} = \{x^{(1)}, \ldots, x^{(n)}\}$
+   - We have a generative model $p_\theta(x,z)$ with parameters $\theta$
+   - We want to learn both the model parameters $\theta$ and the variational parameters $\lambda$ for each datapoint
+
+2. **Traditional BBVI Approach**:
+   - For each datapoint $x$, we would need to run an optimization to find:
+
+$$\lambda^* = \arg\max_{\lambda \in \Lambda} \text{ELBO}(x; \theta, \lambda)$$
+   
+   - This is computationally expensive as it requires running an optimization subroutine for each datapoint
+
+3. **Key Insight - Learnable Mapping**:
+   - Instead of optimizing $\lambda$ separately for each $x$, we realize that there's a mapping from $x$ to $\lambda^*$
+   - This mapping can be learned using a function $f_\phi: \mathcal{X} \to \Lambda$ parameterized by $\phi$
+   - The function $f_\phi$ takes a datapoint $x$ and outputs the variational parameters $\lambda$
+
+4. **Training the Encoder**:
+   - We train $f_\phi$ to maximize the ELBO across all datapoints:
+
+$$\max_\phi \sum_{x \in \mathcal{D}} \text{ELBO}(x; \theta, f_\phi(x))$$
+
+   - This is equivalent to learning a conditional distribution $q_\phi(z|x)$
+
+5. **Joint Optimization**:
+   - Instead of running BBVI's Step 1 as a subroutine, we interleave the optimization of $\phi$ and $\theta$
+   - For each mini-batch $\mathcal{B} = \{x^{(1)}, \ldots, x^{(m)}\}$, we perform two updates:
+
+$$\begin{align*}
+\phi &\leftarrow \phi + \tilde{\nabla}_\phi \sum_{x \in \mathcal{B}} \text{ELBO}(x; \theta, \phi) \\
+\theta &\leftarrow \theta + \tilde{\nabla}_\theta \sum_{x \in \mathcal{B}} \text{ELBO}(x; \theta, \phi)
+\end{align*}$$
+
+6. **Practical Implementation**:
+   - When $f_\phi$ is implemented as a neural network, we get a variational autoencoder
+   - The encoder network $f_\phi$ maps inputs $x$ to variational parameters
+   - The decoder network maps latent variables $z$ to reconstructed inputs
+   - Both networks are trained end-to-end using the ELBO objective
+
+The key advantage of this approach is that it amortizes the cost of variational inference by learning a single function $f_\phi$ that can quickly approximate the optimal variational parameters for any input $x$, rather than running a separate optimization for each datapoint.
+
+
 
