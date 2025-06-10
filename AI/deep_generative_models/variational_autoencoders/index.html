@@ -590,6 +590,30 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#amortized-variational-inference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Amortized Variational Inference
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Amortized Variational Inference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps-of-amortized-variational-inference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Steps of Amortized Variational Inference
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -901,6 +925,76 @@ T(\varepsilon; \lambda) &amp;= \mu + \Sigma^{1/2}\varepsilon,
 1. Sample <span class="arithmatex">\(\varepsilon\)</span> from the standard normal distribution <span class="arithmatex">\(p(\varepsilon)\)</span>
 2. Transform it using <span class="arithmatex">\(T(\varepsilon; \lambda)\)</span> to make it seem like we're getting a sample from <span class="arithmatex">\(q_\lambda(z)\)</span></p>
 <p>This trick is crucial because it allows us to compute gradients with respect to <span class="arithmatex">\(\lambda\)</span> through the sampling process. Since the transformation <span class="arithmatex">\(T\)</span> is differentiable, we can backpropagate through it to update the parameters <span class="arithmatex">\(\lambda\)</span> during training. This is why the reparameterization trick often leads to lower variance in gradient estimates compared to the REINFORCE trick.</p>
+<h2 id="amortized-variational-inference">Amortized Variational Inference</h2>
+<p>A noticeable limitation of black-box variational inference is that Step 1 executes an optimization subroutine that is computationally expensive. Recall that the goal of Step 1 is to find</p>
+<div class="arithmatex">\[\lambda^* = \arg\max_{\lambda \in \Lambda} \text{ELBO}(x; \theta, \lambda).\]</div>
+<p>For a given choice of <span class="arithmatex">\(\theta\)</span>, there is a well-defined mapping from <span class="arithmatex">\(x \mapsto \lambda^*\)</span>. A key realization is that this mapping can be learned. In particular, one can train an encoding function (parameterized by <span class="arithmatex">\(\phi\)</span>) <span class="arithmatex">\(f_\phi: \mathcal{X} \to \Lambda\)</span> (where <span class="arithmatex">\(\Lambda\)</span> is the space of <span class="arithmatex">\(\lambda\)</span> parameters) on the following objective</p>
+<div class="arithmatex">\[\max_\phi \sum_{x \in \mathcal{D}} \text{ELBO}(x; \theta, f_\phi(x)).\]</div>
+<p>It is worth noting at this point that <span class="arithmatex">\(f_\phi(x)\)</span> can be interpreted as defining the conditional distribution <span class="arithmatex">\(q_\phi(z|x)\)</span>. With a slight abuse of notation, we define</p>
+<div class="arithmatex">\[\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}\left[\log\frac{p_\theta(x,z)}{q_\phi(z|x)}\right],\]</div>
+<p>and rewrite the optimization problem as</p>
+<div class="arithmatex">\[\max_\phi \sum_{x \in \mathcal{D}} \text{ELBO}(x; \theta, \phi).\]</div>
+<p>It is also worth noting that optimizing <span class="arithmatex">\(\phi\)</span> over the entire dataset as a subroutine every time we sample a new mini-batch is clearly not reasonable. However, if we believe that <span class="arithmatex">\(f_\phi\)</span> is capable of quickly adapting to a close-enough approximation of <span class="arithmatex">\(\lambda^*\)</span> given the current choice of <span class="arithmatex">\(\theta\)</span>, then we can interleave the optimization of <span class="arithmatex">\(\phi\)</span> and <span class="arithmatex">\(\theta\)</span>. This yields the following procedure, where for each mini-batch <span class="arithmatex">\(\mathcal{B} = \{x^{(1)}, \ldots, x^{(m)}\}\)</span>, we perform the following two updates jointly:</p>
+<div class="arithmatex">\[\begin{align*}
+\phi &amp;\leftarrow \phi + \tilde{\nabla}_\phi \sum_{x \in \mathcal{B}} \text{ELBO}(x; \theta, \phi) \\
+\theta &amp;\leftarrow \theta + \tilde{\nabla}_\theta \sum_{x \in \mathcal{B}} \text{ELBO}(x; \theta, \phi),
+\end{align*}\]</div>
+<p>rather than running BBVI's Step 1 as a subroutine. By leveraging the learnability of <span class="arithmatex">\(x \mapsto \lambda^*\)</span>, this optimization procedure amortizes the cost of variational inference. If one further chooses to define <span class="arithmatex">\(f_\phi\)</span> as a neural network, the result is the variational autoencoder.</p>
+<h3 id="steps-of-amortized-variational-inference">Steps of Amortized Variational Inference</h3>
+<p>Let's break down the amortized variational inference procedure in detail:</p>
+<ol>
+<li><strong>Initial Setup</strong>:</li>
+<li>We have a dataset <span class="arithmatex">\(\mathcal{D} = \{x^{(1)}, \ldots, x^{(n)}\}\)</span></li>
+<li>We have a generative model <span class="arithmatex">\(p_\theta(x,z)\)</span> with parameters <span class="arithmatex">\(\theta\)</span></li>
+<li>
+<p>We want to learn both the model parameters <span class="arithmatex">\(\theta\)</span> and the variational parameters <span class="arithmatex">\(\lambda\)</span> for each datapoint</p>
+</li>
+<li>
+<p><strong>Traditional BBVI Approach</strong>:</p>
+</li>
+<li>For each datapoint <span class="arithmatex">\(x\)</span>, we would need to run an optimization to find:</li>
+</ol>
+<div class="arithmatex">\[\lambda^* = \arg\max_{\lambda \in \Lambda} \text{ELBO}(x; \theta, \lambda)\]</div>
+<ul>
+<li>
+<p>This is computationally expensive as it requires running an optimization subroutine for each datapoint</p>
+</li>
+<li>
+<p><strong>Key Insight - Learnable Mapping</strong>:</p>
+</li>
+<li>Instead of optimizing <span class="arithmatex">\(\lambda\)</span> separately for each <span class="arithmatex">\(x\)</span>, we realize that there's a mapping from <span class="arithmatex">\(x\)</span> to <span class="arithmatex">\(\lambda^*\)</span></li>
+<li>This mapping can be learned using a function <span class="arithmatex">\(f_\phi: \mathcal{X} \to \Lambda\)</span> parameterized by <span class="arithmatex">\(\phi\)</span></li>
+<li>
+<p>The function <span class="arithmatex">\(f_\phi\)</span> takes a datapoint <span class="arithmatex">\(x\)</span> and outputs the variational parameters <span class="arithmatex">\(\lambda\)</span></p>
+</li>
+<li>
+<p><strong>Training the Encoder</strong>:</p>
+</li>
+<li>We train <span class="arithmatex">\(f_\phi\)</span> to maximize the ELBO across all datapoints:</li>
+</ul>
+<div class="arithmatex">\[\max_\phi \sum_{x \in \mathcal{D}} \text{ELBO}(x; \theta, f_\phi(x))\]</div>
+<ul>
+<li>
+<p>This is equivalent to learning a conditional distribution <span class="arithmatex">\(q_\phi(z|x)\)</span></p>
+</li>
+<li>
+<p><strong>Joint Optimization</strong>:</p>
+</li>
+<li>Instead of running BBVI's Step 1 as a subroutine, we interleave the optimization of <span class="arithmatex">\(\phi\)</span> and <span class="arithmatex">\(\theta\)</span></li>
+<li>For each mini-batch <span class="arithmatex">\(\mathcal{B} = \{x^{(1)}, \ldots, x^{(m)}\}\)</span>, we perform two updates:</li>
+</ul>
+<div class="arithmatex">\[\begin{align*}
+\phi &amp;\leftarrow \phi + \tilde{\nabla}_\phi \sum_{x \in \mathcal{B}} \text{ELBO}(x; \theta, \phi) \\
+\theta &amp;\leftarrow \theta + \tilde{\nabla}_\theta \sum_{x \in \mathcal{B}} \text{ELBO}(x; \theta, \phi)
+\end{align*}\]</div>
+<ol>
+<li><strong>Practical Implementation</strong>:</li>
+<li>When <span class="arithmatex">\(f_\phi\)</span> is implemented as a neural network, we get a variational autoencoder</li>
+<li>The encoder network <span class="arithmatex">\(f_\phi\)</span> maps inputs <span class="arithmatex">\(x\)</span> to variational parameters</li>
+<li>The decoder network maps latent variables <span class="arithmatex">\(z\)</span> to reconstructed inputs</li>
+<li>Both networks are trained end-to-end using the ELBO objective</li>
+</ol>
+<p>The key advantage of this approach is that it amortizes the cost of variational inference by learning a single function <span class="arithmatex">\(f_\phi\)</span> that can quickly approximate the optimal variational parameters for any input <span class="arithmatex">\(x\)</span>, rather than running a separate optimization for each datapoint.</p>
 
 
 
