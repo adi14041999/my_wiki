@@ -1003,6 +1003,11 @@ T(\varepsilon; \lambda) &amp;= \mu + \Sigma^{1/2}\varepsilon,
 <li>The decoder network maps latent variables <span class="arithmatex">\(z\)</span> to reconstructed inputs</li>
 <li>Both networks are trained end-to-end using the ELBO objective</li>
 </ol>
+<p>In practice, the encoder neural network <span class="arithmatex">\(f_\phi\)</span> outputs the parameters of a diagonal Gaussian distribution:</p>
+<div class="arithmatex">\[q_\phi(z|x) = \mathcal{N}(z|\mu_\phi(x), \text{diag}(\sigma^2_\phi(x)))\]</div>
+<p>where <span class="arithmatex">\(\mu_\phi(x)\)</span> and <span class="arithmatex">\(\sigma^2_\phi(x)\)</span> are the mean and variance vectors output by the encoder network. To sample from this distribution during training, we use the reparameterization trick:</p>
+<div class="arithmatex">\[z = \mu_\phi(x) + \sigma_\phi(x) \odot \varepsilon, \quad \varepsilon \sim \mathcal{N}(0,I)\]</div>
+<p>where <span class="arithmatex">\(\odot\)</span> denotes element-wise multiplication. This allows us to backpropagate through the sampling process and train the encoder network end-to-end.</p>
 <p>The key advantage of this approach is that it amortizes the cost of variational inference by learning a single function <span class="arithmatex">\(f_\phi\)</span> that can quickly approximate the optimal variational parameters for any input <span class="arithmatex">\(x\)</span>, rather than running a separate optimization for each datapoint.</p>
 <h3 id="decomposition-of-the-negative-elbo">Decomposition of the Negative ELBO</h3>
 <p>Starting with the definition of the ELBO:</p>

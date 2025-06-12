@@ -294,6 +294,16 @@ $$\begin{align*}
    - The decoder network maps latent variables $z$ to reconstructed inputs
    - Both networks are trained end-to-end using the ELBO objective
 
+   In practice, the encoder neural network $f_\phi$ outputs the parameters of a diagonal Gaussian distribution:
+
+$$q_\phi(z|x) = \mathcal{N}(z|\mu_\phi(x), \text{diag}(\sigma^2_\phi(x)))$$
+   
+   where $\mu_\phi(x)$ and $\sigma^2_\phi(x)$ are the mean and variance vectors output by the encoder network. To sample from this distribution during training, we use the reparameterization trick:
+
+$$z = \mu_\phi(x) + \sigma_\phi(x) \odot \varepsilon, \quad \varepsilon \sim \mathcal{N}(0,I)$$
+   
+   where $\odot$ denotes element-wise multiplication. This allows us to backpropagate through the sampling process and train the encoder network end-to-end.
+
 The key advantage of this approach is that it amortizes the cost of variational inference by learning a single function $f_\phi$ that can quickly approximate the optimal variational parameters for any input $x$, rather than running a separate optimization for each datapoint.
 
 ### Decomposition of the Negative ELBO
