@@ -296,5 +296,46 @@ $$\begin{align*}
 
 The key advantage of this approach is that it amortizes the cost of variational inference by learning a single function $f_\phi$ that can quickly approximate the optimal variational parameters for any input $x$, rather than running a separate optimization for each datapoint.
 
+### Decomposition of the Negative ELBO
+Starting with the definition of the ELBO:
+
+$$\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}\left[\log\frac{p_\theta(x,z)}{q_\phi(z|x)}\right]$$
+
+We can expand the joint distribution $p_\theta(x,z)$ using the chain rule of probability:
+
+$$p_\theta(x,z) = p_\theta(x|z)p(z)$$
+
+Substituting this into the ELBO:
+
+$$\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}\left[\log\frac{p_\theta(x|z)p(z)}{q_\phi(z|x)}\right]$$
+
+Using the properties of logarithms, we can split this into three terms:
+
+$$\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] + \mathbb{E}_{q_\phi(z|x)}[\log p(z)] - \mathbb{E}_{q_\phi(z|x)}[\log q_\phi(z|x)]$$
+
+The second and third terms can be combined to form the KL divergence between $q_\phi(z|x)$ and $p(z)$:
+
+$$\mathbb{E}_{q_\phi(z|x)}[\log p(z)] - \mathbb{E}_{q_\phi(z|x)}[\log q_\phi(z|x)] = -\mathbb{E}_{q_\phi(z|x)}\left[\log\frac{q_\phi(z|x)}{p(z)}\right] = -D_{KL}(q_\phi(z|x) \| p(z))$$
+
+Therefore, the ELBO can be written as:
+
+$$\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] - D_{KL}(q_\phi(z|x) \| p(z))$$
+
+It is insightful to note that the negative ELBO can be decomposed into two terms:
+
+$$-\text{ELBO}(x; \theta, \phi) = \underbrace{-\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)]}_{\text{Reconstruction Loss}} + \underbrace{D_{KL}(q_\phi(z|x) \| p(z))}_{\text{KL Divergence}}$$
+
+This decomposition reveals two key components of the training objective:
+
+1. **Reconstruction Loss**: $-\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)]$
+   - This term measures how well the model can reconstruct the input $x$ from its latent representation $z$
+   - It encourages the encoder to produce latent codes that preserve the essential information about the input
+   - In practice, this is often implemented as the mean squared error or binary cross-entropy between the input and its reconstruction
+
+2. **KL Divergence**: $D_{KL}(q_\phi(z|x) \| p(z))$
+   - This term measures how far the approximate posterior $q_\phi(z|x)$ is from the prior $p(z)$
+   - It encourages the latent space to follow the prior distribution (typically a standard normal distribution)
+
+
 
 

@@ -609,6 +609,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#decomposition-of-the-negative-elbo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decomposition of the Negative ELBO
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -995,6 +1004,35 @@ T(\varepsilon; \lambda) &amp;= \mu + \Sigma^{1/2}\varepsilon,
 <li>Both networks are trained end-to-end using the ELBO objective</li>
 </ol>
 <p>The key advantage of this approach is that it amortizes the cost of variational inference by learning a single function <span class="arithmatex">\(f_\phi\)</span> that can quickly approximate the optimal variational parameters for any input <span class="arithmatex">\(x\)</span>, rather than running a separate optimization for each datapoint.</p>
+<h3 id="decomposition-of-the-negative-elbo">Decomposition of the Negative ELBO</h3>
+<p>Starting with the definition of the ELBO:</p>
+<div class="arithmatex">\[\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}\left[\log\frac{p_\theta(x,z)}{q_\phi(z|x)}\right]\]</div>
+<p>We can expand the joint distribution <span class="arithmatex">\(p_\theta(x,z)\)</span> using the chain rule of probability:</p>
+<div class="arithmatex">\[p_\theta(x,z) = p_\theta(x|z)p(z)\]</div>
+<p>Substituting this into the ELBO:</p>
+<div class="arithmatex">\[\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}\left[\log\frac{p_\theta(x|z)p(z)}{q_\phi(z|x)}\right]\]</div>
+<p>Using the properties of logarithms, we can split this into three terms:</p>
+<div class="arithmatex">\[\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] + \mathbb{E}_{q_\phi(z|x)}[\log p(z)] - \mathbb{E}_{q_\phi(z|x)}[\log q_\phi(z|x)]\]</div>
+<p>The second and third terms can be combined to form the KL divergence between <span class="arithmatex">\(q_\phi(z|x)\)</span> and <span class="arithmatex">\(p(z)\)</span>:</p>
+<div class="arithmatex">\[\mathbb{E}_{q_\phi(z|x)}[\log p(z)] - \mathbb{E}_{q_\phi(z|x)}[\log q_\phi(z|x)] = -\mathbb{E}_{q_\phi(z|x)}\left[\log\frac{q_\phi(z|x)}{p(z)}\right] = -D_{KL}(q_\phi(z|x) \| p(z))\]</div>
+<p>Therefore, the ELBO can be written as:</p>
+<div class="arithmatex">\[\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] - D_{KL}(q_\phi(z|x) \| p(z))\]</div>
+<p>It is insightful to note that the negative ELBO can be decomposed into two terms:</p>
+<div class="arithmatex">\[-\text{ELBO}(x; \theta, \phi) = \underbrace{-\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)]}_{\text{Reconstruction Loss}} + \underbrace{D_{KL}(q_\phi(z|x) \| p(z))}_{\text{KL Divergence}}\]</div>
+<p>This decomposition reveals two key components of the training objective:</p>
+<ol>
+<li><strong>Reconstruction Loss</strong>: <span class="arithmatex">\(-\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)]\)</span></li>
+<li>This term measures how well the model can reconstruct the input <span class="arithmatex">\(x\)</span> from its latent representation <span class="arithmatex">\(z\)</span></li>
+<li>It encourages the encoder to produce latent codes that preserve the essential information about the input</li>
+<li>
+<p>In practice, this is often implemented as the mean squared error or binary cross-entropy between the input and its reconstruction</p>
+</li>
+<li>
+<p><strong>KL Divergence</strong>: <span class="arithmatex">\(D_{KL}(q_\phi(z|x) \| p(z))\)</span></p>
+</li>
+<li>This term measures how far the approximate posterior <span class="arithmatex">\(q_\phi(z|x)\)</span> is from the prior <span class="arithmatex">\(p(z)\)</span></li>
+<li>It encourages the latent space to follow the prior distribution (typically a standard normal distribution)</li>
+</ol>
 
 
 
