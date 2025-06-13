@@ -306,7 +306,7 @@ $$z = \mu_\phi(x) + \sigma_\phi(x) \odot \varepsilon, \quad \varepsilon \sim \ma
 
 The key advantage of this approach is that it amortizes the cost of variational inference by learning a single function $f_\phi$ that can quickly approximate the optimal variational parameters for any input $x$, rather than running a separate optimization for each datapoint.
 
-### Decomposition of the Negative ELBO
+## Decomposition of the Negative ELBO
 Starting with the definition of the ELBO:
 
 $$\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}\left[\log\frac{p_\theta(x,z)}{q_\phi(z|x)}\right]$$
@@ -346,7 +346,7 @@ This decomposition reveals two key components of the training objective:
    - This term measures how far the approximate posterior $q_\phi(z|x)$ is from the prior $p_\theta(z)$
    - It encourages the latent space to follow the prior distribution (typically a standard normal distribution)
 
-### Practical Implementation of ELBO Computation
+## Practical Implementation of ELBO Computation
 
 Let's look at how the ELBO is actually computed in practice. Here's a detailed implementation with explanations:
 

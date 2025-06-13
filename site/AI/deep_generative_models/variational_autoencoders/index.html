@@ -609,7 +609,12 @@
   
 </li>
         
-          <li class="md-nav__item">
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#decomposition-of-the-negative-elbo" class="md-nav__link">
     <span class="md-ellipsis">
       Decomposition of the Negative ELBO
@@ -617,18 +622,13 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#practical-implementation-of-elbo-computation" class="md-nav__link">
     <span class="md-ellipsis">
       Practical Implementation of ELBO Computation
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1018,7 +1018,7 @@ T(\varepsilon; \lambda) &amp;= \mu + \Sigma^{1/2}\varepsilon,
 <div class="arithmatex">\[z = \mu_\phi(x) + \sigma_\phi(x) \odot \varepsilon, \quad \varepsilon \sim \mathcal{N}(0,I)\]</div>
 <p>where <span class="arithmatex">\(\odot\)</span> denotes element-wise multiplication. This allows us to backpropagate through the sampling process and train the encoder network end-to-end.</p>
 <p>The key advantage of this approach is that it amortizes the cost of variational inference by learning a single function <span class="arithmatex">\(f_\phi\)</span> that can quickly approximate the optimal variational parameters for any input <span class="arithmatex">\(x\)</span>, rather than running a separate optimization for each datapoint.</p>
-<h3 id="decomposition-of-the-negative-elbo">Decomposition of the Negative ELBO</h3>
+<h2 id="decomposition-of-the-negative-elbo">Decomposition of the Negative ELBO</h2>
 <p>Starting with the definition of the ELBO:</p>
 <div class="arithmatex">\[\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}\left[\log\frac{p_\theta(x,z)}{q_\phi(z|x)}\right]\]</div>
 <p>We can expand the joint distribution <span class="arithmatex">\(p_\theta(x,z)\)</span> using the chain rule of probability:</p>
@@ -1047,7 +1047,7 @@ T(\varepsilon; \lambda) &amp;= \mu + \Sigma^{1/2}\varepsilon,
 <li>This term measures how far the approximate posterior <span class="arithmatex">\(q_\phi(z|x)\)</span> is from the prior <span class="arithmatex">\(p_\theta(z)\)</span></li>
 <li>It encourages the latent space to follow the prior distribution (typically a standard normal distribution)</li>
 </ol>
-<h3 id="practical-implementation-of-elbo-computation">Practical Implementation of ELBO Computation</h3>
+<h2 id="practical-implementation-of-elbo-computation">Practical Implementation of ELBO Computation</h2>
 <p>Let's look at how the ELBO is actually computed in practice. Here's a detailed implementation with explanations:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">negative_elbo_bound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
