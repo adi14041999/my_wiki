@@ -1049,6 +1049,23 @@ T(\varepsilon; \lambda) &amp;= \mu + \Sigma^{1/2}\varepsilon,
 </ol>
 <h2 id="practical-implementation-of-elbo-computation">Practical Implementation of ELBO Computation</h2>
 <p>Let's look at how the ELBO is actually computed in practice. Here's a detailed implementation with explanations:</p>
+<p>We implement the (rec+kl) decomposed form for practicality and clarity because:</p>
+<ul>
+<li>KL has a closed form (for two Gaussians <span class="arithmatex">\(q_\phi(z|x) \sim \mathcal{N}(\mu,\sigma^2)\)</span>, and <span class="arithmatex">\(p(z) \sim \mathcal{N}(0,I)\)</span>, the KL term can be computed analytically). A closed form means we can compute the exact value using a finite number of standard operations (addition, multiplication, logarithms, etc.) without needing numerical integration or approximation. This closed form is derived as follows:</li>
+</ul>
+<p>For two multivariate Gaussians <span class="arithmatex">\(q_\phi(z|x) = \mathcal{N}(\mu,\Sigma)\)</span> and <span class="arithmatex">\(p(z) = \mathcal{N}(0,I)\)</span>, the KL divergence is:</p>
+<div class="arithmatex">\[D_{KL}(q_\phi(z|x) \| p(z)) = \frac{1}{2}\left[\text{tr}(\Sigma) + \mu^T\mu - d - \log|\Sigma|\right]\]</div>
+<p>where <span class="arithmatex">\(\text{tr}(\Sigma)\)</span> is the trace of the covariance matrix <span class="arithmatex">\(\Sigma\)</span> (the sum of its diagonal elements), <span class="arithmatex">\(\mu^T\mu\)</span> is the squared L2 norm of the mean vector, <span class="arithmatex">\(d\)</span> is the dimension of the latent space, and <span class="arithmatex">\(|\Sigma|\)</span> is the determinant of <span class="arithmatex">\(\Sigma\)</span>. For diagonal covariance matrices <span class="arithmatex">\(\Sigma = \text{diag}(\sigma^2)\)</span>, this simplifies to:</p>
+<div class="arithmatex">\[D_{KL}(q_\phi(z|x) \| p(z)) = \frac{1}{2}\sum_{i=1}^d (\mu_i^2 + \sigma_i^2 - \log(\sigma_i^2) - 1)\]</div>
+<p>This analytical solution is not only computationally efficient but also provides exact gradients, unlike Monte Carlo estimates which would require sampling.</p>
+<ul>
+<li>
+<p>The analytical KL avoids noisy gradients that arise from computing KL via sampling so the decomposition makes training more stable. When using Monte Carlo estimation, the gradients can have high variance due to the randomness in sampling. The analytical form provides deterministic gradients, which leads to more stable optimization. This is particularly important because the KL term acts as a regularizer, and having stable gradients for this term helps prevent the model from either collapsing to a degenerate solution (where the KL term becomes too small) or failing to learn meaningful representations (where the KL term dominates).</p>
+</li>
+<li>
+<p>The decomposed form allows you to monitor reconstruction loss and KL separately which is very helpful in debugging and understanding model behavior</p>
+</li>
+</ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">negative_elbo_bound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="sd">    Computes the Evidence Lower Bound, KL and, Reconstruction costs</span>
