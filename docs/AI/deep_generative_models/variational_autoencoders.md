@@ -350,6 +350,24 @@ This decomposition reveals two key components of the training objective:
 
 Let's look at how the ELBO is actually computed in practice. Here's a detailed implementation with explanations:
 
+We implement the (rec+kl) decomposed form for practicality and clarity because:
+
+* KL has a closed form (for two Gaussians $q_\phi(z|x) \sim \mathcal{N}(\mu,\sigma^2)$, and $p(z) \sim \mathcal{N}(0,I)$, the KL term can be computed analytically). A closed form means we can compute the exact value using a finite number of standard operations (addition, multiplication, logarithms, etc.) without needing numerical integration or approximation. This closed form is derived as follows:
+
+For two multivariate Gaussians $q_\phi(z|x) = \mathcal{N}(\mu,\Sigma)$ and $p(z) = \mathcal{N}(0,I)$, the KL divergence is:
+
+$$D_{KL}(q_\phi(z|x) \| p(z)) = \frac{1}{2}\left[\text{tr}(\Sigma) + \mu^T\mu - d - \log|\Sigma|\right]$$
+
+where $\text{tr}(\Sigma)$ is the trace of the covariance matrix $\Sigma$ (the sum of its diagonal elements), $\mu^T\mu$ is the squared L2 norm of the mean vector, $d$ is the dimension of the latent space, and $|\Sigma|$ is the determinant of $\Sigma$. For diagonal covariance matrices $\Sigma = \text{diag}(\sigma^2)$, this simplifies to:
+
+$$D_{KL}(q_\phi(z|x) \| p(z)) = \frac{1}{2}\sum_{i=1}^d (\mu_i^2 + \sigma_i^2 - \log(\sigma_i^2) - 1)$$
+
+This analytical solution is not only computationally efficient but also provides exact gradients, unlike Monte Carlo estimates which would require sampling.
+
+* The analytical KL avoids noisy gradients that arise from computing KL via sampling so the decomposition makes training more stable. When using Monte Carlo estimation, the gradients can have high variance due to the randomness in sampling. The analytical form provides deterministic gradients, which leads to more stable optimization. This is particularly important because the KL term acts as a regularizer, and having stable gradients for this term helps prevent the model from either collapsing to a degenerate solution (where the KL term becomes too small) or failing to learn meaningful representations (where the KL term dominates).
+
+* The decomposed form allows you to monitor reconstruction loss and KL separately which is very helpful in debugging and understanding model behavior
+
 ```python
 def negative_elbo_bound(self, x):
     """
