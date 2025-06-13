@@ -313,27 +313,27 @@ $$\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}\left[\log\frac{p_\thet
 
 We can expand the joint distribution $p_\theta(x,z)$ using the chain rule of probability:
 
-$$p_\theta(x,z) = p_\theta(x|z)p(z)$$
+$$p_\theta(x,z) = p_\theta(x|z)p_\theta(z)$$
 
 Substituting this into the ELBO:
 
-$$\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}\left[\log\frac{p_\theta(x|z)p(z)}{q_\phi(z|x)}\right]$$
+$$\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}\left[\log\frac{p_\theta(x|z)p_\theta(z)}{q_\phi(z|x)}\right]$$
 
 Using the properties of logarithms, we can split this into three terms:
 
-$$\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] + \mathbb{E}_{q_\phi(z|x)}[\log p(z)] - \mathbb{E}_{q_\phi(z|x)}[\log q_\phi(z|x)]$$
+$$\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] + \mathbb{E}_{q_\phi(z|x)}[\log p_\theta(z)] - \mathbb{E}_{q_\phi(z|x)}[\log q_\phi(z|x)]$$
 
-The second and third terms can be combined to form the KL divergence between $q_\phi(z|x)$ and $p(z)$:
+The second and third terms can be combined to form the KL divergence between $q_\phi(z|x)$ and $p_\theta(z)$:
 
-$$\mathbb{E}_{q_\phi(z|x)}[\log p(z)] - \mathbb{E}_{q_\phi(z|x)}[\log q_\phi(z|x)] = -\mathbb{E}_{q_\phi(z|x)}\left[\log\frac{q_\phi(z|x)}{p(z)}\right] = -D_{KL}(q_\phi(z|x) \| p(z))$$
+$$\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(z)] - \mathbb{E}_{q_\phi(z|x)}[\log q_\phi(z|x)] = -\mathbb{E}_{q_\phi(z|x)}\left[\log\frac{q_\phi(z|x)}{p_\theta(z)}\right] = -D_{KL}(q_\phi(z|x) \| p_\theta(z))$$
 
 Therefore, the ELBO can be written as:
 
-$$\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] - D_{KL}(q_\phi(z|x) \| p(z))$$
+$$\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] - D_{KL}(q_\phi(z|x) \| p_\theta(z))$$
 
 It is insightful to note that the negative ELBO can be decomposed into two terms:
 
-$$-\text{ELBO}(x; \theta, \phi) = \underbrace{-\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)]}_{\text{Reconstruction Loss}} + \underbrace{D_{KL}(q_\phi(z|x) \| p(z))}_{\text{KL Divergence}}$$
+$$-\text{ELBO}(x; \theta, \phi) = \underbrace{-\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)]}_{\text{Reconstruction Loss}} + \underbrace{D_{KL}(q_\phi(z|x) \| p_\theta(z))}_{\text{KL Divergence}}$$
 
 This decomposition reveals two key components of the training objective:
 
@@ -342,9 +342,110 @@ This decomposition reveals two key components of the training objective:
    - It encourages the encoder to produce latent codes that preserve the essential information about the input
    - In practice, this is often implemented as the mean squared error or binary cross-entropy between the input and its reconstruction
 
-2. **KL Divergence**: $D_{KL}(q_\phi(z|x) \| p(z))$
-   - This term measures how far the approximate posterior $q_\phi(z|x)$ is from the prior $p(z)$
+2. **KL Divergence**: $D_{KL}(q_\phi(z|x) \| p_\theta(z))$
+   - This term measures how far the approximate posterior $q_\phi(z|x)$ is from the prior $p_\theta(z)$
    - It encourages the latent space to follow the prior distribution (typically a standard normal distribution)
+
+### Practical Implementation of ELBO Computation
+
+Let's look at how the ELBO is actually computed in practice. Here's a detailed implementation with explanations:
+
+```python
+def negative_elbo_bound(self, x):
+    """
+    Computes the Evidence Lower Bound, KL and, Reconstruction costs
+
+    Args:
+        x: tensor: (batch, dim): Observations
+
+    Returns:
+        nelbo: tensor: (): Negative evidence lower bound
+        kl: tensor: (): ELBO KL divergence to prior
+        rec: tensor: (): ELBO Reconstruction term
+    """
+    # Step 1: Get the parameters of the approximate posterior q_phi(z|x)
+    q_phi_z_given_x_m, q_phi_z_given_x_v = self.enc(x)
+    
+    # Step 2: Compute the KL divergence term
+    # This computes D_KL(q_phi(z|x) || p_theta(z))
+    kl = ut.kl_normal(q_phi_z_given_x_m, q_phi_z_given_x_v,
+                      self.z_prior_m, self.z_prior_v)
+    
+    # Step 3: Sample from the approximate posterior using reparameterization
+    # This implements z = mu + sigma * epsilon, where epsilon ~ N(0,I)
+    z_samples = ut.sample_gaussian(
+        q_phi_z_given_x_m.expand(x.shape[0], self.z_dim),
+        q_phi_z_given_x_v.expand(x.shape[0], self.z_dim))
+    
+    # Step 4: Get the decoder outputs (logits)
+    # These parameterize the Bernoulli distributions for reconstruction
+    f_theta_of_z = self.dec(z_samples)
+    
+    # Step 5: Compute the reconstruction term
+    # This computes -E_q[log p_theta(x|z)] using binary cross-entropy
+    rec = -ut.log_bernoulli_with_logits(x, f_theta_of_z)
+    
+    # Step 6: Combine terms to get the negative ELBO
+    nelbo = kl + rec
+    
+    # Step 7: Average over the batch
+    nelbo_avg = torch.mean(nelbo)
+    kl_avg = torch.mean(kl)
+    rec_avg = torch.mean(rec)
+    
+    return nelbo_avg, kl_avg, rec_avg
+```
+
+Let's break down each step:
+
+1. **Encoder Output**: 
+   - The encoder network takes input $x$ and outputs the parameters of the approximate posterior $q_\phi(z|x)$
+   - These parameters are the mean ($\mu_\phi(x)$) and variance ($\sigma^2_\phi(x)$) of a diagonal Gaussian
+
+2. **KL Divergence**:
+   - Computes $D_{KL}(q_\phi(z|x) \| p_\theta(z))$
+   - For diagonal Gaussians, this has a closed-form solution
+   - The prior $p_\theta(z)$ is typically a standard normal distribution
+
+3. **Sampling**:
+   - Uses the reparameterization trick to sample from $q_\phi(z|x)$
+   - Implements $z = \mu_\phi(x) + \sigma_\phi(x) \odot \varepsilon$ where $\varepsilon \sim \mathcal{N}(0,I)$
+   - The samples are used to estimate the reconstruction term
+
+4. **Decoder Output**:
+   - The decoder network takes the sampled $z$ and outputs logits
+   - These logits parameterize Bernoulli distributions for each element of $x$
+
+5. **Reconstruction Term**:
+   - Computes $-\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)]$
+   - Uses binary cross-entropy loss which takes logits directly
+   - The sigmoid function is incorporated into the loss computation
+
+6. **Final ELBO**:
+   - Combines the KL divergence and reconstruction terms
+   - The negative ELBO is what we minimize during training
+
+7. **Batch Averaging**:
+   - Averages the losses over the batch
+   - This gives us the final training objective
+
+This implementation shows how the theoretical ELBO decomposition we discussed earlier is actually computed in practice, with all the necessary components for training a VAE on binary data.
+
+**Note on Sampling from $q_\phi(z|x)$**: The sampling step in the implementation is crucial for two reasons:
+
+**Monte Carlo Estimation**: The reconstruction term $-\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)]$ involves an expectation over $q_\phi(z|x)$. We estimate this expectation using Monte Carlo sampling:
+
+$$-\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] \approx -\frac{1}{K}\sum_{k=1}^K \log p_\theta(x|z^{(k)})$$
+
+where $z^{(k)} \sim q_\phi(z|x)$. In practice, we often use $K=1$ (a single sample) as it works well and is computationally efficient.
+
+**Gradient Estimation**: We need to compute gradients of this expectation with respect to both $\phi$ (encoder parameters) and $\theta$ (decoder parameters). The reparameterization trick allows us to:
+- Sample from a fixed distribution $p(\varepsilon)$ that doesn't depend on $\phi$
+- Transform these samples using a deterministic function that depends on $\phi$
+- Backpropagate through this transformation to compute gradients
+- This results in lower variance gradient estimates compared to the REINFORCE trick
+
+The sampling step is therefore essential for both estimating the ELBO and computing its gradients during training.
 
 
 

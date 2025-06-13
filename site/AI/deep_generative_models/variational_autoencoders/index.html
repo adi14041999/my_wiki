@@ -618,6 +618,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#practical-implementation-of-elbo-computation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Practical Implementation of ELBO Computation
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1013,17 +1022,17 @@ T(\varepsilon; \lambda) &amp;= \mu + \Sigma^{1/2}\varepsilon,
 <p>Starting with the definition of the ELBO:</p>
 <div class="arithmatex">\[\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}\left[\log\frac{p_\theta(x,z)}{q_\phi(z|x)}\right]\]</div>
 <p>We can expand the joint distribution <span class="arithmatex">\(p_\theta(x,z)\)</span> using the chain rule of probability:</p>
-<div class="arithmatex">\[p_\theta(x,z) = p_\theta(x|z)p(z)\]</div>
+<div class="arithmatex">\[p_\theta(x,z) = p_\theta(x|z)p_\theta(z)\]</div>
 <p>Substituting this into the ELBO:</p>
-<div class="arithmatex">\[\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}\left[\log\frac{p_\theta(x|z)p(z)}{q_\phi(z|x)}\right]\]</div>
+<div class="arithmatex">\[\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}\left[\log\frac{p_\theta(x|z)p_\theta(z)}{q_\phi(z|x)}\right]\]</div>
 <p>Using the properties of logarithms, we can split this into three terms:</p>
-<div class="arithmatex">\[\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] + \mathbb{E}_{q_\phi(z|x)}[\log p(z)] - \mathbb{E}_{q_\phi(z|x)}[\log q_\phi(z|x)]\]</div>
-<p>The second and third terms can be combined to form the KL divergence between <span class="arithmatex">\(q_\phi(z|x)\)</span> and <span class="arithmatex">\(p(z)\)</span>:</p>
-<div class="arithmatex">\[\mathbb{E}_{q_\phi(z|x)}[\log p(z)] - \mathbb{E}_{q_\phi(z|x)}[\log q_\phi(z|x)] = -\mathbb{E}_{q_\phi(z|x)}\left[\log\frac{q_\phi(z|x)}{p(z)}\right] = -D_{KL}(q_\phi(z|x) \| p(z))\]</div>
+<div class="arithmatex">\[\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] + \mathbb{E}_{q_\phi(z|x)}[\log p_\theta(z)] - \mathbb{E}_{q_\phi(z|x)}[\log q_\phi(z|x)]\]</div>
+<p>The second and third terms can be combined to form the KL divergence between <span class="arithmatex">\(q_\phi(z|x)\)</span> and <span class="arithmatex">\(p_\theta(z)\)</span>:</p>
+<div class="arithmatex">\[\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(z)] - \mathbb{E}_{q_\phi(z|x)}[\log q_\phi(z|x)] = -\mathbb{E}_{q_\phi(z|x)}\left[\log\frac{q_\phi(z|x)}{p_\theta(z)}\right] = -D_{KL}(q_\phi(z|x) \| p_\theta(z))\]</div>
 <p>Therefore, the ELBO can be written as:</p>
-<div class="arithmatex">\[\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] - D_{KL}(q_\phi(z|x) \| p(z))\]</div>
+<div class="arithmatex">\[\text{ELBO}(x; \theta, \phi) = \mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] - D_{KL}(q_\phi(z|x) \| p_\theta(z))\]</div>
 <p>It is insightful to note that the negative ELBO can be decomposed into two terms:</p>
-<div class="arithmatex">\[-\text{ELBO}(x; \theta, \phi) = \underbrace{-\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)]}_{\text{Reconstruction Loss}} + \underbrace{D_{KL}(q_\phi(z|x) \| p(z))}_{\text{KL Divergence}}\]</div>
+<div class="arithmatex">\[-\text{ELBO}(x; \theta, \phi) = \underbrace{-\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)]}_{\text{Reconstruction Loss}} + \underbrace{D_{KL}(q_\phi(z|x) \| p_\theta(z))}_{\text{KL Divergence}}\]</div>
 <p>This decomposition reveals two key components of the training objective:</p>
 <ol>
 <li><strong>Reconstruction Loss</strong>: <span class="arithmatex">\(-\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)]\)</span></li>
@@ -1033,11 +1042,119 @@ T(\varepsilon; \lambda) &amp;= \mu + \Sigma^{1/2}\varepsilon,
 <p>In practice, this is often implemented as the mean squared error or binary cross-entropy between the input and its reconstruction</p>
 </li>
 <li>
-<p><strong>KL Divergence</strong>: <span class="arithmatex">\(D_{KL}(q_\phi(z|x) \| p(z))\)</span></p>
+<p><strong>KL Divergence</strong>: <span class="arithmatex">\(D_{KL}(q_\phi(z|x) \| p_\theta(z))\)</span></p>
 </li>
-<li>This term measures how far the approximate posterior <span class="arithmatex">\(q_\phi(z|x)\)</span> is from the prior <span class="arithmatex">\(p(z)\)</span></li>
+<li>This term measures how far the approximate posterior <span class="arithmatex">\(q_\phi(z|x)\)</span> is from the prior <span class="arithmatex">\(p_\theta(z)\)</span></li>
 <li>It encourages the latent space to follow the prior distribution (typically a standard normal distribution)</li>
 </ol>
+<h3 id="practical-implementation-of-elbo-computation">Practical Implementation of ELBO Computation</h3>
+<p>Let's look at how the ELBO is actually computed in practice. Here's a detailed implementation with explanations:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">negative_elbo_bound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="sd">    Computes the Evidence Lower Bound, KL and, Reconstruction costs</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="sd">        x: tensor: (batch, dim): Observations</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="sd">        nelbo: tensor: (): Negative evidence lower bound</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="sd">        kl: tensor: (): ELBO KL divergence to prior</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="sd">        rec: tensor: (): ELBO Reconstruction term</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="c1"># Step 1: Get the parameters of the approximate posterior q_phi(z|x)</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="n">q_phi_z_given_x_m</span><span class="p">,</span> <span class="n">q_phi_z_given_x_v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="c1"># Step 2: Compute the KL divergence term</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="c1"># This computes D_KL(q_phi(z|x) || p_theta(z))</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="n">kl</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">kl_normal</span><span class="p">(</span><span class="n">q_phi_z_given_x_m</span><span class="p">,</span> <span class="n">q_phi_z_given_x_v</span><span class="p">,</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>                      <span class="bp">self</span><span class="o">.</span><span class="n">z_prior_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_prior_v</span><span class="p">)</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="c1"># Step 3: Sample from the approximate posterior using reparameterization</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    <span class="c1"># This implements z = mu + sigma * epsilon, where epsilon ~ N(0,I)</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    <span class="n">z_samples</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">sample_gaussian</span><span class="p">(</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        <span class="n">q_phi_z_given_x_m</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_dim</span><span class="p">),</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        <span class="n">q_phi_z_given_x_v</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_dim</span><span class="p">))</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    <span class="c1"># Step 4: Get the decoder outputs (logits)</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="c1"># These parameterize the Bernoulli distributions for reconstruction</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    <span class="n">f_theta_of_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec</span><span class="p">(</span><span class="n">z_samples</span><span class="p">)</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    <span class="c1"># Step 5: Compute the reconstruction term</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    <span class="c1"># This computes -E_q[log p_theta(x|z)] using binary cross-entropy</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    <span class="n">rec</span> <span class="o">=</span> <span class="o">-</span><span class="n">ut</span><span class="o">.</span><span class="n">log_bernoulli_with_logits</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f_theta_of_z</span><span class="p">)</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    <span class="c1"># Step 6: Combine terms to get the negative ELBO</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    <span class="n">nelbo</span> <span class="o">=</span> <span class="n">kl</span> <span class="o">+</span> <span class="n">rec</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    <span class="c1"># Step 7: Average over the batch</span>
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    <span class="n">nelbo_avg</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">nelbo</span><span class="p">)</span>
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    <span class="n">kl_avg</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">kl</span><span class="p">)</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    <span class="n">rec_avg</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    <span class="k">return</span> <span class="n">nelbo_avg</span><span class="p">,</span> <span class="n">kl_avg</span><span class="p">,</span> <span class="n">rec_avg</span>
+</code></pre></div>
+<p>Let's break down each step:</p>
+<ol>
+<li><strong>Encoder Output</strong>: </li>
+<li>The encoder network takes input <span class="arithmatex">\(x\)</span> and outputs the parameters of the approximate posterior <span class="arithmatex">\(q_\phi(z|x)\)</span></li>
+<li>
+<p>These parameters are the mean (<span class="arithmatex">\(\mu_\phi(x)\)</span>) and variance (<span class="arithmatex">\(\sigma^2_\phi(x)\)</span>) of a diagonal Gaussian</p>
+</li>
+<li>
+<p><strong>KL Divergence</strong>:</p>
+</li>
+<li>Computes <span class="arithmatex">\(D_{KL}(q_\phi(z|x) \| p_\theta(z))\)</span></li>
+<li>For diagonal Gaussians, this has a closed-form solution</li>
+<li>
+<p>The prior <span class="arithmatex">\(p_\theta(z)\)</span> is typically a standard normal distribution</p>
+</li>
+<li>
+<p><strong>Sampling</strong>:</p>
+</li>
+<li>Uses the reparameterization trick to sample from <span class="arithmatex">\(q_\phi(z|x)\)</span></li>
+<li>Implements <span class="arithmatex">\(z = \mu_\phi(x) + \sigma_\phi(x) \odot \varepsilon\)</span> where <span class="arithmatex">\(\varepsilon \sim \mathcal{N}(0,I)\)</span></li>
+<li>
+<p>The samples are used to estimate the reconstruction term</p>
+</li>
+<li>
+<p><strong>Decoder Output</strong>:</p>
+</li>
+<li>The decoder network takes the sampled <span class="arithmatex">\(z\)</span> and outputs logits</li>
+<li>
+<p>These logits parameterize Bernoulli distributions for each element of <span class="arithmatex">\(x\)</span></p>
+</li>
+<li>
+<p><strong>Reconstruction Term</strong>:</p>
+</li>
+<li>Computes <span class="arithmatex">\(-\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)]\)</span></li>
+<li>Uses binary cross-entropy loss which takes logits directly</li>
+<li>
+<p>The sigmoid function is incorporated into the loss computation</p>
+</li>
+<li>
+<p><strong>Final ELBO</strong>:</p>
+</li>
+<li>Combines the KL divergence and reconstruction terms</li>
+<li>
+<p>The negative ELBO is what we minimize during training</p>
+</li>
+<li>
+<p><strong>Batch Averaging</strong>:</p>
+</li>
+<li>Averages the losses over the batch</li>
+<li>This gives us the final training objective</li>
+</ol>
+<p>This implementation shows how the theoretical ELBO decomposition we discussed earlier is actually computed in practice, with all the necessary components for training a VAE on binary data.</p>
+<p><strong>Note on Sampling from <span class="arithmatex">\(q_\phi(z|x)\)</span></strong>: The sampling step in the implementation is crucial for two reasons:</p>
+<p><strong>Monte Carlo Estimation</strong>: The reconstruction term <span class="arithmatex">\(-\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)]\)</span> involves an expectation over <span class="arithmatex">\(q_\phi(z|x)\)</span>. We estimate this expectation using Monte Carlo sampling:</p>
+<div class="arithmatex">\[-\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] \approx -\frac{1}{K}\sum_{k=1}^K \log p_\theta(x|z^{(k)})\]</div>
+<p>where <span class="arithmatex">\(z^{(k)} \sim q_\phi(z|x)\)</span>. In practice, we often use <span class="arithmatex">\(K=1\)</span> (a single sample) as it works well and is computationally efficient.</p>
+<p><strong>Gradient Estimation</strong>: We need to compute gradients of this expectation with respect to both <span class="arithmatex">\(\phi\)</span> (encoder parameters) and <span class="arithmatex">\(\theta\)</span> (decoder parameters). The reparameterization trick allows us to:
+- Sample from a fixed distribution <span class="arithmatex">\(p(\varepsilon)\)</span> that doesn't depend on <span class="arithmatex">\(\phi\)</span>
+- Transform these samples using a deterministic function that depends on <span class="arithmatex">\(\phi\)</span>
+- Backpropagate through this transformation to compute gradients
+- This results in lower variance gradient estimates compared to the REINFORCE trick</p>
+<p>The sampling step is therefore essential for both estimating the ELBO and computing its gradients during training.</p>
 
 
 
