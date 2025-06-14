@@ -464,7 +464,3 @@ where $z^{(k)} \sim q_\phi(z|x)$. In practice, we often use $K=1$ (a single samp
 - This results in lower variance gradient estimates compared to the REINFORCE trick
 
 The sampling step is therefore essential for both estimating the ELBO and computing its gradients during training.
-
-
-
-
