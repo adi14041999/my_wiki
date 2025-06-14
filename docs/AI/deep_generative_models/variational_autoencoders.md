@@ -464,3 +464,25 @@ where $z^{(k)} \sim q_\phi(z|x)$. In practice, we often use $K=1$ (a single samp
 - This results in lower variance gradient estimates compared to the REINFORCE trick
 
 The sampling step is therefore essential for both estimating the ELBO and computing its gradients during training.
+
+## Gaussian Mixture VAE (GMVAE)
+
+The VAE's prior distribution was a parameter-free isotropic Gaussian $p_\theta(z) = \mathcal{N}(z|0,I)$. While this original setup works well, there are settings in which we desire more expressivity to better model our data. Let's look at GMVAE, which has a mixture of Gaussians as the prior distribution.
+
+$$p_\theta(z) = \sum_{i=1}^k \frac{1}{k}\mathcal{N}(z|\mu_i, \text{diag}(\sigma^2_i))$$
+
+where $i \in \{1, ..., k\}$ denotes the $i$th cluster index. For notational simplicity, we shall subsume our mixture of Gaussian parameters $\{\mu_i, \sigma_i\}_{i=1}^k$ into our generative model parameters $\theta$. For simplicity, we have also assumed fixed uniform weights $1/k$ over the possible different clusters.
+
+Apart from the prior, the GMVAE shares an identical setup as the VAE:
+
+$$q_\phi(z|x) = \mathcal{N}(z|\mu_\phi(x), \text{diag}(\sigma^2_\phi(x)))$$
+
+$$p_\theta(x|z) = \text{Bern}(x|f_\theta(z))$$
+
+Although the ELBO for the GMVAE: $\mathbb{E}_{q_\phi(z)}[\log p_\theta(x|z)] - D_{KL}(q_\phi(z|x) \| p_\theta(z))$ is identical to that of the VAE, we note that the KL term $D_{KL}(q_\phi(z|x) \| p_\theta(z))$ cannot be computed analytically between a Gaussian distribution $q_\phi(z|x)$ and a mixture of Gaussians $p_\theta(z)$. However, we can obtain its unbiased estimator via Monte Carlo sampling:
+
+$$D_{KL}(q_\phi(z|x) \| p_\theta(z)) \approx \log q_\phi(z^{(1)}|x) - \log p_\theta(z^{(1)})$$
+
+$$= \underbrace{\log\mathcal{N}(z^{(1)}|\mu_\phi(x), \text{diag}(\sigma^2_\phi(x)))}_{\text{log normal}} - \underbrace{\log\sum_{i=1}^k \frac{1}{k}\mathcal{N}(z^{(1)}|\mu_i, \text{diag}(\sigma^2_i))}_{\text{log normal mixture}}$$
+
+where $z^{(1)} \sim q_\phi(z|x)$ denotes a single sample.
