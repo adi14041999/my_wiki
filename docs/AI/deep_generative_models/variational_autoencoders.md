@@ -389,7 +389,7 @@ def negative_elbo_bound(self, x):
     kl = ut.kl_normal(q_phi_z_given_x_m, q_phi_z_given_x_v,
                       self.z_prior_m, self.z_prior_v)
     
-    # Step 3: Sample from the approximate posterior using reparameterization
+    # Step 3: Take m samples from the approximate posterior using reparameterization
     # This implements z = mu + sigma * epsilon, where epsilon ~ N(0,I)
     z_samples = ut.sample_gaussian(
         q_phi_z_given_x_m.expand(x.shape[0], self.z_dim),
@@ -465,6 +465,42 @@ where $z^{(k)} \sim q_\phi(z|x)$. In practice, we often use $K=1$ (a single samp
 
 The sampling step is therefore essential for both estimating the ELBO and computing its gradients during training.
 
+## β-VAE
+
+A popular variation of the normal VAE is called the β-VAE. The β-VAE optimizes the following objective:
+
+$$
+\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] - \beta D_{KL}(q_\phi(z|x) || p(z))
+$$
+
+Here, β is a positive real number. From a training objective, we want to decrease the negative of ELBO, also called NELBO:
+
+$$
+\text{NELBO} = \text{Reconstruction Loss} + \beta D_{KL}(q_\phi(z|x) \| p(z))
+$$
+
+We see that the second term acts as a regularization term. β can be thought of as a hyperparameter that adjusts how much we want to regularize. Greater the β, more is the training optimized to reduce KL divergence, and a higher possibility of overfitting (and also more the $q_\phi(z|x)$ closely approximates $p(z)$). Lesser the β, optimization is geared towards increasing the KL divergence, leading to a more general model. When β is set to 1 however, we get the standard VAE.
+
+## Importance Weighted Autoencoder (IWAE)
+
+While the ELBO serves as a lower bound to the true marginal log-likelihood, it may be loose if the variational posterior $q_\phi(z|x)$ is a poor approximation to the true posterior $p_\theta(z|x)$. The key idea behind IWAE is to use $m > 1$ samples from the approximate posterior $q_\phi(z|x)$ to obtain the following IWAE bound:
+
+$$
+\mathcal{L}_m(x; \theta,\phi) = \mathbb{E}_{z^{(1)},...,z^{(m)} \text{ i.i.d.} \sim q_\phi(z|x)} \log \frac{1}{m}\sum_{i=1}^m \frac{p_\theta(x,z^{(i)})}{q_\phi(z^{(i)}|x)}
+$$
+
+Notice that for the special case of $m=1$, the IWAE objective $\mathcal{L}_m$ reduces to the standard ELBO $\mathcal{L}_1 = \mathbb{E}_{z\sim q_\phi(z|x)} \log \frac{p_\theta(x,z)}{q_\phi(z|x)}$.
+
+As a pseudocode, the main modification to the standard VAE would be:
+
+```python
+# Step 3: Take m samples from the approximate posterior using reparameterization
+# This implements z = mu + sigma * epsilon, where epsilon ~ N(0,I)
+z_samples = ut.sample_gaussian(
+    q_phi_z_given_x_m.expand(x.shape[0], self.z_dim),
+    q_phi_z_given_x_v.expand(x.shape[0], self.z_dim))
+```
+
 ## Gaussian Mixture VAE (GMVAE)
 
 The VAE's prior distribution was a parameter-free isotropic Gaussian $p_\theta(z) = \mathcal{N}(z|0,I)$. While this original setup works well, there are settings in which we desire more expressivity to better model our data. Let's look at GMVAE, which has a mixture of Gaussians as the prior distribution.
@@ -486,3 +522,86 @@ $$D_{KL}(q_\phi(z|x) \| p_\theta(z)) \approx \log q_\phi(z^{(1)}|x) - \log p_\th
 $$= \underbrace{\log\mathcal{N}(z^{(1)}|\mu_\phi(x), \text{diag}(\sigma^2_\phi(x)))}_{\text{log normal}} - \underbrace{\log\sum_{i=1}^k \frac{1}{k}\mathcal{N}(z^{(1)}|\mu_i, \text{diag}(\sigma^2_i))}_{\text{log normal mixture}}$$
 
 where $z^{(1)} \sim q_\phi(z|x)$ denotes a single sample.
+
+## The Semi-Supervised VAE (SSVAE)
+
+The Semi-Supervised VAE (SSVAE) extends the standard VAE to handle both labeled and unlabeled data. In a semi-supervised setting, we have a dataset $\mathcal{D}$ that consists of:
+- Labeled data: $\mathcal{D}_l = \{(x^{(i)}, y^{(i)})\}_{i=1}^{N_l}$
+- Unlabeled data: $\mathcal{D}_u = \{x^{(i)}\}_{i=1}^{N_u}$
+
+where $y^{(i)}$ represents the class label for the $i$-th labeled example. The SSVAE introduces an additional latent variable $y$ to model the class labels, and the joint distribution is factorized as:
+
+$$
+p_\theta(x, y, z) = p_\theta(x|y,z)p_\theta(y|z)p_\theta(z)
+$$
+
+This factorization is derived from the chain rule of probability. We first factorize $p_\theta(x, y, z)$ as $p_\theta(x|y,z)p_\theta(y,z)$, and then further factorize $p_\theta(y,z)$ as $p_\theta(y|z)p_\theta(z)$. This reflects the generative process where:
+1. First, we sample $z$ from the prior $p_\theta(z)$
+2. Then, we sample $y$ conditioned on $z$ from $p_\theta(y|z)$
+3. Finally, we generate $x$ conditioned on both $y$ and $z$ from $p_\theta(x|y,z)$
+
+The approximate posterior for labeled data is:
+
+$$
+q_\phi(y,z|x) = q_\phi(z|x,y)q_\phi(y|x)
+$$
+
+This factorization is derived from the chain rule of probability for the approximate posterior. The chain rule states that for any random variables $A$, $B$, and $C$, we can write:
+
+$$p(A,B|C) = p(A|B,C)p(B|C)$$
+
+This equation is derived from the definition of conditional probability. Let's break it down step by step:
+
+1. First, recall that conditional probability is defined as:
+
+$$p(A|B) = \frac{p(A,B)}{p(B)}$$
+
+2. For our case with three variables, we can write:
+
+$$p(A,B|C) = \frac{p(A,B,C)}{p(C)}$$
+
+3. We can also write:
+   
+$$p(A|B,C) = \frac{p(A,B,C)}{p(B,C)}$$
+
+and
+
+$$p(B|C) = \frac{p(B,C)}{p(C)}$$
+
+4. Multiplying these last two equations:
+   
+$$p(A|B,C)p(B|C) = \frac{p(A,B,C)}{p(B,C)} \cdot \frac{p(B,C)}{p(C)} = \frac{p(A,B,C)}{p(C)} = p(A,B|C)$$
+
+Therefore, we have proven that:
+
+$$p(A,B|C) = p(A|B,C)p(B|C)$$
+
+In our case, we can identify:
+- $A$ as $z$ (the latent code)
+- $B$ as $y$ (the label)
+- $C$ as $x$ (the observed data)
+
+Therefore, applying the chain rule:
+
+$$q_\phi(y,z|x) = q_\phi(z|x,y)q_\phi(y|x)$$
+
+This means:
+1. First, we predict the label $y$ from $x$ using $q_\phi(y|x)$
+2. Then, we infer the latent code $z$ using both $x$ and the predicted $y$ through $q_\phi(z|x,y)$
+
+and for unlabeled data:
+
+$$
+q_\phi(y,z|x) = q_\phi(z|x,y)q_\phi(y)
+$$
+
+For unlabeled data, since we don't know the true label $y$, we use a prior distribution $q_\phi(y)$ (typically a uniform distribution over classes) instead of $q_\phi(y|x)$. The factorization reflects that:
+1. We sample a label $y$ from the prior $q_\phi(y)$
+2. Then, we infer the latent code $z$ using both $x$ and the sampled $y$ through $q_\phi(z|x,y)$
+
+The training objective for SSVAE combines:
+1. The ELBO for labeled data
+2. The ELBO for unlabeled data
+3. A classification loss for labeled data
+
+This allows the model to learn both the data distribution and the class labels in a semi-supervised manner.
