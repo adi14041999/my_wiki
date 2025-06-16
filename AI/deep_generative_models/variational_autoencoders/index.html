@@ -633,9 +633,36 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#-vae" class="md-nav__link">
+    <span class="md-ellipsis">
+      β-VAE
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#importance-weighted-autoencoder-iwae" class="md-nav__link">
+    <span class="md-ellipsis">
+      Importance Weighted Autoencoder (IWAE)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#gaussian-mixture-vae-gmvae" class="md-nav__link">
     <span class="md-ellipsis">
       Gaussian Mixture VAE (GMVAE)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-semi-supervised-vae-ssvae" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Semi-Supervised VAE (SSVAE)
     </span>
   </a>
   
@@ -1095,7 +1122,7 @@ T(\varepsilon; \lambda) &amp;= \mu + \Sigma^{1/2}\varepsilon,
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="n">kl</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">kl_normal</span><span class="p">(</span><span class="n">q_phi_z_given_x_m</span><span class="p">,</span> <span class="n">q_phi_z_given_x_v</span><span class="p">,</span>
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>                      <span class="bp">self</span><span class="o">.</span><span class="n">z_prior_m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_prior_v</span><span class="p">)</span>
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="c1"># Step 3: Sample from the approximate posterior using reparameterization</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="c1"># Step 3: Take m samples from the approximate posterior using reparameterization</span>
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    <span class="c1"># This implements z = mu + sigma * epsilon, where epsilon ~ N(0,I)</span>
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    <span class="n">z_samples</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">sample_gaussian</span><span class="p">(</span>
 <a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        <span class="n">q_phi_z_given_x_m</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_dim</span><span class="p">),</span>
@@ -1181,6 +1208,29 @@ T(\varepsilon; \lambda) &amp;= \mu + \Sigma^{1/2}\varepsilon,
 - Backpropagate through this transformation to compute gradients
 - This results in lower variance gradient estimates compared to the REINFORCE trick</p>
 <p>The sampling step is therefore essential for both estimating the ELBO and computing its gradients during training.</p>
+<h2 id="-vae">β-VAE</h2>
+<p>A popular variation of the normal VAE is called the β-VAE. The β-VAE optimizes the following objective:</p>
+<div class="arithmatex">\[
+\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] - \beta D_{KL}(q_\phi(z|x) || p(z))
+\]</div>
+<p>Here, β is a positive real number. From a training objective, we want to decrease the negative of ELBO, also called NELBO:</p>
+<div class="arithmatex">\[
+\text{NELBO} = \text{Reconstruction Loss} + \beta D_{KL}(q_\phi(z|x) \| p(z))
+\]</div>
+<p>We see that the second term acts as a regularization term. β can be thought of as a hyperparameter that adjusts how much we want to regularize. Greater the β, more is the training optimized to reduce KL divergence, and a higher possibility of overfitting (and also more the <span class="arithmatex">\(q_\phi(z|x)\)</span> closely approximates <span class="arithmatex">\(p(z)\)</span>). Lesser the β, optimization is geared towards increasing the KL divergence, leading to a more general model. When β is set to 1 however, we get the standard VAE.</p>
+<h2 id="importance-weighted-autoencoder-iwae">Importance Weighted Autoencoder (IWAE)</h2>
+<p>While the ELBO serves as a lower bound to the true marginal log-likelihood, it may be loose if the variational posterior <span class="arithmatex">\(q_\phi(z|x)\)</span> is a poor approximation to the true posterior <span class="arithmatex">\(p_\theta(z|x)\)</span>. The key idea behind IWAE is to use <span class="arithmatex">\(m &gt; 1\)</span> samples from the approximate posterior <span class="arithmatex">\(q_\phi(z|x)\)</span> to obtain the following IWAE bound:</p>
+<div class="arithmatex">\[
+\mathcal{L}_m(x; \theta,\phi) = \mathbb{E}_{z^{(1)},...,z^{(m)} \text{ i.i.d.} \sim q_\phi(z|x)} \log \frac{1}{m}\sum_{i=1}^m \frac{p_\theta(x,z^{(i)})}{q_\phi(z^{(i)}|x)}
+\]</div>
+<p>Notice that for the special case of <span class="arithmatex">\(m=1\)</span>, the IWAE objective <span class="arithmatex">\(\mathcal{L}_m\)</span> reduces to the standard ELBO <span class="arithmatex">\(\mathcal{L}_1 = \mathbb{E}_{z\sim q_\phi(z|x)} \log \frac{p_\theta(x,z)}{q_\phi(z|x)}\)</span>.</p>
+<p>As a pseudocode, the main modification to the standard VAE would be:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Step 3: Take m samples from the approximate posterior using reparameterization</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># This implements z = mu + sigma * epsilon, where epsilon ~ N(0,I)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">z_samples</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">sample_gaussian</span><span class="p">(</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">q_phi_z_given_x_m</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_dim</span><span class="p">),</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">q_phi_z_given_x_v</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_dim</span><span class="p">))</span>
+</code></pre></div>
 <h2 id="gaussian-mixture-vae-gmvae">Gaussian Mixture VAE (GMVAE)</h2>
 <p>The VAE's prior distribution was a parameter-free isotropic Gaussian <span class="arithmatex">\(p_\theta(z) = \mathcal{N}(z|0,I)\)</span>. While this original setup works well, there are settings in which we desire more expressivity to better model our data. Let's look at GMVAE, which has a mixture of Gaussians as the prior distribution.</p>
 <div class="arithmatex">\[p_\theta(z) = \sum_{i=1}^k \frac{1}{k}\mathcal{N}(z|\mu_i, \text{diag}(\sigma^2_i))\]</div>
@@ -1192,6 +1242,66 @@ T(\varepsilon; \lambda) &amp;= \mu + \Sigma^{1/2}\varepsilon,
 <div class="arithmatex">\[D_{KL}(q_\phi(z|x) \| p_\theta(z)) \approx \log q_\phi(z^{(1)}|x) - \log p_\theta(z^{(1)})\]</div>
 <div class="arithmatex">\[= \underbrace{\log\mathcal{N}(z^{(1)}|\mu_\phi(x), \text{diag}(\sigma^2_\phi(x)))}_{\text{log normal}} - \underbrace{\log\sum_{i=1}^k \frac{1}{k}\mathcal{N}(z^{(1)}|\mu_i, \text{diag}(\sigma^2_i))}_{\text{log normal mixture}}\]</div>
 <p>where <span class="arithmatex">\(z^{(1)} \sim q_\phi(z|x)\)</span> denotes a single sample.</p>
+<h2 id="the-semi-supervised-vae-ssvae">The Semi-Supervised VAE (SSVAE)</h2>
+<p>The Semi-Supervised VAE (SSVAE) extends the standard VAE to handle both labeled and unlabeled data. In a semi-supervised setting, we have a dataset <span class="arithmatex">\(\mathcal{D}\)</span> that consists of:
+- Labeled data: <span class="arithmatex">\(\mathcal{D}_l = \{(x^{(i)}, y^{(i)})\}_{i=1}^{N_l}\)</span>
+- Unlabeled data: <span class="arithmatex">\(\mathcal{D}_u = \{x^{(i)}\}_{i=1}^{N_u}\)</span></p>
+<p>where <span class="arithmatex">\(y^{(i)}\)</span> represents the class label for the <span class="arithmatex">\(i\)</span>-th labeled example. The SSVAE introduces an additional latent variable <span class="arithmatex">\(y\)</span> to model the class labels, and the joint distribution is factorized as:</p>
+<div class="arithmatex">\[
+p_\theta(x, y, z) = p_\theta(x|y,z)p_\theta(y|z)p_\theta(z)
+\]</div>
+<p>This factorization is derived from the chain rule of probability. We first factorize <span class="arithmatex">\(p_\theta(x, y, z)\)</span> as <span class="arithmatex">\(p_\theta(x|y,z)p_\theta(y,z)\)</span>, and then further factorize <span class="arithmatex">\(p_\theta(y,z)\)</span> as <span class="arithmatex">\(p_\theta(y|z)p_\theta(z)\)</span>. This reflects the generative process where:
+1. First, we sample <span class="arithmatex">\(z\)</span> from the prior <span class="arithmatex">\(p_\theta(z)\)</span>
+2. Then, we sample <span class="arithmatex">\(y\)</span> conditioned on <span class="arithmatex">\(z\)</span> from <span class="arithmatex">\(p_\theta(y|z)\)</span>
+3. Finally, we generate <span class="arithmatex">\(x\)</span> conditioned on both <span class="arithmatex">\(y\)</span> and <span class="arithmatex">\(z\)</span> from <span class="arithmatex">\(p_\theta(x|y,z)\)</span></p>
+<p>The approximate posterior for labeled data is:</p>
+<div class="arithmatex">\[
+q_\phi(y,z|x) = q_\phi(z|x,y)q_\phi(y|x)
+\]</div>
+<p>This factorization is derived from the chain rule of probability for the approximate posterior. The chain rule states that for any random variables <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span>, and <span class="arithmatex">\(C\)</span>, we can write:</p>
+<div class="arithmatex">\[p(A,B|C) = p(A|B,C)p(B|C)\]</div>
+<p>This equation is derived from the definition of conditional probability. Let's break it down step by step:</p>
+<ol>
+<li>First, recall that conditional probability is defined as:</li>
+</ol>
+<div class="arithmatex">\[p(A|B) = \frac{p(A,B)}{p(B)}\]</div>
+<ol>
+<li>For our case with three variables, we can write:</li>
+</ol>
+<div class="arithmatex">\[p(A,B|C) = \frac{p(A,B,C)}{p(C)}\]</div>
+<ol>
+<li>We can also write:</li>
+</ol>
+<div class="arithmatex">\[p(A|B,C) = \frac{p(A,B,C)}{p(B,C)}\]</div>
+<p>and</p>
+<div class="arithmatex">\[p(B|C) = \frac{p(B,C)}{p(C)}\]</div>
+<ol>
+<li>Multiplying these last two equations:</li>
+</ol>
+<div class="arithmatex">\[p(A|B,C)p(B|C) = \frac{p(A,B,C)}{p(B,C)} \cdot \frac{p(B,C)}{p(C)} = \frac{p(A,B,C)}{p(C)} = p(A,B|C)\]</div>
+<p>Therefore, we have proven that:</p>
+<div class="arithmatex">\[p(A,B|C) = p(A|B,C)p(B|C)\]</div>
+<p>In our case, we can identify:
+- <span class="arithmatex">\(A\)</span> as <span class="arithmatex">\(z\)</span> (the latent code)
+- <span class="arithmatex">\(B\)</span> as <span class="arithmatex">\(y\)</span> (the label)
+- <span class="arithmatex">\(C\)</span> as <span class="arithmatex">\(x\)</span> (the observed data)</p>
+<p>Therefore, applying the chain rule:</p>
+<div class="arithmatex">\[q_\phi(y,z|x) = q_\phi(z|x,y)q_\phi(y|x)\]</div>
+<p>This means:
+1. First, we predict the label <span class="arithmatex">\(y\)</span> from <span class="arithmatex">\(x\)</span> using <span class="arithmatex">\(q_\phi(y|x)\)</span>
+2. Then, we infer the latent code <span class="arithmatex">\(z\)</span> using both <span class="arithmatex">\(x\)</span> and the predicted <span class="arithmatex">\(y\)</span> through <span class="arithmatex">\(q_\phi(z|x,y)\)</span></p>
+<p>and for unlabeled data:</p>
+<div class="arithmatex">\[
+q_\phi(y,z|x) = q_\phi(z|x,y)q_\phi(y)
+\]</div>
+<p>For unlabeled data, since we don't know the true label <span class="arithmatex">\(y\)</span>, we use a prior distribution <span class="arithmatex">\(q_\phi(y)\)</span> (typically a uniform distribution over classes) instead of <span class="arithmatex">\(q_\phi(y|x)\)</span>. The factorization reflects that:
+1. We sample a label <span class="arithmatex">\(y\)</span> from the prior <span class="arithmatex">\(q_\phi(y)\)</span>
+2. Then, we infer the latent code <span class="arithmatex">\(z\)</span> using both <span class="arithmatex">\(x\)</span> and the sampled <span class="arithmatex">\(y\)</span> through <span class="arithmatex">\(q_\phi(z|x,y)\)</span></p>
+<p>The training objective for SSVAE combines:
+1. The ELBO for labeled data
+2. The ELBO for unlabeled data
+3. A classification loss for labeled data</p>
+<p>This allows the model to learn both the data distribution and the class labels in a semi-supervised manner.</p>
 
 
 
