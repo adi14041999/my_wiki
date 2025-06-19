@@ -10,6 +10,9 @@ nav:
       - Introduction: AI/deep_generative_models/introduction.md
       - Autoregressive Models: AI/deep_generative_models/autoregressive_models.md
       - Variational Autoencoders: AI/deep_generative_models/variational_autoencoders.md
+  - Math:
+    - Probability:
+      - Probability and Counting: math/probability/probability_and_counting.md
 
 theme:
   name: material
