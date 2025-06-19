@@ -2,6 +2,15 @@ site_name: My Wiki
 site_url: https://adi14041999.github.io/my_wiki/
 site_description: A personal wiki for notes, ideas, and projects.
 use_directory_urls: true
+
+nav:
+  - Home: index.md
+  - AI:
+    - Deep Generative Models:
+      - Introduction: AI/deep_generative_models/introduction.md
+      - Autoregressive Models: AI/deep_generative_models/autoregressive_models.md
+      - Variational Autoencoders: AI/deep_generative_models/variational_autoencoders.md
+
 theme:
   name: material
   features:
