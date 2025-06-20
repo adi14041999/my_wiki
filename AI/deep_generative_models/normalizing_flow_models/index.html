@@ -77,6 +77,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#normalizing-flow-models" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -520,6 +525,21 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Normalizing flow models
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -532,6 +552,58 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#change-of-variables-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      Change of Variables Formula
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Change of Variables Formula">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#univariate-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      Univariate Case
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multivariate-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multivariate Case
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -693,9 +765,79 @@
 
 
 
-  <h1>Normalizing flow models</h1>
-
-
+<h1 id="normalizing-flow-models">Normalizing Flow Models</h1>
+<p>So far we have learned two types of likelihood based generative models:</p>
+<p><strong>Autoregressive Models</strong>: <span class="arithmatex">\(p_\theta(x) = \prod_{i=1}^N p_\theta(x_i|x_{&lt;i})\)</span></p>
+<p><strong>Variational autoencoders</strong>: <span class="arithmatex">\(p_\theta(x) = \int p_\theta(x,z)dz\)</span></p>
+<p>The two methods have relative strengths and weaknesses. Autoregressive models provide tractable likelihoods but no direct mechanism for learning features, whereas variational autoencoders can learn feature representations but have intractable marginal likelihoods.</p>
+<h2 id="change-of-variables-formula">Change of Variables Formula</h2>
+<p>In normalizing flows, we wish to map simple distributions (easy to sample and evaluate densities) to complex ones (learned via data). The change of variables formula describes how to evaluate densities of a random variable that is a deterministic transformation from another variable.</p>
+<p>Let's start with the univariate case and then generalize to multivariate random variables.</p>
+<h3 id="univariate-case">Univariate Case</h3>
+<p>Consider two random variables <span class="arithmatex">\(Z\)</span> and <span class="arithmatex">\(X\)</span> related by a strictly monotonic function <span class="arithmatex">\(f: \mathbb{R} \rightarrow \mathbb{R}\)</span> such that <span class="arithmatex">\(X = f(Z)\)</span>. We want to find the probability density function of <span class="arithmatex">\(X\)</span> in terms of the density of <span class="arithmatex">\(Z\)</span>.</p>
+<p>The key insight comes from the fact that probabilities must be preserved under the transformation. For any interval <span class="arithmatex">\([a, b]\)</span> in the <span class="arithmatex">\(X\)</span> space:</p>
+<div class="arithmatex">\[P(a \leq X \leq b) = P(f^{-1}(a) \leq Z \leq f^{-1}(b))\]</div>
+<p>This can be written as:</p>
+<div class="arithmatex">\[\int_a^b p_X(x) dx = \int_{f^{-1}(a)}^{f^{-1}(b)} p_Z(z) dz\]</div>
+<p>To perform the substitution <span class="arithmatex">\(z = f^{-1}(x)\)</span>, we need to express <span class="arithmatex">\(dz\)</span> in terms of <span class="arithmatex">\(dx\)</span>. Since <span class="arithmatex">\(z = f^{-1}(x)\)</span>, we can use the chain rule to find:</p>
+<div class="arithmatex">\[\frac{dz}{dx} = \frac{d}{dx}f^{-1}(x) = \frac{1}{f'(f^{-1}(x))}\]</div>
+<p>This follows from the inverse function theorem: if <span class="arithmatex">\(y = f(x)\)</span>, then <span class="arithmatex">\(\frac{dx}{dy} = \frac{1}{f'(x)}\)</span>.</p>
+<p><strong>Why can we write <span class="arithmatex">\(dz = \frac{dz}{dx} dx\)</span>?</strong></p>
+<p>This is a common source of confusion! While <span class="arithmatex">\(\frac{dz}{dx}\)</span> is indeed a notation for the derivative, in the context of integration by substitution, we can treat it as a fraction. This works because:</p>
+<ol>
+<li>
+<p><strong>Differential notation</strong>: The expression <span class="arithmatex">\(dz = \frac{dz}{dx} dx\)</span> is actually the definition of the differential <span class="arithmatex">\(dz\)</span>. In calculus, the differential of a function <span class="arithmatex">\(z = f^{-1}(x)\)</span> is defined as <span class="arithmatex">\(dz = \frac{dz}{dx} dx\)</span>.</p>
+</li>
+<li>
+<p><strong>Integration by substitution</strong>: When we perform substitution in integrals, we're essentially using the chain rule in reverse. The notation <span class="arithmatex">\(dz = \frac{dz}{dx} dx\)</span> is a formal way of expressing how the "infinitesimal" change in <span class="arithmatex">\(z\)</span> relates to the "infinitesimal" change in <span class="arithmatex">\(x\)</span>.</p>
+</li>
+<li>
+<p><strong>Rigorous justification</strong>: While this might seem like "treating derivatives as fractions," it's actually mathematically rigorous when used in the context of integration by substitution. The chain rule guarantees that this manipulation is valid.</p>
+</li>
+</ol>
+<p>Therefore, <span class="arithmatex">\(dz = \frac{1}{f'(f^{-1}(x))} dx\)</span>. However, we need to take the absolute value because probability densities must be non-negative. If <span class="arithmatex">\(f'(f^{-1}(x)) &lt; 0\)</span> (meaning <span class="arithmatex">\(f\)</span> is decreasing), then <span class="arithmatex">\(\frac{1}{f'(f^{-1}(x))} &lt; 0\)</span>, which would make the density negative. Therefore, we use:</p>
+<div class="arithmatex">\[dz = \frac{1}{|f'(f^{-1}(x))|} dx\]</div>
+<p>Substituting this into our integral:</p>
+<div class="arithmatex">\[\int_a^b p_X(x) dx = \int_{f^{-1}(a)}^{f^{-1}(b)} p_Z(z) dz = \int_a^b p_Z(f^{-1}(x)) \cdot \frac{1}{|f'(f^{-1}(x))|} dx\]</div>
+<p>Since this equality must hold for all intervals <span class="arithmatex">\([a, b]\)</span>, the integrands must be equal:</p>
+<div class="arithmatex">\[p_X(x) = p_Z(f^{-1}(x)) \cdot \frac{1}{|f'(f^{-1}(x))|}\]</div>
+<p>This is the univariate change of variables formula. The factor <span class="arithmatex">\(\frac{1}{|f'(f^{-1}(x))|}\)</span> accounts for how the transformation stretches or compresses the probability mass.</p>
+<p><strong>Why should <span class="arithmatex">\(f\)</span> be monotonic?</strong> The monotonicity requirement ensures that <span class="arithmatex">\(f\)</span> is invertible (one-to-one), which is crucial for the change of variables formula to work correctly. If <span class="arithmatex">\(f\)</span> were not monotonic, there could be multiple values of <span class="arithmatex">\(z\)</span> that map to the same value of <span class="arithmatex">\(x\)</span>, making the inverse function <span class="arithmatex">\(f^{-1}\)</span> ill-defined. This would violate the fundamental assumption that we can uniquely determine the original variable <span class="arithmatex">\(z\)</span> from the transformed variable <span class="arithmatex">\(x\)</span>.</p>
+<p>For example, if <span class="arithmatex">\(f(z) = z^2\)</span> (which is not monotonic on <span class="arithmatex">\(\mathbb{R}\)</span>), then both <span class="arithmatex">\(z = 2\)</span> and <span class="arithmatex">\(z = -2\)</span> map to <span class="arithmatex">\(x = 4\)</span>. This creates ambiguity in the inverse mapping and would require special handling to account for multiple pre-images.</p>
+<h3 id="multivariate-case">Multivariate Case</h3>
+<p>For the multivariate case, we have random variables <span class="arithmatex">\(\mathbf{Z}\)</span> and <span class="arithmatex">\(\mathbf{X}\)</span> related by a bijective function <span class="arithmatex">\(f: \mathbb{R}^n \rightarrow \mathbb{R}^n\)</span> such that <span class="arithmatex">\(\mathbf{X} = f(\mathbf{Z})\)</span>.</p>
+<p>The key insight is that the probability mass in any region must be preserved under the transformation. For any region <span class="arithmatex">\(A\)</span> in the <span class="arithmatex">\(\mathbf{X}\)</span> space:</p>
+<div class="arithmatex">\[P(\mathbf{X} \in A) = P(\mathbf{Z} \in f^{-1}(A))\]</div>
+<p>This can be written as:</p>
+<div class="arithmatex">\[\int_A p_X(\mathbf{x}) d\mathbf{x} = \int_{f^{-1}(A)} p_Z(\mathbf{z}) d\mathbf{z}\]</div>
+<p>To perform the multivariate substitution <span class="arithmatex">\(\mathbf{z} = f^{-1}(\mathbf{x})\)</span>, we need to understand how the volume element <span class="arithmatex">\(d\mathbf{z}\)</span> transforms. The Jacobian matrix <span class="arithmatex">\(\frac{\partial f^{-1}(\mathbf{x})}{\partial \mathbf{x}}\)</span> is an <span class="arithmatex">\(n \times n\)</span> matrix where:</p>
+<div class="arithmatex">\[\left[\frac{\partial f^{-1}(\mathbf{x})}{\partial \mathbf{x}}\right]_{ij} = \frac{\partial f^{-1}_i(\mathbf{x})}{\partial x_j}\]</div>
+<p>This matrix describes how small changes in <span class="arithmatex">\(\mathbf{x}\)</span> correspond to changes in <span class="arithmatex">\(\mathbf{z}\)</span>. In multivariate calculus, when we perform a change of variables <span class="arithmatex">\(\mathbf{z} = f^{-1}(\mathbf{x})\)</span>, the volume element transforms as:</p>
+<div class="arithmatex">\[d\mathbf{z} = \left|\det\left(\frac{\partial f^{-1}(\mathbf{x})}{\partial \mathbf{x}}\right)\right| d\mathbf{x}\]</div>
+<p>This is the multivariate generalization of the univariate substitution <span class="arithmatex">\(dz = \frac{1}{|f'(f^{-1}(x))|} dx\)</span>. The determinant of the Jacobian matrix measures how the transformation affects the volume of a small region:
+- If <span class="arithmatex">\(|\det(J)| &gt; 1\)</span>, the transformation expands volume
+- If <span class="arithmatex">\(|\det(J)| &lt; 1\)</span>, the transformation contracts volume<br />
+- If <span class="arithmatex">\(|\det(J)| = 1\)</span>, the transformation preserves volume</p>
+<p>Substituting this into our integral:</p>
+<div class="arithmatex">\[\int_A p_X(\mathbf{x}) d\mathbf{x} = \int_{f^{-1}(A)} p_Z(\mathbf{z}) d\mathbf{z} = \int_A p_Z(f^{-1}(\mathbf{x})) \left|\det\left(\frac{\partial f^{-1}(\mathbf{x})}{\partial \mathbf{x}}\right)\right| d\mathbf{x}\]</div>
+<p>Since this equality must hold for all regions <span class="arithmatex">\(A\)</span>, the integrands must be equal:</p>
+<div class="arithmatex">\[p_X(\mathbf{x}) = p_Z(f^{-1}(\mathbf{x})) \left|\det\left(\frac{\partial f^{-1}(\mathbf{x})}{\partial \mathbf{x}}\right)\right|\]</div>
+<p>This is the multivariate change of variables formula. The determinant of the Jacobian matrix accounts for how the transformation affects the volume of probability mass.</p>
+<p><strong>Alternative Form Using Forward Mapping:</strong>
+Using the property that <span class="arithmatex">\(\det(A^{-1}) = \det(A)^{-1}\)</span> for any invertible matrix <span class="arithmatex">\(A\)</span>, we can rewrite this as:</p>
+<div class="arithmatex">\[p_X(\mathbf{x}) = p_Z(\mathbf{z}) \left|\det\left(\frac{\partial f(\mathbf{z})}{\partial \mathbf{z}}\right)\right|^{-1}\]</div>
+<p>This form is often more convenient in practice because it uses the forward mapping <span class="arithmatex">\(f\)</span> rather than the inverse mapping <span class="arithmatex">\(f^{-1}\)</span>.</p>
+<p><strong>Final result</strong>: Let <span class="arithmatex">\(Z\)</span> and <span class="arithmatex">\(X\)</span> be random variables which are related by a mapping <span class="arithmatex">\(f: \mathbb{R}^n \rightarrow \mathbb{R}^n\)</span> such that <span class="arithmatex">\(X = f(Z)\)</span> and <span class="arithmatex">\(Z = f^{-1}(X)\)</span>. Then</p>
+<div class="arithmatex">\[p_X(\mathbf{x}) = p_Z(f^{-1}(\mathbf{x})) \left|\det\left(\frac{\partial f^{-1}(\mathbf{x})}{\partial \mathbf{x}}\right)\right|\]</div>
+<p>There are several things to note here:</p>
+<ul>
+<li><span class="arithmatex">\(\mathbf{x}\)</span> and <span class="arithmatex">\(\mathbf{z}\)</span> need to be continuous and have the same dimension.</li>
+<li><span class="arithmatex">\(\frac{\partial f^{-1}(\mathbf{x})}{\partial \mathbf{x}}\)</span> is a matrix of dimension <span class="arithmatex">\(n \times n\)</span>, where each entry at location <span class="arithmatex">\((i,j)\)</span> is defined as <span class="arithmatex">\(\frac{\partial f^{-1}(\mathbf{x})_i}{\partial x_j}\)</span>. This matrix is also known as the Jacobian matrix.</li>
+<li><span class="arithmatex">\(\det(A)\)</span> denotes the determinant of a square matrix <span class="arithmatex">\(A\)</span>.</li>
+</ul>
+<p>For any invertible matrix <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(\det(A^{-1}) = \det(A)^{-1}\)</span>, so for <span class="arithmatex">\(\mathbf{z} = f^{-1}(\mathbf{x})\)</span> we have</p>
+<div class="arithmatex">\[p_X(\mathbf{x}) = p_Z(\mathbf{z}) \left|\det\left(\frac{\partial f(\mathbf{z})}{\partial \mathbf{z}}\right)\right|^{-1}\]</div>
+<p>If <span class="arithmatex">\(\left|\det\left(\frac{\partial f(\mathbf{z})}{\partial \mathbf{z}}\right)\right| = 1\)</span>, then the mapping is volume preserving, which means that the transformed distribution <span class="arithmatex">\(p_X\)</span> will have the same "volume" compared to the original one <span class="arithmatex">\(p_Z\)</span>.</p>
 
 
 
