@@ -32,16 +32,6 @@ $$\frac{dz}{dx} = \frac{d}{dx}f^{-1}(x) = \frac{1}{f'(f^{-1}(x))}$$
 
 This follows from the inverse function theorem: if $y = f(x)$, then $\frac{dx}{dy} = \frac{1}{f'(x)}$.
 
-**Why can we write $dz = \frac{dz}{dx} dx$?**
-
-This is a common source of confusion! While $\frac{dz}{dx}$ is indeed a notation for the derivative, in the context of integration by substitution, we can treat it as a fraction. This works because:
-
-1. **Differential notation**: The expression $dz = \frac{dz}{dx} dx$ is actually the definition of the differential $dz$. In calculus, the differential of a function $z = f^{-1}(x)$ is defined as $dz = \frac{dz}{dx} dx$.
-
-2. **Integration by substitution**: When we perform substitution in integrals, we're essentially using the chain rule in reverse. The notation $dz = \frac{dz}{dx} dx$ is a formal way of expressing how the "infinitesimal" change in $z$ relates to the "infinitesimal" change in $x$.
-
-3. **Rigorous justification**: While this might seem like "treating derivatives as fractions," it's actually mathematically rigorous when used in the context of integration by substitution. The chain rule guarantees that this manipulation is valid.
-
 Therefore, $dz = \frac{1}{f'(f^{-1}(x))} dx$. However, we need to take the absolute value because probability densities must be non-negative. If $f'(f^{-1}(x)) < 0$ (meaning $f$ is decreasing), then $\frac{1}{f'(f^{-1}(x))} < 0$, which would make the density negative. Therefore, we use:
 
 $$dz = \frac{1}{|f'(f^{-1}(x))|} dx$$

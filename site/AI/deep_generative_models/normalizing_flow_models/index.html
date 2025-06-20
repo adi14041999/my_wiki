@@ -782,19 +782,6 @@
 <p>To perform the substitution <span class="arithmatex">\(z = f^{-1}(x)\)</span>, we need to express <span class="arithmatex">\(dz\)</span> in terms of <span class="arithmatex">\(dx\)</span>. Since <span class="arithmatex">\(z = f^{-1}(x)\)</span>, we can use the chain rule to find:</p>
 <div class="arithmatex">\[\frac{dz}{dx} = \frac{d}{dx}f^{-1}(x) = \frac{1}{f'(f^{-1}(x))}\]</div>
 <p>This follows from the inverse function theorem: if <span class="arithmatex">\(y = f(x)\)</span>, then <span class="arithmatex">\(\frac{dx}{dy} = \frac{1}{f'(x)}\)</span>.</p>
-<p><strong>Why can we write <span class="arithmatex">\(dz = \frac{dz}{dx} dx\)</span>?</strong></p>
-<p>This is a common source of confusion! While <span class="arithmatex">\(\frac{dz}{dx}\)</span> is indeed a notation for the derivative, in the context of integration by substitution, we can treat it as a fraction. This works because:</p>
-<ol>
-<li>
-<p><strong>Differential notation</strong>: The expression <span class="arithmatex">\(dz = \frac{dz}{dx} dx\)</span> is actually the definition of the differential <span class="arithmatex">\(dz\)</span>. In calculus, the differential of a function <span class="arithmatex">\(z = f^{-1}(x)\)</span> is defined as <span class="arithmatex">\(dz = \frac{dz}{dx} dx\)</span>.</p>
-</li>
-<li>
-<p><strong>Integration by substitution</strong>: When we perform substitution in integrals, we're essentially using the chain rule in reverse. The notation <span class="arithmatex">\(dz = \frac{dz}{dx} dx\)</span> is a formal way of expressing how the "infinitesimal" change in <span class="arithmatex">\(z\)</span> relates to the "infinitesimal" change in <span class="arithmatex">\(x\)</span>.</p>
-</li>
-<li>
-<p><strong>Rigorous justification</strong>: While this might seem like "treating derivatives as fractions," it's actually mathematically rigorous when used in the context of integration by substitution. The chain rule guarantees that this manipulation is valid.</p>
-</li>
-</ol>
 <p>Therefore, <span class="arithmatex">\(dz = \frac{1}{f'(f^{-1}(x))} dx\)</span>. However, we need to take the absolute value because probability densities must be non-negative. If <span class="arithmatex">\(f'(f^{-1}(x)) &lt; 0\)</span> (meaning <span class="arithmatex">\(f\)</span> is decreasing), then <span class="arithmatex">\(\frac{1}{f'(f^{-1}(x))} &lt; 0\)</span>, which would make the density negative. Therefore, we use:</p>
 <div class="arithmatex">\[dz = \frac{1}{|f'(f^{-1}(x))|} dx\]</div>
 <p>Substituting this into our integral:</p>
