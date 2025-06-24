@@ -601,6 +601,48 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#normalizing-flow-models-deep-dive" class="md-nav__link">
+    <span class="md-ellipsis">
+      Normalizing Flow Models deep dive
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Normalizing Flow Models deep dive">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#planar-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Planar Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nice-and-realnvp" class="md-nav__link">
+    <span class="md-ellipsis">
+      NICE and RealNVP
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autoregressive-flow-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autoregressive Flow Models
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -825,6 +867,118 @@ Using the property that <span class="arithmatex">\(\det(A^{-1}) = \det(A)^{-1}\)
 <p>For any invertible matrix <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(\det(A^{-1}) = \det(A)^{-1}\)</span>, so for <span class="arithmatex">\(\mathbf{z} = f^{-1}(\mathbf{x})\)</span> we have</p>
 <div class="arithmatex">\[p_X(\mathbf{x}) = p_Z(\mathbf{z}) \left|\det\left(\frac{\partial f(\mathbf{z})}{\partial \mathbf{z}}\right)\right|^{-1}\]</div>
 <p>If <span class="arithmatex">\(\left|\det\left(\frac{\partial f(\mathbf{z})}{\partial \mathbf{z}}\right)\right| = 1\)</span>, then the mapping is volume preserving, which means that the transformed distribution <span class="arithmatex">\(p_X\)</span> will have the same "volume" compared to the original one <span class="arithmatex">\(p_Z\)</span>.</p>
+<h2 id="normalizing-flow-models-deep-dive">Normalizing Flow Models deep dive</h2>
+<p>Let us consider a directed, latent-variable model over observed variables <span class="arithmatex">\(X\)</span> and latent variables <span class="arithmatex">\(Z\)</span>. In a normalizing flow model, the mapping between <span class="arithmatex">\(Z\)</span> and <span class="arithmatex">\(X\)</span>, given by <span class="arithmatex">\(f_\theta: \mathbb{R}^n \rightarrow \mathbb{R}^n\)</span>, is deterministic and invertible such that <span class="arithmatex">\(X = f_\theta(Z)\)</span> and <span class="arithmatex">\(Z = f^{-1}_\theta(X)\)</span>.</p>
+<p>Using change of variables, the marginal likelihood <span class="arithmatex">\(p(x)\)</span> is given by</p>
+<div class="arithmatex">\[p_X(\mathbf{x}; \theta) = p_Z(f^{-1}_\theta(\mathbf{x})) \left|\det\left(\frac{\partial f^{-1}_\theta(\mathbf{x})}{\partial \mathbf{x}}\right)\right|\]</div>
+<p>The name "normalizing flow" can be interpreted as the following:</p>
+<ul>
+<li>
+<p><strong>"Normalizing"</strong> means that the change of variables gives a normalized density after applying an invertible transformation. When we transform a random variable through an invertible function, the resulting density automatically integrates to 1 (is normalized) because the change of variables formula preserves the total probability mass. This is different from other methods where we might need to explicitly normalize or approximate the density.</p>
+</li>
+<li>
+<p><strong>"Flow"</strong> means that the invertible transformations can be composed with each other to create more complex invertible transformations. If we have two invertible functions <span class="arithmatex">\(f_1\)</span> and <span class="arithmatex">\(f_2\)</span>, then their composition <span class="arithmatex">\(f_2 \circ f_1\)</span> is also invertible. This allows us to build complex transformations by chaining simpler ones, creating a "flow" of transformations.</p>
+</li>
+</ul>
+<p>Different from autoregressive models and variational autoencoders, deep normalizing flow models require specific architectural structures:</p>
+<ol>
+<li>
+<p><strong>The input and output dimensions must be the same</strong> - This is necessary for the transformation to be invertible. If the dimensions don't match, we can't uniquely map back and forth between the spaces.</p>
+</li>
+<li>
+<p><strong>The transformation must be invertible</strong> - This is fundamental to the change of variables formula and allows us to compute both the forward transformation (for sampling) and the inverse transformation (for density evaluation).</p>
+</li>
+<li>
+<p><strong>Computing the determinant of the Jacobian needs to be efficient (and differentiable)</strong> - The change of variables formula requires computing the determinant of the Jacobian matrix. For high-dimensional spaces, this can be computationally expensive, so we need architectures that make this computation tractable.</p>
+</li>
+</ol>
+<p>Next, we introduce several popular forms of flow models that satisfy these properties.</p>
+<h3 id="planar-flow">Planar Flow</h3>
+<p>The Planar Flow introduces the following invertible transformation:</p>
+<div class="arithmatex">\[\mathbf{x} = f_\theta(\mathbf{z}) = \mathbf{z} + \mathbf{u}h(\mathbf{w}^\top\mathbf{z} + b)\]</div>
+<p>where <span class="arithmatex">\(\mathbf{u}, \mathbf{w}, b\)</span> are parameters.</p>
+<p>The absolute value of the determinant of the Jacobian is given by:</p>
+<div class="arithmatex">\[\left|\det\left(\frac{\partial f(\mathbf{z})}{\partial \mathbf{z}}\right)\right| = |1 + h'(\mathbf{w}^\top\mathbf{z} + b)\mathbf{u}^\top\mathbf{w}|\]</div>
+<p>However, <span class="arithmatex">\(\mathbf{u}, \mathbf{w}, b, h(\cdot)\)</span> need to be restricted in order to be invertible. For example, <span class="arithmatex">\(h = \tanh\)</span> and <span class="arithmatex">\(h'(\mathbf{w}^\top\mathbf{z} + b)\mathbf{u}^\top\mathbf{w} \geq -1\)</span>. Note that while <span class="arithmatex">\(f_\theta(\mathbf{z})\)</span> is invertible, computing <span class="arithmatex">\(f^{-1}_\theta(\mathbf{z})\)</span> could be difficult analytically. The following models address this problem, where both <span class="arithmatex">\(f_\theta\)</span> and <span class="arithmatex">\(f^{-1}_\theta\)</span> have simple analytical forms.</p>
+<h3 id="nice-and-realnvp">NICE and RealNVP</h3>
+<p>The Nonlinear Independent Components Estimation (NICE) model and Real Non-Volume Preserving (RealNVP) model compose two kinds of invertible transformations: additive coupling layers and rescaling layers. The coupling layer in NICE partitions a variable <span class="arithmatex">\(\mathbf{z}\)</span> into two disjoint subsets, say <span class="arithmatex">\(\mathbf{z}_1\)</span> and <span class="arithmatex">\(\mathbf{z}_2\)</span>. Then it applies the following transformation:</p>
+<p><strong>Forward mapping <span class="arithmatex">\(\mathbf{z} \rightarrow \mathbf{x}\)</span>:</strong></p>
+<ul>
+<li><span class="arithmatex">\(\mathbf{x}_1 = \mathbf{z}_1\)</span>, which is an identity mapping.</li>
+<li><span class="arithmatex">\(\mathbf{x}_2 = \mathbf{z}_2 + m_\theta(\mathbf{z}_1)\)</span>, where <span class="arithmatex">\(m_\theta\)</span> is a neural network.</li>
+</ul>
+<p><strong>Inverse mapping <span class="arithmatex">\(\mathbf{x} \rightarrow \mathbf{z}\)</span>:</strong></p>
+<ul>
+<li><span class="arithmatex">\(\mathbf{z}_1 = \mathbf{x}_1\)</span>, which is an identity mapping.</li>
+<li><span class="arithmatex">\(\mathbf{z}_2 = \mathbf{x}_2 - m_\theta(\mathbf{x}_1)\)</span>, which is the inverse of the forward transformation.</li>
+</ul>
+<p>Therefore, the Jacobian of the forward mapping is lower triangular, whose determinant is simply the product of the elements on the diagonal, which is 1. Therefore, this defines a volume preserving transformation. RealNVP adds scaling factors to the transformation:</p>
+<div class="arithmatex">\[\mathbf{x}_2 = \exp(s_\theta(\mathbf{z}_1)) \odot \mathbf{z}_2 + m_\theta(\mathbf{z}_1)\]</div>
+<p>where <span class="arithmatex">\(\odot\)</span> denotes elementwise product. This results in a non-volume preserving transformation.</p>
+<h3 id="autoregressive-flow-models">Autoregressive Flow Models</h3>
+<p>Some autoregressive models can also be interpreted as flow models. For a Gaussian autoregressive model, one receives some Gaussian noise for each dimension of <span class="arithmatex">\(\mathbf{x}\)</span>, which can be treated as the latent variables <span class="arithmatex">\(\mathbf{z}\)</span>. Such transformations are also invertible, meaning that given <span class="arithmatex">\(\mathbf{x}\)</span> and the model parameters, we can obtain <span class="arithmatex">\(\mathbf{z}\)</span> exactly.</p>
+<p><strong>Masked Autoregressive Flow (MAF)</strong> uses this interpretation, where the forward mapping is an autoregressive model. However, sampling is sequential and slow, in <span class="arithmatex">\(O(n)\)</span> time where <span class="arithmatex">\(n\)</span> is the dimension of the samples.</p>
+<p>To address the sampling problem, the <strong>Inverse Autoregressive Flow (IAF)</strong> simply inverts the generating process. In this case, the sampling (generation), is still parallelized. However, computing the likelihood of new data points is slow.</p>
+<p><strong>Forward mapping from <span class="arithmatex">\(\mathbf{z} \rightarrow \mathbf{x}\)</span> (parallel):</strong></p>
+<ol>
+<li>
+<p>Sample <span class="arithmatex">\(z_i \sim \mathcal{N}(0,1)\)</span> for <span class="arithmatex">\(i = 1, \ldots, n\)</span></p>
+</li>
+<li>
+<p>Compute all <span class="arithmatex">\(\mu_i, \alpha_i\)</span> (can be done in parallel)</p>
+</li>
+<li>
+<p>Let <span class="arithmatex">\(x_1 = \exp(\alpha_1)z_1 + \mu_1\)</span></p>
+</li>
+<li>
+<p>Let <span class="arithmatex">\(x_2 = \exp(\alpha_2)z_2 + \mu_2\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(\ldots\)</span></p>
+</li>
+</ol>
+<p><strong>Inverse mapping from <span class="arithmatex">\(\mathbf{x} \rightarrow \mathbf{z}\)</span> (sequential):</strong></p>
+<ol>
+<li>
+<p>Let <span class="arithmatex">\(z_1 = (x_1 - \mu_1)/\exp(\alpha_1)\)</span></p>
+</li>
+<li>
+<p>Compute <span class="arithmatex">\(\mu_2(z_1), \alpha_2(z_1)\)</span></p>
+</li>
+<li>
+<p>Let <span class="arithmatex">\(z_2 = (x_2 - \mu_2)/\exp(\alpha_2)\)</span></p>
+</li>
+<li>
+<p>Compute <span class="arithmatex">\(\mu_3(z_1,z_2), \alpha_3(z_1,z_2)\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(\ldots\)</span></p>
+</li>
+</ol>
+<p><strong>Key insight:</strong> Fast to sample from, slow to evaluate likelihoods of data points (train).</p>
+<p><strong>Efficient Likelihood for Generated Points:</strong>
+However, for generated points the likelihood can be computed efficiently (since the noise are already obtained). When we generate samples using IAF, we start with known noise values <span class="arithmatex">\(\mathbf{z}\)</span> and transform them to get <span class="arithmatex">\(\mathbf{x}\)</span>. Since we already have the noise values, we don't need to perform the expensive sequential inverse mapping to recover them. We can directly compute the likelihood using the change of variables formula:</p>
+<div class="arithmatex">\[\log p(\mathbf{x}) = \log p(\mathbf{z}) - \sum_{i=1}^n \alpha_i\]</div>
+<p>where we already know all the <span class="arithmatex">\(\alpha_i\)</span> values from the forward pass. This is much faster than the <span class="arithmatex">\(O(n)\)</span> sequential computation required for arbitrary data points.</p>
+<p><strong>Derivation of the Change of Variables Formula for IAF:</strong></p>
+<p>Let's derive how we get this formula. Starting with the general change of variables formula:</p>
+<div class="arithmatex">\[\log p(\mathbf{x}) = \log p(\mathbf{z}) + \log \left|\det\left(\frac{\partial \mathbf{z}}{\partial \mathbf{x}}\right)\right|\]</div>
+<p>For IAF, the forward transformation is:</p>
+<div class="arithmatex">\[x_i = \exp(\alpha_i)z_i + \mu_i\]</div>
+<p>The inverse transformation is:</p>
+<div class="arithmatex">\[z_i = \frac{x_i - \mu_i}{\exp(\alpha_i)}\]</div>
+<p>The Jacobian matrix <span class="arithmatex">\(\frac{\partial \mathbf{z}}{\partial \mathbf{x}}\)</span> is diagonal because each <span class="arithmatex">\(z_i\)</span> only depends on <span class="arithmatex">\(x_i\)</span>:</p>
+<div class="arithmatex">\[\frac{\partial z_i}{\partial x_j} = \begin{cases} 
+\frac{1}{\exp(\alpha_i)} &amp; \text{if } i = j \\
+0 &amp; \text{if } i \neq j
+\end{cases}\]</div>
+<p>Therefore, the determinant is the product of the diagonal elements:</p>
+<div class="arithmatex">\[\det\left(\frac{\partial \mathbf{z}}{\partial \mathbf{x}}\right) = \prod_{i=1}^n \frac{1}{\exp(\alpha_i)} = \exp\left(-\sum_{i=1}^n \alpha_i\right)\]</div>
+<p>Taking the absolute value and logarithm:</p>
+<div class="arithmatex">\[\log \left|\det\left(\frac{\partial \mathbf{z}}{\partial \mathbf{x}}\right)\right| = \log \exp\left(-\sum_{i=1}^n \alpha_i\right) = -\sum_{i=1}^n \alpha_i\]</div>
+<p>Substituting back into the change of variables formula:</p>
+<div class="arithmatex">\[\log p(\mathbf{x}) = \log p(\mathbf{z}) - \sum_{i=1}^n \alpha_i\]</div>
+<p>This derivation shows why the likelihood computation is efficient for generated samples - we already have all the <span class="arithmatex">\(\alpha_i\)</span> values from the forward pass, so we just need to sum them up.</p>
 
 
 
