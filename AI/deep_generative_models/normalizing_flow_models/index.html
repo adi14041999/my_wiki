@@ -638,6 +638,57 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#rnade-vs-autoregressive-flow-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      RNADE vs. Autoregressive Flow Models
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RNADE vs. Autoregressive Flow Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rnade" class="md-nav__link">
+    <span class="md-ellipsis">
+      RNADE:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autoregressive-flow-models-mafiaf" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autoregressive Flow Models (MAF/IAF):
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-differences" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Differences:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Types:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -918,6 +969,34 @@ Using the property that <span class="arithmatex">\(\det(A^{-1}) = \det(A)^{-1}\)
 <h3 id="autoregressive-flow-models">Autoregressive Flow Models</h3>
 <p>Some autoregressive models can also be interpreted as flow models. For a Gaussian autoregressive model, one receives some Gaussian noise for each dimension of <span class="arithmatex">\(\mathbf{x}\)</span>, which can be treated as the latent variables <span class="arithmatex">\(\mathbf{z}\)</span>. Such transformations are also invertible, meaning that given <span class="arithmatex">\(\mathbf{x}\)</span> and the model parameters, we can obtain <span class="arithmatex">\(\mathbf{z}\)</span> exactly.</p>
 <p><strong>Masked Autoregressive Flow (MAF)</strong> uses this interpretation, where the forward mapping is an autoregressive model. However, sampling is sequential and slow, in <span class="arithmatex">\(O(n)\)</span> time where <span class="arithmatex">\(n\)</span> is the dimension of the samples.</p>
+<p><strong>MAF Architecture and Mathematical Formulation:</strong></p>
+<p>The MAF is comprised of <strong>Masked Autoencoder for Distribution Estimation (MADE)</strong> blocks, which has a special masking scheme at each layer such that the autoregressive property is preserved. In particular, we consider a Gaussian autoregressive model:</p>
+<div class="arithmatex">\[p(\mathbf{x}) = \prod_{i=1}^n p(x_i | \mathbf{x}_{&lt;i})\]</div>
+<p>such that the conditional Gaussians <span class="arithmatex">\(p(x_i | \mathbf{x}_{&lt;i}) = \mathcal{N}(x_i | \mu_i, (\exp(\alpha_i))^2)\)</span> are parameterized by neural networks <span class="arithmatex">\(\mu_i = f_{\mu_i}(\mathbf{x}_{&lt;i})\)</span> and <span class="arithmatex">\(\alpha_i = f_{\alpha_i}(\mathbf{x}_{&lt;i})\)</span>. Note that <span class="arithmatex">\(\alpha_i\)</span> denotes the log standard deviation of the Gaussian <span class="arithmatex">\(p(x_i | \mathbf{x}_{&lt;i})\)</span>.</p>
+<p>As seen in the change of variables formula, a normalizing flow uses a series of deterministic and invertible mappings <span class="arithmatex">\(f: \mathbb{R}^n \rightarrow \mathbb{R}^n\)</span> such that <span class="arithmatex">\(\mathbf{x} = f(\mathbf{z})\)</span> and <span class="arithmatex">\(\mathbf{z} = f^{-1}(\mathbf{x})\)</span> to transform a simple prior distribution <span class="arithmatex">\(p_z\)</span> (e.g. isotropic Gaussian) into a more expressive one. In particular, a normalizing flow which composes <span class="arithmatex">\(k\)</span> invertible transformations <span class="arithmatex">\(\{f_j\}_{j=1}^k\)</span> such that <span class="arithmatex">\(\mathbf{x} = f_k \circ f_{k-1} \circ \cdots \circ f_1(\mathbf{z}_0)\)</span> takes advantage of the change-of-variables property:</p>
+<div class="arithmatex">\[\log p(\mathbf{x}) = \log p_z(f^{-1}(\mathbf{x})) + \sum_{j=1}^k \log \left|\det\left(\frac{\partial f_j^{-1}(\mathbf{x}_j)}{\partial \mathbf{x}_j}\right)\right|\]</div>
+<p>In MAF, the forward mapping is: <span class="arithmatex">\(x_i = \mu_i + z_i \cdot \exp(\alpha_i)\)</span>, and the inverse mapping is: <span class="arithmatex">\(z_i = (x_i - \mu_i)/\exp(\alpha_i)\)</span>. The log of the absolute value of the determinant of the Jacobian is:</p>
+<div class="arithmatex">\[\log \left|\det\left(\frac{\partial f^{-1}}{\partial \mathbf{x}}\right)\right| = -\sum_{i=1}^n \alpha_i\]</div>
+<p>where <span class="arithmatex">\(\mu_i\)</span> and <span class="arithmatex">\(\alpha_i\)</span> are as defined above.</p>
+<p><strong>Connection between <span class="arithmatex">\(p(\mathbf{x})\)</span> and <span class="arithmatex">\(\log p(\mathbf{x})\)</span> formulations:</strong></p>
+<p>The two formulations are equivalent but serve different purposes:</p>
+<ol>
+<li><strong><span class="arithmatex">\(p(\mathbf{x})\)</span> formulation (autoregressive view)</strong>:</li>
+</ol>
+<div class="arithmatex">\[p(\mathbf{x}) = \prod_{i=1}^n p(x_i | \mathbf{x}_{&lt;i}) = \prod_{i=1}^n \mathcal{N}(x_i | \mu_i, (\exp(\alpha_i))^2)\]</div>
+<ol>
+<li><strong><span class="arithmatex">\(\log p(\mathbf{x})\)</span> formulation (flow view)</strong>:</li>
+</ol>
+<div class="arithmatex">\[\log p(\mathbf{x}) = \log p_z(f^{-1}(\mathbf{x})) + \sum_{j=1}^k \log \left|\det\left(\frac{\partial f_j^{-1}(\mathbf{x}_j)}{\partial \mathbf{x}_j}\right)\right|\]</div>
+<p><strong>How they relate:</strong></p>
+<p>Taking the logarithm of the autoregressive formulation:</p>
+<div class="arithmatex">\[\log p(\mathbf{x}) = \sum_{i=1}^n \log p(x_i | \mathbf{x}_{&lt;i}) = \sum_{i=1}^n \log \mathcal{N}(x_i | \mu_i, (\exp(\alpha_i))^2)\]</div>
+<p>For a Gaussian distribution <span class="arithmatex">\(\mathcal{N}(x | \mu, \sigma^2)\)</span>, we have:</p>
+<div class="arithmatex">\[\log \mathcal{N}(x | \mu, \sigma^2) = -\frac{1}{2}\log(2\pi) - \log(\sigma) - \frac{(x-\mu)^2}{2\sigma^2}\]</div>
+<p>Substituting <span class="arithmatex">\(\sigma = \exp(\alpha_i)\)</span> and using the inverse mapping <span class="arithmatex">\(z_i = (x_i - \mu_i)/\exp(\alpha_i)\)</span>:</p>
+<div class="arithmatex">\[\log p(\mathbf{x}) = \sum_{i=1}^n \left[-\frac{1}{2}\log(2\pi) - \alpha_i - \frac{z_i^2}{2}\right] = \sum_{i=1}^n \log \mathcal{N}(z_i | 0, 1) - \sum_{i=1}^n \alpha_i\]</div>
+<p>This shows that the autoregressive formulation (using conditional Gaussians) is equivalent to the flow formulation (using change of variables with a standard normal prior and the Jacobian determinant term <span class="arithmatex">\(-\sum_{i=1}^n \alpha_i\)</span>).</p>
+<p><strong>Key insight:</strong> The <span class="arithmatex">\(\alpha_i\)</span> terms serve dual purposes - they parameterize the conditional standard deviations in the autoregressive view, and they contribute to the Jacobian determinant in the flow view.</p>
 <p>To address the sampling problem, the <strong>Inverse Autoregressive Flow (IAF)</strong> simply inverts the generating process. In this case, the sampling (generation), is still parallelized. However, computing the likelihood of new data points is slow.</p>
 <p><strong>Forward mapping from <span class="arithmatex">\(\mathbf{z} \rightarrow \mathbf{x}\)</span> (parallel):</strong></p>
 <ol>
@@ -979,6 +1058,62 @@ However, for generated points the likelihood can be computed efficiently (since 
 <p>Substituting back into the change of variables formula:</p>
 <div class="arithmatex">\[\log p(\mathbf{x}) = \log p(\mathbf{z}) - \sum_{i=1}^n \alpha_i\]</div>
 <p>This derivation shows why the likelihood computation is efficient for generated samples - we already have all the <span class="arithmatex">\(\alpha_i\)</span> values from the forward pass, so we just need to sum them up.</p>
+<h3 id="rnade-vs-autoregressive-flow-models">RNADE vs. Autoregressive Flow Models</h3>
+<p><strong>RNADE (Real-valued Neural Autoregressive Density Estimator)</strong> and <strong>Autoregressive Flow models</strong> are both autoregressive approaches but with key differences:</p>
+<h4 id="rnade"><strong>RNADE:</strong></h4>
+<ul>
+<li><strong>Direct density modeling</strong>: RNADE directly models the conditional densities <span class="arithmatex">\(p(x_i | x_{&lt;i})\)</span> using neural networks</li>
+<li><strong>Sequential sampling</strong>: Generation requires sampling each dimension sequentially: <span class="arithmatex">\(x_1 \sim p(x_1)\)</span>, then <span class="arithmatex">\(x_2 \sim p(x_2|x_1)\)</span>, etc.</li>
+<li><strong>No invertible transformation</strong>: RNADE doesn't use the change of variables formula - it directly parameterizes the conditional distributions</li>
+<li><strong>Tractable likelihood</strong>: Can compute exact likelihoods efficiently since it directly models the density</li>
+</ul>
+<h4 id="autoregressive-flow-models-mafiaf"><strong>Autoregressive Flow Models (MAF/IAF):</strong></h4>
+<ul>
+<li><strong>Flow interpretation</strong>: Treats the autoregressive process as an invertible transformation from noise <span class="arithmatex">\(\mathbf{z}\)</span> to data <span class="arithmatex">\(\mathbf{x}\)</span></li>
+<li><strong>Change of variables</strong>: Uses the change of variables formula to compute likelihoods</li>
+<li><strong>Invertible transformation</strong>: Can be viewed as <span class="arithmatex">\(f: \mathbf{z} \rightarrow \mathbf{x}\)</span> where <span class="arithmatex">\(\mathbf{z}\)</span> is independent noise</li>
+<li><strong>Two directions</strong>: </li>
+<li><strong>MAF</strong>: Forward mapping is autoregressive (slow sampling, fast likelihood)</li>
+<li><strong>IAF</strong>: Inverse mapping is autoregressive (fast sampling, slow likelihood)</li>
+</ul>
+<h4 id="key-differences"><strong>Key Differences:</strong></h4>
+<ol>
+<li><strong>Mathematical Framework</strong>:</li>
+<li><strong>RNADE</strong>: Direct density estimation <span class="arithmatex">\(p(\mathbf{x}) = \prod_i p(x_i | x_{&lt;i})\)</span></li>
+<li>
+<p><strong>Autoregressive Flow</strong>: Invertible transformation with change of variables</p>
+</li>
+<li>
+<p><strong>Computational Properties</strong>:</p>
+</li>
+<li><strong>RNADE</strong>: Sequential in both sampling and likelihood computation</li>
+<li>
+<p><strong>Autoregressive Flow</strong>: Can optimize for either fast sampling (IAF) or fast likelihood (MAF)</p>
+</li>
+<li>
+<p><strong>Interpretation</strong>:</p>
+</li>
+<li><strong>RNADE</strong>: Pure autoregressive model</li>
+<li>
+<p><strong>Autoregressive Flow</strong>: Can be viewed as both autoregressive model and flow model</p>
+</li>
+<li>
+<p><strong>Flexibility</strong>:</p>
+</li>
+<li><strong>RNADE</strong>: Limited to sequential computation</li>
+<li><strong>Autoregressive Flow</strong>: Can design for specific computational needs (sampling vs. likelihood)</li>
+</ol>
+<p>The key insight is that Autoregressive Flow models provide a flow-based interpretation of autoregressive models, allowing for more flexible computational trade-offs while maintaining the expressive power of autoregressive modeling.</p>
+<h4 id="data-types"><strong>Data Types:</strong></h4>
+<p><strong>RNADE</strong>: 
+- <strong>Designed for continuous data</strong>: RNADE was specifically developed for real-valued data
+- <strong>Gaussian conditionals</strong>: Typically uses Gaussian distributions for the conditional densities <span class="arithmatex">\(p(x_i | x_{&lt;i})\)</span>
+- <strong>Not suitable for discrete data</strong>: The Gaussian assumption doesn't work well for categorical or discrete variables</p>
+<p><strong>Autoregressive Flow Models</strong>:
+- <strong>Primarily continuous data</strong>: Most implementations (MAF, IAF) are designed for continuous data
+- <strong>Can be extended</strong>: Some variants can handle discrete data through different conditional distributions
+- <strong>Flow requirement</strong>: The change of variables formula requires continuous, differentiable transformations</p>
+<p><strong>Key Limitation</strong>: Both RNADE and standard Autoregressive Flow models are primarily designed for <strong>continuous data</strong>.</p>
 
 
 
