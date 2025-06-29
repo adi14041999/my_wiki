@@ -172,6 +172,55 @@ Some autoregressive models can also be interpreted as flow models. For a Gaussia
 
 **Masked Autoregressive Flow (MAF)** uses this interpretation, where the forward mapping is an autoregressive model. However, sampling is sequential and slow, in $O(n)$ time where $n$ is the dimension of the samples.
 
+**MAF Architecture and Mathematical Formulation:**
+
+The MAF is comprised of **Masked Autoencoder for Distribution Estimation (MADE)** blocks, which has a special masking scheme at each layer such that the autoregressive property is preserved. In particular, we consider a Gaussian autoregressive model:
+
+$$p(\mathbf{x}) = \prod_{i=1}^n p(x_i | \mathbf{x}_{<i})$$
+
+such that the conditional Gaussians $p(x_i | \mathbf{x}_{<i}) = \mathcal{N}(x_i | \mu_i, (\exp(\alpha_i))^2)$ are parameterized by neural networks $\mu_i = f_{\mu_i}(\mathbf{x}_{<i})$ and $\alpha_i = f_{\alpha_i}(\mathbf{x}_{<i})$. Note that $\alpha_i$ denotes the log standard deviation of the Gaussian $p(x_i | \mathbf{x}_{<i})$.
+
+As seen in the change of variables formula, a normalizing flow uses a series of deterministic and invertible mappings $f: \mathbb{R}^n \rightarrow \mathbb{R}^n$ such that $\mathbf{x} = f(\mathbf{z})$ and $\mathbf{z} = f^{-1}(\mathbf{x})$ to transform a simple prior distribution $p_z$ (e.g. isotropic Gaussian) into a more expressive one. In particular, a normalizing flow which composes $k$ invertible transformations $\{f_j\}_{j=1}^k$ such that $\mathbf{x} = f_k \circ f_{k-1} \circ \cdots \circ f_1(\mathbf{z}_0)$ takes advantage of the change-of-variables property:
+
+$$\log p(\mathbf{x}) = \log p_z(f^{-1}(\mathbf{x})) + \sum_{j=1}^k \log \left|\det\left(\frac{\partial f_j^{-1}(\mathbf{x}_j)}{\partial \mathbf{x}_j}\right)\right|$$
+
+In MAF, the forward mapping is: $x_i = \mu_i + z_i \cdot \exp(\alpha_i)$, and the inverse mapping is: $z_i = (x_i - \mu_i)/\exp(\alpha_i)$. The log of the absolute value of the determinant of the Jacobian is:
+
+$$\log \left|\det\left(\frac{\partial f^{-1}}{\partial \mathbf{x}}\right)\right| = -\sum_{i=1}^n \alpha_i$$
+
+where $\mu_i$ and $\alpha_i$ are as defined above.
+
+**Connection between $p(\mathbf{x})$ and $\log p(\mathbf{x})$ formulations:**
+
+The two formulations are equivalent but serve different purposes:
+
+1. **$p(\mathbf{x})$ formulation (autoregressive view)**:
+
+$$p(\mathbf{x}) = \prod_{i=1}^n p(x_i | \mathbf{x}_{<i}) = \prod_{i=1}^n \mathcal{N}(x_i | \mu_i, (\exp(\alpha_i))^2)$$
+
+
+2. **$\log p(\mathbf{x})$ formulation (flow view)**:
+
+$$\log p(\mathbf{x}) = \log p_z(f^{-1}(\mathbf{x})) + \sum_{j=1}^k \log \left|\det\left(\frac{\partial f_j^{-1}(\mathbf{x}_j)}{\partial \mathbf{x}_j}\right)\right|$$
+
+**How they relate:**
+
+Taking the logarithm of the autoregressive formulation:
+
+$$\log p(\mathbf{x}) = \sum_{i=1}^n \log p(x_i | \mathbf{x}_{<i}) = \sum_{i=1}^n \log \mathcal{N}(x_i | \mu_i, (\exp(\alpha_i))^2)$$
+
+For a Gaussian distribution $\mathcal{N}(x | \mu, \sigma^2)$, we have:
+
+$$\log \mathcal{N}(x | \mu, \sigma^2) = -\frac{1}{2}\log(2\pi) - \log(\sigma) - \frac{(x-\mu)^2}{2\sigma^2}$$
+
+Substituting $\sigma = \exp(\alpha_i)$ and using the inverse mapping $z_i = (x_i - \mu_i)/\exp(\alpha_i)$:
+
+$$\log p(\mathbf{x}) = \sum_{i=1}^n \left[-\frac{1}{2}\log(2\pi) - \alpha_i - \frac{z_i^2}{2}\right] = \sum_{i=1}^n \log \mathcal{N}(z_i | 0, 1) - \sum_{i=1}^n \alpha_i$$
+
+This shows that the autoregressive formulation (using conditional Gaussians) is equivalent to the flow formulation (using change of variables with a standard normal prior and the Jacobian determinant term $-\sum_{i=1}^n \alpha_i$).
+
+**Key insight:** The $\alpha_i$ terms serve dual purposes - they parameterize the conditional standard deviations in the autoregressive view, and they contribute to the Jacobian determinant in the flow view.
+
 To address the sampling problem, the **Inverse Autoregressive Flow (IAF)** simply inverts the generating process. In this case, the sampling (generation), is still parallelized. However, computing the likelihood of new data points is slow.
 
 **Forward mapping from $\mathbf{z} \rightarrow \mathbf{x}$ (parallel):**
@@ -241,3 +290,55 @@ Substituting back into the change of variables formula:
 $$\log p(\mathbf{x}) = \log p(\mathbf{z}) - \sum_{i=1}^n \alpha_i$$
 
 This derivation shows why the likelihood computation is efficient for generated samples - we already have all the $\alpha_i$ values from the forward pass, so we just need to sum them up.
+
+### RNADE vs. Autoregressive Flow Models
+
+**RNADE (Real-valued Neural Autoregressive Density Estimator)** and **Autoregressive Flow models** are both autoregressive approaches but with key differences:
+
+#### **RNADE:**
+- **Direct density modeling**: RNADE directly models the conditional densities $p(x_i | x_{<i})$ using neural networks
+- **Sequential sampling**: Generation requires sampling each dimension sequentially: $x_1 \sim p(x_1)$, then $x_2 \sim p(x_2|x_1)$, etc.
+- **No invertible transformation**: RNADE doesn't use the change of variables formula - it directly parameterizes the conditional distributions
+- **Tractable likelihood**: Can compute exact likelihoods efficiently since it directly models the density
+
+#### **Autoregressive Flow Models (MAF/IAF):**
+- **Flow interpretation**: Treats the autoregressive process as an invertible transformation from noise $\mathbf{z}$ to data $\mathbf{x}$
+- **Change of variables**: Uses the change of variables formula to compute likelihoods
+- **Invertible transformation**: Can be viewed as $f: \mathbf{z} \rightarrow \mathbf{x}$ where $\mathbf{z}$ is independent noise
+- **Two directions**: 
+  - **MAF**: Forward mapping is autoregressive (slow sampling, fast likelihood)
+  - **IAF**: Inverse mapping is autoregressive (fast sampling, slow likelihood)
+
+#### **Key Differences:**
+
+1. **Mathematical Framework**:
+   - **RNADE**: Direct density estimation $p(\mathbf{x}) = \prod_i p(x_i | x_{<i})$
+   - **Autoregressive Flow**: Invertible transformation with change of variables
+
+2. **Computational Properties**:
+   - **RNADE**: Sequential in both sampling and likelihood computation
+   - **Autoregressive Flow**: Can optimize for either fast sampling (IAF) or fast likelihood (MAF)
+
+3. **Interpretation**:
+   - **RNADE**: Pure autoregressive model
+   - **Autoregressive Flow**: Can be viewed as both autoregressive model and flow model
+
+4. **Flexibility**:
+   - **RNADE**: Limited to sequential computation
+   - **Autoregressive Flow**: Can design for specific computational needs (sampling vs. likelihood)
+
+The key insight is that Autoregressive Flow models provide a flow-based interpretation of autoregressive models, allowing for more flexible computational trade-offs while maintaining the expressive power of autoregressive modeling.
+
+#### **Data Types:**
+
+**RNADE**: 
+- **Designed for continuous data**: RNADE was specifically developed for real-valued data
+- **Gaussian conditionals**: Typically uses Gaussian distributions for the conditional densities $p(x_i | x_{<i})$
+- **Not suitable for discrete data**: The Gaussian assumption doesn't work well for categorical or discrete variables
+
+**Autoregressive Flow Models**:
+- **Primarily continuous data**: Most implementations (MAF, IAF) are designed for continuous data
+- **Can be extended**: Some variants can handle discrete data through different conditional distributions
+- **Flow requirement**: The change of variables formula requires continuous, differentiable transformations
+
+**Key Limitation**: Both RNADE and standard Autoregressive Flow models are primarily designed for **continuous data**.
