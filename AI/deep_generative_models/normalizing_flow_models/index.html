@@ -997,6 +997,16 @@ Using the property that <span class="arithmatex">\(\det(A^{-1}) = \det(A)^{-1}\)
 <div class="arithmatex">\[\log p(\mathbf{x}) = \sum_{i=1}^n \left[-\frac{1}{2}\log(2\pi) - \alpha_i - \frac{z_i^2}{2}\right] = \sum_{i=1}^n \log \mathcal{N}(z_i | 0, 1) - \sum_{i=1}^n \alpha_i\]</div>
 <p>This shows that the autoregressive formulation (using conditional Gaussians) is equivalent to the flow formulation (using change of variables with a standard normal prior and the Jacobian determinant term <span class="arithmatex">\(-\sum_{i=1}^n \alpha_i\)</span>).</p>
 <p><strong>Key insight:</strong> The <span class="arithmatex">\(\alpha_i\)</span> terms serve dual purposes - they parameterize the conditional standard deviations in the autoregressive view, and they contribute to the Jacobian determinant in the flow view.</p>
+<p><strong>What are <span class="arithmatex">\(\mu_1\)</span> and <span class="arithmatex">\(\alpha_1\)</span> in MAF?</strong></p>
+<p>In MAF, for the first dimension (<span class="arithmatex">\(i=1\)</span>):</p>
+<ul>
+<li>
+<p><strong><span class="arithmatex">\(\mu_1\)</span></strong>: This is the <strong>mean</strong> of the first conditional distribution <span class="arithmatex">\(p(x_1)\)</span>. Since <span class="arithmatex">\(x_1\)</span> has no previous dimensions to condition on (<span class="arithmatex">\(\mathbf{x}_{&lt;1}\)</span> is empty), <span class="arithmatex">\(\mu_1\)</span> is typically a learned constant parameter or computed from a bias term in the neural network.</p>
+</li>
+<li>
+<p><strong><span class="arithmatex">\(\alpha_1\)</span></strong>: This is the <strong>log standard deviation</strong> of the first conditional distribution <span class="arithmatex">\(p(x_1)\)</span>. The actual standard deviation is <span class="arithmatex">\(\exp(\alpha_1)\)</span>, and <span class="arithmatex">\(\alpha_1\)</span> is also typically a learned constant parameter.</p>
+</li>
+</ul>
 <p>To address the sampling problem, the <strong>Inverse Autoregressive Flow (IAF)</strong> simply inverts the generating process. In this case, the sampling (generation), is still parallelized. However, computing the likelihood of new data points is slow.</p>
 <p><strong>Forward mapping from <span class="arithmatex">\(\mathbf{z} \rightarrow \mathbf{x}\)</span> (parallel):</strong></p>
 <ol>
