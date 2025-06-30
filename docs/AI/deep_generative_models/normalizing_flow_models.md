@@ -221,6 +221,14 @@ This shows that the autoregressive formulation (using conditional Gaussians) is 
 
 **Key insight:** The $\alpha_i$ terms serve dual purposes - they parameterize the conditional standard deviations in the autoregressive view, and they contribute to the Jacobian determinant in the flow view.
 
+**What are $\mu_1$ and $\alpha_1$ in MAF?**
+
+In MAF, for the first dimension ($i=1$):
+
+- **$\mu_1$**: This is the **mean** of the first conditional distribution $p(x_1)$. Since $x_1$ has no previous dimensions to condition on ($\mathbf{x}_{<1}$ is empty), $\mu_1$ is typically a learned constant parameter or computed from a bias term in the neural network.
+
+- **$\alpha_1$**: This is the **log standard deviation** of the first conditional distribution $p(x_1)$. The actual standard deviation is $\exp(\alpha_1)$, and $\alpha_1$ is also typically a learned constant parameter.
+
 To address the sampling problem, the **Inverse Autoregressive Flow (IAF)** simply inverts the generating process. In this case, the sampling (generation), is still parallelized. However, computing the likelihood of new data points is slow.
 
 **Forward mapping from $\mathbf{z} \rightarrow \mathbf{x}$ (parallel):**
