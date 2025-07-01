@@ -636,49 +636,40 @@
     </span>
   </a>
   
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#rnade-vs-autoregressive-flow-models" class="md-nav__link">
-    <span class="md-ellipsis">
-      RNADE vs. Autoregressive Flow Models
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="RNADE vs. Autoregressive Flow Models">
+    <nav class="md-nav" aria-label="Autoregressive Flow Models">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#rnade" class="md-nav__link">
+  <a href="#masked-autoregressive-flow-maf" class="md-nav__link">
     <span class="md-ellipsis">
-      RNADE:
+      Masked Autoregressive Flow (MAF)
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#autoregressive-flow-models-mafiaf" class="md-nav__link">
+  <a href="#made-blocks" class="md-nav__link">
     <span class="md-ellipsis">
-      Autoregressive Flow Models (MAF/IAF):
+      MADE Blocks
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#key-differences" class="md-nav__link">
+  <a href="#detailed-maf-implementation-analysis" class="md-nav__link">
     <span class="md-ellipsis">
-      Key Differences:
+      Detailed MAF Implementation Analysis
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#data-types" class="md-nav__link">
+  <a href="#inverse-autoregressive-flow-iaf" class="md-nav__link">
     <span class="md-ellipsis">
-      Data Types:
+      Inverse Autoregressive Flow (IAF)
     </span>
   </a>
   
@@ -968,6 +959,7 @@ Using the property that <span class="arithmatex">\(\det(A^{-1}) = \det(A)^{-1}\)
 <p>where <span class="arithmatex">\(\odot\)</span> denotes elementwise product. This results in a non-volume preserving transformation.</p>
 <h3 id="autoregressive-flow-models">Autoregressive Flow Models</h3>
 <p>Some autoregressive models can also be interpreted as flow models. For a Gaussian autoregressive model, one receives some Gaussian noise for each dimension of <span class="arithmatex">\(\mathbf{x}\)</span>, which can be treated as the latent variables <span class="arithmatex">\(\mathbf{z}\)</span>. Such transformations are also invertible, meaning that given <span class="arithmatex">\(\mathbf{x}\)</span> and the model parameters, we can obtain <span class="arithmatex">\(\mathbf{z}\)</span> exactly.</p>
+<h4 id="masked-autoregressive-flow-maf">Masked Autoregressive Flow (MAF)</h4>
 <p><strong>Masked Autoregressive Flow (MAF)</strong> uses this interpretation, where the forward mapping is an autoregressive model. However, sampling is sequential and slow, in <span class="arithmatex">\(O(n)\)</span> time where <span class="arithmatex">\(n\)</span> is the dimension of the samples.</p>
 <p><strong>MAF Architecture and Mathematical Formulation:</strong></p>
 <p>The MAF is comprised of <strong>Masked Autoencoder for Distribution Estimation (MADE)</strong> blocks, which has a special masking scheme at each layer such that the autoregressive property is preserved. In particular, we consider a Gaussian autoregressive model:</p>
@@ -1007,7 +999,187 @@ Using the property that <span class="arithmatex">\(\det(A^{-1}) = \det(A)^{-1}\)
 <p><strong><span class="arithmatex">\(\alpha_1\)</span></strong>: This is the <strong>log standard deviation</strong> of the first conditional distribution <span class="arithmatex">\(p(x_1)\)</span>. The actual standard deviation is <span class="arithmatex">\(\exp(\alpha_1)\)</span>, and <span class="arithmatex">\(\alpha_1\)</span> is also typically a learned constant parameter.</p>
 </li>
 </ul>
-<p>To address the sampling problem, the <strong>Inverse Autoregressive Flow (IAF)</strong> simply inverts the generating process. In this case, the sampling (generation), is still parallelized. However, computing the likelihood of new data points is slow.</p>
+<p>This makes sense because the first dimension has no autoregressive dependencies - it's the starting point of the autoregressive chain.</p>
+<h4 id="made-blocks">MADE Blocks</h4>
+<p><strong>MADE (Masked Autoencoder for Distribution Estimation)</strong> is a key architectural component that enables efficient autoregressive modeling. MADE uses a special masking scheme to ensure that the autoregressive property is preserved while allowing for efficient parallel computation of all conditional parameters.</p>
+<p><strong>How MADE Works:</strong></p>
+<ol>
+<li>
+<p><strong>Masking Scheme</strong>: Each layer in the neural network has a mask that ensures each output unit only depends on a subset of input units, maintaining the autoregressive ordering.</p>
+</li>
+<li>
+<p><strong>Autoregressive Property</strong>: For dimension <span class="arithmatex">\(i\)</span>, the network can only access inputs <span class="arithmatex">\(x_j\)</span> where <span class="arithmatex">\(j &lt; i\)</span>, ensuring that <span class="arithmatex">\(p(x_i | \mathbf{x}_{&lt;i})\)</span> only depends on previous dimensions.</p>
+</li>
+<li>
+<p><strong>Parallel Parameter Computation</strong>: Despite the autoregressive constraints, MADE can compute all <span class="arithmatex">\(\mu_i\)</span> and <span class="arithmatex">\(\alpha_i\)</span> parameters in parallel during training, making it much more efficient than sequential autoregressive models.</p>
+</li>
+</ol>
+<p><strong>Mathematical Implementation:</strong></p>
+<p>The masking is implemented by multiplying the weight matrices with binary masks:</p>
+<div class="arithmatex">\[W_{masked} = W \odot M\]</div>
+<p>where <span class="arithmatex">\(M\)</span> is a binary mask matrix that enforces the autoregressive dependencies. The mask ensures that:
+- Output <span class="arithmatex">\(i\)</span> can only depend on inputs <span class="arithmatex">\(j &lt; i\)</span>
+- This creates a lower triangular dependency structure</p>
+<p><strong>Connection to MAF:</strong>
+MAF uses MADE blocks as its core building blocks, allowing it to efficiently compute all the conditional parameters <span class="arithmatex">\(\mu_i\)</span> and <span class="arithmatex">\(\alpha_i\)</span> while maintaining the autoregressive structure required for the flow transformation.</p>
+<h4 id="detailed-maf-implementation-analysis">Detailed MAF Implementation Analysis</h4>
+<p>Let's analyze a complete MAF implementation that demonstrates the concepts discussed above:</p>
+<p><strong>Core Components:</strong></p>
+<ol>
+<li><strong>MaskedLinear</strong>: Implements the masking mechanism for autoregressive dependencies</li>
+<li><strong>PermuteLayer</strong>: Reorders dimensions between flow layers</li>
+<li><strong>MADE</strong>: Single MADE block with forward and inverse transformations</li>
+<li><strong>MAF</strong>: Complete model with multiple MADE blocks</li>
+</ol>
+<p><strong>1. MaskedLinear Layer:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">MaskedLinear</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">):</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">)</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;mask&quot;</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Key Features:</strong>
+- <strong>Masking</strong>: The mask is a binary matrix that enforces autoregressive dependencies
+- <strong>Element-wise Multiplication</strong>: <code>self.mask * self.weight</code> zeros out forbidden connections
+- <strong>Autoregressive Property</strong>: Ensures output <span class="arithmatex">\(i\)</span> only depends on inputs <span class="arithmatex">\(j &lt; i\)</span></p>
+<p><strong>2. PermuteLayer:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">PermuteLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_inputs</span><span class="p">):</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">perm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_inputs</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>        <span class="k">return</span> <span class="n">inputs</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">perm</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">inputs</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">inputs</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        <span class="k">return</span> <span class="n">inputs</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">perm</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">inputs</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">inputs</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Purpose:</strong>
+- <strong>Dimension Reordering</strong>: Reverses the order of dimensions between flow layers
+- <strong>Expressiveness</strong>: Allows different autoregressive orderings across layers
+- <strong>Jacobian</strong>: Since it's just a permutation, the Jacobian determinant is 1 (log_det = 0)</p>
+<p><strong>3. MADE Block Implementation:</strong></p>
+<p><strong>Forward Method (z → x):</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">log_det</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_size</span><span class="p">):</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># MADE network with masking</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        <span class="n">mean</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Split into mean and log_std</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        <span class="n">x</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">z</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">alpha</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>  <span class="c1"># Transform</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>        <span class="k">if</span> <span class="n">log_det</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>            <span class="n">log_det</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>        <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>            <span class="n">log_det</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">log_det</span><span class="p">,</span> <span class="n">alpha</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">log_det</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">log_det</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Negative sum for change of variables</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">log_det</span>
+</code></pre></div></p>
+<p><strong>Key Implementation Details:</strong>
+- <strong>Sequential Processing</strong>: Each dimension is processed one by one
+- <strong>Autoregressive Access</strong>: The MADE network can only access previously computed <span class="arithmatex">\(x\)</span> values
+- <strong>Transformation</strong>: <span class="arithmatex">\(x_i = \mu_i + z_i \cdot \exp(\alpha_i)\)</span>
+- <strong>Log Determinant</strong>: Accumulates <span class="arithmatex">\(\alpha_i\)</span> values and takes negative sum</p>
+<p><strong>Inverse Method (x → z):</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># MADE network with masking</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">mean</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Split into mean and log_std</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">alpha</span><span class="p">)</span>  <span class="c1"># Inverse transform</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">log_det</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Negative sum for change of variables</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="n">log_det</span>
+</code></pre></div></p>
+<p><strong>Key Implementation Details:</strong>
+- <strong>Parallel Processing</strong>: All dimensions can be processed simultaneously
+- <strong>Autoregressive Masking</strong>: The masking ensures proper dependencies
+- <strong>Inverse Transformation</strong>: <span class="arithmatex">\(z_i = (x_i - \mu_i) / \exp(\alpha_i)\)</span>
+- <strong>Log Determinant</strong>: Same formula as forward, but computed in parallel</p>
+<p><strong>4. Complete MAF Model:</strong></p>
+<p><strong>Architecture:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">n_hidden</span><span class="p">,</span> <span class="n">n_flows</span><span class="p">):</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="n">nf_blocks</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_flows</span><span class="p">):</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>        <span class="n">nf_blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MADE</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">n_hidden</span><span class="p">))</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>        <span class="n">nf_blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PermuteLayer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_size</span><span class="p">))</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">nf</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">nf_blocks</span><span class="p">)</span>
+</code></pre></div></p>
+<p><strong>Structure:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Input → MADE₁ → Permute₁ → MADE₂ → Permute₂ → ... → MADEₖ → Permuteₖ → Output
+</code></pre></div></p>
+<p><strong>Log Probability Computation:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">log_probs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="n">log_det_list</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="k">for</span> <span class="n">flow</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="p">:</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>        <span class="n">x</span><span class="p">,</span> <span class="n">log_det</span> <span class="o">=</span> <span class="n">flow</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># Transform x → z</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>        <span class="n">log_det_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">log_det</span><span class="p">)</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="n">sum_log_det</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">log_det_list</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    <span class="n">z</span> <span class="o">=</span> <span class="n">x</span>  <span class="c1"># Final z after all transformations</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    <span class="n">p_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_dist</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Prior log probability</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    <span class="n">log_prob</span> <span class="o">=</span> <span class="p">(</span><span class="n">p_z</span> <span class="o">+</span> <span class="n">sum_log_det</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>  <span class="c1"># Change of variables formula</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    <span class="k">return</span> <span class="n">log_prob</span>
+</code></pre></div></p>
+<p><strong>Sampling Process:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="n">x_sample</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>  <span class="c1"># Sample from prior</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="k">for</span> <span class="n">flow</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>  <span class="c1"># Reverse order for sampling</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>        <span class="n">x_sample</span><span class="p">,</span> <span class="n">log_det</span> <span class="o">=</span> <span class="n">flow</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">x_sample</span><span class="p">)</span>  <span class="c1"># Transform z → x</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="k">return</span> <span class="n">x_sample</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+</code></pre></div></p>
+<p><strong>Understanding the Flow Methods:</strong></p>
+<ol>
+<li>
+<p><strong>During Training (likelihood computation):</strong>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># We have x, want to compute log p(x)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">for</span> <span class="n">flow</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="p">:</span>  <span class="c1"># Forward order</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="n">x</span><span class="p">,</span> <span class="n">log_det</span> <span class="o">=</span> <span class="n">flow</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># x → z (inverse of this flow)</span>
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>During Sampling:</strong>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># We have z, want to get x</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">for</span> <span class="n">flow</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>  <span class="c1"># Reverse order</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="n">x_sample</span><span class="p">,</span> <span class="n">log_det</span> <span class="o">=</span> <span class="n">flow</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">x_sample</span><span class="p">)</span>  <span class="c1"># z → x (forward of this flow)</span>
+</code></pre></div></p>
+</li>
+</ol>
+<p><strong>In other words:</strong></p>
+<ul>
+<li><strong>Each flow's <code>forward()</code> method</strong>: Transforms <span class="arithmatex">\(\mathbf{z} \rightarrow \mathbf{x}\)</span> for that specific flow</li>
+<li><strong>Each flow's <code>inverse()</code> method</strong>: Transforms <span class="arithmatex">\(\mathbf{x} \rightarrow \mathbf{z}\)</span> for that specific flow</li>
+<li><strong>During training</strong>: We use <code>inverse()</code> to go from data space to latent space</li>
+<li><strong>During sampling</strong>: We use <code>forward()</code> to go from latent space to data space</li>
+</ul>
+<p><strong>Mathematical Perspective:</strong>
+Let <span class="arithmatex">\(f_i\)</span> denote the forward transformation of the <span class="arithmatex">\(i\)</span>-th flow (from <span class="arithmatex">\(\mathbf{z}\)</span> to <span class="arithmatex">\(\mathbf{x}\)</span>), and <span class="arithmatex">\(f_i^{-1}\)</span> denote its inverse transformation (from <span class="arithmatex">\(\mathbf{x}\)</span> to <span class="arithmatex">\(\mathbf{z}\)</span>).</p>
+<ul>
+<li><strong>Training</strong>: <span class="arithmatex">\(f_k^{-1} \circ f_{k-1}^{-1} \circ \cdots \circ f_1^{-1}(\mathbf{x}) = \mathbf{z}\)</span> (using <code>inverse()</code> methods)</li>
+<li><strong>Sampling</strong>: <span class="arithmatex">\(f_1 \circ f_2 \circ \cdots \circ f_k(\mathbf{z}) = \mathbf{x}\)</span> (using <code>forward()</code> methods)</li>
+</ul>
+<p><strong>What is <span class="arithmatex">\(k\)</span>?</strong></p>
+<p>The parameter <span class="arithmatex">\(k\)</span> represents the <strong>total number of flow layers</strong> in the MAF model. In the implementation, this corresponds to <code>n_flows</code> in the MAF constructor.</p>
+<p><strong>In the MAF Architecture:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">n_hidden</span><span class="p">,</span> <span class="n">n_flows</span><span class="p">):</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="c1"># n_flows = k (total number of flow layers)</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_flows</span><span class="p">):</span>  <span class="c1"># i goes from 0 to k-1</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>        <span class="n">nf_blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MADE</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">n_hidden</span><span class="p">))</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>        <span class="n">nf_blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PermuteLayer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_size</span><span class="p">))</span>
+</code></pre></div></p>
+<p><strong>Flow Composition Structure:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Input → MADE₁ → Permute₁ → MADE₂ → Permute₂ → ... → MADEₖ → Permuteₖ → Output
+</code></pre></div></p>
+<p>Where:
+- <strong><span class="arithmatex">\(f_1\)</span></strong>: First MADE block (MADE₁)
+- <strong><span class="arithmatex">\(f_2\)</span></strong>: Second MADE block (MADE₂)
+- <strong>...</strong>
+- <strong><span class="arithmatex">\(f_k\)</span></strong>: Last MADE block (MADEₖ)</p>
+<p><strong>Example with <span class="arithmatex">\(k = 3\)</span>:</strong>
+- <strong>Training</strong>: <span class="arithmatex">\(f_3^{-1} \circ f_2^{-1} \circ f_1^{-1}(\mathbf{x}) = \mathbf{z}\)</span>
+- <strong>Sampling</strong>: <span class="arithmatex">\(f_1 \circ f_2 \circ f_3(\mathbf{z}) = \mathbf{x}\)</span></p>
+<p><strong>Key Insight:</strong> The <code>forward()</code> method of each flow is designed to be the inverse transformation for the overall model's training direction. This is why we use <code>forward()</code> during sampling in reverse order.</p>
+<p>This implementation demonstrates how the theoretical concepts of MAF translate into practical code, showing the interplay between autoregressive structure, masking, and flow transformations.</p>
+<h4 id="inverse-autoregressive-flow-iaf">Inverse Autoregressive Flow (IAF)</h4>
+<p>To address the sampling problem (sequential) in MAF, the <strong>Inverse Autoregressive Flow (IAF)</strong> simply inverts the generating process. In this case, the sampling (generation), is still parallelized. However, computing the likelihood of new data points is slow.</p>
 <p><strong>Forward mapping from <span class="arithmatex">\(\mathbf{z} \rightarrow \mathbf{x}\)</span> (parallel):</strong></p>
 <ol>
 <li>
@@ -1068,62 +1240,6 @@ However, for generated points the likelihood can be computed efficiently (since 
 <p>Substituting back into the change of variables formula:</p>
 <div class="arithmatex">\[\log p(\mathbf{x}) = \log p(\mathbf{z}) - \sum_{i=1}^n \alpha_i\]</div>
 <p>This derivation shows why the likelihood computation is efficient for generated samples - we already have all the <span class="arithmatex">\(\alpha_i\)</span> values from the forward pass, so we just need to sum them up.</p>
-<h3 id="rnade-vs-autoregressive-flow-models">RNADE vs. Autoregressive Flow Models</h3>
-<p><strong>RNADE (Real-valued Neural Autoregressive Density Estimator)</strong> and <strong>Autoregressive Flow models</strong> are both autoregressive approaches but with key differences:</p>
-<h4 id="rnade"><strong>RNADE:</strong></h4>
-<ul>
-<li><strong>Direct density modeling</strong>: RNADE directly models the conditional densities <span class="arithmatex">\(p(x_i | x_{&lt;i})\)</span> using neural networks</li>
-<li><strong>Sequential sampling</strong>: Generation requires sampling each dimension sequentially: <span class="arithmatex">\(x_1 \sim p(x_1)\)</span>, then <span class="arithmatex">\(x_2 \sim p(x_2|x_1)\)</span>, etc.</li>
-<li><strong>No invertible transformation</strong>: RNADE doesn't use the change of variables formula - it directly parameterizes the conditional distributions</li>
-<li><strong>Tractable likelihood</strong>: Can compute exact likelihoods efficiently since it directly models the density</li>
-</ul>
-<h4 id="autoregressive-flow-models-mafiaf"><strong>Autoregressive Flow Models (MAF/IAF):</strong></h4>
-<ul>
-<li><strong>Flow interpretation</strong>: Treats the autoregressive process as an invertible transformation from noise <span class="arithmatex">\(\mathbf{z}\)</span> to data <span class="arithmatex">\(\mathbf{x}\)</span></li>
-<li><strong>Change of variables</strong>: Uses the change of variables formula to compute likelihoods</li>
-<li><strong>Invertible transformation</strong>: Can be viewed as <span class="arithmatex">\(f: \mathbf{z} \rightarrow \mathbf{x}\)</span> where <span class="arithmatex">\(\mathbf{z}\)</span> is independent noise</li>
-<li><strong>Two directions</strong>: </li>
-<li><strong>MAF</strong>: Forward mapping is autoregressive (slow sampling, fast likelihood)</li>
-<li><strong>IAF</strong>: Inverse mapping is autoregressive (fast sampling, slow likelihood)</li>
-</ul>
-<h4 id="key-differences"><strong>Key Differences:</strong></h4>
-<ol>
-<li><strong>Mathematical Framework</strong>:</li>
-<li><strong>RNADE</strong>: Direct density estimation <span class="arithmatex">\(p(\mathbf{x}) = \prod_i p(x_i | x_{&lt;i})\)</span></li>
-<li>
-<p><strong>Autoregressive Flow</strong>: Invertible transformation with change of variables</p>
-</li>
-<li>
-<p><strong>Computational Properties</strong>:</p>
-</li>
-<li><strong>RNADE</strong>: Sequential in both sampling and likelihood computation</li>
-<li>
-<p><strong>Autoregressive Flow</strong>: Can optimize for either fast sampling (IAF) or fast likelihood (MAF)</p>
-</li>
-<li>
-<p><strong>Interpretation</strong>:</p>
-</li>
-<li><strong>RNADE</strong>: Pure autoregressive model</li>
-<li>
-<p><strong>Autoregressive Flow</strong>: Can be viewed as both autoregressive model and flow model</p>
-</li>
-<li>
-<p><strong>Flexibility</strong>:</p>
-</li>
-<li><strong>RNADE</strong>: Limited to sequential computation</li>
-<li><strong>Autoregressive Flow</strong>: Can design for specific computational needs (sampling vs. likelihood)</li>
-</ol>
-<p>The key insight is that Autoregressive Flow models provide a flow-based interpretation of autoregressive models, allowing for more flexible computational trade-offs while maintaining the expressive power of autoregressive modeling.</p>
-<h4 id="data-types"><strong>Data Types:</strong></h4>
-<p><strong>RNADE</strong>: 
-- <strong>Designed for continuous data</strong>: RNADE was specifically developed for real-valued data
-- <strong>Gaussian conditionals</strong>: Typically uses Gaussian distributions for the conditional densities <span class="arithmatex">\(p(x_i | x_{&lt;i})\)</span>
-- <strong>Not suitable for discrete data</strong>: The Gaussian assumption doesn't work well for categorical or discrete variables</p>
-<p><strong>Autoregressive Flow Models</strong>:
-- <strong>Primarily continuous data</strong>: Most implementations (MAF, IAF) are designed for continuous data
-- <strong>Can be extended</strong>: Some variants can handle discrete data through different conditional distributions
-- <strong>Flow requirement</strong>: The change of variables formula requires continuous, differentiable transformations</p>
-<p><strong>Key Limitation</strong>: Both RNADE and standard Autoregressive Flow models are primarily designed for <strong>continuous data</strong>.</p>
 
 
 
