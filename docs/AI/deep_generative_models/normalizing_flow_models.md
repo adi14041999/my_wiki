@@ -170,6 +170,8 @@ where $\odot$ denotes elementwise product. This results in a non-volume preservi
 
 Some autoregressive models can also be interpreted as flow models. For a Gaussian autoregressive model, one receives some Gaussian noise for each dimension of $\mathbf{x}$, which can be treated as the latent variables $\mathbf{z}$. Such transformations are also invertible, meaning that given $\mathbf{x}$ and the model parameters, we can obtain $\mathbf{z}$ exactly.
 
+#### Masked Autoregressive Flow (MAF)
+
 **Masked Autoregressive Flow (MAF)** uses this interpretation, where the forward mapping is an autoregressive model. However, sampling is sequential and slow, in $O(n)$ time where $n$ is the dimension of the samples.
 
 **MAF Architecture and Mathematical Formulation:**
@@ -229,7 +231,227 @@ In MAF, for the first dimension ($i=1$):
 
 - **$\alpha_1$**: This is the **log standard deviation** of the first conditional distribution $p(x_1)$. The actual standard deviation is $\exp(\alpha_1)$, and $\alpha_1$ is also typically a learned constant parameter.
 
-To address the sampling problem, the **Inverse Autoregressive Flow (IAF)** simply inverts the generating process. In this case, the sampling (generation), is still parallelized. However, computing the likelihood of new data points is slow.
+This makes sense because the first dimension has no autoregressive dependencies - it's the starting point of the autoregressive chain.
+
+#### MADE Blocks
+
+**MADE (Masked Autoencoder for Distribution Estimation)** is a key architectural component that enables efficient autoregressive modeling. MADE uses a special masking scheme to ensure that the autoregressive property is preserved while allowing for efficient parallel computation of all conditional parameters.
+
+**How MADE Works:**
+
+1. **Masking Scheme**: Each layer in the neural network has a mask that ensures each output unit only depends on a subset of input units, maintaining the autoregressive ordering.
+
+2. **Autoregressive Property**: For dimension $i$, the network can only access inputs $x_j$ where $j < i$, ensuring that $p(x_i | \mathbf{x}_{<i})$ only depends on previous dimensions.
+
+3. **Parallel Parameter Computation**: Despite the autoregressive constraints, MADE can compute all $\mu_i$ and $\alpha_i$ parameters in parallel during training, making it much more efficient than sequential autoregressive models.
+
+**Mathematical Implementation:**
+
+The masking is implemented by multiplying the weight matrices with binary masks:
+
+$$W_{masked} = W \odot M$$
+
+where $M$ is a binary mask matrix that enforces the autoregressive dependencies. The mask ensures that:
+- Output $i$ can only depend on inputs $j < i$
+- This creates a lower triangular dependency structure
+
+**Connection to MAF:**
+MAF uses MADE blocks as its core building blocks, allowing it to efficiently compute all the conditional parameters $\mu_i$ and $\alpha_i$ while maintaining the autoregressive structure required for the flow transformation.
+
+#### Detailed MAF Implementation Analysis
+
+Let's analyze a complete MAF implementation that demonstrates the concepts discussed above:
+
+**Core Components:**
+
+1. **MaskedLinear**: Implements the masking mechanism for autoregressive dependencies
+2. **PermuteLayer**: Reorders dimensions between flow layers
+3. **MADE**: Single MADE block with forward and inverse transformations
+4. **MAF**: Complete model with multiple MADE blocks
+
+**1. MaskedLinear Layer:**
+
+```python
+class MaskedLinear(nn.Linear):
+    def __init__(self, input_size, output_size, mask):
+        super().__init__(input_size, output_size)
+        self.register_buffer("mask", mask)
+
+    def forward(self, x):
+        return F.linear(x, self.mask * self.weight, self.bias)
+```
+
+**Key Features:**
+- **Masking**: The mask is a binary matrix that enforces autoregressive dependencies
+- **Element-wise Multiplication**: `self.mask * self.weight` zeros out forbidden connections
+- **Autoregressive Property**: Ensures output $i$ only depends on inputs $j < i$
+
+**2. PermuteLayer:**
+
+```python
+class PermuteLayer(nn.Module):
+    def __init__(self, num_inputs):
+        super().__init__()
+        self.perm = np.array(np.arange(0, num_inputs)[::-1])
+
+    def forward(self, inputs):
+        return inputs[:, self.perm], torch.zeros(inputs.size(0), 1, device=inputs.device)
+
+    def inverse(self, inputs):
+        return inputs[:, self.perm], torch.zeros(inputs.size(0), 1, device=inputs.device)
+```
+
+**Purpose:**
+- **Dimension Reordering**: Reverses the order of dimensions between flow layers
+- **Expressiveness**: Allows different autoregressive orderings across layers
+- **Jacobian**: Since it's just a permutation, the Jacobian determinant is 1 (log_det = 0)
+
+**3. MADE Block Implementation:**
+
+**Forward Method (z → x):**
+```python
+def forward(self, z):
+    x = torch.zeros_like(z)
+    log_det = None
+    for i in range(self.input_size):
+        out = self.net(x)  # MADE network with masking
+        mean, alpha = out.chunk(2, dim=1)  # Split into mean and log_std
+        x[:, i] = mean[:, i] + z[:, i] * torch.exp(alpha[:, i])  # Transform
+        if log_det is None:
+            log_det = alpha[:, i].unsqueeze(1)
+        else:
+            log_det = torch.cat((log_det, alpha[:, i].unsqueeze(1)), dim=1)
+    log_det = -torch.sum(log_det, dim=1)  # Negative sum for change of variables
+    return x, log_det
+```
+
+**Key Implementation Details:**
+- **Sequential Processing**: Each dimension is processed one by one
+- **Autoregressive Access**: The MADE network can only access previously computed $x$ values
+- **Transformation**: $x_i = \mu_i + z_i \cdot \exp(\alpha_i)$
+- **Log Determinant**: Accumulates $\alpha_i$ values and takes negative sum
+
+**Inverse Method (x → z):**
+```python
+def inverse(self, x):
+    out = self.net(x)  # MADE network with masking
+    mean, alpha = out.chunk(2, dim=1)  # Split into mean and log_std
+    z = (x - mean) * torch.exp(-alpha)  # Inverse transform
+    log_det = -torch.sum(alpha, dim=1)  # Negative sum for change of variables
+    return z, log_det
+```
+
+**Key Implementation Details:**
+- **Parallel Processing**: All dimensions can be processed simultaneously
+- **Autoregressive Masking**: The masking ensures proper dependencies
+- **Inverse Transformation**: $z_i = (x_i - \mu_i) / \exp(\alpha_i)$
+- **Log Determinant**: Same formula as forward, but computed in parallel
+
+**4. Complete MAF Model:**
+
+**Architecture:**
+```python
+def __init__(self, input_size, hidden_size, n_hidden, n_flows):
+    nf_blocks = []
+    for i in range(self.n_flows):
+        nf_blocks.append(MADE(self.input_size, hidden_size, n_hidden))
+        nf_blocks.append(PermuteLayer(self.input_size))
+    self.nf = nn.Sequential(*nf_blocks)
+```
+
+**Structure:**
+```
+Input → MADE₁ → Permute₁ → MADE₂ → Permute₂ → ... → MADEₖ → Permuteₖ → Output
+```
+
+**Log Probability Computation:**
+```python
+def log_probs(self, x):
+    log_det_list = []
+    for flow in self.nf:
+        x, log_det = flow.inverse(x)  # Transform x → z
+        log_det_list.append(log_det)
+    
+    sum_log_det = torch.stack(log_det_list, dim=1).sum(dim=1)
+    z = x  # Final z after all transformations
+    p_z = self.base_dist.log_prob(z).sum(-1)  # Prior log probability
+    log_prob = (p_z + sum_log_det).mean()  # Change of variables formula
+    return log_prob
+```
+
+**Sampling Process:**
+```python
+def sample(self, device, n):
+    x_sample = torch.randn(n, self.input_size).to(device)  # Sample from prior
+    for flow in self.nf[::-1]:  # Reverse order for sampling
+        x_sample, log_det = flow.forward(x_sample)  # Transform z → x
+    return x_sample.cpu().data.numpy()
+```
+
+**Understanding the Flow Methods:**
+
+1. **During Training (likelihood computation):**
+   ```python
+   # We have x, want to compute log p(x)
+   for flow in self.nf:  # Forward order
+       x, log_det = flow.inverse(x)  # x → z (inverse of this flow)
+   ```
+
+2. **During Sampling:**
+   ```python
+   # We have z, want to get x
+   for flow in self.nf[::-1]:  # Reverse order
+       x_sample, log_det = flow.forward(x_sample)  # z → x (forward of this flow)
+   ```
+
+**In other words:**
+
+- **Each flow's `forward()` method**: Transforms $\mathbf{z} \rightarrow \mathbf{x}$ for that specific flow
+- **Each flow's `inverse()` method**: Transforms $\mathbf{x} \rightarrow \mathbf{z}$ for that specific flow
+- **During training**: We use `inverse()` to go from data space to latent space
+- **During sampling**: We use `forward()` to go from latent space to data space
+
+**Mathematical Perspective:**
+Let $f_i$ denote the forward transformation of the $i$-th flow (from $\mathbf{z}$ to $\mathbf{x}$), and $f_i^{-1}$ denote its inverse transformation (from $\mathbf{x}$ to $\mathbf{z}$).
+
+- **Training**: $f_k^{-1} \circ f_{k-1}^{-1} \circ \cdots \circ f_1^{-1}(\mathbf{x}) = \mathbf{z}$ (using `inverse()` methods)
+- **Sampling**: $f_1 \circ f_2 \circ \cdots \circ f_k(\mathbf{z}) = \mathbf{x}$ (using `forward()` methods)
+
+**What is $k$?**
+
+The parameter $k$ represents the **total number of flow layers** in the MAF model. In the implementation, this corresponds to `n_flows` in the MAF constructor.
+
+**In the MAF Architecture:**
+```python
+def __init__(self, input_size, hidden_size, n_hidden, n_flows):
+    # n_flows = k (total number of flow layers)
+    for i in range(self.n_flows):  # i goes from 0 to k-1
+        nf_blocks.append(MADE(self.input_size, hidden_size, n_hidden))
+        nf_blocks.append(PermuteLayer(self.input_size))
+```
+
+**Flow Composition Structure:**
+```
+Input → MADE₁ → Permute₁ → MADE₂ → Permute₂ → ... → MADEₖ → Permuteₖ → Output
+```
+
+Where:
+- **$f_1$**: First MADE block (MADE₁)
+- **$f_2$**: Second MADE block (MADE₂)
+- **...**
+- **$f_k$**: Last MADE block (MADEₖ)
+
+**Example with $k = 3$:**
+- **Training**: $f_3^{-1} \circ f_2^{-1} \circ f_1^{-1}(\mathbf{x}) = \mathbf{z}$
+- **Sampling**: $f_1 \circ f_2 \circ f_3(\mathbf{z}) = \mathbf{x}$
+
+**Key Insight:** The `forward()` method of each flow is designed to be the inverse transformation for the overall model's training direction. This is why we use `forward()` during sampling in reverse order.
+
+This implementation demonstrates how the theoretical concepts of MAF translate into practical code, showing the interplay between autoregressive structure, masking, and flow transformations.
+
+#### Inverse Autoregressive Flow (IAF)
+
+To address the sampling problem (sequential) in MAF, the **Inverse Autoregressive Flow (IAF)** simply inverts the generating process. In this case, the sampling (generation), is still parallelized. However, computing the likelihood of new data points is slow.
 
 **Forward mapping from $\mathbf{z} \rightarrow \mathbf{x}$ (parallel):**
 
@@ -298,55 +520,3 @@ Substituting back into the change of variables formula:
 $$\log p(\mathbf{x}) = \log p(\mathbf{z}) - \sum_{i=1}^n \alpha_i$$
 
 This derivation shows why the likelihood computation is efficient for generated samples - we already have all the $\alpha_i$ values from the forward pass, so we just need to sum them up.
-
-### RNADE vs. Autoregressive Flow Models
-
-**RNADE (Real-valued Neural Autoregressive Density Estimator)** and **Autoregressive Flow models** are both autoregressive approaches but with key differences:
-
-#### **RNADE:**
-- **Direct density modeling**: RNADE directly models the conditional densities $p(x_i | x_{<i})$ using neural networks
-- **Sequential sampling**: Generation requires sampling each dimension sequentially: $x_1 \sim p(x_1)$, then $x_2 \sim p(x_2|x_1)$, etc.
-- **No invertible transformation**: RNADE doesn't use the change of variables formula - it directly parameterizes the conditional distributions
-- **Tractable likelihood**: Can compute exact likelihoods efficiently since it directly models the density
-
-#### **Autoregressive Flow Models (MAF/IAF):**
-- **Flow interpretation**: Treats the autoregressive process as an invertible transformation from noise $\mathbf{z}$ to data $\mathbf{x}$
-- **Change of variables**: Uses the change of variables formula to compute likelihoods
-- **Invertible transformation**: Can be viewed as $f: \mathbf{z} \rightarrow \mathbf{x}$ where $\mathbf{z}$ is independent noise
-- **Two directions**: 
-  - **MAF**: Forward mapping is autoregressive (slow sampling, fast likelihood)
-  - **IAF**: Inverse mapping is autoregressive (fast sampling, slow likelihood)
-
-#### **Key Differences:**
-
-1. **Mathematical Framework**:
-   - **RNADE**: Direct density estimation $p(\mathbf{x}) = \prod_i p(x_i | x_{<i})$
-   - **Autoregressive Flow**: Invertible transformation with change of variables
-
-2. **Computational Properties**:
-   - **RNADE**: Sequential in both sampling and likelihood computation
-   - **Autoregressive Flow**: Can optimize for either fast sampling (IAF) or fast likelihood (MAF)
-
-3. **Interpretation**:
-   - **RNADE**: Pure autoregressive model
-   - **Autoregressive Flow**: Can be viewed as both autoregressive model and flow model
-
-4. **Flexibility**:
-   - **RNADE**: Limited to sequential computation
-   - **Autoregressive Flow**: Can design for specific computational needs (sampling vs. likelihood)
-
-The key insight is that Autoregressive Flow models provide a flow-based interpretation of autoregressive models, allowing for more flexible computational trade-offs while maintaining the expressive power of autoregressive modeling.
-
-#### **Data Types:**
-
-**RNADE**: 
-- **Designed for continuous data**: RNADE was specifically developed for real-valued data
-- **Gaussian conditionals**: Typically uses Gaussian distributions for the conditional densities $p(x_i | x_{<i})$
-- **Not suitable for discrete data**: The Gaussian assumption doesn't work well for categorical or discrete variables
-
-**Autoregressive Flow Models**:
-- **Primarily continuous data**: Most implementations (MAF, IAF) are designed for continuous data
-- **Can be extended**: Some variants can handle discrete data through different conditional distributions
-- **Flow requirement**: The change of variables formula requires continuous, differentiable transformations
-
-**Key Limitation**: Both RNADE and standard Autoregressive Flow models are primarily designed for **continuous data**.
