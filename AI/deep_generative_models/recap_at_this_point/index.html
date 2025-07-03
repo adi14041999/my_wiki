@@ -10,26 +10,28 @@
       
       
       
-        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/">
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/AI/deep_generative_models/recap_at_this_point/">
       
       
+        <link rel="prev" href="../normalizing_flow_models/">
       
-        <link rel="next" href="AI/deep_generative_models/introduction/">
+      
+        <link rel="next" href="../generative_adversarial_networks/">
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
-        <title>My Wiki</title>
+        <title>Recap at this point - My Wiki</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.342714a4.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.342714a4.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -48,9 +50,9 @@
       
     
     
-      <link rel="stylesheet" href="stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#welcome-to-my-wiki" class="md-skip">
+        <a href="#recap-at-this-point" class="md-skip">
           Skip to content
         </a>
       
@@ -90,7 +92,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="My Wiki" class="md-header__button md-logo" aria-label="My Wiki" data-md-component="logo">
+    <a href="../../.." title="My Wiki" class="md-header__button md-logo" aria-label="My Wiki" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -110,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              Recap at this point
             
           </span>
         </div>
@@ -209,11 +211,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="." class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -230,6 +230,8 @@
   
   
   
+    
+  
   
     
     
@@ -237,11 +239,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="AI/deep_generative_models/introduction/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../introduction/" class="md-tabs__link">
           
   
   
@@ -271,7 +275,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="math/probability/probability_and_counting/" class="md-tabs__link">
+        <a href="../../../math/probability/probability_and_counting/" class="md-tabs__link">
           
   
   
@@ -310,7 +314,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="My Wiki" class="md-nav__button md-logo" aria-label="My Wiki" data-md-component="logo">
+    <a href="../../.." title="My Wiki" class="md-nav__button md-logo" aria-label="My Wiki" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -325,19 +329,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -348,7 +343,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -357,26 +351,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -389,7 +388,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             AI
@@ -400,26 +399,31 @@
                 
   
   
+    
   
   
+  
     
     
     
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
         
           
-          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
             
   
   
@@ -432,7 +436,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2_1">
             <span class="md-nav__icon md-icon"></span>
             Deep Generative Models
@@ -446,7 +450,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/introduction/" class="md-nav__link">
+      <a href="../introduction/" class="md-nav__link">
         
   
   
@@ -469,7 +473,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/autoregressive_models/" class="md-nav__link">
+      <a href="../autoregressive_models/" class="md-nav__link">
         
   
   
@@ -492,7 +496,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/variational_autoencoders/" class="md-nav__link">
+      <a href="../variational_autoencoders/" class="md-nav__link">
         
   
   
@@ -515,7 +519,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/normalizing_flow_models/" class="md-nav__link">
+      <a href="../normalizing_flow_models/" class="md-nav__link">
         
   
   
@@ -535,10 +539,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="AI/deep_generative_models/recap_at_this_point/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Recap at this point
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -549,6 +575,113 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-generative-modeling-framework" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Generative Modeling Framework
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-families-weve-explored" class="md-nav__link">
+    <span class="md-ellipsis">
+      Model Families We've Explored
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-likelihood-based-training-paradigm" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Likelihood-Based Training Paradigm
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative-similarity-measures" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alternative Similarity Measures
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-likelihood-vs-sample-quality-dilemma" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Likelihood vs. Sample Quality Dilemma
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Likelihood vs. Sample Quality Dilemma">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-this-disconnect-occurs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why This Disconnect Occurs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implications-for-model-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implications for Model Design
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative-training-paradigms" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alternative Training Paradigms
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -561,7 +694,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/generative_adversarial_networks/" class="md-nav__link">
+      <a href="../generative_adversarial_networks/" class="md-nav__link">
         
   
   
@@ -685,7 +818,7 @@
   
   
     <li class="md-nav__item">
-      <a href="math/probability/probability_and_counting/" class="md-nav__link">
+      <a href="../../../math/probability/probability_and_counting/" class="md-nav__link">
         
   
   
@@ -732,7 +865,68 @@
 
 
 
-<h1 id="welcome-to-my-wiki">Welcome to my wiki!</h1>
+<h1 id="recap-at-this-point">Recap at this point</h1>
+<h2 id="the-generative-modeling-framework">The Generative Modeling Framework</h2>
+<p>We have some data from an unknown probability distribution, that we denote <span class="arithmatex">\(p_{data}\)</span>. We have a model family <span class="arithmatex">\(\mathcal{M}\)</span> which is a set of probability distributions. We denote some kind of notion of similarity between <span class="arithmatex">\(p_{data}\)</span> and the distributions in <span class="arithmatex">\(\mathcal{M}\)</span>. We try to find the probability distribution <span class="arithmatex">\(p_\theta\)</span> that is the closest to <span class="arithmatex">\(p_{data}\)</span> in this notion of similarity.</p>
+<h2 id="model-families-weve-explored">Model Families We've Explored</h2>
+<p>We have seen different ways of constructing probability distributions in <span class="arithmatex">\(\mathcal{M}\)</span>:</p>
+<ol>
+<li><strong>Autoregressive Models</strong>: <span class="arithmatex">\(p_\theta(x) = \prod_{i=1}^N p_\theta(x_i|x_{&lt;i})\)</span></li>
+<li><strong>Variational Autoencoders (VAEs)</strong>: <span class="arithmatex">\(p_\theta(x) = \int p_\theta(x,z)dz\)</span></li>
+<li><strong>Normalizing Flow Models</strong>: <span class="arithmatex">\(p_\theta(x) = p_z(f^{-1}_\theta(x)) \left|\det\left(\frac{\partial f^{-1}_\theta(x)}{\partial x}\right)\right|\)</span></li>
+</ol>
+<h2 id="the-likelihood-based-training-paradigm">The Likelihood-Based Training Paradigm</h2>
+<p>The key thing is we always try to assign some probability assigned by the model to a data point. All the above families are trained by minimizing KL divergence <span class="arithmatex">\(D_{KL}(p_{data} || p_\theta)\)</span>, or equivalently maximizing likelihoods (or approximations). In these techniques, the machinery involves setting up models such that we can evaluate likelihoods (or approximations) pretty efficiently.</p>
+<p><strong>Mathematical Foundation:</strong></p>
+<div class="arithmatex">\[\arg\min_\theta D_{KL}(p_{data} || p_\theta) = \arg\max_\theta \mathbb{E}_{x \sim p_{data}}[\log p_\theta(x)]\]</div>
+<p>This equivalence shows that minimizing KL divergence is equivalent to maximizing the expected log-likelihood of the data.</p>
+<h2 id="alternative-similarity-measures">Alternative Similarity Measures</h2>
+<p>However, the training objective of maximizing likelihoods is not the only way to measure similarity between <span class="arithmatex">\(p_{data}\)</span> and <span class="arithmatex">\(p_\theta\)</span>. There are other ways to measure the notion of similarity:</p>
+<ol>
+<li><strong>Wasserstein Distance</strong>: Measures the minimum "cost" of transporting mass from one distribution to another</li>
+<li><strong>Maximum Mean Discrepancy (MMD)</strong>: Compares distributions using kernel methods</li>
+<li><strong>Adversarial Training</strong>: Uses a discriminator to distinguish between real and generated samples</li>
+<li><strong>Energy-Based Models</strong>: Learn an energy function that assigns low energy to real data and high energy to fake data</li>
+</ol>
+<h2 id="the-likelihood-vs-sample-quality-dilemma">The Likelihood vs. Sample Quality Dilemma</h2>
+<p><strong>The Problem:</strong>
+It is possible that models with high likelihood could be bad at sample generation and vice versa. This creates a fundamental tension in generative modeling.</p>
+<h3 id="why-this-disconnect-occurs">Why This Disconnect Occurs</h3>
+<p><strong>1. Likelihood Measures Average Performance:</strong></p>
+<div class="arithmatex">\[\mathbb{E}_{x \sim p_{data}}[\log p_\theta(x)] = \int p_{data}(x) \log p_\theta(x) dx\]</div>
+<p>This measures how well the model assigns probability to the average data point, not necessarily how well it captures the fine-grained structure needed for high-quality generation.</p>
+<p><strong>2. Sample Quality Requires Fine-Grained Structure:</strong>
+High-quality generation requires the model to capture:
+- Sharp boundaries between different modes
+- Fine details and textures
+- Proper spatial relationships
+- Realistic variations within modes</p>
+<p><strong>3. Different Optimization Objectives:</strong>
+- <strong>Likelihood</strong>: Optimizes for probability assignment over the entire distribution
+- <strong>Sample Quality</strong>: Requires optimization of perceptual and structural properties</p>
+<h3 id="implications-for-model-design">Implications for Model Design</h3>
+<p><strong>The Training Objective Trade-off:</strong>
+Although training objective of maximizing likelihoods could be a good one, it might not be the best one if the objective is to generate the best samples.</p>
+<p><strong>This suggests that it might be useful to disentangle likelihoods and sample quality.</strong></p>
+<h2 id="alternative-training-paradigms">Alternative Training Paradigms</h2>
+<p><strong>1. Adversarial Training (GANs):</strong>
+- <strong>Objective</strong>: Direct optimization of sample quality through adversarial training
+- <strong>Advantage</strong>: Can generate very high-quality samples
+- <strong>Disadvantage</strong>: No explicit likelihood computation, training instability</p>
+<p><strong>2. Hybrid Approaches:</strong>
+- <strong>VAE-GAN</strong>: Combines likelihood-based training with adversarial training
+- <strong>Flow-GAN</strong>: Combines normalizing flows with adversarial training
+- <strong>Objective</strong>: Balance between likelihood and sample quality</p>
+<p><strong>3. Perceptual Losses:</strong>
+- <strong>Objective</strong>: Use pre-trained networks to measure perceptual similarity
+- <strong>Advantage</strong>: Better alignment with human perception
+- <strong>Example</strong>: LPIPS (Learned Perceptual Image Patch Similarity)</p>
+<p><strong>4. Multi-Objective Training:</strong>
+- <strong>Objective</strong>: Combine multiple loss functions
+- <strong>Example</strong>: <span class="arithmatex">\(\mathcal{L} = \mathcal{L}_{likelihood} + \lambda \mathcal{L}_{perceptual} + \mu \mathcal{L}_{adversarial}\)</span></p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The tension between likelihood and sample quality is a fundamental challenge in generative modeling. While likelihood-based training provides a principled framework, it may not always lead to the best sample quality. This motivates the exploration of alternative training paradigms and evaluation metrics that better align with the ultimate goal of generating high-quality, diverse samples.</p>
+<p>The key insight is that <strong>generative modeling is not just about fitting a distribution to data, but about creating models that can generate samples that are both high-quality and diverse</strong>. This requires careful consideration of both the training objective and the evaluation metrics used to assess model performance.</p>
 
 
 
@@ -793,12 +987,12 @@
     
     
       
-      <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.56ea9cef.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
-        <script src="javascripts/mathjax.js"></script>
+        <script src="../../../javascripts/mathjax.js"></script>
       
         <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
       
