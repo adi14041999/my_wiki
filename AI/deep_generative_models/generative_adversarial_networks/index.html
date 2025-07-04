@@ -574,6 +574,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Generative Adversarial Networks
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -585,6 +598,214 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction-gans-as-a-paradigm-shift" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction: GANs as a Paradigm Shift
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Introduction: GANs as a Paradigm Shift">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-traditional-likelihood-based-paradigm" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Traditional Likelihood-Based Paradigm
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gans-a-different-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      GANs: A Different Approach
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#likelihood-free-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      Likelihood-Free Learning
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Likelihood-Free Learning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-likelihood-vs-sample-quality-disconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Likelihood vs. Sample Quality Disconnect
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-two-sample-test-framework" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Two-Sample Test Framework
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-to-generative-modeling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Application to Generative Modeling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-this-approach-makes-sense" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why This Approach Makes Sense
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gan-objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      GAN Objective
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GAN Objective">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Components
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-minimax-game" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Minimax Game
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#formal-objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      Formal Objective
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#understanding-the-objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding the Objective
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimal-discriminator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optimal Discriminator
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connection-to-jensen-shannon-divergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      Connection to Jensen-Shannon Divergence
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties-of-jsd" class="md-nav__link">
+    <span class="md-ellipsis">
+      Properties of JSD
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimal-solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optimal Solution
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gan-training-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      GAN Training Algorithm
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      Challenges
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -747,6 +968,204 @@
 
 
 <h1 id="generative-adversarial-networks">Generative Adversarial Networks</h1>
+<h2 id="introduction-gans-as-a-paradigm-shift">Introduction: GANs as a Paradigm Shift</h2>
+<p>GANs are unique from all the other model families that we have seen so far, such as autoregressive models, VAEs, and normalizing flow models, because we do not train them using maximum likelihood.</p>
+<h3 id="the-traditional-likelihood-based-paradigm">The Traditional Likelihood-Based Paradigm</h3>
+<p>All the generative models we've explored so far follow a similar training paradigm:</p>
+<ol>
+<li><strong>Autoregressive Models</strong>: Maximize <span class="arithmatex">\(\log p_\theta(x) = \sum_{i=1}^N \log p_\theta(x_i|x_{&lt;i})\)</span></li>
+<li><strong>Variational Autoencoders</strong>: Maximize the ELBO <span class="arithmatex">\(\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)] - D_{KL}(q_\phi(z|x) || p(z))\)</span></li>
+<li><strong>Normalizing Flow Models</strong>: Maximize <span class="arithmatex">\(\log p_\theta(x) = \log p_z(f^{-1}_\theta(x)) + \log |\det(\frac{\partial f^{-1}_\theta(x)}{\partial x})|\)</span></li>
+</ol>
+<p><strong>Common Theme</strong>: All these models are trained by maximizing some form of likelihood or likelihood approximation.</p>
+<h3 id="gans-a-different-approach">GANs: A Different Approach</h3>
+<p><strong>GANs break away from this paradigm entirely.</strong> Instead of maximizing likelihood, GANs use <strong>adversarial training</strong> - a fundamentally different approach to generative modeling. We'll get to what a Generator and a Discriminator are in a bit but here is a quick table showing how GAN is different.</p>
+<p><strong>Key Differences:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Likelihood-Based Models</th>
+<th>GANs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Training Objective</strong></td>
+<td>Maximize likelihood/ELBO</td>
+<td>Minimax game between generator and discriminator</td>
+</tr>
+<tr>
+<td><strong>Loss Function</strong></td>
+<td><span class="arithmatex">\(\mathcal{L} = -\log p_\theta(x)\)</span></td>
+<td><span class="arithmatex">\(\mathcal{L}_G = -\log D(G(z))\)</span>, <span class="arithmatex">\(\mathcal{L}_D = -\log D(x) - \log(1-D(G(z)))\)</span></td>
+</tr>
+<tr>
+<td><strong>Model Evaluation</strong></td>
+<td>Direct likelihood computation</td>
+<td>No explicit likelihood computation</td>
+</tr>
+<tr>
+<td><strong>Training Stability</strong></td>
+<td>Generally stable</td>
+<td>Can be unstable, requires careful tuning</td>
+</tr>
+<tr>
+<td><strong>Sample Quality</strong></td>
+<td>May produce blurry samples</td>
+<td>Often produces sharp, realistic samples</td>
+</tr>
+</tbody>
+</table>
+<h2 id="likelihood-free-learning">Likelihood-Free Learning</h2>
+<p><strong>Why not use maximum likelihood?</strong> In fact, it is not so clear that better likelihood numbers necessarily correspond to higher sample quality. We know that the optimal generative model will give us the best sample quality and highest test log-likelihood. However, models with high test log-likelihoods can still yield poor samples, and vice versa.</p>
+<h3 id="the-likelihood-vs-sample-quality-disconnect">The Likelihood vs. Sample Quality Disconnect</h3>
+<p>To see why, consider pathological cases in which our model is comprised almost entirely of noise, or our model simply memorizes the training set:</p>
+<ol>
+<li>
+<p><strong>Noise Model</strong>: A model that outputs pure noise might assign some probability to real data points, leading to a non-zero (though poor) likelihood, but produces completely useless samples.</p>
+</li>
+<li>
+<p><strong>Memorization Model</strong>: A model that perfectly memorizes the training set will have very high likelihood on training data but will only reproduce exact training examples, lacking generalization and diversity.</p>
+</li>
+</ol>
+<p>Therefore, we turn to <strong>likelihood-free training</strong> with the hope that optimizing a different objective will allow us to disentangle our desiderata of obtaining high likelihoods as well as high-quality samples.</p>
+<h3 id="the-two-sample-test-framework">The Two-Sample Test Framework</h3>
+<p>Recall that maximum likelihood required us to evaluate the likelihood of the data under our model <span class="arithmatex">\(p_\theta\)</span>. A natural way to set up a likelihood-free objective is to consider the <strong>two-sample test</strong>, a statistical test that determines whether or not a finite set of samples from two distributions are from the same distribution using only samples from <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span>.</p>
+<p><strong>Concretely</strong>, given <span class="arithmatex">\(S_1 = \{x \sim P\}\)</span> and <span class="arithmatex">\(S_2 = \{x \sim Q\}\)</span>, we compute a test statistic <span class="arithmatex">\(T\)</span> according to the difference in <span class="arithmatex">\(S_1\)</span> and <span class="arithmatex">\(S_2\)</span> that, when less than a threshold <span class="arithmatex">\(\alpha\)</span>, accepts the null hypothesis that <span class="arithmatex">\(P = Q\)</span>.</p>
+<h3 id="application-to-generative-modeling">Application to Generative Modeling</h3>
+<p>Analogously, we have in our generative modeling setup access to our training set <span class="arithmatex">\(S_1 = \{x \sim p_{data}\}\)</span> and <span class="arithmatex">\(S_2 = \{x \sim p_\theta\}\)</span>. The key idea is to train the model to minimize a two-sample test objective between <span class="arithmatex">\(S_1\)</span> and <span class="arithmatex">\(S_2\)</span>.</p>
+<p><strong>However</strong>, this objective becomes extremely difficult to work with in high dimensions, so we choose to optimize a <strong>surrogate objective</strong> that instead maximizes some distance between <span class="arithmatex">\(S_1\)</span> and <span class="arithmatex">\(S_2\)</span>.</p>
+<h3 id="why-this-approach-makes-sense">Why This Approach Makes Sense</h3>
+<p><strong>1. Avoiding Pathological Cases:</strong>
+- The two-sample test framework naturally avoids the noise and memorization problems
+- It forces the model to learn the true underlying distribution structure</p>
+<p><strong>3. Flexibility:</strong>
+- We can choose different distance metrics or test statistics
+- This allows us to focus on different aspects of sample quality</p>
+<p><strong>Key Insight:</strong> GANs implement likelihood-free learning by using a neural network (the discriminator) to learn an optimal test statistic for distinguishing between real and generated data, and then training the generator to minimize this learned distance.</p>
+<h2 id="gan-objective">GAN Objective</h2>
+<p>We thus arrive at the generative adversarial network formulation. There are two components in a GAN: (1) a generator and (2) a discriminator. The generator <span class="arithmatex">\(G_\theta\)</span> is a directed latent variable model that deterministically generates samples <span class="arithmatex">\(x\)</span> from <span class="arithmatex">\(z\)</span>, and the discriminator <span class="arithmatex">\(D_\phi\)</span> is a function whose job is to distinguish samples from the real dataset and the generator.</p>
+<h3 id="components">Components</h3>
+<ul>
+<li><strong>Generator <span class="arithmatex">\(G_\theta\)</span></strong>: A neural network that transforms noise <span class="arithmatex">\(z \sim p(z)\)</span> to samples <span class="arithmatex">\(G_\theta(z)\)</span></li>
+<li><strong>Discriminator <span class="arithmatex">\(D_\phi\)</span></strong>: A neural network that outputs a probability <span class="arithmatex">\(D_\phi(x) \in [0,1]\)</span> indicating whether <span class="arithmatex">\(x\)</span> is real or generated</li>
+</ul>
+<p><img alt="GAN graphical model" src="../gan.png" /></p>
+<h3 id="the-minimax-game">The Minimax Game</h3>
+<p>The generator and discriminator both play a two player minimax game, where:
+- <strong>Generator</strong>: Minimizes a two-sample test objective (<span class="arithmatex">\(p_{data} = p_\theta\)</span>)
+- <strong>Discriminator</strong>: Maximizes the objective (<span class="arithmatex">\(p_{data} \neq p_\theta\)</span>)</p>
+<p>Intuitively, the generator tries to fool the discriminator to the best of its ability by generating samples that look indistinguishable from <span class="arithmatex">\(p_{data}\)</span>.</p>
+<h3 id="formal-objective">Formal Objective</h3>
+<p>The GAN objective can be written as:</p>
+<div class="arithmatex">\[\min_\theta \max_\phi V(G_\theta, D_\phi) = \mathbb{E}_{x \sim p_{data}}[\log D_\phi(x)] + \mathbb{E}_{z \sim p(z)}[\log(1-D_\phi(G_\theta(z)))]\]</div>
+<h3 id="understanding-the-objective">Understanding the Objective</h3>
+<p>Let's unpack this expression:</p>
+<p><strong>For the Discriminator (maximizing with respect to <span class="arithmatex">\(\phi\)</span>):</strong>
+- Given a fixed generator <span class="arithmatex">\(G_\theta\)</span>, the discriminator performs binary classification
+- It tries to assign probability 1 to data points from the training set <span class="arithmatex">\(x \sim p_{data}\)</span>
+- It tries to assign probability 0 to generated samples <span class="arithmatex">\(x \sim p_G\)</span></p>
+<p><strong>For the Generator (minimizing with respect to <span class="arithmatex">\(\theta\)</span>):</strong>
+- Given a fixed discriminator <span class="arithmatex">\(D_\phi\)</span>, the generator tries to maximize <span class="arithmatex">\(D_\phi(G_\theta(z))\)</span>
+- This is equivalent to minimizing <span class="arithmatex">\(\log(1-D_\phi(G_\theta(z)))\)</span></p>
+<h3 id="optimal-discriminator">Optimal Discriminator</h3>
+<p>In this setup, the optimal discriminator is:</p>
+<div class="arithmatex">\[D^*_G(x) = \frac{p_{data}(x)}{p_{data}(x) + p_G(x)}\]</div>
+<p><strong>Derivation:</strong>
+The discriminator's objective is to maximize:</p>
+<div class="arithmatex">\[\mathbb{E}_{x \sim p_{data}}[\log D(x)] + \mathbb{E}_{x \sim p_G}[\log(1-D(x))]\]</div>
+<p>This is maximized when:</p>
+<div class="arithmatex">\[D(x) = \frac{p_{data}(x)}{p_{data}(x) + p_G(x)}\]</div>
+<p>On the other hand, the generator minimizes this objective for a fixed discriminator <span class="arithmatex">\(D_\phi\)</span>.</p>
+<h3 id="connection-to-jensen-shannon-divergence">Connection to Jensen-Shannon Divergence</h3>
+<p>After performing some algebra, plugging in the optimal discriminator <span class="arithmatex">\(D^*_G(\cdot)\)</span> into the overall objective <span class="arithmatex">\(V(G_\theta, D^*_G(x))\)</span> gives us:</p>
+<div class="arithmatex">\[2D_{JSD}[p_{data}, p_G] - \log 4\]</div>
+<p>The <span class="arithmatex">\(D_{JSD}\)</span> term is the <strong>Jensen-Shannon Divergence</strong>, which is also known as the symmetric form of the KL divergence:</p>
+<div class="arithmatex">\[D_{JSD}[p,q] = \frac{1}{2}\left(D_{KL}\left[p, \frac{p+q}{2}\right] + D_{KL}\left[q, \frac{p+q}{2}\right]\right)\]</div>
+<h3 id="properties-of-jsd">Properties of JSD</h3>
+<p>The JSD satisfies all properties of the KL divergence, and has the additional perk that <span class="arithmatex">\(D_{JSD}[p,q] = D_{JSD}[q,p]\)</span> (symmetry).</p>
+<p><strong>Key Properties:</strong></p>
+<ol>
+<li>
+<p><strong>Non-negative</strong>: <span class="arithmatex">\(D_{JSD}[p,q] \geq 0\)</span></p>
+</li>
+<li>
+<p><strong>Symmetric</strong>: <span class="arithmatex">\(D_{JSD}[p,q] = D_{JSD}[q,p]\)</span></p>
+</li>
+<li>
+<p><strong>Zero iff equal</strong>: <span class="arithmatex">\(D_{JSD}[p,q] = 0\)</span> if and only if <span class="arithmatex">\(p = q\)</span></p>
+</li>
+<li>
+<p><strong>Bounded</strong>: <span class="arithmatex">\(D_{JSD}[p,q] \leq \log 2\)</span></p>
+</li>
+</ol>
+<h3 id="optimal-solution">Optimal Solution</h3>
+<p>With this distance metric, the optimal generator for the GAN objective becomes <span class="arithmatex">\(p_G = p_{data}\)</span>, and the optimal objective value that we can achieve with optimal generators and discriminators <span class="arithmatex">\(G^*(\cdot)\)</span> and <span class="arithmatex">\(D^*_{G^*}(x)\)</span> is <span class="arithmatex">\(-\log 4\)</span>.</p>
+<p><strong>Why <span class="arithmatex">\(-\log 4\)</span>?</strong>
+- When <span class="arithmatex">\(p_G = p_{data}\)</span>, we have <span class="arithmatex">\(D_{JSD}[p_{data}, p_G] = 0\)</span>
+- Therefore, <span class="arithmatex">\(V(G^*, D^*) = 2 \cdot 0 - \log 4 = -\log 4\)</span></p>
+<h2 id="gan-training-algorithm">GAN Training Algorithm</h2>
+<p>Thus, the way in which we train a GAN is as follows:</p>
+<p><strong>For epochs <span class="arithmatex">\(1, \ldots, N\)</span> do:</strong></p>
+<ol>
+<li><strong>Sample minibatch of size <span class="arithmatex">\(m\)</span> from data</strong>: <span class="arithmatex">\(x^{(1)}, \ldots, x^{(m)} \sim p_{data}\)</span></li>
+<li><strong>Sample minibatch of size <span class="arithmatex">\(m\)</span> of noise</strong>: <span class="arithmatex">\(z^{(1)}, \ldots, z^{(m)} \sim p_z\)</span></li>
+<li><strong>Take a gradient descent step on the generator parameters <span class="arithmatex">\(\theta\)</span></strong>:</li>
+</ol>
+<div class="arithmatex">\[\nabla_\theta V(G_\theta, D_\phi) = \frac{1}{m}\nabla_\theta \sum_{i=1}^m \log(1-D_\phi(G_\theta(z^{(i)})))\]</div>
+<ol>
+<li><strong>Take a gradient ascent step on the discriminator parameters <span class="arithmatex">\(\phi\)</span></strong>:</li>
+</ol>
+<div class="arithmatex">\[\nabla_\phi V(G_\theta, D_\phi) = \frac{1}{m}\nabla_\phi \sum_{i=1}^m [\log D_\phi(x^{(i)}) + \log(1-D_\phi(G_\theta(z^{(i)})))]\]</div>
+<p><strong>Key Points:</strong></p>
+<ol>
+<li><strong>Alternating Updates</strong>: We update the generator and discriminator in alternating steps</li>
+<li><strong>Minibatch Training</strong>: We use minibatches of both real data and noise samples</li>
+<li><strong>Generator Update</strong>: Minimizes the probability that the discriminator correctly identifies generated samples</li>
+<li><strong>Discriminator Update</strong>: Maximizes the probability of correctly classifying real vs. generated samples</li>
+</ol>
+<p><strong>Practical Considerations:</strong></p>
+<ul>
+<li><strong>Learning Rate Balance</strong>: The learning rates for generator and discriminator must be carefully balanced</li>
+<li><strong>Update Frequency</strong>: Often the discriminator is updated multiple times per generator update</li>
+<li><strong>Convergence Monitoring</strong>: Training progress is monitored through discriminator accuracy and sample quality</li>
+<li><strong>Early Stopping</strong>: Training may be stopped when the discriminator can no longer distinguish real from fake</li>
+</ul>
+<p>This formulation shows that GANs are essentially implementing an adaptive two-sample test, where the discriminator learns the optimal way to distinguish between real and generated data, and the generator learns to minimize this learned distance.</p>
+<h2 id="challenges">Challenges</h2>
+<p>Although GANs have been successfully applied to several domains and tasks, working with them in practice is challenging because of their: (1) unstable optimization procedure, (2) potential for mode collapse, (3) difficulty in evaluation.</p>
+<p><strong>1. Unstable Optimization Procedure</strong></p>
+<p>During optimization, the generator and discriminator loss often continue to oscillate without converging to a clear stopping point. Due to the lack of a robust stopping criteria, it is difficult to know when exactly the GAN has finished training.</p>
+<p><strong>Causes of Instability:</strong>
+- <strong>Minimax Nature</strong>: The adversarial game creates competing objectives
+- <strong>Gradient Issues</strong>: Vanishing/exploding gradients can occur
+- <strong>Learning Rate Sensitivity</strong>: Small changes in learning rates can cause divergence
+- <strong>Network Capacity Imbalance</strong>: If one network becomes too powerful, training collapses</p>
+<p><strong>Symptoms:</strong>
+- Oscillating loss curves
+- No clear convergence pattern
+- Sudden collapse of training
+- Generator or discriminator loss going to zero/infinity</p>
+<p><strong>2. Mode Collapse</strong></p>
+<p>The generator of a GAN can often get stuck producing one of a few types of samples over and over again (mode collapse). This occurs when the generator finds a few "safe" modes that consistently fool the discriminator and stops exploring the full data distribution.</p>
+<p><strong>What is Mode Collapse:</strong>
+- <strong>Definition</strong>: Generator only produces samples from a subset of the true distribution modes
+- <strong>Example</strong>: In image generation, only producing images of one type (e.g., only front-facing faces)
+- <strong>Problem</strong>: Lack of diversity in generated samples</p>
+<p><strong>Causes:</strong>
+- <strong>Discriminator Overfitting</strong>: Discriminator becomes too good at detecting certain types of fake samples
+- <strong>Generator Optimization</strong>: Generator finds local optima that work well against current discriminator
+- <strong>Training Imbalance</strong>: One network becomes too powerful relative to the other</p>
+<p><strong>3. Difficulty in Evaluation</strong></p>
+<p>Unlike likelihood-based models, GANs don't provide explicit likelihood values, making evaluation challenging.</p>
+<p><strong>Evaluation Challenges:</strong>
+- <strong>No Likelihood</strong>: Can't use traditional metrics like log-likelihood
+- <strong>Subjective Quality</strong>: Sample quality is often subjective and domain-specific
+- <strong>Diversity vs. Quality Trade-off</strong>: Hard to balance sample quality with diversity
+- <strong>Mode Coverage</strong>: Difficult to measure if all modes of the data distribution are captured</p>
+<p><strong>Addressing the Challenges:</strong></p>
+<p>Most fixes to these challenges are empirically driven, and there has been a significant amount of work put into developing new architectures, regularization schemes, and noise perturbations in an attempt to circumvent these issues.</p>
 
 
 
