@@ -687,7 +687,7 @@
           <li class="md-nav__item">
   <a href="#why-this-approach-makes-sense" class="md-nav__link">
     <span class="md-ellipsis">
-      Why This Approach Makes Sense
+      Why this approach makes sense
     </span>
   </a>
   
@@ -800,6 +800,90 @@
       Challenges
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#selected-gans" class="md-nav__link">
+    <span class="md-ellipsis">
+      Selected GANs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Selected GANs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#f-gan" class="md-nav__link">
+    <span class="md-ellipsis">
+      f-GAN
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="f-GAN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#understanding-the-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding the Requirements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f-divergence-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      f-Divergence Examples
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-the-f-gan-objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting up the f-GAN Objective
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steps-in-f-gan" class="md-nav__link">
+    <span class="md-ellipsis">
+      Steps in f-GAN
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advantages-of-f-gan" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advantages of f-GAN
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practical-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Practical Considerations
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1036,8 +1120,8 @@
 <h3 id="application-to-generative-modeling">Application to Generative Modeling</h3>
 <p>Analogously, we have in our generative modeling setup access to our training set <span class="arithmatex">\(S_1 = \{x \sim p_{data}\}\)</span> and <span class="arithmatex">\(S_2 = \{x \sim p_\theta\}\)</span>. The key idea is to train the model to minimize a two-sample test objective between <span class="arithmatex">\(S_1\)</span> and <span class="arithmatex">\(S_2\)</span>.</p>
 <p><strong>However</strong>, this objective becomes extremely difficult to work with in high dimensions, so we choose to optimize a <strong>surrogate objective</strong> that instead maximizes some distance between <span class="arithmatex">\(S_1\)</span> and <span class="arithmatex">\(S_2\)</span>.</p>
-<h3 id="why-this-approach-makes-sense">Why This Approach Makes Sense</h3>
-<p><strong>1. Avoiding Pathological Cases:</strong>
+<h3 id="why-this-approach-makes-sense">Why this approach makes sense</h3>
+<p><strong>1. Avoiding pathological cases:</strong>
 - The two-sample test framework naturally avoids the noise and memorization problems
 - It forces the model to learn the true underlying distribution structure</p>
 <p><strong>3. Flexibility:</strong>
@@ -1166,6 +1250,317 @@ The discriminator's objective is to maximize:</p>
 - <strong>Mode Coverage</strong>: Difficult to measure if all modes of the data distribution are captured</p>
 <p><strong>Addressing the Challenges:</strong></p>
 <p>Most fixes to these challenges are empirically driven, and there has been a significant amount of work put into developing new architectures, regularization schemes, and noise perturbations in an attempt to circumvent these issues.</p>
+<h2 id="selected-gans">Selected GANs</h2>
+<p>Next, we focus our attention to a few select types of GAN architectures and explore them in more detail.</p>
+<h3 id="f-gan">f-GAN</h3>
+<p>The f-GAN optimizes the variant of the two-sample test objective that we have discussed so far, but using a very general notion of distance: the <strong>f-divergence</strong>. Given two densities <span class="arithmatex">\(p\)</span> and <span class="arithmatex">\(q\)</span>, the f-divergence can be written as:</p>
+<div class="arithmatex">\[D_f(p,q) = \sup_{T} \left(\mathbb{E}_{x \sim p}[T(x)] - \mathbb{E}_{x_{fake} \sim q}[f^*(T(x_{fake}))]\right)\]</div>
+<p>where <span class="arithmatex">\(f\)</span> is any convex, lower-semicontinuous function with <span class="arithmatex">\(f(1) = 0\)</span>. Several of the distance "metrics" that we have seen so far fall under the class of f-divergences, such as KL and Jensen-Shannon.</p>
+<h4 id="understanding-the-requirements">Understanding the Requirements</h4>
+<p><strong>What is a convex function?</strong>
+A function <span class="arithmatex">\(f\)</span> is convex if for any two points <span class="arithmatex">\(x, y\)</span> and any <span class="arithmatex">\(\lambda \in [0,1]\)</span>, we have:</p>
+<div class="arithmatex">\[f(\lambda x + (1-\lambda)y) \leq \lambda f(x) + (1-\lambda)f(y)\]</div>
+<p>This means that the line segment between any two points on the function lies above or on the function itself. </p>
+<p><strong>Understanding the Line Segment Property:</strong></p>
+<p>Let's break down what this means geometrically:</p>
+<p><strong>Two Points</strong>: Consider any two points <span class="arithmatex">\((x, f(x))\)</span> and <span class="arithmatex">\((y, f(y))\)</span> on the graph of the function <span class="arithmatex">\(f\)</span></p>
+<p><strong>Line Segment</strong>: The line segment connecting these points consists of all points of the form:</p>
+<div class="arithmatex">\[(\lambda x + (1-\lambda)y, \lambda f(x) + (1-\lambda)f(y))\]</div>
+<p>where <span class="arithmatex">\(\lambda \in [0,1]\)</span></p>
+<p><strong>Function Value</strong>: At the same <span class="arithmatex">\(x\)</span>-coordinate <span class="arithmatex">\(\lambda x + (1-\lambda)y\)</span>, the function value is:</p>
+<div class="arithmatex">\[f(\lambda x + (1-\lambda)y)\]</div>
+<p><strong>Convexity Condition</strong>: The inequality <span class="arithmatex">\(f(\lambda x + (1-\lambda)y) \leq \lambda f(x) + (1-\lambda)f(y)\)</span> means that the function value at any point on the line segment is less than or equal to the corresponding point on the straight line connecting <span class="arithmatex">\((x, f(x))\)</span> and <span class="arithmatex">\((y, f(y))\)</span></p>
+<p><strong>Visual Interpretation:</strong>
+If you draw a straight line between any two points on a convex function's graph. The entire function between those points must lie on or below that straight line.</p>
+<p>Convex functions have important properties:</p>
+<ul>
+<li>
+<p><strong>Single minimum</strong>: If a minimum exists, it's global</p>
+</li>
+<li>
+<p><strong>Well-behaved gradients</strong>: Useful for optimization</p>
+</li>
+<li>
+<p><strong>Jensen's inequality</strong>: <span class="arithmatex">\(\mathbb{E}[f(X)] \geq f(\mathbb{E}[X])\)</span> for convex <span class="arithmatex">\(f\)</span></p>
+</li>
+</ul>
+<p><strong>What is a lower-semicontinuous function?</strong>
+A function <span class="arithmatex">\(f\)</span> is lower-semicontinuous at a point <span class="arithmatex">\(x_0\)</span> if:</p>
+<div class="arithmatex">\[\liminf_{x \to x_0} f(x) \geq f(x_0)\]</div>
+<p><strong>Understanding <span class="arithmatex">\(\liminf\)</span> and the Infimum:</strong></p>
+<p>The notation <span class="arithmatex">\(\liminf_{x \to x_0} f(x)\)</span> involves two concepts:</p>
+<ol>
+<li>
+<p><strong>Infimum (inf)</strong>: The infimum of a set is the greatest lower bound. For a set <span class="arithmatex">\(S\)</span>, <span class="arithmatex">\(\inf S\)</span> is the largest number that is less than or equal to all elements in <span class="arithmatex">\(S\)</span>.</p>
+</li>
+<li>
+<p><strong>Limit Inferior</strong>: <span class="arithmatex">\(\liminf_{x \to x_0} f(x)\)</span> is the infimum of all limit points of <span class="arithmatex">\(f(x)\)</span> as <span class="arithmatex">\(x\)</span> approaches <span class="arithmatex">\(x_0\)</span>.</p>
+</li>
+</ol>
+<p><strong>How <span class="arithmatex">\(\liminf\)</span> works:</strong></p>
+<p>Consider all sequences <span class="arithmatex">\(\{x_n\}\)</span> that converge to <span class="arithmatex">\(x_0\)</span>. For each sequence, we look at the limit of <span class="arithmatex">\(f(x_n)\)</span> (if it exists). The <span class="arithmatex">\(\liminf\)</span> is the infimum of all these possible limit values.</p>
+<p><strong>Mathematical Definition:</strong></p>
+<div class="arithmatex">\[\liminf_{x \to x_0} f(x) = \inf \left\{ \lim_{n \to \infty} f(x_n) : x_n \to x_0 \text{ and } \lim_{n \to \infty} f(x_n) \text{ exists} \right\}\]</div>
+<p><strong>Why consider Sequences even for Continuous Functions?</strong></p>
+<p>You might wonder: "If <span class="arithmatex">\(f\)</span> is continuous, why do we need sequences? Can't we just use the regular limit?"</p>
+<p><strong>Key Insight:</strong> Lower-semicontinuity is a <strong>weaker condition</strong> than continuity. A function can be lower-semicontinuous without being continuous.</p>
+<p><strong>The Relationship:</strong></p>
+<ol>
+<li><strong>Continuous functions</strong> are always lower-semicontinuous</li>
+<li><strong>Lower-semicontinuous functions</strong> may have discontinuities (but only "jumps up")</li>
+</ol>
+<p><strong>Example of Lower-Semicontinuous but NOT Continuous:</strong>
+Consider <span class="arithmatex">\(f(x) = \begin{cases} 0 &amp; \text{if } x &lt; 0 \\ 1 &amp; \text{if } x \geq 0 \end{cases}\)</span>. This function is lower-semicontinuous at <span class="arithmatex">\(x = 0\)</span> (no "jump down"). But it's NOT continuous at <span class="arithmatex">\(x = 0\)</span> (there's a "jump up")</p>
+<p><strong>Example of NOT Lower-Semicontinuous:</strong>
+Consider <span class="arithmatex">\(f(x) = \begin{cases} 0 &amp; \text{if } x &lt; 0 \\ 1 &amp; \text{if } x = 0 \\ 0 &amp; \text{if } x &gt; 0 \end{cases}\)</span> at <span class="arithmatex">\(x_0 = 0\)</span>:</p>
+<p><span class="arithmatex">\(\liminf_{x \to 0^-} f(x) = 0\)</span> (approaching from left)</p>
+<p><span class="arithmatex">\(\liminf_{x \to 0^+} f(x) = 0\)</span> (approaching from right)</p>
+<p><span class="arithmatex">\(\liminf_{x \to 0} f(x) = 0\)</span> (overall limit inferior)</p>
+<p>Since <span class="arithmatex">\(f(0) = 1\)</span> and <span class="arithmatex">\(0 \not\geq 1\)</span>, this function is NOT lower-semicontinuous at <span class="arithmatex">\(x = 0\)</span></p>
+<p><strong>Why the Sequence definition is uiversal:</strong></p>
+<p>The sequence-based definition works for ALL functions, whether they're:
+- Continuous everywhere
+- Lower-semicontinuous but not continuous
+- Neither continuous nor lower-semicontinuous</p>
+<p><strong>For Continuous Functions:</strong>
+If <span class="arithmatex">\(f\)</span> is continuous at <span class="arithmatex">\(x_0\)</span>, then:</p>
+<div class="arithmatex">\[\liminf_{x \to x_0} f(x) = \lim_{x \to x_0} f(x) = f(x_0)\]</div>
+<p>So the sequence definition "reduces" to the regular limit, but it's still the same mathematical concept.</p>
+<p><strong>Why this matters for f-Divergences:</strong>
+The f-divergence framework needs to work with functions that might not be continuous everywhere, so we need the more general sequence-based definition.</p>
+<p><strong>Why do we need <span class="arithmatex">\(f(1) = 0\)</span>?</strong>
+This requirement ensures that the f-divergence has the correct properties for a distance measure:</p>
+<p><strong>Zero when distributions are equal</strong>: When <span class="arithmatex">\(p = q\)</span>, we have <span class="arithmatex">\(\frac{p(x)}{q(x)} = 1\)</span> everywhere, so:</p>
+<div class="arithmatex">\[D_f(p,p) = \mathbb{E}_{x \sim p}[f(1)] = \mathbb{E}_{x \sim p}[0] = 0\]</div>
+<p><strong>Distance-like behavior</strong>: This property ensures that the f-divergence behaves like a proper distance measure, being zero only when the distributions are identical</p>
+<p><strong>Example</strong>: For KL divergence, <span class="arithmatex">\(f(u) = u \log u\)</span> satisfies <span class="arithmatex">\(f(1) = 1 \cdot \log 1 = 0\)</span>, making it a valid choice for an f-divergence.</p>
+<p><strong>Important Clarification: KL Divergence and Convexity</strong></p>
+<p>You might be wondering: "But <span class="arithmatex">\(\log u\)</span> is concave, so how can KL divergence be an f-divergence?" This is a great observation! The key is that the <span class="arithmatex">\(f\)</span> function for KL divergence is <span class="arithmatex">\(f(u) = u \log u\)</span>, not just <span class="arithmatex">\(\log u\)</span>.</p>
+<p><strong>The KL Divergence Formula:</strong>
+The KL divergence between distributions <span class="arithmatex">\(p\)</span> and <span class="arithmatex">\(q\)</span> is:</p>
+<div class="arithmatex">\[D_{KL}(p||q) = \mathbb{E}_{x \sim p}\left[\log\frac{p(x)}{q(x)}\right] = \mathbb{E}_{x \sim q}\left[\frac{p(x)}{q(x)}\log\frac{p(x)}{q(x)}\right]\]</div>
+<p>Notice that the second form matches the f-divergence formula with <span class="arithmatex">\(f(u) = u \log u\)</span>.</p>
+<h4 id="f-divergence-examples">f-Divergence Examples</h4>
+<p><strong>Common f-divergences:</strong></p>
+<ol>
+<li><strong>KL Divergence</strong>: <span class="arithmatex">\(f(u) = u \log u\)</span></li>
+<li><strong>Reverse KL</strong>: <span class="arithmatex">\(f(u) = -\log u\)</span></li>
+<li><strong>Jensen-Shannon</strong>: <span class="arithmatex">\(f(u) = u \log u - (u+1) \log \frac{u+1}{2}\)</span></li>
+<li><strong>Total Variation</strong>: <span class="arithmatex">\(f(u) = \frac{1}{2}|u-1|\)</span></li>
+<li><strong>Pearson χ²</strong>: <span class="arithmatex">\(f(u) = (u-1)^2\)</span></li>
+</ol>
+<h4 id="setting-up-the-f-gan-objective">Setting up the f-GAN Objective</h4>
+<p>To set up the f-GAN objective, we borrow two commonly used tools from convex optimization: the <strong>Fenchel conjugate</strong> and <strong>duality</strong>. Specifically, we obtain a lower bound to any f-divergence via its Fenchel conjugate:</p>
+<div class="arithmatex">\[D_f(p,q) \geq \sup_{T \in \mathcal{T}} \left(\mathbb{E}_{x \sim p}[T(x)] - \mathbb{E}_{x_{fake} \sim q}[f^*(T(x_{fake}))]\right)\]</div>
+<p>Where <span class="arithmatex">\(f^*\)</span> is the Fenchel conjugate of <span class="arithmatex">\(f\)</span>:</p>
+<div class="arithmatex">\[f^*(t) = \sup_{u \in \text{dom}(f)} (tu - f(u))\]</div>
+<p><strong>What is the Fenchel Conjugate?</strong></p>
+<p>The Fenchel conjugate <span class="arithmatex">\(f^*\)</span> of a function <span class="arithmatex">\(f\)</span> is defined as:</p>
+<div class="arithmatex">\[f^*(t) = \sup_{u \in \text{dom}(f)} (tu - f(u))\]</div>
+<p><strong>Detailed Geometric Interpretation:</strong></p>
+<p>The Fenchel conjugate <span class="arithmatex">\(f^*(t)\)</span> has a beautiful geometric interpretation that helps us understand what it represents. For each value of <span class="arithmatex">\(t\)</span>, we consider the family of lines <span class="arithmatex">\(y = tu + c\)</span> with slope <span class="arithmatex">\(t\)</span>. We look for the line <span class="arithmatex">\(y = tu + c\)</span> that touches the graph of <span class="arithmatex">\(f(u)\)</span> from below and has the largest <span class="arithmatex">\(y\)</span>-intercept <span class="arithmatex">\(c\)</span>. The Fenchel conjugate <span class="arithmatex">\(f^*(t)\)</span> is the negative of this <span class="arithmatex">\(y\)</span>-intercept: <span class="arithmatex">\(f^*(t) = -c\)</span></p>
+<p><strong>Economic Intuition for the Fenchel Conjugate:</strong></p>
+<p>One of the most intuitive ways to understand the convex conjugate function <span class="arithmatex">\(f^*(t)\)</span> is through an economic lens. Imagine <span class="arithmatex">\(f(u)\)</span> as the cost function representing the total expense incurred to produce a quantity <span class="arithmatex">\(u\)</span> of a certain product. The variable <span class="arithmatex">\(y\)</span> corresponds to the market price per unit of that product.</p>
+<p>In this context, the product <span class="arithmatex">\(xy\)</span> represents the revenue generated by selling <span class="arithmatex">\(x\)</span> units at price <span class="arithmatex">\(t\)</span>. The term <span class="arithmatex">\(f(u)\)</span>, as mentioned, is the cost of producing those units. Therefore, the expression <span class="arithmatex">\(tu - f(u)\)</span> represents the profit earned by producing and selling <span class="arithmatex">\(u\)</span> units at price <span class="arithmatex">\(t\)</span>.</p>
+<p>The convex conjugate <span class="arithmatex">\(f^*(t)\)</span> is defined as the supremum (or maximum) of this profit over all possible production quantities <span class="arithmatex">\(u\)</span>:</p>
+<div class="arithmatex">\[f^*(t) = \sup_u (tu - f(u))\]</div>
+<p>Thus, <span class="arithmatex">\(f^*(t)\)</span> gives the optimal profit achievable at the market price <span class="arithmatex">\(t\)</span>, assuming the producer chooses the best production quantity <span class="arithmatex">\(u\)</span> to maximize profit.</p>
+<p><strong>Geometric Interpretation in Economics:</strong></p>
+<p>Now, consider the graph of the cost function <span class="arithmatex">\(f(u)\)</span>. Assume <span class="arithmatex">\(f\)</span> is convex, continuous, and differentiable, which is a reasonable assumption for many cost functions in economics.</p>
+<p>The slope of the cost curve at any point <span class="arithmatex">\(u\)</span> is given by the derivative <span class="arithmatex">\(f'(u)\)</span>. This derivative represents the marginal cost — the additional cost to produce one more unit at quantity <span class="arithmatex">\(u\)</span>.</p>
+<p>The condition for optimal production quantity <span class="arithmatex">\(u\)</span> at price <span class="arithmatex">\(t\)</span> arises from maximizing profit:</p>
+<div class="arithmatex">\[\max_u \{tu - f(u)\}\]</div>
+<p>Taking the derivative with respect to <span class="arithmatex">\(u\)</span> and setting it to zero for an optimum:</p>
+<div class="arithmatex">\[t - f'(u) = 0 \implies t = f'(u)\]</div>
+<p>This means the optimal production quantity <span class="arithmatex">\(u\)</span> is found where the price <span class="arithmatex">\(t\)</span> equals the marginal cost <span class="arithmatex">\(f'(u)\)</span>.</p>
+<p>Geometrically, this corresponds to finding a tangent line to the graph of <span class="arithmatex">\(f(u)\)</span> that has slope <span class="arithmatex">\(t\)</span>. Using a ruler, you can "slide" the line around until it just touches the cost curve without crossing it. The point of tangency corresponds to the optimal <span class="arithmatex">\(u\)</span>.</p>
+<p>Importantly, the vertical intercept of this tangent line relates directly to the optimal profit. The tangent line can be expressed as:</p>
+<div class="arithmatex">\[\ell(u) = f(u_0) + f'(u_0)(u - u_0)\]</div>
+<p>At <span class="arithmatex">\(u = 0\)</span>, the intercept is:</p>
+<div class="arithmatex">\[\ell(0) = f(u_0) - u_0 f'(u_0)\]</div>
+<p>Notice that:</p>
+<div class="arithmatex">\[-(u_0 t - f(u_0)) = f(u_0) - u_0 t\]</div>
+<p>Since <span class="arithmatex">\(t = f'(u_0)\)</span>, the intercept equals the negative of the optimal profit. Therefore, the intercept of the tangent line with slope <span class="arithmatex">\(t\)</span> gives <span class="arithmatex">\(-f^*(t)\)</span>.</p>
+<p><strong>Key Properties:</strong>
+1. <strong>Convexity</strong>: If <span class="arithmatex">\(f\)</span> is convex, then <span class="arithmatex">\(f^*\)</span> is also convex
+2. <strong>Duality</strong>: <span class="arithmatex">\((f^*)^* = f\)</span> (the conjugate of the conjugate is the original function)
+3. <strong>Domain</strong>: The domain of <span class="arithmatex">\(f^*\)</span> depends on the behavior of <span class="arithmatex">\(f\)</span></p>
+<p><strong>Examples of Fenchel Conjugates:</strong></p>
+<p><strong>Example 1: KL Divergence</strong></p>
+<p>For <span class="arithmatex">\(f(u) = u \log u\)</span>:</p>
+<div class="arithmatex">\[f^*(t) = \sup_{u &gt; 0} (tu - u \log u)\]</div>
+<p>To find this, we set the derivative to zero:</p>
+<div class="arithmatex">\[\frac{d}{du}(tu - u \log u) = t - \log u - 1 = 0\]</div>
+<div class="arithmatex">\[\log u = t - 1\]</div>
+<div class="arithmatex">\[u = e^{t-1}\]</div>
+<p>Substituting back:</p>
+<div class="arithmatex">\[f^*(t) = te^{t-1} - e^{t-1}(t-1) = e^{t-1}\]</div>
+<p><strong>Example 2: Reverse KL</strong></p>
+<p>For <span class="arithmatex">\(f(u) = -\log u\)</span>:</p>
+<div class="arithmatex">\[f^*(t) = \sup_{u &gt; 0} (tu + \log u)\]</div>
+<p>Setting derivative to zero:</p>
+<div class="arithmatex">\[\frac{d}{du}(tu + \log u) = t + \frac{1}{u} = 0\]</div>
+<div class="arithmatex">\[u = -\frac{1}{t}\]</div>
+<p>Substituting back:</p>
+<div class="arithmatex">\[f^*(t) = t(-\frac{1}{t}) + \log(-\frac{1}{t}) = -1 + \log(-\frac{1}{t}) = -1 - \log(-t)\]</div>
+<p><strong>Example 3: Total Variation</strong></p>
+<p>For <span class="arithmatex">\(f(u) = \frac{1}{2}|u-1|\)</span>:</p>
+<div class="arithmatex">\[f^*(t) = \sup_{u} (tu - \frac{1}{2}|u-1|)\]</div>
+<p>This gives:</p>
+<div class="arithmatex">\[f^*(t) = \begin{cases} t &amp; \text{if } |t| \leq \frac{1}{2} \\ +\infty &amp; \text{otherwise} \end{cases}\]</div>
+<p><strong>The Duality Principle:</strong></p>
+<p>The Fenchel conjugate provides a way to transform optimization problems. The key insight is that:</p>
+<p><strong>Primal Problem</strong>: <span class="arithmatex">\(\inf_{u} f(u)\)</span></p>
+<p><strong>Dual Problem</strong>: <span class="arithmatex">\(\sup_{t} -f^*(t)\)</span></p>
+<p><strong>The Primal-Dual Relationship:</strong></p>
+<p>The f-divergence can be expressed in both forms:</p>
+<div class="arithmatex">\[D_f(p,q) = \mathbb{E}_{x \sim q}\left[f\left(\frac{p(x)}{q(x)}\right)\right] = \sup_{T} \left(\mathbb{E}_{x \sim p}[T(x)]- \mathbb{E}_{x_{fake} \sim q}[f^*(T(x_{fake}))]\right)\]</div>
+<p>Where:</p>
+<ul>
+<li>
+<p><strong>Primal form</strong>: <span class="arithmatex">\(\mathbb{E}_{x \sim q}\left[f\left(\frac{p(x)}{q(x)}\right)\right]\)</span> (direct computation)</p>
+</li>
+<li>
+<p><strong>Dual form</strong>: <span class="arithmatex">\(\sup_{T} \left(\mathbb{E}_{x \sim p}[T(x)] - \mathbb{E}_{x_{fake} \sim q}[f^*(T(x_{fake}))]\right)\)</span> (optimization problem)</p>
+</li>
+</ul>
+<p><strong>Derivation: From Primal to Dual Form</strong></p>
+<p>Let's walk through the step-by-step derivation of how we transform the primal form into the dual form:</p>
+<p><strong>Step 1: Start with the Primal Form</strong></p>
+<p>The f-divergence is defined as:</p>
+<div class="arithmatex">\[D_f(p,q) = \mathbb{E}_{x \sim q}\left[f\left(\frac{p(x)}{q(x)}\right)\right]\]</div>
+<p>This is the "primal form" - it directly computes the divergence by evaluating the function <span class="arithmatex">\(f\)</span> at the ratio <span class="arithmatex">\(\frac{p(x)}{q(x)}\)</span>.</p>
+<p><strong>Step 2: Apply the Fenchel Conjugate Identity</strong></p>
+<p>The key insight comes from the Fenchel conjugate identity. For any convex function <span class="arithmatex">\(f\)</span> and any point <span class="arithmatex">\(u\)</span>, we have:</p>
+<div class="arithmatex">\[f(u) = \sup_{t} (tu - f^*(t))\]</div>
+<p>This is a fundamental result in convex analysis known as the <strong>Fenchel-Moreau theorem</strong>. It states that a convex function can be recovered from its conjugate.</p>
+<p><strong>Step 3: Substitute the Identity</strong></p>
+<p>We substitute this identity into our primal form:</p>
+<div class="arithmatex">\[D_f(p,q) = \mathbb{E}_{x \sim q}\left[\sup_{t} \left(t \cdot \frac{p(x)}{q(x)} - f^*(t)\right)\right]\]</div>
+<p><strong>Step 4: Exchange Supremum and Expectation</strong></p>
+<p>This is the crucial step. We can exchange the supremum and expectation under certain conditions (satisfied for convex <span class="arithmatex">\(f\)</span>):</p>
+<div class="arithmatex">\[D_f(p,q) = \sup_{T} \mathbb{E}_{x \sim q}\left[T(x) \cdot \frac{p(x)}{q(x)} - f^*(T(x))\right]\]</div>
+<p>Here, we've replaced the variable <span class="arithmatex">\(t\)</span> with a function <span class="arithmatex">\(T(x)\)</span> that can depend on <span class="arithmatex">\(x\)</span>.</p>
+<p><strong>Step 5: Simplify the Expression</strong></p>
+<p>We can rewrite the expectation:</p>
+<div class="arithmatex">\[\mathbb{E}_{x \sim q}\left[T(x) \cdot \frac{p(x)}{q(x)} - f^*(T(x))\right] = \mathbb{E}_{x \sim q}\left[T(x) \cdot \frac{p(x)}{q(x)}\right] - \mathbb{E}_{x \sim q}[f^*(T(x))]\]</div>
+<p>The first term can be simplified using the definition of expectation:</p>
+<div class="arithmatex">\[\mathbb{E}_{x \sim q}\left[T(x) \cdot \frac{p(x)}{q(x)}\right] = \int T(x) \cdot \frac{p(x)}{q(x)} \cdot q(x) dx = \int T(x) \cdot p(x) dx = \mathbb{E}_{x \sim p}[T(x)]\]</div>
+<p><strong>Step 6: Arrive at the Dual Form</strong></p>
+<p>Putting it all together:</p>
+<div class="arithmatex">\[D_f(p,q) = \sup_{T} \left(\mathbb{E}_{x \sim p}[T(x)] - \mathbb{E}_{x \sim q}[f^*(T(x))]\right)\]</div>
+<p>In other words (to distinguish the two different inputs to the Discriminator):</p>
+<div class="arithmatex">\[D_f(p,q) = \sup_{T} \left(\mathbb{E}_{x \sim p}[T(x)] - \mathbb{E}_{x_{fake} \sim q}[f^*(T(x_{fake}))]\right)\]</div>
+<p>This is the <strong>dual form</strong> of the f-divergence.</p>
+<p><strong>Why This Derivation Works:</strong></p>
+<ol>
+<li><strong>Convexity</strong>: The convexity of <span class="arithmatex">\(f\)</span> ensures that the Fenchel conjugate identity holds</li>
+<li><strong>Exchange of Supremum and Expectation</strong>: This is valid because we're optimizing over a convex set of functions</li>
+<li><strong>Duality Gap</strong>: Under certain conditions, there is no duality gap, meaning the primal and dual forms give the same value</li>
+</ol>
+<p><strong>Key Insights from the Derivation:</strong></p>
+<ol>
+<li>
+<p><strong>From Direct Computation to Optimization</strong>: The primal form requires direct computation of <span class="arithmatex">\(f(\frac{p(x)}{q(x)})\)</span>, while the dual form transforms this into an optimization problem over functions <span class="arithmatex">\(T\)</span>.</p>
+</li>
+<li>
+<p><strong>Role of the Fenchel Conjugate</strong>: The conjugate <span class="arithmatex">\(f^*\)</span> appears naturally in the dual form.</p>
+</li>
+<li>
+<p><strong>Connection to GANs</strong>: The dual form is perfect for GANs because we can parameterize <span class="arithmatex">\(T\)</span> as a neural network (the discriminator). The optimization becomes a minimax game. We can use gradient-based optimization.</p>
+</li>
+</ol>
+<p><strong>Example: KL Divergence Derivation</strong></p>
+<p>Let's see this in action for KL divergence where <span class="arithmatex">\(f(u) = u \log u\)</span>:</p>
+<p><strong>Primal Form:</strong></p>
+<div class="arithmatex">\[D_{KL}(p||q) = \mathbb{E}_{x \sim q}\left[\frac{p(x)}{q(x)} \log \frac{p(x)}{q(x)}\right]\]</div>
+<p><strong>Step 1:</strong> Use the Fenchel conjugate identity for <span class="arithmatex">\(f(u) = u \log u\)</span></p>
+<p>We know that <span class="arithmatex">\(f^*(t) = e^{t-1}\)</span> (from our earlier examples)</p>
+<p><strong>Step 2:</strong> Substitute:</p>
+<div class="arithmatex">\[D_{KL}(p||q) = \mathbb{E}_{x \sim q}\left[\sup_{t} \left(t \cdot \frac{p(x)}{q(x)} - e^{t-1}\right)\right]\]</div>
+<p><strong>Step 3:</strong> Exchange supremum and expectation:</p>
+<div class="arithmatex">\[D_{KL}(p||q) = \sup_{T} \mathbb{E}_{x \sim q}\left[T(x) \cdot \frac{p(x)}{q(x)} - e^{T(x)-1}\right]\]</div>
+<p><strong>Step 4:</strong> Simplify:</p>
+<div class="arithmatex">\[D_{KL}(p||q) = \sup_{T} \left(\mathbb{E}_{x \sim p}[T(x)] - \mathbb{E}_{x \sim q}[e^{T(x)-1}]\right)\]</div>
+<p>This gives us the dual form for KL divergence, which can be used in f-GAN training.</p>
+<h4 id="steps-in-f-gan">Steps in f-GAN</h4>
+<p><strong>Step 1: Choose an f-divergence</strong>
+Select a convex function <span class="arithmatex">\(f\)</span> with <span class="arithmatex">\(f(1) = 0\)</span> (e.g., KL divergence, Jensen-Shannon, etc.)</p>
+<p><strong>Step 2: Compute the Fenchel conjugate</strong>
+Find <span class="arithmatex">\(f^*\)</span> analytically or numerically</p>
+<p><strong>Step 3: Parameterize the dual variable</strong>
+Replace <span class="arithmatex">\(T\)</span> with a neural network <span class="arithmatex">\(T_\phi\)</span> parameterized by <span class="arithmatex">\(\phi\)</span></p>
+<p><strong>Step 4: Set up the minimax game</strong></p>
+<div class="arithmatex">\[\min_\theta \max_\phi F(\theta,\phi) = \mathbb{E}_{x \sim p_{data}}[T_\phi(x)] - \mathbb{E}_{x_{fake} \sim p_{G_\theta}}[f^*(T_\phi(x_{fake}))]\]</div>
+<p><strong>Understanding the Roles:</strong></p>
+<ul>
+<li><strong>Generator (<span class="arithmatex">\(G_\theta\)</span>)</strong>: Tries to minimize the divergence estimate</li>
+<li><strong>Discriminator (<span class="arithmatex">\(T_\phi\)</span>)</strong>: Tries to tighten the lower bound by maximizing the dual objective</li>
+</ul>
+<p><strong>Key Insight:</strong>
+The discriminator <span class="arithmatex">\(T_\phi\)</span> is not a binary classifier like in standard GANs, but rather a function.</p>
+<p><strong>Important Distinction: Vanilla GAN vs f-GAN Generator</strong></p>
+<p>There is a fundamental difference between how generators work in vanilla GANs versus f-GANs:</p>
+<p><strong>Vanilla GAN Generator:</strong></p>
+<ul>
+<li>
+<p><strong>Explicit generator network</strong>: <span class="arithmatex">\(G_\theta(z)\)</span> where <span class="arithmatex">\(z \sim p(z)\)</span> (noise)</p>
+</li>
+<li>
+<p><strong>Direct transformation</strong>: Noise <span class="arithmatex">\(z\)</span> → Generated sample <span class="arithmatex">\(G_\theta(z)\)</span></p>
+</li>
+<li>
+<p><strong>Objective</strong>: <span class="arithmatex">\(\min_\theta \max_\phi V(G_\theta, D_\phi) = \mathbb{E}_{x \sim p_{data}}[\log D_\phi(x)] + \mathbb{E}_{z \sim p(z)}[\log(1-D_\phi(G_\theta(z)))]\)</span></p>
+</li>
+</ul>
+<p><strong>f-GAN Generator:</strong></p>
+<ul>
+<li>
+<p><strong>No explicit generator network</strong>: We work with <span class="arithmatex">\(p_{G_\theta}\)</span> as a distribution directly</p>
+</li>
+<li>
+<p><strong>Implicit generator</strong>: The "generator" is whatever mechanism produces samples from <span class="arithmatex">\(p_{G_\theta}\)</span></p>
+</li>
+<li>
+<p><strong>Objective</strong>: <span class="arithmatex">\(\min_\theta \max_\phi F(\theta,\phi) = \mathbb{E}_{x \sim p_{data}}[T_\phi(x)] - \mathbb{E}_{x_{fake} \sim p_{G_\theta}}[f^*(T_\phi(x_{fake}))]\)</span></p>
+</li>
+</ul>
+<p><strong>The Key Insight:</strong></p>
+<p>In f-GAN, the "generator" is <strong>implicit</strong> - it's whatever mechanism produces samples from the distribution <span class="arithmatex">\(p_{G_\theta}\)</span>. This could be:</p>
+<ol>
+<li><strong>A neural network</strong> <span class="arithmatex">\(G_\theta\)</span> that transforms noise (like in vanilla GANs)</li>
+<li><strong>A flow-based model</strong> that transforms a base distribution</li>
+<li><strong>A VAE decoder</strong> that generates from a latent space</li>
+<li><strong>Any other generative model</strong> that produces samples from <span class="arithmatex">\(p_{G_\theta}\)</span></li>
+</ol>
+<p><strong>Why This Matters:</strong></p>
+<p>The f-GAN framework is <strong>more general</strong> than vanilla GANs because:</p>
+<ul>
+<li><strong>Vanilla GANs</strong>: Require a specific generator architecture <span class="arithmatex">\(G_\theta(z)\)</span></li>
+<li><strong>f-GANs</strong>: Can work with any generative model that produces samples from <span class="arithmatex">\(p_{G_\theta}\)</span></li>
+</ul>
+<p><strong>Practical Implementation:</strong></p>
+<p>In practice, when implementing f-GAN, you would typically:</p>
+<ol>
+<li><strong>Choose a generative model</strong> (e.g., a neural network <span class="arithmatex">\(G_\theta\)</span>)</li>
+<li><strong>Use it to generate samples</strong> from <span class="arithmatex">\(p_{G_\theta}\)</span></li>
+<li><strong>Apply the f-GAN objective</strong> to train both the generator and discriminator</li>
+</ol>
+<p>So in the f-GAN formulation, there's no explicit <span class="arithmatex">\(G_\theta\)</span> network like in vanilla GANs. The "generator" is the abstract distribution <span class="arithmatex">\(p_{G_\theta}\)</span>, and the actual implementation depends on what generative model you choose to use.</p>
+<h4 id="advantages-of-f-gan">Advantages of f-GAN</h4>
+<ol>
+<li><strong>Unified Framework</strong>: One formulation covers many different GAN variants</li>
+<li><strong>Theoretical Rigor</strong>: Based on well-established convex optimization theory</li>
+<li><strong>Flexibility</strong>: Can adapt the divergence measure to the specific problem</li>
+<li><strong>Stability</strong>: Some f-divergences may lead to more stable training</li>
+</ol>
+<h4 id="practical-considerations">Practical Considerations</h4>
+<ul>
+<li><strong>Choice of f</strong>: Different f-divergences have different properties</li>
+<li><strong>Fenchel Conjugate</strong>: Must be computable for the chosen f-divergence</li>
+<li><strong>Training</strong>: Similar alternating optimization as standard GANs</li>
+<li><strong>Evaluation</strong>: Same challenges as other GAN variants</li>
+</ul>
 
 
 
