@@ -393,11 +393,6 @@ The Fenchel conjugate $f^*$ of a function $f$ is defined as:
 
 $$f^*(t) = \sup_{u \in \text{dom}(f)} (tu - f(u))$$
 
-**Detailed Geometric Interpretation:**
-
-The Fenchel conjugate $f^*(t)$ has a beautiful geometric interpretation that helps us understand what it represents. For each value of $t$, we consider the family of lines $y = tu + c$ with slope $t$. We look for the line $y = tu + c$ that touches the graph of $f(u)$ from below and has the largest $y$-intercept $c$. The Fenchel conjugate $f^*(t)$ is the negative of this $y$-intercept: $f^*(t) = -c$
-
-
 **Economic Intuition for the Fenchel Conjugate:**
 
 One of the most intuitive ways to understand the convex conjugate function $f^*(t)$ is through an economic lens. Imagine $f(u)$ as the cost function representing the total expense incurred to produce a quantity $u$ of a certain product. The variable $y$ corresponds to the market price per unit of that product.
@@ -441,6 +436,10 @@ Notice that:
 $$-(u_0 t - f(u_0)) = f(u_0) - u_0 t$$
 
 Since $t = f'(u_0)$, the intercept equals the negative of the optimal profit. Therefore, the intercept of the tangent line with slope $t$ gives $-f^*(t)$.
+
+![Conjugate of a function](f_conjugate.png)
+
+In the above diagram, for a given $y$, we are trying to maximize the difference between the line $xy$ and $f(x)$. For that given $y$, it turns out that the maximum value that $xy - f(x)$ occurs when we draw a tangent to $f(x)$ with slope $y$. The point at which the tangent occurs is the optimum $x$. It also turns out that the vertical intercept is $-f^*(y)$ = maximum value that $xy - f(x)$ occurs for the given $y$. For a different $y$, there will be a different $x$ where a line parallel to the line $xy$ becomes tangent. The graph of $f^*(y)$ is essentially how the negative of the vertical intercept varies over the domain $y$. The graphs of $f(x)$ and $f^*(y)$ live in different dual spaces. $f(x)$ is a function of "quantities", while $f^*(y)$ is a function of "prices" or "slopes". 
 
 **Key Properties:**
 1. **Convexity**: If $f$ is convex, then $f^*$ is also convex
