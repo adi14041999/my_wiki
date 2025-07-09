@@ -13,6 +13,7 @@ nav:
       - Normalizing flow models: AI/deep_generative_models/normalizing_flow_models.md
       - Recap at this point: AI/deep_generative_models/recap_at_this_point.md
       - Generative Adversarial Networks: AI/deep_generative_models/generative_adversarial_networks.md
+      - Energy Based Models: AI/deep_generative_models/energy_based_models.md
   - Math:
     - Probability:
       - Probability and Counting: math/probability/probability_and_counting.md
