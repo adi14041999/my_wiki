@@ -77,6 +77,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#energy-based-models" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -589,6 +594,21 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Energy Based Models
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -601,6 +621,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#parameterizing-probability-distributions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameterizing Probability Distributions
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -762,9 +810,23 @@
 
 
 
-  <h1>Energy Based Models</h1>
-
-
+<h1 id="energy-based-models">Energy-Based Models</h1>
+<h2 id="parameterizing-probability-distributions">Parameterizing Probability Distributions</h2>
+<p>Probability distributions <span class="arithmatex">\(p(x)\)</span> are a key building block in generative modeling. Building a neural network that ensures <span class="arithmatex">\(p(x) \geq 0\)</span> is not hard. However, the real challenge lies in ensuring that the distribution satisfies the normalization constraint: for discrete variables, the sum over all possible values of <span class="arithmatex">\(x\)</span> must equal 1, while for continuous variables, the integral over the entire domain must equal 1.</p>
+<p><strong>Problem:</strong> <span class="arithmatex">\(g_\theta(x) \geq 0\)</span> is easy. But <span class="arithmatex">\(\sum_x g_\theta(x) = Z(\theta) \neq 1\)</span> in general, so <span class="arithmatex">\(g_\theta(x)\)</span> is not a valid probability mass function. For continuous variables, <span class="arithmatex">\(\int g_\theta(x) dx = Z(\theta) \neq 1\)</span> in general, so <span class="arithmatex">\(g_\theta(x)\)</span> is not a valid probability density function.</p>
+<p><strong>Solution:</strong></p>
+<div class="arithmatex">\[p_\theta(x) = \frac{1}{Z(\theta)} g_\theta(x) = \frac{1}{\int g_\theta(x) dx} g_\theta(x) = \frac{1}{\text{Volume}(g_\theta)} g_\theta(x)\]</div>
+<p>Then by definition,</p>
+<div class="arithmatex">\[\int p_\theta(x) dx = \int \frac{1}{Z(\theta)} g_\theta(x) dx = \frac{Z(\theta)}{Z(\theta)} = 1\]</div>
+<p>Here, <span class="arithmatex">\(g_\theta(x)\)</span> is the output of the neural network with parameters <span class="arithmatex">\(\theta\)</span> at input <span class="arithmatex">\(x\)</span>. The <strong>volume</strong> of <span class="arithmatex">\(g_\theta\)</span>, denoted as <span class="arithmatex">\(\text{Volume}(g_\theta)\)</span>, is defined as the integral of <span class="arithmatex">\(g_\theta(x)\)</span> over the entire domain: <span class="arithmatex">\(\text{Volume}(g_\theta) = \int g_\theta(x) dx = Z(\theta)\)</span>. It is a normalizing constant (w.r.t. <span class="arithmatex">\(x\)</span>) but changes for different <span class="arithmatex">\(\theta\)</span>. For example, we choose <span class="arithmatex">\(g_\theta(x)\)</span> so that we know the volume analytically as a function of <span class="arithmatex">\(\theta\)</span>.</p>
+<p>The <strong>partition function</strong> <span class="arithmatex">\(Z(\theta)\)</span> is the normalization constant that ensures a probability distribution integrates (or sums) to 1. It's called a "partition function" because it partitions the unnormalized function <span class="arithmatex">\(g_\theta(x)\)</span> into a proper probability distribution.</p>
+<p><strong>Example:</strong> <span class="arithmatex">\(g_{(\mu, \sigma)}(x) = e^{-\frac{(x-\mu)^2}{2\sigma^2}}\)</span></p>
+<div class="arithmatex">\[\text{Volume}(g_{(\mu, \sigma)}) = \int_{-\infty}^{\infty} e^{-\frac{(x-\mu)^2}{2\sigma^2}} dx = \sqrt{2\pi\sigma^2}\]</div>
+<p>Therefore, the normalized probability density function is:</p>
+<div class="arithmatex">\[p_{(\mu, \sigma)}(x) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}\]</div>
+<p>This is the standard normal (Gaussian) distribution with mean <span class="arithmatex">\(\mu\)</span> and variance <span class="arithmatex">\(\sigma^2\)</span>.
+Functional forms <span class="arithmatex">\(g_\theta(x)\)</span> need to allow analytical integration. Despite being restrictive, they are very useful as building blocks for more complex distributions.</p>
+<p><strong>Note:</strong> What we've been doing with autoregressive models, flow models, and VAEs are essentially tricks for composing simple functions that are normalized to build more complex probabilistic models that are by construction guaranteed to be normalized. These approaches avoid the intractability of computing the partition function for complex distributions by designing architectures where normalization is preserved through the composition of simple, analytically tractable components.</p>
 
 
 
