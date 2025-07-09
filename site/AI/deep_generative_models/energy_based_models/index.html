@@ -646,6 +646,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#energy-based-models_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Energy Based Models
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -827,6 +836,39 @@
 <p>This is the standard normal (Gaussian) distribution with mean <span class="arithmatex">\(\mu\)</span> and variance <span class="arithmatex">\(\sigma^2\)</span>.
 Functional forms <span class="arithmatex">\(g_\theta(x)\)</span> need to allow analytical integration. Despite being restrictive, they are very useful as building blocks for more complex distributions.</p>
 <p><strong>Note:</strong> What we've been doing with autoregressive models, flow models, and VAEs are essentially tricks for composing simple functions that are normalized to build more complex probabilistic models that are by construction guaranteed to be normalized. These approaches avoid the intractability of computing the partition function for complex distributions by designing architectures where normalization is preserved through the composition of simple, analytically tractable components.</p>
+<h2 id="energy-based-models_1">Energy Based Models</h2>
+<p>We are going to formalize EBMs the following way:</p>
+<div class="arithmatex">\[p_\theta(x) = \frac{1}{\int e^{f_\theta(x)} dx} \cdot e^{f_\theta(x)}\]</div>
+<div class="arithmatex">\[p_\theta(x) = \frac{1}{Z(\theta)} \cdot e^{f_\theta(x)}\]</div>
+<p><strong>Why <span class="arithmatex">\(e^{f_\theta(x)}\)</span> and not <span class="arithmatex">\(f_\theta(x)^2\)</span>?</strong></p>
+<p>Both <span class="arithmatex">\(e^{f_\theta(x)}\)</span> and <span class="arithmatex">\(f_\theta(x)^2\)</span> produce non-negative outputs, but we choose the exponential form for several important reasons:</p>
+<ol>
+<li>
+<p><strong>Additive Energy</strong>: The exponential form allows us to work with additive energy functions. If we have <span class="arithmatex">\(f_\theta(x) = f_1(x) + f_2(x)\)</span>, then <span class="arithmatex">\(e^{f_\theta(x)} = e^{f_1(x)} \cdot e^{f_2(x)}\)</span>, which is a natural way to combine energy terms.</p>
+</li>
+<li>
+<p><strong>Log-Probability Interpretation</strong>: Taking the logarithm gives us <span class="arithmatex">\(\log p_\theta(x) = f_\theta(x) - \log Z(\theta)\)</span>. This means <span class="arithmatex">\(f_\theta(x)\)</span> directly represents the unnormalized log-probability, making it easier to work with in practice.</p>
+</li>
+<li>
+<p><strong>Gradient Properties</strong>: The exponential function has the property that <span class="arithmatex">\(\frac{d}{dx}e^{f(x)} = e^{f(x)} \cdot f'(x)\)</span>. This makes gradient-based learning more stable and interpretable.</p>
+</li>
+<li>
+<p><strong>Numerical Stability</strong>: The exponential function grows more smoothly than quadratic functions, which can lead to better numerical stability during training.</p>
+</li>
+<li>
+<p><strong>Dynamic Range</strong>: The exponential function can capture much larger variations in probability compared to quadratic functions. While <span class="arithmatex">\(f_\theta(x)^2\)</span> is bounded by the square of the function's range, <span class="arithmatex">\(e^{f_\theta(x)}\)</span> can represent probabilities that vary by many orders of magnitude.</p>
+</li>
+<li>
+<p><strong>Statistical Mechanics Connection</strong>: The exponential form follows from the Boltzmann distribution in statistical mechanics, where <span class="arithmatex">\(p(x) \propto e^{-E(x)/kT}\)</span>, where <span class="arithmatex">\(-E(x)\)</span> is the energy of state <span class="arithmatex">\(x\)</span>. Hence the name.</p>
+</li>
+</ol>
+<p><strong>Pros:</strong>
+Very flexible, can use any <span class="arithmatex">\(f_\theta(x)\)</span></p>
+<p><strong>Cons:</strong>
+Sampling from <span class="arithmatex">\(p_\theta(x)\)</span> is hard. Evaluating and optimizing likelihood <span class="arithmatex">\(p_\theta(x)\)</span> is hard (learning is hard). Another con is there is no feature learning (but can add latent variables). EBMs also suffer from the curse of dimensionality - as the dimension of <span class="arithmatex">\(x\)</span> increases, the volume of the space grows exponentially, making it increasingly difficult to learn meaningful energy functions and sample efficiently.</p>
+<p>Given two points <span class="arithmatex">\(x_1\)</span> and <span class="arithmatex">\(x_2\)</span>, evaluating <span class="arithmatex">\(p_\theta(x_1)\)</span> or <span class="arithmatex">\(p_\theta(x_2)\)</span> requires calculating <span class="arithmatex">\(Z(\theta)\)</span>. However, their ratio does not involve calculating <span class="arithmatex">\(Z(\theta)\)</span>.</p>
+<div class="arithmatex">\[\frac{p_\theta(x_1)}{p_\theta(x_2)} = \frac{\frac{1}{Z(\theta)} \cdot e^{f_\theta(x_1)}}{\frac{1}{Z(\theta)} \cdot e^{f_\theta(x_2)}} = \frac{e^{f_\theta(x_1)}}{e^{f_\theta(x_2)}} = e^{f_\theta(x_1) - f_\theta(x_2)}\]</div>
+<p>The partition function <span class="arithmatex">\(Z(\theta)\)</span> cancels out in the ratio, so we only need to evaluate the energy function at the two points and take their difference. This means we can determine which of <span class="arithmatex">\(x_1\)</span> or <span class="arithmatex">\(x_2\)</span> is more likely under our model without needing to compute the intractable partition function.</p>
 
 
 
