@@ -697,6 +697,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sampling-from-ebms-with-markov-monte-carlo-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sampling from EBMs with Markov Monte Carlo Methods
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sampling from EBMs with Markov Monte Carlo Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metropolis-hastings-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      Metropolis-Hastings Algorithm
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unadjusted-langevin-mcmc" class="md-nav__link">
+    <span class="md-ellipsis">
+      Unadjusted Langevin MCMC
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -907,7 +940,7 @@ Functional forms <span class="arithmatex">\(g_\theta(x)\)</span> need to allow a
 <p><strong>Pros:</strong>
 Very flexible, can use any <span class="arithmatex">\(f_\theta(x)\)</span></p>
 <p><strong>Cons:</strong>
-Sampling from <span class="arithmatex">\(p_\theta(x)\)</span> is hard. Evaluating and optimizing likelihood <span class="arithmatex">\(p_\theta(x)\)</span> is hard (learning is hard). Another con is there is no feature learning (but can add latent variables). EBMs also suffer from the curse of dimensionality - as the dimension of <span class="arithmatex">\(x\)</span> increases, the volume of the space grows exponentially, making it increasingly difficult to learn meaningful energy functions and sample efficiently.</p>
+<span class="arithmatex">\(Z(\theta)\)</span> is intractable, so no access to likelihood. Thus, evaluating and optimizing likelihood <span class="arithmatex">\(p_\theta(x)\)</span> is hard (learning is hard). Also, sampling from <span class="arithmatex">\(p_\theta(x)\)</span> is hard. Another con is there is no feature learning (but can add latent variables). EBMs also suffer from the curse of dimensionality - as the dimension of <span class="arithmatex">\(x\)</span> increases, the volume of the space grows exponentially, making it increasingly difficult to learn meaningful energy functions and sample efficiently.</p>
 <p>Given two points <span class="arithmatex">\(x_1\)</span> and <span class="arithmatex">\(x_2\)</span>, evaluating <span class="arithmatex">\(p_\theta(x_1)\)</span> or <span class="arithmatex">\(p_\theta(x_2)\)</span> requires calculating <span class="arithmatex">\(Z(\theta)\)</span>. However, their ratio does not involve calculating <span class="arithmatex">\(Z(\theta)\)</span>.</p>
 <div class="arithmatex">\[\frac{p_\theta(x_1)}{p_\theta(x_2)} = \frac{\frac{1}{Z(\theta)} \cdot e^{f_\theta(x_1)}}{\frac{1}{Z(\theta)} \cdot e^{f_\theta(x_2)}} = \frac{e^{f_\theta(x_1)}}{e^{f_\theta(x_2)}} = e^{f_\theta(x_1) - f_\theta(x_2)}\]</div>
 <p>The partition function <span class="arithmatex">\(Z(\theta)\)</span> cancels out in the ratio, so we only need to evaluate the energy function at the two points and take their difference. This means we can determine which of <span class="arithmatex">\(x_1\)</span> or <span class="arithmatex">\(x_2\)</span> is more likely under our model without needing to compute the intractable partition function.</p>
@@ -963,6 +996,86 @@ Sampling from <span class="arithmatex">\(p_\theta(x)\)</span> is hard. Evaluatin
 <li><strong>Hamiltonian Monte Carlo</strong>: More sophisticated MCMC methods</li>
 </ul>
 <p>This sampling challenge is one of the main difficulties in training EBMs, as we need to run these sampling procedures every time we want to estimate the gradient.</p>
+<h2 id="sampling-from-ebms-with-markov-monte-carlo-methods">Sampling from EBMs with Markov Monte Carlo Methods</h2>
+<h3 id="metropolis-hastings-algorithm"><strong>Metropolis-Hastings Algorithm</strong></h3>
+<p>Metropolis-Hastings (MH) is a general-purpose Markov Chain Monte Carlo (MCMC) method for sampling from complex probability distributions. It's particularly useful for Energy-Based Models where direct sampling is not possible.</p>
+<p><strong>The Algorithm</strong></p>
+<p><strong>Step 1: Initialize</strong>
+Start with an initial sample <span class="arithmatex">\(x^{(0)}\)</span> (could be random or from training data)</p>
+<p><strong>Step 2: Propose a New Sample</strong>
+For each iteration <span class="arithmatex">\(t\)</span>:</p>
+<ul>
+<li>
+<p>Generate a proposal <span class="arithmatex">\(x^*\)</span> from a proposal distribution <span class="arithmatex">\(q(x^* | x^{(t)})\)</span></p>
+</li>
+<li>
+<p>The proposal distribution should be easy to sample from (e.g., Gaussian centered at current point)</p>
+</li>
+</ul>
+<p><strong>Step 3: Accept or Reject</strong></p>
+<p>Compute the acceptance probability:</p>
+<div class="arithmatex">\[\alpha = \min\left(1, \frac{e^{f_\theta(x^*)} \cdot q(x^{(t)} | x^*)}{e^{f_\theta(x^{(t)})} \cdot q(x^* | x^{(t)})}\right)\]</div>
+<p>The <code>min(1, ...)</code> ensures the acceptance probability is between 0 and 1. When the ratio is &gt; 1, we always accept (probability = 1). When the ratio is ≤ 1, we accept with probability equal to the ratio.</p>
+<p><strong>Step 4: Update</strong>
+With probability <span class="arithmatex">\(\alpha\)</span>, accept the proposal: <span class="arithmatex">\(x^{(t+1)} = x^*\)</span>.
+With probability <span class="arithmatex">\(1-\alpha\)</span>, reject and keep current: <span class="arithmatex">\(x^{(t+1)} = x^{(t)}\)</span></p>
+<p><strong>Step 5: Repeat</strong>
+Continue for many iterations until convergence</p>
+<p>This algorithm provides a robust foundation for sampling from Energy-Based Models, though it may require careful tuning and monitoring for optimal performance.</p>
+<h3 id="unadjusted-langevin-mcmc"><strong>Unadjusted Langevin MCMC</strong></h3>
+<p>Unadjusted Langevin MCMC (ULMCMC) is another popular method for sampling from Energy-Based Models. Unlike Metropolis-Hastings, it doesn't use an accept/reject step, making it computationally more efficient.</p>
+<p><strong>The Algorithm</strong></p>
+<p><strong>Step 1: Initialize</strong>
+Start with an initial sample <span class="arithmatex">\(x^{(0)}\)</span> (could be random or from training data)</p>
+<p><strong>Step 2: Langevin Dynamics Update</strong>
+For each iteration <span class="arithmatex">\(t\)</span>:</p>
+<div class="arithmatex">\[x^{(t+1)} = x^{(t)} + \epsilon \nabla_x f_\theta(x^{(t)}) + \sqrt{2\epsilon} \eta_t\]</div>
+<p>where:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(\epsilon\)</span> is the step size (learning rate)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\nabla_x f_\theta(x^{(t)})\)</span> is the gradient of the energy function</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\eta_t \sim \mathcal{N}(0, I)\)</span> is Gaussian noise</p>
+</li>
+</ul>
+<p><strong>Step 3: Repeat</strong>
+Continue for many iterations until convergence</p>
+<p><strong>Intuition</strong></p>
+<p>The update rule can be understood as:</p>
+<ol>
+<li>
+<p><strong>Gradient Ascent</strong>: <span class="arithmatex">\(\epsilon \nabla_x f_\theta(x^{(t)})\)</span> moves the sample toward higher energy regions</p>
+</li>
+<li>
+<p><strong>Noise Injection</strong>: <span class="arithmatex">\(\sqrt{2\epsilon} \eta_t\)</span> adds randomness to prevent getting stuck in local optima</p>
+</li>
+<li>
+<p><strong>Balance</strong>: The step size <span class="arithmatex">\(\epsilon\)</span> controls the trade-off between exploration and exploitation</p>
+</li>
+</ol>
+<p><strong>High-Dimensional Expense</strong></p>
+<p>In high dimensions, gradient computation becomes expensive, and the noise term <span class="arithmatex">\(\sqrt{2\epsilon} \eta_t\)</span> scales with dimension, making each step computationally costly. This computational burden is particularly problematic when training Energy-Based Models using Contrastive Divergence.</p>
+<p><strong>The Training Bottleneck:</strong></p>
+<p>Each training step in Contrastive Divergence requires sampling from the model distribution <span class="arithmatex">\(p_\theta(x)\)</span>. This sampling process itself is computationally expensive:</p>
+<ol>
+<li><strong>Single Sampling Step</strong>: Each Langevin step requires computing gradients and adding noise, both of which scale with dimension</li>
+<li><strong>Multiple Sampling Steps</strong>: To get a good sample, we typically need hundreds or thousands of Langevin steps</li>
+<li><strong>Per Training Step</strong>: Each gradient update of the model parameters requires multiple samples</li>
+</ol>
+<p><strong>Computational Complexity:</strong></p>
+<ul>
+<li><strong>Gradient Computation</strong>: <span class="arithmatex">\(O(d)\)</span> where <span class="arithmatex">\(d\)</span> is the dimension</li>
+<li><strong>Noise Generation</strong>: <span class="arithmatex">\(O(d)\)</span> for generating <span class="arithmatex">\(\eta_t \sim \mathcal{N}(0, I)\)</span></li>
+<li><strong>Per Langevin Step</strong>: <span class="arithmatex">\(O(d)\)</span> total cost</li>
+<li><strong>Sampling Process</strong>: <span class="arithmatex">\(O(k \cdot d)\)</span> where <span class="arithmatex">\(k\)</span> is the number of Langevin steps (typically 100-1000)</li>
+<li><strong>Per Training Step</strong>: <span class="arithmatex">\(O(n \cdot k \cdot d)\)</span> where <span class="arithmatex">\(n\)</span> is the number of samples needed</li>
+</ul>
+<p><strong>Practical Impact:</strong></p>
+<p>This means that training an EBM using Contrastive Divergence with Langevin sampling can be extremely slow, especially for high-dimensional data like images. The sampling process becomes the computational bottleneck, making it difficult to scale EBMs to large datasets or high-dimensional problems.</p>
 
 
 

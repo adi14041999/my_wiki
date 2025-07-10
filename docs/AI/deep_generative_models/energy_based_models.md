@@ -59,7 +59,7 @@ Both $e^{f_\theta(x)}$ and $f_\theta(x)^2$ produce non-negative outputs, but we 
 Very flexible, can use any $f_\theta(x)$
 
 **Cons:**
-Sampling from $p_\theta(x)$ is hard. Evaluating and optimizing likelihood $p_\theta(x)$ is hard (learning is hard). Another con is there is no feature learning (but can add latent variables). EBMs also suffer from the curse of dimensionality - as the dimension of $x$ increases, the volume of the space grows exponentially, making it increasingly difficult to learn meaningful energy functions and sample efficiently.
+$Z(\theta)$ is intractable, so no access to likelihood. Thus, evaluating and optimizing likelihood $p_\theta(x)$ is hard (learning is hard). Also, sampling from $p_\theta(x)$ is hard. Another con is there is no feature learning (but can add latent variables). EBMs also suffer from the curse of dimensionality - as the dimension of $x$ increases, the volume of the space grows exponentially, making it increasingly difficult to learn meaningful energy functions and sample efficiently.
 
 Given two points $x_1$ and $x_2$, evaluating $p_\theta(x_1)$ or $p_\theta(x_2)$ requires calculating $Z(\theta)$. However, their ratio does not involve calculating $Z(\theta)$.
 
@@ -147,3 +147,97 @@ Unlike autoregressive models or normalizing flow models, Energy-Based Models do 
 - **Hamiltonian Monte Carlo**: More sophisticated MCMC methods
 
 This sampling challenge is one of the main difficulties in training EBMs, as we need to run these sampling procedures every time we want to estimate the gradient.
+
+##Sampling from EBMs with Markov Monte Carlo Methods
+
+### **Metropolis-Hastings Algorithm**
+
+Metropolis-Hastings (MH) is a general-purpose Markov Chain Monte Carlo (MCMC) method for sampling from complex probability distributions. It's particularly useful for Energy-Based Models where direct sampling is not possible.
+
+**The Algorithm**
+
+**Step 1: Initialize**
+Start with an initial sample $x^{(0)}$ (could be random or from training data)
+
+**Step 2: Propose a New Sample**
+For each iteration $t$:
+
+- Generate a proposal $x^*$ from a proposal distribution $q(x^* | x^{(t)})$
+
+- The proposal distribution should be easy to sample from (e.g., Gaussian centered at current point)
+
+**Step 3: Accept or Reject**
+
+Compute the acceptance probability:
+
+$$\alpha = \min\left(1, \frac{e^{f_\theta(x^*)} \cdot q(x^{(t)} | x^*)}{e^{f_\theta(x^{(t)})} \cdot q(x^* | x^{(t)})}\right)$$
+
+The `min(1, ...)` ensures the acceptance probability is between 0 and 1. When the ratio is > 1, we always accept (probability = 1). When the ratio is ≤ 1, we accept with probability equal to the ratio.
+
+**Step 4: Update**
+With probability $\alpha$, accept the proposal: $x^{(t+1)} = x^*$.
+With probability $1-\alpha$, reject and keep current: $x^{(t+1)} = x^{(t)}$
+
+**Step 5: Repeat**
+Continue for many iterations until convergence
+
+This algorithm provides a robust foundation for sampling from Energy-Based Models, though it may require careful tuning and monitoring for optimal performance.
+
+### **Unadjusted Langevin MCMC**
+
+Unadjusted Langevin MCMC (ULMCMC) is another popular method for sampling from Energy-Based Models. Unlike Metropolis-Hastings, it doesn't use an accept/reject step, making it computationally more efficient.
+
+**The Algorithm**
+
+**Step 1: Initialize**
+Start with an initial sample $x^{(0)}$ (could be random or from training data)
+
+**Step 2: Langevin Dynamics Update**
+For each iteration $t$:
+
+$$x^{(t+1)} = x^{(t)} + \epsilon \nabla_x f_\theta(x^{(t)}) + \sqrt{2\epsilon} \eta_t$$
+
+where:
+
+- $\epsilon$ is the step size (learning rate)
+
+- $\nabla_x f_\theta(x^{(t)})$ is the gradient of the energy function
+
+- $\eta_t \sim \mathcal{N}(0, I)$ is Gaussian noise
+
+**Step 3: Repeat**
+Continue for many iterations until convergence
+
+**Intuition**
+
+The update rule can be understood as:
+
+1. **Gradient Ascent**: $\epsilon \nabla_x f_\theta(x^{(t)})$ moves the sample toward higher energy regions
+
+2. **Noise Injection**: $\sqrt{2\epsilon} \eta_t$ adds randomness to prevent getting stuck in local optima
+
+3. **Balance**: The step size $\epsilon$ controls the trade-off between exploration and exploitation
+
+**High-Dimensional Expense**
+
+In high dimensions, gradient computation becomes expensive, and the noise term $\sqrt{2\epsilon} \eta_t$ scales with dimension, making each step computationally costly. This computational burden is particularly problematic when training Energy-Based Models using Contrastive Divergence.
+
+**The Training Bottleneck:**
+
+Each training step in Contrastive Divergence requires sampling from the model distribution $p_\theta(x)$. This sampling process itself is computationally expensive:
+
+1. **Single Sampling Step**: Each Langevin step requires computing gradients and adding noise, both of which scale with dimension
+2. **Multiple Sampling Steps**: To get a good sample, we typically need hundreds or thousands of Langevin steps
+3. **Per Training Step**: Each gradient update of the model parameters requires multiple samples
+
+**Computational Complexity:**
+
+- **Gradient Computation**: $O(d)$ where $d$ is the dimension
+- **Noise Generation**: $O(d)$ for generating $\eta_t \sim \mathcal{N}(0, I)$
+- **Per Langevin Step**: $O(d)$ total cost
+- **Sampling Process**: $O(k \cdot d)$ where $k$ is the number of Langevin steps (typically 100-1000)
+- **Per Training Step**: $O(n \cdot k \cdot d)$ where $n$ is the number of samples needed
+
+**Practical Impact:**
+
+This means that training an EBM using Contrastive Divergence with Langevin sampling can be extremely slow, especially for high-dimensional data like images. The sampling process becomes the computational bottleneck, making it difficult to scale EBMs to large datasets or high-dimensional problems.
