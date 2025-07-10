@@ -67,3 +67,83 @@ $$\frac{p_\theta(x_1)}{p_\theta(x_2)} = \frac{\frac{1}{Z(\theta)} \cdot e^{f_\th
 
 The partition function $Z(\theta)$ cancels out in the ratio, so we only need to evaluate the energy function at the two points and take their difference. This means we can determine which of $x_1$ or $x_2$ is more likely under our model without needing to compute the intractable partition function.
 
+## Training EBMs with Contrastive Divergence
+
+![Dataset](ebm_training.png)
+
+Let's assume we want to maximize $\frac{\exp(f_\theta(x_{train}))}{Z(\theta)}$. $x_{train}$ is the 'correct answer'- we want to increase the probability of this under the model. Let's also assume we have a 'wrong answer'. The objective is to not just maximize $\exp(f_\theta(x_{train}))$ but also minimize $Z(\theta)$ because that's going to result in the 'wrong' answer being pushed down.
+
+Instead of evaluating $Z(\theta)$ exactly, we use a Monte Carlo estimate.
+
+## Contrastive Divergence Algorithm
+
+### **High-Level Idea**
+
+The contrastive divergence algorithm works as follows:
+
+**Algorithm:**
+
+1. Assuming we can sample from the model, sample $x_{sample} \sim p_\theta$
+
+2. Take a step on the gradient: $\nabla_\theta(f_\theta(x_{train}) - f_\theta(x_{sample}))$
+
+3. Keep repeating this to make the training data more likely than typical samples from the model
+
+### **Why Does This Work?**
+
+We want to maximize the log-likelihood: $\max_\theta(f_\theta(x_{train}) - \log Z(\theta))$
+
+**Mathematical Derivation:**
+
+The gradient of the log-likelihood is:
+
+$$\nabla_\theta \log p_\theta(x_{train}) = \nabla_\theta(f_\theta(x_{train}) - \log Z(\theta))$$
+
+Let's split the terms and take the derivative:
+
+$$\nabla_\theta \log p_\theta(x_{train}) = \nabla_\theta f_\theta(x_{train}) - \nabla_\theta \log Z(\theta)$$
+
+Now we need to compute $\nabla_\theta \log Z(\theta)$. Let's expand this:
+
+$$\nabla_\theta \log Z(\theta) = \nabla_\theta \log \int e^{f_\theta(x)} dx$$
+
+Using the chain rule and the fact that $\nabla \log f(x) = \frac{\nabla f(x)}{f(x)}$:
+
+$$\nabla_\theta \log Z(\theta) = \frac{1}{Z(\theta)} \nabla_\theta \int e^{f_\theta(x)} dx$$
+
+Since the integral and derivative can be exchanged:
+
+$$\nabla_\theta \log Z(\theta) = \frac{1}{Z(\theta)} \int \nabla_\theta e^{f_\theta(x)} dx$$
+
+Using the chain rule again:
+
+$$\nabla_\theta \log Z(\theta) = \frac{1}{Z(\theta)} \int e^{f_\theta(x)} \nabla_\theta f_\theta(x) dx$$
+
+Notice that $\frac{e^{f_\theta(x)}}{Z(\theta)} = p_\theta(x)$, so:
+
+$$\nabla_\theta \log Z(\theta) = \int p_\theta(x) \nabla_\theta f_\theta(x) dx = \mathbb{E}_{x \sim p_\theta}[\nabla_\theta f_\theta(x)]$$
+
+**Final Result:**
+
+Putting it all together:
+
+$$\nabla_\theta \log p_\theta(x_{train}) = \nabla_\theta f_\theta(x_{train}) - \mathbb{E}_{x \sim p_\theta}[\nabla_\theta f_\theta(x)]$$
+
+**The Key Insight:**
+
+The second term $\mathbb{E}_{x \sim p_\theta}[\nabla_\theta f_\theta(x)]$ is an expectation over the model distribution. We approximate (Monte Carlo approximation) this expectation using samples from the model:
+
+$$\mathbb{E}_{x \sim p_\theta}[\nabla_\theta f_\theta(x)] \approx \nabla_\theta f_\theta(x_{sample})$$
+
+where $x_{sample} \sim p_\theta$ is a sample from our model.
+
+**Important note on sampling:**
+
+Unlike autoregressive models or normalizing flow models, Energy-Based Models do not provide a direct way to sample from $p_\theta(x)$. In autoregressive models, we can sample sequentially by conditioning on previous values. In flow models, we can sample from a simple base distribution and transform it through invertible functions. However, in EBMs, we need to use approximate sampling methods like:
+
+- **Langevin Dynamics**: Gradient-based sampling with noise
+- **Gibbs Sampling**: For discrete variables, updating one variable at a time
+- **Metropolis-Hastings**: Markov chain Monte Carlo methods
+- **Hamiltonian Monte Carlo**: More sophisticated MCMC methods
+
+This sampling challenge is one of the main difficulties in training EBMs, as we need to run these sampling procedures every time we want to estimate the gradient.
