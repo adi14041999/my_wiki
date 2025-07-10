@@ -655,6 +655,48 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#training-ebms-with-contrastive-divergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      Training EBMs with Contrastive Divergence
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contrastive-divergence-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contrastive Divergence Algorithm
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contrastive Divergence Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#high-level-idea" class="md-nav__link">
+    <span class="md-ellipsis">
+      High-Level Idea
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-this-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Does This Work?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -869,6 +911,58 @@ Sampling from <span class="arithmatex">\(p_\theta(x)\)</span> is hard. Evaluatin
 <p>Given two points <span class="arithmatex">\(x_1\)</span> and <span class="arithmatex">\(x_2\)</span>, evaluating <span class="arithmatex">\(p_\theta(x_1)\)</span> or <span class="arithmatex">\(p_\theta(x_2)\)</span> requires calculating <span class="arithmatex">\(Z(\theta)\)</span>. However, their ratio does not involve calculating <span class="arithmatex">\(Z(\theta)\)</span>.</p>
 <div class="arithmatex">\[\frac{p_\theta(x_1)}{p_\theta(x_2)} = \frac{\frac{1}{Z(\theta)} \cdot e^{f_\theta(x_1)}}{\frac{1}{Z(\theta)} \cdot e^{f_\theta(x_2)}} = \frac{e^{f_\theta(x_1)}}{e^{f_\theta(x_2)}} = e^{f_\theta(x_1) - f_\theta(x_2)}\]</div>
 <p>The partition function <span class="arithmatex">\(Z(\theta)\)</span> cancels out in the ratio, so we only need to evaluate the energy function at the two points and take their difference. This means we can determine which of <span class="arithmatex">\(x_1\)</span> or <span class="arithmatex">\(x_2\)</span> is more likely under our model without needing to compute the intractable partition function.</p>
+<h2 id="training-ebms-with-contrastive-divergence">Training EBMs with Contrastive Divergence</h2>
+<p><img alt="Dataset" src="../ebm_training.png" /></p>
+<p>Let's assume we want to maximize <span class="arithmatex">\(\frac{\exp(f_\theta(x_{train}))}{Z(\theta)}\)</span>. <span class="arithmatex">\(x_{train}\)</span> is the 'correct answer'- we want to increase the probability of this under the model. Let's also assume we have a 'wrong answer'. The objective is to not just maximize <span class="arithmatex">\(\exp(f_\theta(x_{train}))\)</span> but also minimize <span class="arithmatex">\(Z(\theta)\)</span> because that's going to result in the 'wrong' answer being pushed down.</p>
+<p>Instead of evaluating <span class="arithmatex">\(Z(\theta)\)</span> exactly, we use a Monte Carlo estimate.</p>
+<h2 id="contrastive-divergence-algorithm">Contrastive Divergence Algorithm</h2>
+<h3 id="high-level-idea"><strong>High-Level Idea</strong></h3>
+<p>The contrastive divergence algorithm works as follows:</p>
+<p><strong>Algorithm:</strong></p>
+<ol>
+<li>
+<p>Assuming we can sample from the model, sample <span class="arithmatex">\(x_{sample} \sim p_\theta\)</span></p>
+</li>
+<li>
+<p>Take a step on the gradient: <span class="arithmatex">\(\nabla_\theta(f_\theta(x_{train}) - f_\theta(x_{sample}))\)</span></p>
+</li>
+<li>
+<p>Keep repeating this to make the training data more likely than typical samples from the model</p>
+</li>
+</ol>
+<h3 id="why-does-this-work"><strong>Why Does This Work?</strong></h3>
+<p>We want to maximize the log-likelihood: <span class="arithmatex">\(\max_\theta(f_\theta(x_{train}) - \log Z(\theta))\)</span></p>
+<p><strong>Mathematical Derivation:</strong></p>
+<p>The gradient of the log-likelihood is:</p>
+<div class="arithmatex">\[\nabla_\theta \log p_\theta(x_{train}) = \nabla_\theta(f_\theta(x_{train}) - \log Z(\theta))\]</div>
+<p>Let's split the terms and take the derivative:</p>
+<div class="arithmatex">\[\nabla_\theta \log p_\theta(x_{train}) = \nabla_\theta f_\theta(x_{train}) - \nabla_\theta \log Z(\theta)\]</div>
+<p>Now we need to compute <span class="arithmatex">\(\nabla_\theta \log Z(\theta)\)</span>. Let's expand this:</p>
+<div class="arithmatex">\[\nabla_\theta \log Z(\theta) = \nabla_\theta \log \int e^{f_\theta(x)} dx\]</div>
+<p>Using the chain rule and the fact that <span class="arithmatex">\(\nabla \log f(x) = \frac{\nabla f(x)}{f(x)}\)</span>:</p>
+<div class="arithmatex">\[\nabla_\theta \log Z(\theta) = \frac{1}{Z(\theta)} \nabla_\theta \int e^{f_\theta(x)} dx\]</div>
+<p>Since the integral and derivative can be exchanged:</p>
+<div class="arithmatex">\[\nabla_\theta \log Z(\theta) = \frac{1}{Z(\theta)} \int \nabla_\theta e^{f_\theta(x)} dx\]</div>
+<p>Using the chain rule again:</p>
+<div class="arithmatex">\[\nabla_\theta \log Z(\theta) = \frac{1}{Z(\theta)} \int e^{f_\theta(x)} \nabla_\theta f_\theta(x) dx\]</div>
+<p>Notice that <span class="arithmatex">\(\frac{e^{f_\theta(x)}}{Z(\theta)} = p_\theta(x)\)</span>, so:</p>
+<div class="arithmatex">\[\nabla_\theta \log Z(\theta) = \int p_\theta(x) \nabla_\theta f_\theta(x) dx = \mathbb{E}_{x \sim p_\theta}[\nabla_\theta f_\theta(x)]\]</div>
+<p><strong>Final Result:</strong></p>
+<p>Putting it all together:</p>
+<div class="arithmatex">\[\nabla_\theta \log p_\theta(x_{train}) = \nabla_\theta f_\theta(x_{train}) - \mathbb{E}_{x \sim p_\theta}[\nabla_\theta f_\theta(x)]\]</div>
+<p><strong>The Key Insight:</strong></p>
+<p>The second term <span class="arithmatex">\(\mathbb{E}_{x \sim p_\theta}[\nabla_\theta f_\theta(x)]\)</span> is an expectation over the model distribution. We approximate (Monte Carlo approximation) this expectation using samples from the model:</p>
+<div class="arithmatex">\[\mathbb{E}_{x \sim p_\theta}[\nabla_\theta f_\theta(x)] \approx \nabla_\theta f_\theta(x_{sample})\]</div>
+<p>where <span class="arithmatex">\(x_{sample} \sim p_\theta\)</span> is a sample from our model.</p>
+<p><strong>Important note on sampling:</strong></p>
+<p>Unlike autoregressive models or normalizing flow models, Energy-Based Models do not provide a direct way to sample from <span class="arithmatex">\(p_\theta(x)\)</span>. In autoregressive models, we can sample sequentially by conditioning on previous values. In flow models, we can sample from a simple base distribution and transform it through invertible functions. However, in EBMs, we need to use approximate sampling methods like:</p>
+<ul>
+<li><strong>Langevin Dynamics</strong>: Gradient-based sampling with noise</li>
+<li><strong>Gibbs Sampling</strong>: For discrete variables, updating one variable at a time</li>
+<li><strong>Metropolis-Hastings</strong>: Markov chain Monte Carlo methods</li>
+<li><strong>Hamiltonian Monte Carlo</strong>: More sophisticated MCMC methods</li>
+</ul>
+<p>This sampling challenge is one of the main difficulties in training EBMs, as we need to run these sampling procedures every time we want to estimate the gradient.</p>
 
 
 
