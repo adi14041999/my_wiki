@@ -10,26 +10,28 @@
       
       
       
-        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/">
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/AI/deep_generative_models/score_based_models/">
       
       
+        <link rel="prev" href="../energy_based_models/">
       
-        <link rel="next" href="AI/deep_generative_models/introduction/">
+      
+        <link rel="next" href="../../../math/probability/probability_and_counting/">
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
     
     
       
-        <title>My Wiki</title>
+        <title>Score Based Models - My Wiki</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.342714a4.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.342714a4.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -48,9 +50,9 @@
       
     
     
-      <link rel="stylesheet" href="stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#welcome-to-my-wiki" class="md-skip">
+        <a href="#score-based-models" class="md-skip">
           Skip to content
         </a>
       
@@ -90,7 +92,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="My Wiki" class="md-header__button md-logo" aria-label="My Wiki" data-md-component="logo">
+    <a href="../../.." title="My Wiki" class="md-header__button md-logo" aria-label="My Wiki" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -110,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              Score Based Models
             
           </span>
         </div>
@@ -209,11 +211,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="." class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -230,6 +230,8 @@
   
   
   
+    
+  
   
     
     
@@ -237,11 +239,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="AI/deep_generative_models/introduction/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../introduction/" class="md-tabs__link">
           
   
   
@@ -271,7 +275,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="math/probability/probability_and_counting/" class="md-tabs__link">
+        <a href="../../../math/probability/probability_and_counting/" class="md-tabs__link">
           
   
   
@@ -310,7 +314,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="My Wiki" class="md-nav__button md-logo" aria-label="My Wiki" data-md-component="logo">
+    <a href="../../.." title="My Wiki" class="md-nav__button md-logo" aria-label="My Wiki" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -325,19 +329,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -348,7 +343,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -357,26 +351,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -389,7 +388,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             AI
@@ -400,26 +399,31 @@
                 
   
   
+    
   
   
+  
     
     
     
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
         
           
-          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
             
   
   
@@ -432,7 +436,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2_1">
             <span class="md-nav__icon md-icon"></span>
             Deep Generative Models
@@ -446,7 +450,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/introduction/" class="md-nav__link">
+      <a href="../introduction/" class="md-nav__link">
         
   
   
@@ -469,7 +473,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/autoregressive_models/" class="md-nav__link">
+      <a href="../autoregressive_models/" class="md-nav__link">
         
   
   
@@ -492,7 +496,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/variational_autoencoders/" class="md-nav__link">
+      <a href="../variational_autoencoders/" class="md-nav__link">
         
   
   
@@ -515,7 +519,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/normalizing_flow_models/" class="md-nav__link">
+      <a href="../normalizing_flow_models/" class="md-nav__link">
         
   
   
@@ -538,7 +542,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/recap_at_this_point/" class="md-nav__link">
+      <a href="../recap_at_this_point/" class="md-nav__link">
         
   
   
@@ -561,7 +565,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/generative_adversarial_networks/" class="md-nav__link">
+      <a href="../generative_adversarial_networks/" class="md-nav__link">
         
   
   
@@ -584,7 +588,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/energy_based_models/" class="md-nav__link">
+      <a href="../energy_based_models/" class="md-nav__link">
         
   
   
@@ -604,10 +608,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="AI/deep_generative_models/score_based_models/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Score Based Models
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -618,6 +644,77 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#score-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      Score Matching
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Score Matching">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#score-matching-comparing-distributions-via-vector-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      Score Matching: Comparing Distributions via Vector Fields
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#noise-contrastive-estimation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Noise Contrastive Estimation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#training-score-based-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Training Score Based Models
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#denoising-slicing-score-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      Denoising &amp; Slicing Score Matching
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -731,7 +828,7 @@
   
   
     <li class="md-nav__item">
-      <a href="math/probability/probability_and_counting/" class="md-nav__link">
+      <a href="../../../math/probability/probability_and_counting/" class="md-nav__link">
         
   
   
@@ -778,7 +875,82 @@
 
 
 
-<h1 id="welcome-to-my-wiki">Welcome to my wiki!</h1>
+<h1 id="score-based-models">Score Based Models</h1>
+<p>Goal: Training without sampling. 
+Alternative to Contrastive Divergence. Loss function does not involve some partition function.</p>
+<h2 id="score-matching">Score Matching</h2>
+<p><strong>Energy-Based Model Probability Distribution</strong></p>
+<p>In Energy-Based Models, the probability distribution is defined as:</p>
+<div class="arithmatex">\[p_\theta(x) = \frac{1}{Z(\theta)} e^{f_\theta(x)}\]</div>
+<p>where:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(f_\theta(x)\)</span> is the energy function (neural network)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(Z(\theta) = \int e^{f_\theta(x)} dx\)</span> is the partition function (intractable)</p>
+</li>
+</ul>
+<p>Taking the logarithm of the probability distribution:</p>
+<div class="arithmatex">\[\log p_\theta(x) = f_\theta(x) - \log Z(\theta)\]</div>
+<p>Notice that the partition function <span class="arithmatex">\(Z(\theta)\)</span> appears as a constant term that doesn't depend on <span class="arithmatex">\(x\)</span>.</p>
+<p><strong>Stein Score Function</strong></p>
+<p>The <strong>Stein score function</strong> <span class="arithmatex">\(s_\theta(x)\)</span> is defined as the gradient of the log probability with respect to <span class="arithmatex">\(x\)</span>:</p>
+<div class="arithmatex">\[s_\theta(x) = \nabla_x \log p_\theta(x)\]</div>
+<p>For Energy-Based Models, the score function equals the gradient of the energy function:</p>
+<div class="arithmatex">\[s_\theta(x) = \nabla_x \log p_\theta(x) = \nabla_x (f_\theta(x) - \log Z(\theta)) = \nabla_x f_\theta(x)\]</div>
+<p>The partition function term <span class="arithmatex">\(\log Z(\theta)\)</span> disappears because it doesn't depend on <span class="arithmatex">\(x\)</span>.</p>
+<p><strong>Score as a Vector Field</strong></p>
+<p>The score function <span class="arithmatex">\(s_\theta(x)\)</span> is a <strong>vector field</strong> that assigns a vector to each point <span class="arithmatex">\(x\)</span> in the data space. This vector has both:</p>
+<ol>
+<li>
+<p><strong>Magnitude</strong>: How quickly the log probability changes</p>
+</li>
+<li>
+<p><strong>Direction</strong>: The direction of steepest increase in log probability</p>
+</li>
+</ol>
+<p><strong>Intuition</strong>: The score vector points "uphill" in the log probability landscape, indicating the direction where the model assigns higher probability.</p>
+<p><strong>Example: Gaussian Distribution</strong></p>
+<p>Consider a Gaussian distribution with mean <span class="arithmatex">\(\mu\)</span> and covariance <span class="arithmatex">\(\Sigma\)</span>:</p>
+<div class="arithmatex">\[p(x) = \frac{1}{\sqrt{(2\pi)^d |\Sigma|}} \exp\left(-\frac{1}{2}(x - \mu)^T \Sigma^{-1}(x - \mu)\right)\]</div>
+<p><strong>Log Probability:</strong></p>
+<div class="arithmatex">\[\log p(x) = -\frac{1}{2}(x - \mu)^T \Sigma^{-1}(x - \mu) - \frac{1}{2}\log((2\pi)^d |\Sigma|)\]</div>
+<p><strong>Score Function:</strong></p>
+<div class="arithmatex">\[s(x) = \nabla_x \log p(x) = -\Sigma^{-1}(x - \mu)\]</div>
+<p><strong>Interpretation:</strong></p>
+<ul>
+<li>
+<p>The score points toward the mean <span class="arithmatex">\(\mu\)</span> (direction of higher probability)</p>
+</li>
+<li>
+<p>The magnitude is proportional to the distance from the mean</p>
+</li>
+<li>
+<p>For isotropic Gaussian (<span class="arithmatex">\(\Sigma = \sigma^2 I\)</span>): <span class="arithmatex">\(s(x) = -\frac{1}{\sigma^2}(x - \mu)\)</span></p>
+</li>
+</ul>
+<p>This example shows how the score function naturally guides samples toward high-probability regions of the distribution.</p>
+<h3 id="score-matching-comparing-distributions-via-vector-fields"><strong>Score Matching: Comparing Distributions via Vector Fields</strong></h3>
+<p>The core idea of score matching is that we want to compare two probability distributions by comparing their respective vector fields of gradients (score functions).</p>
+<p><strong>The Key Insight:</strong></p>
+<p>Instead of directly comparing probability densities <span class="arithmatex">\(p_{data}(x)\)</span> and <span class="arithmatex">\(p_\theta(x)\)</span> (which requires computing the intractable partition function), we compare their score functions:</p>
+<ul>
+<li><strong>Data Score</strong>: <span class="arithmatex">\(s_{data}(x) = \nabla_x \log p_{data}(x)\)</span></li>
+<li><strong>Model Score</strong>: <span class="arithmatex">\(s_\theta(x) = \nabla_x \log p_\theta(x) = \nabla_x f_\theta(x)\)</span></li>
+</ul>
+<p>This measures how different the "pointing directions" are at each location <span class="arithmatex">\(x\)</span>.</p>
+<p><strong>L2 Distance Between Score Functions</strong></p>
+<p>One way to compare the score functions is to calculate the average L2 distance between the score of <span class="arithmatex">\(p_{data}\)</span> and <span class="arithmatex">\(p_\theta\)</span>:</p>
+<div class="arithmatex">\[\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \|s_\theta(x) - s_{data}(x)\|^2 \right]\]</div>
+<p><strong>Note</strong>: This loss function is also called the <strong>Fisher divergence</strong> between <span class="arithmatex">\(p_{data}(x)\)</span> and <span class="arithmatex">\(p_\theta(x)\)</span>. The Fisher divergence measures the difference between two probability distributions by comparing their score functions (gradients of log densities) rather than the densities themselves.</p>
+<p><strong>Understanding the L2 Distance:</strong></p>
+<p>The L2 norm <span class="arithmatex">\(\|s_\theta(x) - s_{data}(x)\|^2\)</span> measures the squared Euclidean distance between two vectors:</p>
+<div class="arithmatex">\[\|s_\theta(x) - s_{data}(x)\|^2 = \sum_{i=1}^d (s_\theta(x)_i - s_{data}(x)_i)^2\]</div>
+<p>where <span class="arithmatex">\(d\)</span> is the dimension of the data space.</p>
+<h2 id="noise-contrastive-estimation">Noise Contrastive Estimation</h2>
+<h2 id="training-score-based-models">Training Score Based Models</h2>
+<h2 id="denoising-slicing-score-matching">Denoising &amp; Slicing Score Matching</h2>
 
 
 
@@ -839,12 +1011,12 @@
     
     
       
-      <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
       
-        <script src="javascripts/mathjax.js"></script>
+        <script src="../../../javascripts/mathjax.js"></script>
       
         <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
       
