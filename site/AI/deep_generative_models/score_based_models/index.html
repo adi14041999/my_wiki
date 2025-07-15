@@ -679,6 +679,48 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#score-matching-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      Score Matching Algorithm
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap-distances-for-training-ebms" class="md-nav__link">
+    <span class="md-ellipsis">
+      Recap: Distances for Training EBMs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recap: Distances for Training EBMs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#contrastive-divergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contrastive Divergence
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fisher-divergence-score-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fisher Divergence (Score Matching)
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -691,14 +733,29 @@
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#training-score-based-models" class="md-nav__link">
+    <nav class="md-nav" aria-label="Noise Contrastive Estimation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gan-objective" class="md-nav__link">
     <span class="md-ellipsis">
-      Training Score Based Models
+      GAN Objective
     </span>
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimal-discriminator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optimal Discriminator
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -959,17 +1016,112 @@
 <div class="arithmatex">\[\int f(x) \frac{d}{dx} g(x) dx = f(x)g(x) - \int \frac{d}{dx} f(x) \cdot g(x) dx\]</div>
 <p>Setting <span class="arithmatex">\(f(x) = \frac{d}{dx} \log p_\theta(x)\)</span> and <span class="arithmatex">\(g(x) = p_{data}(x)\)</span>, we get:</p>
 <div class="arithmatex">\[\mathbb{E}_{x \sim p_{data}} \left[ \frac{d}{dx} \log p_\theta(x) \cdot \frac{d}{dx} \log p_{data}(x) \right] = \int \frac{d}{dx} \log p_\theta(x) \cdot \frac{d}{dx} \log p_{data}(x) \cdot p_{data}(x) dx\]</div>
+<p>Using the chain rule: <span class="arithmatex">\(\frac{d}{dx} \log p_{data}(x) \cdot p_{data}(x) = \frac{d}{dx} p_{data}(x)\)</span>, we get:</p>
 <div class="arithmatex">\[= \int \frac{d}{dx} \log p_\theta(x) \cdot \frac{d}{dx} p_{data}(x) dx\]</div>
 <p>Using integration by parts:</p>
 <div class="arithmatex">\[= \left. \frac{d}{dx} \log p_\theta(x) \cdot p_{data}(x) \right|_{-\infty}^{\infty} - \int \frac{d^2}{dx^2} \log p_\theta(x) \cdot p_{data}(x) dx\]</div>
+<p><strong>Why does the boundary term vanish?</strong></p>
+<p>The boundary term <span class="arithmatex">\(\left. \frac{d}{dx} \log p_\theta(x) \cdot p_{data}(x) \right|_{-\infty}^{\infty}\)</span> vanishes under reasonable assumptions:</p>
+<ol>
+<li><strong>Data distribution decay</strong>: <span class="arithmatex">\(p_{data}(x) \to 0\)</span> as <span class="arithmatex">\(|x| \to \infty\)</span> (most real-world distributions have finite support or decay to zero)</li>
+<li><strong>Model score boundedness</strong>: <span class="arithmatex">\(\frac{d}{dx} \log p_\theta(x)\)</span> grows at most polynomially as <span class="arithmatex">\(|x| \to \infty\)</span></li>
+<li><strong>Product decay</strong>: The product <span class="arithmatex">\(\frac{d}{dx} \log p_\theta(x) \cdot p_{data}(x) \to 0\)</span> as <span class="arithmatex">\(|x| \to \infty\)</span></li>
+</ol>
+<p>This is a standard assumption in score matching literature and holds for most practical distributions.</p>
 <p>Assuming the boundary term vanishes (which is reasonable for well-behaved distributions), we get:</p>
 <div class="arithmatex">\[\mathbb{E}_{x \sim p_{data}} \left[ \frac{d}{dx} \log p_\theta(x) \cdot \frac{d}{dx} \log p_{data}(x) \right] = -\mathbb{E}_{x \sim p_{data}} \left[ \frac{d^2}{dx^2} \log p_\theta(x) \right]\]</div>
 <p>Substituting back into the original objective:</p>
 <div class="arithmatex">\[\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \left(\frac{d}{dx} \log p_\theta(x)\right)^2 + \frac{d^2}{dx^2} \log p_\theta(x) \right] + \text{constant}\]</div>
 <p>where the constant term <span class="arithmatex">\(\frac{1}{2} \mathbb{E}_{x \sim p_{data}} \left[ \left(\frac{d}{dx} \log p_{data}(x)\right)^2 \right]\)</span> doesn't depend on <span class="arithmatex">\(\theta\)</span> and can be ignored during optimization.</p>
 <p><strong>Key Insight</strong>: This reformulation allows us to train the model using only samples from <span class="arithmatex">\(p_{data}(x)\)</span> and the derivatives of our model's log probability, without needing access to the data score function.</p>
+<p><strong>Score Matching Reformulation (Multivariate Case)</strong></p>
+<p>For the multivariate case where <span class="arithmatex">\(x \in \mathbb{R}^d\)</span>, we can extend the univariate derivation. The score matching objective becomes:</p>
+<div class="arithmatex">\[\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \|\nabla_x \log p_\theta(x) - \nabla_x \log p_{data}(x)\|^2 \right]\]</div>
+<p>Expanding the squared norm:</p>
+<div class="arithmatex">\[\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \|\nabla_x \log p_\theta(x)\|^2 - \nabla_x \log p_\theta(x)^T \nabla_x \log p_{data}(x) + \frac{1}{2} \|\nabla_x \log p_{data}(x)\|^2 \right]\]</div>
+<p>The key insight is to use integration by parts on the cross term. For the multivariate case, we need to handle each component separately. Let <span class="arithmatex">\(s_\theta(x)_i\)</span> and <span class="arithmatex">\(s_{data}(x)_i\)</span> denote the <span class="arithmatex">\(i\)</span>-th component of the respective score functions.</p>
+<p>For each component <span class="arithmatex">\(i\)</span>, we have:</p>
+<div class="arithmatex">\[\mathbb{E}_{x \sim p_{data}} \left[ s_\theta(x)_i \cdot s_{data}(x)_i \right] = \int s_\theta(x)_i \cdot s_{data}(x)_i \cdot p_{data}(x) dx\]</div>
+<p>Using the chain rule: <span class="arithmatex">\(s_{data}(x)_i \cdot p_{data}(x) = \frac{\partial}{\partial x_i} p_{data}(x)\)</span>, we get:</p>
+<div class="arithmatex">\[= \int s_\theta(x)_i \cdot \frac{\partial}{\partial x_i} p_{data}(x) dx\]</div>
+<p>Using integration by parts (assuming boundary terms vanish):</p>
+<div class="arithmatex">\[= -\int \frac{\partial}{\partial x_i} s_\theta(x)_i \cdot p_{data}(x) dx = -\mathbb{E}_{x \sim p_{data}} \left[ \frac{\partial}{\partial x_i} s_\theta(x)_i \right]\]</div>
+<p><strong>Why do the boundary terms vanish in the multivariate case?</strong></p>
+<p>For each component <span class="arithmatex">\(i\)</span>, the boundary term is:</p>
+<div class="arithmatex">\[\left. s_\theta(x)_i \cdot p_{data}(x) \right|_{x_i = -\infty}^{x_i = \infty}\]</div>
+<p>This vanishes under similar assumptions as the univariate case:</p>
+<ol>
+<li><strong>Data distribution decay</strong>: <span class="arithmatex">\(p_{data}(x) \to 0\)</span> as <span class="arithmatex">\(\|x\| \to \infty\)</span> in any direction</li>
+<li><strong>Model score boundedness</strong>: Each component <span class="arithmatex">\(s_\theta(x)_i\)</span> grows at most polynomially as <span class="arithmatex">\(\|x\| \to \infty\)</span></li>
+<li><strong>Product decay</strong>: The product <span class="arithmatex">\(s_\theta(x)_i \cdot p_{data}(x) \to 0\)</span> as <span class="arithmatex">\(\|x\| \to \infty\)</span> for each component</li>
+</ol>
+<p>These assumptions ensure that the boundary terms vanish for all components, allowing us to apply integration by parts component-wise.</p>
+<p>Summing over all components:</p>
+<div class="arithmatex">\[\sum_{i=1}^d \mathbb{E}_{x \sim p_{data}} \left[ s_\theta(x)_i \cdot s_{data}(x)_i \right] = -\sum_{i=1}^d \mathbb{E}_{x \sim p_{data}} \left[ \frac{\partial}{\partial x_i} s_\theta(x)_i \right] = -\mathbb{E}_{x \sim p_{data}} \left[ \text{tr}(\nabla_x s_\theta(x)) \right]\]</div>
+<p>where <span class="arithmatex">\(\text{tr}(\nabla_x s_\theta(x)) = \sum_{i=1}^d \frac{\partial}{\partial x_i} s_\theta(x)_i\)</span> is the trace of the Jacobian matrix of the score function.</p>
+<p>Substituting back into the original objective:</p>
+<div class="arithmatex">\[\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \|\nabla_x \log p_\theta(x)\|^2 + \text{tr}(\nabla_x \nabla_x \log p_\theta(x)) \right] + \text{constant}\]</div>
+<p>where the constant term <span class="arithmatex">\(\frac{1}{2} \mathbb{E}_{x \sim p_{data}} \left[ \|\nabla_x \log p_{data}(x)\|^2 \right]\)</span> doesn't depend on <span class="arithmatex">\(\theta\)</span> and can be ignored during optimization.</p>
+<p><strong>Key Insight</strong>: The multivariate case introduces the trace of the Hessian matrix <span class="arithmatex">\(\text{tr}(\nabla_x \nabla_x \log p_\theta(x))\)</span>.</p>
+<h3 id="score-matching-algorithm">Score Matching Algorithm</h3>
+<p>The score matching algorithm follows these steps:</p>
+<p><strong>Sample a mini-batch of datapoints</strong>: <span class="arithmatex">\(\{x_1, x_2, \ldots, x_n\} \sim p_{data}(x)\)</span></p>
+<p><strong>Estimate the score matching loss with the empirical mean</strong>: </p>
+<div class="arithmatex">\[\mathcal{L}_{SM}(\theta) \approx \frac{1}{n} \sum_{i=1}^n \left[ \frac{1}{2} \|\nabla_x \log p_\theta(x_i)\|^2 + \text{tr}(\nabla_x \nabla_x \log p_\theta(x_i)) \right]\]</div>
+<p><strong>Stochastic gradient descent</strong>: Update parameters using gradients of the estimated loss</p>
+<p><strong>Advantages:</strong>
+* <strong>No need to sample from EBM</strong>: Unlike other training methods for energy-based models, score matching doesn't require generating samples from the model during training. This avoids the computational expense and potential instability of MCMC sampling.
+* <strong>Direct optimization</strong>: The objective directly measures how well the model's score function matches the data distribution's score function.
+* <strong>Theoretically sound</strong>: Score matching provides a consistent estimator under mild conditions.</p>
+<p><strong>Disadvantages:</strong>
+* <strong>Computing the Hessian is expensive</strong>: The term <span class="arithmatex">\(\text{tr}(\nabla_x \nabla_x \log p_\theta(x))\)</span> requires computing second derivatives, which scales quadratically with the input dimension and can be computationally prohibitive for large models.
+* <strong>Memory requirements</strong>: Storing and computing Hessians for large neural networks requires significant memory.
+* <strong>Numerical instability</strong>: Second derivatives can be numerically unstable, especially for deep networks.</p>
+<p><strong>Computational Complexity:</strong>
+For a model with <span class="arithmatex">\(d\)</span> input dimensions and <span class="arithmatex">\(m\)</span> parameters, computing the Hessian trace requires <span class="arithmatex">\(O(d^2 \cdot m)\)</span> operations, making it impractical for high-dimensional data like images.</p>
+<h2 id="recap-distances-for-training-ebms">Recap: Distances for Training EBMs</h2>
+<p>When training Energy-Based Models, we need to measure how close our model distribution <span class="arithmatex">\(p_\theta(x)\)</span> is to the data distribution <span class="arithmatex">\(p_{data}(x)\)</span>. Here are the main approaches:</p>
+<h3 id="contrastive-divergence">Contrastive Divergence</h3>
+<p>Contrastive divergence measures the difference between the data distribution and the model distribution using KL divergence:</p>
+<div class="arithmatex">\[\mathcal{L}_{CD}(\theta) = D_{KL}(p_{data}(x) \| p_\theta(x)) - D_{KL}(p_\theta(x) \| p_{data}(x))\]</div>
+<p><strong>Key insight</strong>: This objective encourages the model to match the data distribution while preventing mode collapse.</p>
+<p><strong>Challenge</strong>: Computing the KL divergence requires sampling from the model distribution <span class="arithmatex">\(p_\theta(x)\)</span>, which is typically done using MCMC methods like Langevin dynamics or Hamiltonian Monte Carlo.</p>
+<h3 id="fisher-divergence-score-matching">Fisher Divergence (Score Matching)</h3>
+<p>Fisher divergence measures the difference between the score functions (gradients of log densities) of the two distributions:</p>
+<div class="arithmatex">\[\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \|\nabla_x \log p_\theta(x) - \nabla_x \log p_{data}(x)\|^2 \right]\]</div>
+<p><strong>Key insight</strong>: Instead of comparing probability densities directly, we compare their gradients, which avoids the need to compute the intractable partition function.</p>
+<p><strong>Advantage</strong>: No need to sample from the model during training, making it computationally more efficient than contrastive divergence.</p>
+<p><strong>Challenge</strong>: Requires computing second derivatives (Hessian) of the log probability, which can be expensive for high-dimensional data.</p>
 <h2 id="noise-contrastive-estimation">Noise Contrastive Estimation</h2>
-<h2 id="training-score-based-models">Training Score Based Models</h2>
+<p><strong>Learning an EBM by contrasting it with a noise distribution.</strong></p>
+<p>We have the data distribution <span class="arithmatex">\(p_{data}(x)\)</span>. We have the noise distribution <span class="arithmatex">\(p_n(x)\)</span> which should be analytically tractable and easy to sample from. We train a discriminator <span class="arithmatex">\(D_\theta(x) \in [0, 1]\)</span> to distinguish between data samples and noise samples.</p>
+<h3 id="gan-objective">GAN Objective</h3>
+<p>The discriminator is trained to maximize the probability of correctly classifying data and noise samples. The objective is:</p>
+<div class="arithmatex">\[\mathcal{L}_{NCE}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \log D_\theta(x) \right] + \mathbb{E}_{x \sim p_n} \left[ \log(1 - D_\theta(x)) \right]\]</div>
+<p>This is the standard binary cross-entropy loss for binary classification, where <span class="arithmatex">\(D_\theta(x)\)</span> represents the probability that <span class="arithmatex">\(x\)</span> comes from the data distribution and <span class="arithmatex">\(1 - D_\theta(x)\)</span> represents the probability that <span class="arithmatex">\(x\)</span> comes from the noise distribution.</p>
+<h3 id="optimal-discriminator">Optimal Discriminator</h3>
+<p>The optimal discriminator <span class="arithmatex">\(D^*(x)\)</span> that maximizes this objective is given by:</p>
+<div class="arithmatex">\[D^*(x) = \frac{p_{data}(x)}{p_{data}(x) + p_n(x)}\]</div>
+<p><strong>Connection to Model Distribution:</strong></p>
+<p>By training the discriminator, we are implicitly learning <span class="arithmatex">\(p_\theta(x)\)</span> which approximates <span class="arithmatex">\(p_{data}(x)\)</span>. Here's how this works:</p>
+<ul>
+<li>
+<p><strong>Discriminator as Ratio Estimator</strong>: The optimal discriminator <span class="arithmatex">\(D^*(x)\)</span> represents the ratio of data probability to the sum of data and noise probabilities.</p>
+</li>
+<li>
+<p><strong>Model Distribution Recovery</strong>: If we parameterize our model distribution as <span class="arithmatex">\(p_\theta(x) = \frac{e^{f_\theta(x)}}{Z(\theta)}\)</span>, then the discriminator learns to approximate:</p>
+</li>
+</ul>
+<div class="arithmatex">\[D_\theta(x) = \frac{e^{f_\theta(x)}}{e^{f_\theta(x)} + p_n(x)}\]</div>
+<p>The partition function <span class="arithmatex">\(Z(\theta)\)</span> disappears because we parameterize the discriminator directly in terms of the unnormalized energy function <span class="arithmatex">\(e^{f_\theta(x)}\)</span>, not the normalized probability <span class="arithmatex">\(p_\theta(x) = \frac{e^{f_\theta(x)}}{Z(\theta)}\)</span>.</p>
+<p>If we had used the normalized probability, we would have:</p>
+<div class="arithmatex">\[D_\theta(x) = \frac{p_\theta(x)}{p_\theta(x) + p_n(x)} = \frac{\frac{e^{f_\theta(x)}}{Z(\theta)}}{\frac{e^{f_\theta(x)}}{Z(\theta)} + p_n(x)} = \frac{e^{f_\theta(x)}}{e^{f_\theta(x)} + Z(\theta) \cdot p_n(x)}\]</div>
+<p>But by parameterizing directly with <span class="arithmatex">\(e^{f_\theta(x)}\)</span>, we avoid the need to compute <span class="arithmatex">\(Z(\theta)\)</span> entirely. This is the key advantage of noise contrastive estimation - it sidesteps the intractable partition function by working with unnormalized probabilities.</p>
+<div class="arithmatex">\[D_\theta(x) \approx \frac{p_{data}(x)}{p_{data}(x) + p_n(x)}\]</div>
+<ul>
+<li><strong>Energy Function Learning</strong>: Through the discriminator training, the function <span class="arithmatex">\(f_\theta(x)\)</span> learns to capture the structure of the data distribution, effectively becoming an energy function that represents <span class="arithmatex">\(\log p_{data}(x)\)</span> up to a constant.</li>
+</ul>
+<p><strong>Key Insight</strong>: The discriminator training process transforms the intractable problem of learning <span class="arithmatex">\(p_\theta(x)\)</span> directly into a tractable binary classification problem, where the learned discriminator implicitly encodes the energy function of the data distribution.</p>
 <h2 id="denoising-slicing-score-matching">Denoising &amp; Slicing Score Matching</h2>
 
 
