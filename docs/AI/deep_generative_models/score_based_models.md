@@ -1,6 +1,4 @@
 # Score Based Models
-Goal: Training without sampling. 
-Alternative to Contrastive Divergence. Loss function does not involve some partition function.
 
 ## Score Matching
 
@@ -97,6 +95,49 @@ $$\|s_\theta(x) - s_{data}(x)\|^2 = \sum_{i=1}^d (s_\theta(x)_i - s_{data}(x)_i)
 
 where $d$ is the dimension of the data space.
 
+**Score matching** is a method for training Energy-Based Models by minimizing the Fisher divergence between the data distribution $p_{data}(x)$ and the model distribution $p_\theta(x)$:
+
+$$\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \|s_\theta(x) - s_{data}(x)\|^2 \right]$$
+
+where $s_\theta(x) = \nabla_x \log p_\theta(x)$ and $s_{data}(x) = \nabla_x \log p_{data}(x)$ are the score functions of the model and data distributions respectively.
+
+But how do we figure out $\nabla_x \log p_{data}(x)$ given only samples?
+
+**Score Matching Reformulation (Univariate Case)**
+
+For the univariate case where $x \in \mathbb{R}$, we can rewrite the score matching objective to avoid needing the data score. Let's expand the squared difference:
+
+$$\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \left(\frac{d}{dx} \log p_\theta(x) - \frac{d}{dx} \log p_{data}(x)\right)^2 \right]$$
+
+Expanding the square:
+
+$$\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \left(\frac{d}{dx} \log p_\theta(x)\right)^2 - \frac{d}{dx} \log p_\theta(x) \cdot \frac{d}{dx} \log p_{data}(x) + \frac{1}{2} \left(\frac{d}{dx} \log p_{data}(x)\right)^2 \right]$$
+
+The key insight is to use integration by parts on the cross term. For any function $f(x)$ and $g(x)$:
+
+$$\int f(x) \frac{d}{dx} g(x) dx = f(x)g(x) - \int \frac{d}{dx} f(x) \cdot g(x) dx$$
+
+Setting $f(x) = \frac{d}{dx} \log p_\theta(x)$ and $g(x) = p_{data}(x)$, we get:
+
+$$\mathbb{E}_{x \sim p_{data}} \left[ \frac{d}{dx} \log p_\theta(x) \cdot \frac{d}{dx} \log p_{data}(x) \right] = \int \frac{d}{dx} \log p_\theta(x) \cdot \frac{d}{dx} \log p_{data}(x) \cdot p_{data}(x) dx$$
+
+$$= \int \frac{d}{dx} \log p_\theta(x) \cdot \frac{d}{dx} p_{data}(x) dx$$
+
+Using integration by parts:
+
+$$= \left. \frac{d}{dx} \log p_\theta(x) \cdot p_{data}(x) \right|_{-\infty}^{\infty} - \int \frac{d^2}{dx^2} \log p_\theta(x) \cdot p_{data}(x) dx$$
+
+Assuming the boundary term vanishes (which is reasonable for well-behaved distributions), we get:
+
+$$\mathbb{E}_{x \sim p_{data}} \left[ \frac{d}{dx} \log p_\theta(x) \cdot \frac{d}{dx} \log p_{data}(x) \right] = -\mathbb{E}_{x \sim p_{data}} \left[ \frac{d^2}{dx^2} \log p_\theta(x) \right]$$
+
+Substituting back into the original objective:
+
+$$\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \left(\frac{d}{dx} \log p_\theta(x)\right)^2 + \frac{d^2}{dx^2} \log p_\theta(x) \right] + \text{constant}$$
+
+where the constant term $\frac{1}{2} \mathbb{E}_{x \sim p_{data}} \left[ \left(\frac{d}{dx} \log p_{data}(x)\right)^2 \right]$ doesn't depend on $\theta$ and can be ignored during optimization.
+
+**Key Insight**: This reformulation allows us to train the model using only samples from $p_{data}(x)$ and the derivatives of our model's log probability, without needing access to the data score function.
 
 ## Noise Contrastive Estimation
 ## Training Score Based Models

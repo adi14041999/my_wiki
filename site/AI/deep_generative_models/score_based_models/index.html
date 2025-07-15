@@ -876,8 +876,6 @@
 
 
 <h1 id="score-based-models">Score Based Models</h1>
-<p>Goal: Training without sampling. 
-Alternative to Contrastive Divergence. Loss function does not involve some partition function.</p>
 <h2 id="score-matching">Score Matching</h2>
 <p><strong>Energy-Based Model Probability Distribution</strong></p>
 <p>In Energy-Based Models, the probability distribution is defined as:</p>
@@ -948,6 +946,28 @@ Alternative to Contrastive Divergence. Loss function does not involve some parti
 <p>The L2 norm <span class="arithmatex">\(\|s_\theta(x) - s_{data}(x)\|^2\)</span> measures the squared Euclidean distance between two vectors:</p>
 <div class="arithmatex">\[\|s_\theta(x) - s_{data}(x)\|^2 = \sum_{i=1}^d (s_\theta(x)_i - s_{data}(x)_i)^2\]</div>
 <p>where <span class="arithmatex">\(d\)</span> is the dimension of the data space.</p>
+<p><strong>Score matching</strong> is a method for training Energy-Based Models by minimizing the Fisher divergence between the data distribution <span class="arithmatex">\(p_{data}(x)\)</span> and the model distribution <span class="arithmatex">\(p_\theta(x)\)</span>:</p>
+<div class="arithmatex">\[\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \|s_\theta(x) - s_{data}(x)\|^2 \right]\]</div>
+<p>where <span class="arithmatex">\(s_\theta(x) = \nabla_x \log p_\theta(x)\)</span> and <span class="arithmatex">\(s_{data}(x) = \nabla_x \log p_{data}(x)\)</span> are the score functions of the model and data distributions respectively.</p>
+<p>But how do we figure out <span class="arithmatex">\(\nabla_x \log p_{data}(x)\)</span> given only samples?</p>
+<p><strong>Score Matching Reformulation (Univariate Case)</strong></p>
+<p>For the univariate case where <span class="arithmatex">\(x \in \mathbb{R}\)</span>, we can rewrite the score matching objective to avoid needing the data score. Let's expand the squared difference:</p>
+<div class="arithmatex">\[\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \left(\frac{d}{dx} \log p_\theta(x) - \frac{d}{dx} \log p_{data}(x)\right)^2 \right]\]</div>
+<p>Expanding the square:</p>
+<div class="arithmatex">\[\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \left(\frac{d}{dx} \log p_\theta(x)\right)^2 - \frac{d}{dx} \log p_\theta(x) \cdot \frac{d}{dx} \log p_{data}(x) + \frac{1}{2} \left(\frac{d}{dx} \log p_{data}(x)\right)^2 \right]\]</div>
+<p>The key insight is to use integration by parts on the cross term. For any function <span class="arithmatex">\(f(x)\)</span> and <span class="arithmatex">\(g(x)\)</span>:</p>
+<div class="arithmatex">\[\int f(x) \frac{d}{dx} g(x) dx = f(x)g(x) - \int \frac{d}{dx} f(x) \cdot g(x) dx\]</div>
+<p>Setting <span class="arithmatex">\(f(x) = \frac{d}{dx} \log p_\theta(x)\)</span> and <span class="arithmatex">\(g(x) = p_{data}(x)\)</span>, we get:</p>
+<div class="arithmatex">\[\mathbb{E}_{x \sim p_{data}} \left[ \frac{d}{dx} \log p_\theta(x) \cdot \frac{d}{dx} \log p_{data}(x) \right] = \int \frac{d}{dx} \log p_\theta(x) \cdot \frac{d}{dx} \log p_{data}(x) \cdot p_{data}(x) dx\]</div>
+<div class="arithmatex">\[= \int \frac{d}{dx} \log p_\theta(x) \cdot \frac{d}{dx} p_{data}(x) dx\]</div>
+<p>Using integration by parts:</p>
+<div class="arithmatex">\[= \left. \frac{d}{dx} \log p_\theta(x) \cdot p_{data}(x) \right|_{-\infty}^{\infty} - \int \frac{d^2}{dx^2} \log p_\theta(x) \cdot p_{data}(x) dx\]</div>
+<p>Assuming the boundary term vanishes (which is reasonable for well-behaved distributions), we get:</p>
+<div class="arithmatex">\[\mathbb{E}_{x \sim p_{data}} \left[ \frac{d}{dx} \log p_\theta(x) \cdot \frac{d}{dx} \log p_{data}(x) \right] = -\mathbb{E}_{x \sim p_{data}} \left[ \frac{d^2}{dx^2} \log p_\theta(x) \right]\]</div>
+<p>Substituting back into the original objective:</p>
+<div class="arithmatex">\[\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \left(\frac{d}{dx} \log p_\theta(x)\right)^2 + \frac{d^2}{dx^2} \log p_\theta(x) \right] + \text{constant}\]</div>
+<p>where the constant term <span class="arithmatex">\(\frac{1}{2} \mathbb{E}_{x \sim p_{data}} \left[ \left(\frac{d}{dx} \log p_{data}(x)\right)^2 \right]\)</span> doesn't depend on <span class="arithmatex">\(\theta\)</span> and can be ignored during optimization.</p>
+<p><strong>Key Insight</strong>: This reformulation allows us to train the model using only samples from <span class="arithmatex">\(p_{data}(x)\)</span> and the derivatives of our model's log probability, without needing access to the data score function.</p>
 <h2 id="noise-contrastive-estimation">Noise Contrastive Estimation</h2>
 <h2 id="training-score-based-models">Training Score Based Models</h2>
 <h2 id="denoising-slicing-score-matching">Denoising &amp; Slicing Score Matching</h2>
