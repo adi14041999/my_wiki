@@ -544,4 +544,24 @@ This reformulation allows us to train the score function using only samples from
 
 The computational cost of the second term makes score matching challenging for high-dimensional data, which motivates alternative approaches like denoising score matching and sliced score matching.
 
-## Denoising & Slicing Score Matching
+##Denoising & Slicing Score Matching
+
+###Denoising Score Matching
+
+Denoising score matching addresses the computational challenges of standard score matching by adding noise to the data.
+
+**The Key Idea:**
+
+Instead of trying to learn the score function of the original data distribution $p_{data}(x)$, we learn the score function of a noisy version of the data.
+
+**Noise Distribution:**
+
+We define a noise distribution $q_\sigma(\tilde{x} | x)$ that adds noise to clean data points. A common choice is Gaussian noise:
+
+$$q_\sigma(\tilde{x} | x) = \mathcal{N}(\tilde{x}; x, \sigma^2 I)$$
+
+This means: $\tilde{x} = x + \epsilon$ where $\epsilon \sim \mathcal{N}(0, \sigma^2 I)$
+
+The noisy data distribution $q_\sigma(\tilde{x})$ is obtained by convolving the original data distribution $p_{data}(x)$ with the noise distribution $q_\sigma(\tilde{x} | x)$.
+
+$$q_\sigma(\tilde{x}) = \int q_\sigma(\tilde{x} | x) p_{data}(x) dx$$

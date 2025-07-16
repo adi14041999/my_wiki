@@ -784,6 +784,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Denoising &amp; Slicing Score Matching">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#denoising-score-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      Denoising Score Matching
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -1321,6 +1336,16 @@ For a model with <span class="arithmatex">\(d\)</span> input dimensions and <spa
 <p>This reformulation allows us to train the score function using only samples from <span class="arithmatex">\(p_{data}(x)\)</span> and the derivatives of our score model, without needing access to the true score function <span class="arithmatex">\(s_{data}(x)\)</span>.</p>
 <p>The computational cost of the second term makes score matching challenging for high-dimensional data, which motivates alternative approaches like denoising score matching and sliced score matching.</p>
 <h2 id="denoising-slicing-score-matching">Denoising &amp; Slicing Score Matching</h2>
+<h3 id="denoising-score-matching">Denoising Score Matching</h3>
+<p>Denoising score matching addresses the computational challenges of standard score matching by adding noise to the data.</p>
+<p><strong>The Key Idea:</strong></p>
+<p>Instead of trying to learn the score function of the original data distribution <span class="arithmatex">\(p_{data}(x)\)</span>, we learn the score function of a noisy version of the data.</p>
+<p><strong>Noise Distribution:</strong></p>
+<p>We define a noise distribution <span class="arithmatex">\(q_\sigma(\tilde{x} | x)\)</span> that adds noise to clean data points. A common choice is Gaussian noise:</p>
+<div class="arithmatex">\[q_\sigma(\tilde{x} | x) = \mathcal{N}(\tilde{x}; x, \sigma^2 I)\]</div>
+<p>This means: <span class="arithmatex">\(\tilde{x} = x + \epsilon\)</span> where <span class="arithmatex">\(\epsilon \sim \mathcal{N}(0, \sigma^2 I)\)</span></p>
+<p>The noisy data distribution <span class="arithmatex">\(q_\sigma(\tilde{x})\)</span> is obtained by convolving the original data distribution <span class="arithmatex">\(p_{data}(x)\)</span> with the noise distribution <span class="arithmatex">\(q_\sigma(\tilde{x} | x)\)</span>.</p>
+<div class="arithmatex">\[q_\sigma(\tilde{x}) = \int q_\sigma(\tilde{x} | x) p_{data}(x) dx\]</div>
 
 
 
