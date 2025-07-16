@@ -258,15 +258,7 @@ $$\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \|\
 
 **Learning an EBM by contrasting it with a noise distribution.**
 
-We have the data distribution $p_{data}(x)$. We have the noise distribution $p_n(x)$ which should be analytically tractable and easy to sample from. We train a discriminator $D_\theta(x) \in [0, 1]$ to distinguish between data samples and noise samples.
-
-### GAN Objective
-
-The discriminator is trained to maximize the probability of correctly classifying data and noise samples. The objective is:
-
-$$\mathcal{L}_{NCE}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \log D_\theta(x) \right] + \mathbb{E}_{x \sim p_n} \left[ \log(1 - D_\theta(x)) \right]$$
-
-This is the standard binary cross-entropy loss for binary classification, where $D_\theta(x)$ represents the probability that $x$ comes from the data distribution and $1 - D_\theta(x)$ represents the probability that $x$ comes from the noise distribution.
+We have the data distribution $p_{data}(x)$. We have the noise distribution $p_n(x)$ which should be analytically tractable and easy to sample from. We can train a discriminator $D(x) \in [0, 1]$ to distinguish between data samples and noise samples.
 
 ### Optimal Discriminator
 
@@ -274,28 +266,175 @@ The optimal discriminator $D^*(x)$ that maximizes this objective is given by:
 
 $$D^*(x) = \frac{p_{data}(x)}{p_{data}(x) + p_n(x)}$$
 
-**Connection to Model Distribution:**
+### Parameterizing the Discriminator as an EBM
 
-By training the discriminator, we are implicitly learning $p_\theta(x)$ which approximates $p_{data}(x)$. Here's how this works:
+**Key Insight**: Instead of training a separate discriminator, we can parameterize it directly in terms of an Energy-Based Model.
 
-* **Discriminator as Ratio Estimator**: The optimal discriminator $D^*(x)$ represents the ratio of data probability to the sum of data and noise probabilities.
+Let's define a parameterized version of the discriminator as:
 
-* **Model Distribution Recovery**: If we parameterize our model distribution as $p_\theta(x) = \frac{e^{f_\theta(x)}}{Z(\theta)}$, then the discriminator learns to approximate:
+$$D_\theta(x) = \frac{p_\theta(x)}{p_\theta(x) + p_n(x)}$$
 
-$$D_\theta(x) = \frac{e^{f_\theta(x)}}{e^{f_\theta(x)} + p_n(x)}$$
+where $p_\theta(x) = \frac{1}{Z(\theta)} e^{f_\theta(x)}$ is our Energy-Based Model.
 
-The partition function $Z(\theta)$ disappears because we parameterize the discriminator directly in terms of the unnormalized energy function $e^{f_\theta(x)}$, not the normalized probability $p_\theta(x) = \frac{e^{f_\theta(x)}}{Z(\theta)}$.
+**Implicit Learning of the Data Distribution**
 
-If we had used the normalized probability, we would have:
+By training the discriminator $D_\theta(x)$ to distinguish between data samples and noise samples, we are implicitly learning the Energy-Based Model $p_\theta(x)$ to approximate the true data distribution $p_{data}(x)$.
 
-$$D_\theta(x) = \frac{p_\theta(x)}{p_\theta(x) + p_n(x)} = \frac{\frac{e^{f_\theta(x)}}{Z(\theta)}}{\frac{e^{f_\theta(x)}}{Z(\theta)} + p_n(x)} = \frac{e^{f_\theta(x)}}{e^{f_\theta(x)} + Z(\theta) \cdot p_n(x)}$$
+**Why This Works:**
 
-But by parameterizing directly with $e^{f_\theta(x)}$, we avoid the need to compute $Z(\theta)$ entirely. This is the key advantage of noise contrastive estimation - it sidesteps the intractable partition function by working with unnormalized probabilities.
+Recall that the optimal discriminator (when trained to perfection) satisfies:
 
-$$D_\theta(x) \approx \frac{p_{data}(x)}{p_{data}(x) + p_n(x)}$$
+$$D^*(x) = \frac{p_{data}(x)}{p_{data}(x) + p_n(x)}$$
 
-* **Energy Function Learning**: Through the discriminator training, the function $f_\theta(x)$ learns to capture the structure of the data distribution, effectively becoming an energy function that represents $\log p_{data}(x)$ up to a constant.
+But we've parameterized our discriminator as:
 
-**Key Insight**: The discriminator training process transforms the intractable problem of learning $p_\theta(x)$ directly into a tractable binary classification problem, where the learned discriminator implicitly encodes the energy function of the data distribution.
+$$D_\theta(x) = \frac{p_\theta(x)}{p_\theta(x) + p_n(x)}$$
 
-## Denoising & Slicing Score Matching
+**The Key Insight**: When we train $D_\theta(x)$ to match the optimal discriminator $D^*(x)$, we're essentially forcing:
+
+$$\frac{p_\theta(x)}{p_\theta(x) + p_n(x)} \approx \frac{p_{data}(x)}{p_{data}(x) + p_n(x)}$$
+
+This equality holds if and only if $p_\theta(x) \approx p_{data}(x)$ (assuming $p_n(x) > 0$ everywhere).
+
+**Mathematical Justification:**
+
+If $\frac{p_\theta(x)}{p_\theta(x) + p_n(x)} = \frac{p_{data}(x)}{p_{data}(x) + p_n(x)}$, then:
+
+$$p_\theta(x) \cdot (p_{data}(x) + p_n(x)) = p_{data}(x) \cdot (p_\theta(x) + p_n(x))$$
+
+$$p_\theta(x) \cdot p_{data}(x) + p_\theta(x) \cdot p_n(x) = p_{data}(x) \cdot p_\theta(x) + p_{data}(x) \cdot p_n(x)$$
+
+$$p_\theta(x) \cdot p_n(x) = p_{data}(x) \cdot p_n(x)$$
+
+Since $p_n(x) > 0$, we can divide both sides to get:
+
+$$p_\theta(x) = p_{data}(x)$$
+
+**Modeling the Partition Function as a Trainable Parameter**
+
+**The EBM Equation:**
+
+Our Energy-Based Model is defined as:
+
+$$p_\theta(x) = \frac{1}{Z(\theta)} e^{f_\theta(x)}$$
+
+where $f_\theta(x)$ is the energy function (neural network) and $Z(\theta) = \int e^{f_\theta(x)} dx$ is the partition function.
+
+**The Partition Function Constraint Problem:**
+
+The constraint $Z(\theta) = \int e^{f_\theta(x)} dx$ is computationally intractable to satisfy exactly because:
+
+1. **High-dimensional integration**: Computing $\int e^{f_\theta(x)} dx$ over high-dimensional spaces is extremely expensive
+2. **No closed form**: For complex energy functions, there's no analytical solution
+3. **Dynamic updates**: The integral changes every time we update the energy function parameters
+
+**Solution: Treat Z as a Trainable Parameter**
+
+Instead of enforcing the constraint, we model $Z(\theta)$ as an additional trainable parameter $Z$ that is not explicitly constrained to satisfy $Z = \int e^{f_\theta(x)} dx$.
+
+This gives us the modified EBM:
+
+$$p_{\theta, Z}(x) = \frac{e^{f_\theta(x)}}{Z}$$
+
+**Why Z Converges to the Correct Partition Function:**
+
+As we train $p_{\theta, Z}(x)$ to approximate $p_{data}(x)$, the parameter $Z$ automatically converges to the correct partition function value.
+
+**Mathematical Justification:**
+
+When training converges, we have $p_{\theta, Z}(x) \approx p_{data}(x)$. This means:
+
+$$\frac{e^{f_\theta(x)}}{Z} \approx p_{data}(x)$$
+
+A direct argument comes from the fact that $p_{\theta, Z}(x)$ must approximate $p_{data}(x)$, which must integrate to 1:
+
+$$\int p_{\theta, Z}(x) dx = \int \frac{e^{f_\theta(x)}}{Z} dx \approx 1$$
+
+This immediately gives us:
+
+$$Z \approx \int e^{f_\theta(x)} dx$$
+
+**Deriving the Discriminator for the Modified EBM**
+
+Now let's derive the discriminator $D_{\theta, Z}(x)$ for our modified EBM $p_{\theta, Z}(x) = \frac{e^{f_\theta(x)}}{Z}$.
+
+Starting with the discriminator definition:
+
+$$D_{\theta, Z}(x) = \frac{p_{\theta, Z}(x)}{p_{\theta, Z}(x) + p_n(x)}$$
+
+Substituting our modified EBM:
+
+$$D_{\theta, Z}(x) = \frac{\frac{e^{f_\theta(x)}}{Z}}{\frac{e^{f_\theta(x)}}{Z} + p_n(x)}$$
+
+$$D_{\theta, Z}(x) = \frac{e^{f_\theta(x)}}{e^{f_\theta(x)} + Z \cdot p_n(x)}$$
+
+**Noise Contrastive Estimation Training Objective**
+
+The NCE objective maximizes the log-likelihood of correctly classifying data vs noise samples:
+
+$$\mathcal{L}_{NCE}(\theta, Z) = \mathbb{E}_{x \sim p_{data}} \left[ \log D_{\theta, Z}(x) \right] + \mathbb{E}_{x \sim p_n} \left[ \log(1 - D_{\theta, Z}(x)) \right]$$
+
+In theory, we could have any noise distribution to make this work. But in pratice, a noise distribution that similar (if we can manage) to the data distribution works very well. At the end of the day you learn an EBM and you learn a partition function. In the limit of infinite data and perfect optimization, the EBM matches the data distribution and Z matches the true partition function of the EBM.
+
+There is no evolving Generator like we had in GAN. The generator here is fixed, which is the noise distribution. We are training a special Discriminator.
+
+Note: The NCE objective function does not guide us to sample any data. We still need to use something like MCMC (e.g., Langevin dynamics, Hamiltonian Monte Carlo) to generate samples from the trained EBM. NCE only provides a way to train the energy function and partition function without computing the intractable partition function integral.
+
+Substituting our discriminator:
+
+$$\mathcal{L}_{NCE}(\theta, Z) = \mathbb{E}_{x \sim p_{data}} \left[ \log \frac{e^{f_\theta(x)}}{e^{f_\theta(x)} + Z \cdot p_n(x)} \right] + \mathbb{E}_{x \sim p_n} \left[ \log \frac{Z \cdot p_n(x)}{e^{f_\theta(x)} + Z \cdot p_n(x)} \right]$$
+
+Using the sigmoid formulation with $h_{\theta, Z}(x) = f_\theta(x) - \log p_n(x) - \log Z$:
+
+$$\mathcal{L}_{NCE}(\theta, Z) = \mathbb{E}_{x \sim p_{data}} \left[ \log \sigma(h_{\theta, Z}(x)) \right] + \mathbb{E}_{x \sim p_n} \left[ \log(1 - \sigma(h_{\theta, Z}(x))) \right]$$
+
+This is exactly the binary cross-entropy loss for a binary classifier that distinguishes between data and noise samples.
+
+**Training Algorithm**:
+
+1. Sample data batch: $\{x_1, x_2, \ldots, x_n\} \sim p_{data}(x)$
+
+2. Sample noise batch: $\{\tilde{x}_1, \tilde{x}_2, \ldots, \tilde{x}_n\} \sim p_n(x)$
+
+3. Compute logits: $h_{\theta, Z}(x_i)$ and $h_{\theta, Z}(\tilde{x}_i)$
+
+4. Compute binary cross-entropy loss
+
+5. Update both $\theta$ (energy function parameters) and $Z$ (partition function parameter) via gradient descent
+
+**Key Advantage**: Unlike other EBM training methods (like contrastive divergence), NCE does not require sampling from the EBM during the training process. This eliminates the computational expense and potential instability of MCMC sampling during training, making NCE much more efficient and stable.
+
+## Comparing NCE and GAN
+
+Both NCE and GANs use binary classification objectives to train generative models, but they differ significantly in their approach and properties.
+
+**Similarities**
+
+1. **Binary Classification Objective**: Both use binary cross-entropy loss to distinguish between real and fake samples
+2. **No Likelihood Computation**: Neither requires computing or maximizing explicit likelihood
+3. **Stable Training**: Both avoid the computational challenges of direct likelihood-based training
+
+**Key Differences**
+
+| Aspect | NCE | GAN |
+|--------|-----|-----|
+| **Generator** | Fixed noise distribution $p_n(x)$ | Learnable generator network $G_\phi(z)$ |
+| **Discriminator** | Parameterized as EBM: $D_{\theta,Z}(x) = \frac{e^{f_\theta(x)}}{e^{f_\theta(x)} + Z \cdot p_n(x)}$ | Separate neural network $D_\theta(x)$ |
+| **Training** | Single objective: $\mathcal{L}_{NCE}(\theta, Z)$ | Min-max game: $\min_G \max_D \mathcal{L}_{GAN}(G, D)$ |
+| **Sampling** | Requires MCMC after training | Direct sampling via generator |
+| **Mode Coverage** | Depends on noise distribution choice | Can adapt to cover all data modes |
+| **Convergence** | Single optimization problem | Requires careful balance between generator and discriminator |
+
+**When to Use Each**
+
+**Use NCE when:**
+- You need interpretable energy functions
+- Training stability is crucial
+- You want theoretical guarantees
+- You can afford MCMC sampling at inference time
+
+**Use GAN when:**
+- Fast sampling is required
+- You need high-quality, diverse samples
+- You have computational resources for adversarial training
+- You want to avoid MCMC entirely
