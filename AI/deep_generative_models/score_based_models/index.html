@@ -768,6 +768,24 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#training-score-based-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Training Score Based Models
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#denoising-slicing-score-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      Denoising &amp; Slicing Score Matching
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1243,6 +1261,66 @@ For a model with <span class="arithmatex">\(d\)</span> input dimensions and <spa
 - You need high-quality, diverse samples
 - You have computational resources for adversarial training
 - You want to avoid MCMC entirely</p>
+<h2 id="training-score-based-models">Training Score Based Models</h2>
+<p><strong>Is Score Matching Limited to EBMs?</strong></p>
+<p>No, score matching is not limited to Energy-Based Models. We can use score matching for other generative model types as well:</p>
+<ul>
+<li><strong>Autoregressive Models</strong>: Can be trained using score matching</li>
+<li><strong>Normalizing Flow Models</strong>: Can also be trained using score matching</li>
+<li><strong>Variational Autoencoders</strong>: Score matching can be applied to VAEs</li>
+</ul>
+<p><strong>But what's the point since likelihoods are tractable?</strong></p>
+<p>For models like autoregressive models and normalizing flows, the likelihood is indeed tractable, so we could use maximum likelihood estimation (MLE) instead of score matching. However, in principle, we could still train these models using score matching.</p>
+<p><strong>Practical Considerations:</strong>
+<strong>MLE is often preferred</strong> when likelihood is tractable because it's more direct and efficient. <strong>Score matching might be useful</strong> when the likelihood computation is numerically unstable</p>
+<p><strong>The core ddea of Score-Based Models</strong></p>
+<p>The fundamental insight behind score-based models is that instead of modeling the energy function or probability density directly, we model the <strong>score function</strong> <span class="arithmatex">\(s_\theta(x)\)</span>.</p>
+<p><strong>What is the Score Function?</strong></p>
+<p>The score function is the gradient of the log probability density:</p>
+<div class="arithmatex">\[s_\theta(x) = \nabla_x \log p_\theta(x)\]</div>
+<p><strong>Direct Modeling Approach:</strong></p>
+<p>Instead of learning an energy function <span class="arithmatex">\(f_\theta(x)\)</span> and computing <span class="arithmatex">\(s_\theta(x) = \nabla_x f_\theta(x)\)</span>, we directly model:</p>
+<div class="arithmatex">\[s_\theta(x): \mathbb{R}^d \rightarrow \mathbb{R}^d\]</div>
+<p>This is a <strong>vector-valued function</strong> that maps from the data space to the same space, representing the gradient field.</p>
+<p><strong>Key Properties:</strong></p>
+<ol>
+<li><strong>Vector Field</strong>: <span class="arithmatex">\(s_\theta(x)\)</span> is a vector field that assigns a gradient vector to each point <span class="arithmatex">\(x\)</span> in the data space</li>
+<li><strong>No Partition Function</strong>: We don't need to compute or approximate the partition function <span class="arithmatex">\(Z(\theta)\)</span></li>
+<li><strong>Direct Approximation</strong>: <span class="arithmatex">\(s_\theta(x) \approx \nabla_x \log p_{data}(x)\)</span></li>
+</ol>
+<p><img alt="Score Based Models" src="../score_based_models.png" /></p>
+<p><strong>Deriving the Score Matching Objective</strong></p>
+<p><strong>Fisher Divergence objective:</strong></p>
+<p>We want to minimize the Fisher divergence between the data distribution and the distribution induced by our score function:</p>
+<div class="arithmatex">\[\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \|s_\theta(x) - s_{data}(x)\|^2 \right]\]</div>
+<p>This measures how well our learned score function <span class="arithmatex">\(s_\theta(x)\)</span> approximates the true score function <span class="arithmatex">\(s_{data}(x) = \nabla_x \log p_{data}(x)\)</span>.</p>
+<p><strong>The Challenge:</strong></p>
+<p>We don't have access to <span class="arithmatex">\(s_{data}(x) = \nabla_x \log p_{data}(x)\)</span> since we only have samples from <span class="arithmatex">\(p_{data}(x)\)</span>, not its analytical form.</p>
+<p>We can rewrite the Fisher divergence to avoid needing the true score function. Let's expand the squared norm:</p>
+<div class="arithmatex">\[\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \|s_\theta(x)\|^2 - s_\theta(x)^T s_{data}(x) + \frac{1}{2} \|s_{data}(x)\|^2 \right]\]</div>
+<p>The key insight is to handle the cross term <span class="arithmatex">\(s_\theta(x)^T s_{data}(x)\)</span> using integration by parts.</p>
+<p>For the univariate case (<span class="arithmatex">\(x \in \mathbb{R}\)</span>), we have:</p>
+<div class="arithmatex">\[\mathbb{E}_{x \sim p_{data}} \left[ s_\theta(x) \cdot s_{data}(x) \right] = \int s_\theta(x) \cdot \frac{d}{dx} \log p_{data}(x) \cdot p_{data}(x) dx\]</div>
+<div class="arithmatex">\[= \int s_\theta(x) \cdot \frac{d}{dx} p_{data}(x) dx\]</div>
+<p>Using integration by parts: <span class="arithmatex">\(\int u \cdot \frac{d}{dx} v \, dx = u \cdot v - \int \frac{d}{dx} u \cdot v \, dx\)</span></p>
+<p>Setting <span class="arithmatex">\(u = s_\theta(x)\)</span> and <span class="arithmatex">\(v = p_{data}(x)\)</span>:</p>
+<div class="arithmatex">\[= \left. s_\theta(x) \cdot p_{data}(x) \right|_{-\infty}^{\infty} - \int \frac{d}{dx} s_\theta(x) \cdot p_{data}(x) dx\]</div>
+<p>Assuming the boundary term vanishes (reasonable for well-behaved distributions):</p>
+<div class="arithmatex">\[= -\mathbb{E}_{x \sim p_{data}} \left[ \frac{d}{dx} s_\theta(x) \right]\]</div>
+<p><strong>Multivariate Case:</strong></p>
+<p>For <span class="arithmatex">\(x \in \mathbb{R}^d\)</span>, we apply integration by parts component-wise:</p>
+<div class="arithmatex">\[\mathbb{E}_{x \sim p_{data}} \left[ s_\theta(x)^T s_{data}(x) \right] = \sum_{i=1}^d \mathbb{E}_{x \sim p_{data}} \left[ s_\theta(x)_i \cdot s_{data}(x)_i \right]\]</div>
+<div class="arithmatex">\[= -\sum_{i=1}^d \mathbb{E}_{x \sim p_{data}} \left[ \frac{\partial}{\partial x_i} s_\theta(x)_i \right]\]</div>
+<div class="arithmatex">\[= -\mathbb{E}_{x \sim p_{data}} \left[ \text{tr}(\nabla_x s_\theta(x)) \right]\]</div>
+<p>where <span class="arithmatex">\(\text{tr}(\nabla_x s_\theta(x)) = \sum_{i=1}^d \frac{\partial}{\partial x_i} s_\theta(x)_i\)</span> is the trace of the Jacobian matrix.</p>
+<p><strong>Final Score Matching Objective:</strong></p>
+<p>Substituting back into the Fisher divergence:</p>
+<div class="arithmatex">\[\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \|s_\theta(x)\|^2 + \text{tr}(\nabla_x s_\theta(x)) \right] + \text{constant}\]</div>
+<p>where the constant term <span class="arithmatex">\(\frac{1}{2} \mathbb{E}_{x \sim p_{data}} \left[ \|s_{data}(x)\|^2 \right]\)</span> doesn't depend on <span class="arithmatex">\(\theta\)</span> and can be ignored during optimization.</p>
+<p><strong>Key Insight:</strong></p>
+<p>This reformulation allows us to train the score function using only samples from <span class="arithmatex">\(p_{data}(x)\)</span> and the derivatives of our score model, without needing access to the true score function <span class="arithmatex">\(s_{data}(x)\)</span>.</p>
+<p>The computational cost of the second term makes score matching challenging for high-dimensional data, which motivates alternative approaches like denoising score matching and sliced score matching.</p>
+<h2 id="denoising-slicing-score-matching">Denoising &amp; Slicing Score Matching</h2>
 
 
 
