@@ -438,3 +438,110 @@ Both NCE and GANs use binary classification objectives to train generative model
 - You need high-quality, diverse samples
 - You have computational resources for adversarial training
 - You want to avoid MCMC entirely
+
+##Training Score Based Models
+
+**Is Score Matching Limited to EBMs?**
+
+No, score matching is not limited to Energy-Based Models. We can use score matching for other generative model types as well:
+
+- **Autoregressive Models**: Can be trained using score matching
+- **Normalizing Flow Models**: Can also be trained using score matching
+- **Variational Autoencoders**: Score matching can be applied to VAEs
+
+**But what's the point since likelihoods are tractable?**
+
+For models like autoregressive models and normalizing flows, the likelihood is indeed tractable, so we could use maximum likelihood estimation (MLE) instead of score matching. However, in principle, we could still train these models using score matching.
+
+**Practical Considerations:**
+**MLE is often preferred** when likelihood is tractable because it's more direct and efficient. **Score matching might be useful** when the likelihood computation is numerically unstable
+
+**The core ddea of Score-Based Models**
+
+The fundamental insight behind score-based models is that instead of modeling the energy function or probability density directly, we model the **score function** $s_\theta(x)$.
+
+**What is the Score Function?**
+
+The score function is the gradient of the log probability density:
+
+$$s_\theta(x) = \nabla_x \log p_\theta(x)$$
+
+**Direct Modeling Approach:**
+
+Instead of learning an energy function $f_\theta(x)$ and computing $s_\theta(x) = \nabla_x f_\theta(x)$, we directly model:
+
+$$s_\theta(x): \mathbb{R}^d \rightarrow \mathbb{R}^d$$
+
+This is a **vector-valued function** that maps from the data space to the same space, representing the gradient field.
+
+**Key Properties:**
+
+1. **Vector Field**: $s_\theta(x)$ is a vector field that assigns a gradient vector to each point $x$ in the data space
+2. **No Partition Function**: We don't need to compute or approximate the partition function $Z(\theta)$
+3. **Direct Approximation**: $s_\theta(x) \approx \nabla_x \log p_{data}(x)$
+
+![Score Based Models](score_based_models.png)
+
+**Deriving the Score Matching Objective**
+
+**Fisher Divergence objective:**
+
+We want to minimize the Fisher divergence between the data distribution and the distribution induced by our score function:
+
+$$\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \|s_\theta(x) - s_{data}(x)\|^2 \right]$$
+
+This measures how well our learned score function $s_\theta(x)$ approximates the true score function $s_{data}(x) = \nabla_x \log p_{data}(x)$.
+
+**The Challenge:**
+
+We don't have access to $s_{data}(x) = \nabla_x \log p_{data}(x)$ since we only have samples from $p_{data}(x)$, not its analytical form.
+
+We can rewrite the Fisher divergence to avoid needing the true score function. Let's expand the squared norm:
+
+$$\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \|s_\theta(x)\|^2 - s_\theta(x)^T s_{data}(x) + \frac{1}{2} \|s_{data}(x)\|^2 \right]$$
+
+The key insight is to handle the cross term $s_\theta(x)^T s_{data}(x)$ using integration by parts.
+
+For the univariate case ($x \in \mathbb{R}$), we have:
+
+$$\mathbb{E}_{x \sim p_{data}} \left[ s_\theta(x) \cdot s_{data}(x) \right] = \int s_\theta(x) \cdot \frac{d}{dx} \log p_{data}(x) \cdot p_{data}(x) dx$$
+
+$$= \int s_\theta(x) \cdot \frac{d}{dx} p_{data}(x) dx$$
+
+Using integration by parts: $\int u \cdot \frac{d}{dx} v \, dx = u \cdot v - \int \frac{d}{dx} u \cdot v \, dx$
+
+Setting $u = s_\theta(x)$ and $v = p_{data}(x)$:
+
+$$= \left. s_\theta(x) \cdot p_{data}(x) \right|_{-\infty}^{\infty} - \int \frac{d}{dx} s_\theta(x) \cdot p_{data}(x) dx$$
+
+Assuming the boundary term vanishes (reasonable for well-behaved distributions):
+
+$$= -\mathbb{E}_{x \sim p_{data}} \left[ \frac{d}{dx} s_\theta(x) \right]$$
+
+**Multivariate Case:**
+
+For $x \in \mathbb{R}^d$, we apply integration by parts component-wise:
+
+$$\mathbb{E}_{x \sim p_{data}} \left[ s_\theta(x)^T s_{data}(x) \right] = \sum_{i=1}^d \mathbb{E}_{x \sim p_{data}} \left[ s_\theta(x)_i \cdot s_{data}(x)_i \right]$$
+
+$$= -\sum_{i=1}^d \mathbb{E}_{x \sim p_{data}} \left[ \frac{\partial}{\partial x_i} s_\theta(x)_i \right]$$
+
+$$= -\mathbb{E}_{x \sim p_{data}} \left[ \text{tr}(\nabla_x s_\theta(x)) \right]$$
+
+where $\text{tr}(\nabla_x s_\theta(x)) = \sum_{i=1}^d \frac{\partial}{\partial x_i} s_\theta(x)_i$ is the trace of the Jacobian matrix.
+
+**Final Score Matching Objective:**
+
+Substituting back into the Fisher divergence:
+
+$$\mathcal{L}_{SM}(\theta) = \mathbb{E}_{x \sim p_{data}} \left[ \frac{1}{2} \|s_\theta(x)\|^2 + \text{tr}(\nabla_x s_\theta(x)) \right] + \text{constant}$$
+
+where the constant term $\frac{1}{2} \mathbb{E}_{x \sim p_{data}} \left[ \|s_{data}(x)\|^2 \right]$ doesn't depend on $\theta$ and can be ignored during optimization.
+
+**Key Insight:**
+
+This reformulation allows us to train the score function using only samples from $p_{data}(x)$ and the derivatives of our score model, without needing access to the true score function $s_{data}(x)$.
+
+The computational cost of the second term makes score matching challenging for high-dimensional data, which motivates alternative approaches like denoising score matching and sliced score matching.
+
+## Denoising & Slicing Score Matching
