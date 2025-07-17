@@ -544,9 +544,7 @@ This reformulation allows us to train the score function using only samples from
 
 The computational cost of the second term makes score matching challenging for high-dimensional data, which motivates alternative approaches like denoising score matching and sliced score matching.
 
-##Denoising & Slicing Score Matching
-
-###Denoising Score Matching
+##Denoising Score Matching
 
 Denoising score matching addresses the computational challenges of standard score matching by adding noise to the data.
 
@@ -562,6 +560,231 @@ $$q_\sigma(\tilde{x} | x) = \mathcal{N}(\tilde{x}; x, \sigma^2 I)$$
 
 This means: $\tilde{x} = x + \epsilon$ where $\epsilon \sim \mathcal{N}(0, \sigma^2 I)$
 
-The noisy data distribution $q_\sigma(\tilde{x})$ is obtained by convolving the original data distribution $p_{data}(x)$ with the noise distribution $q_\sigma(\tilde{x} | x)$.
+**Noisy Data Distribution:**
+
+The noisy data distribution is the convolution of the original data distribution with the noise:
 
 $$q_\sigma(\tilde{x}) = \int q_\sigma(\tilde{x} | x) p_{data}(x) dx$$
+
+The denoising score matching objective minimizes the Fisher divergence between the noise perturbed data distribution $q_\sigma(\tilde{x})$ and our score model $s_\theta(\tilde{x})$:
+
+$$\mathcal{L}_{DSM}(\theta) = \mathbb{E}_{\tilde{x} \sim q_\sigma(\tilde{x})} \left[ \frac{1}{2} \|s_\theta(\tilde{x}) - \nabla_{\tilde{x}} \log q_\sigma(\tilde{x})\|^2 \right]$$
+
+$$\mathcal{L}_{DSM}(\theta) = \int q_\sigma(\tilde{x}) \left[ \frac{1}{2} \|s_\theta(\tilde{x})\|^2 - s_\theta(\tilde{x})^T \nabla_{\tilde{x}} \log q_\sigma(\tilde{x}) + \frac{1}{2} \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x})\|^2 \right] d\tilde{x}$$
+
+**Focusing on the Cross Term:**
+
+The cross term $-s_\theta(\tilde{x})^T \nabla_{\tilde{x}} \log q_\sigma(\tilde{x})$ is the challenging part. First, let's write the cross term as an integral:
+
+$$\int q_\sigma(\tilde{x}) \left[ -s_\theta(\tilde{x})^T \nabla_{\tilde{x}} \log q_\sigma(\tilde{x}) \right] d\tilde{x}$$
+
+Using the chain rule: $\nabla_{\tilde{x}} \log q_\sigma(\tilde{x}) \cdot q_\sigma(\tilde{x}) = \nabla_{\tilde{x}} q_\sigma(\tilde{x})$, we get:
+
+$$= -\int s_\theta(\tilde{x})^T \nabla_{\tilde{x}} q_\sigma(\tilde{x}) d\tilde{x}$$
+
+**Substituting the noisy data distribution:**
+
+Recall that $q_\sigma(\tilde{x}) = \int q_\sigma(\tilde{x} | x) p_{data}(x) dx$. Substituting this into the integral:
+
+$$= -\int s_\theta(\tilde{x})^T \nabla_{\tilde{x}} \left[ \int q_\sigma(\tilde{x} | x) p_{data}(x) dx \right] d\tilde{x}$$
+
+Since the gradient operator $\nabla_{\tilde{x}}$ acts only on $\tilde{x}$ and not on $x$, we can interchange the gradient and the integral over $x$:
+
+$$= -\int s_\theta(\tilde{x})^T \left[ \int \nabla_{\tilde{x}} q_\sigma(\tilde{x} | x) p_{data}(x) dx \right] d\tilde{x}$$
+
+We can rearrange this as a double integral:
+
+$$= -\iint s_\theta(\tilde{x})^T \nabla_{\tilde{x}} q_\sigma(\tilde{x} | x) \cdot p_{data}(x) \, dx \, d\tilde{x}$$
+
+Now we can use the chain rule in reverse: $\nabla_{\tilde{x}} q_\sigma(\tilde{x} | x) = \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) \cdot q_\sigma(\tilde{x} | x)$
+
+$$= -\iint s_\theta(\tilde{x})^T \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) \cdot q_\sigma(\tilde{x} | x) \cdot p_{data}(x) \, dx \, d\tilde{x}$$
+
+**Final Expression:**
+
+This can be written as an expectation:
+
+$$= -\mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ s_\theta(\tilde{x})^T \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) \right]$$
+
+Or equivalently:
+
+$$= -\mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)^T s_\theta(\tilde{x}) \right]$$
+
+**Completing the Denoising Score Matching Objective:**
+
+Now let's bring this back to the complete objective function. Recall that we started with:
+
+$$\mathcal{L}_{DSM}(\theta) = \int q_\sigma(\tilde{x}) \left[ \frac{1}{2} \|s_\theta(\tilde{x})\|^2 - s_\theta(\tilde{x})^T \nabla_{\tilde{x}} \log q_\sigma(\tilde{x}) + \frac{1}{2} \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x})\|^2 \right] d\tilde{x}$$
+
+We've derived the cross term. Now let's handle all three terms:
+
+**Term 1: $\frac{1}{2} \|s_\theta(\tilde{x})\|^2$**
+
+$$\int q_\sigma(\tilde{x}) \cdot \frac{1}{2} \|s_\theta(\tilde{x})\|^2 d\tilde{x} = \frac{1}{2} \mathbb{E}_{\tilde{x} \sim q_\sigma(\tilde{x})} \left[ \|s_\theta(\tilde{x})\|^2 \right]$$
+
+Substituting $q_\sigma(\tilde{x}) = \int q_\sigma(\tilde{x} | x) p_{data}(x) dx$:
+
+$$= \frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|s_\theta(\tilde{x})\|^2 \right]$$
+
+**Term 2: Cross term (already derived)**
+
+$$- \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)^T s_\theta(\tilde{x}) \right]$$
+
+**Term 3: $\frac{1}{2} \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x})\|^2$**
+
+$$\int q_\sigma(\tilde{x}) \cdot \frac{1}{2} \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x})\|^2 d\tilde{x} = \frac{1}{2} \mathbb{E}_{\tilde{x} \sim q_\sigma(\tilde{x})} \left[ \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x})\|^2 \right]$$
+
+This term is a constant with respect to $\theta$ and can be ignored during optimization.
+
+**Combining all terms:**
+
+$$\mathcal{L}_{DSM}(\theta) = \frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|s_\theta(\tilde{x})\|^2 \right] - \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)^T s_\theta(\tilde{x}) \right] + \text{const}$$
+
+**Simplifying to the final form:**
+
+$$\mathcal{L}_{DSM}(\theta) = \frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|s_\theta(\tilde{x})\|^2 \right] - \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)^T s_\theta(\tilde{x}) \right] + \text{const}$$
+
+To see how this becomes the final form, let's expand the squared difference:
+
+$$\|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) - s_\theta(\tilde{x})\|^2 = \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)\|^2 - 2 \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)^T s_\theta(\tilde{x}) + \|s_\theta(\tilde{x})\|^2$$
+
+Taking the expectation and multiplying by $\frac{1}{2}$:
+
+$$\frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) - s_\theta(\tilde{x})\|^2 \right] = \frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|s_\theta(\tilde{x})\|^2 \right] - \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)^T s_\theta(\tilde{x}) \right] + \frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)\|^2 \right]$$
+
+The last term $\frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)\|^2 \right]$ is a constant with respect to $\theta$ and can be absorbed into the constant term.
+
+This can be written as:
+
+$$\mathcal{L}_{DSM}(\theta) = \frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) - s_\theta(\tilde{x})\|^2 \right] + \text{const}$$
+
+**Key Advantage: easy computation of the Target Score Function**
+
+The major advantage of denoising score matching is that $\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)$ is **easy to compute analytically**, unlike the true data score function $\nabla_x \log p_{data}(x)$.
+
+**For Gaussian Noise:**
+
+The most common choice is Gaussian noise: $q_\sigma(\tilde{x} | x) = \mathcal{N}(\tilde{x}; x, \sigma^2 I)$
+
+The log probability is:
+
+$$\log q_\sigma(\tilde{x} | x) = -\frac{1}{2\sigma^2} \|\tilde{x} - x\|^2 - \frac{d}{2} \log(2\pi\sigma^2)$$
+
+Taking the gradient with respect to $\tilde{x}$:
+
+$$\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) = -\frac{1}{\sigma^2} (\tilde{x} - x)$$
+
+This gradient is **analytically tractable** and **computationally cheap**.
+
+**Comparison with Standard Score Matching:**
+
+In standard score matching, we need to compute:
+
+- $\nabla_x \log p_\theta(x)$ (our model's score function)
+
+- $\text{tr}(\nabla_x \nabla_x \log p_\theta(x))$ (Hessian trace - expensive!)
+
+In denoising score matching, we only need:
+
+- $\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) = -\frac{1}{\sigma^2} (\tilde{x} - x)$ (known analytically)
+
+- $s_\theta(\tilde{x})$ (our model's score function)
+
+**Training Algorithm:**
+
+1. Sample clean data: $x \sim p_{data}(x)$
+2. Add noise: $\tilde{x} = x + \epsilon$ where $\epsilon \sim \mathcal{N}(0, \sigma^2 I)$
+3. Compute target: $\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) = -\frac{1}{\sigma^2} (\tilde{x} - x) = -\frac{1}{\sigma^2} \epsilon$
+4. Compute prediction: $s_\theta(\tilde{x})$
+5. Minimize: $\|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) - s_\theta(\tilde{x})\|^2$
+
+**Monte Carlo Estimation:**
+
+For a batch of $N$ samples $\{x_1, x_2, \ldots, x_N\}$, the Monte Carlo estimate of the loss is:
+
+$$\mathcal{L}_{DSM}(\theta) \approx \frac{1}{2N} \sum_{i=1}^N \|\nabla_{\tilde{x}_i} \log q_\sigma(\tilde{x}_i | x_i) - s_\theta(\tilde{x}_i)\|^2$$
+
+where $\tilde{x}_i = x_i + \epsilon_i$ with $\epsilon_i \sim \mathcal{N}(0, \sigma^2 I)$.
+
+**Practical Implementation:**
+
+```python
+# For a batch of data
+def denoising_score_matching_loss(model, data_batch, sigma):
+    # Add noise to data
+    noise = torch.randn_like(data_batch) * sigma
+    noisy_data = data_batch + noise
+    
+    # Compute target score (gradient of log noise distribution)
+    target_score = -noise / (sigma ** 2)
+    
+    # Compute model prediction
+    predicted_score = model(noisy_data)
+    
+    # Compute loss
+    loss = 0.5 * torch.mean((target_score - predicted_score) ** 2)
+    
+    return loss
+```
+
+**Intuition behind the loss function**
+
+The denoising score matching objective has a beautiful intuition: **we're teaching our model to estimate the score function of noisy data, and when the noise is very small, this approximates the score function of the clean data distribution.**
+
+**The Core Idea:**
+
+1. **Learning Noisy Data Structure**: Instead of trying to learn the score function of the complex, unknown data distribution $p_{data}(x)$, we learn the score function of a simpler, known noisy distribution $q_\sigma(\tilde{x})$.
+
+2. **Denoising as Learning**: By learning to predict $\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) = -\frac{1}{\sigma^2} (\tilde{x} - x)$, our model learns to "point" from noisy points $\tilde{x}$ back toward their clean counterparts $x$.
+
+**What does "point" mean?**
+
+The score function $\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)$ is a **vector field** that assigns a direction vector to each point $\tilde{x}$ in the data space. This vector "points" in the direction of steepest increase in the log probability.
+
+For Gaussian noise, this vector is:
+
+$$\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) = -\frac{1}{\sigma^2} (\tilde{x} - x)$$
+
+**Interpretation:**
+
+- **Direction**: The vector points from the noisy point $\tilde{x}$ toward the clean point $x$
+
+- **Magnitude**: The length of the vector is proportional to the distance between $\tilde{x}$ and $x$, scaled by $\frac{1}{\sigma^2}$
+
+- **Purpose**: This vector tells us "if you want to increase the probability of this noisy point, move in this direction"
+
+**Visual Example:**
+Imagine a 2D space where:
+
+- Clean point $x = (0, 0)$
+
+- Noisy point $\tilde{x} = (1, 1)$ 
+
+- Noise level $\sigma = 1$
+
+The score vector at $\tilde{x}$ is:
+
+$$\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) = -(1, 1)$$
+
+This vector points from $(1, 1)$ toward $(0, 0)$, indicating the direction to move to increase the probability of the noisy point under the noise distribution.
+
+**Why this matters:**
+When our model learns to predict this vector, it's learning to identify the direction that leads back to the clean data. This implicitly teaches it about the local structure of the data manifold - where the "good" data points are located relative to any given noisy point.
+
+**Why this is a denoiser:**
+
+The score function $\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) = -\frac{1}{\sigma^2} (\tilde{x} - x)$ acts as a **denoiser** because it provides the exact direction and magnitude needed to remove the noise from a noisy data point.
+
+When our model learns to predict this score function, it's learning to:
+
+- **Identify noise**: Recognize what part of the data is noise
+
+- **Compute denoising direction**: Determine which direction to move to remove the noise
+
+- **Estimate noise magnitude**: Understand how much to move in that direction
+
+This is why denoising score matching is so powerful - by learning to denoise, the model implicitly learns the structure of the clean data distribution, even though it never directly sees the clean data score function.
+
+**Generating Samples with MCMC:**
+
+Once we've trained our score function $s_\theta(x)$, we can generate samples using **Markov Chain Monte Carlo (MCMC)** methods, typically **Langevin dynamics**.

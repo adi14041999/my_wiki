@@ -778,26 +778,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#denoising-slicing-score-matching" class="md-nav__link">
-    <span class="md-ellipsis">
-      Denoising &amp; Slicing Score Matching
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Denoising &amp; Slicing Score Matching">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#denoising-score-matching" class="md-nav__link">
     <span class="md-ellipsis">
       Denoising Score Matching
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1335,8 +1320,7 @@ For a model with <span class="arithmatex">\(d\)</span> input dimensions and <spa
 <p><strong>Key Insight:</strong></p>
 <p>This reformulation allows us to train the score function using only samples from <span class="arithmatex">\(p_{data}(x)\)</span> and the derivatives of our score model, without needing access to the true score function <span class="arithmatex">\(s_{data}(x)\)</span>.</p>
 <p>The computational cost of the second term makes score matching challenging for high-dimensional data, which motivates alternative approaches like denoising score matching and sliced score matching.</p>
-<h2 id="denoising-slicing-score-matching">Denoising &amp; Slicing Score Matching</h2>
-<h3 id="denoising-score-matching">Denoising Score Matching</h3>
+<h2 id="denoising-score-matching">Denoising Score Matching</h2>
 <p>Denoising score matching addresses the computational challenges of standard score matching by adding noise to the data.</p>
 <p><strong>The Key Idea:</strong></p>
 <p>Instead of trying to learn the score function of the original data distribution <span class="arithmatex">\(p_{data}(x)\)</span>, we learn the score function of a noisy version of the data.</p>
@@ -1344,8 +1328,175 @@ For a model with <span class="arithmatex">\(d\)</span> input dimensions and <spa
 <p>We define a noise distribution <span class="arithmatex">\(q_\sigma(\tilde{x} | x)\)</span> that adds noise to clean data points. A common choice is Gaussian noise:</p>
 <div class="arithmatex">\[q_\sigma(\tilde{x} | x) = \mathcal{N}(\tilde{x}; x, \sigma^2 I)\]</div>
 <p>This means: <span class="arithmatex">\(\tilde{x} = x + \epsilon\)</span> where <span class="arithmatex">\(\epsilon \sim \mathcal{N}(0, \sigma^2 I)\)</span></p>
-<p>The noisy data distribution <span class="arithmatex">\(q_\sigma(\tilde{x})\)</span> is obtained by convolving the original data distribution <span class="arithmatex">\(p_{data}(x)\)</span> with the noise distribution <span class="arithmatex">\(q_\sigma(\tilde{x} | x)\)</span>.</p>
+<p><strong>Noisy Data Distribution:</strong></p>
+<p>The noisy data distribution is the convolution of the original data distribution with the noise:</p>
 <div class="arithmatex">\[q_\sigma(\tilde{x}) = \int q_\sigma(\tilde{x} | x) p_{data}(x) dx\]</div>
+<p>The denoising score matching objective minimizes the Fisher divergence between the noise perturbed data distribution <span class="arithmatex">\(q_\sigma(\tilde{x})\)</span> and our score model <span class="arithmatex">\(s_\theta(\tilde{x})\)</span>:</p>
+<div class="arithmatex">\[\mathcal{L}_{DSM}(\theta) = \mathbb{E}_{\tilde{x} \sim q_\sigma(\tilde{x})} \left[ \frac{1}{2} \|s_\theta(\tilde{x}) - \nabla_{\tilde{x}} \log q_\sigma(\tilde{x})\|^2 \right]\]</div>
+<div class="arithmatex">\[\mathcal{L}_{DSM}(\theta) = \int q_\sigma(\tilde{x}) \left[ \frac{1}{2} \|s_\theta(\tilde{x})\|^2 - s_\theta(\tilde{x})^T \nabla_{\tilde{x}} \log q_\sigma(\tilde{x}) + \frac{1}{2} \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x})\|^2 \right] d\tilde{x}\]</div>
+<p><strong>Focusing on the Cross Term:</strong></p>
+<p>The cross term <span class="arithmatex">\(-s_\theta(\tilde{x})^T \nabla_{\tilde{x}} \log q_\sigma(\tilde{x})\)</span> is the challenging part. First, let's write the cross term as an integral:</p>
+<div class="arithmatex">\[\int q_\sigma(\tilde{x}) \left[ -s_\theta(\tilde{x})^T \nabla_{\tilde{x}} \log q_\sigma(\tilde{x}) \right] d\tilde{x}\]</div>
+<p>Using the chain rule: <span class="arithmatex">\(\nabla_{\tilde{x}} \log q_\sigma(\tilde{x}) \cdot q_\sigma(\tilde{x}) = \nabla_{\tilde{x}} q_\sigma(\tilde{x})\)</span>, we get:</p>
+<div class="arithmatex">\[= -\int s_\theta(\tilde{x})^T \nabla_{\tilde{x}} q_\sigma(\tilde{x}) d\tilde{x}\]</div>
+<p><strong>Substituting the noisy data distribution:</strong></p>
+<p>Recall that <span class="arithmatex">\(q_\sigma(\tilde{x}) = \int q_\sigma(\tilde{x} | x) p_{data}(x) dx\)</span>. Substituting this into the integral:</p>
+<div class="arithmatex">\[= -\int s_\theta(\tilde{x})^T \nabla_{\tilde{x}} \left[ \int q_\sigma(\tilde{x} | x) p_{data}(x) dx \right] d\tilde{x}\]</div>
+<p>Since the gradient operator <span class="arithmatex">\(\nabla_{\tilde{x}}\)</span> acts only on <span class="arithmatex">\(\tilde{x}\)</span> and not on <span class="arithmatex">\(x\)</span>, we can interchange the gradient and the integral over <span class="arithmatex">\(x\)</span>:</p>
+<div class="arithmatex">\[= -\int s_\theta(\tilde{x})^T \left[ \int \nabla_{\tilde{x}} q_\sigma(\tilde{x} | x) p_{data}(x) dx \right] d\tilde{x}\]</div>
+<p>We can rearrange this as a double integral:</p>
+<div class="arithmatex">\[= -\iint s_\theta(\tilde{x})^T \nabla_{\tilde{x}} q_\sigma(\tilde{x} | x) \cdot p_{data}(x) \, dx \, d\tilde{x}\]</div>
+<p>Now we can use the chain rule in reverse: <span class="arithmatex">\(\nabla_{\tilde{x}} q_\sigma(\tilde{x} | x) = \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) \cdot q_\sigma(\tilde{x} | x)\)</span></p>
+<div class="arithmatex">\[= -\iint s_\theta(\tilde{x})^T \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) \cdot q_\sigma(\tilde{x} | x) \cdot p_{data}(x) \, dx \, d\tilde{x}\]</div>
+<p><strong>Final Expression:</strong></p>
+<p>This can be written as an expectation:</p>
+<div class="arithmatex">\[= -\mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ s_\theta(\tilde{x})^T \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) \right]\]</div>
+<p>Or equivalently:</p>
+<div class="arithmatex">\[= -\mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)^T s_\theta(\tilde{x}) \right]\]</div>
+<p><strong>Completing the Denoising Score Matching Objective:</strong></p>
+<p>Now let's bring this back to the complete objective function. Recall that we started with:</p>
+<div class="arithmatex">\[\mathcal{L}_{DSM}(\theta) = \int q_\sigma(\tilde{x}) \left[ \frac{1}{2} \|s_\theta(\tilde{x})\|^2 - s_\theta(\tilde{x})^T \nabla_{\tilde{x}} \log q_\sigma(\tilde{x}) + \frac{1}{2} \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x})\|^2 \right] d\tilde{x}\]</div>
+<p>We've derived the cross term. Now let's handle all three terms:</p>
+<p><strong>Term 1: <span class="arithmatex">\(\frac{1}{2} \|s_\theta(\tilde{x})\|^2\)</span></strong></p>
+<div class="arithmatex">\[\int q_\sigma(\tilde{x}) \cdot \frac{1}{2} \|s_\theta(\tilde{x})\|^2 d\tilde{x} = \frac{1}{2} \mathbb{E}_{\tilde{x} \sim q_\sigma(\tilde{x})} \left[ \|s_\theta(\tilde{x})\|^2 \right]\]</div>
+<p>Substituting <span class="arithmatex">\(q_\sigma(\tilde{x}) = \int q_\sigma(\tilde{x} | x) p_{data}(x) dx\)</span>:</p>
+<div class="arithmatex">\[= \frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|s_\theta(\tilde{x})\|^2 \right]\]</div>
+<p><strong>Term 2: Cross term (already derived)</strong></p>
+<div class="arithmatex">\[- \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)^T s_\theta(\tilde{x}) \right]\]</div>
+<p><strong>Term 3: <span class="arithmatex">\(\frac{1}{2} \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x})\|^2\)</span></strong></p>
+<div class="arithmatex">\[\int q_\sigma(\tilde{x}) \cdot \frac{1}{2} \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x})\|^2 d\tilde{x} = \frac{1}{2} \mathbb{E}_{\tilde{x} \sim q_\sigma(\tilde{x})} \left[ \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x})\|^2 \right]\]</div>
+<p>This term is a constant with respect to <span class="arithmatex">\(\theta\)</span> and can be ignored during optimization.</p>
+<p><strong>Combining all terms:</strong></p>
+<div class="arithmatex">\[\mathcal{L}_{DSM}(\theta) = \frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|s_\theta(\tilde{x})\|^2 \right] - \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)^T s_\theta(\tilde{x}) \right] + \text{const}\]</div>
+<p><strong>Simplifying to the final form:</strong></p>
+<div class="arithmatex">\[\mathcal{L}_{DSM}(\theta) = \frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|s_\theta(\tilde{x})\|^2 \right] - \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)^T s_\theta(\tilde{x}) \right] + \text{const}\]</div>
+<p>To see how this becomes the final form, let's expand the squared difference:</p>
+<div class="arithmatex">\[\|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) - s_\theta(\tilde{x})\|^2 = \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)\|^2 - 2 \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)^T s_\theta(\tilde{x}) + \|s_\theta(\tilde{x})\|^2\]</div>
+<p>Taking the expectation and multiplying by <span class="arithmatex">\(\frac{1}{2}\)</span>:</p>
+<div class="arithmatex">\[\frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) - s_\theta(\tilde{x})\|^2 \right] = \frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|s_\theta(\tilde{x})\|^2 \right] - \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)^T s_\theta(\tilde{x}) \right] + \frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)\|^2 \right]\]</div>
+<p>The last term <span class="arithmatex">\(\frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)\|^2 \right]\)</span> is a constant with respect to <span class="arithmatex">\(\theta\)</span> and can be absorbed into the constant term.</p>
+<p>This can be written as:</p>
+<div class="arithmatex">\[\mathcal{L}_{DSM}(\theta) = \frac{1}{2} \mathbb{E}_{x \sim p_{data}, \tilde{x} \sim q_\sigma(\tilde{x} | x)} \left[ \|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) - s_\theta(\tilde{x})\|^2 \right] + \text{const}\]</div>
+<p><strong>Key Advantage: easy computation of the Target Score Function</strong></p>
+<p>The major advantage of denoising score matching is that <span class="arithmatex">\(\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)\)</span> is <strong>easy to compute analytically</strong>, unlike the true data score function <span class="arithmatex">\(\nabla_x \log p_{data}(x)\)</span>.</p>
+<p><strong>For Gaussian Noise:</strong></p>
+<p>The most common choice is Gaussian noise: <span class="arithmatex">\(q_\sigma(\tilde{x} | x) = \mathcal{N}(\tilde{x}; x, \sigma^2 I)\)</span></p>
+<p>The log probability is:</p>
+<div class="arithmatex">\[\log q_\sigma(\tilde{x} | x) = -\frac{1}{2\sigma^2} \|\tilde{x} - x\|^2 - \frac{d}{2} \log(2\pi\sigma^2)\]</div>
+<p>Taking the gradient with respect to <span class="arithmatex">\(\tilde{x}\)</span>:</p>
+<div class="arithmatex">\[\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) = -\frac{1}{\sigma^2} (\tilde{x} - x)\]</div>
+<p>This gradient is <strong>analytically tractable</strong> and <strong>computationally cheap</strong>.</p>
+<p><strong>Comparison with Standard Score Matching:</strong></p>
+<p>In standard score matching, we need to compute:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(\nabla_x \log p_\theta(x)\)</span> (our model's score function)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\text{tr}(\nabla_x \nabla_x \log p_\theta(x))\)</span> (Hessian trace - expensive!)</p>
+</li>
+</ul>
+<p>In denoising score matching, we only need:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) = -\frac{1}{\sigma^2} (\tilde{x} - x)\)</span> (known analytically)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(s_\theta(\tilde{x})\)</span> (our model's score function)</p>
+</li>
+</ul>
+<p><strong>Training Algorithm:</strong></p>
+<ol>
+<li>Sample clean data: <span class="arithmatex">\(x \sim p_{data}(x)\)</span></li>
+<li>Add noise: <span class="arithmatex">\(\tilde{x} = x + \epsilon\)</span> where <span class="arithmatex">\(\epsilon \sim \mathcal{N}(0, \sigma^2 I)\)</span></li>
+<li>Compute target: <span class="arithmatex">\(\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) = -\frac{1}{\sigma^2} (\tilde{x} - x) = -\frac{1}{\sigma^2} \epsilon\)</span></li>
+<li>Compute prediction: <span class="arithmatex">\(s_\theta(\tilde{x})\)</span></li>
+<li>Minimize: <span class="arithmatex">\(\|\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) - s_\theta(\tilde{x})\|^2\)</span></li>
+</ol>
+<p><strong>Monte Carlo Estimation:</strong></p>
+<p>For a batch of <span class="arithmatex">\(N\)</span> samples <span class="arithmatex">\(\{x_1, x_2, \ldots, x_N\}\)</span>, the Monte Carlo estimate of the loss is:</p>
+<div class="arithmatex">\[\mathcal{L}_{DSM}(\theta) \approx \frac{1}{2N} \sum_{i=1}^N \|\nabla_{\tilde{x}_i} \log q_\sigma(\tilde{x}_i | x_i) - s_\theta(\tilde{x}_i)\|^2\]</div>
+<p>where <span class="arithmatex">\(\tilde{x}_i = x_i + \epsilon_i\)</span> with <span class="arithmatex">\(\epsilon_i \sim \mathcal{N}(0, \sigma^2 I)\)</span>.</p>
+<p><strong>Practical Implementation:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># For a batch of data</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">denoising_score_matching_loss</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data_batch</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="c1"># Add noise to data</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">noise</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">data_batch</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigma</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">noisy_data</span> <span class="o">=</span> <span class="n">data_batch</span> <span class="o">+</span> <span class="n">noise</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="c1"># Compute target score (gradient of log noise distribution)</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">target_score</span> <span class="o">=</span> <span class="o">-</span><span class="n">noise</span> <span class="o">/</span> <span class="p">(</span><span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="c1"># Compute model prediction</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">predicted_score</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">noisy_data</span><span class="p">)</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="c1"># Compute loss</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="n">loss</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">target_score</span> <span class="o">-</span> <span class="n">predicted_score</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="k">return</span> <span class="n">loss</span>
+</code></pre></div>
+<p><strong>Intuition behind the loss function</strong></p>
+<p>The denoising score matching objective has a beautiful intuition: <strong>we're teaching our model to estimate the score function of noisy data, and when the noise is very small, this approximates the score function of the clean data distribution.</strong></p>
+<p><strong>The Core Idea:</strong></p>
+<ol>
+<li>
+<p><strong>Learning Noisy Data Structure</strong>: Instead of trying to learn the score function of the complex, unknown data distribution <span class="arithmatex">\(p_{data}(x)\)</span>, we learn the score function of a simpler, known noisy distribution <span class="arithmatex">\(q_\sigma(\tilde{x})\)</span>.</p>
+</li>
+<li>
+<p><strong>Denoising as Learning</strong>: By learning to predict <span class="arithmatex">\(\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) = -\frac{1}{\sigma^2} (\tilde{x} - x)\)</span>, our model learns to "point" from noisy points <span class="arithmatex">\(\tilde{x}\)</span> back toward their clean counterparts <span class="arithmatex">\(x\)</span>.</p>
+</li>
+</ol>
+<p><strong>What does "point" mean?</strong></p>
+<p>The score function <span class="arithmatex">\(\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x)\)</span> is a <strong>vector field</strong> that assigns a direction vector to each point <span class="arithmatex">\(\tilde{x}\)</span> in the data space. This vector "points" in the direction of steepest increase in the log probability.</p>
+<p>For Gaussian noise, this vector is:</p>
+<div class="arithmatex">\[\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) = -\frac{1}{\sigma^2} (\tilde{x} - x)\]</div>
+<p><strong>Interpretation:</strong></p>
+<ul>
+<li>
+<p><strong>Direction</strong>: The vector points from the noisy point <span class="arithmatex">\(\tilde{x}\)</span> toward the clean point <span class="arithmatex">\(x\)</span></p>
+</li>
+<li>
+<p><strong>Magnitude</strong>: The length of the vector is proportional to the distance between <span class="arithmatex">\(\tilde{x}\)</span> and <span class="arithmatex">\(x\)</span>, scaled by <span class="arithmatex">\(\frac{1}{\sigma^2}\)</span></p>
+</li>
+<li>
+<p><strong>Purpose</strong>: This vector tells us "if you want to increase the probability of this noisy point, move in this direction"</p>
+</li>
+</ul>
+<p><strong>Visual Example:</strong>
+Imagine a 2D space where:</p>
+<ul>
+<li>
+<p>Clean point <span class="arithmatex">\(x = (0, 0)\)</span></p>
+</li>
+<li>
+<p>Noisy point <span class="arithmatex">\(\tilde{x} = (1, 1)\)</span> </p>
+</li>
+<li>
+<p>Noise level <span class="arithmatex">\(\sigma = 1\)</span></p>
+</li>
+</ul>
+<p>The score vector at <span class="arithmatex">\(\tilde{x}\)</span> is:</p>
+<div class="arithmatex">\[\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) = -(1, 1)\]</div>
+<p>This vector points from <span class="arithmatex">\((1, 1)\)</span> toward <span class="arithmatex">\((0, 0)\)</span>, indicating the direction to move to increase the probability of the noisy point under the noise distribution.</p>
+<p><strong>Why this matters:</strong>
+When our model learns to predict this vector, it's learning to identify the direction that leads back to the clean data. This implicitly teaches it about the local structure of the data manifold - where the "good" data points are located relative to any given noisy point.</p>
+<p><strong>Why this is a denoiser:</strong></p>
+<p>The score function <span class="arithmatex">\(\nabla_{\tilde{x}} \log q_\sigma(\tilde{x} | x) = -\frac{1}{\sigma^2} (\tilde{x} - x)\)</span> acts as a <strong>denoiser</strong> because it provides the exact direction and magnitude needed to remove the noise from a noisy data point.</p>
+<p>When our model learns to predict this score function, it's learning to:</p>
+<ul>
+<li>
+<p><strong>Identify noise</strong>: Recognize what part of the data is noise</p>
+</li>
+<li>
+<p><strong>Compute denoising direction</strong>: Determine which direction to move to remove the noise</p>
+</li>
+<li>
+<p><strong>Estimate noise magnitude</strong>: Understand how much to move in that direction</p>
+</li>
+</ul>
+<p>This is why denoising score matching is so powerful - by learning to denoise, the model implicitly learns the structure of the clean data distribution, even though it never directly sees the clean data score function.</p>
+<p><strong>Generating Samples with MCMC:</strong></p>
+<p>Once we've trained our score function <span class="arithmatex">\(s_\theta(x)\)</span>, we can generate samples using <strong>Markov Chain Monte Carlo (MCMC)</strong> methods, typically <strong>Langevin dynamics</strong>.</p>
 
 
 
