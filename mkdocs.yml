@@ -15,6 +15,7 @@ nav:
       - Generative Adversarial Networks: AI/deep_generative_models/generative_adversarial_networks.md
       - Energy Based Models: AI/deep_generative_models/energy_based_models.md
       - Score Based Models: AI/deep_generative_models/score_based_models.md
+      - Score Based Generative Modeling: AI/deep_generative_models/score_based_generative_modeling.md
   - Math:
     - Probability:
       - Probability and Counting: math/probability/probability_and_counting.md
