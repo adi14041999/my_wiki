@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/AI/deep_generative_models/recap_at_this_point/">
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/AI/deep_generative_models/score_based_generative_modeling/">
       
       
-        <link rel="prev" href="../normalizing_flow_models/">
+        <link rel="prev" href="../score_based_models/">
       
       
-        <link rel="next" href="../generative_adversarial_networks/">
+        <link rel="next" href="../../../math/probability/probability_and_counting/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Recap at this point - My Wiki</title>
+        <title>Score Based Generative Modeling - My Wiki</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#recap-at-this-point" class="md-skip">
+        <a href="#score-based-generative-modeling" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Recap at this point
+              Score Based Generative Modeling
             
           </span>
         </div>
@@ -539,32 +539,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Recap at this point
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../recap_at_this_point/" class="md-nav__link">
         
   
   
@@ -575,113 +553,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#the-generative-modeling-framework" class="md-nav__link">
-    <span class="md-ellipsis">
-      The Generative Modeling Framework
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#model-families-weve-explored" class="md-nav__link">
-    <span class="md-ellipsis">
-      Model Families We've Explored
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-likelihood-based-training-paradigm" class="md-nav__link">
-    <span class="md-ellipsis">
-      The Likelihood-Based Training Paradigm
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#alternative-similarity-measures" class="md-nav__link">
-    <span class="md-ellipsis">
-      Alternative Similarity Measures
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-likelihood-vs-sample-quality-dilemma" class="md-nav__link">
-    <span class="md-ellipsis">
-      The Likelihood vs. Sample Quality Dilemma
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="The Likelihood vs. Sample Quality Dilemma">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#why-this-disconnect-occurs" class="md-nav__link">
-    <span class="md-ellipsis">
-      Why This Disconnect Occurs
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#implications-for-model-design" class="md-nav__link">
-    <span class="md-ellipsis">
-      Implications for Model Design
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#alternative-training-paradigms" class="md-nav__link">
-    <span class="md-ellipsis">
-      Alternative Training Paradigms
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#conclusion" class="md-nav__link">
-    <span class="md-ellipsis">
-      Conclusion
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -760,10 +631,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../score_based_generative_modeling/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Score Based Generative Modeling
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -774,6 +667,35 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#langevin-dynamics-sampling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Langevin Dynamics Sampling
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -934,68 +856,125 @@
 
 
 
-<h1 id="recap-at-this-point">Recap at this point</h1>
-<h2 id="the-generative-modeling-framework">The Generative Modeling Framework</h2>
-<p>We have some data from an unknown probability distribution, that we denote <span class="arithmatex">\(p_{data}\)</span>. We have a model family <span class="arithmatex">\(\mathcal{M}\)</span> which is a set of probability distributions. We denote some kind of notion of similarity between <span class="arithmatex">\(p_{data}\)</span> and the distributions in <span class="arithmatex">\(\mathcal{M}\)</span>. We try to find the probability distribution <span class="arithmatex">\(p_\theta\)</span> that is the closest to <span class="arithmatex">\(p_{data}\)</span> in this notion of similarity.</p>
-<h2 id="model-families-weve-explored">Model Families We've Explored</h2>
-<p>We have seen different ways of constructing probability distributions in <span class="arithmatex">\(\mathcal{M}\)</span>:</p>
+<h1 id="score-based-generative-modeling">Score Based Generative Modeling</h1>
+<h2 id="langevin-dynamics-sampling">Langevin Dynamics Sampling</h2>
+<p>Langevin dynamics is a powerful MCMC method that uses gradient information to efficiently sample from complex probability distributions. For score-based models, it provides a natural way to generate samples by following the learned score field.</p>
+<p><strong>Mathematical Foundation</strong></p>
+<p>Langevin dynamics is based on the <strong>Langevin equation</strong>, a stochastic differential equation that describes the motion of particles in a potential field:</p>
+<div class="arithmatex">\[dx_t = \nabla_x \log p(x_t) dt + \sqrt{2} dW_t\]</div>
+<p>where:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(x_t\)</span> is the particle position at time <span class="arithmatex">\(t\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(\nabla_x \log p(x_t)\)</span> is the score function (gradient of log probability)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(W_t\)</span> is a Wiener process (Brownian motion)</p>
+</li>
+<li>
+<p>The first term is the <strong>drift term</strong> (gradient guidance)</p>
+</li>
+<li>
+<p>The second term is the <strong>diffusion term</strong> (random exploration)</p>
+</li>
+</ul>
+<p><strong>Discretized Langevin Dynamics</strong></p>
+<p>For practical implementation, we discretize the continuous-time equation:</p>
+<div class="arithmatex">\[x_{t+1} = x_t + \epsilon \cdot \nabla_x \log p(x_t) + \sqrt{2\epsilon} \cdot \eta_t\]</div>
+<p>where:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(\epsilon\)</span> is the step size (time discretization)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\eta_t \sim \mathcal{N}(0, I)\)</span> is Gaussian noise</p>
+</li>
+<li>
+<p><span class="arithmatex">\(t\)</span> indexes the discrete time steps</p>
+</li>
+</ul>
+<p><strong>Score-Based Langevin Sampling</strong></p>
+<p>For our trained score function <span class="arithmatex">\(s_\theta(x) \approx \nabla_x \log p_{data}(x)\)</span>, the sampling algorithm becomes:</p>
+<p><strong>Algorithm: Score-Based Langevin Sampling</strong></p>
 <ol>
-<li><strong>Autoregressive Models</strong>: <span class="arithmatex">\(p_\theta(x) = \prod_{i=1}^N p_\theta(x_i|x_{&lt;i})\)</span></li>
-<li><strong>Variational Autoencoders (VAEs)</strong>: <span class="arithmatex">\(p_\theta(x) = \int p_\theta(x,z)dz\)</span></li>
-<li><strong>Normalizing Flow Models</strong>: <span class="arithmatex">\(p_\theta(x) = p_z(f^{-1}_\theta(x)) \left|\det\left(\frac{\partial f^{-1}_\theta(x)}{\partial x}\right)\right|\)</span></li>
+<li>
+<p><strong>Initialize</strong>: <span class="arithmatex">\(x_0 \sim \mathcal{N}(0, I)\)</span> (random noise)</p>
+</li>
+<li>
+<p><strong>Iterate</strong>: For <span class="arithmatex">\(t = 0, 1, 2, \ldots, T-1\)</span>:</p>
+</li>
+<li>
+<p>Compute score: <span class="arithmatex">\(s_t = s_\theta(x_t)\)</span></p>
+</li>
+<li>
+<p>Add gradient step: <span class="arithmatex">\(x_{t+1} = x_t + \frac{\epsilon}{2} \cdot s_t + \sqrt{2\epsilon} \cdot \eta_t\)</span></p>
+</li>
+<li>
+<p>Where <span class="arithmatex">\(\eta_t \sim \mathcal{N}(0, I)\)</span></p>
+</li>
+<li>
+<p><strong>Return</strong>: <span class="arithmatex">\(x_T\)</span> as the generated sample</p>
+</li>
 </ol>
-<h2 id="the-likelihood-based-training-paradigm">The Likelihood-Based Training Paradigm</h2>
-<p>The key thing is we always try to assign some probability assigned by the model to a data point. All the above families are trained by minimizing KL divergence <span class="arithmatex">\(D_{KL}(p_{data} || p_\theta)\)</span>, or equivalently maximizing likelihoods (or approximations). In these techniques, the machinery involves setting up models such that we can evaluate likelihoods (or approximations) pretty efficiently.</p>
-<p><strong>Mathematical Foundation:</strong></p>
-<div class="arithmatex">\[\arg\min_\theta D_{KL}(p_{data} || p_\theta) = \arg\max_\theta \mathbb{E}_{x \sim p_{data}}[\log p_\theta(x)]\]</div>
-<p>This equivalence shows that minimizing KL divergence is equivalent to maximizing the expected log-likelihood of the data.</p>
-<h2 id="alternative-similarity-measures">Alternative Similarity Measures</h2>
-<p>However, the training objective of maximizing likelihoods is not the only way to measure similarity between <span class="arithmatex">\(p_{data}\)</span> and <span class="arithmatex">\(p_\theta\)</span>. There are other ways to measure the notion of similarity:</p>
-<ol>
-<li><strong>Wasserstein Distance</strong>: Measures the minimum "cost" of transporting mass from one distribution to another</li>
-<li><strong>Maximum Mean Discrepancy (MMD)</strong>: Compares distributions using kernel methods</li>
-<li><strong>Adversarial Training</strong>: Uses a discriminator to distinguish between real and generated samples</li>
-<li><strong>Energy-Based Models</strong>: Learn an energy function that assigns low energy to real data and high energy to fake data</li>
-</ol>
-<h2 id="the-likelihood-vs-sample-quality-dilemma">The Likelihood vs. Sample Quality Dilemma</h2>
-<p><strong>The Problem:</strong>
-It is possible that models with high likelihood could be bad at sample generation and vice versa. This creates a fundamental tension in generative modeling.</p>
-<h3 id="why-this-disconnect-occurs">Why This Disconnect Occurs</h3>
-<p><strong>1. Likelihood Measures Average Performance:</strong></p>
-<div class="arithmatex">\[\mathbb{E}_{x \sim p_{data}}[\log p_\theta(x)] = \int p_{data}(x) \log p_\theta(x) dx\]</div>
-<p>This measures how well the model assigns probability to the average data point, not necessarily how well it captures the fine-grained structure needed for high-quality generation.</p>
-<p><strong>2. Sample Quality Requires Fine-Grained Structure:</strong>
-High-quality generation requires the model to capture:
-- Sharp boundaries between different modes
-- Fine details and textures
-- Proper spatial relationships
-- Realistic variations within modes</p>
-<p><strong>3. Different Optimization Objectives:</strong>
-- <strong>Likelihood</strong>: Optimizes for probability assignment over the entire distribution
-- <strong>Sample Quality</strong>: Requires optimization of perceptual and structural properties</p>
-<h3 id="implications-for-model-design">Implications for Model Design</h3>
-<p><strong>The Training Objective Trade-off:</strong>
-Although training objective of maximizing likelihoods could be a good one, it might not be the best one if the objective is to generate the best samples.</p>
-<p><strong>This suggests that it might be useful to disentangle likelihoods and sample quality.</strong></p>
-<h2 id="alternative-training-paradigms">Alternative Training Paradigms</h2>
-<p><strong>1. Adversarial Training (GANs):</strong>
-- <strong>Objective</strong>: Direct optimization of sample quality through adversarial training
-- <strong>Advantage</strong>: Can generate very high-quality samples
-- <strong>Disadvantage</strong>: No explicit likelihood computation, training instability</p>
-<p><strong>2. Hybrid Approaches:</strong>
-- <strong>VAE-GAN</strong>: Combines likelihood-based training with adversarial training
-- <strong>Flow-GAN</strong>: Combines normalizing flows with adversarial training
-- <strong>Objective</strong>: Balance between likelihood and sample quality</p>
-<p><strong>3. Perceptual Losses:</strong>
-- <strong>Objective</strong>: Use pre-trained networks to measure perceptual similarity
-- <strong>Advantage</strong>: Better alignment with human perception
-- <strong>Example</strong>: LPIPS (Learned Perceptual Image Patch Similarity)</p>
-<p><strong>4. Multi-Objective Training:</strong>
-- <strong>Objective</strong>: Combine multiple loss functions
-- <strong>Example</strong>: <span class="arithmatex">\(\mathcal{L} = \mathcal{L}_{likelihood} + \lambda \mathcal{L}_{perceptual} + \mu \mathcal{L}_{adversarial}\)</span></p>
-<h2 id="conclusion">Conclusion</h2>
-<p>The tension between likelihood and sample quality is a fundamental challenge in generative modeling. While likelihood-based training provides a principled framework, it may not always lead to the best sample quality. This motivates the exploration of alternative training paradigms and evaluation metrics that better align with the ultimate goal of generating high-quality, diverse samples.</p>
-<p>The key insight is that <strong>generative modeling is not just about fitting a distribution to data, but about creating models that can generate samples that are both high-quality and diverse</strong>. This requires careful consideration of both the training objective and the evaluation metrics used to assess model performance.</p>
+<p><strong>Intuition Behind Langevin Dynamics</strong></p>
+<p><strong>The Drift Term (<span class="arithmatex">\(\frac{\epsilon}{2} \cdot s_\theta(x_t)\)</span>):</strong></p>
+<ul>
+<li>
+<p>Pushes the sample toward high-probability regions</p>
+</li>
+<li>
+<p>The score function points "uphill" in the probability landscape</p>
+</li>
+<li>
+<p>Larger step sizes <span class="arithmatex">\(\epsilon\)</span> lead to more aggressive movement</p>
+</li>
+<li>
+<p>The factor of <span class="arithmatex">\(\frac{1}{2}\)</span> comes from proper discretization of the continuous Langevin equation</p>
+</li>
+</ul>
+<p><strong>The Diffusion Term (<span class="arithmatex">\(\sqrt{2\epsilon} \cdot \eta_t\)</span>):</strong></p>
+<ul>
+<li>
+<p>Adds random exploration to avoid getting stuck in local modes</p>
+</li>
+<li>
+<p>Balances the deterministic gradient guidance</p>
+</li>
+<li>
+<p>Ensures the chain can escape local optima and explore the full distribution</p>
+</li>
+</ul>
+<p><strong>Balance Between Drift and Diffusion:</strong></p>
+<ul>
+<li>
+<p><strong>Small <span class="arithmatex">\(\epsilon\)</span></strong>: More exploration, slower convergence, better mixing</p>
+</li>
+<li>
+<p><strong>Large <span class="arithmatex">\(\epsilon\)</span></strong>: Faster convergence, but may miss modes or become unstable</p>
+</li>
+<li>
+<p><strong>Optimal <span class="arithmatex">\(\epsilon\)</span></strong>: Depends on the data distribution and model architecture</p>
+</li>
+</ul>
+<p><strong>Convergence Guarantees</strong></p>
+<p>Under mild conditions on the target distribution and score function, Langevin dynamics provides strong theoretical guarantees:</p>
+<p><strong>Asymptotic Convergence:</strong></p>
+<p>If <span class="arithmatex">\(\epsilon \to 0\)</span> and <span class="arithmatex">\(T \to \infty\)</span>, we are guaranteed that <span class="arithmatex">\(x_T \sim p_{data}(x)\)</span>.</p>
+<p><strong>Mathematical Interpretation:</strong></p>
+<ul>
+<li><strong><span class="arithmatex">\(\epsilon \to 0\)</span></strong>: The discretization becomes arbitrarily fine, approaching the continuous Langevin equation</li>
+<li><strong><span class="arithmatex">\(T \to \infty\)</span></strong>: The Markov chain runs for an infinite number of steps, allowing it to reach the stationary distribution</li>
+<li><strong><span class="arithmatex">\(x_T \sim p_{data}(x)\)</span></strong>: The final sample is distributed according to the target data distribution</li>
+</ul>
+<p><strong>Challenge in Low Density Regions:</strong></p>
+<p>One significant limitation of Langevin dynamics is its poor performance in <strong>low density regions</strong> of the target distribution:</p>
+<ul>
+<li><strong>Weak Score Signals</strong>: In regions where <span class="arithmatex">\(p_{data}(x) \approx 0\)</span>, the score function <span class="arithmatex">\(\nabla_x \log p_{data}(x)\)</span> becomes very small or noisy</li>
+<li><strong>Mode Collapse Risk</strong>: The algorithm may fail to explore all modes (mode is a region where the probability density is high, i.e., data points are concentrated) of a multi-modal distribution</li>
+</ul>
+<p>This challenge motivates the development of <strong>annealed Langevin dynamics</strong> and other advanced sampling techniques that can better handle complex, multi-modal distributions.</p>
 
 
 
