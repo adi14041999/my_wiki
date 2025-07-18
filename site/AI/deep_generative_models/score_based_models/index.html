@@ -16,7 +16,7 @@
         <link rel="prev" href="../energy_based_models/">
       
       
-        <link rel="next" href="../../../math/probability/probability_and_counting/">
+        <link rel="next" href="../score_based_generative_modeling/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -795,6 +795,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../score_based_generative_modeling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Score Based Generative Modeling
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1495,6 +1518,8 @@ When our model learns to predict this vector, it's learning to identify the dire
 </li>
 </ul>
 <p>This is why denoising score matching is so powerful - by learning to denoise, the model implicitly learns the structure of the clean data distribution, even though it never directly sees the clean data score function.</p>
+<p><strong>Con:</strong>
+Estimates the score of the noise-perturbed data, not the score of the actual data. We have shifted the goal post basically.</p>
 <p><strong>Generating Samples with MCMC:</strong></p>
 <p>Once we've trained our score function <span class="arithmatex">\(s_\theta(x)\)</span>, we can generate samples using <strong>Markov Chain Monte Carlo (MCMC)</strong> methods, typically <strong>Langevin dynamics</strong>.</p>
 

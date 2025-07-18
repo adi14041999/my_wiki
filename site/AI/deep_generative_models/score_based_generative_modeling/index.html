@@ -1,0 +1,1119 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A personal wiki for notes, ideas, and projects.">
+      
+      
+      
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/AI/deep_generative_models/score_based_generative_modeling/">
+      
+      
+        <link rel="prev" href="../score_based_models/">
+      
+      
+        <link rel="next" href="../../../math/probability/probability_and_counting/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Score Based Generative Modeling - My Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#score-based-generative-modeling" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="My Wiki" class="md-header__button md-logo" aria-label="My Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            My Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Score Based Generative Modeling
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="lime"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../introduction/" class="md-tabs__link">
+          
+  
+  
+  AI
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../math/probability/probability_and_counting/" class="md-tabs__link">
+          
+  
+  
+  Math
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="My Wiki" class="md-nav__button md-logo" aria-label="My Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    My Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    AI
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            AI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Deep Generative Models
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Deep Generative Models
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../autoregressive_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Autoregressive Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variational_autoencoders/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Variational Autoencoders
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../normalizing_flow_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Normalizing flow models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recap_at_this_point/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Recap at this point
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../generative_adversarial_networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Generative Adversarial Networks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../energy_based_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Energy Based Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../score_based_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Score Based Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Score Based Generative Modeling
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Score Based Generative Modeling
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#langevin-dynamics-sampling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Langevin Dynamics Sampling
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#annealed-langevin-dynamics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Annealed Langevin Dynamics
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Math
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Math
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Probability
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Probability
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/probability_and_counting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Probability and Counting
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="score-based-generative-modeling">Score Based Generative Modeling</h1>
+<h2 id="langevin-dynamics-sampling">Langevin Dynamics Sampling</h2>
+<p>Langevin dynamics is a powerful MCMC method that uses gradient information to efficiently sample from complex probability distributions. For score-based models, it provides a natural way to generate samples by following the learned score field.</p>
+<p><strong>Mathematical Foundation</strong></p>
+<p>Langevin dynamics is based on the <strong>Langevin equation</strong>, a stochastic differential equation that describes the motion of particles in a potential field:</p>
+<div class="arithmatex">\[dx_t = \nabla_x \log p(x_t) dt + \sqrt{2} dW_t\]</div>
+<p>where:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(x_t\)</span> is the particle position at time <span class="arithmatex">\(t\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(\nabla_x \log p(x_t)\)</span> is the score function (gradient of log probability)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(W_t\)</span> is a Wiener process (Brownian motion)</p>
+</li>
+<li>
+<p>The first term is the <strong>drift term</strong> (gradient guidance)</p>
+</li>
+<li>
+<p>The second term is the <strong>diffusion term</strong> (random exploration)</p>
+</li>
+</ul>
+<p><strong>Discretized Langevin Dynamics</strong></p>
+<p>For practical implementation, we discretize the continuous-time equation:</p>
+<div class="arithmatex">\[x_{t+1} = x_t + \epsilon \cdot \nabla_x \log p(x_t) + \sqrt{2\epsilon} \cdot \eta_t\]</div>
+<p>where:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(\epsilon\)</span> is the step size (time discretization)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\eta_t \sim \mathcal{N}(0, I)\)</span> is Gaussian noise</p>
+</li>
+<li>
+<p><span class="arithmatex">\(t\)</span> indexes the discrete time steps</p>
+</li>
+</ul>
+<p><strong>Score-Based Langevin Sampling</strong></p>
+<p>For our trained score function <span class="arithmatex">\(s_\theta(x) \approx \nabla_x \log p_{data}(x)\)</span>, the sampling algorithm becomes:</p>
+<p><strong>Algorithm: Score-Based Langevin Sampling</strong></p>
+<ol>
+<li>
+<p><strong>Initialize</strong>: <span class="arithmatex">\(x_0 \sim \mathcal{N}(0, I)\)</span> (random noise)</p>
+</li>
+<li>
+<p><strong>Iterate</strong>: For <span class="arithmatex">\(t = 0, 1, 2, \ldots, T-1\)</span>:</p>
+</li>
+<li>
+<p>Compute score: <span class="arithmatex">\(s_t = s_\theta(x_t)\)</span></p>
+</li>
+<li>
+<p>Add gradient step: <span class="arithmatex">\(x_{t+1} = x_t + \frac{\epsilon}{2} \cdot s_t + \sqrt{2\epsilon} \cdot \eta_t\)</span></p>
+</li>
+<li>
+<p>Where <span class="arithmatex">\(\eta_t \sim \mathcal{N}(0, I)\)</span></p>
+</li>
+<li>
+<p><strong>Return</strong>: <span class="arithmatex">\(x_T\)</span> as the generated sample</p>
+</li>
+</ol>
+<p><strong>Intuition Behind Langevin Dynamics</strong></p>
+<p><strong>The Drift Term (<span class="arithmatex">\(\frac{\epsilon}{2} \cdot s_\theta(x_t)\)</span>):</strong></p>
+<ul>
+<li>
+<p>Pushes the sample toward high-probability regions</p>
+</li>
+<li>
+<p>The score function points "uphill" in the probability landscape</p>
+</li>
+<li>
+<p>Larger step sizes <span class="arithmatex">\(\epsilon\)</span> lead to more aggressive movement</p>
+</li>
+<li>
+<p>The factor of <span class="arithmatex">\(\frac{1}{2}\)</span> comes from proper discretization of the continuous Langevin equation</p>
+</li>
+</ul>
+<p><strong>The Diffusion Term (<span class="arithmatex">\(\sqrt{2\epsilon} \cdot \eta_t\)</span>):</strong></p>
+<ul>
+<li>
+<p>Adds random exploration to avoid getting stuck in local modes</p>
+</li>
+<li>
+<p>Balances the deterministic gradient guidance</p>
+</li>
+<li>
+<p>Ensures the chain can escape local optima and explore the full distribution</p>
+</li>
+</ul>
+<p><strong>Balance Between Drift and Diffusion:</strong></p>
+<ul>
+<li>
+<p><strong>Small <span class="arithmatex">\(\epsilon\)</span></strong>: More exploration, slower convergence, better mixing</p>
+</li>
+<li>
+<p><strong>Large <span class="arithmatex">\(\epsilon\)</span></strong>: Faster convergence, but may miss modes or become unstable</p>
+</li>
+<li>
+<p><strong>Optimal <span class="arithmatex">\(\epsilon\)</span></strong>: Depends on the data distribution and model architecture</p>
+</li>
+</ul>
+<p><strong>Convergence Guarantees</strong></p>
+<p>Under mild conditions on the target distribution and score function, Langevin dynamics provides strong theoretical guarantees:</p>
+<p><strong>Asymptotic Convergence:</strong></p>
+<p>If <span class="arithmatex">\(\epsilon \to 0\)</span> and <span class="arithmatex">\(T \to \infty\)</span>, we are guaranteed that <span class="arithmatex">\(x_T \sim p_{data}(x)\)</span>.</p>
+<p><strong>Mathematical Interpretation:</strong></p>
+<ul>
+<li><strong><span class="arithmatex">\(\epsilon \to 0\)</span></strong>: The discretization becomes arbitrarily fine, approaching the continuous Langevin equation</li>
+<li><strong><span class="arithmatex">\(T \to \infty\)</span></strong>: The Markov chain runs for an infinite number of steps, allowing it to reach the stationary distribution</li>
+<li><strong><span class="arithmatex">\(x_T \sim p_{data}(x)\)</span></strong>: The final sample is distributed according to the target data distribution</li>
+</ul>
+<p><strong>Challenge in Low Density Regions:</strong></p>
+<p>One significant limitation of Langevin dynamics is its poor performance in <strong>low density regions</strong> of the target distribution:</p>
+<ul>
+<li><strong>Weak Score Signals</strong>: In regions where <span class="arithmatex">\(p_{data}(x) \approx 0\)</span>, the score function <span class="arithmatex">\(\nabla_x \log p_{data}(x)\)</span> becomes very small or noisy</li>
+<li><strong>Mode Collapse Risk</strong>: The algorithm may fail to explore all modes (mode is a region where the probability density is high, i.e., data points are concentrated) of a multi-modal distribution</li>
+<li><strong>Slow convergence:</strong> Langevin Dynamics converges very slowly. Might not even converge if we have zero probability somewhere.</li>
+</ul>
+<p>This challenge motivates the development of <strong>annealed Langevin dynamics</strong> and other advanced sampling techniques that can better handle complex, multi-modal distributions.</p>
+<h2 id="annealed-langevin-dynamics">Annealed Langevin Dynamics</h2>
+<p><strong>Mathematical Formulation</strong></p>
+<p>We define a sequence of <strong>annealed distributions</strong> indexed by noise level <span class="arithmatex">\(\sigma_t\)</span>:</p>
+<div class="arithmatex">\[p_t(x) = \int p_{data}(y) \mathcal{N}(x; y, \sigma_t^2 I) dy\]</div>
+<p>where each <span class="arithmatex">\(p_t(x)\)</span> is a smoothed version of the original data distribution.</p>
+<p>This equation is derived from the <strong>convolution</strong> of the data distribution with the noise distribution. Here's the step-by-step reasoning:</p>
+<p>If <span class="arithmatex">\(Y \sim p_{data}(y)\)</span> and <span class="arithmatex">\(\epsilon \sim \mathcal{N}(0, \sigma_i^2 I)\)</span>, then the noisy sample is <span class="arithmatex">\(X = Y + \epsilon\)</span>.</p>
+<p>The joint distribution of <span class="arithmatex">\((Y, X)\)</span> is:</p>
+<div class="arithmatex">\[p(y, x) = p_{data}(y) \cdot \mathcal{N}(x; y, \sigma_i^2 I)\]</div>
+<p>The joint distribution is derived using the <strong>chain rule of probability</strong>:</p>
+<div class="arithmatex">\[p(y, x) = p(y) \cdot p(x | y)\]</div>
+<p>where:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(p(y) = p_{data}(y)\)</span> is the marginal distribution of the clean data</p>
+</li>
+<li>
+<p><span class="arithmatex">\(p(x | y)\)</span> is the conditional distribution of the noisy sample given the clean data</p>
+</li>
+</ul>
+<p>Since <span class="arithmatex">\(X = Y + \epsilon\)</span> where <span class="arithmatex">\(\epsilon \sim \mathcal{N}(0, \sigma_i^2 I)\)</span>, the conditional distribution is:</p>
+<div class="arithmatex">\[p(x | y) = \mathcal{N}(x; y, \sigma_i^2 I)\]</div>
+<p>This is because adding a constant (<span class="arithmatex">\(y\)</span>) to a Gaussian random variable shifts the mean but preserves the variance. Therefore:</p>
+<div class="arithmatex">\[p(y, x) = p_{data}(y) \cdot \mathcal{N}(x; y, \sigma_i^2 I)\]</div>
+<p>To get the distribution of <span class="arithmatex">\(X\)</span> alone, we marginalize over <span class="arithmatex">\(Y\)</span>:</p>
+<div class="arithmatex">\[p_{\sigma_i}(x) = \int p(y, x) dy = \int p_{data}(y) \mathcal{N}(x; y, \sigma_i^2 I) dy\]</div>
+<p>We're using the <strong>law of total probability</strong> (also called marginalization). When we have a joint distribution <span class="arithmatex">\(p(y, x)\)</span>, to find the marginal distribution of <span class="arithmatex">\(x\)</span> alone, we integrate out the other variable:</p>
+<div class="arithmatex">\[p_{\sigma_i}(x) = \int p(y, x) dy\]</div>
+<p>This is because:</p>
+<ul>
+<li>
+<p>The joint distribution <span class="arithmatex">\(p(y, x)\)</span> gives us the probability of both <span class="arithmatex">\(y\)</span> AND <span class="arithmatex">\(x\)</span> occurring together</p>
+</li>
+<li>
+<p>To find the probability of just <span class="arithmatex">\(x\)</span> (regardless of what <span class="arithmatex">\(y\)</span> is), we sum over all possible values of <span class="arithmatex">\(y\)</span></p>
+</li>
+<li>
+<p>In continuous probability, "summing" becomes integration</p>
+</li>
+</ul>
+<p><strong>Intuition</strong>: We're asking "What's the probability of observing a noisy sample <span class="arithmatex">\(x\)</span>?" The answer is the sum of probabilities over all possible clean samples <span class="arithmatex">\(y\)</span> that could have generated this noisy sample.</p>
+<p><strong>Final Form</strong>: The noise-perturbed distribution is:</p>
+<div class="arithmatex">\[p_{\sigma_i}(x) = \int p_{data}(y) \mathcal{N}(x; y, \sigma_i^2 I) dy\]</div>
+<p>We use multiple scales of noise perturbations simultaneously. Suppose we always perturb the data with isotropic Gaussian noise, and let there be a total of <span class="arithmatex">\(L\)</span> increasing standard deviations <span class="arithmatex">\(\sigma_1 &lt; \sigma_2 &lt; \ldots &lt; \sigma_L\)</span>. We first perturb the data distribution <span class="arithmatex">\(p_{data}(y)\)</span> with each of the Gaussian noise <span class="arithmatex">\(\mathcal{N}(0, \sigma_i^2 I)\)</span> to obtain a noise-perturbed distribution (the final form we derived above):</p>
+<div class="arithmatex">\[p_{\sigma_i}(x) = \int p_{data}(y) \mathcal{N}(x; y, \sigma_i^2 I) dy\]</div>
+<p>Note that we can easily draw samples from <span class="arithmatex">\(p_{\sigma_i}(x)\)</span> by sampling <span class="arithmatex">\(y \sim p_{data}(y)\)</span> and computing <span class="arithmatex">\(x = y + \sigma_i \epsilon\)</span>, with <span class="arithmatex">\(\epsilon \sim \mathcal{N}(0, I)\)</span>.</p>
+<p>We estimate the score function of each noise-perturbed distribution, <span class="arithmatex">\(\nabla_x \log p_{\sigma_i}(x)\)</span>, by training a Denoising Score Matching Model (when parameterized with a neural network) with score matching, such that <span class="arithmatex">\(s_\theta(x, \sigma_i) \approx \nabla_x \log p_{\sigma_i}(x)\)</span> for all <span class="arithmatex">\(i\)</span>. The training objective for <span class="arithmatex">\(s_\theta\)</span> is a weighted sum of Fisher divergences for all noise scales. In particular, we use the objective below:</p>
+<div class="arithmatex">\[\mathcal{L}(\theta) = \frac{1}{L} \sum_{i=1}^L \lambda(\sigma_i) \mathbb{E}_{p_{\sigma_i}(x)} \left[ \| s_\theta(x, \sigma_i) - \nabla_x \log p_{\sigma_i}(x) \|_2^2 \right]\]</div>
+<p>where <span class="arithmatex">\(\lambda(\sigma_i)\)</span> is a positive weighting function, often chosen to be <span class="arithmatex">\(\lambda(\sigma_i) = \sigma_i^2\)</span>. The objective <span class="arithmatex">\(\mathcal{L}(\theta)\)</span> can be optimized with score matching, exactly as in optimizing the naive score-based model.</p>
+<p><strong>Denoising Score Matching Format:</strong></p>
+<p>We can rewrite the objective in Denoising Score Matching model format:</p>
+<div class="arithmatex">\[\mathcal{L}(\theta) = \frac{1}{L} \sum_{i=1}^L \lambda(\sigma_i) \mathbb{E}_{y \sim p_{data}(y), x \sim \mathcal{N}(x; y, \sigma_i^2 I)} \left[ \left\| s_\theta(x, \sigma_i) - \frac{y - x}{\sigma_i^2} \right\|_2^2 \right]\]</div>
+<p><strong>Note</strong>: The noise scales <span class="arithmatex">\(\sigma_1, \sigma_2, \ldots, \sigma_L\)</span> are typically chosen to be in a <strong>geometric progression</strong>, meaning <span class="arithmatex">\(\sigma_{i+1} = \alpha \cdot \sigma_i\)</span> for some constant <span class="arithmatex">\(\alpha &lt; 1\)</span>. This ensures that the noise levels decrease exponentially, providing a smooth annealing schedule from high noise to low noise.</p>
+<p>Perturbing an image with multiple scales of Gaussian noise:
+<img alt="Perturbing an image with multiple scales of Gaussian noise" src="../duoduo.jpg" /></p>
+<p>After training our score-based model <span class="arithmatex">\(s_\theta(x, \sigma_i)\)</span>, we can produce samples from it by running Langevin dynamics for <span class="arithmatex">\(\sigma_L, \sigma_{L-1}, \ldots, \sigma_1\)</span> in sequence. This method is called Annealed Langevin dynamics, since the noise scale decreases (anneals) gradually over time.</p>
+<p>We can start from unstructured noise, modify images according to the scores, and generate nice samples:
+<img alt="Annealed Langevin dynamics" src="../celeba_large.gif" /></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      &copy; 2025 <a href="https://github.com/adi14041999"  target="_blank" rel="noopener">Aditya Prabhu</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

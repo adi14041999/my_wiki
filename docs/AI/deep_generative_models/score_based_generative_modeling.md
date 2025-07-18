@@ -101,5 +101,95 @@ One significant limitation of Langevin dynamics is its poor performance in **low
 
 - **Weak Score Signals**: In regions where $p_{data}(x) \approx 0$, the score function $\nabla_x \log p_{data}(x)$ becomes very small or noisy
 - **Mode Collapse Risk**: The algorithm may fail to explore all modes (mode is a region where the probability density is high, i.e., data points are concentrated) of a multi-modal distribution
+- **Slow convergence:** Langevin Dynamics converges very slowly. Might not even converge if we have zero probability somewhere.
 
 This challenge motivates the development of **annealed Langevin dynamics** and other advanced sampling techniques that can better handle complex, multi-modal distributions.
+
+## Annealed Langevin Dynamics
+
+**Mathematical Formulation**
+
+We define a sequence of **annealed distributions** indexed by noise level $\sigma_t$:
+
+$$p_t(x) = \int p_{data}(y) \mathcal{N}(x; y, \sigma_t^2 I) dy$$
+
+where each $p_t(x)$ is a smoothed version of the original data distribution.
+
+This equation is derived from the **convolution** of the data distribution with the noise distribution. Here's the step-by-step reasoning:
+
+If $Y \sim p_{data}(y)$ and $\epsilon \sim \mathcal{N}(0, \sigma_i^2 I)$, then the noisy sample is $X = Y + \epsilon$.
+
+The joint distribution of $(Y, X)$ is:
+
+$$p(y, x) = p_{data}(y) \cdot \mathcal{N}(x; y, \sigma_i^2 I)$$
+
+The joint distribution is derived using the **chain rule of probability**:
+
+$$p(y, x) = p(y) \cdot p(x | y)$$
+
+where:
+
+- $p(y) = p_{data}(y)$ is the marginal distribution of the clean data
+
+- $p(x | y)$ is the conditional distribution of the noisy sample given the clean data
+
+Since $X = Y + \epsilon$ where $\epsilon \sim \mathcal{N}(0, \sigma_i^2 I)$, the conditional distribution is:
+
+$$p(x | y) = \mathcal{N}(x; y, \sigma_i^2 I)$$
+
+This is because adding a constant ($y$) to a Gaussian random variable shifts the mean but preserves the variance. Therefore:
+
+$$p(y, x) = p_{data}(y) \cdot \mathcal{N}(x; y, \sigma_i^2 I)$$
+
+To get the distribution of $X$ alone, we marginalize over $Y$:
+
+$$p_{\sigma_i}(x) = \int p(y, x) dy = \int p_{data}(y) \mathcal{N}(x; y, \sigma_i^2 I) dy$$
+
+We're using the **law of total probability** (also called marginalization). When we have a joint distribution $p(y, x)$, to find the marginal distribution of $x$ alone, we integrate out the other variable:
+
+$$p_{\sigma_i}(x) = \int p(y, x) dy$$
+
+This is because:
+
+- The joint distribution $p(y, x)$ gives us the probability of both $y$ AND $x$ occurring together
+
+- To find the probability of just $x$ (regardless of what $y$ is), we sum over all possible values of $y$
+
+- In continuous probability, "summing" becomes integration
+
+**Intuition**: We're asking "What's the probability of observing a noisy sample $x$?" The answer is the sum of probabilities over all possible clean samples $y$ that could have generated this noisy sample.
+
+**Final Form**: The noise-perturbed distribution is:
+
+$$p_{\sigma_i}(x) = \int p_{data}(y) \mathcal{N}(x; y, \sigma_i^2 I) dy$$
+
+We use multiple scales of noise perturbations simultaneously. Suppose we always perturb the data with isotropic Gaussian noise, and let there be a total of $L$ increasing standard deviations $\sigma_1 < \sigma_2 < \ldots < \sigma_L$. We first perturb the data distribution $p_{data}(y)$ with each of the Gaussian noise $\mathcal{N}(0, \sigma_i^2 I)$ to obtain a noise-perturbed distribution (the final form we derived above):
+
+$$p_{\sigma_i}(x) = \int p_{data}(y) \mathcal{N}(x; y, \sigma_i^2 I) dy$$
+
+Note that we can easily draw samples from $p_{\sigma_i}(x)$ by sampling $y \sim p_{data}(y)$ and computing $x = y + \sigma_i \epsilon$, with $\epsilon \sim \mathcal{N}(0, I)$.
+
+We estimate the score function of each noise-perturbed distribution, $\nabla_x \log p_{\sigma_i}(x)$, by training a Denoising Score Matching Model (when parameterized with a neural network) with score matching, such that $s_\theta(x, \sigma_i) \approx \nabla_x \log p_{\sigma_i}(x)$ for all $i$. The training objective for $s_\theta$ is a weighted sum of Fisher divergences for all noise scales. In particular, we use the objective below:
+
+$$\mathcal{L}(\theta) = \frac{1}{L} \sum_{i=1}^L \lambda(\sigma_i) \mathbb{E}_{p_{\sigma_i}(x)} \left[ \| s_\theta(x, \sigma_i) - \nabla_x \log p_{\sigma_i}(x) \|_2^2 \right]$$
+
+where $\lambda(\sigma_i)$ is a positive weighting function, often chosen to be $\lambda(\sigma_i) = \sigma_i^2$. The objective $\mathcal{L}(\theta)$ can be optimized with score matching, exactly as in optimizing the naive score-based model.
+
+**Denoising Score Matching Format:**
+
+We can rewrite the objective in Denoising Score Matching model format:
+
+$$\mathcal{L}(\theta) = \frac{1}{L} \sum_{i=1}^L \lambda(\sigma_i) \mathbb{E}_{y \sim p_{data}(y), x \sim \mathcal{N}(x; y, \sigma_i^2 I)} \left[ \left\| s_\theta(x, \sigma_i) - \frac{y - x}{\sigma_i^2} \right\|_2^2 \right]$$
+
+**Note**: The noise scales $\sigma_1, \sigma_2, \ldots, \sigma_L$ are typically chosen to be in a **geometric progression**, meaning $\sigma_{i+1} = \alpha \cdot \sigma_i$ for some constant $\alpha < 1$. This ensures that the noise levels decrease exponentially, providing a smooth annealing schedule from high noise to low noise.
+
+Perturbing an image with multiple scales of Gaussian noise:
+![Perturbing an image with multiple scales of Gaussian noise](duoduo.jpg)
+
+After training our score-based model $s_\theta(x, \sigma_i)$, we can produce samples from it by running Langevin dynamics for $\sigma_L, \sigma_{L-1}, \ldots, \sigma_1$ in sequence. This method is called Annealed Langevin dynamics, since the noise scale decreases (anneals) gradually over time.
+
+We can start from unstructured noise, modify images according to the scores, and generate nice samples:
+![Annealed Langevin dynamics](celeba_large.gif)
+
+
+

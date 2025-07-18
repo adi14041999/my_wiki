@@ -785,6 +785,9 @@ When our model learns to predict this score function, it's learning to:
 
 This is why denoising score matching is so powerful - by learning to denoise, the model implicitly learns the structure of the clean data distribution, even though it never directly sees the clean data score function.
 
+**Con:**
+Estimates the score of the noise-perturbed data, not the score of the actual data. We have shifted the goal post basically.
+
 **Generating Samples with MCMC:**
 
 Once we've trained our score function $s_\theta(x)$, we can generate samples using **Markov Chain Monte Carlo (MCMC)** methods, typically **Langevin dynamics**.
