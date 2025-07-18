@@ -114,4 +114,20 @@ $$\text{FID} = \|\mu_r - \mu_g\|^2 + \text{tr}(\Sigma_r + \Sigma_g - 2(\Sigma_r 
 
 ## Evaluating Latent Representations and Prompting
 
+### Clustering
+
+Clustering is a powerful method for evaluating the quality and structure of latent representations learned by generative models. It provides insights into how well the model organizes and separates different concepts in its latent space. Clusters can be obtained by applying k-means or any other algorithm in the latent space of the generative model.
+
+### Lossy Compression or Reconstruction
+
+Latent representations can be evaluated based on the maximum compression they can achieve without significant loss in reconstruction accuracy. This involves measuring the trade-off between the dimensionality of the latent space and the quality of reconstructed samples. A good latent representation should maintain high reconstruction fidelity while using a compact, low-dimensional encoding that captures the essential features of the data. There are many quantitative evaluation metrics for this.
+
+### Disentanglement
+
+Intuitively, we want representations that disentangle independent and interpretable attributes of the observed data. Disentanglement means that different dimensions of the latent space should correspond to distinct, meaningful factors of variation in the data. For example, in face generation, one latent dimension might control facial expression while another controls hair color, allowing for independent manipulation of these attributes. There are many quantitative evaluation metrics for this.
+
+### Solving tasks through prompting
+
+An LLM can be used to directly solve tasks without extracting representations by specifying tasks in natural language.
+
 
