@@ -692,6 +692,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#annealed-langevin-dynamics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Annealed Langevin Dynamics
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -973,8 +982,67 @@
 <ul>
 <li><strong>Weak Score Signals</strong>: In regions where <span class="arithmatex">\(p_{data}(x) \approx 0\)</span>, the score function <span class="arithmatex">\(\nabla_x \log p_{data}(x)\)</span> becomes very small or noisy</li>
 <li><strong>Mode Collapse Risk</strong>: The algorithm may fail to explore all modes (mode is a region where the probability density is high, i.e., data points are concentrated) of a multi-modal distribution</li>
+<li><strong>Slow convergence:</strong> Langevin Dynamics converges very slowly. Might not even converge if we have zero probability somewhere.</li>
 </ul>
 <p>This challenge motivates the development of <strong>annealed Langevin dynamics</strong> and other advanced sampling techniques that can better handle complex, multi-modal distributions.</p>
+<h2 id="annealed-langevin-dynamics">Annealed Langevin Dynamics</h2>
+<p><strong>Mathematical Formulation</strong></p>
+<p>We define a sequence of <strong>annealed distributions</strong> indexed by noise level <span class="arithmatex">\(\sigma_t\)</span>:</p>
+<div class="arithmatex">\[p_t(x) = \int p_{data}(y) \mathcal{N}(x; y, \sigma_t^2 I) dy\]</div>
+<p>where each <span class="arithmatex">\(p_t(x)\)</span> is a smoothed version of the original data distribution.</p>
+<p>This equation is derived from the <strong>convolution</strong> of the data distribution with the noise distribution. Here's the step-by-step reasoning:</p>
+<p>If <span class="arithmatex">\(Y \sim p_{data}(y)\)</span> and <span class="arithmatex">\(\epsilon \sim \mathcal{N}(0, \sigma_i^2 I)\)</span>, then the noisy sample is <span class="arithmatex">\(X = Y + \epsilon\)</span>.</p>
+<p>The joint distribution of <span class="arithmatex">\((Y, X)\)</span> is:</p>
+<div class="arithmatex">\[p(y, x) = p_{data}(y) \cdot \mathcal{N}(x; y, \sigma_i^2 I)\]</div>
+<p>The joint distribution is derived using the <strong>chain rule of probability</strong>:</p>
+<div class="arithmatex">\[p(y, x) = p(y) \cdot p(x | y)\]</div>
+<p>where:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(p(y) = p_{data}(y)\)</span> is the marginal distribution of the clean data</p>
+</li>
+<li>
+<p><span class="arithmatex">\(p(x | y)\)</span> is the conditional distribution of the noisy sample given the clean data</p>
+</li>
+</ul>
+<p>Since <span class="arithmatex">\(X = Y + \epsilon\)</span> where <span class="arithmatex">\(\epsilon \sim \mathcal{N}(0, \sigma_i^2 I)\)</span>, the conditional distribution is:</p>
+<div class="arithmatex">\[p(x | y) = \mathcal{N}(x; y, \sigma_i^2 I)\]</div>
+<p>This is because adding a constant (<span class="arithmatex">\(y\)</span>) to a Gaussian random variable shifts the mean but preserves the variance. Therefore:</p>
+<div class="arithmatex">\[p(y, x) = p_{data}(y) \cdot \mathcal{N}(x; y, \sigma_i^2 I)\]</div>
+<p>To get the distribution of <span class="arithmatex">\(X\)</span> alone, we marginalize over <span class="arithmatex">\(Y\)</span>:</p>
+<div class="arithmatex">\[p_{\sigma_i}(x) = \int p(y, x) dy = \int p_{data}(y) \mathcal{N}(x; y, \sigma_i^2 I) dy\]</div>
+<p>We're using the <strong>law of total probability</strong> (also called marginalization). When we have a joint distribution <span class="arithmatex">\(p(y, x)\)</span>, to find the marginal distribution of <span class="arithmatex">\(x\)</span> alone, we integrate out the other variable:</p>
+<div class="arithmatex">\[p_{\sigma_i}(x) = \int p(y, x) dy\]</div>
+<p>This is because:</p>
+<ul>
+<li>
+<p>The joint distribution <span class="arithmatex">\(p(y, x)\)</span> gives us the probability of both <span class="arithmatex">\(y\)</span> AND <span class="arithmatex">\(x\)</span> occurring together</p>
+</li>
+<li>
+<p>To find the probability of just <span class="arithmatex">\(x\)</span> (regardless of what <span class="arithmatex">\(y\)</span> is), we sum over all possible values of <span class="arithmatex">\(y\)</span></p>
+</li>
+<li>
+<p>In continuous probability, "summing" becomes integration</p>
+</li>
+</ul>
+<p><strong>Intuition</strong>: We're asking "What's the probability of observing a noisy sample <span class="arithmatex">\(x\)</span>?" The answer is the sum of probabilities over all possible clean samples <span class="arithmatex">\(y\)</span> that could have generated this noisy sample.</p>
+<p><strong>Final Form</strong>: The noise-perturbed distribution is:</p>
+<div class="arithmatex">\[p_{\sigma_i}(x) = \int p_{data}(y) \mathcal{N}(x; y, \sigma_i^2 I) dy\]</div>
+<p>We use multiple scales of noise perturbations simultaneously. Suppose we always perturb the data with isotropic Gaussian noise, and let there be a total of <span class="arithmatex">\(L\)</span> increasing standard deviations <span class="arithmatex">\(\sigma_1 &lt; \sigma_2 &lt; \ldots &lt; \sigma_L\)</span>. We first perturb the data distribution <span class="arithmatex">\(p_{data}(y)\)</span> with each of the Gaussian noise <span class="arithmatex">\(\mathcal{N}(0, \sigma_i^2 I)\)</span> to obtain a noise-perturbed distribution (the final form we derived above):</p>
+<div class="arithmatex">\[p_{\sigma_i}(x) = \int p_{data}(y) \mathcal{N}(x; y, \sigma_i^2 I) dy\]</div>
+<p>Note that we can easily draw samples from <span class="arithmatex">\(p_{\sigma_i}(x)\)</span> by sampling <span class="arithmatex">\(y \sim p_{data}(y)\)</span> and computing <span class="arithmatex">\(x = y + \sigma_i \epsilon\)</span>, with <span class="arithmatex">\(\epsilon \sim \mathcal{N}(0, I)\)</span>.</p>
+<p>We estimate the score function of each noise-perturbed distribution, <span class="arithmatex">\(\nabla_x \log p_{\sigma_i}(x)\)</span>, by training a Denoising Score Matching Model (when parameterized with a neural network) with score matching, such that <span class="arithmatex">\(s_\theta(x, \sigma_i) \approx \nabla_x \log p_{\sigma_i}(x)\)</span> for all <span class="arithmatex">\(i\)</span>. The training objective for <span class="arithmatex">\(s_\theta\)</span> is a weighted sum of Fisher divergences for all noise scales. In particular, we use the objective below:</p>
+<div class="arithmatex">\[\mathcal{L}(\theta) = \frac{1}{L} \sum_{i=1}^L \lambda(\sigma_i) \mathbb{E}_{p_{\sigma_i}(x)} \left[ \| s_\theta(x, \sigma_i) - \nabla_x \log p_{\sigma_i}(x) \|_2^2 \right]\]</div>
+<p>where <span class="arithmatex">\(\lambda(\sigma_i)\)</span> is a positive weighting function, often chosen to be <span class="arithmatex">\(\lambda(\sigma_i) = \sigma_i^2\)</span>. The objective <span class="arithmatex">\(\mathcal{L}(\theta)\)</span> can be optimized with score matching, exactly as in optimizing the naive score-based model.</p>
+<p><strong>Denoising Score Matching Format:</strong></p>
+<p>We can rewrite the objective in Denoising Score Matching model format:</p>
+<div class="arithmatex">\[\mathcal{L}(\theta) = \frac{1}{L} \sum_{i=1}^L \lambda(\sigma_i) \mathbb{E}_{y \sim p_{data}(y), x \sim \mathcal{N}(x; y, \sigma_i^2 I)} \left[ \left\| s_\theta(x, \sigma_i) - \frac{y - x}{\sigma_i^2} \right\|_2^2 \right]\]</div>
+<p><strong>Note</strong>: The noise scales <span class="arithmatex">\(\sigma_1, \sigma_2, \ldots, \sigma_L\)</span> are typically chosen to be in a <strong>geometric progression</strong>, meaning <span class="arithmatex">\(\sigma_{i+1} = \alpha \cdot \sigma_i\)</span> for some constant <span class="arithmatex">\(\alpha &lt; 1\)</span>. This ensures that the noise levels decrease exponentially, providing a smooth annealing schedule from high noise to low noise.</p>
+<p>Perturbing an image with multiple scales of Gaussian noise:
+<img alt="Perturbing an image with multiple scales of Gaussian noise" src="../duoduo.jpg" /></p>
+<p>After training our score-based model <span class="arithmatex">\(s_\theta(x, \sigma_i)\)</span>, we can produce samples from it by running Langevin dynamics for <span class="arithmatex">\(\sigma_L, \sigma_{L-1}, \ldots, \sigma_1\)</span> in sequence. This method is called Annealed Langevin dynamics, since the noise scale decreases (anneals) gradually over time.</p>
+<p>We can start from unstructured noise, modify images according to the scores, and generate nice samples:
+<img alt="Annealed Langevin dynamics" src="../celeba_large.gif" /></p>
 
 
 
