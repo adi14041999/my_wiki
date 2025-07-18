@@ -58,4 +58,60 @@ While ELBO is a lower bound on the true likelihood, it provides a reasonable pro
 In general, unbiased estimation of probability density functions from samples is impossible.
 
 ## Sample Quality
+
+Human evaluations are the gold standard.
+
+**HYPE_time**: A metric that measures the minimum time it takes for a human to distinguish between real and generated samples. Higher HYPE_time indicates better sample quality, as it takes humans longer to detect that samples are fake.
+
+**HYPE_infinity**: The percentage of samples that deceive people under unlimited time. The larger the better.
+
+**Key Insight**: HYPE metrics provide a human-centric evaluation of generative models, measuring how convincingly the model can fool human evaluators. This is particularly relevant for applications where human perception is the ultimate judge of quality.
    
+Human evaluations are expensive, biased and hard to reproduce.
+
+### Inception Score
+
+The Inception Score measures the quality and diversity of generated samples using a pre-trained classifier (typically Inception-v3 for images). It is based on two key principles:
+
+1. **Sharpness**: Generated samples should be easily classifiable (high confidence predictions)
+2. **Diversity**: The model should generate samples from different classes
+
+### Fréchet Inception Distance (FID)
+
+The Fréchet Inception Distance (FID) measures similarities in the feature representations for datapoints sampled from $p_{\theta}$ and the test dataset.
+
+**How FID is Computed**:
+
+**Feature Extraction**: Use a pre-trained Inception network (typically Inception-v3) to extract features from both real and generated samples. Let $f_r(x)$ and $f_g(x)$ be the feature extractors for real and generated samples respectively.
+
+**Distribution Modeling**: Model the feature distributions as multivariate Gaussians.
+
+   - For real data: $\mathcal{N}(\mu_r, \Sigma_r)$ where:
+
+     - $\mu_r = \mathbb{E}_{x \sim p_{data}}[f_r(x)]$ (mean of real features)
+
+     - $\Sigma_r = \mathbb{E}_{x \sim p_{data}}[(f_r(x) - \mu_r)(f_r(x) - \mu_r)^T]$ (covariance of real features)
+
+   - For generated data: $\mathcal{N}(\mu_g, \Sigma_g)$ where:
+
+     - $\mu_g = \mathbb{E}_{x \sim p_\theta}[f_g(x)]$ (mean of generated features)
+
+     - $\Sigma_g = \mathbb{E}_{x \sim p_\theta}[(f_g(x) - \mu_g)(f_g(x) - \mu_g)^T]$ (covariance of generated features)
+
+**Fréchet Distance Calculation**: Compute the Fréchet distance between the two Gaussian distributions:
+   
+$$\text{FID} = \|\mu_r - \mu_g\|^2 + \text{tr}(\Sigma_r + \Sigma_g - 2(\Sigma_r \Sigma_g)^{1/2})$$
+   
+   where:
+
+   - $\|\mu_r - \mu_g\|^2$ is the squared Euclidean distance between means
+
+   - $\text{tr}(\Sigma_r + \Sigma_g - 2(\Sigma_r \Sigma_g)^{1/2})$ is the trace of the covariance difference term
+
+   - The matrix square root $(\Sigma_r \Sigma_g)^{1/2}$ is computed using eigendecomposition
+
+**Note:** Check this resource on evaluating Text-To-Image Models: [HEIM](https://crfm.stanford.edu/helm/heim/latest/)
+
+## Evaluating Latent Representations and Prompting
+
+

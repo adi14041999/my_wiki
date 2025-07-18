@@ -722,6 +722,39 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Sample Quality">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inception-score" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inception Score
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frechet-inception-distance-fid" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fréchet Inception Distance (FID)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evaluating-latent-representations-and-prompting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evaluating Latent Representations and Prompting
+    </span>
+  </a>
+  
 </li>
       
     </ul>
@@ -937,6 +970,62 @@
 <p><strong>GANs</strong>: GANs pose a unique challenge because they don't provide explicit likelihood estimates.</p>
 <p>In general, unbiased estimation of probability density functions from samples is impossible.</p>
 <h2 id="sample-quality">Sample Quality</h2>
+<p>Human evaluations are the gold standard.</p>
+<p><strong>HYPE_time</strong>: A metric that measures the minimum time it takes for a human to distinguish between real and generated samples. Higher HYPE_time indicates better sample quality, as it takes humans longer to detect that samples are fake.</p>
+<p><strong>HYPE_infinity</strong>: The percentage of samples that deceive people under unlimited time. The larger the better.</p>
+<p><strong>Key Insight</strong>: HYPE metrics provide a human-centric evaluation of generative models, measuring how convincingly the model can fool human evaluators. This is particularly relevant for applications where human perception is the ultimate judge of quality.</p>
+<p>Human evaluations are expensive, biased and hard to reproduce.</p>
+<h3 id="inception-score">Inception Score</h3>
+<p>The Inception Score measures the quality and diversity of generated samples using a pre-trained classifier (typically Inception-v3 for images). It is based on two key principles:</p>
+<ol>
+<li><strong>Sharpness</strong>: Generated samples should be easily classifiable (high confidence predictions)</li>
+<li><strong>Diversity</strong>: The model should generate samples from different classes</li>
+</ol>
+<h3 id="frechet-inception-distance-fid">Fréchet Inception Distance (FID)</h3>
+<p>The Fréchet Inception Distance (FID) measures similarities in the feature representations for datapoints sampled from <span class="arithmatex">\(p_{\theta}\)</span> and the test dataset.</p>
+<p><strong>How FID is Computed</strong>:</p>
+<p><strong>Feature Extraction</strong>: Use a pre-trained Inception network (typically Inception-v3) to extract features from both real and generated samples. Let <span class="arithmatex">\(f_r(x)\)</span> and <span class="arithmatex">\(f_g(x)\)</span> be the feature extractors for real and generated samples respectively.</p>
+<p><strong>Distribution Modeling</strong>: Model the feature distributions as multivariate Gaussians.</p>
+<ul>
+<li>
+<p>For real data: <span class="arithmatex">\(\mathcal{N}(\mu_r, \Sigma_r)\)</span> where:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(\mu_r = \mathbb{E}_{x \sim p_{data}}[f_r(x)]\)</span> (mean of real features)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\Sigma_r = \mathbb{E}_{x \sim p_{data}}[(f_r(x) - \mu_r)(f_r(x) - \mu_r)^T]\)</span> (covariance of real features)</p>
+</li>
+</ul>
+</li>
+<li>
+<p>For generated data: <span class="arithmatex">\(\mathcal{N}(\mu_g, \Sigma_g)\)</span> where:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(\mu_g = \mathbb{E}_{x \sim p_\theta}[f_g(x)]\)</span> (mean of generated features)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\Sigma_g = \mathbb{E}_{x \sim p_\theta}[(f_g(x) - \mu_g)(f_g(x) - \mu_g)^T]\)</span> (covariance of generated features)</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Fréchet Distance Calculation</strong>: Compute the Fréchet distance between the two Gaussian distributions:</p>
+<div class="arithmatex">\[\text{FID} = \|\mu_r - \mu_g\|^2 + \text{tr}(\Sigma_r + \Sigma_g - 2(\Sigma_r \Sigma_g)^{1/2})\]</div>
+<p>where:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(\|\mu_r - \mu_g\|^2\)</span> is the squared Euclidean distance between means</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\text{tr}(\Sigma_r + \Sigma_g - 2(\Sigma_r \Sigma_g)^{1/2})\)</span> is the trace of the covariance difference term</p>
+</li>
+<li>
+<p>The matrix square root <span class="arithmatex">\((\Sigma_r \Sigma_g)^{1/2}\)</span> is computed using eigendecomposition</p>
+</li>
+</ul>
+<p><strong>Note:</strong> Check this resource on evaluating Text-To-Image Models: <a href="https://crfm.stanford.edu/helm/heim/latest/">HEIM</a></p>
+<h2 id="evaluating-latent-representations-and-prompting">Evaluating Latent Representations and Prompting</h2>
 
 
 
