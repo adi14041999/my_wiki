@@ -701,6 +701,30 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#generative-modeling-via-stochastic-differential-equations-sdes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generative Modeling via Stochastic Differential Equations (SDEs)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Generative Modeling via Stochastic Differential Equations (SDEs)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estimating-the-reverse-sde-with-score-based-models-and-score-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      Estimating the reverse SDE with score-based models and score matching
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1043,6 +1067,50 @@
 <p>After training our score-based model <span class="arithmatex">\(s_\theta(x, \sigma_i)\)</span>, we can produce samples from it by running Langevin dynamics for <span class="arithmatex">\(\sigma_L, \sigma_{L-1}, \ldots, \sigma_1\)</span> in sequence. This method is called Annealed Langevin dynamics, since the noise scale decreases (anneals) gradually over time.</p>
 <p>We can start from unstructured noise, modify images according to the scores, and generate nice samples:
 <img alt="Annealed Langevin dynamics" src="../celeba_large.gif" /></p>
+<h2 id="generative-modeling-via-stochastic-differential-equations-sdes">Generative Modeling via Stochastic Differential Equations (SDEs)</h2>
+<p>When the number of noise scales approaches infinity, we essentially perturb the data distribution with continuously growing levels of noise. In this case, the noise perturbation procedure is a continuous-time stochastic process, as demonstrated below.</p>
+<p><img alt="Perturbing data to noise with a continuous-time stochastic process" src="../perturb_vp.gif" /></p>
+<p>How can we represent a stochastic process in a concise way? Many stochastic processes are solutions of stochastic differential equations (SDEs). In general, an SDE possesses the following form:</p>
+<div class="arithmatex">\[dx = f(x, t)dt + g(t)dw\]</div>
+<p>where <span class="arithmatex">\(f(x, t)\)</span> is a vector-valued function called the <strong>drift coefficient</strong>, <span class="arithmatex">\(g(t)\)</span> is a real-valued function called the <strong>diffusion coefficient</strong>, <span class="arithmatex">\(w\)</span> denotes a standard Brownian motion, and <span class="arithmatex">\(dw\)</span> can be viewed as infinitesimal white noise. The solution of a stochastic differential equation is a continuous collection of random variables <span class="arithmatex">\(\{x(t)\}_{t \in [0, T]}\)</span>.</p>
+<p>These random variables trace stochastic trajectories as the time index <span class="arithmatex">\(t\)</span> grows from the start time <span class="arithmatex">\(0\)</span> to the end time <span class="arithmatex">\(T\)</span>. Let <span class="arithmatex">\(p_t(x)\)</span> denote the (marginal) probability density function of <span class="arithmatex">\(x(t)\)</span>. Here <span class="arithmatex">\(p_t(x)\)</span> is analogous to <span class="arithmatex">\(p_{\sigma_i}(x)\)</span> when we had a finite number of noise scales, and <span class="arithmatex">\(t\)</span> is analogous to <span class="arithmatex">\(\sigma_i\)</span>. Clearly, <span class="arithmatex">\(p_0(x)\)</span> is the data distribution since no perturbation is applied to data at <span class="arithmatex">\(t = 0\)</span>. After perturbing <span class="arithmatex">\(p_0(x)\)</span> with the stochastic process for a sufficiently long time <span class="arithmatex">\(T\)</span>, <span class="arithmatex">\(p_T(x)\)</span> becomes close to a tractable noise distribution <span class="arithmatex">\(p_T(x) \approx \pi(x)\)</span>, called a prior distribution. We note that <span class="arithmatex">\(\pi(x)\)</span> is analogous to <span class="arithmatex">\(p_{\sigma_L}(x)\)</span> in the case of finite noise scales, which corresponds to applying the largest noise perturbation <span class="arithmatex">\(\sigma_L\)</span> to the data.</p>
+<p>There are numerous ways to add noise perturbations, and the choice of SDEs is not unique. For example, the following SDE</p>
+<div class="arithmatex">\[dx = e^t dw\]</div>
+<p>perturbs data with a Gaussian noise of mean zero and exponentially growing variance. Therefore, the SDE should be viewed as part of the model, much like <span class="arithmatex">\(\sigma_i\)</span>.</p>
+<p>Recall that with a finite number of noise scales, we can generate samples by reversing the perturbation process with annealed Langevin dynamics, i.e., sequentially sampling from each noise-perturbed distribution using Langevin dynamics. For infinite noise scales, we can analogously reverse the perturbation process for sample generation by using the reverse SDE.</p>
+<p>Importantly, any SDE has a corresponding reverse SDE, whose closed form is given by</p>
+<div class="arithmatex">\[dx = [f(x, t) - g^2(t)\nabla_x \log p_t(x)]dt + g(t)d\bar{w}\]</div>
+<p>Here <span class="arithmatex">\(dt\)</span> represents a negative infinitesimal time step, since the SDE needs to be solved backwards in time (from <span class="arithmatex">\(T\)</span> to <span class="arithmatex">\(0\)</span>). In order to compute the reverse SDE, we need to estimate <span class="arithmatex">\(\nabla_x \log p_t(x)\)</span>, which is exactly the score function of <span class="arithmatex">\(p_t(x)\)</span>.</p>
+<p><img alt="SDE schematic" src="../sde_schematic.jpg" /></p>
+<p><strong>Note</strong>: Langevin dynamics is a specific instance of the reverse SDE where <span class="arithmatex">\(f(x, t) = 0\)</span> (no forward drift) and <span class="arithmatex">\(g(t) = \sqrt{2}\)</span> (constant diffusion). This shows how Langevin dynamics naturally emerges as a special case of the reverse SDE when we want to sample from a target distribution.</p>
+<h3 id="estimating-the-reverse-sde-with-score-based-models-and-score-matching">Estimating the reverse SDE with score-based models and score matching</h3>
+<p>Solving the reverse SDE requires us to know the terminal distribution <span class="arithmatex">\(p_T(x)\)</span>, and the score function <span class="arithmatex">\(\nabla_x \log p_t(x)\)</span>. By design, the former is close to the prior distribution <span class="arithmatex">\(\pi(x)\)</span> which is fully tractable. In order to estimate <span class="arithmatex">\(\nabla_x \log p_t(x)\)</span>, we train a Time-Dependent Score-Based Model <span class="arithmatex">\(s_\theta(x, t)\)</span>, such that <span class="arithmatex">\(s_\theta(x, t) \approx \nabla_x \log p_t(x)\)</span>. This is analogous to the denoising score matching model <span class="arithmatex">\(s_\theta(x, \sigma_i)\)</span> used for finite noise scales, trained such that <span class="arithmatex">\(s_\theta(x, \sigma_i) \approx \nabla_x \log p_{\sigma_i}(x)\)</span>.</p>
+<p>Our training objective for <span class="arithmatex">\(s_\theta(x, t)\)</span> is a continuous weighted combination of Fisher divergences, given by</p>
+<div class="arithmatex">\[\mathcal{L}(\theta) = \mathbb{E}_{t \sim \mathcal{U}[0, T]} \mathbb{E}_{x \sim p_t(x)} \left[ \lambda(t) \| s_\theta(x, t) - \nabla_x \log p_t(x) \|_2^2 \right]\]</div>
+<p>where <span class="arithmatex">\(\mathcal{U}[0, T]\)</span> denotes a uniform distribution over the time interval <span class="arithmatex">\([0, T]\)</span>, and <span class="arithmatex">\(\lambda(t)\)</span> is a positive weighting function.</p>
+<p>As before, our weighted combination of Fisher divergences can be efficiently optimized with score matching methods, such as denoising score matching and sliced score matching. Once our score-based model <span class="arithmatex">\(s_\theta(x, t)\)</span> is trained to optimality, we can plug it into the expression of the reverse SDE to obtain an estimated reverse SDE.</p>
+<p>We can start with <span class="arithmatex">\(x(T) \sim p_T(x)\)</span>, and solve the above reverse SDE to obtain a sample <span class="arithmatex">\(x(0)\)</span>. Let us denote the distribution of <span class="arithmatex">\(x(0)\)</span> obtained in such way as <span class="arithmatex">\(p_\theta(x)\)</span>. When the score-based model <span class="arithmatex">\(s_\theta(x, t)\)</span> is well-trained, we have <span class="arithmatex">\(s_\theta(x, t) \approx \nabla_x \log p_t(x)\)</span>, in which case <span class="arithmatex">\(x(0)\)</span> is an approximate sample from the data distribution <span class="arithmatex">\(p_0(x)\)</span>.</p>
+<p>By solving the estimated reverse SDE with numerical SDE solvers, we can simulate the reverse stochastic process for sample generation. Perhaps the simplest numerical SDE solver is the Euler-Maruyama method. When applied to our estimated reverse SDE, it discretizes the SDE using finite time steps and small Gaussian noise. Specifically, it chooses a small negative time step <span class="arithmatex">\(\Delta t\)</span>, initializes <span class="arithmatex">\(x(T) \sim p_T(x)\)</span>, and iterates the following procedure until <span class="arithmatex">\(t = 0\)</span>:</p>
+<div class="arithmatex">\[\Delta x = [f(x, t) - g^2(t)s_\theta(x, t)]\Delta t + g(t)\sqrt{|\Delta t|}\eta_t\]</div>
+<p>where <span class="arithmatex">\(\eta_t \sim \mathcal{N}(0, I)\)</span>.</p>
+<p>Then update: <span class="arithmatex">\(x \leftarrow x + \Delta x\)</span> and <span class="arithmatex">\(t \leftarrow t + \Delta t\)</span>.</p>
+<p><strong>Note</strong>: The function <span class="arithmatex">\(f(x, t)\)</span> in the Euler-Maruyama equation is the <strong>drift coefficient from the original forward SDE</strong>. Common examples include:</p>
+<ul>
+<li>
+<p><strong><span class="arithmatex">\(f(x, t) = 0\)</span></strong> (pure diffusion): Used in simple noise perturbation</p>
+</li>
+<li>
+<p><strong><span class="arithmatex">\(f(x, t) = -\frac{1}{2}\beta(t)x\)</span></strong> (linear drift): Used in variance-preserving diffusion</p>
+</li>
+<li>
+<p><strong><span class="arithmatex">\(f(x, t) = -x^2\)</span></strong> (quadratic drift): Creates potential wells</p>
+</li>
+<li>
+<p><strong><span class="arithmatex">\(f(x, t) = x - x^3\)</span></strong> (polynomial drift): Creates multiple stable equilibria</p>
+</li>
+</ul>
+<p><strong>Most Common in Practice</strong>: For score-based generative modeling, the most commonly used forms are <span class="arithmatex">\(f(x, t) = 0\)</span> (pure diffusion) and <span class="arithmatex">\(f(x, t) = -\frac{1}{2}\beta(t)x\)</span> (VP diffusion). The choice of <span class="arithmatex">\(f(x, t)\)</span> determines how the data is perturbed during the forward process.</p>
+<p>The Euler-Maruyama method is qualitatively similar to Langevin dynamics— both update <span class="arithmatex">\(x\)</span> by following score functions perturbed with Gaussian noise.</p>
 
 
 
