@@ -126,8 +126,4 @@ Latent representations can be evaluated based on the maximum compression they ca
 
 Intuitively, we want representations that disentangle independent and interpretable attributes of the observed data. Disentanglement means that different dimensions of the latent space should correspond to distinct, meaningful factors of variation in the data. For example, in face generation, one latent dimension might control facial expression while another controls hair color, allowing for independent manipulation of these attributes. There are many quantitative evaluation metrics for this.
 
-### Solving tasks through prompting
-
-An LLM can be used to directly solve tasks without extracting representations by specifying tasks in natural language.
-
 
