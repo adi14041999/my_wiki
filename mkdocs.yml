@@ -16,6 +16,7 @@ nav:
       - Energy Based Models: AI/deep_generative_models/energy_based_models.md
       - Score Based Models: AI/deep_generative_models/score_based_models.md
       - Score Based Generative Modeling: AI/deep_generative_models/score_based_generative_modeling.md
+      - Evaluating Generative Models: AI/deep_generative_models/evaluating_generative_models.md
   - Math:
     - Probability:
       - Probability and Counting: math/probability/probability_and_counting.md
