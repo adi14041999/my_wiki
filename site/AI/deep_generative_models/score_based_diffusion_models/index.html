@@ -10,26 +10,28 @@
       
       
       
-        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/">
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/AI/deep_generative_models/score_based_diffusion_models/">
       
       
+        <link rel="prev" href="../evaluating_generative_models/">
       
-        <link rel="next" href="AI/deep_generative_models/introduction/">
+      
+        <link rel="next" href="../../../math/probability/probability_and_counting/">
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
     
     
       
-        <title>My Wiki</title>
+        <title>Score Based Diffusion Models - My Wiki</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.342714a4.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.342714a4.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -48,9 +50,9 @@
       
     
     
-      <link rel="stylesheet" href="stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#welcome-to-my-wiki" class="md-skip">
+        <a href="#score-based-diffusion-models" class="md-skip">
           Skip to content
         </a>
       
@@ -90,7 +92,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="My Wiki" class="md-header__button md-logo" aria-label="My Wiki" data-md-component="logo">
+    <a href="../../.." title="My Wiki" class="md-header__button md-logo" aria-label="My Wiki" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -110,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              Score Based Diffusion Models
             
           </span>
         </div>
@@ -209,11 +211,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="." class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -230,6 +230,8 @@
   
   
   
+    
+  
   
     
     
@@ -237,11 +239,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="AI/deep_generative_models/introduction/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../introduction/" class="md-tabs__link">
           
   
   
@@ -271,7 +275,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="math/probability/probability_and_counting/" class="md-tabs__link">
+        <a href="../../../math/probability/probability_and_counting/" class="md-tabs__link">
           
   
   
@@ -310,7 +314,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="My Wiki" class="md-nav__button md-logo" aria-label="My Wiki" data-md-component="logo">
+    <a href="../../.." title="My Wiki" class="md-nav__button md-logo" aria-label="My Wiki" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -325,19 +329,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -348,7 +343,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -357,26 +351,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -389,7 +388,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             AI
@@ -400,26 +399,31 @@
                 
   
   
+    
   
   
+  
     
     
     
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
         
           
-          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
             
   
   
@@ -432,7 +436,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2_1">
             <span class="md-nav__icon md-icon"></span>
             Deep Generative Models
@@ -446,7 +450,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/introduction/" class="md-nav__link">
+      <a href="../introduction/" class="md-nav__link">
         
   
   
@@ -469,7 +473,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/autoregressive_models/" class="md-nav__link">
+      <a href="../autoregressive_models/" class="md-nav__link">
         
   
   
@@ -492,7 +496,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/variational_autoencoders/" class="md-nav__link">
+      <a href="../variational_autoencoders/" class="md-nav__link">
         
   
   
@@ -515,7 +519,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/normalizing_flow_models/" class="md-nav__link">
+      <a href="../normalizing_flow_models/" class="md-nav__link">
         
   
   
@@ -538,7 +542,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/recap_at_this_point/" class="md-nav__link">
+      <a href="../recap_at_this_point/" class="md-nav__link">
         
   
   
@@ -561,7 +565,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/generative_adversarial_networks/" class="md-nav__link">
+      <a href="../generative_adversarial_networks/" class="md-nav__link">
         
   
   
@@ -584,7 +588,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/energy_based_models/" class="md-nav__link">
+      <a href="../energy_based_models/" class="md-nav__link">
         
   
   
@@ -607,7 +611,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/score_based_models/" class="md-nav__link">
+      <a href="../score_based_models/" class="md-nav__link">
         
   
   
@@ -630,7 +634,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/score_based_generative_modeling/" class="md-nav__link">
+      <a href="../score_based_generative_modeling/" class="md-nav__link">
         
   
   
@@ -653,7 +657,7 @@
   
   
     <li class="md-nav__item">
-      <a href="AI/deep_generative_models/evaluating_generative_models/" class="md-nav__link">
+      <a href="../evaluating_generative_models/" class="md-nav__link">
         
   
   
@@ -673,10 +677,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="AI/deep_generative_models/score_based_diffusion_models/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Score Based Diffusion Models
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -687,6 +713,86 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quick-recap-score-based-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quick Recap: Score Based Models
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Quick Recap: Score Based Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core Concepts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampling-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sampling Methods
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenges-and-solutions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Challenges and Solutions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continuous-time-framework" class="md-nav__link">
+    <span class="md-ellipsis">
+      Continuous-Time Framework
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-insights" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Insights
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -800,7 +906,7 @@
   
   
     <li class="md-nav__item">
-      <a href="math/probability/probability_and_counting/" class="md-nav__link">
+      <a href="../../../math/probability/probability_and_counting/" class="md-nav__link">
         
   
   
@@ -847,7 +953,40 @@
 
 
 
-<h1 id="welcome-to-my-wiki">Welcome to my wiki!</h1>
+<h1 id="score-based-diffusion-models">Score Based Diffusion Models</h1>
+<h2 id="quick-recap-score-based-models">Quick Recap: Score Based Models</h2>
+<p>From our exploration of score-based generative modeling, we learned several key concepts:</p>
+<h3 id="core-concepts">Core Concepts</h3>
+<p><strong>Score Function</strong>: The gradient of the log probability density, <span class="arithmatex">\(\nabla_x \log p(x)\)</span>, which points "uphill" in the probability landscape toward high-density regions.</p>
+<p><strong>Score Matching</strong>: A training objective that learns the score function by minimizing the Fisher divergence between the learned and true score functions.</p>
+<p><strong>Score Matching Objective</strong>: The original score matching objective is:</p>
+<div class="arithmatex">\[\mathcal{L}(\theta) = \mathbb{E}_{x \sim p_{data}(x)} \left[ \frac{1}{2} \| s_\theta(x) \|_2^2 + \text{tr}(\nabla_x s_\theta(x)) \right]\]</div>
+<p>where <span class="arithmatex">\(\text{tr}(\nabla_x s_\theta(x))\)</span> is the trace of the Jacobian of the score function, which is computationally expensive to evaluate.</p>
+<p><strong>Denoising Score Matching (DSM)</strong>: A practical variant that trains the score function to predict the direction from noisy to clean data, avoiding the need to compute the true score function.</p>
+<p><strong>DSM Objective</strong>: The denoising score matching objective is:</p>
+<div class="arithmatex">\[\mathcal{L}(\theta) = \mathbb{E}_{y \sim p_{data}(y)} \mathbb{E}_{x \sim \mathcal{N}(x; y, \sigma^2 I)} \left[ \frac{1}{2} \left\| s_\theta(x) - \frac{y - x}{\sigma^2} \right\|_2^2 \right]\]</div>
+<p>where <span class="arithmatex">\(s_\theta(x)\)</span> learns to predict the score function of the noise-perturbed distribution, and <span class="arithmatex">\(\frac{y - x}{\sigma^2}\)</span> is the target score function that points from noisy sample <span class="arithmatex">\(x\)</span> toward clean data <span class="arithmatex">\(y\)</span>.</p>
+<h3 id="sampling-methods">Sampling Methods</h3>
+<p><strong>Langevin Dynamics</strong>: A continuous-time stochastic process that uses the score function to guide sampling:</p>
+<div class="arithmatex">\[dx_t = \nabla_x \log p(x_t) dt + \sqrt{2} dW_t\]</div>
+<p><strong>Discretized Form</strong>: For practical implementation:</p>
+<div class="arithmatex">\[x_{t+1} = x_t + \frac{\epsilon}{2} \cdot s_\theta(x_t) + \sqrt{2\epsilon} \cdot \eta_t\]</div>
+<h3 id="challenges-and-solutions">Challenges and Solutions</h3>
+<p><strong>Mode Collapse</strong>: Standard Langevin dynamics struggles with multi-modal distributions and low-density regions.</p>
+<p><strong>Annealed Langevin Dynamics</strong>: Addresses this by using multiple noise scales <span class="arithmatex">\(\sigma_1 &lt; \sigma_2 &lt; \ldots &lt; \sigma_L\)</span>, creating a sequence of increasingly noisy distributions that are easier to sample from.</p>
+<h3 id="continuous-time-framework">Continuous-Time Framework</h3>
+<p><strong>Stochastic Differential Equations (SDEs)</strong>: General framework for continuous-time stochastic processes:</p>
+<div class="arithmatex">\[dx = f(x, t)dt + g(t)dw\]</div>
+<p><strong>Reverse SDE</strong>: Any SDE has a corresponding reverse process for sampling:</p>
+<div class="arithmatex">\[dx = [f(x, t) - g^2(t)\nabla_x \log p_t(x)]dt + g(t)d\bar{w}\]</div>
+<p><strong>Time-Dependent Score Models</strong>: Neural networks that learn <span class="arithmatex">\(s_\theta(x, t) \approx \nabla_x \log p_t(x)\)</span> for continuous-time processes.</p>
+<h3 id="key-insights">Key Insights</h3>
+<ol>
+<li><strong>Score functions act as denoisers</strong>: They point from noisy to clean data</li>
+<li><strong>Multiple noise scales help</strong>: Annealing from high to low noise improves sampling</li>
+<li><strong>Continuous-time generalizes discrete</strong>: SDEs provide a unified framework</li>
+<li><strong>Reverse processes enable generation</strong>: The reverse SDE naturally incorporates the score function for sampling</li>
+</ol>
 
 
 
@@ -908,12 +1047,12 @@
     
     
       
-      <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
       
-        <script src="javascripts/mathjax.js"></script>
+        <script src="../../../javascripts/mathjax.js"></script>
       
         <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
       
