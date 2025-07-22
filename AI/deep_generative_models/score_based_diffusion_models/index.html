@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/AI/deep_generative_models/diffusion_models/">
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/AI/deep_generative_models/score_based_diffusion_models/">
       
       
         <link rel="prev" href="../evaluating_generative_models/">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Diffusion Models - My Wiki</title>
+        <title>Score Based Diffusion Models - My Wiki</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#diffusion-models" class="md-skip">
+        <a href="#score-based-diffusion-models" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Diffusion Models
+              Score Based Diffusion Models
             
           </span>
         </div>
@@ -694,7 +694,7 @@
   
   
   <span class="md-ellipsis">
-    Diffusion Models
+    Score Based Diffusion Models
     
   </span>
   
@@ -707,7 +707,7 @@
   
   
   <span class="md-ellipsis">
-    Diffusion Models
+    Score Based Diffusion Models
     
   </span>
   
@@ -733,57 +733,6 @@
   <a href="#quick-recap-score-based-models" class="md-nav__link">
     <span class="md-ellipsis">
       Quick Recap: Score Based Models
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#introduction-to-diffusion-models" class="md-nav__link">
-    <span class="md-ellipsis">
-      Introduction to Diffusion Models
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#forward-encoder" class="md-nav__link">
-    <span class="md-ellipsis">
-      Forward Encoder
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Forward Encoder">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#diffusion-kernel" class="md-nav__link">
-    <span class="md-ellipsis">
-      Diffusion Kernel
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#conditional-distribution" class="md-nav__link">
-    <span class="md-ellipsis">
-      Conditional distribution
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#reverse-decoder" class="md-nav__link">
-    <span class="md-ellipsis">
-      Reverse Decoder
     </span>
   </a>
   
@@ -953,7 +902,7 @@
 
 
 
-<h1 id="diffusion-models">Diffusion Models</h1>
+<h1 id="score-based-diffusion-models">Score Based Diffusion Models</h1>
 <h2 id="quick-recap-score-based-models">Quick Recap: Score Based Models</h2>
 <p>From our exploration of score-based generative modeling, we learned several key concepts:</p>
 <p><strong>Score Function</strong>: The gradient of the log probability density, <span class="arithmatex">\(\nabla_x \log p(x)\)</span>, which points "uphill" in the probability landscape toward high-density regions.</p>
@@ -983,100 +932,6 @@
 <li><strong>Continuous-time generalizes discrete</strong>: SDEs provide a unified framework</li>
 <li><strong>Reverse processes enable generation</strong>: The reverse SDE naturally incorporates the score function for sampling</li>
 </ol>
-<h2 id="introduction-to-diffusion-models">Introduction to Diffusion Models</h2>
-<p>We have seen that a powerful way to construct rich generative models is to introduce a distribution p(z) over a latent variable z, and then to transform z into the data space x using a deep neural network. It is sufficient to use a simple, fixed distribution for p(z), such as a Gaussian N(z|0; I), since the generality of the neural network transforms this into a highly flexible family of distributions over x.</p>
-<p>The central idea is to take each training image and to corrupt it using a multi-step noise process to transform it into a sample from a Gaussian distribution.</p>
-<p><img alt="Encoding process in a diffusion model" src="../cat_diff.png" /></p>
-<p>A deep neural network is then trained to invert this process, and once trained the network can then generate new images starting with samples from a Gaussian as input. Diffusion models can be viewed as a form of hierarchical variational autoencoder in which the encoder distribution is fixed, and defined by the noise process, and only the generative distribution is learned. They are easy to train, they scale well on parallel hardware, and they avoid the challenges and instabilities of adversarial training while producing results that have quality comparable to, or better than, generative adversarial networks. However, generating new samples can be computationally expensive due to the need for multiple forward passes through the decoder network.</p>
-<h2 id="forward-encoder">Forward Encoder</h2>
-<p>Suppose we take an image from the training set, which we will denote by <span class="arithmatex">\(x\)</span>, and blend it with Gaussian noise independently for each pixel to give a noise-corrupted image <span class="arithmatex">\(z_1\)</span> defined by</p>
-<div class="arithmatex">\[z_1 = \sqrt{1 - \beta_1} x + \sqrt{\beta_1} \epsilon_1\]</div>
-<p>where <span class="arithmatex">\(\epsilon_1 \sim \mathcal{N}(\epsilon_1|0; I)\)</span> and <span class="arithmatex">\(\beta_1 &lt; 1\)</span> is the variance of the noise distribution. We can write the transformation in the form</p>
-<div class="arithmatex">\[q(z_1|x) = \mathcal{N}(z_1|\sqrt{1 - \beta_1} x; \beta_1 I)\]</div>
-<p>We then repeat the process with additional independent Gaussian noise steps to give a sequence of increasingly noisy images <span class="arithmatex">\(z_2, \ldots, x_T\)</span>.</p>
-<p>Each successive image is given by</p>
-<div class="arithmatex">\[z_t = \sqrt{1 - \beta_t} z_{t-1} + \sqrt{\beta_t} \epsilon_t\]</div>
-<p>where <span class="arithmatex">\(\epsilon_t \sim \mathcal{N}(\epsilon_t|0; I)\)</span>. Again, we can write this equation in the form</p>
-<div class="arithmatex">\[q(z_t|z_{t-1}) = \mathcal{N}(z_t|\sqrt{1 - \beta_t} x_{t-1}; \beta_t I)\]</div>
-<p>The choice of coefficients <span class="arithmatex">\(\sqrt{1 - \beta_1}\)</span> and <span class="arithmatex">\(\sqrt{\beta_1}\)</span> ensures that the mean of the distribution of <span class="arithmatex">\(x_t\)</span> is closer to zero than the mean of <span class="arithmatex">\(z_{t-1}\)</span> and that the variance of <span class="arithmatex">\(z_t\)</span> is closer to the unit matrix than the variance of <span class="arithmatex">\(z_{t-1}\)</span>.</p>
-<p>The sequence of conditional distributions forms a Markov chain and can be expressed as a probabilistic graphical model. The values of the variance parameters <span class="arithmatex">\(\beta_t \in (0, 1)\)</span> are set by hand and are typically chosen such that the variance values increase through the chain according to a prescribed schedule such that <span class="arithmatex">\(\beta_1 &lt; \beta_2 &lt; \ldots &lt; \beta_T\)</span>.</p>
-<h3 id="diffusion-kernel">Diffusion Kernel</h3>
-<p>The joint distribution of the latent variables, conditioned on the observed data vector <span class="arithmatex">\(x\)</span>, is given by</p>
-<div class="arithmatex">\[q(z_1, \ldots, z_t|x) = q(z_1|x) \prod_{s=2}^t q(z_s|z_{s-1})\]</div>
-<p>If we now marginalize over the intermediate variables <span class="arithmatex">\(z_1, \ldots, z_{t-1}\)</span>, we obtain the
-diffusion kernel:</p>
-<div class="arithmatex">\[q(z_t|x) = \mathcal{N}(z_t|\sqrt{\bar{\alpha}_t} x; (1 - \bar{\alpha}_t)I)\]</div>
-<p>where we have defined</p>
-<div class="arithmatex">\[\bar{\alpha}_t = \prod_{s=1}^t (1 - \beta_s)\]</div>
-<p>We see that each intermediate distribution has a simple closed-form Gaussian expression from which we can directly sample, which will prove useful when training as it allows efficient stochastic gradient descent using randomly chosen intermediate terms in the Markov chain without having to run the whole chain.</p>
-<p>Also,</p>
-<div class="arithmatex">\[z_t = \sqrt{\bar{\alpha}_t} x + \sqrt{1 - \bar{\alpha}_t} \epsilon_t\]</div>
-<p>where again <span class="arithmatex">\(\epsilon_t \sim \mathcal{N}(\epsilon_t|0; I)\)</span>. Note that <span class="arithmatex">\(\epsilon_t\)</span> now represents the total noise added to the original image instead of the incremental noise added at this step of the Markov chain.</p>
-<p>After many steps the image becomes indistinguishable from Gaussian noise, and in the limit <span class="arithmatex">\(T \rightarrow \infty\)</span> we have</p>
-<div class="arithmatex">\[q(z_T |x) = \mathcal{N}(z_T |0; I)\]</div>
-<p>and therefore all information about the original image is lost. The choice of coefficients <span class="arithmatex">\(\sqrt{1 - \bar{\alpha}_t}\)</span> and <span class="arithmatex">\(\sqrt{\bar{\alpha}_t}\)</span> ensures that once the Markov chain converges to a distribution with zero mean and unit covariance, further updates will leave this unchanged.</p>
-<p>The marginal distribution of <span class="arithmatex">\(z_T\)</span> is given by</p>
-<div class="arithmatex">\[q(z_T) = \mathcal{N}(z_T |0; I)\]</div>
-<p>It is common to refer to the Markov chain as the forward process, and it is  analogous to the encoder in a VAE, except that here it is fixed rather than learned.</p>
-<h3 id="conditional-distribution">Conditional distribution</h3>
-<p>Our goal is to learn to undo the noise process, and so it is natural to consider the reverse of the conditional distribution <span class="arithmatex">\(q(z_t|z_{t-1})\)</span>, which we can express using Bayes' theorem in the form</p>
-<div class="arithmatex">\[q(z_{t-1}|z_t) = \frac{q(z_t|z_{t-1})q(z_{t-1})}{q(z_t)}\]</div>
-<p>We can write the marginal distribution <span class="arithmatex">\(q(z_{t-1})\)</span> in the form</p>
-<div class="arithmatex">\[q(z_{t-1}) = \int q(z_{t-1}|x)p_{data}(x) dx\]</div>
-<p>where <span class="arithmatex">\(q(z_{t-1}|x)\)</span> is given by the conditional Gaussian. This distribution is intractable, however, because we must integrate over the unknown data density <span class="arithmatex">\(p_{data}(x)\)</span>.</p>
-<p>We consider the conditional version of the reverse distribution, conditioned on the data vector <span class="arithmatex">\(x\)</span>, defined by <span class="arithmatex">\(q(z_{t-1}|z_t, x)\)</span>, which as we will see shortly turns out to be a simple Gaussian distribution. Intuitively this is reasonable since, given a noisy image, it is difficult to guess which lower-noise image gave rise to it, whereas if we also know the starting image then the problem becomes much easier. We can calculate this conditional distribution using Bayes' theorem:</p>
-<div class="arithmatex">\[q(z_{t-1}|z_t, x) = \frac{q(z_t|z_{t-1}, x)q(z_{t-1}|x)}{q(z_t|x)}\]</div>
-<p>Let's derive this formula step by step using Bayes' theorem and the properties of the diffusion process.</p>
-<p>In the general case of <span class="arithmatex">\(n\)</span> random variables <span class="arithmatex">\(X_1, X_2, \ldots, X_n\)</span>, the values of an arbitrary subset of variables can be known and one can ask for the joint probability of all other variables. For example if the values of <span class="arithmatex">\(X_{k+1}, X_{k+2}, \ldots, X_n\)</span> are known, the probability for <span class="arithmatex">\(X_1, X_2, \ldots, X_k\)</span> given these known values is</p>
-<div class="arithmatex">\[p(X_1, X_2, \ldots, X_k|X_{k+1}, X_{k+2}, \ldots, X_n) = \frac{p(X_1, X_2, \ldots, X_n)}{p(X_{k+1}, X_{k+2}, \ldots, X_n)}\]</div>
-<p>Applying this general definition to the case of three variables <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span>, and <span class="arithmatex">\(C\)</span>, we have:</p>
-<div class="arithmatex">\[p(A|B, C) = \frac{p(A, B, C)}{p(B, C)}\]</div>
-<p>This is the fundamental definition of conditional probability for three variables. From this basic definition, we can derive the more useful Bayes' theorem form.</p>
-<div class="arithmatex">\[p(A|B, C) = \frac{p(A, B, C)}{p(B, C)}\]</div>
-<p>We can write the joint probability <span class="arithmatex">\(p(A, B, C)\)</span> using the chain rule:</p>
-<div class="arithmatex">\[p(A, B, C) = p(B|A, C) \cdot p(A, C)\]</div>
-<p>Substituting this into our basic definition:</p>
-<div class="arithmatex">\[p(A|B, C) = \frac{p(B|A, C) \cdot p(A, C)}{p(B, C)}\]</div>
-<p>We can write <span class="arithmatex">\(p(A, C)\)</span> as:</p>
-<div class="arithmatex">\[p(A, C) = p(A|C) \cdot p(C)\]</div>
-<div class="arithmatex">\[p(A|B, C) = \frac{p(B|A, C) \cdot p(A|C) \cdot p(C)}{p(B, C)}\]</div>
-<p>Similarly, we can write <span class="arithmatex">\(p(B, C)\)</span> as:</p>
-<div class="arithmatex">\[p(B, C) = p(B|C) \cdot p(C)\]</div>
-<div class="arithmatex">\[p(A|B, C) = \frac{p(B|A, C) \cdot p(A|C) \cdot p(C)}{p(B|C) \cdot p(C)}\]</div>
-<p>The <span class="arithmatex">\(p(C)\)</span> terms cancel out:</p>
-<div class="arithmatex">\[p(A|B, C) = \frac{p(B|A, C) \cdot p(A|C)}{p(B|C)}\]</div>
-<p>This is <strong>Bayes' theorem for three variables</strong>.</p>
-<p>In our case, we have:</p>
-<ul>
-<li>
-<p><span class="arithmatex">\(A = z_{t-1}\)</span> (the previous noisy image)</p>
-</li>
-<li>
-<p><span class="arithmatex">\(B = z_t\)</span> (the current noisy image)</p>
-</li>
-<li>
-<p><span class="arithmatex">\(C = x\)</span> (the original clean image)</p>
-</li>
-</ul>
-<p>Substituting these into Bayes' theorem:</p>
-<div class="arithmatex">\[q(z_{t-1}|z_t, x) = \frac{q(z_t|z_{t-1}, x)q(z_{t-1}|x)}{q(z_t|x)}\]</div>
-<p>Since the forward process is Markovian, <span class="arithmatex">\(z_t\)</span> depends only on <span class="arithmatex">\(z_{t-1}\)</span>, not on <span class="arithmatex">\(x\)</span> directly:</p>
-<div class="arithmatex">\[q(z_t|z_{t-1}, x) = q(z_t|z_{t-1})\]</div>
-<p>This is because once we know <span class="arithmatex">\(z_{t-1}\)</span>, the additional knowledge of <span class="arithmatex">\(x\)</span> doesn't change the distribution of <span class="arithmatex">\(z_t\)</span>. We know from the diffusion kernel that:</p>
-<div class="arithmatex">\[q(z_{t-1}|x) = \mathcal{N}(z_{t-1}|\sqrt{\bar{\alpha}_{t-1}} x, (1 - \bar{\alpha}_{t-1})I)\]</div>
-<div class="arithmatex">\[q(z_t|x) = \mathcal{N}(z_t|\sqrt{\bar{\alpha}_t} x, (1 - \bar{\alpha}_t)I)\]</div>
-<p>The forward process gives us:</p>
-<div class="arithmatex">\[q(z_t|z_{t-1}) = \mathcal{N}(z_t|\sqrt{1 - \beta_t} z_{t-1}, \beta_t I)\]</div>
-<p>Putting it all together:</p>
-<div class="arithmatex">\[q(z_{t-1}|z_t, x) = \frac{q(z_t|z_{t-1})q(z_{t-1}|x)}{q(z_t|x)}\]</div>
-<div class="arithmatex">\[= \frac{\mathcal{N}(z_t|\sqrt{1 - \beta_t} z_{t-1}, \beta_t I) \cdot \mathcal{N}(z_{t-1}|\sqrt{\bar{\alpha}_{t-1}} x, (1 - \bar{\alpha}_{t-1})I)}{\mathcal{N}(z_t|\sqrt{\bar{\alpha}_t} x, (1 - \bar{\alpha}_t)I)}\]</div>
-<p>After algebraic manipulation, this simplifies to:</p>
-<div class="arithmatex">\[q(z_{t-1}|z_t, x) = \mathcal{N}(z_{t-1}|\mu_t(x, z_t), \sigma_t^2 I)\]</div>
-<p>where:</p>
-<div class="arithmatex">\[\mu_t(x, z_t) = \frac{(1 - \bar{\alpha}_{t-1})\sqrt{1 - \beta_t} z_t + \sqrt{\bar{\alpha}_{t-1}} \beta_t x}{1 - \bar{\alpha}_t}\]</div>
-<div class="arithmatex">\[\sigma_t^2 = \frac{\beta_t(1 - \bar{\alpha}_{t-1})}{1 - \bar{\alpha}_t}\]</div>
-<h2 id="reverse-decoder">Reverse Decoder</h2>
-<p>We have seen that the forward encoder model is defined by a sequence of Gaussian conditional distributions <span class="arithmatex">\(q(z_t|z_{t-1})\)</span> but that inverting this directly leads to a distribution <span class="arithmatex">\(q(z_{t-1}|z_t)\)</span> that is intractable, as it would require integrating over all possible values of the starting vector <span class="arithmatex">\(x\)</span> whose distribution is the unknown data distribution <span class="arithmatex">\(p_{data}(x)\)</span> that we wish to model. Instead, we will learn an approximation to the reverse distribution by using a distribution <span class="arithmatex">\(p(z_{t-1}|z_t, \theta)\)</span> governed by a deep neural network, where <span class="arithmatex">\(\theta\)</span> represents the network weights and biases. Once the network is trained, we can sample from the simple Gaussian distribution over <span class="arithmatex">\(z_T\)</span> and transform it into a sample from the data distribution <span class="arithmatex">\(p_{data}(x)\)</span> through a sequence of reverse sampling steps by repeated application of the trained network.</p>
 
 
 
