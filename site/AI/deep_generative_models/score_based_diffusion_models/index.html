@@ -738,6 +738,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#diffusion-models-as-score-based-models-hierarchical-vaes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diffusion Models as Score Based Models &amp; Hierarchical VAEs
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -932,6 +941,95 @@
 <li><strong>Continuous-time generalizes discrete</strong>: SDEs provide a unified framework</li>
 <li><strong>Reverse processes enable generation</strong>: The reverse SDE naturally incorporates the score function for sampling</li>
 </ol>
+<h2 id="diffusion-models-as-score-based-models-hierarchical-vaes">Diffusion Models as Score Based Models &amp; Hierarchical VAEs</h2>
+<p><strong>Iterative Denoising perspective</strong>: In annealed Langevin dynamics with multiple noise scales, the sampling process can be viewed as <strong>iterative denoising</strong>. Starting from high noise levels and gradually reducing noise, each step uses the score function to denoise the sample, progressively refining it from a noisy state toward the clean data distribution.</p>
+<p><strong>Training perspective</strong>: The inverse process involves <strong>iteratively adding Gaussian noise</strong> to clean data during training. By corrupting data with increasing levels of noise, the model learns to predict the score function at each noise level, enabling it to reverse the corruption process during sampling.</p>
+<p><img alt="Iterative denoising" src="../iter_denoise.png" /></p>
+<p><strong>VAE Perspective</strong>: This entire framework can be viewed as a <strong>VAE</strong> where:</p>
+<ul>
+<li>
+<p><strong>Encoder process</strong>: The forward process that converts clean data to noise through iterative corruption</p>
+</li>
+<li>
+<p><strong>Decoder process</strong>: The reverse process that generates samples by iteratively denoising from noise</p>
+</li>
+</ul>
+<p><strong>Noise Perturbation process</strong>: Each <span class="arithmatex">\(x_t\)</span> represents a noise-perturbed density that is obtained by adding Gaussian noise to <span class="arithmatex">\(x_{t-1}\)</span>. This creates a Markov chain where each step adds a small amount of noise to the previous state.</p>
+<p>We can write the forward process as a conditional distribution:</p>
+<div class="arithmatex">\[q(x_t | x_{t-1}) = \mathcal{N}(x_t; \sqrt{1 - \beta_t} x_{t-1}, \beta_t I)\]</div>
+<p>where <span class="arithmatex">\(\beta_t\)</span> is the noise schedule that determines how much noise is added at each step.</p>
+<p>The joint distribution of the entire forward process is:</p>
+<div class="arithmatex">\[q(x_1, x_2, \ldots, x_T | x_0) = \prod_{t=1}^T q(x_t | x_{t-1})\]</div>
+<p>This factorization follows from the <strong>chain rule of probability</strong> and the <strong>Markov property</strong> of the forward process:</p>
+<p><strong>Chain Rule</strong>: For any joint distribution, we can write:</p>
+<div class="arithmatex">\[q(x_1, x_2, \ldots, x_T | x_0) = q(x_1 | x_0) \cdot q(x_2 | x_0, x_1) \cdot q(x_3 | x_0, x_1, x_2) \cdots q(x_T | x_0, x_1, \ldots, x_{T-1})\]</div>
+<p><strong>Markov Property</strong>: In the forward process, each <span class="arithmatex">\(x_t\)</span> depends only on <span class="arithmatex">\(x_{t-1}\)</span>, not on earlier states:</p>
+<div class="arithmatex">\[q(x_t | x_0, x_1, \ldots, x_{t-1}) = q(x_t | x_{t-1})\]</div>
+<p>Substituting the Markov property into the chain rule:</p>
+<div class="arithmatex">\[q(x_1, x_2, \ldots, x_T | x_0) = q(x_1 | x_0) \cdot q(x_2 | x_1) \cdot q(x_3 | x_2) \cdots q(x_T | x_{T-1})\]</div>
+<p>This can be written compactly as:</p>
+<div class="arithmatex">\[q(x_1, x_2, \ldots, x_T | x_0) = \prod_{t=1}^T q(x_t | x_{t-1})\]</div>
+<p>This represents the probability of the entire noise corruption sequence, where each step depends only on the previous step (Markov property).</p>
+<p><strong>Comparison with VAEs</strong>: In a typical VAE, you would take <span class="arithmatex">\(x_0\)</span> and map it via a neural network to obtain some mean and standard deviation to parameterize the distribution of the latent variable. Here, we obtain the distribution of the latent variables through the <strong>predefined noise corruption procedure</strong> we defined above, rather than learning it with a neural network.</p>
+<p><strong>Multistep transitions</strong>: A key advantage of this process is that we can compute transitions between any two time steps efficiently. For example, we can directly compute <span class="arithmatex">\(q(x_t | x_0)\)</span> without going through all intermediate steps.</p>
+<p>Starting from <span class="arithmatex">\(x_0\)</span>, we can write:</p>
+<div class="arithmatex">\[x_t = \sqrt{\alpha_t} x_{t-1} + \sqrt{1 - \alpha_t} \epsilon_{t-1}\]</div>
+<p>where <span class="arithmatex">\(\alpha_t = 1 - \beta_t\)</span> and <span class="arithmatex">\(\epsilon_{t-1} \sim \mathcal{N}(0, I)\)</span>.</p>
+<p>Recursively substituting:</p>
+<div class="arithmatex">\[x_t = \sqrt{\alpha_t} (\sqrt{\alpha_{t-1}} x_{t-2} + \sqrt{1 - \alpha_{t-1}} \epsilon_{t-2}) + \sqrt{1 - \alpha_t} \epsilon_{t-1}\]</div>
+<p>Continuing this recursion, we get:</p>
+<div class="arithmatex">\[x_t = \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon\]</div>
+<p>where <span class="arithmatex">\(\bar{\alpha}_t = \prod_{s=1}^t \alpha_s\)</span> and <span class="arithmatex">\(\epsilon \sim \mathcal{N}(0, I)\)</span>.</p>
+<p><strong>Result</strong>: The multistep transition is:</p>
+<div class="arithmatex">\[q(x_t | x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t} x_0, (1 - \bar{\alpha}_t) I)\]</div>
+<p>This allows us to sample <span class="arithmatex">\(x_t\)</span> directly from <span class="arithmatex">\(x_0\)</span> in a single step, making training much more efficient.</p>
+<p><strong>Diffusion analogy</strong>: We can think of this as a <strong>diffusion process</strong>. This is like a diffuser where given an initial state, we keep adding noise at every step. This is analogous to <strong>heat diffusion</strong> in a space- just as heat spreads out and becomes more uniform over time, our data distribution becomes increasingly noisy and uniform Gaussian as we add more noise at each step.</p>
+<p>The process gradually "diffuses" the structured information in the data into random noise, creating a smooth transition from the complex data distribution to a simple Gaussian noise distribution.</p>
+<p><img alt="Diffusion" src="../diff.png" /></p>
+<p>The ideal sampling process would be:</p>
+<ol>
+<li>Sample <span class="arithmatex">\(x_T\)</span> from <span class="arithmatex">\(\pi(x_T)\)</span>. Start with pure noise from the prior distribution</li>
+<li>Iteratively sample from the true denoising distribution <span class="arithmatex">\(q(x_{t-1} | x_t)\)</span>.</li>
+</ol>
+<p>This would generate samples by following the exact reverse of the forward diffusion process, gradually denoising from pure noise back to clean data.</p>
+<p>The challenge however, is that we don't know the true denoising distributions <span class="arithmatex">\(q(x_{t-1} | x_t)\)</span>. While the forward process <span class="arithmatex">\(q(x_t | x_{t-1})\)</span> is predefined and tractable, the reverse process is not.</p>
+<p>However, we can learn an approximation <span class="arithmatex">\(p_\theta(x_{t-1} | x_t)\)</span> which is a Gaussian distribution with learned parameters:</p>
+<div class="arithmatex">\[p_\theta(x_{t-1} | x_t) = \mathcal{N}(x_{t-1}; \mu_\theta(x_t, t), \sigma_t^2 I)\]</div>
+<p>where <span class="arithmatex">\(\mu_\theta(x_t, t)\)</span> is a neural network that learns the mean of the denoising distribution, and <span class="arithmatex">\(\sigma_t^2 I\)</span> is the fixed variance schedule.</p>
+<p>This is similar to a VAE decoder:</p>
+<p><strong>VAE Decoder</strong>:</p>
+<div class="arithmatex">\[p_\theta(x | z) = \mathcal{N}(x; \mu_\theta(z), \sigma_\theta^2(z) I)\]</div>
+<p><strong>Diffusion reverse process</strong>:</p>
+<div class="arithmatex">\[p_\theta(x_{t-1} | x_t) = \mathcal{N}(x_{t-1}; \mu_\theta(x_t, t), \sigma_t^2 I)\]</div>
+<p>The diffusion decoder <span class="arithmatex">\(p_\theta(x_{t-1} | x_t)\)</span> is trying to learn to approximate the true denoising distributions <span class="arithmatex">\(q(x_{t-1} | x_t)\)</span>.</p>
+<p>The joint distribution of the learned reverse process is:</p>
+<div class="arithmatex">\[p_\theta(x_0, x_1, \ldots, x_{T-1} | x_T) = \prod_{t=1}^T p_\theta(x_{t-1} | x_t)\]</div>
+<p>Let's derive the joint distribution of the learned reverse process step by step.</p>
+<p>In the general case of <span class="arithmatex">\(n\)</span> random variables <span class="arithmatex">\(X_1, X_2, \ldots, X_n\)</span>, the values of an arbitrary subset of variables can be known and one can ask for the joint probability of all other variables. For example, if the values of <span class="arithmatex">\(X_{k+1}, X_{k+2}, \ldots, X_n\)</span> are known, the probability for <span class="arithmatex">\(X_1, X_2, \ldots, X_k\)</span> given these known values is:</p>
+<div class="arithmatex">\[P(X_1, X_2, \ldots, X_k|X_{k+1}, X_{k+2}, \ldots, X_n) = \frac{P(X_1, X_2, \ldots, X_n)}{P(X_{k+1}, X_{k+2}, \ldots, X_n)}\]</div>
+<p>This is the fundamental definition of conditional probability for multiple random variables.</p>
+<p>For any three events <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span>, and <span class="arithmatex">\(C\)</span>, the joint conditional probability is defined as:</p>
+<div class="arithmatex">\[P(A, B|C) = \frac{P(A, B, C)}{P(C)}\]</div>
+<p>We can write the joint probability <span class="arithmatex">\(P(A, B, C)\)</span> using the chain rule:</p>
+<div class="arithmatex">\[P(A, B, C) = P(A|B, C) \cdot P(B, C)\]</div>
+<p>Substituting this into our definition:</p>
+<div class="arithmatex">\[P(A, B|C) = \frac{P(A|B, C) \cdot P(B, C)}{P(C)}\]</div>
+<p>We can write <span class="arithmatex">\(P(B, C)\)</span> as:</p>
+<div class="arithmatex">\[P(B, C) = P(B|C) \cdot P(C)\]</div>
+<div class="arithmatex">\[P(A, B|C) = \frac{P(A|B, C) \cdot P(B|C) \cdot P(C)}{P(C)}\]</div>
+<p>The <span class="arithmatex">\(P(C)\)</span> terms cancel out:</p>
+<div class="arithmatex">\[P(A, B|C) = P(A|B, C) \cdot P(B|C)\]</div>
+<p>The learned reverse process consists of a sequence of conditional distributions:</p>
+<div class="arithmatex">\[p_\theta(x_{t-1} | x_t) = \mathcal{N}(x_{t-1}; \mu_\theta(x_t, t), \sigma_t^2 I)\]</div>
+<p>where <span class="arithmatex">\(\mu_\theta(x_t, t)\)</span> is a neural network that learns the mean of the denoising distribution.</p>
+<p>For the joint distribution <span class="arithmatex">\(p_\theta(x_0, x_1, \ldots, x_{T-1} | x_T)\)</span>, we can apply the chain rule:</p>
+<div class="arithmatex">\[p_\theta(x_0, x_1, \ldots, x_{T-1} | x_T) = p_\theta(x_0 | x_1, \ldots, x_T) \cdot p_\theta(x_1 | x_2, \ldots, x_T) \cdots p_\theta(x_{T-1} | x_T)\]</div>
+<p>In the reverse process, we assume that each <span class="arithmatex">\(x_{t-1}\)</span> depends only on <span class="arithmatex">\(x_t\)</span>, not on future states. This is the <strong>reverse Markov property</strong>:</p>
+<div class="arithmatex">\[p_\theta(x_{t-1} | x_t, x_{t+1}, \ldots, x_T) = p_\theta(x_{t-1} | x_t)\]</div>
+<p>Substituting the reverse Markov property into the chain rule:</p>
+<div class="arithmatex">\[p_\theta(x_0, x_1, \ldots, x_{T-1} | x_T) = p_\theta(x_0 | x_1) \cdot p_\theta(x_1 | x_2) \cdots p_\theta(x_{T-1} | x_T)\]</div>
+<p>This can be written compactly as:</p>
+<div class="arithmatex">\[p_\theta(x_0, x_1, \ldots, x_{T-1} | x_T) = \prod_{t=1}^T p_\theta(x_{t-1} | x_t)\]</div>
 
 
 
