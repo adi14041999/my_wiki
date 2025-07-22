@@ -1,4 +1,4 @@
-# Score Based Diffusion Models
+# Diffusion Models
 
 ## Quick Recap: Score Based Models
 
@@ -50,3 +50,17 @@ $$dx = [f(x, t) - g^2(t)\nabla_x \log p_t(x)]dt + g(t)d\bar{w}$$
 2. **Multiple noise scales help**: Annealing from high to low noise improves sampling
 3. **Continuous-time generalizes discrete**: SDEs provide a unified framework
 4. **Reverse processes enable generation**: The reverse SDE naturally incorporates the score function for sampling
+
+## Introduction to Diffusion Models
+
+We have seen that a powerful way to construct rich generative models is to introduce a distribution p(z) over a latent variable z, and then to transform z into the data space x using a deep neural network. It is sufficient to use a simple, fixed distribution for p(z), such as a Gaussian N(z|0; I), since the generality of the neural network transforms this into a highly flexible family of distributions over x.
+
+The central idea is to take each training image and to corrupt it using a multi-step noise process to transform it into a sample from a Gaussian distribution.
+
+![Encoding process in a diffusion model](cat_diff.png)
+
+A deep neural network is then trained to invert this process, and once trained the network can then generate new images starting with samples from a Gaussian as input. Diffusion models can be viewed as a form of hierarchical variational autoencoder in which the encoder distribution is fixed, and defined by the noise process, and only the generative distribution is learned. They are easy to train, they scale well on parallel hardware, and they avoid the challenges and instabilities of adversarial training while producing results that have quality comparable to, or better than, generative adversarial networks. However, generating new samples can be computationally expensive due to the need for multiple forward passes through the decoder network.
+
+## Forward Encoder
+
+
