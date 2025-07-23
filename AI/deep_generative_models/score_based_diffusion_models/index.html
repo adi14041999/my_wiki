@@ -1030,6 +1030,93 @@
 <div class="arithmatex">\[p_\theta(x_0, x_1, \ldots, x_{T-1} | x_T) = p_\theta(x_0 | x_1) \cdot p_\theta(x_1 | x_2) \cdots p_\theta(x_{T-1} | x_T)\]</div>
 <p>This can be written compactly as:</p>
 <div class="arithmatex">\[p_\theta(x_0, x_1, \ldots, x_{T-1} | x_T) = \prod_{t=1}^T p_\theta(x_{t-1} | x_t)\]</div>
+<p>To get the complete joint distribution, we need to include the prior distribution over <span class="arithmatex">\(x_T\)</span>:</p>
+<div class="arithmatex">\[p_\theta(x_0, x_1, \ldots, x_T) = p(x_T) \cdot p_\theta(x_0, x_1, \ldots, x_{T-1} | x_T)\]</div>
+<div class="arithmatex">\[p_\theta(x_0, x_1, \ldots, x_T) = p(x_T) \cdot \prod_{t=1}^T p_\theta(x_{t-1} | x_t)\]</div>
+<p>A crucial aspect of the diffusion process is choosing the values of <span class="arithmatex">\(\bar{\alpha}_t\)</span> such that after many steps, we are left with pure noise. This ensures that the forward process converges to a simple, known distribution.</p>
+<p>Common choices for the noise schedule include:</p>
+<ol>
+<li><strong>Linear Schedule</strong>: <span class="arithmatex">\(\beta_t = \frac{t}{T} \cdot \beta_{\text{max}}\)</span></li>
+<li><strong>Cosine Schedule</strong>: <span class="arithmatex">\(\beta_t = \cos\left(\frac{t}{T} \cdot \frac{\pi}{2}\right)\)</span></li>
+<li><strong>Quadratic Schedule</strong>: <span class="arithmatex">\(\beta_t = \left(\frac{t}{T}\right)^2 \cdot \beta_{\text{max}}\)</span></li>
+</ol>
+<p><strong>Example</strong>: For a linear schedule with <span class="arithmatex">\(\beta_{\text{max}} = 0.02\)</span> and <span class="arithmatex">\(T = 1000\)</span>, we get <span class="arithmatex">\(\beta_1 = 0.00002\)</span>, <span class="arithmatex">\(\beta_{500} = 0.01\)</span> and <span class="arithmatex">\(\beta_{1000} = 0.02\)</span>.</p>
+<p>Once we have trained the diffusion model and learned the reverse process <span class="arithmatex">\(p_\theta(x_{t-1} | x_t)\)</span>, we can generate new samples by running the reverse process. Here's how sampling works. </p>
+<p>Sample <span class="arithmatex">\(x_T\)</span> from the prior distribution <span class="arithmatex">\(x_T \sim \mathcal{N}(x_T; 0, I)\)</span>.</p>
+<p>For <span class="arithmatex">\(t = T, T-1, \ldots, 1\)</span>, sample from the learned reverse process <span class="arithmatex">\(x_{t-1} \sim p_\theta(x_{t-1} | x_t) = \mathcal{N}(x_{t-1}; \mu_\theta(x_t, t), \sigma_t^2 I)\)</span>.</p>
+<p>After <span class="arithmatex">\(T\)</span> steps, we obtain <span class="arithmatex">\(x_0\)</span>, which is our generated sample.</p>
+<p>This entire diffusion framework can be viewed as a <strong>Variational Autoencoder (VAE)</strong> with a crucial difference: <strong>the encoder is fixed and predefined, while only the decoder is learned</strong>.</p>
+<p><strong>Standard VAE Structure</strong>:</p>
+<ul>
+<li>
+<p><strong>Encoder</strong>: <span class="arithmatex">\(q_\phi(z | x) = \mathcal{N}(z; \mu_\phi(x), \sigma_\phi^2(x) I)\)</span></p>
+</li>
+<li>
+<p><strong>Decoder</strong>: <span class="arithmatex">\(p_\theta(x | z) = \mathcal{N}(x; \mu_\theta(z), \sigma_\theta^2(z) I)\)</span></p>
+</li>
+<li>
+<p><strong>Prior</strong>: <span class="arithmatex">\(p(z) = \mathcal{N}(z; 0, I)\)</span></p>
+</li>
+</ul>
+<p><strong>Vanilla VAE ELBO (Non-KL form)</strong>:</p>
+<div class="arithmatex">\[ELBO_{\text{VAE}} = \mathbb{E}_{q_\phi(z|x)} \left[ \log \frac{p_\theta(x, z)}{q_\phi(z|x)} \right]\]</div>
+<p><strong>Hierarchical VAE Structure</strong> (z₂ → z₁ → x):</p>
+<ul>
+<li>
+<p><strong>Encoder</strong>: <span class="arithmatex">\(q_\phi(z_1, z_2 | x) = q_\phi(z_1 | x) \cdot q_\phi(z_2 | z_1)\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(q_\phi(z_1 | x) = \mathcal{N}(z_1; \mu_\phi(x), \sigma_\phi^2(x) I)\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(q_\phi(z_2 | z_1) = \mathcal{N}(z_2; \mu_\phi(z_1), \sigma_\phi^2(z_1) I)\)</span></p>
+</li>
+<li>
+<p><strong>Decoder</strong>: <span class="arithmatex">\(p_\theta(x, z_1 | z_2) = p_\theta(x | z_1) \cdot p_\theta(z_1 | z_2)\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(p_\theta(x | z_1) = \mathcal{N}(x; \mu_\theta(z_1), \sigma_\theta^2(z_1) I)\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(p_\theta(z_1 | z_2) = \mathcal{N}(z_1; \mu_\theta(z_2), \sigma_\theta^2(z_2) I)\)</span></p>
+</li>
+<li>
+<p><strong>Prior</strong>: <span class="arithmatex">\(p(z_2) = \mathcal{N}(z_2; 0, I)\)</span></p>
+</li>
+</ul>
+<p><strong>Hierarchical VAE ELBO (Non-KL form)</strong>:</p>
+<div class="arithmatex">\[ELBO_{\text{HVAE}} = \mathbb{E}_{q_\phi(z_1,z_2|x)} \left[ \log \frac{p_\theta(x, z_1, z_2)}{q_\phi(z_1, z_2|x)} \right]\]</div>
+<p>Following the hierarchical VAE formulation, we can write the ELBO for diffusion models. In diffusion models, we have a sequence of latent variables <span class="arithmatex">\(x_1, x_2, \ldots, x_T\)</span> where <span class="arithmatex">\(x_T\)</span> is the most abstract (pure noise) and <span class="arithmatex">\(x_0\)</span> is the data.</p>
+<p><strong>Diffusion Model Structure</strong> (x_T → x_{T-1} → ... → x_1 → x_0):</p>
+<ul>
+<li>
+<p><strong>Encoder</strong>: <span class="arithmatex">\(q(x_1, x_2, \ldots, x_T | x_0) = \prod_{t=1}^T q(x_t | x_{t-1})\)</span> - Fixed noise corruption process</p>
+</li>
+<li>
+<p><strong>Decoder</strong>: <span class="arithmatex">\(p_\theta(x_0, x_1, \ldots, x_{T-1} | x_T) = \prod_{t=1}^T p_\theta(x_{t-1} | x_t)\)</span> - Learned denoising process</p>
+</li>
+<li>
+<p><strong>Prior</strong>: <span class="arithmatex">\(p(x_T) = \mathcal{N}(x_T; 0, I)\)</span></p>
+</li>
+</ul>
+<p><strong>Diffusion Model ELBO (Non-KL form)</strong>:</p>
+<div class="arithmatex">\[ELBO_{\text{Diff}} = \mathbb{E}_{q(x_1,\ldots,x_T|x_0)} \left[ \log \frac{p_\theta(x_0, x_1, \ldots, x_T)}{q(x_1, \ldots, x_T|x_0)} \right]\]</div>
+<p>The Negative Evidence Lower BOund (NELBO) is the negative of the ELBO, which is what we actually minimize during training:</p>
+<div class="arithmatex">\[\mathcal{L}_{\text{Diff}} = -\mathbb{E}_{q(x_1,\ldots,x_T|x_0)} \left[ \log \frac{p_\theta(x_0, x_1, \ldots, x_T)}{q(x_1, \ldots, x_T|x_0)} \right]\]</div>
+<p>This can be rewritten as:</p>
+<div class="arithmatex">\[\mathcal{L}_{\text{Diff}} = \mathbb{E}_{q(x_1,\ldots,x_T|x_0)} \left[ -\log \frac{p_\theta(x_0, x_1, \ldots, x_T)}{q(x_1, \ldots, x_T|x_0)} \right]\]</div>
+<p>The decoder learns to predict the mean function <span class="arithmatex">\(\mu_\theta(x_t, t)\)</span> for the reverse process. Let's derive how this function is parameterized.</p>
+<p>The true reverse process <span class="arithmatex">\(q(x_{t-1} | x_t, x_0)\)</span> can be derived using Bayes' theorem. For Gaussian distributions, this gives us:</p>
+<div class="arithmatex">\[q(x_{t-1} | x_t, x_0) = \mathcal{N}(x_{t-1}; \mu_t(x_t, x_0), \sigma_t^2 I)\]</div>
+<p>where it can be shown that:</p>
+<div class="arithmatex">\[\mu_t(x_t, x_0) = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon \right)\]</div>
+<p>and:</p>
+<div class="arithmatex">\[\sigma_t^2 = \frac{\beta_t(1 - \bar{\alpha}_{t-1})}{1 - \bar{\alpha}_t}\]</div>
+<p>The learned reverse process is:</p>
+<div class="arithmatex">\[p_\theta(x_{t-1} | x_t) = \mathcal{N}(x_{t-1}; \mu_\theta(x_t, t), \sigma_t^2 I)\]</div>
+<p>Since we want the learned process to approximate the true reverse process, we parameterize <span class="arithmatex">\(\mu_\theta(x_t, t)\)</span> to match the form of <span class="arithmatex">\(\mu_t(x_t, x_0)\)</span>:</p>
+<div class="arithmatex">\[\mu_\theta(x_t, t) = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(x_t, t) \right)\]</div>
+<p>where <span class="arithmatex">\(\epsilon_\theta(x_t, t)\)</span> is a neural network that predicts the noise <span class="arithmatex">\(\epsilon\)</span> given <span class="arithmatex">\(x_t\)</span> and <span class="arithmatex">\(t\)</span>.</p>
 
 
 
