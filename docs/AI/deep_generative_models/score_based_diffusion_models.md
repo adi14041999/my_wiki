@@ -315,3 +315,194 @@ Since we want the learned process to approximate the true reverse process, we pa
 $$\mu_\theta(x_t, t) = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(x_t, t) \right)$$
 
 where $\epsilon_\theta(x_t, t)$ is a neural network that predicts the noise $\epsilon$ given $x_t$ and $t$.
+
+### Rewriting the ELBO for Diffusion Models
+Let's rewrite the diffusion model ELBO and transform it to resemble denoising score matching.
+
+Starting with the diffusion model ELBO:
+
+$$\mathcal{L}_{\text{Diff}} = \mathbb{E}_{q(x_1,\ldots,x_T|x_0)} \left[ -\log \frac{p_\theta(x_0, x_1, \ldots, x_T)}{q(x_1, \ldots, x_T|x_0)} \right]$$
+
+We can expand this as:
+
+$$\mathcal{L}_{\text{Diff}} = \mathbb{E}_{q(x_1,\ldots,x_T|x_0)} \left[ -\log p_\theta(x_0, x_1, \ldots, x_T) + \log q(x_1, \ldots, x_T|x_0) \right]$$
+
+The learned joint distribution is:
+
+$$p_\theta(x_0, x_1, \ldots, x_T) = p(x_T) \cdot \prod_{t=1}^T p_\theta(x_{t-1} | x_t)$$
+
+The true joint distribution is:
+
+$$q(x_1, \ldots, x_T | x_0) = \prod_{t=1}^T q(x_t | x_{t-1})$$
+
+Substituting these:
+
+$$\mathcal{L}_{\text{Diff}} = \mathbb{E}_{q(x_1,\ldots,x_T|x_0)} \left[ -\log p(x_T) - \sum_{t=1}^T \log p_\theta(x_{t-1} | x_t) + \sum_{t=1}^T \log q(x_t | x_{t-1}) \right]$$
+
+For Gaussian distributions, the log-likelihood is:
+
+$$\log \mathcal{N}(x; \mu, \sigma^2 I) = -\frac{1}{2\sigma^2} \|x - \mu\|^2 + C$$
+
+where $C$ is a constant that doesn't depend on the parameters.
+
+For the learned reverse process:
+
+$$\log p_\theta(x_{t-1} | x_t) = -\frac{1}{2\sigma_t^2} \|x_{t-1} - \mu_\theta(x_t, t)\|^2 + C$$
+
+For the true forward process:
+
+$$\log q(x_t | x_{t-1}) = -\frac{1}{2\beta_t} \|x_t - \sqrt{1 - \beta_t} x_{t-1}\|^2 + C$$
+
+Using the definition of $\mu_\theta(x_t, t)$:
+
+$$\mu_\theta(x_t, t) = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(x_t, t) \right)$$
+
+The squared error term becomes:
+
+$$\|x_{t-1} - \mu_\theta(x_t, t)\|^2 = \left\|x_{t-1} - \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(x_t, t) \right)\right\|^2$$
+
+From the forward process, we know:
+
+$$x_t = \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon$$
+
+And from the multistep transition:
+
+$$x_{t-1} = \sqrt{\bar{\alpha}_{t-1}} x_0 + \sqrt{1 - \bar{\alpha}_{t-1}} \epsilon_{t-1}$$
+
+Substituting these into the squared error:
+
+$$\|x_{t-1} - \mu_\theta(x_t, t)\|^2 = \left\|\sqrt{\bar{\alpha}_{t-1}} x_0 + \sqrt{1 - \bar{\alpha}_{t-1}} \epsilon_{t-1} - \frac{1}{\sqrt{\alpha_t}} \left( \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(x_t, t) \right)\right\|^2$$
+
+Using the relationship $\bar{\alpha}_t = \bar{\alpha}_{t-1} \cdot \alpha_t$, we can simplify:
+
+$$\|x_{t-1} - \mu_\theta(x_t, t)\|^2 = \left\|\frac{\beta_t}{\sqrt{\alpha_t(1 - \bar{\alpha}_t)}} (\epsilon - \epsilon_\theta(x_t, t))\right\|^2$$
+
+This simplifies to:
+
+$$\|x_{t-1} - \mu_\theta(x_t, t)\|^2 = \frac{\beta_t^2}{\alpha_t(1 - \bar{\alpha}_t)} \|\epsilon - \epsilon_\theta(x_t, t)\|^2$$
+
+Substituting back into the ELBO:
+
+$$\mathcal{L}_{\text{Diff}} = \mathbb{E}_{q(x_1,\ldots,x_T|x_0)} \left[ -\log p(x_T) + \sum_{t=1}^T \frac{\beta_t^2}{2\sigma_t^2 \alpha_t(1 - \bar{\alpha}_t)} \|\epsilon - \epsilon_\theta(x_t, t)\|^2 + \sum_{t=1}^T \frac{1}{2\beta_t} \|x_t - \sqrt{1 - \beta_t} x_{t-1}\|^2 \right]$$
+
+The key term in the ELBO is:
+
+$$\sum_{t=1}^T \frac{\beta_t^2}{2\sigma_t^2 \alpha_t(1 - \bar{\alpha}_t)} \|\epsilon - \epsilon_\theta(x_t, t)\|^2$$
+
+Let's define:
+
+$$\lambda_t = \frac{\beta_t^2}{2\sigma_t^2 \alpha_t(1 - \bar{\alpha}_t)}$$
+
+From the forward process, we know:
+
+$$x_t = \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon$$
+
+where $\epsilon \sim \mathcal{N}(0, I)$.
+
+The expectation $\mathbb{E}_{q(x_1,\ldots,x_T|x_0)}$ can be rewritten as:
+
+$$\mathbb{E}_{x_0 \sim p_{data}(x_0)} \mathbb{E}_{\epsilon_1, \ldots, \epsilon_T \sim \mathcal{N}(0, I)}$$
+
+Since each $x_t$ is generated as:
+
+$$x_t = \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon_t$$
+
+The ELBO can be simplified to:
+
+$$\mathcal{L}_{\text{Diff}} = \mathbb{E}_{x_0, \epsilon, t} \left[ \lambda_t \|\epsilon - \epsilon_\theta(\sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon, t)\|^2 \right] + \text{constant terms}$$
+
+where:
+
+$$x_t = \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon_t$$
+
+This can be written more compactly as:
+
+$$\mathcal{L}_{\text{Diff}} = \mathbb{E}_{x_0, \epsilon, t} \left[ \lambda_t \|\epsilon - \epsilon_\theta(\sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon, t)\|^2 \right] + \text{constant terms}$$
+
+where $x_0 \sim p_{data}(x_0)$ (clean data), $\epsilon \sim \mathcal{N}(0, I)$ (noise), $t \sim \text{Uniform}(1, T)$ (timestep)
+
+The diffusion model ELBO is equivalent to:
+
+$$\mathcal{L}_{\text{Diff}} = \mathbb{E}_{x_0, \epsilon, t} \left[ \lambda_t \|\epsilon - \epsilon_\theta(\sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon, t)\|^2 \right]$$
+
+where $\lambda_t = \frac{\beta_t^2}{2\sigma_t^2 \alpha_t(1 - \bar{\alpha}_t)}$ is the weighting factor for each timestep.
+
+**Note**
+In the original ELBO, we had two summation-terms:
+
+1. $\sum_{t=1}^T \frac{\beta_t^2}{2\sigma_t^2 \alpha_t(1 - \bar{\alpha}_t)} \|\epsilon - \epsilon_\theta(x_t, t)\|^2$ (noise prediction term)
+
+2. $\sum_{t=1}^T \frac{1}{2\beta_t} \|x_t - \sqrt{1 - \beta_t} x_{t-1}\|^2$ (forward process term)
+
+The second summation-term $\sum_{t=1}^T \frac{1}{2\beta_t} \|x_t - \sqrt{1 - \beta_t} x_{t-1}\|^2$ represents the log-likelihood of the forward process $q(x_t | x_{t-1})$. This summation-term does **not depend on the model parameters $\theta$** because the forward process is fixed and predefined. It only depends on the noise schedule $\beta_t$ and the data. When we take the gradient with respect to $\theta$ to optimize the model, this summation-term vanishes.
+
+### Sampling
+
+While the ELBO loss $\mathcal{L}_{\text{Diff}}$ and the score-based objective are roughly equivalent in terms of what they learn, the **sampling procedures** differ between these two approaches.
+
+In a **Score-Based Model (SBM)**, sampling is performed using **Langevin dynamics**. In a **Diffusion Model (VAE form)**, sampling follows the **learned reverse process**.
+
+The connection between the two approaches comes from the relationship between the score function and the noise predictor:
+
+**Score function**: $s_\theta(x_t, t) = \nabla_x \log p_t(x_t)$
+
+**Noise predictor**: $\epsilon_\theta(x_t, t)$ predicts the noise added during the forward process
+
+**Relationship**: For Gaussian noise, the score function is proportional to the negative noise.
+
+From the forward process, we have:
+
+$$x_t = \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon$$
+
+where $\epsilon \sim \mathcal{N}(0, I)$.
+
+The distribution of $x_t$ given $x_0$ is:
+
+$$q(x_t | x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t} x_0, (1 - \bar{\alpha}_t) I)$$
+
+The score function is the gradient of the log probability density:
+
+$$s(x_t, t) = \nabla_{x_t} \log q(x_t | x_0)$$
+
+For the Gaussian distribution $q(x_t | x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t} x_0, (1 - \bar{\alpha}_t) I)$:
+
+$$\log q(x_t | x_0) = -\frac{1}{2(1 - \bar{\alpha}_t)} \|x_t - \sqrt{\bar{\alpha}_t} x_0\|^2 + C$$
+
+where $C$ is a constant that doesn't depend on $x_t$.
+
+Taking the gradient with respect to $x_t$:
+
+$$\nabla_{x_t} \log q(x_t | x_0) = -\frac{1}{1 - \bar{\alpha}_t} (x_t - \sqrt{\bar{\alpha}_t} x_0)$$
+
+From the forward process, we can express $x_0$ in terms of $x_t$ and $\epsilon$:
+
+$$x_0 = \frac{x_t - \sqrt{1 - \bar{\alpha}_t} \epsilon}{\sqrt{\bar{\alpha}_t}}$$
+
+$$\nabla_{x_t} \log q(x_t | x_0) = -\frac{1}{1 - \bar{\alpha}_t} \left(x_t - \sqrt{\bar{\alpha}_t} \cdot \frac{x_t - \sqrt{1 - \bar{\alpha}_t} \epsilon}{\sqrt{\bar{\alpha}_t}}\right)$$
+
+Simplifying the expression:
+
+$$\nabla_{x_t} \log q(x_t | x_0) = -\frac{1}{1 - \bar{\alpha}_t} \left(x_t - (x_t - \sqrt{1 - \bar{\alpha}_t} \epsilon)\right)$$
+
+$$\nabla_{x_t} \log q(x_t | x_0) = -\frac{1}{1 - \bar{\alpha}_t} \cdot \sqrt{1 - \bar{\alpha}_t} \epsilon$$
+
+$$\nabla_{x_t} \log q(x_t | x_0) = -\frac{\epsilon}{\sqrt{1 - \bar{\alpha}_t}}$$
+
+Therefore, the score function is:
+
+$$s(x_t, t) = \nabla_{x_t} \log q(x_t | x_0) = -\frac{\epsilon}{\sqrt{1 - \bar{\alpha}_t}}$$
+
+In practice, we learn:
+
+- **Score function**: $s_\theta(x_t, t) \approx \nabla_{x_t} \log q(x_t | x_0)$
+
+- **Noise predictor**: $\epsilon_\theta(x_t, t) \approx \epsilon$
+
+Therefore, $s_\theta(x_t, t) \approx -\frac{\epsilon_\theta(x_t, t)}{\sqrt{1 - \bar{\alpha}_t}}$.
+
+Both sampling methods work because they're learning the same underlying structure:
+
+1. **Score-based**: Learns the gradient of the log-density at each noise level
+2. **Diffusion**: Learns the noise that was added during the forward process
+
+Since the score function and noise predictor are mathematically related, both approaches can generate high-quality samples, but they use different sampling algorithms.
