@@ -211,3 +211,107 @@ $$p_\theta(x_0, x_1, \ldots, x_{T-1} | x_T) = p_\theta(x_0 | x_1) \cdot p_\theta
 This can be written compactly as:
 
 $$p_\theta(x_0, x_1, \ldots, x_{T-1} | x_T) = \prod_{t=1}^T p_\theta(x_{t-1} | x_t)$$
+
+To get the complete joint distribution, we need to include the prior distribution over $x_T$:
+
+$$p_\theta(x_0, x_1, \ldots, x_T) = p(x_T) \cdot p_\theta(x_0, x_1, \ldots, x_{T-1} | x_T)$$
+
+$$p_\theta(x_0, x_1, \ldots, x_T) = p(x_T) \cdot \prod_{t=1}^T p_\theta(x_{t-1} | x_t)$$
+
+A crucial aspect of the diffusion process is choosing the values of $\bar{\alpha}_t$ such that after many steps, we are left with pure noise. This ensures that the forward process converges to a simple, known distribution.
+
+Common choices for the noise schedule include:
+
+1. **Linear Schedule**: $\beta_t = \frac{t}{T} \cdot \beta_{\text{max}}$
+2. **Cosine Schedule**: $\beta_t = \cos\left(\frac{t}{T} \cdot \frac{\pi}{2}\right)$
+3. **Quadratic Schedule**: $\beta_t = \left(\frac{t}{T}\right)^2 \cdot \beta_{\text{max}}$
+
+**Example**: For a linear schedule with $\beta_{\text{max}} = 0.02$ and $T = 1000$, we get $\beta_1 = 0.00002$, $\beta_{500} = 0.01$ and $\beta_{1000} = 0.02$.
+
+Once we have trained the diffusion model and learned the reverse process $p_\theta(x_{t-1} | x_t)$, we can generate new samples by running the reverse process. Here's how sampling works. 
+
+Sample $x_T$ from the prior distribution $x_T \sim \mathcal{N}(x_T; 0, I)$.
+
+For $t = T, T-1, \ldots, 1$, sample from the learned reverse process $x_{t-1} \sim p_\theta(x_{t-1} | x_t) = \mathcal{N}(x_{t-1}; \mu_\theta(x_t, t), \sigma_t^2 I)$.
+
+After $T$ steps, we obtain $x_0$, which is our generated sample.
+
+This entire diffusion framework can be viewed as a **Variational Autoencoder (VAE)** with a crucial difference: **the encoder is fixed and predefined, while only the decoder is learned**.
+
+**Standard VAE Structure**:
+
+- **Encoder**: $q_\phi(z | x) = \mathcal{N}(z; \mu_\phi(x), \sigma_\phi^2(x) I)$
+
+- **Decoder**: $p_\theta(x | z) = \mathcal{N}(x; \mu_\theta(z), \sigma_\theta^2(z) I)$
+
+- **Prior**: $p(z) = \mathcal{N}(z; 0, I)$
+
+**Vanilla VAE ELBO (Non-KL form)**:
+
+$$ELBO_{\text{VAE}} = \mathbb{E}_{q_\phi(z|x)} \left[ \log \frac{p_\theta(x, z)}{q_\phi(z|x)} \right]$$
+
+**Hierarchical VAE Structure** (z₂ → z₁ → x):
+
+- **Encoder**: $q_\phi(z_1, z_2 | x) = q_\phi(z_1 | x) \cdot q_\phi(z_2 | z_1)$
+
+  - $q_\phi(z_1 | x) = \mathcal{N}(z_1; \mu_\phi(x), \sigma_\phi^2(x) I)$
+
+  - $q_\phi(z_2 | z_1) = \mathcal{N}(z_2; \mu_\phi(z_1), \sigma_\phi^2(z_1) I)$
+
+- **Decoder**: $p_\theta(x, z_1 | z_2) = p_\theta(x | z_1) \cdot p_\theta(z_1 | z_2)$
+
+  - $p_\theta(x | z_1) = \mathcal{N}(x; \mu_\theta(z_1), \sigma_\theta^2(z_1) I)$
+
+  - $p_\theta(z_1 | z_2) = \mathcal{N}(z_1; \mu_\theta(z_2), \sigma_\theta^2(z_2) I)$
+
+- **Prior**: $p(z_2) = \mathcal{N}(z_2; 0, I)$
+
+**Hierarchical VAE ELBO (Non-KL form)**:
+
+$$ELBO_{\text{HVAE}} = \mathbb{E}_{q_\phi(z_1,z_2|x)} \left[ \log \frac{p_\theta(x, z_1, z_2)}{q_\phi(z_1, z_2|x)} \right]$$
+
+Following the hierarchical VAE formulation, we can write the ELBO for diffusion models. In diffusion models, we have a sequence of latent variables $x_1, x_2, \ldots, x_T$ where $x_T$ is the most abstract (pure noise) and $x_0$ is the data.
+
+**Diffusion Model Structure** (x_T → x_{T-1} → ... → x_1 → x_0):
+
+- **Encoder**: $q(x_1, x_2, \ldots, x_T | x_0) = \prod_{t=1}^T q(x_t | x_{t-1})$ - Fixed noise corruption process
+
+- **Decoder**: $p_\theta(x_0, x_1, \ldots, x_{T-1} | x_T) = \prod_{t=1}^T p_\theta(x_{t-1} | x_t)$ - Learned denoising process
+
+- **Prior**: $p(x_T) = \mathcal{N}(x_T; 0, I)$
+
+**Diffusion Model ELBO (Non-KL form)**:
+
+$$ELBO_{\text{Diff}} = \mathbb{E}_{q(x_1,\ldots,x_T|x_0)} \left[ \log \frac{p_\theta(x_0, x_1, \ldots, x_T)}{q(x_1, \ldots, x_T|x_0)} \right]$$
+
+The Negative Evidence Lower BOund (NELBO) is the negative of the ELBO, which is what we actually minimize during training:
+
+$$\mathcal{L}_{\text{Diff}} = -\mathbb{E}_{q(x_1,\ldots,x_T|x_0)} \left[ \log \frac{p_\theta(x_0, x_1, \ldots, x_T)}{q(x_1, \ldots, x_T|x_0)} \right]$$
+
+This can be rewritten as:
+
+$$\mathcal{L}_{\text{Diff}} = \mathbb{E}_{q(x_1,\ldots,x_T|x_0)} \left[ -\log \frac{p_\theta(x_0, x_1, \ldots, x_T)}{q(x_1, \ldots, x_T|x_0)} \right]$$
+
+The decoder learns to predict the mean function $\mu_\theta(x_t, t)$ for the reverse process. Let's derive how this function is parameterized.
+
+The true reverse process $q(x_{t-1} | x_t, x_0)$ can be derived using Bayes' theorem. For Gaussian distributions, this gives us:
+
+$$q(x_{t-1} | x_t, x_0) = \mathcal{N}(x_{t-1}; \mu_t(x_t, x_0), \sigma_t^2 I)$$
+
+where it can be shown that:
+
+$$\mu_t(x_t, x_0) = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon \right)$$
+
+and:
+
+$$\sigma_t^2 = \frac{\beta_t(1 - \bar{\alpha}_{t-1})}{1 - \bar{\alpha}_t}$$
+
+The learned reverse process is:
+
+$$p_\theta(x_{t-1} | x_t) = \mathcal{N}(x_{t-1}; \mu_\theta(x_t, t), \sigma_t^2 I)$$
+
+Since we want the learned process to approximate the true reverse process, we parameterize $\mu_\theta(x_t, t)$ to match the form of $\mu_t(x_t, x_0)$:
+
+$$\mu_\theta(x_t, t) = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{\beta_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(x_t, t) \right)$$
+
+where $\epsilon_\theta(x_t, t)$ is a neural network that predicts the noise $\epsilon$ given $x_t$ and $t$.
