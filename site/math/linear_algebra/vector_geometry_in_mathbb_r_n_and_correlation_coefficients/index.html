@@ -836,6 +836,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Vector geometry in Rn and correlation coefficients
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -847,6 +860,43 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#angles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Angles
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#properties-of-dot-products" class="md-nav__link">
+    <span class="md-ellipsis">
+      Properties of dot products
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -962,6 +1012,24 @@
 
 
 <h1 id="vector-geometry-in-mathbbrn-and-correlation-coefficients">Vector geometry in <span class="arithmatex">\(\mathbb{R}^n\)</span> and correlation coefficients</h1>
+<h2 id="angles">Angles</h2>
+<p>The angle <span class="arithmatex">\(0° \leq \theta \leq 180°\)</span> between nonzero 2-vectors a = <span class="arithmatex">\((a_1, a_2)\)</span> and b = <span class="arithmatex">\((b_1, b_2)\)</span> satisfies</p>
+<div class="arithmatex">\[\cos \theta = \frac{a_1b_1 + a_2b_2}{\|a\|\|b\|}\]</div>
+<p>The angle <span class="arithmatex">\(0° \leq \theta \leq 180°\)</span> between two nonzero 3-vectors a = <span class="arithmatex">\((a_1, a_2, a_3)\)</span> and b = <span class="arithmatex">\((b_1, b_2, b_3)\)</span> satisfies</p>
+<div class="arithmatex">\[\cos \theta = \frac{a_1b_1 + a_2b_2 + a_3b_3}{\|a\|\|b\|}\]</div>
+<p>The preceding in <span class="arithmatex">\(\mathbb{R}^2\)</span> and <span class="arithmatex">\(\mathbb{R}^3\)</span> motivates how to define appropriate concepts with <span class="arithmatex">\(n\)</span>-vectors for any <span class="arithmatex">\(n\)</span>.</p>
+<p>Consider <span class="arithmatex">\(n\)</span>-vectors x = <span class="arithmatex">\(\begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{bmatrix}\)</span> and y = <span class="arithmatex">\(\begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_n \end{bmatrix}\)</span>.</p>
+<p>(i) The dot product of x and y is defined to be the scalar</p>
+<div class="arithmatex">\[x \cdot y = x_1y_1 + x_2y_2 + \cdots + x_ny_n = \sum_{i=1}^n x_iy_i\]</div>
+<p>The dot product is only defined if the two vectors are <span class="arithmatex">\(n\)</span>-vectors for the same value of <span class="arithmatex">\(n\)</span>.</p>
+<p>(ii) The angle <span class="arithmatex">\(\theta\)</span> between two nonzero <span class="arithmatex">\(n\)</span>-vectors x, y is defined by the formula</p>
+<div class="arithmatex">\[\cos(\theta) = \frac{x \cdot y}{\|x\|\|y\|} \tag{2.1.4}\]</div>
+<p>with <span class="arithmatex">\(0° \leq \theta \leq 180°\)</span>. For emphasis: x and y must be nonzero <span class="arithmatex">\(n\)</span>-vectors for a common <span class="arithmatex">\(n\)</span>.</p>
+<p>(iii) When <span class="arithmatex">\(x \cdot y = 0\)</span> (same as <span class="arithmatex">\(\theta = 90°\)</span> if x, y ≠ 0), we say x and y are perpendicular; the word orthogonal is often used for this ("orthogōnios" is ancient Greek for "right-angled"), though only rarely at the U.S. Supreme Court.</p>
+<p>Always remember that the dot product of vectors is a scalar (it is not a vector).</p>
+<p>The notion of angle is a definition in <span class="arithmatex">\(\mathbb{R}^n\)</span> for general <span class="arithmatex">\(n\)</span>: it is motivated by the case when <span class="arithmatex">\(n = 3\)</span>, but for general <span class="arithmatex">\(n\)</span> there is nothing to "physically justify". The real content making this definition for general <span class="arithmatex">\(n\)</span> is that (as you will learn with experience) this notion of angle behaves like our visual experience in <span class="arithmatex">\(\mathbb{R}^2\)</span> and <span class="arithmatex">\(\mathbb{R}^3\)</span> and so provides useful visual guidance with <span class="arithmatex">\(n\)</span>-vectors for any <span class="arithmatex">\(n\)</span>.</p>
+<p>Whenever we speak of an angle between two lines through the origin, there is always an ambiguity (when they're not perpendicular) of whether we want the acute angle between them or the (supplementary) obtuse angle between them. This corresponds to the fact that when we set it up as a vector problem, we have to choose a direction along each line (coming out of the intersection point). Depending on the choice, we will get the acute or the obtuse angle.</p>
+<h2 id="properties-of-dot-products">Properties of dot products</h2>
 
 
 
