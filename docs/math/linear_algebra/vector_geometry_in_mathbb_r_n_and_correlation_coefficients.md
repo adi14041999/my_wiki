@@ -142,7 +142,4 @@ Note that X, Y ≠ 0 since we assumed the data points aren't on a common horizon
 
 But the correlation coefficient is the cosine of the angle between the nonzero vectors X and Y, so the correlation coefficient is equal to 1 precisely when the angle between X and Y is $0°$. The angle $\theta$ between the (nonzero) vectors X and Y is $0°$ precisely when Y = $m$X for some $m > 0$.
 
-## Dot product formula for angles in $\mathbb{R}^3$
-
-
 
