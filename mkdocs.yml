@@ -21,6 +21,7 @@ nav:
   - Math:
     - Linear Algebra:
       - Vectors, vector addition, and scalar multiplication: math/linear_algebra/vectors_vector_addition_and_scalar_multiplication.md
+      - Vector geometry in Rn and correlation coefficients: math/linear_algebra/vector_geometry_in_mathbb_r_n_and_correlation_coefficients.md
     - Probability:
       - Probability and Counting: math/probability/probability_and_counting.md
 
