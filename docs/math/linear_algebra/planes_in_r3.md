@@ -24,6 +24,16 @@ This means any point on the line has coordinates $(1 + 3t, t, -2 + 4t)$ for some
 
 - When $t = -1$: $(-2, -1, -6)$
 
+**Parametric form through two points**: Given two points $\mathbf{p}$ and $\mathbf{q}$, the line passing through them has parametric equation:
+
+$$\mathbf{r}(t) = \mathbf{p} + t(\mathbf{q} - \mathbf{p}) = (1-t)\mathbf{p} + t\mathbf{q}$$
+
+This form uses the direction vector $\mathbf{q} - \mathbf{p}$ and parameter $t$ ranges from 0 to 1 to give all points between $\mathbf{p}$ and $\mathbf{q}$.
+
+*Example*: For points $\mathbf{p} = (1, 2, 3)$ and $\mathbf{q} = (4, 1, 0)$, the line equation is:
+
+$$\mathbf{r}(t) = (1, 2, 3) + t(3, -1, -3) = (1 + 3t, 2 - t, 3 - 3t)$$
+
 **Symmetric form** (when all components of $\mathbf{v}$ are nonzero): $\frac{x - x_0}{v_1} = \frac{y - y_0}{v_2} = \frac{z - z_0}{v_3}$
 
 In the symmetric form:
@@ -56,15 +66,17 @@ Planes in $\mathbb{R}^3$ can be represented in several different forms, each use
 
 This form uses a point $(x_0, y_0, z_0)$ on the plane and a normal vector $\mathbf{n} = (a, b, c)$ perpendicular to the plane.
 
-*Example*: A plane passing through the point $(2, -1, 3)$ with normal vector $(1, 2, -1)$ has equation:
+![Point-normal form](norm.png)
 
-$$(x - 2, y - (-1), z - 3) \cdot (1, 2, -1) = 0$$
+*Example*: A plane (shown above) passing through the point $(0, 1, 1)$ with normal vector $(3, -2, 1)$ has equation:
 
-$$(x - 2) + 2(y + 1) - (z - 3) = 0$$
+$$(x - 0, y - 1, z - 1) \cdot (3, -2, 1) = 0$$
 
-$$x - 2 + 2y + 2 - z + 3 = 0$$
+$$3(x - 0) - 2(y - 1) + 1(z - 1) = 0$$
 
-$$x + 2y - z + 3 = 0$$
+$$3x - 2y + z + 1 = 0$$
+
+From the coefficients we again read off that (3, -2, 1) is a normal vector to the plane (not to the individual points in the plane, but rather to differences between such points). This is no surprise, in view of how the plane was originally defined.
 
 **2. General form**: $ax + by + cz + d = 0$
 
@@ -83,6 +95,12 @@ This form uses a point $\mathbf{r}_0$ on the plane and two non-parallel directio
 *Example*: A plane through the point $(1, 0, 2)$ with direction vectors $(1, 1, 0)$ and $(0, 1, 1)$ has parametric equation:
 $\mathbf{r}(s,t) = (1, 0, 2) + s(1, 1, 0) + t(0, 1, 1) = (1 + s, s + t, 2 + t)$
 
+An advantage of the parametric form is that as we independently vary values of the parameters $t$ and $t′$, the vectors we get in the parametric form are guaranteed to lie exactly on the plane. For instance, if we want to trace out some path in the plane, then by varying the values of $t$ and $t′$ continuously we trace out a continuous curve exactly in the plan.
+
+![Parametric form](param.png)
+
+The parametric description for planes and its analogues for more complicated surfaces (such as a sphere, a cylinder, etc.) is quite useful in computer graphics to generate the image of a path of motion lying exactly on a specific surface. For such applications a parametric form is far more useful than the general form; as with the parametric form we do not have to solve for anything.
+
 **4. Three-point form**: Using three non-collinear points
 
 Given three points $(x_1, y_1, z_1)$, $(x_2, y_2, z_2)$, and $(x_3, y_3, z_3)$, the plane equation is:
@@ -97,6 +115,8 @@ $$(x - 1)(1 \cdot 1 - 0 \cdot 0) - y(-1 \cdot 1 - 0 \cdot (-1)) + z(-1 \cdot 0 -
 $$(x - 1) + y + z = 0$$
 
 $$x + y + z = 1$$
+
+**Note:** We claim that the only way three different points can be on a common line in space is when the difference vectors from one of them to the other two lie along the same or opposite directions. This corresponds to those two difference vectors being scalar multiples of each other (a positive scalar when pointing in the same direction, and a negative scalar when pointing in opposite directions).
 
 **5. Intercept form**: $\frac{x}{a} + \frac{y}{b} + \frac{z}{c} = 1$
 
