@@ -24,6 +24,7 @@ nav:
       - Vector geometry in Rn and correlation coefficients: math/linear_algebra/vector_geometry_in_mathbb_r_n_and_correlation_coefficients.md
       - Planes in R3: math/linear_algebra/planes_in_r3.md
       - Span, subspaces, and dimension: math/linear_algebra/span_subspaces_and_dimension.md
+      - Basis and orthogonality: math/linear_algebra/basis_and_orthogonality.md
     - Probability:
       - Probability and Counting: math/probability/probability_and_counting.md
 

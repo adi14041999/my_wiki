@@ -16,7 +16,7 @@
         <link rel="prev" href="../planes_in_r3/">
       
       
-        <link rel="next" href="../../probability/probability_and_counting/">
+        <link rel="next" href="../basis_and_orthogonality/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -949,6 +949,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../basis_and_orthogonality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Basis and orthogonality
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1088,6 +1111,19 @@
 <img alt="Linear subspaces_1" src="../ill_1.png" />
 <img alt="Linear subspaces_2" src="../ill_2.png" /></p>
 <h2 id="dimension">Dimension</h2>
+<p>We would like to define the "dimension" of a linear subspace in a way that generalizes our familiar concept of dimension: a thread or a line is 1-dimensional, a sheet of paper is 2-dimensional, the world around us is 3-dimensional.</p>
+<p>In particular, we may informally say: the "dimension" of an object <span class="arithmatex">\(X\)</span> tells us how many different numbers are needed to locate a point in <span class="arithmatex">\(X\)</span>.</p>
+<p>To turn this into something unambiguous and useful, we now focus on the case of a linear subspace <span class="arithmatex">\(V\)</span> of <span class="arithmatex">\(\mathbb{R}^n\)</span>, where vector algebra will provide a way to make that informal idea precise. The "dimension" of <span class="arithmatex">\(V\)</span> will be, intuitively, the number of independent directions in <span class="arithmatex">\(V\)</span>. In other words, it will tell us how many numbers we need in order to specify a vector v in <span class="arithmatex">\(V\)</span>.</p>
+<p>More precisely, recall that by the definition of "linear subspace", <span class="arithmatex">\(V\)</span> is the span of some finite collection of vectors v<span class="arithmatex">\(_1\)</span>, . . . , v<span class="arithmatex">\(_k \in \mathbb{R}^n\)</span>. That is, for any v <span class="arithmatex">\(\in V\)</span> we can write</p>
+<div class="arithmatex">\[\mathbf{v} = c_1\mathbf{v}_1 + \cdots + c_k\mathbf{v}_k\]</div>
+<p>for some scalars <span class="arithmatex">\(c_1\)</span>, . . . , <span class="arithmatex">\(c_k\)</span>, so to determine v it is enough to tell us <span class="arithmatex">\(k\)</span> numbers– the scalars <span class="arithmatex">\(c_1\)</span>, . . . , <span class="arithmatex">\(c_k\)</span>. But <span class="arithmatex">\(V\)</span> can have another spanning set consisting of a different number of vectors.</p>
+<p>The span <span class="arithmatex">\(V\)</span> of two nonzero vectors in <span class="arithmatex">\(\mathbb{R}^3\)</span> could be a line (such as if the two vectors point in the same or opposite directions), in which case <span class="arithmatex">\(V\)</span> is also spanned by just one of those two vectors (e.g., the second vector is redundant).</p>
+<p>Similarly, the span of three nonzero vectors in <span class="arithmatex">\(\mathbb{R}^3\)</span> could be a plane in special circumstances (or even a line in especially degenerate circumstances).</p>
+<p>In both such cases, the initial spanning set has some redundancy. To define "dimension" for <span class="arithmatex">\(V\)</span>, we want to use ways of spanning <span class="arithmatex">\(V\)</span> that (in a sense we need to make precise) don't have redundancy.</p>
+<p>Let <span class="arithmatex">\(V\)</span> be a nonzero linear subspace of some <span class="arithmatex">\(\mathbb{R}^n\)</span>. The dimension of <span class="arithmatex">\(V\)</span>, denoted as <span class="arithmatex">\(\dim(V)\)</span>, is defined to be the smallest number of vectors needed to span <span class="arithmatex">\(V\)</span>. We define <span class="arithmatex">\(\dim(\{0\}) = 0\)</span>.</p>
+<p>For <span class="arithmatex">\(k \geq 2\)</span>, consider a collection v<span class="arithmatex">\(_1\)</span>, . . . , v<span class="arithmatex">\(_k\)</span> of vectors spanning a linear subspace <span class="arithmatex">\(V\)</span> in <span class="arithmatex">\(\mathbb{R}^n\)</span>. We have <span class="arithmatex">\(\dim(V) = k\)</span> precisely when "there is no redundancy": each v<span class="arithmatex">\(_i\)</span> is not a linear combination of the others, or in other words removing it from the list destroys the spanning property.</p>
+<p>Equivalently, <span class="arithmatex">\(\dim(V) &lt; k\)</span> precisely when "there is redundancy": some v<span class="arithmatex">\(_i\)</span> is a linear combination of the others, or in other words removing some v<span class="arithmatex">\(_i\)</span> from the list does not affect the span. If some v<span class="arithmatex">\(_i\)</span> vanishes then it is a linear combination of the others and hence can be dropped from the span, so <span class="arithmatex">\(\dim(V) &lt; k\)</span>.</p>
+<p>If <span class="arithmatex">\(V\)</span> and <span class="arithmatex">\(W\)</span> are linear subspaces of <span class="arithmatex">\(\mathbb{R}^n\)</span> with <span class="arithmatex">\(W\)</span> contained in <span class="arithmatex">\(V\)</span> (i.e., every vector in <span class="arithmatex">\(W\)</span> also belongs to <span class="arithmatex">\(V\)</span>, much like a line inside a plane in <span class="arithmatex">\(\mathbb{R}^3\)</span>) then <span class="arithmatex">\(\dim(W) \leq \dim(V)\)</span>, and equality holds precisely when <span class="arithmatex">\(W = V\)</span>.</p>
 
 
 

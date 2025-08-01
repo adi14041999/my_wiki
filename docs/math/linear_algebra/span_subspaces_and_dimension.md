@@ -56,3 +56,29 @@ Some illustrations below of which are linear subspaces and which are not. Only t
 ![Linear subspaces_2](ill_2.png)
 
 ## Dimension
+
+We would like to define the "dimension" of a linear subspace in a way that generalizes our familiar concept of dimension: a thread or a line is 1-dimensional, a sheet of paper is 2-dimensional, the world around us is 3-dimensional.
+
+In particular, we may informally say: the "dimension" of an object $X$ tells us how many different numbers are needed to locate a point in $X$.
+
+To turn this into something unambiguous and useful, we now focus on the case of a linear subspace $V$ of $\mathbb{R}^n$, where vector algebra will provide a way to make that informal idea precise. The "dimension" of $V$ will be, intuitively, the number of independent directions in $V$. In other words, it will tell us how many numbers we need in order to specify a vector v in $V$.
+
+More precisely, recall that by the definition of "linear subspace", $V$ is the span of some finite collection of vectors v$_1$, . . . , v$_k \in \mathbb{R}^n$. That is, for any v $\in V$ we can write
+
+$$\mathbf{v} = c_1\mathbf{v}_1 + \cdots + c_k\mathbf{v}_k$$
+
+for some scalars $c_1$, . . . , $c_k$, so to determine v it is enough to tell us $k$ numbers– the scalars $c_1$, . . . , $c_k$. But $V$ can have another spanning set consisting of a different number of vectors.
+
+The span $V$ of two nonzero vectors in $\mathbb{R}^3$ could be a line (such as if the two vectors point in the same or opposite directions), in which case $V$ is also spanned by just one of those two vectors (e.g., the second vector is redundant).
+
+Similarly, the span of three nonzero vectors in $\mathbb{R}^3$ could be a plane in special circumstances (or even a line in especially degenerate circumstances).
+
+In both such cases, the initial spanning set has some redundancy. To define "dimension" for $V$, we want to use ways of spanning $V$ that (in a sense we need to make precise) don't have redundancy.
+
+Let $V$ be a nonzero linear subspace of some $\mathbb{R}^n$. The dimension of $V$, denoted as $\dim(V)$, is defined to be the smallest number of vectors needed to span $V$. We define $\dim(\{0\}) = 0$.
+
+For $k \geq 2$, consider a collection v$_1$, . . . , v$_k$ of vectors spanning a linear subspace $V$ in $\mathbb{R}^n$. We have $\dim(V) = k$ precisely when "there is no redundancy": each v$_i$ is not a linear combination of the others, or in other words removing it from the list destroys the spanning property.
+
+Equivalently, $\dim(V) < k$ precisely when "there is redundancy": some v$_i$ is a linear combination of the others, or in other words removing some v$_i$ from the list does not affect the span. If some v$_i$ vanishes then it is a linear combination of the others and hence can be dropped from the span, so $\dim(V) < k$.
+
+If $V$ and $W$ are linear subspaces of $\mathbb{R}^n$ with $W$ contained in $V$ (i.e., every vector in $W$ also belongs to $V$, much like a line inside a plane in $\mathbb{R}^3$) then $\dim(W) \leq \dim(V)$, and equality holds precisely when $W = V$.
