@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/math/linear_algebra/vector_geometry_in_mathbb_r_n_and_correlation_coefficients/">
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/math/linear_algebra/projections/">
       
       
-        <link rel="prev" href="../vectors_vector_addition_and_scalar_multiplication/">
+        <link rel="prev" href="../basis_and_orthogonality/">
       
       
-        <link rel="next" href="../planes_in_r3/">
+        <link rel="next" href="../../probability/probability_and_counting/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Vector geometry in Rn and correlation coefficients - My Wiki</title>
+        <title>Projections - My Wiki</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#vector-geometry-in-mathbbrn-and-correlation-coefficients" class="md-skip">
+        <a href="#projections" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Vector geometry in Rn and correlation coefficients
+              Projections
             
           </span>
         </div>
@@ -824,32 +824,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Vector geometry in Rn and correlation coefficients
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../vector_geometry_in_mathbb_r_n_and_correlation_coefficients/" class="md-nav__link">
         
   
   
@@ -860,62 +838,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#angles" class="md-nav__link">
-    <span class="md-ellipsis">
-      Angles
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#properties-of-dot-products" class="md-nav__link">
-    <span class="md-ellipsis">
-      Properties of dot products
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pythagorean-theorem-in-mathbbrn-and-the-cauchyschwarz-inequality" class="md-nav__link">
-    <span class="md-ellipsis">
-      Pythagorean Theorem in \(\mathbb{R}^n\) and the Cauchy–Schwarz Inequality
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-correlation-coefficient" class="md-nav__link">
-    <span class="md-ellipsis">
-      The correlation coefficient
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -994,10 +916,19 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../projections/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1008,6 +939,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -1121,78 +1053,7 @@
 
 
 
-<h1 id="vector-geometry-in-mathbbrn-and-correlation-coefficients">Vector geometry in <span class="arithmatex">\(\mathbb{R}^n\)</span> and correlation coefficients</h1>
-<h2 id="angles">Angles</h2>
-<p>The angle <span class="arithmatex">\(0° \leq \theta \leq 180°\)</span> between nonzero 2-vectors a = <span class="arithmatex">\((a_1, a_2)\)</span> and b = <span class="arithmatex">\((b_1, b_2)\)</span> satisfies</p>
-<div class="arithmatex">\[\cos \theta = \frac{a_1b_1 + a_2b_2}{\|a\|\|b\|}\]</div>
-<p>The angle <span class="arithmatex">\(0° \leq \theta \leq 180°\)</span> between two nonzero 3-vectors a = <span class="arithmatex">\((a_1, a_2, a_3)\)</span> and b = <span class="arithmatex">\((b_1, b_2, b_3)\)</span> satisfies</p>
-<div class="arithmatex">\[\cos \theta = \frac{a_1b_1 + a_2b_2 + a_3b_3}{\|a\|\|b\|}\]</div>
-<p>The preceding in <span class="arithmatex">\(\mathbb{R}^2\)</span> and <span class="arithmatex">\(\mathbb{R}^3\)</span> motivates how to define appropriate concepts with <span class="arithmatex">\(n\)</span>-vectors for any <span class="arithmatex">\(n\)</span>.</p>
-<p>Consider <span class="arithmatex">\(n\)</span>-vectors x = <span class="arithmatex">\(\begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{bmatrix}\)</span> and y = <span class="arithmatex">\(\begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_n \end{bmatrix}\)</span>.</p>
-<p>(i) The dot product of x and y is defined to be the scalar</p>
-<div class="arithmatex">\[x \cdot y = x_1y_1 + x_2y_2 + \cdots + x_ny_n = \sum_{i=1}^n x_iy_i\]</div>
-<p>The dot product is only defined if the two vectors are <span class="arithmatex">\(n\)</span>-vectors for the same value of <span class="arithmatex">\(n\)</span>.</p>
-<p>(ii) The angle <span class="arithmatex">\(\theta\)</span> between two nonzero <span class="arithmatex">\(n\)</span>-vectors x, y is defined by the formula</p>
-<div class="arithmatex">\[\cos(\theta) = \frac{x \cdot y}{\|x\|\|y\|} \tag{2.1.4}\]</div>
-<p>with <span class="arithmatex">\(0° \leq \theta \leq 180°\)</span>. For emphasis: x and y must be nonzero <span class="arithmatex">\(n\)</span>-vectors for a common <span class="arithmatex">\(n\)</span>.</p>
-<p>(iii) When <span class="arithmatex">\(x \cdot y = 0\)</span> (same as <span class="arithmatex">\(\theta = 90°\)</span> if x, y ≠ 0), we say x and y are perpendicular; the word orthogonal is often used for this ("orthogōnios" is ancient Greek for "right-angled"), though only rarely at the U.S. Supreme Court.</p>
-<p>Always remember that the dot product of vectors is a scalar (it is not a vector).</p>
-<p>The notion of angle is a definition in <span class="arithmatex">\(\mathbb{R}^n\)</span> for general <span class="arithmatex">\(n\)</span>: it is motivated by the case when <span class="arithmatex">\(n = 3\)</span>, but for general <span class="arithmatex">\(n\)</span> there is nothing to "physically justify". The real content making this definition for general <span class="arithmatex">\(n\)</span> is that (as you will learn with experience) this notion of angle behaves like our visual experience in <span class="arithmatex">\(\mathbb{R}^2\)</span> and <span class="arithmatex">\(\mathbb{R}^3\)</span> and so provides useful visual guidance with <span class="arithmatex">\(n\)</span>-vectors for any <span class="arithmatex">\(n\)</span>.</p>
-<p>Whenever we speak of an angle between two lines through the origin, there is always an ambiguity (when they're not perpendicular) of whether we want the acute angle between them or the (supplementary) obtuse angle between them. This corresponds to the fact that when we set it up as a vector problem, we have to choose a direction along each line (coming out of the intersection point). Depending on the choice, we will get the acute or the obtuse angle.</p>
-<h2 id="properties-of-dot-products">Properties of dot products</h2>
-<p>For any <span class="arithmatex">\(n\)</span>-vectors v, w, w<span class="arithmatex">\(_1\)</span>, and w<span class="arithmatex">\(_2\)</span>, the following hold:</p>
-<p>(i) <span class="arithmatex">\(v \cdot w = w \cdot v\)</span>,</p>
-<p>(ii) <span class="arithmatex">\(v \cdot v = \|v\|^2\)</span>,</p>
-<p>(iii) <span class="arithmatex">\(v \cdot (cw) = c(v \cdot w)\)</span> for any scalar <span class="arithmatex">\(c\)</span>, and <span class="arithmatex">\(v \cdot (w_1 + w_2) = v \cdot w_1 + v \cdot w_2\)</span>.</p>
-<p>(iii′) Combining both rules in (iii), for any scalars <span class="arithmatex">\(c_1\)</span>, <span class="arithmatex">\(c_2\)</span> we have</p>
-<div class="arithmatex">\[v \cdot (c_1w_1 + c_2w_2) = c_1(v \cdot w_1) + c_2(v \cdot w_2)\]</div>
-<h2 id="pythagorean-theorem-in-mathbbrn-and-the-cauchyschwarz-inequality">Pythagorean Theorem in <span class="arithmatex">\(\mathbb{R}^n\)</span> and the Cauchy–Schwarz Inequality</h2>
-<p>As an application of the dot product rules, we can establish a version of the Pythagorean Theorem for <span class="arithmatex">\(n\)</span>-vectors with any <span class="arithmatex">\(n\)</span> (not just <span class="arithmatex">\(n = 2\)</span>) and we can show that the subtlety lurking in the definition of "angle" between <span class="arithmatex">\(n\)</span>-vectors is really not a problem at all.</p>
-<p><strong>Theorem (Pythagoras).</strong> If <span class="arithmatex">\(n\)</span>-vectors v<span class="arithmatex">\(_1\)</span> and v<span class="arithmatex">\(_2\)</span> are nonzero and perpendicular (i.e., at an angle of <span class="arithmatex">\(90°\)</span>) then</p>
-<div class="arithmatex">\[\|v_1 + v_2\|^2 = \|v_1\|^2 + \|v_2\|^2 \]</div>
-<p><strong>Proof.</strong> Expand the left side as a dot product:</p>
-<div class="arithmatex">\[(v_1 + v_2) \cdot (v_1 + v_2) = v_1 \cdot (v_1 + v_2) + v_2 \cdot (v_1 + v_2) = v_1 \cdot v_1 + v_1 \cdot v_2 + v_2 \cdot v_1 + v_2 \cdot v_2\]</div>
-<p>We've used the rules for dot products at each step to expand. But the common value <span class="arithmatex">\(v_1 \cdot v_2\)</span> and <span class="arithmatex">\(v_2 \cdot v_1\)</span> is 0 because v<span class="arithmatex">\(_1\)</span> and v<span class="arithmatex">\(_2\)</span> are assumed to be perpendicular (which means by definition that their dot product equals 0). Thus, the right side equals <span class="arithmatex">\(v_1 \cdot v_1 + v_2 \cdot v_2 = \|v_1\|^2 + \|v_2\|^2\)</span>, as we wanted. <span class="arithmatex">\(\square\)</span></p>
-<p>The motivation for our definitions of perpendicularity and more generally angle between vectors in <span class="arithmatex">\(\mathbb{R}^n\)</span> and length of vectors in <span class="arithmatex">\(\mathbb{R}^n\)</span> for general <span class="arithmatex">\(n\)</span> (especially <span class="arithmatex">\(n &gt; 3\)</span>) came from our knowledge of how things work in <span class="arithmatex">\(\mathbb{R}^2\)</span> based on knowing the Pythagorean Theorem in plane geometry. Making up definitions of words cannot ever replace the work involved in proving a real theorem.</p>
-<p>Since we now have several good properties of dot products in hand, we can establish a fact that is needed to confirm that our definition of "angle" between nonzero <span class="arithmatex">\(n\)</span>-vectors makes sense for any <span class="arithmatex">\(n\)</span>:</p>
-<p><strong>Theorem (Cauchy–Schwarz Inequality).</strong> For <span class="arithmatex">\(n\)</span>-vectors v, w, we have</p>
-<div class="arithmatex">\[-\|v\| \|w\| \leq v \cdot w \leq \|v\| \|w\|\]</div>
-<p>(or equivalently the absolute value <span class="arithmatex">\(|v \cdot w|\)</span> is at most <span class="arithmatex">\(\|v\| \|w\|\)</span>). Moreover, one of the inequalities is an equality precisely when one of v or w is a scalar multiple of the other.</p>
-<p><strong>Proof.</strong> If v = 0 or w = 0 then everything is clear (note that 0 is a scalar multiple of any <span class="arithmatex">\(n\)</span>-vector: multiply it by the scalar 0), so now we assume v, w ≠ 0. The idea of the proof is to explore how the length of v + <span class="arithmatex">\(x\)</span>w depends on <span class="arithmatex">\(x\)</span>. This is most conveniently done by analyzing the squared-length, which is a dot product:</p>
-<div class="arithmatex">\[\|v + xw\|^2 = (v + xw) \cdot (v + xw)\]</div>
-<p>Using the linearity properties of dot products, we have</p>
-<div class="arithmatex">\[(v + xw) \cdot (v + xw) = (v + xw) \cdot v + x((v + xw) \cdot w) = v \cdot v + (xw) \cdot v + x((v \cdot w) + x(w \cdot w)) = v \cdot v + x(w \cdot v) + x(v \cdot w) + x^2(w \cdot w)\]</div>
-<p>But <span class="arithmatex">\(w \cdot v = v \cdot w\)</span>, so combining the middle two terms yields:</p>
-<div class="arithmatex">\[\|v + xw\|^2 = \|v\|^2 + 2(v \cdot w)x + \|w\|^2x^2\]</div>
-<p>The squared length of a vector is always ≥ 0, and it equals 0 precisely when the vector equals 0. But the vector v + <span class="arithmatex">\(x\)</span>w equals 0 for some value <span class="arithmatex">\(x = c\)</span> precisely when v = <span class="arithmatex">\(-c\)</span>w, which is to say v is a scalar multiple of w, and that is the same as w being a scalar multiple of v (since the scalar multiplier can be brought to the other side as its reciprocal as long as the scalar cannot be 0, and indeed such a scalar cannot be 0 since we have arranged that v, w ≠ 0). So we just need to analyze what it means that the quadratic polynomial in <span class="arithmatex">\(x\)</span> given by</p>
-<div class="arithmatex">\[q(x) = \|w\|^2x^2 + 2(v \cdot w)x + \|v\|^2\]</div>
-<p>is always non-negative, and determine when this polynomial does actually attain the value 0 for some value of <span class="arithmatex">\(x\)</span>.</p>
-<p>Let's review when a quadratic polynomial <span class="arithmatex">\(ax^2 + bx + c\)</span> with positive leading coefficient (such as <span class="arithmatex">\(a = \|w\|^2\)</span> for <span class="arithmatex">\(q(x)\)</span> above) is ≥ 0 everywhere. This happens precisely when its concave-up parabolic graph lies entirely on one side of the <span class="arithmatex">\(x\)</span>-axis (possibly touching the <span class="arithmatex">\(x\)</span>-axis at one point), which is exactly the situation that the graph does not cross the <span class="arithmatex">\(x\)</span>-axis at two different points. This is exactly the situation when the output of the quadratic formula does not yield two different real numbers. The opposite case of having two different real roots occurs exactly when the "<span class="arithmatex">\(b^2 - 4ac\)</span>" part of the quadratic formula inside the square-root is &gt; 0, so in our situation we must have the exactly opposite situation: <span class="arithmatex">\(b^2 - 4ac \leq 0\)</span>, with equality happening precisely when there is a real root.</p>
-<p>Applying the preceding review with <span class="arithmatex">\(a = \|w\|^2\)</span>, <span class="arithmatex">\(b = 2(v \cdot w)\)</span>, <span class="arithmatex">\(c = \|v\|^2\)</span> for <span class="arithmatex">\(q(x)\)</span>, we get</p>
-<div class="arithmatex">\[(2(v \cdot w))^2 - 4\|w\|^2\|v\|^2 \leq 0\]</div>
-<p>with equality happening exactly when v and w are scalar multiples of each other. Bringing the second term on the left over to the other side, we conclude that</p>
-<div class="arithmatex">\[(2(v \cdot w))^2 \leq 4\|w\|^2\|v\|^2\]</div>
-<p>with equality precisely when v and w are scalar multiples of each other. Dividing each side by 4, this is the same as the inequality</p>
-<div class="arithmatex">\[|v \cdot w|^2 \leq (\|w\| \|v\|)^2\]</div>
-<p>so taking square roots of both sides gives what we want. <span class="arithmatex">\(\square\)</span></p>
-<h2 id="the-correlation-coefficient">The correlation coefficient</h2>
-<p>Given data points <span class="arithmatex">\((x_1, y_1)\)</span>, . . . , <span class="arithmatex">\((x_n, y_n)\)</span>, it is often useful to seek a line which gives a "best fit" to this collection of points.</p>
-<p>The problem of finding a "best fit" line to some data is called linear regression. But at a more basic level we may seek a measure of the extent to which it is reasonable to try to find a line that could be regarded as a good fit to the data (setting aside what that specific line may be). There is a widely used measure of whether one should seek such a line: this measure is called the correlation coefficient of the data points.</p>
-<p>Consider <span class="arithmatex">\(n\)</span> data points <span class="arithmatex">\((x_1, y_1)\)</span>, <span class="arithmatex">\((x_2, y_2)\)</span>, . . . , <span class="arithmatex">\((x_n, y_n)\)</span> in <span class="arithmatex">\(\mathbb{R}^2\)</span>. Assume they don't all lie on a common vertical line nor on a common horizontal line (i.e., the <span class="arithmatex">\(x_i\)</span>'s are not all equal to each other, and the <span class="arithmatex">\(y_i\)</span>'s are not all equal to each other, so in particular X, Y ≠ 0).</p>
-<p>In the above setup, assume furthermore that the averages <span class="arithmatex">\(\bar{x} = \frac{1}{n}\sum x_i\)</span> and <span class="arithmatex">\(\bar{y} = \frac{1}{n}\sum y_i\)</span> of the <span class="arithmatex">\(x\)</span>-coordinates and of the <span class="arithmatex">\(y\)</span>-coordinates both equal 0. The correlation coefficient <span class="arithmatex">\(r\)</span> between the <span class="arithmatex">\(x_i\)</span>'s and <span class="arithmatex">\(y_i\)</span>'s is defined to be the cosine of the angle between X and Y, or equivalently between the unit vectors <span class="arithmatex">\(\frac{X}{\|X\|}\)</span> and <span class="arithmatex">\(\frac{Y}{\|Y\|}\)</span>:</p>
-<div class="arithmatex">\[r = \text{cosine of the angle between X and Y} = \frac{X \cdot Y}{\|X\|\|Y\|} = \frac{X}{\|X\|} \cdot \frac{Y}{\|Y\|}\]</div>
-<p><img alt="correlation coefficient" src="../corr_coeff.png" /></p>
-<p><strong>Intuition:</strong> This definition makes perfect geometric sense. When the data points <span class="arithmatex">\((x_i, y_i)\)</span> are centered (so their averages are 0), we can think of X and Y as vectors in <span class="arithmatex">\(\mathbb{R}^n\)</span> representing the <span class="arithmatex">\(x\)</span>-coordinates and <span class="arithmatex">\(y\)</span>-coordinates respectively. </p>
-<p>The correlation coefficient <span class="arithmatex">\(r\)</span> measures how well the data points align along a line through the origin. When <span class="arithmatex">\(r = 1\)</span>, the vectors X and Y point in the same direction, meaning the data points lie perfectly on a line with positive slope. When <span class="arithmatex">\(r = -1\)</span>, the vectors point in opposite directions, meaning the data points lie perfectly on a line with negative slope. When <span class="arithmatex">\(r = 0\)</span>, the vectors are perpendicular, meaning there's no linear relationship between the variables.</p>
-<p>You may be bothered by the assumption that the averages <span class="arithmatex">\(\bar{x}\)</span> and <span class="arithmatex">\(\bar{y}\)</span> of the coordinates of the data both equal 0, since in practice it is rarely satisfied. What is done in real-world problems is that the data is recentered: we replace <span class="arithmatex">\(x_i\)</span> with <span class="arithmatex">\(\hat{x}_i = x_i - \bar{x}\)</span> and replacing <span class="arithmatex">\(y_i\)</span> with <span class="arithmatex">\(\hat{y}_i = y_i - \bar{y}\)</span>. Such subtraction of the averages makes "center of mass" move to <span class="arithmatex">\((0, 0)\)</span> (i.e., <span class="arithmatex">\(\hat{\bar{x}}, \hat{\bar{y}} = 0\)</span>).</p>
-<p>Often people work with <span class="arithmatex">\(r^2\)</span>, which is always non-negative. This is</p>
-<div class="arithmatex">\[r^2 = \frac{(X \cdot Y)^2}{\|X\|^2\|Y\|^2}\]</div>
-<p>it is near 0 when there is little correlation, and near 1 when there's a strong linear relationship (without specifying the sign of the slope: <span class="arithmatex">\(r\)</span> may be near 1 or near <span class="arithmatex">\(-1\)</span>).</p>
-<p>Don't confuse the value of <span class="arithmatex">\(r\)</span> with the slope of a "best-fit line"! The nearness of <span class="arithmatex">\(r^2\)</span> to 1 (or of <span class="arithmatex">\(r\)</span> to <span class="arithmatex">\(\pm 1\)</span>) is a measure of quality of fit. The actual slope of the best-fit line (which could be any real number at all) has nothing whatsoever to do with the value of <span class="arithmatex">\(r\)</span> (which is always between <span class="arithmatex">\(-1\)</span> and 1).</p>
-<p>Correlation coefficients go hand in hand with linear regression (finding a "best fit" line for data) and help one to understand how meaningful the results of a linear regression are.</p>
-<p><strong>Note:</strong> Let's see why the correlation coefficient equals 1 precisely when the points <span class="arithmatex">\((x_i, y_i)\)</span> all lie exactly on a line <span class="arithmatex">\(y = mx\)</span> whose slope <span class="arithmatex">\(m\)</span> is positive. We assume as always that the data doesn't all lie on a common vertical line or a common horizontal line, and that the averages <span class="arithmatex">\(\bar{x}\)</span> and <span class="arithmatex">\(\bar{y}\)</span> equal 0. By then replacing <span class="arithmatex">\(y_i\)</span> with <span class="arithmatex">\(-y_i\)</span> everywhere, it would follow that the correlation coefficient equals <span class="arithmatex">\(-1\)</span> precisely when the points <span class="arithmatex">\((x_i, y_i)\)</span> all lie exactly on a line <span class="arithmatex">\(y = mx\)</span> whose slope <span class="arithmatex">\(m\)</span> is negative.</p>
-<p>Note that X, Y ≠ 0 since we assumed the data points aren't on a common horizontal line and aren't on a common vertical line. We want to show that the correlation coefficient is 1 precisely when Y = <span class="arithmatex">\(m\)</span>X for some <span class="arithmatex">\(m &gt; 0\)</span>.</p>
-<p>But the correlation coefficient is the cosine of the angle between the nonzero vectors X and Y, so the correlation coefficient is equal to 1 precisely when the angle between X and Y is <span class="arithmatex">\(0°\)</span>. The angle <span class="arithmatex">\(\theta\)</span> between the (nonzero) vectors X and Y is <span class="arithmatex">\(0°\)</span> precisely when Y = <span class="arithmatex">\(m\)</span>X for some <span class="arithmatex">\(m &gt; 0\)</span>.</p>
+<h1 id="projections">Projections</h1>
 
 
 
