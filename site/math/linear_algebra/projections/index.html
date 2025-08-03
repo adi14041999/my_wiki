@@ -928,6 +928,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Projections
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -939,6 +952,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-closest-point-to-a-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      The closest point to a line
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1054,6 +1095,30 @@
 
 
 <h1 id="projections">Projections</h1>
+<p>For many applications in engineering, physics, and data-related problems in all scientific fields (genetics, economics, neuroscience, computer science, etc.) it is essential to go far beyond <span class="arithmatex">\(\mathbb{R}^3\)</span> and solve problems involving distance minimization to subspaces in <span class="arithmatex">\(\mathbb{R}^n\)</span> for any <span class="arithmatex">\(n\)</span>:</p>
+<p>If <span class="arithmatex">\(V\)</span> is a linear subspace in <span class="arithmatex">\(\mathbb{R}^n\)</span> and <span class="arithmatex">\(\mathbf{x} \in \mathbb{R}^n\)</span> is some point, then what point in <span class="arithmatex">\(V\)</span> is closest to <span class="arithmatex">\(\mathbf{x}\)</span>? This closest point will be called the <strong>projection</strong> of <span class="arithmatex">\(\mathbf{x}\)</span> into <span class="arithmatex">\(V\)</span>.</p>
+<h2 id="the-closest-point-to-a-line">The closest point to a line</h2>
+<p>The way we will solve the general problem of distance minimization from a point in <span class="arithmatex">\(\mathbb{R}^n\)</span> to a linear subspace <span class="arithmatex">\(V\)</span> involves "assembling" a collection of solutions to distance minimization to certain <span class="arithmatex">\(1\)</span>-dimensional linear subspaces of <span class="arithmatex">\(V\)</span>, or in other words, solving distance minimization problems to a collection of lines through <span class="arithmatex">\(0\)</span> in <span class="arithmatex">\(\mathbb{R}^n\)</span>.</p>
+<p>Since minimizing distance to lines will be the foundation for the general case, we begin by focusing on this special case. Consider a line <span class="arithmatex">\(L\)</span> in <span class="arithmatex">\(\mathbb{R}^n\)</span> through <span class="arithmatex">\(0\)</span>, so <span class="arithmatex">\(L = \text{span}(\mathbf{w}) = \{c\mathbf{w} : c \in \mathbb{R}\}\)</span> where <span class="arithmatex">\(\mathbf{w} \in \mathbb{R}^n\)</span> is some nonzero vector. For any point <span class="arithmatex">\(\mathbf{x} \in \mathbb{R}^n\)</span>, we want to show that there is a unique point in <span class="arithmatex">\(L\)</span> closest to <span class="arithmatex">\(\mathbf{x}\)</span>, and to actually give a formula for how to compute this nearest point to <span class="arithmatex">\(\mathbf{x}\)</span> in <span class="arithmatex">\(L\)</span>. </p>
+<p>Here is the fundamental idea: although our task (necessary for many applications!) takes place in <span class="arithmatex">\(\mathbb{R}^n\)</span> with completely general (and possibly huge) <span class="arithmatex">\(n\)</span>, we look at a low-dimensional instance of the problem in the hope that the low-dimensional case will suggest some feature that has a chance to adapt to the general situation. This balancing of insight from pictures in low-dimensional cases alongside algebraic work and geometric language developed for <span class="arithmatex">\(\mathbb{R}^n\)</span> with general <span class="arithmatex">\(n\)</span> is an important part of linear algebra, giving visual insight into <span class="arithmatex">\(\mathbb{R}^n\)</span> for big <span class="arithmatex">\(n\)</span>. This doesn't justify results in <span class="arithmatex">\(\mathbb{R}^n\)</span> for general <span class="arithmatex">\(n\)</span>, but it inspires what we should expect and/or try to prove is true.</p>
+<p>Let's look at the case <span class="arithmatex">\(n = 2\)</span> as shown in the figure below.</p>
+<p><img alt="Projection of the vector x onto the line L spanned by w" src="../proj2.png" /></p>
+<p>The key insight suggested by the figure above is that the point on the line <span class="arithmatex">\(L\)</span> that is closest to <span class="arithmatex">\(\mathbf{x}\)</span> has another characterization (that in turn will allow us to compute it): it is the one point on <span class="arithmatex">\(L\)</span> for which the displacement vector to <span class="arithmatex">\(\mathbf{x}\)</span> (the dotted line segment joining it to <span class="arithmatex">\(\mathbf{x}\)</span> as in the figure above) is perpendicular to <span class="arithmatex">\(L\)</span>, or equivalently is perpendicular to <span class="arithmatex">\(\mathbf{w}\)</span>. Visually, the perpendicular direction to <span class="arithmatex">\(L\)</span> from <span class="arithmatex">\(\mathbf{x}\)</span> is the "most direct" route. Or put another way, you may convince yourself by drawing some pictures that any deviation from perpendicularity entails a longer path from <span class="arithmatex">\(\mathbf{x}\)</span> to the line <span class="arithmatex">\(L\)</span>.</p>
+<p>To summarize, the figure above suggests a workable idea: the point <span class="arithmatex">\(c\mathbf{w} \in L\)</span> for which <span class="arithmatex">\(\|\mathbf{x} - c\mathbf{w}\|\)</span> is minimal should also have the property that <span class="arithmatex">\(\mathbf{x} - c\mathbf{w}\)</span> is orthogonal to everything in <span class="arithmatex">\(L\)</span>. Although this idea is suggested by the picture in <span class="arithmatex">\(\mathbb{R}^2\)</span>, as written it makes equally good sense in <span class="arithmatex">\(\mathbb{R}^n\)</span> for any <span class="arithmatex">\(n\)</span> whatsoever. But is it true? And even once we know it is true, how can we exploit this property of the nearest point to <span class="arithmatex">\(\mathbf{x}\)</span> on <span class="arithmatex">\(L\)</span> to actually compute this nearest point?</p>
+<p>The informal reasoning above may have already convinced you that the distance is minimized precisely when the displacement vector is orthogonal to <span class="arithmatex">\(L\)</span>.</p>
+<p><strong>Method I (algebraic).</strong> In accordance with the idea inspired by the figure above in the case <span class="arithmatex">\(n = 2\)</span>, for general <span class="arithmatex">\(n\)</span> we look for a scalar <span class="arithmatex">\(c\)</span> for which <span class="arithmatex">\(\mathbf{x} - c\mathbf{w}\)</span> is orthogonal to every vector in <span class="arithmatex">\(L\)</span>. The points of <span class="arithmatex">\(L = \text{span}(\mathbf{w})\)</span> are those of the form <span class="arithmatex">\(a\mathbf{w}\)</span> for scalars <span class="arithmatex">\(a\)</span>, so we seek <span class="arithmatex">\(c\)</span> making <span class="arithmatex">\((\mathbf{x} - c\mathbf{w}) \cdot (a\mathbf{w}) = 0\)</span> for every scalar <span class="arithmatex">\(a\)</span>. The dot product has the property that <span class="arithmatex">\((\mathbf{x} - c\mathbf{w}) \cdot (a\mathbf{w}) = a((\mathbf{x} - c\mathbf{w}) \cdot \mathbf{w})\)</span>, so actually it suffices to make sure that <span class="arithmatex">\((\mathbf{x} - c\mathbf{w}) \cdot \mathbf{w} = 0\)</span>. We can use the further properties of the dot product to rewrite this as</p>
+<div class="arithmatex">\[0 = (\mathbf{x} - c\mathbf{w}) \cdot \mathbf{w} = \mathbf{x} \cdot \mathbf{w} - (c\mathbf{w}) \cdot \mathbf{w}.\]</div>
+<p>We can rearrange this expression to write it as <span class="arithmatex">\(c(\mathbf{w} \cdot \mathbf{w}) = \mathbf{x} \cdot \mathbf{w}\)</span>. But <span class="arithmatex">\(\mathbf{w} \cdot \mathbf{w} = \|\mathbf{w}\|^2 &gt; 0\)</span> (since <span class="arithmatex">\(\mathbf{w} \neq 0\)</span>), so it makes sense to divide both sides by <span class="arithmatex">\(\mathbf{w} \cdot \mathbf{w}\)</span> to obtain that <span class="arithmatex">\(c = \frac{\mathbf{x} \cdot \mathbf{w}}{\mathbf{w} \cdot \mathbf{w}}\)</span>. This is the coefficient we had previously regarded as unknown! </p>
+<p>To summarize, we have shown through algebra and the properties of dot products that there is exactly one point in the line <span class="arithmatex">\(L = \text{span}(\mathbf{w})\)</span> through <span class="arithmatex">\(0\)</span> in <span class="arithmatex">\(\mathbb{R}^n\)</span> whose difference from <span class="arithmatex">\(\mathbf{x}\)</span> is orthogonal to everything in <span class="arithmatex">\(L\)</span>: it is <span class="arithmatex">\(\frac{\mathbf{x} \cdot \mathbf{w}}{\mathbf{w} \cdot \mathbf{w}} \mathbf{w}\)</span>. We have not yet actually shown that this scalar multiple of <span class="arithmatex">\(\mathbf{w}\)</span> on <span class="arithmatex">\(L\)</span> is closer to <span class="arithmatex">\(\mathbf{x}\)</span> than every other vector in <span class="arithmatex">\(L\)</span>, but if we believe the orthogonality insight inspired by the <span class="arithmatex">\(2\)</span>-dimensional picture in the figure above then this must be that closest point. As a bonus, we have obtained an explicit formula for it!</p>
+<p><strong>Method II (geometric).</strong> We next use some plane geometry via the figure above to obtain the same formula for the closest point. Strictly speaking, this argument only applies when <span class="arithmatex">\(n = 2\)</span>, but you might find that it gives the formula some visual meaning that is somehow lacking in the purely algebraic work in Method I.</p>
+<p>There is nothing to be done if <span class="arithmatex">\(\mathbf{x} \cdot \mathbf{w} = 0\)</span> (in that case <span class="arithmatex">\(\mathbf{x}\)</span> is perpendicular to <span class="arithmatex">\(L\)</span> and we are thereby convinced that <span class="arithmatex">\(0\)</span> is the closest point, as is also given by the desired formula). Hence, we can suppose <span class="arithmatex">\(\mathbf{x} \neq 0\)</span> and the angle <span class="arithmatex">\(\theta\)</span> between <span class="arithmatex">\(\mathbf{x}\)</span> and <span class="arithmatex">\(\mathbf{w}\)</span> satisfies either <span class="arithmatex">\(0° &lt; \theta &lt; 90°\)</span> or <span class="arithmatex">\(90° &lt; \theta &lt; 180°\)</span>.</p>
+<p>The case of acute <span class="arithmatex">\(\theta\)</span> is shown in the figure above, whereas if <span class="arithmatex">\(\theta\)</span> is obtuse then the point we seek would be in the direction of <span class="arithmatex">\(-\mathbf{w}\)</span> (rather than in the direction of <span class="arithmatex">\(\mathbf{w}\)</span>). If <span class="arithmatex">\(\theta\)</span> is acute, as in the figure above, then by basic trigonometry, the leg along <span class="arithmatex">\(L\)</span> for the right triangle as shown has length <span class="arithmatex">\(\|\mathbf{x}\| \cos(\theta)\)</span> and it points in the direction of the unit vector <span class="arithmatex">\(\mathbf{w}/\|\mathbf{w}\|\)</span>. This says that the endpoint on <span class="arithmatex">\(L\)</span> of the dotted segment is the vector</p>
+<div class="arithmatex">\[(\|\mathbf{x}\| \cos(\theta)) \frac{\mathbf{w}}{\|\mathbf{w}\|}.\]</div>
+<p>But <span class="arithmatex">\(\cos(\theta) = (\mathbf{x} \cdot \mathbf{w})/(\|\mathbf{x}\|\|\mathbf{w}\|)\)</span>, so plugging this into the equation above yields the desired formula since <span class="arithmatex">\(\|\mathbf{w}\|^2 = \mathbf{w} \cdot \mathbf{w}\)</span>. The case when <span class="arithmatex">\(90° &lt; \theta &lt; 180°\)</span> goes very similarly, except now <span class="arithmatex">\(\cos(\theta) &lt; 0\)</span> (so the endpoint on <span class="arithmatex">\(L\)</span> of the dotted segment is in the direction of the opposite unit vector <span class="arithmatex">\(-\mathbf{w}/\|\mathbf{w}\|\)</span>) and we have to work with the length <span class="arithmatex">\(\|\mathbf{x}\| |\cos(\theta)| = -\|\mathbf{x}\| \cos(\theta)\)</span>. Putting these together, the two signs cancel and we get the desired formula again.</p>
+<p><strong>Proposition.</strong> Let <span class="arithmatex">\(L = \text{span}(\mathbf{w}) = \{c\mathbf{w} : c \in \mathbb{R}\}\)</span> be a <span class="arithmatex">\(1\)</span>-dimensional linear subspace of <span class="arithmatex">\(\mathbb{R}^n\)</span> (so <span class="arithmatex">\(\mathbf{w} \neq 0\)</span>), a "line". Choose any point <span class="arithmatex">\(\mathbf{x} \in \mathbb{R}^n\)</span>. There is exactly one point in <span class="arithmatex">\(L\)</span> closest to <span class="arithmatex">\(\mathbf{x}\)</span>, and it is given by the scalar multiple</p>
+<div class="arithmatex">\[\frac{\mathbf{x} \cdot \mathbf{w}}{\mathbf{w} \cdot \mathbf{w}} \mathbf{w}\]</div>
+<p>of <span class="arithmatex">\(\mathbf{w}\)</span>. This is called "the projection of <span class="arithmatex">\(\mathbf{x}\)</span> into <span class="arithmatex">\(\text{span}(\mathbf{w})\)</span>"; we denote it by the symbol <span class="arithmatex">\(\text{Proj}_{\mathbf{w}} \mathbf{x}\)</span>.</p>
+<p><strong>Note:</strong> This can be seen as (dot product of <span class="arithmatex">\(\mathbf{x}\)</span> and <span class="arithmatex">\(\mathbf{w}\)</span>), which is a scalar, times the unit vector in direction of <span class="arithmatex">\(\mathbf{w}\)</span>.</p>
 
 
 
