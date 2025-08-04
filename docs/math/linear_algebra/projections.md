@@ -47,3 +47,15 @@ $$\frac{\mathbf{x} \cdot \mathbf{w}}{\mathbf{w} \cdot \mathbf{w}} \mathbf{w}$$
 of $\mathbf{w}$. This is called "the projection of $\mathbf{x}$ into $\text{span}(\mathbf{w})$"; we denote it by the symbol $\text{Proj}_{\mathbf{w}} \mathbf{x}$.
 
 **Note:** This can be seen as (dot product of $\mathbf{x}$ and $\mathbf{w}$), which is a scalar, times the unit vector in direction of $\mathbf{w}$.
+
+**Example:** Consider $\mathbf{v} = \begin{bmatrix} 1 \\ 3 \\ 4 \end{bmatrix}$. The numbers $1, 3, 4$ represent the amount of $\mathbf{v}$ that points along the $x, y, z$-axes respectively. More precisely, $\begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix} = \mathbf{e}_1$ is the component of $\mathbf{v}$ along the $x$-axis line, $\begin{bmatrix} 0 \\ 3 \\ 0 \end{bmatrix} = 3\mathbf{e}_2$ is the component of $\mathbf{v}$ along the $y$-axis line, and $\begin{bmatrix} 0 \\ 0 \\ 4 \end{bmatrix} = 4\mathbf{e}_3$ is the component of $\mathbf{v}$ along the $z$-axis line. These are the closest points to $\mathbf{v}$ on the $x$-, $y$- and $z$-axes, respectively.
+
+In terms of this data, we want to compute the projection of $\mathbf{v}$ on some line pointing with some other direction: if $\mathbf{w}$ is a (nonzero) vector along this new direction, we want to compute $\text{Proj}_{\mathbf{w}}(\mathbf{v})$. The key point is that the formula for $\text{Proj}_{\mathbf{w}}(\mathbf{x})$ behaves well for any linear combination of any $n$-vectors $\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_k$: the projection of a linear combination of the $\mathbf{x}_i$'s is equal to the corresponding linear combination of the projections.
+
+For example, with $k = 2$ it says $\text{Proj}_{\mathbf{w}}(5\mathbf{x}_1 - 7\mathbf{x}_2) = 5 \text{Proj}_{\mathbf{w}}(\mathbf{x}_1) - 7 \text{Proj}_{\mathbf{w}}(\mathbf{x}_2)$ and likewise with $5$ and $-7$ replaced by any two scalars. The reason this works is an algebraic calculation:
+
+$$\text{Proj}_{\mathbf{w}}(c_1\mathbf{x}_1 + \cdots + c_k\mathbf{x}_k) = \frac{(c_1\mathbf{x}_1 + \cdots + c_k\mathbf{x}_k) \cdot \mathbf{w}}{\mathbf{w} \cdot \mathbf{w}} \mathbf{w} = \frac{c_1(\mathbf{x}_1 \cdot \mathbf{w}) + \cdots + c_k(\mathbf{x}_k \cdot \mathbf{w})}{\mathbf{w} \cdot \mathbf{w}} \mathbf{w} = c_1 \frac{\mathbf{x}_1 \cdot \mathbf{w}}{\mathbf{w} \cdot \mathbf{w}} \mathbf{w} + \cdots + c_k \frac{\mathbf{x}_k \cdot \mathbf{w}}{\mathbf{w} \cdot \mathbf{w}} \mathbf{w} = c_1 \text{Proj}_{\mathbf{w}}(\mathbf{x}_1) + \cdots + c_k \text{Proj}_{\mathbf{w}}(\mathbf{x}_k).$$
+
+Applying this to the expression $\mathbf{v} = \mathbf{e}_1 + 3\mathbf{e}_2 + 4\mathbf{e}_3$ yields $\text{Proj}_{\mathbf{w}}(\mathbf{v}) = \text{Proj}_{\mathbf{w}}(\mathbf{e}_1) + 3 \text{Proj}_{\mathbf{w}}(\mathbf{e}_2) + 4 \text{Proj}_{\mathbf{w}}(\mathbf{e}_3)$.
+
+## Projection onto a general subspace
