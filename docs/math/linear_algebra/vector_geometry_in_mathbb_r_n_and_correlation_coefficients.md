@@ -22,7 +22,7 @@ The dot product is only defined if the two vectors are $n$-vectors for the same 
 
 (ii) The angle $\theta$ between two nonzero $n$-vectors x, y is defined by the formula
 
-$$\cos(\theta) = \frac{x \cdot y}{\|x\|\|y\|} \tag{2.1.4}$$
+$$\cos(\theta) = \frac{x \cdot y}{\|x\|\|y\|}$$
 
 with $0° \leq \theta \leq 180°$. For emphasis: x and y must be nonzero $n$-vectors for a common $n$.
 

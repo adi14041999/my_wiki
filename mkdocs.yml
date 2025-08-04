@@ -26,6 +26,7 @@ nav:
       - Span, subspaces, and dimension: math/linear_algebra/span_subspaces_and_dimension.md
       - Basis and orthogonality: math/linear_algebra/basis_and_orthogonality.md
       - Projections: math/linear_algebra/projections.md
+      - Applications of projections in Rn- orthogonal bases of planes and linear regression: math/linear_algebra/applications_of_projections_in_rn_orthogonal_bases_of_planes_and_linear_regression.md
     - Probability:
       - Probability and Counting: math/probability/probability_and_counting.md
 
