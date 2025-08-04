@@ -79,3 +79,19 @@ where $\text{Proj}_{\mathbf{v}_i}(\mathbf{x}) = \frac{\mathbf{x} \cdot \mathbf{v
 $$\mathbf{x} = \mathbf{v} + \mathbf{v}'$$
 
 with $\mathbf{v} \in V$ and $\mathbf{v}'$ orthogonal to everything in $V$. Explicitly, $\mathbf{v} = \text{Proj}_V(\mathbf{x})$ and $\mathbf{v}' = \mathbf{x} - \text{Proj}_V(\mathbf{x})$.
+
+Since the $\mathbf{v}_i$'s span $V$, the point $\mathbf{v} \in V$ closest to $\mathbf{x}$ can be written in the form $\mathbf{v} = \sum_{i=1}^k c_i\mathbf{v}_i$ for some unknown coefficients $c_i$. We are going to see that the perpendicularity of $\mathbf{x} - \mathbf{v}$ to everything in $V$ forces $c_i = (\mathbf{x} \cdot \mathbf{v}_i)/(\mathbf{v}_i \cdot \mathbf{v}_i)$ for every $i$. But then $c_i\mathbf{v}_i$ is exactly the formula for $\text{Proj}_{\mathbf{v}_i}(\mathbf{x})$, so we would obtain $\mathbf{v} = \sum_{i=1}^k c_i\mathbf{v}_i = \sum_{i=1}^k \text{Proj}_{\mathbf{v}_i}(\mathbf{x})$ as asserted in the equation above.
+
+How can we show that the coefficients $c_i$ are really given by the ratios $(\mathbf{x} \cdot \mathbf{v}_i)/(\mathbf{v}_i \cdot \mathbf{v}_i)$? For this we have to do some algebra (rather than geometry): since $\mathbf{x} - \mathbf{v}$ is perpendicular to everything in $V$, it is in particular perpendicular to every $\mathbf{v}_j$, so
+
+$$0 = (\mathbf{x} - \mathbf{v}) \cdot \mathbf{v}_j = \mathbf{x} \cdot \mathbf{v}_j - \mathbf{v} \cdot \mathbf{v}_j$$
+
+for every $j$. This says $\mathbf{x} \cdot \mathbf{v}_j = \mathbf{v} \cdot \mathbf{v}_j$ for every $j$. But $\mathbf{v} = \sum_{i=1}^k c_i\mathbf{v}_i$ with some unknown $c_i$'s, so
+
+$$\mathbf{v} \cdot \mathbf{v}_j = \sum_{i=1}^k (c_i\mathbf{v}_i) \cdot \mathbf{v}_j = \sum_{i=1}^k c_i(\mathbf{v}_i \cdot \mathbf{v}_j),$$
+
+and the terms for $i \neq j$ all vanish since $\mathbf{v}_i \cdot \mathbf{v}_j = 0$ whenever $i \neq j$ (as $\{\mathbf{v}_1, \ldots, \mathbf{v}_k\}$ is an orthogonal basis of $V$!). In other words, $\mathbf{v} \cdot \mathbf{v}_j = c_j(\mathbf{v}_j \cdot \mathbf{v}_j)$ for every $j$. But we have seen that $\mathbf{x} \cdot \mathbf{v}_j = \mathbf{v} \cdot \mathbf{v}_j$, so
+
+$$\mathbf{x} \cdot \mathbf{v}_j = c_j(\mathbf{v}_j \cdot \mathbf{v}_j)$$
+
+for every $j$. We can divide by $\mathbf{v}_j \cdot \mathbf{v}_j$ since this is nonzero (it is equal to $\|\mathbf{v}_j\|^2 > 0$, as $\mathbf{v}_j \neq 0$), so we thereby obtain the formula $c_j = (\mathbf{x} \cdot \mathbf{v}_j)/(\mathbf{v}_j \cdot \mathbf{v}_j)$ for every $j$, as desired.
