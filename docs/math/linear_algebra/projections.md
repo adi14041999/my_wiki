@@ -59,3 +59,23 @@ $$\text{Proj}_{\mathbf{w}}(c_1\mathbf{x}_1 + \cdots + c_k\mathbf{x}_k) = \frac{(
 Applying this to the expression $\mathbf{v} = \mathbf{e}_1 + 3\mathbf{e}_2 + 4\mathbf{e}_3$ yields $\text{Proj}_{\mathbf{w}}(\mathbf{v}) = \text{Proj}_{\mathbf{w}}(\mathbf{e}_1) + 3 \text{Proj}_{\mathbf{w}}(\mathbf{e}_2) + 4 \text{Proj}_{\mathbf{w}}(\mathbf{e}_3)$.
 
 ## Projection onto a general subspace
+
+Let's look at the case of a plane $V$ through the origin in $\mathbb{R}^3$ equipped with a choice of orthogonal basis $\{\mathbf{v}_1, \mathbf{v}_2\}$ of this plane. In the figure below, we draw the typical situation, indicating with the notation $\text{Proj}_V(\mathbf{x})$ the point in $V$ closest to $\mathbf{x}$. The first geometric insight, similar to our experience with lines, is that since this nearest point should have displacement vector to $\mathbf{x}$ that is the "most direct" route to $V$ from $\mathbf{x}$, the displacement should involve "no tilting" relative to any direction within $V$.
+
+![Projection of the vector x onto the linear subspace V](proj3.png)
+
+If you think about it, hopefully it seems plausible that if $\mathbf{v} \in V$ makes the displacement $\mathbf{x} - \mathbf{v}$ perpendicular to everything in $V$ then $\mathbf{v}$ should be the point in $V$ for which the direction of the displacement $\mathbf{x} - \mathbf{v}$ is the "most direct" route from $\mathbf{x}$ to $V$, making $\mathbf{v}$ the point in $V$ nearest to $\mathbf{x}$.
+
+**Theorem (Orthogonal Projection Theorem, version I).** For any $\mathbf{x} \in \mathbb{R}^n$ and linear subspace $V$ of $\mathbb{R}^n$, there is a unique $\mathbf{v}$ in $V$ closest to $\mathbf{x}$. In symbols, $\|\mathbf{x} - \mathbf{v}\| < \|\mathbf{x} - \mathbf{v}'\|$ for all $\mathbf{v}'$ in $V$ with $\mathbf{v}' \neq \mathbf{v}$. This $\mathbf{v}$ is called the **projection** of $\mathbf{x}$ onto $V$, and is denoted $\text{Proj}_V(\mathbf{x})$; see the figure above. The projection $\text{Proj}_V(\mathbf{x})$ is also the only vector $\mathbf{v} \in V$ with the property that the displacement $\mathbf{x} - \mathbf{v}$ is perpendicular to $V$ (i.e., $\mathbf{x} - \mathbf{v}$ is perpendicular to every vector in $V$).
+
+If $V$ is nonzero then for any orthogonal basis $\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_k$ of $V$ we have
+
+$$\text{Proj}_V(\mathbf{x}) = \text{Proj}_{\mathbf{v}_1}(\mathbf{x}) + \text{Proj}_{\mathbf{v}_2}(\mathbf{x}) + \cdots + \text{Proj}_{\mathbf{v}_k}(\mathbf{x}),$$
+
+where $\text{Proj}_{\mathbf{v}_i}(\mathbf{x}) = \frac{\mathbf{x} \cdot \mathbf{v}_i}{\mathbf{v}_i \cdot \mathbf{v}_i} \mathbf{v}_i$. For $\mathbf{x} \in V$ we have $\text{Proj}_V(\mathbf{x}) = \mathbf{x}$ – the point in $V$ closest to $\mathbf{x}$ is itself! – so the equation above for $\mathbf{x} \in V$ recovers the Fourier formula!
+
+**Theorem (Orthogonal Projection Theorem, version II).** If $V$ is a linear subspace of $\mathbb{R}^n$ then every vector $\mathbf{x} \in \mathbb{R}^n$ can be uniquely expressed as a sum
+
+$$\mathbf{x} = \mathbf{v} + \mathbf{v}'$$
+
+with $\mathbf{v} \in V$ and $\mathbf{v}'$ orthogonal to everything in $V$. Explicitly, $\mathbf{v} = \text{Proj}_V(\mathbf{x})$ and $\mathbf{v}' = \mathbf{x} - \text{Proj}_V(\mathbf{x})$.
