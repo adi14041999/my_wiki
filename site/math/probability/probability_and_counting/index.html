@@ -1084,6 +1084,24 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#counting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Counting
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sampling-choosing-k-items-from-n-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sampling: Choosing \(k\) Items from \(n\) Items
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1125,13 +1143,12 @@
 
 
 <h1 id="probability-and-counting">Probability and counting</h1>
-<p>Mathematics is the logic of certainty; probability is the logic of uncertainty.</p>
 <h2 id="sample-spaces">Sample spaces</h2>
 <p>The mathematical framework for probability is built around sets. Imagine that an experiment is performed, resulting in one out of a set of possible outcomes. Before the experiment is performed, it is unknown which outcome will be the result; after, the result "crystallizes" into the actual outcome.
 <strong>The sample space S of an experiment is the set of all possible outcomes of the experiment. An event A is a subset of the sample space S, and we say that A occurred if the actual outcome is in A.</strong>
 <img alt="image" src="../pebble_world.png" />
 When the sample space is finite, we can visualize it as Pebble World (figure above). Each pebble represents an outcome, and an event is a set of pebbles. Performing the experiment amounts to randomly selecting one pebble. If all the pebbles are of the same mass, all the pebbles are equally likely to be chosen.</p>
-<p>Set theory is very useful in probability, since it provides a rich language for express_ing and working with events. Set operations, especially unions, intersections, and complements, make it easy to build new events in terms of already defined events.</p>
+<p>Set theory is very useful in probability, since it provides a rich language for expressing and working with events. Set operations, especially unions, intersections, and complements, make it easy to build new events in terms of already defined events.</p>
 <p><strong>Example</strong>: 
 A coin is flipped 10 times. Writing Heads as <strong>H</strong> and Tails as <strong>T</strong>, a possible outcome is: HHHTHHTTHT.
 The sample space is the set of all possible strings of length 10 consisting of <strong>H</strong>'s and <strong>T</strong>'s.
@@ -1140,7 +1157,7 @@ $$
 (s_1, s_2, \dots, s_{10}) \quad \text{with} \quad s_j \in {0, 1}
 $$
 The sample space is the set of all such sequences.</p>
-<p>Some Events:</p>
+<p>Some events:</p>
 <ol>
 <li>Event A_1: the first flip is Heads. As a set:
 $$
@@ -1169,10 +1186,154 @@ $$
 <div class="arithmatex">\[
 P_{\text{naive}}(A) = \frac{|A|}{|S|} = \frac{\text{number of outcomes favorable to } A}{\text{total number of outcomes in } S}
 \]</div>
-<p>The naive definition is very restrictive in that it requires S to be finite, with equal
-mass for each pebble. It has often been misapplied by people who assume equally
-likely outcomes without justification and make arguments to the eﬀect of “either
-it will happen or it won’t, and we don’t know which, so it’s 50-50”.</p>
+<p>The naive definition is very restrictive in that it requires S to be finite, with equal mass for each pebble (all outcomes equally likely). It has often been misapplied by people who assume equally likely outcomes without justification and make arguments to the eﬀect of “either it will happen or it won’t, and we don’t know which, so it’s 50-50”.</p>
+<h2 id="counting">Counting</h2>
+<p>The <strong>multiplication rule</strong> is a fundamental principle in counting that allows us to count the number of possible outcomes of a sequence of experiments.</p>
+<p><strong>Multiplication Rule</strong>: If Experiment 1 has <span class="arithmatex">\(n_1\)</span> possible outcomes, Experiment 2 has <span class="arithmatex">\(n_2\)</span> possible outcomes, ..., and Experiment <span class="arithmatex">\(r\)</span> has <span class="arithmatex">\(n_r\)</span> possible outcomes, then the sequence of all <span class="arithmatex">\(r\)</span> experiments has <span class="arithmatex">\(n_1 \times n_2 \times \cdots \times n_r\)</span> possible outcomes.</p>
+<p><strong>Example</strong>: A license plate consists of 3 letters followed by 3 digits. How many different license plates are possible?</p>
+<ul>
+<li>Experiment 1: Choose the first letter (26 outcomes)</li>
+<li>Experiment 2: Choose the second letter (26 outcomes) </li>
+<li>Experiment 3: Choose the third letter (26 outcomes)</li>
+<li>Experiment 4: Choose the first digit (10 outcomes)</li>
+<li>Experiment 5: Choose the second digit (10 outcomes)</li>
+<li>Experiment 6: Choose the third digit (10 outcomes)</li>
+</ul>
+<p>By the multiplication rule, the total number of possible license plates is: <span class="arithmatex">\(26 \times 26 \times 26 \times 10 \times 10 \times 10 = 26^3 \times 10^3 = 17,576,000\)</span></p>
+<p><strong>Key insight</strong>: The multiplication rule applies when the experiments are <strong>independent</strong>- the number of possible outcomes of each experiment doesn't depend on the outcomes of previous experiments.</p>
+<p><strong>Example:</strong> Probability of a Full House in Poker</p>
+<p>A <strong>full house</strong> in poker consists of three cards of one rank and two cards of another rank (e.g., three Kings and two 7s). Let's calculate the probability of being dealt a full house in a 5-card hand from a standard 52-card deck.</p>
+<p><strong>Step 1: Count the total number of possible 5-card hands</strong>
+- This is the number of ways to choose 5 cards from 52 cards
+- Total hands = <span class="arithmatex">\(\binom{52}{5} = \frac{52!}{5!(52-5)!} = \frac{52!}{5! \cdot 47!} = 2,598,960\)</span></p>
+<p><strong>Step 2: Count the number of full house hands</strong>
+We can break this down using the multiplication rule:</p>
+<ol>
+<li><strong>Choose the rank for the three-of-a-kind</strong>: 13 choices (A, 2, 3, ..., 10, J, Q, K)</li>
+<li><strong>Choose 3 cards of that rank</strong>: <span class="arithmatex">\(\binom{4}{3} = 4\)</span> ways (since there are 4 cards of each rank)</li>
+<li><strong>Choose a different rank for the pair</strong>: 12 choices (must be different from the three-of-a-kind rank)</li>
+<li><strong>Choose 2 cards of that rank</strong>: <span class="arithmatex">\(\binom{4}{2} = 6\)</span> ways</li>
+</ol>
+<p>By the multiplication rule, the number of full house hands is: <span class="arithmatex">\(13 \times 4 \times 12 \times 6 = 3,744\)</span></p>
+<p><strong>Step 3: Calculate the probability</strong>
+Using the naive definition of probability:</p>
+<div class="arithmatex">\[P(\text{Full House}) = \frac{\text{Number of full house hands}}{\text{Total number of hands}} = \frac{3,744}{2,598,960} = \frac{6}{4,165} \approx 0.00144\]</div>
+<p>So the probability of being dealt a full house is approximately 0.144%, or about 1 in 694 hands.</p>
+<h2 id="sampling-choosing-k-items-from-n-items">Sampling: Choosing <span class="arithmatex">\(k\)</span> Items from <span class="arithmatex">\(n\)</span> Items</h2>
+<p>When we want to choose <span class="arithmatex">\(k\)</span> items from a set of <span class="arithmatex">\(n\)</span> items, there are four fundamental cases depending on whether:</p>
+<ol>
+<li>
+<p><strong>Replacement</strong>: Can we choose the same item multiple times?</p>
+</li>
+<li>
+<p><strong>Order</strong>: Does the order of selection matter?</p>
+</li>
+</ol>
+<p>This gives us four distinct sampling scenarios:</p>
+<p>Case 1: Sampling with Replacement, Order Matters</p>
+<ul>
+<li>
+<p><strong>Description</strong>: Choose <span class="arithmatex">\(k\)</span> items from <span class="arithmatex">\(n\)</span> items, allowing repeats, where order matters</p>
+</li>
+<li>
+<p><strong>Example</strong>: Rolling a die 3 times (can get same number multiple times, order matters)</p>
+</li>
+<li>
+<p><strong>Formula</strong>: <span class="arithmatex">\(n^k\)</span></p>
+</li>
+<li>
+<p><strong>Derivation</strong>: By the multiplication rule, each of the <span class="arithmatex">\(k\)</span> choices has <span class="arithmatex">\(n\)</span> possible outcomes, so total outcomes = <span class="arithmatex">\(n \times n \times \cdots \times n = n^k\)</span></p>
+</li>
+</ul>
+<p>Case 2: Sampling without Replacement, Order Matters</p>
+<ul>
+<li>
+<p><strong>Description</strong>: Choose <span class="arithmatex">\(k\)</span> items from <span class="arithmatex">\(n\)</span> items, no repeats, where order matters</p>
+</li>
+<li>
+<p><strong>Example</strong>: Choosing 3 people from 10 to be president, vice-president, and treasurer</p>
+</li>
+<li>
+<p><strong>Formula</strong>: <span class="arithmatex">\(P(n,k) = \frac{n!}{(n-k)!} = n \times (n-1) \times (n-2) \times \cdots \times (n-k+1)\)</span></p>
+</li>
+<li>
+<p><strong>Derivation</strong>: First choice has <span class="arithmatex">\(n\)</span> options, second choice has <span class="arithmatex">\((n-1)\)</span> options (can't repeat), third choice has <span class="arithmatex">\((n-2)\)</span> options, etc. By multiplication rule: <span class="arithmatex">\(n \times (n-1) \times (n-2) \times \cdots \times (n-k+1) = \frac{n!}{(n-k)!}\)</span></p>
+</li>
+</ul>
+<p>Case 3: Sampling without Replacement, Order Doesn't Matter</p>
+<ul>
+<li>
+<p><strong>Description</strong>: Choose <span class="arithmatex">\(k\)</span> items from <span class="arithmatex">\(n\)</span> items, no repeats, where order doesn't matter</p>
+</li>
+<li>
+<p><strong>Example</strong>: Choosing 3 people from 10 to be on a committee</p>
+</li>
+<li>
+<p><strong>Formula</strong>: <span class="arithmatex">\(\binom{n}{k} = \frac{n!}{k!(n-k)!}\)</span></p>
+</li>
+<li>
+<p><strong>Derivation</strong>: This is the number of combinations. We start with Case 2- (<span class="arithmatex">\(P(n,k)\)</span>) and divide by <span class="arithmatex">\(k!\)</span> because each group of <span class="arithmatex">\(k\)</span> items can be arranged in <span class="arithmatex">\(k!\)</span> different orders, but we only want to count each group once.</p>
+</li>
+</ul>
+<p>Case 4: Sampling with Replacement, Order Doesn't Matter</p>
+<ul>
+<li>
+<p><strong>Description</strong>: Choose <span class="arithmatex">\(k\)</span> items from <span class="arithmatex">\(n\)</span> items, allowing repeats, where order doesn't matter</p>
+</li>
+<li>
+<p><strong>Example</strong>: Choosing 3 scoops of ice cream from 4 flavors, where you can get multiple scoops of the same flavor (e.g., 2 chocolate and 1 vanilla)</p>
+</li>
+<li>
+<p><strong>Formula</strong>: <span class="arithmatex">\(\binom{n+k-1}{k} = \binom{n+k-1}{n-1}\)</span></p>
+</li>
+<li>
+<p><strong>Derivation</strong>: Let's derive the formula using a visual approach. Imagine we have 3 scoops (represented by x's) and 4 flavors (separated by dividers |). For example, xx|x|| means 2 scoops of flavor 1, 1 scoop of flavor 2, and 0 scoops of flavors 3 and 4. We need to arrange 3 x's and 3 dividers (to create 4 sections) in a total of 6 positions. Now, in these 6 positions, we place 3 scoops. Once the 3 scoops (x) are placed, the dividers (|) are automatically determined. A few examples to illustrate this:</p>
+</li>
+<li>
+<p>xxx||| means 3 scoops of flavor 1, 0 scoops of flavors 2, 3, and 4</p>
+</li>
+<li>x|x|x| means 1 scoop of each flavor and 0 scoops of flavor 4</li>
+<li>||xxx| means 0 scoops of flavors 1 and 2, 3 scoops of flavor 3, 0 scoops of flavor 4</li>
+</ul>
+<p>The key insight is that we're choosing 3 positions out of 6 total positions to place our scoops (x's). The number of ways to do this is <span class="arithmatex">\(\binom{6}{3} = 20\)</span>. </p>
+<p>In general, for <span class="arithmatex">\(k\)</span> scoops and <span class="arithmatex">\(n\)</span> flavors, we have <span class="arithmatex">\((k + n - 1)\)</span> total positions and we need to choose <span class="arithmatex">\(k\)</span> positions for the scoops. This gives us <span class="arithmatex">\(\binom{k + n - 1}{k} = \binom{n + k - 1}{k}\)</span>.</p>
+<p><strong>Summary Table</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Replacement</th>
+<th>Order Matters</th>
+<th>Formula</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>With</td>
+<td>Yes</td>
+<td><span class="arithmatex">\(n^k\)</span></td>
+<td>Permutations with replacement</td>
+</tr>
+<tr>
+<td>Without</td>
+<td>Yes</td>
+<td><span class="arithmatex">\(\frac{n!}{(n-k)!}\)</span></td>
+<td>Permutations without replacement</td>
+</tr>
+<tr>
+<td>Without</td>
+<td>No</td>
+<td><span class="arithmatex">\(\frac{n!}{k!(n-k)!}\)</span></td>
+<td>Combinations</td>
+</tr>
+<tr>
+<td>With</td>
+<td>No</td>
+<td><span class="arithmatex">\(\binom{n+k-1}{k}\)</span></td>
+<td>Combinations with replacement</td>
+</tr>
+</tbody>
+</table>
 
 
 
