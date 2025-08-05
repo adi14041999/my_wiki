@@ -81,4 +81,30 @@ $$Y - (mX + b\mathbf{1}) = \begin{bmatrix} y_1 - (mx_1 + b) \\ y_2 - (mx_2 + b) 
 
 Thus, since $\sum_{i=1}^n v_i^2 = \|\mathbf{v}\|^2$ for any $\mathbf{v} \in \mathbb{R}^n$ (by definition of $\|\mathbf{v}\|$!), the sum of the squares of the errors is
 
-$$\sum_{i=1}^n (y_i - (mx_i + b))^2 = \|Y - (mX + b\mathbf{1})\|^2$$ 
+$$\sum_{i=1}^n (y_i - (mx_i + b))^2 = \|Y - (mX + b\mathbf{1})\|^2$$
+
+So we seek $m$ and $b$ that minimizes the squared length of $Y - (mX + b\mathbf{1})$, which is the same as minimizing the length of that difference.
+
+The length $\|Y - (mX + b\mathbf{1})\|$ is the distance from $Y$ to $mX + b\mathbf{1}$ since "distance" between any $n$-vectors $\mathbf{v}$ and $\mathbf{w}$ is $\|\mathbf{v} - \mathbf{w}\|$ by definition. As $m$ and $b$ vary, the vectors of the form $mX + b\mathbf{1}$ are exactly the vectors in $\text{span}(X, \mathbf{1})$, due to the definition of "span". Hence, the least-squares minimization problem for $n$ data points is equivalent to the following geometric problem:
+
+**find the vector in $\text{span}(X, \mathbf{1})$ that is closest to the vector $Y \in \mathbb{R}^n$.**
+
+Our task is now an instance of finding the point of a linear subspace of $\mathbb{R}^n$ closest to a given $n$-vector.
+
+The vectors $X$ and $\mathbf{1}$ are not scalar multiples of each other because the hypothesis that the $n$ data points do not lie in a common vertical line (i.e., the $x_i$'s are not all equal to each other) says that $X$ is not a scalar multiple of the nonzero vector $\mathbf{1}$.
+
+By using the Theorem above, an orthogonal basis of $\text{span}(X, \mathbf{1})$ is given by $\mathbf{1}$ and $\hat{X} = X - \text{Proj}_{\mathbf{1}}X$ with
+
+$$\text{Proj}_{\mathbf{1}}(X) = \frac{X \cdot \mathbf{1}}{\mathbf{1} \cdot \mathbf{1}} \mathbf{1} = \frac{\sum_{i=1}^n x_i \cdot 1}{\sum_{i=1}^n 1 \cdot 1} \mathbf{1} = \frac{\sum_{i=1}^n x_i}{n} \mathbf{1} = \bar{x} \mathbf{1} = \begin{bmatrix} \bar{x} \\ \bar{x} \\ \vdots \\ \bar{x} \end{bmatrix}$$
+
+equal to the $n$-vector each of whose entries is equal to the average $\bar{x}$ of the $x_i$'s. Hence,
+
+$$\hat{X} = X - \text{Proj}_{\mathbf{1}}(X) = \begin{bmatrix} x_1 - \bar{x} \\ x_2 - \bar{x} \\ \vdots \\ x_n - \bar{x} \end{bmatrix}$$
+
+is obtained from $X$ by subtracting the average $\bar{x}$ from all entries.
+
+By applying to this span the formula for the nearest point on a linear subspace in terms of an orthogonal basis, we obtain that the closest vector to $Y$ in $\text{span}(X, \mathbf{1})$ is
+
+$$\frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \frac{Y \cdot \mathbf{1}}{\mathbf{1} \cdot \mathbf{1}} \mathbf{1} = \frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \bar{y} \mathbf{1}$$
+
+where $\bar{y} = (1/n) \sum_{i=1}^n y_i$ is the average of the $y_i$'s.
