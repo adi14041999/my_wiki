@@ -77,6 +77,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#story-proofs-axioms-of-probability" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -1073,6 +1078,21 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Story Proofs, Axioms of Probability
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -1085,6 +1105,76 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#story-proofs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Story Proofs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#non-naive-definition-of-probability-and-axioms-of-probability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Non-naive definition of Probability and Axioms of Probability
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Non-naive definition of Probability and Axioms of Probability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#formal-definition-of-probability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Formal Definition of Probability
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#axioms-of-probability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Axioms of Probability
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-properties-derived-from-axioms" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Properties Derived from Axioms
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1315,9 +1405,65 @@
 
 
 
-  <h1>Story Proofs, Axioms of Probability</h1>
-
-
+<h1 id="story-proofs-axioms-of-probability">Story Proofs, Axioms of Probability</h1>
+<h2 id="story-proofs">Story Proofs</h2>
+<p>Story proofs are a powerful technique in combinatorics where we prove identities by interpreting both sides of an equation as counting the same thing in different ways. This is also known as <strong>proof by interpretation</strong> or <strong>bijective proof</strong>.</p>
+<p><strong>Example:</strong> <span class="arithmatex">\(\binom{n}{k} = \binom{n}{n-k}\)</span></p>
+<p><strong>Identity</strong>: <span class="arithmatex">\(\binom{n}{k} = \binom{n}{n-k}\)</span></p>
+<p><strong>Story Proof</strong>: Think of choosing <span class="arithmatex">\(k\)</span> people from a group of <span class="arithmatex">\(n\)</span> people to be on a committee. The left side <span class="arithmatex">\(\binom{n}{k}\)</span> counts the number of ways to choose <span class="arithmatex">\(k\)</span> people for the committee. The right side <span class="arithmatex">\(\binom{n}{n-k}\)</span> counts the number of ways to choose <span class="arithmatex">\(n-k\)</span> people to be <strong>left out</strong> of the committee. But choosing <span class="arithmatex">\(k\)</span> people for the committee is exactly the same as choosing <span class="arithmatex">\(n-k\)</span> people to leave out! Therefore, both sides count the same thing.</p>
+<p><strong>Key insight</strong>: Every choice of <span class="arithmatex">\(k\)</span> people corresponds uniquely to a choice of <span class="arithmatex">\(n-k\)</span> people (the complement), and vice versa.</p>
+<p><strong>Example:</strong> <span class="arithmatex">\(n \cdot \binom{n-1}{k-1} = k \cdot \binom{n}{k}\)</span></p>
+<p><strong>Identity</strong>: <span class="arithmatex">\(n \cdot \binom{n-1}{k-1} = k \cdot \binom{n}{k}\)</span></p>
+<p><strong>Story Proof</strong>: Think of choosing <span class="arithmatex">\(k\)</span> people from <span class="arithmatex">\(n\)</span> people, with one of them designated as President.</p>
+<p><strong>Left side</strong>: <span class="arithmatex">\(n \cdot \binom{n-1}{k-1}\)</span>
+First, choose who will be President (<span class="arithmatex">\(n\)</span> choices). Then, from the remaining <span class="arithmatex">\(n-1\)</span> people, choose <span class="arithmatex">\(k-1\)</span> more people to complete the committee. Total: <span class="arithmatex">\(n \cdot \binom{n-1}{k-1}\)</span></p>
+<p><strong>Right side</strong>: <span class="arithmatex">\(k \cdot \binom{n}{k}\)</span>
+First, choose any <span class="arithmatex">\(k\)</span> people from <span class="arithmatex">\(n\)</span> people (<span class="arithmatex">\(\binom{n}{k}\)</span> ways). Then, from those <span class="arithmatex">\(k\)</span> people, choose one to be President (<span class="arithmatex">\(k\)</span> choices). Total: <span class="arithmatex">\(k \cdot \binom{n}{k}\)</span></p>
+<p><strong>Example:</strong> Vandermonde Identity</p>
+<p><strong>Identity</strong>: <span class="arithmatex">\(\sum_{k=0}^n \binom{m}{k} \binom{p}{n-k} = \binom{m+p}{n}\)</span></p>
+<p><strong>Story Proof</strong>: Think of choosing <span class="arithmatex">\(n\)</span> people from a group of <span class="arithmatex">\(m\)</span> men and <span class="arithmatex">\(p\)</span> women to form a committee.</p>
+<p><strong>Left side</strong>: <span class="arithmatex">\(\sum_{k=0}^n \binom{m}{k} \binom{p}{n-k}\)</span>
+For each <span class="arithmatex">\(k\)</span> from <span class="arithmatex">\(0\)</span> to <span class="arithmatex">\(n\)</span>, choose <span class="arithmatex">\(k\)</span> men from <span class="arithmatex">\(m\)</span> men (<span class="arithmatex">\(\binom{m}{k}\)</span> ways). Then, choose <span class="arithmatex">\(n-k\)</span> women from <span class="arithmatex">\(p\)</span> women (<span class="arithmatex">\(\binom{p}{n-k}\)</span> ways). Total for this <span class="arithmatex">\(k\)</span>: <span class="arithmatex">\(\binom{m}{k} \binom{p}{n-k}\)</span>. Sum over all possible values of <span class="arithmatex">\(k\)</span>: <span class="arithmatex">\(\sum_{k=0}^n \binom{m}{k} \binom{p}{n-k}\)</span></p>
+<p><strong>Right side</strong>: <span class="arithmatex">\(\binom{m+p}{n}\)</span>
+Simply choose <span class="arithmatex">\(n\)</span> people from the total group of <span class="arithmatex">\(m+p\)</span> people</p>
+<p><strong>Key insight</strong>: The left side partitions the counting by gender composition, while the right side ignores gender entirely. Both approaches must give the same result.</p>
+<p>Story proofs are powerful because they:</p>
+<ol>
+<li>
+<p><strong>Provide intuition</strong> - You understand why the identity is true</p>
+</li>
+<li>
+<p><strong>Are memorable</strong> - The story helps you remember the result</p>
+</li>
+<li>
+<p><strong>Avoid algebra</strong> - No need for complex manipulations</p>
+</li>
+<li>
+<p><strong>Generalize well</strong> - The same story often works for related problems</p>
+</li>
+</ol>
+<p><strong>Key principle</strong>: If two expressions count the same thing, they must be equal.</p>
+<h2 id="non-naive-definition-of-probability-and-axioms-of-probability">Non-naive definition of Probability and Axioms of Probability</h2>
+<h3 id="formal-definition-of-probability">Formal Definition of Probability</h3>
+<p>Let <span class="arithmatex">\(S\)</span> be a <strong>sample space</strong> (the set of all possible outcomes of an experiment). An <strong>event</strong> <span class="arithmatex">\(A\)</span> is a subset of <span class="arithmatex">\(S\)</span> (i.e., <span class="arithmatex">\(A \subseteq S\)</span>).</p>
+<p>A <strong>probability function</strong> <span class="arithmatex">\(P\)</span> is a function that takes an event <span class="arithmatex">\(A\)</span> as input and returns a real number <span class="arithmatex">\(P(A)\)</span> as output, where <span class="arithmatex">\(P(A) \in [0, 1]\)</span> for any event <span class="arithmatex">\(A \subseteq S\)</span></p>
+<h3 id="axioms-of-probability">Axioms of Probability</h3>
+<p>The probability function <span class="arithmatex">\(P\)</span> must satisfy the following axioms:</p>
+<p><strong>Axiom 1 (Non-negativity)</strong>: For any event <span class="arithmatex">\(A \subseteq S\)</span>,</p>
+<div class="arithmatex">\[P(A) \geq 0\]</div>
+<p><strong>Axiom 2 (Normalization)</strong>: For the entire sample space <span class="arithmatex">\(S\)</span>,</p>
+<div class="arithmatex">\[P(S) = 1\]</div>
+<p><strong>Axiom 3 (Additivity)</strong>: For any collection of mutually exclusive events <span class="arithmatex">\(A_1, A_2, A_3, \ldots\)</span> (i.e., <span class="arithmatex">\(A_i \cap A_j = \emptyset\)</span> for <span class="arithmatex">\(i \neq j\)</span>),</p>
+<div class="arithmatex">\[P\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i)\]</div>
+<h3 id="key-properties-derived-from-axioms">Key Properties Derived from Axioms</h3>
+<p>From these axioms, we can derive several important properties:</p>
+<ol>
+<li><strong>Probability of the empty set</strong>: <span class="arithmatex">\(P(\emptyset) = 0\)</span></li>
+<li><strong>Complement rule</strong>: <span class="arithmatex">\(P(A^c) = 1 - P(A)\)</span></li>
+<li><strong>Monotonicity</strong>: If <span class="arithmatex">\(A \subseteq B\)</span>, then <span class="arithmatex">\(P(A) \leq P(B)\)</span></li>
+<li><strong>Union rule</strong>: <span class="arithmatex">\(P(A \cup B) = P(A) + P(B) - P(A \cap B)\)</span></li>
+</ol>
+<p>These axioms provide the mathematical foundation for probability theory and ensure that probability behaves in an intuitive and consistent way.</p>
 
 
 

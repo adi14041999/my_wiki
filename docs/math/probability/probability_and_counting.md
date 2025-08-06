@@ -161,3 +161,29 @@ In general, for $k$ scoops and $n$ flavors, we have $(k + n - 1)$ total position
 | Without | Yes | $\frac{n!}{(n-k)!}$ | Permutations without replacement |
 | Without | No | $\frac{n!}{k!(n-k)!}$ | Combinations |
 | With | No | $\binom{n+k-1}{k}$ | Combinations with replacement |
+
+**Example:** Splitting 10 People into teams
+
+Case 1: Distinguishable teams (Team A and Team B)
+
+Suppose we want to split 10 people into two teams: Team A with 6 people and Team B with 4 people.
+
+**Question**: How many ways can we do this?
+
+**Solution**: We need to choose 6 people out of 10 for Team A. The remaining 4 people automatically go to Team B. The number of ways is:
+
+$$\binom{10}{6} = \frac{10!}{6! \cdot 4!} = \frac{10 \times 9 \times 8 \times 7}{4 \times 3 \times 2 \times 1} = 210$$
+
+Case 2: Indistinguishable teams
+
+Now suppose we want to split 10 people into two teams of 5, but the teams are indistinguishable (no Team A vs Team B).
+
+**Question**: How many ways can we do this?
+
+**Solution**: Since the teams are indistinguishable, we've double-counted each arrangement. For example, the arrangement where people {1,2,3,4,5} are on one team and {6,7,8,9,10} are on the other is the same as the arrangement where {6,7,8,9,10} are on one team and {1,2,3,4,5} are on the other.
+
+The number of ways is:
+
+$$\frac{\binom{10}{6}}{2} = \frac{210}{2} = 105$$
+
+For unequal-sized groups (like 6 and 4), the two sides of the split are inherently distinguishable due to their sizes.
