@@ -1039,6 +1039,24 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#correlation-coefficient-and-quality-of-fit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Correlation Coefficient and quality of fit
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#orthogonal-basis-formula-and-relation-of-correlation-coefficient-to-best-fit-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Orthogonal basis formula and relation of correlation coefficient to best fit lines
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1427,6 +1445,46 @@
 <p>By applying to this span the formula for the nearest point on a linear subspace in terms of an orthogonal basis, we obtain that the closest vector to <span class="arithmatex">\(Y\)</span> in <span class="arithmatex">\(\text{span}(X, \mathbf{1})\)</span> is</p>
 <div class="arithmatex">\[\frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \frac{Y \cdot \mathbf{1}}{\mathbf{1} \cdot \mathbf{1}} \mathbf{1} = \frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \bar{y} \mathbf{1}\]</div>
 <p>where <span class="arithmatex">\(\bar{y} = (1/n) \sum_{i=1}^n y_i\)</span> is the average of the <span class="arithmatex">\(y_i\)</span>'s.</p>
+<h2 id="correlation-coefficient-and-quality-of-fit">Correlation Coefficient and quality of fit</h2>
+<p>Let the best-fit line be <span class="arithmatex">\(y = mx + b\)</span>, and let <span class="arithmatex">\(r\)</span> be the correlation coefficient for the recentered data <span class="arithmatex">\((x_i - \bar{x}, y_i - \bar{y})\)</span> (whose coordinates average to 0) with associated <span class="arithmatex">\(n\)</span>-vectors <span class="arithmatex">\(\hat{X}\)</span> and <span class="arithmatex">\(\hat{Y}\)</span>. Then the role of nearness of <span class="arithmatex">\(r^2\)</span> to 1 (or equivalently of nearness of <span class="arithmatex">\(1 - r^2\)</span> to 0) as a measure of quality of fit is expressed by the following identity:</p>
+<div class="arithmatex">\[\|Y - (mX + b\mathbf{1})\|^2 = \|\hat{Y}\|^2 (1 - r^2)\]</div>
+<p>This equation will be proven later.</p>
+<p>where <span class="arithmatex">\(\hat{Y}\)</span> is the "recentered" version of <span class="arithmatex">\(Y\)</span> (subtracting <span class="arithmatex">\(\bar{y}\)</span> from all <span class="arithmatex">\(y_i\)</span>'s).</p>
+<p>To explain the meaning of the above equation, expand out the left side (and use that <span class="arithmatex">\(t^2 = |t|^2\)</span> for any <span class="arithmatex">\(t\)</span>) to get</p>
+<div class="arithmatex">\[|y_1 - (mx_1 + b)|^2 + |y_2 - (mx_2 + b)|^2 + \cdots + |y_n - (mx_n + b)|^2\]</div>
+<p>The number <span class="arithmatex">\(|y_i - (mx_i + b)|\)</span> is the vertical distance between the data point <span class="arithmatex">\((x_i, y_i)\)</span> and the best fit line <span class="arithmatex">\(y = mx + b\)</span>. When <span class="arithmatex">\(r^2 \approx 1\)</span>, the equation therefore says that these vertical distances are "collectively small": the sum of their squares is tiny since <span class="arithmatex">\(1 - r^2\)</span> on the right side of the equation is small, so the data points are all close to the best fit line. When <span class="arithmatex">\(r^2 \approx 0\)</span> then (at least informally) the opposite happens since the right side is approximately <span class="arithmatex">\(\|\hat{Y}\|^2\)</span>, which is typically quite far from 0 (even though the average of the entries in <span class="arithmatex">\(\hat{Y}\)</span> is 0 by design).</p>
+<h2 id="orthogonal-basis-formula-and-relation-of-correlation-coefficient-to-best-fit-lines">Orthogonal basis formula and relation of correlation coefficient to best fit lines</h2>
+<p>In this section we prove some results discussed earlier.</p>
+<p><strong>Theorem</strong>: Suppose <span class="arithmatex">\(\mathbf{x}, \mathbf{y} \in \mathbb{R}^n\)</span> are nonzero, and not scalar multiples of each other. The vectors <span class="arithmatex">\(\mathbf{y}\)</span> and <span class="arithmatex">\(\mathbf{x}' = \mathbf{x} - \text{Proj}_{\mathbf{y}} \mathbf{x}\)</span> constitute an orthogonal basis of <span class="arithmatex">\(\text{span}(\mathbf{x}, \mathbf{y})\)</span>. In particular, <span class="arithmatex">\(\text{span}(\mathbf{x}, \mathbf{y})\)</span> is 2-dimensional.</p>
+<p>The setup is symmetric in <span class="arithmatex">\(\mathbf{x}\)</span> and <span class="arithmatex">\(\mathbf{y}\)</span>, so <span class="arithmatex">\(\{\mathbf{x}, \mathbf{y}' = \mathbf{y} - \text{Proj}_{\mathbf{x}} \mathbf{y}\}\)</span> is also an orthogonal basis of <span class="arithmatex">\(\text{span}(\mathbf{x}, \mathbf{y})\)</span>.</p>
+<p><strong>Proof</strong>: Write <span class="arithmatex">\(\mathbf{x}' = \mathbf{x} - \text{Proj}_{\mathbf{y}} \mathbf{x}\)</span>.</p>
+<div class="arithmatex">\[\mathbf{x}' \cdot \mathbf{y} = \left(\mathbf{x} - \frac{\mathbf{x} \cdot \mathbf{y}}{\mathbf{y} \cdot \mathbf{y}}\mathbf{y}\right) \cdot \mathbf{y} = \mathbf{x} \cdot \mathbf{y} - \frac{\mathbf{x} \cdot \mathbf{y}}{\mathbf{y} \cdot \mathbf{y}}\mathbf{y} \cdot \mathbf{y} = \mathbf{x} \cdot \mathbf{y} - \mathbf{x} \cdot \mathbf{y} = 0.\]</div>
+<p>Next, <span class="arithmatex">\(\mathbf{y}\)</span> is not zero (we have assumed this). Also, <span class="arithmatex">\(\mathbf{x}'\)</span> is not zero: if it were zero then <span class="arithmatex">\(\mathbf{x} = \text{Proj}_{\mathbf{y}}(\mathbf{x})\)</span>, yet such a projection is always a scalar multiple of <span class="arithmatex">\(\mathbf{y}\)</span> and we have assumed <span class="arithmatex">\(\mathbf{x}\)</span> is not a scalar multiple of <span class="arithmatex">\(\mathbf{y}\)</span>. Therefore <span class="arithmatex">\(\{\mathbf{x}', \mathbf{y}\}\)</span> is a pair of nonzero orthogonal vectors belonging to <span class="arithmatex">\(\text{span}(\mathbf{x}, \mathbf{y})\)</span> by design (note that <span class="arithmatex">\(\mathbf{y} = 0 \cdot \mathbf{x} + 1 \cdot \mathbf{y}\)</span>), and they exhaust that span since we can also write each of <span class="arithmatex">\(\mathbf{x}\)</span> and <span class="arithmatex">\(\mathbf{y}\)</span> as linear combinations of <span class="arithmatex">\(\mathbf{x}'\)</span> and <span class="arithmatex">\(\mathbf{y}\)</span>: <span class="arithmatex">\(\mathbf{x} = \mathbf{x}' + \text{Proj}_{\mathbf{y}}(\mathbf{x}) = \mathbf{x}' + ((\mathbf{x} \cdot \mathbf{y})/(\mathbf{y} \cdot \mathbf{y}))\mathbf{y}\)</span> and <span class="arithmatex">\(\mathbf{y} = 0 \cdot \mathbf{x}' + 1 \cdot \mathbf{y}\)</span>. Since any collection of pairwise orthogonal nonzero vectors is a basis for its span, we conclude that <span class="arithmatex">\(\{\mathbf{x}', \mathbf{y}\}\)</span> is an orthogonal basis of <span class="arithmatex">\(\text{span}(\mathbf{x}', \mathbf{y}) = \text{span}(\mathbf{x}, \mathbf{y})\)</span>.</p>
+<p>Now suppose we are given <span class="arithmatex">\(n\)</span> data points <span class="arithmatex">\((x_i, y_i)\)</span>, assembled into <span class="arithmatex">\(n\)</span>-vectors</p>
+<div class="arithmatex">\[X = \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{bmatrix} \quad \text{and} \quad Y = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_n \end{bmatrix}\]</div>
+<p>Earlier, we described the relationship between the correlation coefficient <span class="arithmatex">\(r\)</span> for the recentered data (corresponding to the <span class="arithmatex">\(n\)</span>-vectors <span class="arithmatex">\(\hat{X}\)</span> and <span class="arithmatex">\(\hat{Y}\)</span>) and the line of best fit. Let's restate that in terms of <span class="arithmatex">\(r^2\)</span>, which we expressed as the formula</p>
+<div class="arithmatex">\[r^2 = \frac{(\hat{X} \cdot \hat{Y})^2}{\|\hat{X}\|^2\|\hat{Y}\|^2} = \frac{(\hat{X} \cdot \hat{Y})^2}{(\hat{X} \cdot \hat{X})(\hat{Y} \cdot \hat{Y})}\]</div>
+<p>We stated that <span class="arithmatex">\(r^2\)</span> is near 0 when the line of best fit is a bad fit, and near 1 when it is a good fit (note that this could happen either when <span class="arithmatex">\(r\)</span> is near 1, or when <span class="arithmatex">\(r\)</span> is near −1). We made the role of <span class="arithmatex">\(r^2\)</span> as a measure of quality of fit precise. Here is the derivation of <span class="arithmatex">\(\|Y - (mX + b\mathbf{1})\|^2 = \|\hat{Y}\|^2 (1 - r^2)\)</span>.</p>
+<p><strong>Proof</strong>: We know that the closest vector to <span class="arithmatex">\(Y\)</span> in <span class="arithmatex">\(\text{span}(X, \mathbf{1})\)</span> is</p>
+<div class="arithmatex">\[\frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \frac{Y \cdot \mathbf{1}}{\mathbf{1} \cdot \mathbf{1}} \mathbf{1} = \frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \bar{y} \mathbf{1}\]</div>
+<p>where <span class="arithmatex">\(\bar{y} = (1/n) \sum_{i=1}^n y_i\)</span> is the average of the <span class="arithmatex">\(y_i\)</span>'s.</p>
+<div class="arithmatex">\[Y - (mX + b\mathbf{1}) = Y - \left(\frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\hat{X} + \frac{Y \cdot \mathbf{1}}{\mathbf{1} \cdot \mathbf{1}}\mathbf{1}\right) = \left(Y - \frac{Y \cdot \mathbf{1}}{\mathbf{1} \cdot \mathbf{1}}\mathbf{1}\right) - \frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\hat{X}\]</div>
+<p>where <span class="arithmatex">\(Y - \frac{Y \cdot \mathbf{1}}{\mathbf{1} \cdot \mathbf{1}}\mathbf{1} = Y - \bar{y}\mathbf{1}\)</span> is indeed equal to <span class="arithmatex">\(\hat{Y}\)</span>.</p>
+<p>Note that <span class="arithmatex">\(\hat{Y} \cdot \hat{X} = Y \cdot \hat{X}\)</span> because the difference <span class="arithmatex">\(\hat{Y} - Y = -\bar{y}\mathbf{1}\)</span> is orthogonal to <span class="arithmatex">\(\hat{X}\)</span>.</p>
+<p>To understand why <span class="arithmatex">\(\hat{Y} \cdot \hat{X} = Y \cdot \hat{X}\)</span>, let's examine the orthogonality of <span class="arithmatex">\(\hat{Y} - Y = -\bar{y}\mathbf{1}\)</span> to <span class="arithmatex">\(\hat{X}\)</span>. Recall that <span class="arithmatex">\(\hat{X} = X - \bar{x}\mathbf{1}\)</span>, which means <span class="arithmatex">\(\hat{X}\)</span> is the vector <span class="arithmatex">\(X\)</span> with the mean <span class="arithmatex">\(\bar{x}\)</span> subtracted from each component. We need to show that <span class="arithmatex">\((-\bar{y}\mathbf{1}) \cdot \hat{X} = 0\)</span>. This is:</p>
+<div class="arithmatex">\[(-\bar{y}\mathbf{1}) \cdot \hat{X} = -\bar{y}\mathbf{1} \cdot (X - \bar{x}\mathbf{1}) = -\bar{y}(\mathbf{1} \cdot X) + \bar{y}\bar{x}(\mathbf{1} \cdot \mathbf{1})\]</div>
+<p>But <span class="arithmatex">\(\mathbf{1} \cdot X = \sum_{i=1}^n x_i = n\bar{x}\)</span> and <span class="arithmatex">\(\mathbf{1} \cdot \mathbf{1} = n\)</span>.</p>
+<p>So: <span class="arithmatex">\(-\bar{y}(\mathbf{1} \cdot X) + \bar{y}\bar{x}(\mathbf{1} \cdot \mathbf{1}) = -\bar{y}(n\bar{x}) + \bar{y}\bar{x}(n) = -n\bar{x}\bar{y} + n\bar{x}\bar{y} = 0\)</span></p>
+<div class="arithmatex">\[\hat{Y} \cdot \hat{X} = (Y + (\hat{Y} - Y)) \cdot \hat{X} = Y \cdot \hat{X} + (\hat{Y} - Y) \cdot \hat{X} = Y \cdot \hat{X} + 0 = Y \cdot \hat{X}\]</div>
+<p>Putting this into the numerator of the final coefficient on the right side yields</p>
+<div class="arithmatex">\[Y - (mX + b\mathbf{1}) = \hat{Y} - \frac{\hat{Y} \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\hat{X} = \hat{Y} - \text{Proj}_{\hat{X}}\hat{Y}\]</div>
+<p>The vectors <span class="arithmatex">\(\hat{Y} - \text{Proj}_{\hat{X}}\hat{Y}\)</span> and <span class="arithmatex">\(\text{Proj}_{\hat{X}}\hat{Y}\)</span> are perpendicular to each other. Therefore, by the Pythagorean Theorem in <span class="arithmatex">\(\mathbb{R}^n\)</span>, we have</p>
+<div class="arithmatex">\[\|\hat{Y}\|^2 = \|(\hat{Y} - \text{Proj}_{\hat{X}}\hat{Y}) + \text{Proj}_{\hat{X}}\hat{Y}\|^2 = \|\hat{Y} - \text{Proj}_{\hat{X}}\hat{Y}\|^2 + \|\text{Proj}_{\hat{X}}\hat{Y}\|^2\]</div>
+<p>so <span class="arithmatex">\(\|\hat{Y} - \text{Proj}_{\hat{X}}\hat{Y}\|^2 = \|\hat{Y}\|^2 - \|\text{Proj}_{\hat{X}}\hat{Y}\|^2\)</span>. But the vector difference on the left side is exactly <span class="arithmatex">\(Y - (mX + b\mathbf{1})\)</span>, so</p>
+<div class="arithmatex">\[\|Y - (mX + b\mathbf{1})\|^2 = \|\hat{Y}\|^2 - \|\text{Proj}_{\hat{X}}\hat{Y}\|^2\]</div>
+<p>Finally, using the definition of <span class="arithmatex">\(\text{Proj}_{\hat{X}}\hat{Y}\)</span>, we have</p>
+<div class="arithmatex">\[\|\text{Proj}_{\hat{X}}\hat{Y}\|^2 = \left(\frac{\hat{Y} \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\hat{X}\right) \cdot \left(\frac{\hat{Y} \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\hat{X}\right) = \left(\frac{\hat{Y} \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\right)^2\hat{X} \cdot \hat{X} = \frac{(\hat{Y} \cdot \hat{X})^2}{\hat{X} \cdot \hat{X}} = r^2(\hat{Y} \cdot \hat{Y})\]</div>
+<p>so plugging into <span class="arithmatex">\(\|Y - (mX + b\mathbf{1})\|^2 = \|\hat{Y}\|^2 - \|\text{Proj}_{\hat{X}}\hat{Y}\|^2\)</span> yields <span class="arithmatex">\(\|Y - (mX + b\mathbf{1})\|^2 = \|\hat{Y}\|^2(1 - r^2)\)</span>, which is exactly the desired identity.</p>
 
 
 

@@ -108,3 +108,82 @@ By applying to this span the formula for the nearest point on a linear subspace 
 $$\frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \frac{Y \cdot \mathbf{1}}{\mathbf{1} \cdot \mathbf{1}} \mathbf{1} = \frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \bar{y} \mathbf{1}$$
 
 where $\bar{y} = (1/n) \sum_{i=1}^n y_i$ is the average of the $y_i$'s.
+
+## Correlation Coefficient and quality of fit
+
+Let the best-fit line be $y = mx + b$, and let $r$ be the correlation coefficient for the recentered data $(x_i - \bar{x}, y_i - \bar{y})$ (whose coordinates average to 0) with associated $n$-vectors $\hat{X}$ and $\hat{Y}$. Then the role of nearness of $r^2$ to 1 (or equivalently of nearness of $1 - r^2$ to 0) as a measure of quality of fit is expressed by the following identity:
+
+$$\|Y - (mX + b\mathbf{1})\|^2 = \|\hat{Y}\|^2 (1 - r^2)$$
+
+This equation will be proven later.
+
+where $\hat{Y}$ is the "recentered" version of $Y$ (subtracting $\bar{y}$ from all $y_i$'s).
+
+To explain the meaning of the above equation, expand out the left side (and use that $t^2 = |t|^2$ for any $t$) to get
+
+$$|y_1 - (mx_1 + b)|^2 + |y_2 - (mx_2 + b)|^2 + \cdots + |y_n - (mx_n + b)|^2$$
+
+The number $|y_i - (mx_i + b)|$ is the vertical distance between the data point $(x_i, y_i)$ and the best fit line $y = mx + b$. When $r^2 \approx 1$, the equation therefore says that these vertical distances are "collectively small": the sum of their squares is tiny since $1 - r^2$ on the right side of the equation is small, so the data points are all close to the best fit line. When $r^2 \approx 0$ then (at least informally) the opposite happens since the right side is approximately $\|\hat{Y}\|^2$, which is typically quite far from 0 (even though the average of the entries in $\hat{Y}$ is 0 by design).
+
+## Orthogonal basis formula and relation of correlation coefficient to best fit lines
+In this section we prove some results discussed earlier.
+
+**Theorem**: Suppose $\mathbf{x}, \mathbf{y} \in \mathbb{R}^n$ are nonzero, and not scalar multiples of each other. The vectors $\mathbf{y}$ and $\mathbf{x}' = \mathbf{x} - \text{Proj}_{\mathbf{y}} \mathbf{x}$ constitute an orthogonal basis of $\text{span}(\mathbf{x}, \mathbf{y})$. In particular, $\text{span}(\mathbf{x}, \mathbf{y})$ is 2-dimensional.
+
+The setup is symmetric in $\mathbf{x}$ and $\mathbf{y}$, so $\{\mathbf{x}, \mathbf{y}' = \mathbf{y} - \text{Proj}_{\mathbf{x}} \mathbf{y}\}$ is also an orthogonal basis of $\text{span}(\mathbf{x}, \mathbf{y})$.
+
+**Proof**: Write $\mathbf{x}' = \mathbf{x} - \text{Proj}_{\mathbf{y}} \mathbf{x}$.
+
+$$\mathbf{x}' \cdot \mathbf{y} = \left(\mathbf{x} - \frac{\mathbf{x} \cdot \mathbf{y}}{\mathbf{y} \cdot \mathbf{y}}\mathbf{y}\right) \cdot \mathbf{y} = \mathbf{x} \cdot \mathbf{y} - \frac{\mathbf{x} \cdot \mathbf{y}}{\mathbf{y} \cdot \mathbf{y}}\mathbf{y} \cdot \mathbf{y} = \mathbf{x} \cdot \mathbf{y} - \mathbf{x} \cdot \mathbf{y} = 0.$$
+
+Next, $\mathbf{y}$ is not zero (we have assumed this). Also, $\mathbf{x}'$ is not zero: if it were zero then $\mathbf{x} = \text{Proj}_{\mathbf{y}}(\mathbf{x})$, yet such a projection is always a scalar multiple of $\mathbf{y}$ and we have assumed $\mathbf{x}$ is not a scalar multiple of $\mathbf{y}$. Therefore $\{\mathbf{x}', \mathbf{y}\}$ is a pair of nonzero orthogonal vectors belonging to $\text{span}(\mathbf{x}, \mathbf{y})$ by design (note that $\mathbf{y} = 0 \cdot \mathbf{x} + 1 \cdot \mathbf{y}$), and they exhaust that span since we can also write each of $\mathbf{x}$ and $\mathbf{y}$ as linear combinations of $\mathbf{x}'$ and $\mathbf{y}$: $\mathbf{x} = \mathbf{x}' + \text{Proj}_{\mathbf{y}}(\mathbf{x}) = \mathbf{x}' + ((\mathbf{x} \cdot \mathbf{y})/(\mathbf{y} \cdot \mathbf{y}))\mathbf{y}$ and $\mathbf{y} = 0 \cdot \mathbf{x}' + 1 \cdot \mathbf{y}$. Since any collection of pairwise orthogonal nonzero vectors is a basis for its span, we conclude that $\{\mathbf{x}', \mathbf{y}\}$ is an orthogonal basis of $\text{span}(\mathbf{x}', \mathbf{y}) = \text{span}(\mathbf{x}, \mathbf{y})$.
+
+Now suppose we are given $n$ data points $(x_i, y_i)$, assembled into $n$-vectors
+
+$$X = \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{bmatrix} \quad \text{and} \quad Y = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_n \end{bmatrix}$$
+
+Earlier, we described the relationship between the correlation coefficient $r$ for the recentered data (corresponding to the $n$-vectors $\hat{X}$ and $\hat{Y}$) and the line of best fit. Let's restate that in terms of $r^2$, which we expressed as the formula
+
+$$r^2 = \frac{(\hat{X} \cdot \hat{Y})^2}{\|\hat{X}\|^2\|\hat{Y}\|^2} = \frac{(\hat{X} \cdot \hat{Y})^2}{(\hat{X} \cdot \hat{X})(\hat{Y} \cdot \hat{Y})}$$
+
+We stated that $r^2$ is near 0 when the line of best fit is a bad fit, and near 1 when it is a good fit (note that this could happen either when $r$ is near 1, or when $r$ is near −1). We made the role of $r^2$ as a measure of quality of fit precise. Here is the derivation of $\|Y - (mX + b\mathbf{1})\|^2 = \|\hat{Y}\|^2 (1 - r^2)$.
+
+**Proof**: We know that the closest vector to $Y$ in $\text{span}(X, \mathbf{1})$ is
+
+$$\frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \frac{Y \cdot \mathbf{1}}{\mathbf{1} \cdot \mathbf{1}} \mathbf{1} = \frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \bar{y} \mathbf{1}$$
+
+where $\bar{y} = (1/n) \sum_{i=1}^n y_i$ is the average of the $y_i$'s.
+
+$$Y - (mX + b\mathbf{1}) = Y - \left(\frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\hat{X} + \frac{Y \cdot \mathbf{1}}{\mathbf{1} \cdot \mathbf{1}}\mathbf{1}\right) = \left(Y - \frac{Y \cdot \mathbf{1}}{\mathbf{1} \cdot \mathbf{1}}\mathbf{1}\right) - \frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\hat{X}$$
+
+where $Y - \frac{Y \cdot \mathbf{1}}{\mathbf{1} \cdot \mathbf{1}}\mathbf{1} = Y - \bar{y}\mathbf{1}$ is indeed equal to $\hat{Y}$.
+
+Note that $\hat{Y} \cdot \hat{X} = Y \cdot \hat{X}$ because the difference $\hat{Y} - Y = -\bar{y}\mathbf{1}$ is orthogonal to $\hat{X}$.
+
+To understand why $\hat{Y} \cdot \hat{X} = Y \cdot \hat{X}$, let's examine the orthogonality of $\hat{Y} - Y = -\bar{y}\mathbf{1}$ to $\hat{X}$. Recall that $\hat{X} = X - \bar{x}\mathbf{1}$, which means $\hat{X}$ is the vector $X$ with the mean $\bar{x}$ subtracted from each component. We need to show that $(-\bar{y}\mathbf{1}) \cdot \hat{X} = 0$. This is:
+
+$$(-\bar{y}\mathbf{1}) \cdot \hat{X} = -\bar{y}\mathbf{1} \cdot (X - \bar{x}\mathbf{1}) = -\bar{y}(\mathbf{1} \cdot X) + \bar{y}\bar{x}(\mathbf{1} \cdot \mathbf{1})$$
+
+But $\mathbf{1} \cdot X = \sum_{i=1}^n x_i = n\bar{x}$ and $\mathbf{1} \cdot \mathbf{1} = n$.
+   
+So: $-\bar{y}(\mathbf{1} \cdot X) + \bar{y}\bar{x}(\mathbf{1} \cdot \mathbf{1}) = -\bar{y}(n\bar{x}) + \bar{y}\bar{x}(n) = -n\bar{x}\bar{y} + n\bar{x}\bar{y} = 0$
+
+$$\hat{Y} \cdot \hat{X} = (Y + (\hat{Y} - Y)) \cdot \hat{X} = Y \cdot \hat{X} + (\hat{Y} - Y) \cdot \hat{X} = Y \cdot \hat{X} + 0 = Y \cdot \hat{X}$$
+
+Putting this into the numerator of the final coefficient on the right side yields
+
+$$Y - (mX + b\mathbf{1}) = \hat{Y} - \frac{\hat{Y} \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\hat{X} = \hat{Y} - \text{Proj}_{\hat{X}}\hat{Y}$$
+
+The vectors $\hat{Y} - \text{Proj}_{\hat{X}}\hat{Y}$ and $\text{Proj}_{\hat{X}}\hat{Y}$ are perpendicular to each other. Therefore, by the Pythagorean Theorem in $\mathbb{R}^n$, we have
+
+$$\|\hat{Y}\|^2 = \|(\hat{Y} - \text{Proj}_{\hat{X}}\hat{Y}) + \text{Proj}_{\hat{X}}\hat{Y}\|^2 = \|\hat{Y} - \text{Proj}_{\hat{X}}\hat{Y}\|^2 + \|\text{Proj}_{\hat{X}}\hat{Y}\|^2$$
+
+so $\|\hat{Y} - \text{Proj}_{\hat{X}}\hat{Y}\|^2 = \|\hat{Y}\|^2 - \|\text{Proj}_{\hat{X}}\hat{Y}\|^2$. But the vector difference on the left side is exactly $Y - (mX + b\mathbf{1})$, so
+
+$$\|Y - (mX + b\mathbf{1})\|^2 = \|\hat{Y}\|^2 - \|\text{Proj}_{\hat{X}}\hat{Y}\|^2$$
+
+Finally, using the definition of $\text{Proj}_{\hat{X}}\hat{Y}$, we have
+
+$$\|\text{Proj}_{\hat{X}}\hat{Y}\|^2 = \left(\frac{\hat{Y} \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\hat{X}\right) \cdot \left(\frac{\hat{Y} \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\hat{X}\right) = \left(\frac{\hat{Y} \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\right)^2\hat{X} \cdot \hat{X} = \frac{(\hat{Y} \cdot \hat{X})^2}{\hat{X} \cdot \hat{X}} = r^2(\hat{Y} \cdot \hat{Y})$$
+
+so plugging into $\|Y - (mX + b\mathbf{1})\|^2 = \|\hat{Y}\|^2 - \|\text{Proj}_{\hat{X}}\hat{Y}\|^2$ yields $\|Y - (mX + b\mathbf{1})\|^2 = \|\hat{Y}\|^2(1 - r^2)$, which is exactly the desired identity.
