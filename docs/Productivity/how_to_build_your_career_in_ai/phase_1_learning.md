@@ -1,5 +1,4 @@
 # Phase 1: Learning
-## Learning Technical Skills for a Promising AI Career
 More research papers have been published on AI than anyone can read in a lifetime. So, when learning, it's critical to prioritize topic selection.
 
 **Foundational Machine Learning Skills**
@@ -19,6 +18,3 @@ A good course— in which a body of material has been organized into a coherent 
 Given how quickly our field is changing, there’s little choice but to keep learning if you want to keep up. If you can cultivate the habit of learning a little bit every week, you can make significant progress with what feels like less effort.
 
 The best way to build a new habit is to start small and succeed, rather than start too big and fail.
-
-## Should You Learn Math to Get a Job in AI?
-
