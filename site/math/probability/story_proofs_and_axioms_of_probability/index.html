@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/math/probability/story_proofs_axioms_of_probability/">
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/math/probability/story_proofs_and_axioms_of_probability/">
       
       
         <link rel="prev" href="../probability_and_counting/">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Story Proofs, Axioms of Probability - My Wiki</title>
+        <title>Story Proofs and Axioms of Probability - My Wiki</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#story-proofs-axioms-of-probability" class="md-skip">
+        <a href="#story-proofs-and-axioms-of-probability" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Story Proofs, Axioms of Probability
+              Story Proofs and Axioms of Probability
             
           </span>
         </div>
@@ -1086,7 +1086,7 @@
   
   
   <span class="md-ellipsis">
-    Story Proofs, Axioms of Probability
+    Story Proofs and Axioms of Probability
     
   </span>
   
@@ -1099,7 +1099,7 @@
   
   
   <span class="md-ellipsis">
-    Story Proofs, Axioms of Probability
+    Story Proofs and Axioms of Probability
     
   </span>
   
@@ -1169,6 +1169,24 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-birthday-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Birthday Problem
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#de-montmorts-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      De Montmort's Problem
+    </span>
+  </a>
   
 </li>
       
@@ -1405,7 +1423,7 @@
 
 
 
-<h1 id="story-proofs-axioms-of-probability">Story Proofs, Axioms of Probability</h1>
+<h1 id="story-proofs-and-axioms-of-probability">Story Proofs and Axioms of Probability</h1>
 <h2 id="story-proofs">Story Proofs</h2>
 <p>Story proofs are a powerful technique in combinatorics where we prove identities by interpreting both sides of an equation as counting the same thing in different ways. This is also known as <strong>proof by interpretation</strong> or <strong>bijective proof</strong>.</p>
 <p><strong>Example:</strong> <span class="arithmatex">\(\binom{n}{k} = \binom{n}{n-k}\)</span></p>
@@ -1446,7 +1464,8 @@ Simply choose <span class="arithmatex">\(n\)</span> people from the total group 
 <h2 id="non-naive-definition-of-probability-and-axioms-of-probability">Non-naive definition of Probability and Axioms of Probability</h2>
 <h3 id="formal-definition-of-probability">Formal Definition of Probability</h3>
 <p>Let <span class="arithmatex">\(S\)</span> be a <strong>sample space</strong> (the set of all possible outcomes of an experiment). An <strong>event</strong> <span class="arithmatex">\(A\)</span> is a subset of <span class="arithmatex">\(S\)</span> (i.e., <span class="arithmatex">\(A \subseteq S\)</span>).</p>
-<p>A <strong>probability function</strong> <span class="arithmatex">\(P\)</span> is a function that takes an event <span class="arithmatex">\(A\)</span> as input and returns a real number <span class="arithmatex">\(P(A)\)</span> as output, where <span class="arithmatex">\(P(A) \in [0, 1]\)</span> for any event <span class="arithmatex">\(A \subseteq S\)</span></p>
+<p>A <strong>probability function</strong> <span class="arithmatex">\(P\)</span> is a function that takes an event <span class="arithmatex">\(A\)</span> as input and returns a real number <span class="arithmatex">\(P(A)\)</span> as output, where <span class="arithmatex">\(P(A) \in [0, 1]\)</span> for any event <span class="arithmatex">\(A \subseteq S\)</span>.</p>
+<p>Philosophically, there are different interpretations of Probability, arguments even. But mathematically speaking, the formal definition of Probability along with the axioms is well defined without any ambiguity. And this definition coupled with the axioms constitute a foundation for this field where every theorem or result can be derived from.</p>
 <h3 id="axioms-of-probability">Axioms of Probability</h3>
 <p>The probability function <span class="arithmatex">\(P\)</span> must satisfy the following axioms:</p>
 <p><strong>Axiom 1 (Non-negativity)</strong>: For any event <span class="arithmatex">\(A \subseteq S\)</span>,</p>
@@ -1463,7 +1482,98 @@ Simply choose <span class="arithmatex">\(n\)</span> people from the total group 
 <li><strong>Monotonicity</strong>: If <span class="arithmatex">\(A \subseteq B\)</span>, then <span class="arithmatex">\(P(A) \leq P(B)\)</span></li>
 <li><strong>Union rule</strong>: <span class="arithmatex">\(P(A \cup B) = P(A) + P(B) - P(A \cap B)\)</span></li>
 </ol>
+<p><strong>Inclusion-Exclusion Principle (3 events)</strong>: </p>
+<div class="arithmatex">\[P(A \cup B \cup C) = P(A) + P(B) + P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C)\]</div>
+<p><strong>Inclusion-Exclusion Principle (n events)</strong>: For events <span class="arithmatex">\(A_1, A_2, \ldots, A_n\)</span>,</p>
+<div class="arithmatex">\[P\left(\bigcup_{i=1}^n A_i\right) = \sum_{i=1}^n P(A_i) - \sum_{1 \leq i &lt; j \leq n} P(A_i \cap A_j) + \sum_{1 \leq i &lt; j &lt; k \leq n} P(A_i \cap A_j \cap A_k) - \cdots + (-1)^{n+1} P(A_1 \cap A_2 \cap \cdots \cap A_n)\]</div>
 <p>These axioms provide the mathematical foundation for probability theory and ensure that probability behaves in an intuitive and consistent way.</p>
+<h2 id="the-birthday-problem">The Birthday Problem</h2>
+<p>The Birthday Problem is a classic probability puzzle that asks: <strong>What is the probability that in a group of <span class="arithmatex">\(n\)</span> people, at least two people share the same birthday?</strong></p>
+<p>This seemingly simple question leads to a surprising result that challenges our intuition about probability.</p>
+<p><strong>Given</strong>: A group of <span class="arithmatex">\(n\)</span> people chosen randomly from a population where birthdays are uniformly distributed across 365 days (ignoring leap years).</p>
+<p><strong>Find</strong>: The probability that at least two people in the group share the same birthday.</p>
+<p>The result is counterintuitive: <strong>In a group of just 23 people, there is approximately a 50% chance that at least two people share the same birthday!</strong></p>
+<p>This seems impossible at first glance- with 365 possible birthdays and only 23 people, how can there be a 50% chance of a match?</p>
+<p>We solve this using the <strong>complement rule</strong>: Instead of calculating the probability of at least one match directly, we calculate the probability of <strong>no matches</strong> and subtract from 1.</p>
+<p>Let <span class="arithmatex">\(A\)</span> be the event "at least two people share a birthday". <span class="arithmatex">\(P(A) = 1 - P(A^c)\)</span>, where <span class="arithmatex">\(A^c\)</span> is "no two people share a birthday". First person: Can have any birthday (365/365 = 1). Second person: Must have a different birthday (364/365). Third person: Must have a different birthday from the first two (363/365). And so on...</p>
+<p><strong>General formula</strong>:</p>
+<div class="arithmatex">\[P(A^c) = \frac{365}{365} \times \frac{364}{365} \times \frac{363}{365} \times \cdots \times \frac{365-n+1}{365}\]</div>
+<p>This can be written more compactly as:</p>
+<div class="arithmatex">\[P(A^c) = \frac{365!}{(365-n)! \times 365^n}\]</div>
+<div class="arithmatex">\[P(A) = 1 - \frac{365!}{(365-n)! \times 365^n}\]</div>
+<p>Let's calculate some key values:</p>
+<table>
+<thead>
+<tr>
+<th>Number of People (<span class="arithmatex">\(n\)</span>)</th>
+<th>Probability of at least one match</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10</td>
+<td>11.7%</td>
+</tr>
+<tr>
+<td>15</td>
+<td>25.3%</td>
+</tr>
+<tr>
+<td>20</td>
+<td>41.1%</td>
+</tr>
+<tr>
+<td><strong>23</strong></td>
+<td><strong>50.7%</strong></td>
+</tr>
+<tr>
+<td>30</td>
+<td>70.6%</td>
+</tr>
+<tr>
+<td>40</td>
+<td>89.1%</td>
+</tr>
+<tr>
+<td>50</td>
+<td>97.0%</td>
+</tr>
+<tr>
+<td>60</td>
+<td>99.4%</td>
+</tr>
+</tbody>
+</table>
+<p>The result feels wrong because we're thinking about <strong>individual comparisons</strong> rather than <strong>all possible pairs</strong>.</p>
+<p><strong>Number of pairs</strong>: In a group of <span class="arithmatex">\(n\)</span> people, there are <span class="arithmatex">\(\binom{n}{2} = \frac{n(n-1)}{2}\)</span> possible pairs. With 23 people: <span class="arithmatex">\(\binom{23}{2} = 253\)</span> pairs. With 30 people: <span class="arithmatex">\(\binom{30}{2} = 435\)</span> pairs. With 50 people: <span class="arithmatex">\(\binom{50}{2} = 1,225\)</span> pairs.</p>
+<h2 id="de-montmorts-problem">De Montmort's Problem</h2>
+<p>De Montmort's Problem is a classic probability puzzle that asks: <strong>What is the probability that when <span class="arithmatex">\(n\)</span> cards are dealt from a deck, at least one card appears in a position that matches its value?</strong></p>
+<p>This problem is also known as the <strong>matching problem</strong> or the <strong>coincidence problem</strong> and was first studied by Pierre Raymond de Montmort in the early 18th century.</p>
+<p><strong>Given</strong>: A deck of <span class="arithmatex">\(n\)</span> cards numbered from 1 to <span class="arithmatex">\(n\)</span>. The cards are shuffled and dealt face up in a row.</p>
+<p><strong>Find</strong>: The probability that at least one card appears in the <span class="arithmatex">\(k\)</span>-th position where the card's value is <span class="arithmatex">\(k\)</span>.</p>
+<p><strong>Example</strong>: For <span class="arithmatex">\(n = 4\)</span>, we have cards [1, 2, 3, 4]. A deal of [2, 1, 4, 3] has no matches, but [1, 4, 2, 3] has a match (card 1 in position 1).</p>
+<p>We solve this using the <strong>inclusion-exclusion principle</strong>. Let <span class="arithmatex">\(A_i\)</span> be the event that card <span class="arithmatex">\(i\)</span> appears in position <span class="arithmatex">\(i\)</span>.</p>
+<p><strong>Key insight</strong>: We want <span class="arithmatex">\(P(A_1 \cup A_2 \cup \cdots \cup A_n)\)</span>, which we can calculate using inclusion-exclusion.</p>
+<p><strong>Step-by-Step Solution</strong></p>
+<ol>
+<li><strong>Individual probabilities</strong>: <span class="arithmatex">\(P(A_i) = \frac{1}{n}\)</span> for each card</li>
+<li><strong>Pairwise intersections</strong>: <span class="arithmatex">\(P(A_i \cap A_j) = \frac{1}{n(n-1)}\)</span> for <span class="arithmatex">\(i \neq j\)</span></li>
+<li><strong>Triple intersections</strong>: <span class="arithmatex">\(P(A_i \cap A_j \cap A_k) = \frac{1}{n(n-1)(n-2)}\)</span> for distinct <span class="arithmatex">\(i, j, k\)</span></li>
+<li>and so on...</li>
+</ol>
+<p><strong>Using inclusion-exclusion</strong>:</p>
+<div class="arithmatex">\[P(A_1 \cup A_2 \cup \cdots \cup A_n) = \sum_{i=1}^n P(A_i) - \sum_{1 \leq i &lt; j \leq n} P(A_i \cap A_j) + \sum_{1 \leq i &lt; j &lt; k \leq n} P(A_i \cap A_j \cap A_k) - \cdots\]</div>
+<p><strong>Calculating the terms</strong>:
+<strong>First term</strong>: <span class="arithmatex">\(\sum_{i=1}^n P(A_i) = n \cdot \frac{1}{n} = 1\)</span>.
+<strong>Second term</strong>: <span class="arithmatex">\(\sum_{1 \leq i &lt; j \leq n} P(A_i \cap A_j) = \binom{n}{2} \cdot \frac{1}{n(n-1)} = \frac{n(n-1)}{2} \cdot \frac{1}{n(n-1)} = \frac{1}{2}\)</span>.
+<strong>Third term</strong>: <span class="arithmatex">\(\sum_{1 \leq i &lt; j &lt; k \leq n} P(A_i \cap A_j \cap A_k) = \binom{n}{3} \cdot \frac{1}{n(n-1)(n-2)} = \frac{1}{3!} = \frac{1}{6}\)</span>.
+And so on...</p>
+<p><strong>General pattern</strong>: The <span class="arithmatex">\(k\)</span>-th term is <span class="arithmatex">\(\frac{1}{k!}\)</span></p>
+<p><strong>Final result</strong>:</p>
+<div class="arithmatex">\[P(\text{at least one match}) = 1 - \frac{1}{2!} + \frac{1}{3!} - \frac{1}{4!} + \cdots + (-1)^{n+1} \frac{1}{n!}\]</div>
+<p>As <span class="arithmatex">\(n\)</span> approaches infinity, the probability approaches:</p>
+<div class="arithmatex">\[\lim_{n \to \infty} P(\text{at least one match}) = 1 - \frac{1}{e} \approx 0.632\]</div>
+<p>This means that even with infinitely many cards, there's still only about a 63.2% chance that at least one card appears in its "correct" position!</p>
 
 
 
