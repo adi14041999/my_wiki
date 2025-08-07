@@ -1131,16 +1131,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#non-naive-definition-of-probability-and-axioms-of-probability" class="md-nav__link">
-    <span class="md-ellipsis">
-      Non-naive definition of Probability and Axioms of Probability
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Non-naive definition of Probability and Axioms of Probability">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#formal-definition-of-probability" class="md-nav__link">
     <span class="md-ellipsis">
       Formal Definition of Probability
@@ -1148,27 +1138,13 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#axioms-of-probability" class="md-nav__link">
     <span class="md-ellipsis">
       Axioms of Probability
     </span>
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#key-properties-derived-from-axioms" class="md-nav__link">
-    <span class="md-ellipsis">
-      Key Properties Derived from Axioms
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1461,12 +1437,11 @@ Simply choose <span class="arithmatex">\(n\)</span> people from the total group 
 </li>
 </ol>
 <p><strong>Key principle</strong>: If two expressions count the same thing, they must be equal.</p>
-<h2 id="non-naive-definition-of-probability-and-axioms-of-probability">Non-naive definition of Probability and Axioms of Probability</h2>
-<h3 id="formal-definition-of-probability">Formal Definition of Probability</h3>
+<h2 id="formal-definition-of-probability">Formal Definition of Probability</h2>
 <p>Let <span class="arithmatex">\(S\)</span> be a <strong>sample space</strong> (the set of all possible outcomes of an experiment). An <strong>event</strong> <span class="arithmatex">\(A\)</span> is a subset of <span class="arithmatex">\(S\)</span> (i.e., <span class="arithmatex">\(A \subseteq S\)</span>).</p>
 <p>A <strong>probability function</strong> <span class="arithmatex">\(P\)</span> is a function that takes an event <span class="arithmatex">\(A\)</span> as input and returns a real number <span class="arithmatex">\(P(A)\)</span> as output, where <span class="arithmatex">\(P(A) \in [0, 1]\)</span> for any event <span class="arithmatex">\(A \subseteq S\)</span>.</p>
 <p>Philosophically, there are different interpretations of Probability, arguments even. But mathematically speaking, the formal definition of Probability along with the axioms is well defined without any ambiguity. And this definition coupled with the axioms constitute a foundation for this field where every theorem or result can be derived from.</p>
-<h3 id="axioms-of-probability">Axioms of Probability</h3>
+<h2 id="axioms-of-probability">Axioms of Probability</h2>
 <p>The probability function <span class="arithmatex">\(P\)</span> must satisfy the following axioms:</p>
 <p><strong>Axiom 1 (Non-negativity)</strong>: For any event <span class="arithmatex">\(A \subseteq S\)</span>,</p>
 <div class="arithmatex">\[P(A) \geq 0\]</div>
@@ -1474,7 +1449,6 @@ Simply choose <span class="arithmatex">\(n\)</span> people from the total group 
 <div class="arithmatex">\[P(S) = 1\]</div>
 <p><strong>Axiom 3 (Additivity)</strong>: For any collection of mutually exclusive events <span class="arithmatex">\(A_1, A_2, A_3, \ldots\)</span> (i.e., <span class="arithmatex">\(A_i \cap A_j = \emptyset\)</span> for <span class="arithmatex">\(i \neq j\)</span>),</p>
 <div class="arithmatex">\[P\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i)\]</div>
-<h3 id="key-properties-derived-from-axioms">Key Properties Derived from Axioms</h3>
 <p>From these axioms, we can derive several important properties:</p>
 <ol>
 <li><strong>Probability of the empty set</strong>: <span class="arithmatex">\(P(\emptyset) = 0\)</span></li>

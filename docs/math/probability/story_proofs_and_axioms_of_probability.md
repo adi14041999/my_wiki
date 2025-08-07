@@ -50,9 +50,7 @@ Story proofs are powerful because they:
 
 **Key principle**: If two expressions count the same thing, they must be equal.
 
-## Non-naive definition of Probability and Axioms of Probability
-
-### Formal Definition of Probability
+## Formal Definition of Probability
 
 Let $S$ be a **sample space** (the set of all possible outcomes of an experiment). An **event** $A$ is a subset of $S$ (i.e., $A \subseteq S$).
 
@@ -60,7 +58,7 @@ A **probability function** $P$ is a function that takes an event $A$ as input an
 
 Philosophically, there are different interpretations of Probability, arguments even. But mathematically speaking, the formal definition of Probability along with the axioms is well defined without any ambiguity. And this definition coupled with the axioms constitute a foundation for this field where every theorem or result can be derived from.
 
-### Axioms of Probability
+## Axioms of Probability
 
 The probability function $P$ must satisfy the following axioms:
 
@@ -75,8 +73,6 @@ $$P(S) = 1$$
 **Axiom 3 (Additivity)**: For any collection of mutually exclusive events $A_1, A_2, A_3, \ldots$ (i.e., $A_i \cap A_j = \emptyset$ for $i \neq j$),
 
 $$P\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i)$$
-
-### Key Properties Derived from Axioms
 
 From these axioms, we can derive several important properties:
 
