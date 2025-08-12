@@ -167,6 +167,208 @@ $$|y_1 - (mx_1 + b)|^2 + |y_2 - (mx_2 + b)|^2 + \cdots + |y_n - (mx_n + b)|^2$$
 
 The number $|y_i - (mx_i + b)|$ is the vertical distance between the data point $(x_i, y_i)$ and the best fit line $y = mx + b$. When $r^2 \approx 1$, the equation therefore says that these vertical distances are "collectively small": the sum of their squares is tiny since $1 - r^2$ on the right side of the equation is small, so the data points are all close to the best fit line. When $r^2 \approx 0$ then (at least informally) the opposite happens since the right side is approximately $\|\hat{Y}\|^2$, which is typically quite far from 0 (even though the average of the entries in $\hat{Y}$ is 0 by design).
 
+**Example:** Sometimes a quantity $y$ of interest is expected to be (approximately "linearly") related to a pair of quantities $x$ and $v$ rather than just a single quantity $x$. In such cases, as a variant on linear regression, we seek three constants $a, b, c$ for which
+
+$$y \approx a + bx + cv$$
+
+as measured by data.
+
+Suppose we make $n$ measurements of $x, v, y$, yielding data points $(x_i, v_i, y_i)$. Let $X, V, Y \in \mathbb{R}^n$ be the corresponding $n$-vectors for the $n$ measurements of each of $x, v, y$. Assume $W = \text{span}(\mathbf{1}, X, V)$ is 3-dimensional (a reasonable assumption when neither $x$ nor $v$ determines the other).
+
+**(a)** Explain in words how the vector $\text{Proj}_W(Y) \in W$ encodes a "least squares" choice of $(a, b, c)$ in terms of the data.
+
+**(b)** What is the practical difficulty in using the equation of finding a projection of a vector to compute $\text{Proj}_W(Y)$, whereas we had no difficulty in computing the analogous such projection for linear regression?
+
+**Solution:**
+
+**(a) Least Squares Interpretation**
+
+The vector $\text{Proj}_W(Y) \in W$ represents the closest point in the subspace $W = \text{span}(\mathbf{1}, X, V)$ to the data vector $Y$. Since $W$ is 3-dimensional, any vector in $W$ can be written as a linear combination:
+
+$$\text{Proj}_W(Y) = a\mathbf{1} + bX + cV$$
+
+for some constants $a, b, c \in \mathbb{R}$.
+
+This projection minimizes the distance $\|Y - (a\mathbf{1} + bX + cV)\|$, which is equivalent to minimizing the sum of squared errors:
+
+$$\sum_{i=1}^n (y_i - (a + bx_i + cv_i))^2$$
+
+Therefore, the coefficients $(a, b, c)$ in the expression $\text{Proj}_W(Y) = a\mathbf{1} + bX + cV$ represent the least squares solution to the multiple linear regression problem $y \approx a + bx + cv$.
+
+**(b) Practical Difficulty**
+
+The practical difficulty in computing $\text{Proj}_W(Y)$ for multiple linear regression compared to simple linear regression is the **dimensionality of the subspace**.
+
+**Simple Linear Regression (2D subspace)**:
+
+- We had $W = \text{span}(\mathbf{1}, X)$, a 2-dimensional subspace
+
+- We could easily construct an orthogonal basis using the Gram-Schmidt process
+
+- The projection formula was straightforward: $\text{Proj}_W(Y) = \text{Proj}_{\mathbf{1}}(Y) + \text{Proj}_{\hat{X}}(Y)$
+
+- We could compute this step-by-step with simple projections
+
+**Multiple Linear Regression (3D subspace)**:
+
+- We now have $W = \text{span}(\mathbf{1}, X, V)$, a 3-dimensional subspace
+
+- Constructing an orthogonal basis becomes more complex
+
+- The Gram-Schmidt process requires more steps and can lead to numerical instability
+
+- The projection formula involves more terms and becomes computationally intensive
+
+**Specific Challenges**:
+
+1. **Orthogonal Basis Construction**: We need to find three mutually orthogonal vectors spanning $W$, which requires applying Gram-Schmidt to three vectors instead of two.
+
+2. **Numerical Stability**: As the dimension increases, small errors in computations can accumulate, leading to less accurate results.
+
+3. **Computational Complexity**: The projection involves more dot products and vector operations, making it computationally expensive for large datasets.
+
+4. **Matrix Methods**: For higher dimensions, it becomes more practical to use matrix methods (like QR decomposition or solving the normal equations) rather than geometric projection formulas.
+
+This is why in practice, multiple linear regression is typically solved using matrix algebra and computational algorithms rather than the geometric projection approach, even though the geometric interpretation remains valid and insightful.
+
+**Example**: The vectors $\mathbf{v} = \begin{bmatrix} 2 \\ -1 \\ -1 \\ 1 \end{bmatrix}$ and $\mathbf{w} = \begin{bmatrix} 11 \\ 5 \\ -10 \\ 1 \end{bmatrix}$ span a plane $P$ through the origin in $\mathbb{R}^4$. Let
+
+$$L = \left\{\begin{bmatrix} 4-t \\ 4+4t \\ 4-t \\ -7-2t \end{bmatrix} : t \in \mathbb{R}\right\}$$
+
+be a line in $\mathbb{R}^4$.
+
+**(a)** Consider the displacement vector $\mathbf{x}$ between any two different points of $L$ (all such displacements are scalar multiples of each other since $L$ is a line). Show that $\mathbf{x}$ belongs to $P$; this is described in words by saying $L$ is **parallel** to $P$.
+
+**Solution:**
+
+Let's take two different points on the line $L$ by choosing two different values of $t$. Let's use $t = 0$ and $t = 1$:
+
+- Point 1 (when $t = 0$): $\begin{bmatrix} 4 \\ 4 \\ 4 \\ -7 \end{bmatrix}$
+
+- Point 2 (when $t = 1$): $\begin{bmatrix} 3 \\ 8 \\ 3 \\ -9 \end{bmatrix}$
+
+The displacement vector between these two points is:
+
+$$\mathbf{x} = \begin{bmatrix} 3 \\ 8 \\ 3 \\ -9 \end{bmatrix} - \begin{bmatrix} 4 \\ 4 \\ 4 \\ -7 \end{bmatrix} = \begin{bmatrix} -1 \\ 4 \\ -1 \\ -2 \end{bmatrix}$$
+
+We need to find scalars $a, b \in \mathbb{R}$ such that:
+
+$$\mathbf{x} = a\mathbf{v} + b\mathbf{w}$$
+
+This gives us the system of equations:
+
+$$\begin{bmatrix} -1 \\ 4 \\ -1 \\ -2 \end{bmatrix} = a\begin{bmatrix} 2 \\ -1 \\ -1 \\ 1 \end{bmatrix} + b\begin{bmatrix} 11 \\ 5 \\ -10 \\ 1 \end{bmatrix}$$
+
+Which expands to:
+
+$$-1 = 2a + 11b \quad \text{(1)}$$
+
+$$4 = -a + 5b \quad \text{(2)}$$
+
+$$-1 = -a - 10b \quad \text{(3)}$$
+
+$$-2 = a + b \quad \text{(4)}$$
+
+Let's solve equations (1) and (2) first:
+
+From equation (2): $4 = -a + 5b$, so $a = 5b - 4$
+
+Substitute into equation (1):
+
+$$-1 = 2(5b - 4) + 11b = 10b - 8 + 11b = 21b - 8$$
+
+$$21b = 7$$
+
+$$b = \frac{1}{3}$$
+
+Now substitute $b = \frac{1}{3}$ back to find $a$:
+
+$$a = 5\left(\frac{1}{3}\right) - 4 = \frac{5}{3} - 4 = \frac{5}{3} - \frac{12}{3} = -\frac{7}{3}$$
+
+Let's check if $a = -\frac{7}{3}$ and $b = \frac{1}{3}$ satisfy all four equations:
+
+Equation (1): $2a + 11b = 2\left(-\frac{7}{3}\right) + 11\left(\frac{1}{3}\right) = -\frac{14}{3} + \frac{11}{3} = -\frac{3}{3} = -1$ ✓
+
+Equation (2): $-a + 5b = -\left(-\frac{7}{3}\right) + 5\left(\frac{1}{3}\right) = \frac{7}{3} + \frac{5}{3} = \frac{12}{3} = 4$ ✓
+
+Equation (3): $-a - 10b = -\left(-\frac{7}{3}\right) - 10\left(\frac{1}{3}\right) = \frac{7}{3} - \frac{10}{3} = -\frac{3}{3} = -1$ ✓
+
+Equation (4): $a + b = -\frac{7}{3} + \frac{1}{3} = -\frac{6}{3} = -2$ ✓
+
+Since we found scalars $a = -\frac{7}{3}$ and $b = \frac{1}{3}$ such that:
+
+$$\mathbf{x} = -\frac{7}{3}\mathbf{v} + \frac{1}{3}\mathbf{w}$$
+
+This proves that the displacement vector $\mathbf{x} = \begin{bmatrix} -1 \\ 4 \\ -1 \\ -2 \end{bmatrix}$ belongs to the plane $P = \text{span}(\mathbf{v}, \mathbf{w})$.
+
+This means that the line $L$ is parallel to the plane $P$. In $\mathbb{R}^4$, just as in $\mathbb{R}^3$, a line is parallel to a plane if the direction vector of the line (which is a scalar multiple of any displacement vector between two points on the line) lies in the plane.
+
+**(b)** Whenever one has a linear subspace $V$ of $\mathbb{R}^n$ and a line $\ell$ in $\mathbb{R}^n$ (possibly not through the origin) that is parallel to $V$, it is a fact (not difficult to show, but you may take it on faith) that all points in $\ell$ have the same distance to $V$. That is, for every point $\mathbf{y} \in \ell$ and the point $\mathbf{y}' \in V$ nearest to $\mathbf{y}$, the distance $\|\mathbf{y} - \mathbf{y}'\|$ is the same regardless of which $\mathbf{y}$ on $\ell$ we consider. Taking $V$ and $\ell$ to be $P$ and $L$ above, compute the common distance $\|\mathbf{y} - \mathbf{y}'\|$ (since it is independent of $\mathbf{y}$, you may pick whatever you consider to be the most convenient point $\mathbf{y}$ in $L$ to do the calculation).
+
+**Solution:**
+
+Since all points on the line $L$ have the same distance to the plane $P$, we can choose the most convenient point. Let's use the point when $t = 0$: $\mathbf{y} = \begin{bmatrix} 4 \\ 4 \\ 4 \\ -7 \end{bmatrix}$.
+
+The distance from $\mathbf{y}$ to the plane $P$ is the distance from $\mathbf{y}$ to its projection onto $P$. To find this projection, we need an orthogonal basis for $P$.
+
+**Step 1: Find an orthogonal basis for $P$**
+
+Using the theorem from earlier, we can construct an orthogonal basis for $P = \text{span}(\mathbf{v}, \mathbf{w})$:
+
+Let $\mathbf{v}_1 = \mathbf{v} = \begin{bmatrix} 2 \\ -1 \\ -1 \\ 1 \end{bmatrix}$
+
+Then $\mathbf{v}_2 = \mathbf{w} - \text{Proj}_{\mathbf{v}_1}(\mathbf{w})$
+
+First, compute $\text{Proj}_{\mathbf{v}_1}(\mathbf{w})$:
+
+$$\text{Proj}_{\mathbf{v}_1}(\mathbf{w}) = \frac{\mathbf{w} \cdot \mathbf{v}_1}{\mathbf{v}_1 \cdot \mathbf{v}_1} \mathbf{v}_1$$
+
+$$\mathbf{w} \cdot \mathbf{v}_1 = 11(2) + 5(-1) + (-10)(-1) + 1(1) = 22 - 5 + 10 + 1 = 28$$
+
+$$\mathbf{v}_1 \cdot \mathbf{v}_1 = 2^2 + (-1)^2 + (-1)^2 + 1^2 = 4 + 1 + 1 + 1 = 7$$
+
+So:
+
+$$\text{Proj}_{\mathbf{v}_1}(\mathbf{w}) = \frac{28}{7} \begin{bmatrix} 2 \\ -1 \\ -1 \\ 1 \end{bmatrix} = 4 \begin{bmatrix} 2 \\ -1 \\ -1 \\ 1 \end{bmatrix} = \begin{bmatrix} 8 \\ -4 \\ -4 \\ 4 \end{bmatrix}$$
+
+Therefore:
+
+$$\mathbf{v}_2 = \mathbf{w} - \text{Proj}_{\mathbf{v}_1}(\mathbf{w}) = \begin{bmatrix} 11 \\ 5 \\ -10 \\ 1 \end{bmatrix} - \begin{bmatrix} 8 \\ -4 \\ -4 \\ 4 \end{bmatrix} = \begin{bmatrix} 3 \\ 9 \\ -6 \\ -3 \end{bmatrix}$$
+
+**Step 2: Compute the projection of $\mathbf{y}$ onto $P$**
+
+Using the orthogonal basis $\{\mathbf{v}_1, \mathbf{v}_2\}$, the projection is:
+
+$$\text{Proj}_P(\mathbf{y}) = \frac{\mathbf{y} \cdot \mathbf{v}_1}{\mathbf{v}_1 \cdot \mathbf{v}_1} \mathbf{v}_1 + \frac{\mathbf{y} \cdot \mathbf{v}_2}{\mathbf{v}_2 \cdot \mathbf{v}_2} \mathbf{v}_2$$
+
+Compute the dot products:
+
+$$\mathbf{y} \cdot \mathbf{v}_1 = 4(2) + 4(-1) + 4(-1) + (-7)(1) = 8 - 4 - 4 - 7 = -7$$
+
+$$\mathbf{y} \cdot \mathbf{v}_2 = 4(3) + 4(9) + 4(-6) + (-7)(-3) = 12 + 36 - 24 + 21 = 45$$
+
+$$\mathbf{v}_2 \cdot \mathbf{v}_2 = 3^2 + 9^2 + (-6)^2 + (-3)^2 = 9 + 81 + 36 + 9 = 135$$
+
+So:
+
+$$\text{Proj}_P(\mathbf{y}) = \frac{-7}{7} \begin{bmatrix} 2 \\ -1 \\ -1 \\ 1 \end{bmatrix} + \frac{45}{135} \begin{bmatrix} 3 \\ 9 \\ -6 \\ -3 \end{bmatrix}$$
+
+$$= -1 \begin{bmatrix} 2 \\ -1 \\ -1 \\ 1 \end{bmatrix} + \frac{1}{3} \begin{bmatrix} 3 \\ 9 \\ -6 \\ -3 \end{bmatrix}$$
+
+$$= \begin{bmatrix} -2 \\ 1 \\ 1 \\ -1 \end{bmatrix} + \begin{bmatrix} 1 \\ 3 \\ -2 \\ -1 \end{bmatrix}$$
+
+$$= \begin{bmatrix} -1 \\ 4 \\ -1 \\ -2 \end{bmatrix}$$
+
+**Step 3: Compute the distance**
+
+The distance from $\mathbf{y}$ to the plane $P$ is:
+
+$$\|\mathbf{y} - \text{Proj}_P(\mathbf{y})\| = \left\|\begin{bmatrix} 4 \\ 4 \\ 4 \\ -7 \end{bmatrix} - \begin{bmatrix} -1 \\ 4 \\ -1 \\ -2 \end{bmatrix}\right\| = \left\|\begin{bmatrix} 5 \\ 0 \\ 5 \\ -5 \end{bmatrix}\right\|$$
+
+$$\|\mathbf{y} - \text{Proj}_P(\mathbf{y})\| = \sqrt{5^2 + 0^2 + 5^2 + (-5)^2} = \sqrt{25 + 0 + 25 + 25} = \sqrt{75} = \sqrt{25 \times 3} = 5\sqrt{3}$$
+
+**Answer:** The common distance from any point on the line $L$ to the plane $P$ is $\sqrt{75}$.
+
 ## Orthogonal basis formula and relation of correlation coefficient to best fit lines
 In this section we prove some results discussed earlier.
 
@@ -229,4 +431,3 @@ Finally, using the definition of $\text{Proj}_{\hat{X}}\hat{Y}$, we have
 $$\|\text{Proj}_{\hat{X}}\hat{Y}\|^2 = \left(\frac{\hat{Y} \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\hat{X}\right) \cdot \left(\frac{\hat{Y} \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\hat{X}\right) = \left(\frac{\hat{Y} \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\right)^2\hat{X} \cdot \hat{X} = \frac{(\hat{Y} \cdot \hat{X})^2}{\hat{X} \cdot \hat{X}} = r^2(\hat{Y} \cdot \hat{Y})$$
 
 so plugging into $\|Y - (mX + b\mathbf{1})\|^2 = \|\hat{Y}\|^2 - \|\text{Proj}_{\hat{X}}\hat{Y}\|^2$ yields $\|Y - (mX + b\mathbf{1})\|^2 = \|\hat{Y}\|^2(1 - r^2)$, which is exactly the desired identity.
-

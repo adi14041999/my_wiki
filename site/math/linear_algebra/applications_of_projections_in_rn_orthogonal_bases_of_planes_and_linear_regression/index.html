@@ -1520,6 +1520,143 @@
 <p>To explain the meaning of the above equation, expand out the left side (and use that <span class="arithmatex">\(t^2 = |t|^2\)</span> for any <span class="arithmatex">\(t\)</span>) to get</p>
 <div class="arithmatex">\[|y_1 - (mx_1 + b)|^2 + |y_2 - (mx_2 + b)|^2 + \cdots + |y_n - (mx_n + b)|^2\]</div>
 <p>The number <span class="arithmatex">\(|y_i - (mx_i + b)|\)</span> is the vertical distance between the data point <span class="arithmatex">\((x_i, y_i)\)</span> and the best fit line <span class="arithmatex">\(y = mx + b\)</span>. When <span class="arithmatex">\(r^2 \approx 1\)</span>, the equation therefore says that these vertical distances are "collectively small": the sum of their squares is tiny since <span class="arithmatex">\(1 - r^2\)</span> on the right side of the equation is small, so the data points are all close to the best fit line. When <span class="arithmatex">\(r^2 \approx 0\)</span> then (at least informally) the opposite happens since the right side is approximately <span class="arithmatex">\(\|\hat{Y}\|^2\)</span>, which is typically quite far from 0 (even though the average of the entries in <span class="arithmatex">\(\hat{Y}\)</span> is 0 by design).</p>
+<p><strong>Example:</strong> Sometimes a quantity <span class="arithmatex">\(y\)</span> of interest is expected to be (approximately "linearly") related to a pair of quantities <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(v\)</span> rather than just a single quantity <span class="arithmatex">\(x\)</span>. In such cases, as a variant on linear regression, we seek three constants <span class="arithmatex">\(a, b, c\)</span> for which</p>
+<div class="arithmatex">\[y \approx a + bx + cv\]</div>
+<p>as measured by data.</p>
+<p>Suppose we make <span class="arithmatex">\(n\)</span> measurements of <span class="arithmatex">\(x, v, y\)</span>, yielding data points <span class="arithmatex">\((x_i, v_i, y_i)\)</span>. Let <span class="arithmatex">\(X, V, Y \in \mathbb{R}^n\)</span> be the corresponding <span class="arithmatex">\(n\)</span>-vectors for the <span class="arithmatex">\(n\)</span> measurements of each of <span class="arithmatex">\(x, v, y\)</span>. Assume <span class="arithmatex">\(W = \text{span}(\mathbf{1}, X, V)\)</span> is 3-dimensional (a reasonable assumption when neither <span class="arithmatex">\(x\)</span> nor <span class="arithmatex">\(v\)</span> determines the other).</p>
+<p><strong>(a)</strong> Explain in words how the vector <span class="arithmatex">\(\text{Proj}_W(Y) \in W\)</span> encodes a "least squares" choice of <span class="arithmatex">\((a, b, c)\)</span> in terms of the data.</p>
+<p><strong>(b)</strong> What is the practical difficulty in using the equation of finding a projection of a vector to compute <span class="arithmatex">\(\text{Proj}_W(Y)\)</span>, whereas we had no difficulty in computing the analogous such projection for linear regression?</p>
+<p><strong>Solution:</strong></p>
+<p><strong>(a) Least Squares Interpretation</strong></p>
+<p>The vector <span class="arithmatex">\(\text{Proj}_W(Y) \in W\)</span> represents the closest point in the subspace <span class="arithmatex">\(W = \text{span}(\mathbf{1}, X, V)\)</span> to the data vector <span class="arithmatex">\(Y\)</span>. Since <span class="arithmatex">\(W\)</span> is 3-dimensional, any vector in <span class="arithmatex">\(W\)</span> can be written as a linear combination:</p>
+<div class="arithmatex">\[\text{Proj}_W(Y) = a\mathbf{1} + bX + cV\]</div>
+<p>for some constants <span class="arithmatex">\(a, b, c \in \mathbb{R}\)</span>.</p>
+<p>This projection minimizes the distance <span class="arithmatex">\(\|Y - (a\mathbf{1} + bX + cV)\|\)</span>, which is equivalent to minimizing the sum of squared errors:</p>
+<div class="arithmatex">\[\sum_{i=1}^n (y_i - (a + bx_i + cv_i))^2\]</div>
+<p>Therefore, the coefficients <span class="arithmatex">\((a, b, c)\)</span> in the expression <span class="arithmatex">\(\text{Proj}_W(Y) = a\mathbf{1} + bX + cV\)</span> represent the least squares solution to the multiple linear regression problem <span class="arithmatex">\(y \approx a + bx + cv\)</span>.</p>
+<p><strong>(b) Practical Difficulty</strong></p>
+<p>The practical difficulty in computing <span class="arithmatex">\(\text{Proj}_W(Y)\)</span> for multiple linear regression compared to simple linear regression is the <strong>dimensionality of the subspace</strong>.</p>
+<p><strong>Simple Linear Regression (2D subspace)</strong>:</p>
+<ul>
+<li>
+<p>We had <span class="arithmatex">\(W = \text{span}(\mathbf{1}, X)\)</span>, a 2-dimensional subspace</p>
+</li>
+<li>
+<p>We could easily construct an orthogonal basis using the Gram-Schmidt process</p>
+</li>
+<li>
+<p>The projection formula was straightforward: <span class="arithmatex">\(\text{Proj}_W(Y) = \text{Proj}_{\mathbf{1}}(Y) + \text{Proj}_{\hat{X}}(Y)\)</span></p>
+</li>
+<li>
+<p>We could compute this step-by-step with simple projections</p>
+</li>
+</ul>
+<p><strong>Multiple Linear Regression (3D subspace)</strong>:</p>
+<ul>
+<li>
+<p>We now have <span class="arithmatex">\(W = \text{span}(\mathbf{1}, X, V)\)</span>, a 3-dimensional subspace</p>
+</li>
+<li>
+<p>Constructing an orthogonal basis becomes more complex</p>
+</li>
+<li>
+<p>The Gram-Schmidt process requires more steps and can lead to numerical instability</p>
+</li>
+<li>
+<p>The projection formula involves more terms and becomes computationally intensive</p>
+</li>
+</ul>
+<p><strong>Specific Challenges</strong>:</p>
+<ol>
+<li>
+<p><strong>Orthogonal Basis Construction</strong>: We need to find three mutually orthogonal vectors spanning <span class="arithmatex">\(W\)</span>, which requires applying Gram-Schmidt to three vectors instead of two.</p>
+</li>
+<li>
+<p><strong>Numerical Stability</strong>: As the dimension increases, small errors in computations can accumulate, leading to less accurate results.</p>
+</li>
+<li>
+<p><strong>Computational Complexity</strong>: The projection involves more dot products and vector operations, making it computationally expensive for large datasets.</p>
+</li>
+<li>
+<p><strong>Matrix Methods</strong>: For higher dimensions, it becomes more practical to use matrix methods (like QR decomposition or solving the normal equations) rather than geometric projection formulas.</p>
+</li>
+</ol>
+<p>This is why in practice, multiple linear regression is typically solved using matrix algebra and computational algorithms rather than the geometric projection approach, even though the geometric interpretation remains valid and insightful.</p>
+<p><strong>Example</strong>: The vectors <span class="arithmatex">\(\mathbf{v} = \begin{bmatrix} 2 \\ -1 \\ -1 \\ 1 \end{bmatrix}\)</span> and <span class="arithmatex">\(\mathbf{w} = \begin{bmatrix} 11 \\ 5 \\ -10 \\ 1 \end{bmatrix}\)</span> span a plane <span class="arithmatex">\(P\)</span> through the origin in <span class="arithmatex">\(\mathbb{R}^4\)</span>. Let</p>
+<div class="arithmatex">\[L = \left\{\begin{bmatrix} 4-t \\ 4+4t \\ 4-t \\ -7-2t \end{bmatrix} : t \in \mathbb{R}\right\}\]</div>
+<p>be a line in <span class="arithmatex">\(\mathbb{R}^4\)</span>.</p>
+<p><strong>(a)</strong> Consider the displacement vector <span class="arithmatex">\(\mathbf{x}\)</span> between any two different points of <span class="arithmatex">\(L\)</span> (all such displacements are scalar multiples of each other since <span class="arithmatex">\(L\)</span> is a line). Show that <span class="arithmatex">\(\mathbf{x}\)</span> belongs to <span class="arithmatex">\(P\)</span>; this is described in words by saying <span class="arithmatex">\(L\)</span> is <strong>parallel</strong> to <span class="arithmatex">\(P\)</span>.</p>
+<p><strong>Solution:</strong></p>
+<p>Let's take two different points on the line <span class="arithmatex">\(L\)</span> by choosing two different values of <span class="arithmatex">\(t\)</span>. Let's use <span class="arithmatex">\(t = 0\)</span> and <span class="arithmatex">\(t = 1\)</span>:</p>
+<ul>
+<li>
+<p>Point 1 (when <span class="arithmatex">\(t = 0\)</span>): <span class="arithmatex">\(\begin{bmatrix} 4 \\ 4 \\ 4 \\ -7 \end{bmatrix}\)</span></p>
+</li>
+<li>
+<p>Point 2 (when <span class="arithmatex">\(t = 1\)</span>): <span class="arithmatex">\(\begin{bmatrix} 3 \\ 8 \\ 3 \\ -9 \end{bmatrix}\)</span></p>
+</li>
+</ul>
+<p>The displacement vector between these two points is:</p>
+<div class="arithmatex">\[\mathbf{x} = \begin{bmatrix} 3 \\ 8 \\ 3 \\ -9 \end{bmatrix} - \begin{bmatrix} 4 \\ 4 \\ 4 \\ -7 \end{bmatrix} = \begin{bmatrix} -1 \\ 4 \\ -1 \\ -2 \end{bmatrix}\]</div>
+<p>We need to find scalars <span class="arithmatex">\(a, b \in \mathbb{R}\)</span> such that:</p>
+<div class="arithmatex">\[\mathbf{x} = a\mathbf{v} + b\mathbf{w}\]</div>
+<p>This gives us the system of equations:</p>
+<div class="arithmatex">\[\begin{bmatrix} -1 \\ 4 \\ -1 \\ -2 \end{bmatrix} = a\begin{bmatrix} 2 \\ -1 \\ -1 \\ 1 \end{bmatrix} + b\begin{bmatrix} 11 \\ 5 \\ -10 \\ 1 \end{bmatrix}\]</div>
+<p>Which expands to:</p>
+<div class="arithmatex">\[-1 = 2a + 11b \quad \text{(1)}\]</div>
+<div class="arithmatex">\[4 = -a + 5b \quad \text{(2)}\]</div>
+<div class="arithmatex">\[-1 = -a - 10b \quad \text{(3)}\]</div>
+<div class="arithmatex">\[-2 = a + b \quad \text{(4)}\]</div>
+<p>Let's solve equations (1) and (2) first:</p>
+<p>From equation (2): <span class="arithmatex">\(4 = -a + 5b\)</span>, so <span class="arithmatex">\(a = 5b - 4\)</span></p>
+<p>Substitute into equation (1):</p>
+<div class="arithmatex">\[-1 = 2(5b - 4) + 11b = 10b - 8 + 11b = 21b - 8\]</div>
+<div class="arithmatex">\[21b = 7\]</div>
+<div class="arithmatex">\[b = \frac{1}{3}\]</div>
+<p>Now substitute <span class="arithmatex">\(b = \frac{1}{3}\)</span> back to find <span class="arithmatex">\(a\)</span>:</p>
+<div class="arithmatex">\[a = 5\left(\frac{1}{3}\right) - 4 = \frac{5}{3} - 4 = \frac{5}{3} - \frac{12}{3} = -\frac{7}{3}\]</div>
+<p>Let's check if <span class="arithmatex">\(a = -\frac{7}{3}\)</span> and <span class="arithmatex">\(b = \frac{1}{3}\)</span> satisfy all four equations:</p>
+<p>Equation (1): <span class="arithmatex">\(2a + 11b = 2\left(-\frac{7}{3}\right) + 11\left(\frac{1}{3}\right) = -\frac{14}{3} + \frac{11}{3} = -\frac{3}{3} = -1\)</span> ✓</p>
+<p>Equation (2): <span class="arithmatex">\(-a + 5b = -\left(-\frac{7}{3}\right) + 5\left(\frac{1}{3}\right) = \frac{7}{3} + \frac{5}{3} = \frac{12}{3} = 4\)</span> ✓</p>
+<p>Equation (3): <span class="arithmatex">\(-a - 10b = -\left(-\frac{7}{3}\right) - 10\left(\frac{1}{3}\right) = \frac{7}{3} - \frac{10}{3} = -\frac{3}{3} = -1\)</span> ✓</p>
+<p>Equation (4): <span class="arithmatex">\(a + b = -\frac{7}{3} + \frac{1}{3} = -\frac{6}{3} = -2\)</span> ✓</p>
+<p>Since we found scalars <span class="arithmatex">\(a = -\frac{7}{3}\)</span> and <span class="arithmatex">\(b = \frac{1}{3}\)</span> such that:</p>
+<div class="arithmatex">\[\mathbf{x} = -\frac{7}{3}\mathbf{v} + \frac{1}{3}\mathbf{w}\]</div>
+<p>This proves that the displacement vector <span class="arithmatex">\(\mathbf{x} = \begin{bmatrix} -1 \\ 4 \\ -1 \\ -2 \end{bmatrix}\)</span> belongs to the plane <span class="arithmatex">\(P = \text{span}(\mathbf{v}, \mathbf{w})\)</span>.</p>
+<p>This means that the line <span class="arithmatex">\(L\)</span> is parallel to the plane <span class="arithmatex">\(P\)</span>. In <span class="arithmatex">\(\mathbb{R}^4\)</span>, just as in <span class="arithmatex">\(\mathbb{R}^3\)</span>, a line is parallel to a plane if the direction vector of the line (which is a scalar multiple of any displacement vector between two points on the line) lies in the plane.</p>
+<p><strong>(b)</strong> Whenever one has a linear subspace <span class="arithmatex">\(V\)</span> of <span class="arithmatex">\(\mathbb{R}^n\)</span> and a line <span class="arithmatex">\(\ell\)</span> in <span class="arithmatex">\(\mathbb{R}^n\)</span> (possibly not through the origin) that is parallel to <span class="arithmatex">\(V\)</span>, it is a fact (not difficult to show, but you may take it on faith) that all points in <span class="arithmatex">\(\ell\)</span> have the same distance to <span class="arithmatex">\(V\)</span>. That is, for every point <span class="arithmatex">\(\mathbf{y} \in \ell\)</span> and the point <span class="arithmatex">\(\mathbf{y}' \in V\)</span> nearest to <span class="arithmatex">\(\mathbf{y}\)</span>, the distance <span class="arithmatex">\(\|\mathbf{y} - \mathbf{y}'\|\)</span> is the same regardless of which <span class="arithmatex">\(\mathbf{y}\)</span> on <span class="arithmatex">\(\ell\)</span> we consider. Taking <span class="arithmatex">\(V\)</span> and <span class="arithmatex">\(\ell\)</span> to be <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(L\)</span> above, compute the common distance <span class="arithmatex">\(\|\mathbf{y} - \mathbf{y}'\|\)</span> (since it is independent of <span class="arithmatex">\(\mathbf{y}\)</span>, you may pick whatever you consider to be the most convenient point <span class="arithmatex">\(\mathbf{y}\)</span> in <span class="arithmatex">\(L\)</span> to do the calculation).</p>
+<p><strong>Solution:</strong></p>
+<p>Since all points on the line <span class="arithmatex">\(L\)</span> have the same distance to the plane <span class="arithmatex">\(P\)</span>, we can choose the most convenient point. Let's use the point when <span class="arithmatex">\(t = 0\)</span>: <span class="arithmatex">\(\mathbf{y} = \begin{bmatrix} 4 \\ 4 \\ 4 \\ -7 \end{bmatrix}\)</span>.</p>
+<p>The distance from <span class="arithmatex">\(\mathbf{y}\)</span> to the plane <span class="arithmatex">\(P\)</span> is the distance from <span class="arithmatex">\(\mathbf{y}\)</span> to its projection onto <span class="arithmatex">\(P\)</span>. To find this projection, we need an orthogonal basis for <span class="arithmatex">\(P\)</span>.</p>
+<p><strong>Step 1: Find an orthogonal basis for <span class="arithmatex">\(P\)</span></strong></p>
+<p>Using the theorem from earlier, we can construct an orthogonal basis for <span class="arithmatex">\(P = \text{span}(\mathbf{v}, \mathbf{w})\)</span>:</p>
+<p>Let <span class="arithmatex">\(\mathbf{v}_1 = \mathbf{v} = \begin{bmatrix} 2 \\ -1 \\ -1 \\ 1 \end{bmatrix}\)</span></p>
+<p>Then <span class="arithmatex">\(\mathbf{v}_2 = \mathbf{w} - \text{Proj}_{\mathbf{v}_1}(\mathbf{w})\)</span></p>
+<p>First, compute <span class="arithmatex">\(\text{Proj}_{\mathbf{v}_1}(\mathbf{w})\)</span>:</p>
+<div class="arithmatex">\[\text{Proj}_{\mathbf{v}_1}(\mathbf{w}) = \frac{\mathbf{w} \cdot \mathbf{v}_1}{\mathbf{v}_1 \cdot \mathbf{v}_1} \mathbf{v}_1\]</div>
+<div class="arithmatex">\[\mathbf{w} \cdot \mathbf{v}_1 = 11(2) + 5(-1) + (-10)(-1) + 1(1) = 22 - 5 + 10 + 1 = 28\]</div>
+<div class="arithmatex">\[\mathbf{v}_1 \cdot \mathbf{v}_1 = 2^2 + (-1)^2 + (-1)^2 + 1^2 = 4 + 1 + 1 + 1 = 7\]</div>
+<p>So:</p>
+<div class="arithmatex">\[\text{Proj}_{\mathbf{v}_1}(\mathbf{w}) = \frac{28}{7} \begin{bmatrix} 2 \\ -1 \\ -1 \\ 1 \end{bmatrix} = 4 \begin{bmatrix} 2 \\ -1 \\ -1 \\ 1 \end{bmatrix} = \begin{bmatrix} 8 \\ -4 \\ -4 \\ 4 \end{bmatrix}\]</div>
+<p>Therefore:</p>
+<div class="arithmatex">\[\mathbf{v}_2 = \mathbf{w} - \text{Proj}_{\mathbf{v}_1}(\mathbf{w}) = \begin{bmatrix} 11 \\ 5 \\ -10 \\ 1 \end{bmatrix} - \begin{bmatrix} 8 \\ -4 \\ -4 \\ 4 \end{bmatrix} = \begin{bmatrix} 3 \\ 9 \\ -6 \\ -3 \end{bmatrix}\]</div>
+<p><strong>Step 2: Compute the projection of <span class="arithmatex">\(\mathbf{y}\)</span> onto <span class="arithmatex">\(P\)</span></strong></p>
+<p>Using the orthogonal basis <span class="arithmatex">\(\{\mathbf{v}_1, \mathbf{v}_2\}\)</span>, the projection is:</p>
+<div class="arithmatex">\[\text{Proj}_P(\mathbf{y}) = \frac{\mathbf{y} \cdot \mathbf{v}_1}{\mathbf{v}_1 \cdot \mathbf{v}_1} \mathbf{v}_1 + \frac{\mathbf{y} \cdot \mathbf{v}_2}{\mathbf{v}_2 \cdot \mathbf{v}_2} \mathbf{v}_2\]</div>
+<p>Compute the dot products:</p>
+<div class="arithmatex">\[\mathbf{y} \cdot \mathbf{v}_1 = 4(2) + 4(-1) + 4(-1) + (-7)(1) = 8 - 4 - 4 - 7 = -7\]</div>
+<div class="arithmatex">\[\mathbf{y} \cdot \mathbf{v}_2 = 4(3) + 4(9) + 4(-6) + (-7)(-3) = 12 + 36 - 24 + 21 = 45\]</div>
+<div class="arithmatex">\[\mathbf{v}_2 \cdot \mathbf{v}_2 = 3^2 + 9^2 + (-6)^2 + (-3)^2 = 9 + 81 + 36 + 9 = 135\]</div>
+<p>So:</p>
+<div class="arithmatex">\[\text{Proj}_P(\mathbf{y}) = \frac{-7}{7} \begin{bmatrix} 2 \\ -1 \\ -1 \\ 1 \end{bmatrix} + \frac{45}{135} \begin{bmatrix} 3 \\ 9 \\ -6 \\ -3 \end{bmatrix}\]</div>
+<div class="arithmatex">\[= -1 \begin{bmatrix} 2 \\ -1 \\ -1 \\ 1 \end{bmatrix} + \frac{1}{3} \begin{bmatrix} 3 \\ 9 \\ -6 \\ -3 \end{bmatrix}\]</div>
+<div class="arithmatex">\[= \begin{bmatrix} -2 \\ 1 \\ 1 \\ -1 \end{bmatrix} + \begin{bmatrix} 1 \\ 3 \\ -2 \\ -1 \end{bmatrix}\]</div>
+<div class="arithmatex">\[= \begin{bmatrix} -1 \\ 4 \\ -1 \\ -2 \end{bmatrix}\]</div>
+<p><strong>Step 3: Compute the distance</strong></p>
+<p>The distance from <span class="arithmatex">\(\mathbf{y}\)</span> to the plane <span class="arithmatex">\(P\)</span> is:</p>
+<div class="arithmatex">\[\|\mathbf{y} - \text{Proj}_P(\mathbf{y})\| = \left\|\begin{bmatrix} 4 \\ 4 \\ 4 \\ -7 \end{bmatrix} - \begin{bmatrix} -1 \\ 4 \\ -1 \\ -2 \end{bmatrix}\right\| = \left\|\begin{bmatrix} 5 \\ 0 \\ 5 \\ -5 \end{bmatrix}\right\|\]</div>
+<div class="arithmatex">\[\|\mathbf{y} - \text{Proj}_P(\mathbf{y})\| = \sqrt{5^2 + 0^2 + 5^2 + (-5)^2} = \sqrt{25 + 0 + 25 + 25} = \sqrt{75} = \sqrt{25 \times 3} = 5\sqrt{3}\]</div>
+<p><strong>Answer:</strong> The common distance from any point on the line <span class="arithmatex">\(L\)</span> to the plane <span class="arithmatex">\(P\)</span> is <span class="arithmatex">\(\sqrt{75}\)</span>.</p>
 <h2 id="orthogonal-basis-formula-and-relation-of-correlation-coefficient-to-best-fit-lines">Orthogonal basis formula and relation of correlation coefficient to best fit lines</h2>
 <p>In this section we prove some results discussed earlier.</p>
 <p><strong>Theorem</strong>: Suppose <span class="arithmatex">\(\mathbf{x}, \mathbf{y} \in \mathbb{R}^n\)</span> are nonzero, and not scalar multiples of each other. The vectors <span class="arithmatex">\(\mathbf{y}\)</span> and <span class="arithmatex">\(\mathbf{x}' = \mathbf{x} - \text{Proj}_{\mathbf{y}} \mathbf{x}\)</span> constitute an orthogonal basis of <span class="arithmatex">\(\text{span}(\mathbf{x}, \mathbf{y})\)</span>. In particular, <span class="arithmatex">\(\text{span}(\mathbf{x}, \mathbf{y})\)</span> is 2-dimensional.</p>
