@@ -1189,6 +1189,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../probability/monty_hall_problem_and_simpsons_paradox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Monty Hall Problem and Simpson's Paradox
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1437,6 +1460,26 @@
 <div class="arithmatex">\[\text{Proj}_{\mathbf{v}''}(\mathbf{p}) = \frac{\mathbf{p} \cdot \mathbf{v}''}{\mathbf{v}'' \cdot \mathbf{v}''} \mathbf{v}'' = \frac{54}{2900} \begin{bmatrix} 50 \\ 16 \\ -12 \end{bmatrix} = \begin{bmatrix} \frac{27}{29} \\ \frac{216}{725} \\ -\frac{162}{725} \end{bmatrix}\]</div>
 <p>Thus, the place on the metal sheet that the particle ends up at is</p>
 <div class="arithmatex">\[\text{Proj}_V \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix} = \text{Proj}_{\mathbf{w}} \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix} + \text{Proj}_{\mathbf{v}''} \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix} = \begin{bmatrix} 0 \\ \frac{21}{25} \\ \frac{28}{25} \end{bmatrix} + \begin{bmatrix} \frac{27}{29} \\ \frac{216}{725} \\ -\frac{162}{725} \end{bmatrix} = \begin{bmatrix} \frac{27}{29} \\ \frac{33}{29} \\ \frac{26}{29} \end{bmatrix} \approx \begin{bmatrix} 0.931 \\ 1.138 \\ 0.897 \end{bmatrix}\]</div>
+<p><strong>Example</strong>: Let <span class="arithmatex">\(\mathbf{w}_1 = \begin{bmatrix} 1 \\ 1 \\ 1 \\ 1 \end{bmatrix}\)</span> and <span class="arithmatex">\(\mathbf{w}_2 = \begin{bmatrix} 1 \\ -3 \\ 1 \\ 1 \end{bmatrix}\)</span>. Define <span class="arithmatex">\(U\)</span> to be the collection of all 4-vectors <span class="arithmatex">\(\mathbf{u}\)</span> that are orthogonal to both <span class="arithmatex">\(\mathbf{w}_1\)</span> and <span class="arithmatex">\(\mathbf{w}_2\)</span>. Show that <span class="arithmatex">\(U\)</span> is a linear subspace of <span class="arithmatex">\(\mathbb{R}^4\)</span> by writing it as a span of finitely many vectors. Explain why <span class="arithmatex">\(\dim(U) = 2\)</span>.</p>
+<p><strong>Solution</strong>:</p>
+<p>First, let's understand what <span class="arithmatex">\(U\)</span> represents. A vector <span class="arithmatex">\(\mathbf{u} = \begin{bmatrix} u_1 \\ u_2 \\ u_3 \\ u_4 \end{bmatrix}\)</span> belongs to <span class="arithmatex">\(U\)</span> if and only if:</p>
+<div class="arithmatex">\[\mathbf{u} \cdot \mathbf{w}_1 = 0 \quad \text{and} \quad \mathbf{u} \cdot \mathbf{w}_2 = 0\]</div>
+<p>This gives us the system of equations:</p>
+<div class="arithmatex">\[u_1 + u_2 + u_3 + u_4 = 0\]</div>
+<div class="arithmatex">\[u_1 - 3u_2 + u_3 + u_4 = 0\]</div>
+<p>Subtracting the second equation from the first:</p>
+<div class="arithmatex">\[(u_1 + u_2 + u_3 + u_4) - (u_1 - 3u_2 + u_3 + u_4) = 0 - 0\]</div>
+<div class="arithmatex">\[4u_2 = 0\]</div>
+<div class="arithmatex">\[u_2 = 0\]</div>
+<p>Substituting <span class="arithmatex">\(u_2 = 0\)</span> back into the first equation:</p>
+<div class="arithmatex">\[u_1 + 0 + u_3 + u_4 = 0\]</div>
+<div class="arithmatex">\[u_1 + u_3 + u_4 = 0\]</div>
+<p>This means <span class="arithmatex">\(u_1 = -u_3 - u_4\)</span>. So any vector in <span class="arithmatex">\(U\)</span> must have the form:</p>
+<div class="arithmatex">\[\mathbf{u} = \begin{bmatrix} -u_3 - u_4 \\ 0 \\ u_3 \\ u_4 \end{bmatrix} = u_3 \begin{bmatrix} -1 \\ 0 \\ 1 \\ 0 \end{bmatrix} + u_4 \begin{bmatrix} -1 \\ 0 \\ 0 \\ 1 \end{bmatrix}\]</div>
+<p>Let's define:</p>
+<div class="arithmatex">\[\mathbf{v}_1 = \begin{bmatrix} -1 \\ 0 \\ 1 \\ 0 \end{bmatrix}, \quad \mathbf{v}_2 = \begin{bmatrix} -1 \\ 0 \\ 0 \\ 1 \end{bmatrix}\]</div>
+<p>Then <span class="arithmatex">\(U = \text{span}(\mathbf{v}_1, \mathbf{v}_2)\)</span>, which shows that <span class="arithmatex">\(U\)</span> is indeed a linear subspace of <span class="arithmatex">\(\mathbb{R}^4\)</span>.</p>
+<p>The dimension of <span class="arithmatex">\(U\)</span> is 2 because we found that <span class="arithmatex">\(U\)</span> is spanned by two vectors: <span class="arithmatex">\(\mathbf{v}_1\)</span> and <span class="arithmatex">\(\mathbf{v}_2\)</span>. These vectors are linearly independent (neither is a scalar multiple of the other). Therefore, <span class="arithmatex">\(\{\mathbf{v}_1, \mathbf{v}_2\}\)</span> is a basis for <span class="arithmatex">\(U\)</span>. Since the basis has 2 elements, <span class="arithmatex">\(\dim(U) = 2\)</span>.</p>
 <h2 id="fitting-a-function-to-data">Fitting a function to data</h2>
 <p>What does "best fit" mean? Informally, we want <span class="arithmatex">\(f(x_i)\)</span> to be as close as possible to <span class="arithmatex">\(y_i\)</span> for all <span class="arithmatex">\(i\)</span>. The error</p>
 <div class="arithmatex">\[\text{error}_i = y_i - (mx_i + b)\]</div>
@@ -1468,6 +1511,7 @@
 <p>By applying to this span the formula for the nearest point on a linear subspace in terms of an orthogonal basis, we obtain that the closest vector to <span class="arithmatex">\(Y\)</span> in <span class="arithmatex">\(\text{span}(X, \mathbf{1})\)</span> is</p>
 <div class="arithmatex">\[\frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \frac{Y \cdot \mathbf{1}}{\mathbf{1} \cdot \mathbf{1}} \mathbf{1} = \frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \bar{y} \mathbf{1}\]</div>
 <p>where <span class="arithmatex">\(\bar{y} = (1/n) \sum_{i=1}^n y_i\)</span> is the average of the <span class="arithmatex">\(y_i\)</span>'s.</p>
+<p>In the expression <span class="arithmatex">\(\frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \bar{y} \mathbf{1}\)</span> on the right side, we can expand <span class="arithmatex">\(\hat{X}\)</span> in terms of <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(\mathbf{1}\)</span> using the definition of <span class="arithmatex">\(\text{Proj}_{\mathbf{1}}(X)\)</span> and collect terms to rewrite this as a linear combination <span class="arithmatex">\(mX + b\mathbf{1}\)</span> of <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(\mathbf{1}\)</span>. Those coefficients <span class="arithmatex">\(m\)</span> and <span class="arithmatex">\(b\)</span> are exactly the desired "<span class="arithmatex">\(m\)</span>" and "<span class="arithmatex">\(b\)</span>" for the best-fit line!</p>
 <h2 id="correlation-coefficient-and-quality-of-fit">Correlation Coefficient and quality of fit</h2>
 <p>Let the best-fit line be <span class="arithmatex">\(y = mx + b\)</span>, and let <span class="arithmatex">\(r\)</span> be the correlation coefficient for the recentered data <span class="arithmatex">\((x_i - \bar{x}, y_i - \bar{y})\)</span> (whose coordinates average to 0) with associated <span class="arithmatex">\(n\)</span>-vectors <span class="arithmatex">\(\hat{X}\)</span> and <span class="arithmatex">\(\hat{Y}\)</span>. Then the role of nearness of <span class="arithmatex">\(r^2\)</span> to 1 (or equivalently of nearness of <span class="arithmatex">\(1 - r^2\)</span> to 0) as a measure of quality of fit is expressed by the following identity:</p>
 <div class="arithmatex">\[\|Y - (mX + b\mathbf{1})\|^2 = \|\hat{Y}\|^2 (1 - r^2)\]</div>

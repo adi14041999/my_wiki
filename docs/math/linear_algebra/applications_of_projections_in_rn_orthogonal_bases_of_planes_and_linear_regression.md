@@ -46,6 +46,47 @@ Thus, the place on the metal sheet that the particle ends up at is
 
 $$\text{Proj}_V \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix} = \text{Proj}_{\mathbf{w}} \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix} + \text{Proj}_{\mathbf{v}''} \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix} = \begin{bmatrix} 0 \\ \frac{21}{25} \\ \frac{28}{25} \end{bmatrix} + \begin{bmatrix} \frac{27}{29} \\ \frac{216}{725} \\ -\frac{162}{725} \end{bmatrix} = \begin{bmatrix} \frac{27}{29} \\ \frac{33}{29} \\ \frac{26}{29} \end{bmatrix} \approx \begin{bmatrix} 0.931 \\ 1.138 \\ 0.897 \end{bmatrix}$$
 
+
+**Example**: Let $\mathbf{w}_1 = \begin{bmatrix} 1 \\ 1 \\ 1 \\ 1 \end{bmatrix}$ and $\mathbf{w}_2 = \begin{bmatrix} 1 \\ -3 \\ 1 \\ 1 \end{bmatrix}$. Define $U$ to be the collection of all 4-vectors $\mathbf{u}$ that are orthogonal to both $\mathbf{w}_1$ and $\mathbf{w}_2$. Show that $U$ is a linear subspace of $\mathbb{R}^4$ by writing it as a span of finitely many vectors. Explain why $\dim(U) = 2$.
+
+**Solution**:
+
+First, let's understand what $U$ represents. A vector $\mathbf{u} = \begin{bmatrix} u_1 \\ u_2 \\ u_3 \\ u_4 \end{bmatrix}$ belongs to $U$ if and only if:
+
+$$\mathbf{u} \cdot \mathbf{w}_1 = 0 \quad \text{and} \quad \mathbf{u} \cdot \mathbf{w}_2 = 0$$
+
+This gives us the system of equations:
+
+$$u_1 + u_2 + u_3 + u_4 = 0$$
+
+$$u_1 - 3u_2 + u_3 + u_4 = 0$$
+
+Subtracting the second equation from the first:
+
+$$(u_1 + u_2 + u_3 + u_4) - (u_1 - 3u_2 + u_3 + u_4) = 0 - 0$$
+
+$$4u_2 = 0$$
+
+$$u_2 = 0$$
+
+Substituting $u_2 = 0$ back into the first equation:
+
+$$u_1 + 0 + u_3 + u_4 = 0$$
+
+$$u_1 + u_3 + u_4 = 0$$
+
+This means $u_1 = -u_3 - u_4$. So any vector in $U$ must have the form:
+
+$$\mathbf{u} = \begin{bmatrix} -u_3 - u_4 \\ 0 \\ u_3 \\ u_4 \end{bmatrix} = u_3 \begin{bmatrix} -1 \\ 0 \\ 1 \\ 0 \end{bmatrix} + u_4 \begin{bmatrix} -1 \\ 0 \\ 0 \\ 1 \end{bmatrix}$$
+
+Let's define:
+
+$$\mathbf{v}_1 = \begin{bmatrix} -1 \\ 0 \\ 1 \\ 0 \end{bmatrix}, \quad \mathbf{v}_2 = \begin{bmatrix} -1 \\ 0 \\ 0 \\ 1 \end{bmatrix}$$
+
+Then $U = \text{span}(\mathbf{v}_1, \mathbf{v}_2)$, which shows that $U$ is indeed a linear subspace of $\mathbb{R}^4$.
+
+The dimension of $U$ is 2 because we found that $U$ is spanned by two vectors: $\mathbf{v}_1$ and $\mathbf{v}_2$. These vectors are linearly independent (neither is a scalar multiple of the other). Therefore, $\{\mathbf{v}_1, \mathbf{v}_2\}$ is a basis for $U$. Since the basis has 2 elements, $\dim(U) = 2$.
+
 ## Fitting a function to data
 
 What does "best fit" mean? Informally, we want $f(x_i)$ to be as close as possible to $y_i$ for all $i$. The error
@@ -55,7 +96,6 @@ $$\text{error}_i = y_i - (mx_i + b)$$
 measures in absolute value how close the line $y = mx + b$ is vertically to $(x_i, y_i)$.
 
 ![Best fit](best_fit.png)
-
 
 Suppose the line is given by the equation $y = mx + b$. Suppose the $i$th data point is denoted $(x_i, y_i)$. The $i$th error is given by $\text{error}_i = e_i = y_i - (mx_i + b)$. These errors are shown as blue line segments in the figure.
 
@@ -108,6 +148,8 @@ By applying to this span the formula for the nearest point on a linear subspace 
 $$\frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \frac{Y \cdot \mathbf{1}}{\mathbf{1} \cdot \mathbf{1}} \mathbf{1} = \frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \bar{y} \mathbf{1}$$
 
 where $\bar{y} = (1/n) \sum_{i=1}^n y_i$ is the average of the $y_i$'s.
+
+In the expression $\frac{Y \cdot \hat{X}}{\hat{X} \cdot \hat{X}} \hat{X} + \bar{y} \mathbf{1}$ on the right side, we can expand $\hat{X}$ in terms of $X$ and $\mathbf{1}$ using the definition of $\text{Proj}_{\mathbf{1}}(X)$ and collect terms to rewrite this as a linear combination $mX + b\mathbf{1}$ of $X$ and $\mathbf{1}$. Those coefficients $m$ and $b$ are exactly the desired "$m$" and "$b$" for the best-fit line!
 
 ## Correlation Coefficient and quality of fit
 
@@ -187,3 +229,4 @@ Finally, using the definition of $\text{Proj}_{\hat{X}}\hat{Y}$, we have
 $$\|\text{Proj}_{\hat{X}}\hat{Y}\|^2 = \left(\frac{\hat{Y} \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\hat{X}\right) \cdot \left(\frac{\hat{Y} \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\hat{X}\right) = \left(\frac{\hat{Y} \cdot \hat{X}}{\hat{X} \cdot \hat{X}}\right)^2\hat{X} \cdot \hat{X} = \frac{(\hat{Y} \cdot \hat{X})^2}{\hat{X} \cdot \hat{X}} = r^2(\hat{Y} \cdot \hat{Y})$$
 
 so plugging into $\|Y - (mX + b\mathbf{1})\|^2 = \|\hat{Y}\|^2 - \|\text{Proj}_{\hat{X}}\hat{Y}\|^2$ yields $\|Y - (mX + b\mathbf{1})\|^2 = \|\hat{Y}\|^2(1 - r^2)$, which is exactly the desired identity.
+
