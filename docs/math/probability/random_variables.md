@@ -64,7 +64,7 @@ Key Properties of CDF:
 
 ## Distribution of a Random Variable
 
-The **distribution** of a random variable $X$ describes how the probability mass (or density) is distributed across all possible values that $X$ can take. It tells us the complete probabilistic behavior of $X$.
+The **distribution** of a random variable $X$ describes how the probability mass (or density) is distributed across all possible values that $X$ can take. It tells us the complete probabilistic behavior of $X$. It can be represented in various ways, including a PMF, a cumulative distribution function (CDF), or other methods.
 
 The distribution answers the question: "What is the probability that $X$ takes on a particular value or falls within a particular range?"
 
@@ -84,7 +84,7 @@ The distribution tells us that:
 
 - The probability of rolling an even number is $P(X \in \{2, 4, 6\}) = \frac{1}{2}$
 
-In essence, the distribution is the "fingerprint" of a random variable - it completely characterizes its probabilistic behavior.
+While a PMF is a key concept for describing discrete distributions, it's not the only way to define a distribution (e.g., CDF, table, etc.). 
 
 ## Bernoulli Distribution
 
