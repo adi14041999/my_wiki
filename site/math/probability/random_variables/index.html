@@ -1150,6 +1150,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Random Variables
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1161,6 +1174,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#definition-of-a-random-variable" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definition of a Random Variable
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1392,6 +1433,45 @@
 
 
 <h1 id="random-variables">Random Variables</h1>
+<h2 id="definition-of-a-random-variable">Definition of a Random Variable</h2>
+<p>A <strong>random variable</strong> is a function that maps outcomes from a sample space to real numbers. Formally, if <span class="arithmatex">\(S\)</span> is a sample space, then a random variable <span class="arithmatex">\(X\)</span> is a function:</p>
+<div class="arithmatex">\[X: S \rightarrow \mathbb{R}\]</div>
+<p><strong>Example 1: Coin toss</strong></p>
+<ul>
+<li>
+<p><strong>Sample space</strong>: <span class="arithmatex">\(S = \{\text{Heads}, \text{Tails}\}\)</span></p>
+</li>
+<li>
+<p><strong>Random variable</strong>: <span class="arithmatex">\(X(\text{Heads}) = 1\)</span>, <span class="arithmatex">\(X(\text{Tails}) = 0\)</span></p>
+</li>
+<li>
+<p><strong>Interpretation</strong>: <span class="arithmatex">\(X\)</span> counts the number of heads</p>
+</li>
+</ul>
+<p><strong>Example 2: Rolling a die</strong></p>
+<ul>
+<li>
+<p><strong>Sample space</strong>: <span class="arithmatex">\(S = \{1, 2, 3, 4, 5, 6\}\)</span></p>
+</li>
+<li>
+<p><strong>Random variable</strong>: <span class="arithmatex">\(X(\omega) = \omega\)</span> (identity function)</p>
+</li>
+<li>
+<p><strong>Interpretation</strong>: <span class="arithmatex">\(X\)</span> gives the face value of the die</p>
+</li>
+</ul>
+<p><strong>Example 3: Multiple coin tosses</strong></p>
+<ul>
+<li>
+<p><strong>Sample space</strong>: <span class="arithmatex">\(S = \{\text{HH}, \text{HT}, \text{TH}, \text{TT}\}\)</span></p>
+</li>
+<li>
+<p><strong>Random variable</strong>: <span class="arithmatex">\(X(\text{HH}) = 2\)</span>, <span class="arithmatex">\(X(\text{HT}) = 1\)</span>, <span class="arithmatex">\(X(\text{TH}) = 1\)</span>, <span class="arithmatex">\(X(\text{TT}) = 0\)</span></p>
+</li>
+<li>
+<p><strong>Interpretation</strong>: <span class="arithmatex">\(X\)</span> counts the total number of heads</p>
+</li>
+</ul>
 
 
 
