@@ -1199,6 +1199,51 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#probability-mass-function-pmf" class="md-nav__link">
+    <span class="md-ellipsis">
+      Probability Mass Function (PMF)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cumulative-distribution-function-cdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cumulative Distribution Function (CDF)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#distribution-of-a-random-variable" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution of a Random Variable
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bernoulli-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bernoulli Distribution
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#binomial-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Binomial Distribution
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1470,6 +1515,215 @@
 </li>
 <li>
 <p><strong>Interpretation</strong>: <span class="arithmatex">\(X\)</span> counts the total number of heads</p>
+</li>
+</ul>
+<h2 id="probability-mass-function-pmf">Probability Mass Function (PMF)</h2>
+<p>Before discussing distributions, let's understand what a <strong>Probability Mass Function (PMF)</strong> is.</p>
+<p>A <strong>Probability Mass Function</strong> is a function that gives the probability that a discrete random variable takes on a specific value. For a discrete random variable <span class="arithmatex">\(X\)</span>, the PMF is defined as:</p>
+<div class="arithmatex">\[p_X(x) = P(X = x)\]</div>
+<p>Key Properties of PMF:</p>
+<ol>
+<li>
+<p><strong>Non-negativity</strong>: <span class="arithmatex">\(p_X(x) \geq 0\)</span> for all possible values <span class="arithmatex">\(x\)</span></p>
+</li>
+<li>
+<p><strong>Sum to 1</strong>: <span class="arithmatex">\(\sum_x p_X(x) = 1\)</span> (sum over all possible values)</p>
+</li>
+<li>
+<p><strong>Probability interpretation</strong>: <span class="arithmatex">\(0 \leq p_X(x) \leq 1\)</span> for each <span class="arithmatex">\(x\)</span></p>
+</li>
+</ol>
+<h2 id="cumulative-distribution-function-cdf">Cumulative Distribution Function (CDF)</h2>
+<p>Another important function for describing random variables is the <strong>Cumulative Distribution Function (CDF)</strong>.</p>
+<p>A <strong>Cumulative Distribution Function</strong> is a function that gives the probability that a random variable takes on a value less than or equal to a given number. For a random variable <span class="arithmatex">\(X\)</span>, the CDF is defined as:</p>
+<div class="arithmatex">\[F_X(x) = P(X \leq x)\]</div>
+<p>Key Properties of CDF:</p>
+<ol>
+<li>
+<p><strong>Non-decreasing</strong>: <span class="arithmatex">\(F_X(x) \leq F_X(y)\)</span> whenever <span class="arithmatex">\(x \leq y\)</span> (monotonicity)</p>
+</li>
+<li>
+<p><strong>Bounded</strong>: <span class="arithmatex">\(0 \leq F_X(x) \leq 1\)</span> for all <span class="arithmatex">\(x\)</span></p>
+</li>
+<li>
+<p><strong>Limits</strong>: <span class="arithmatex">\(\lim_{x \to -\infty} F_X(x) = 0\)</span> and <span class="arithmatex">\(\lim_{x \to \infty} F_X(x) = 1\)</span></p>
+</li>
+</ol>
+<h2 id="distribution-of-a-random-variable">Distribution of a Random Variable</h2>
+<p>The <strong>distribution</strong> of a random variable <span class="arithmatex">\(X\)</span> describes how the probability mass (or density) is distributed across all possible values that <span class="arithmatex">\(X\)</span> can take. It tells us the complete probabilistic behavior of <span class="arithmatex">\(X\)</span>.</p>
+<p>The distribution answers the question: "What is the probability that <span class="arithmatex">\(X\)</span> takes on a particular value or falls within a particular range?"</p>
+<p>Consider the die-rolling random variable <span class="arithmatex">\(X\)</span>:</p>
+<ul>
+<li>
+<p><strong>Sample space</strong>: <span class="arithmatex">\(S = \{1, 2, 3, 4, 5, 6\}\)</span></p>
+</li>
+<li>
+<p><strong>Random variable</strong>: <span class="arithmatex">\(X(\omega) = \omega\)</span></p>
+</li>
+<li>
+<p><strong>Distribution</strong>: <span class="arithmatex">\(P(X = k) = \frac{1}{6}\)</span> for <span class="arithmatex">\(k = 1, 2, 3, 4, 5, 6\)</span></p>
+</li>
+</ul>
+<p>The distribution tells us that:</p>
+<ul>
+<li>
+<p>Each face is equally likely</p>
+</li>
+<li>
+<p>The probability of any specific value is <span class="arithmatex">\(\frac{1}{6}\)</span></p>
+</li>
+<li>
+<p>The probability of rolling an even number is <span class="arithmatex">\(P(X \in \{2, 4, 6\}) = \frac{1}{2}\)</span></p>
+</li>
+</ul>
+<p>In essence, the distribution is the "fingerprint" of a random variable - it completely characterizes its probabilistic behavior.</p>
+<h2 id="bernoulli-distribution">Bernoulli Distribution</h2>
+<p>The <strong>Bernoulli distribution</strong> is the simplest discrete probability distribution, modeling a random experiment with exactly two possible outcomes: success or failure.</p>
+<p>A random variable <span class="arithmatex">\(X\)</span> follows a <strong>Bernoulli distribution</strong> with parameter <span class="arithmatex">\(p\)</span> (denoted <span class="arithmatex">\(X \sim \text{Bernoulli}(p)\)</span>) if:</p>
+<ul>
+<li>
+<p><strong>Possible values</strong>: <span class="arithmatex">\(X\)</span> takes only two values: <span class="arithmatex">\(0\)</span> (failure) and <span class="arithmatex">\(1\)</span> (success)</p>
+</li>
+<li>
+<p><strong>Parameter</strong>: <span class="arithmatex">\(p \in [0, 1]\)</span> represents the probability of success</p>
+</li>
+<li>
+<p><strong>Probability mass function</strong>:</p>
+</li>
+</ul>
+<div class="arithmatex">\[P(X = 1) = p \quad \text{and} \quad P(X = 0) = 1 - p\]</div>
+<div class="arithmatex">\[P(X = k) = p^k(1-p)^{1-k} \quad \text{for } k \in \{0, 1\}\]</div>
+<p>This compact formula gives:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(P(X = 1) = p^1(1-p)^0 = p\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(P(X = 0) = p^0(1-p)^1 = 1-p\)</span></p>
+</li>
+</ul>
+<p><strong>Example: coin toss</strong></p>
+<ul>
+<li>
+<p><strong>Success</strong>: Heads (with probability <span class="arithmatex">\(p = \frac{1}{2}\)</span>)</p>
+</li>
+<li>
+<p><strong>Failure</strong>: Tails (with probability <span class="arithmatex">\(1-p = \frac{1}{2}\)</span>)</p>
+</li>
+<li>
+<p><strong>Random variable</strong>: <span class="arithmatex">\(X(\text{Heads}) = 1\)</span>, <span class="arithmatex">\(X(\text{Tails}) = 0\)</span></p>
+</li>
+</ul>
+<h2 id="binomial-distribution">Binomial Distribution</h2>
+<p>The <strong>binomial distribution</strong> models the number of successes in a fixed number of independent Bernoulli trials, each with the same probability of success.</p>
+<p>A random variable <span class="arithmatex">\(X\)</span> follows a <strong>binomial distribution</strong> with parameters <span class="arithmatex">\(n\)</span> and <span class="arithmatex">\(p\)</span> (denoted <span class="arithmatex">\(X \sim \text{Binomial}(n, p)\)</span>) if:</p>
+<ul>
+<li>
+<p><strong>Possible values</strong>: <span class="arithmatex">\(X\)</span> takes values in <span class="arithmatex">\(\{0, 1, 2, \ldots, n\}\)</span></p>
+</li>
+<li>
+<p><strong>Parameters</strong>: </p>
+</li>
+<li>
+<p><span class="arithmatex">\(n \in \mathbb{N}\)</span> (number of trials)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(p \in [0, 1]\)</span> (probability of success in each trial)</p>
+</li>
+<li>
+<p><strong>Probability mass function</strong>:</p>
+</li>
+</ul>
+<div class="arithmatex">\[P(X = k) = \binom{n}{k} p^k(1-p)^{n-k} \quad \text{for } k = 0, 1, 2, \ldots, n\]</div>
+<p>The PMF formula <span class="arithmatex">\(P(X = k) = \binom{n}{k} p^k(1-p)^{n-k}\)</span> has three components:</p>
+<ol>
+<li>
+<p><strong><span class="arithmatex">\(\binom{n}{k}\)</span></strong>: Number of ways to choose <span class="arithmatex">\(k\)</span> successes from <span class="arithmatex">\(n\)</span> trials</p>
+</li>
+<li>
+<p><strong><span class="arithmatex">\(p^k\)</span></strong>: Probability of <span class="arithmatex">\(k\)</span> successes</p>
+</li>
+<li>
+<p><strong><span class="arithmatex">\((1-p)^{n-k}\)</span></strong>: Probability of <span class="arithmatex">\(n-k\)</span> failures</p>
+</li>
+</ol>
+<p><strong>Example: Quality Control</strong></p>
+<ul>
+<li>
+<p><strong>Experiment</strong>: Test 100 products from a production line</p>
+</li>
+<li>
+<p><strong>Random variable</strong>: <span class="arithmatex">\(X\)</span> = number of defective products</p>
+</li>
+<li>
+<p><strong>Distribution</strong>: <span class="arithmatex">\(X \sim \text{Binomial}(100, 0.02)\)</span> (assuming 2% defect rate)</p>
+</li>
+<li>
+<p><strong>Probability of at most 3 defects</strong>: <span class="arithmatex">\(P(X \leq 3) = \sum_{k=0}^3 \binom{100}{k} (0.02)^k (0.98)^{100-k}\)</span></p>
+</li>
+</ul>
+<p>Let's derive the binomial PMF formula <span class="arithmatex">\(P(X = k) = \binom{n}{k} p^k(1-p)^{n-k}\)</span> using combinatorial reasoning.</p>
+<p>We want to find the probability of getting exactly <span class="arithmatex">\(k\)</span> successes in <span class="arithmatex">\(n\)</span> independent Bernoulli trials, where each trial has success probability <span class="arithmatex">\(p\)</span>.</p>
+<p>Since the trials are <strong>independent</strong>, the probability of any specific sequence of outcomes is the product of individual probabilities.</p>
+<p><strong>Example</strong>: For <span class="arithmatex">\(n = 3\)</span> trials with <span class="arithmatex">\(k = 2\)</span> successes, one possible sequence is:</p>
+<ul>
+<li>
+<p>Trial 1: Success (probability <span class="arithmatex">\(p\)</span>)</p>
+</li>
+<li>
+<p>Trial 2: Success (probability <span class="arithmatex">\(p\)</span>)</p>
+</li>
+<li>
+<p>Trial 3: Failure (probability <span class="arithmatex">\(1-p\)</span>)</p>
+</li>
+</ul>
+<p><strong>Probability of this specific sequence</strong>: <span class="arithmatex">\(p \cdot p \cdot (1-p) = p^2(1-p)^1 = p^k(1-p)^{n-k}\)</span></p>
+<p>The key insight is that there are <strong>multiple sequences</strong> that result in exactly <span class="arithmatex">\(k\)</span> successes and <span class="arithmatex">\(n-k\)</span> failures.</p>
+<p><strong>Question</strong>: How many different ways can we arrange <span class="arithmatex">\(k\)</span> successes and <span class="arithmatex">\(n-k\)</span> failures in <span class="arithmatex">\(n\)</span> positions?</p>
+<p><strong>Answer</strong>: <span class="arithmatex">\(\binom{n}{k}\)</span> , that is, the number of ways to choose <span class="arithmatex">\(k\)</span> positions out of <span class="arithmatex">\(n\)</span> for the successes</p>
+<p>Probability of any specific sequence with <span class="arithmatex">\(k\)</span> successes and <span class="arithmatex">\(n-k\)</span> failures:</p>
+<div class="arithmatex">\[P(\text{specific sequence}) = p^k(1-p)^{n-k}\]</div>
+<p>Number of different sequences with exactly <span class="arithmatex">\(k\)</span> successes:</p>
+<div class="arithmatex">\[\text{Number of sequences} = \binom{n}{k}\]</div>
+<p>Total probability using the addition rule (sums probabilities of mutually exclusive sequences):</p>
+<div class="arithmatex">\[P(X = k) = \binom{n}{k} \cdot p^k(1-p)^{n-k}\]</div>
+<p>Let's verify that the binomial PMF <span class="arithmatex">\(p_X(k) = \binom{n}{k} p^k(1-p)^{n-k}\)</span> satisfies all the required properties of a PMF.</p>
+<p>Property 1: Non-negativity</p>
+<p>We need to show that <span class="arithmatex">\(p_X(k) \geq 0\)</span> for all <span class="arithmatex">\(k \in \{0, 1, 2, \ldots, n\}\)</span>.</p>
+<p><strong>Proof</strong>: </p>
+<ul>
+<li>
+<p><span class="arithmatex">\(\binom{n}{k} \geq 0\)</span> (combinatorial coefficient is always non-negative)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(p^k \geq 0\)</span> (since <span class="arithmatex">\(p \in [0, 1]\)</span> and <span class="arithmatex">\(k \geq 0\)</span>)</p>
+</li>
+<li>
+<p><span class="arithmatex">\((1-p)^{n-k} \geq 0\)</span> (since <span class="arithmatex">\(1-p \in [0, 1]\)</span> and <span class="arithmatex">\(n-k \geq 0\)</span>)</p>
+</li>
+</ul>
+<p>Since all three factors are non-negative, their product <span class="arithmatex">\(p_X(k) = \binom{n}{k} p^k(1-p)^{n-k} \geq 0\)</span> ✓</p>
+<p>Property 2: Sum to 1</p>
+<p>We need to show that <span class="arithmatex">\(\sum_{k=0}^n p_X(k) = 1\)</span>.</p>
+<p><strong>Proof</strong>: </p>
+<div class="arithmatex">\[\sum_{k=0}^n p_X(k) = \sum_{k=0}^n \binom{n}{k} p^k(1-p)^{n-k}\]</div>
+<p>This is exactly the <strong>binomial expansion</strong> of <span class="arithmatex">\((p + (1-p))^n\)</span>:</p>
+<div class="arithmatex">\[(p + (1-p))^n = \sum_{k=0}^n \binom{n}{k} p^k(1-p)^{n-k}\]</div>
+<p>But <span class="arithmatex">\(p + (1-p) = 1\)</span>, so:</p>
+<div class="arithmatex">\[(p + (1-p))^n = 1^n = 1\]</div>
+<p>Therefore, <span class="arithmatex">\(\sum_{k=0}^n p_X(k) = 1\)</span> ✓</p>
+<p>Property 3: Probability Interpretation</p>
+<p>We need to show that <span class="arithmatex">\(0 \leq p_X(k) \leq 1\)</span> for each <span class="arithmatex">\(k\)</span>.</p>
+<p><strong>Proof</strong>: </p>
+<ul>
+<li>
+<p>We already showed <span class="arithmatex">\(p_X(k) \geq 0\)</span> (Property 1)</p>
+</li>
+<li>
+<p>Since <span class="arithmatex">\(\sum_{k=0}^n p_X(k) = 1\)</span> (Property 2) and all terms are non-negative, no individual term can exceed 1</p>
+</li>
+<li>
+<p>Therefore, <span class="arithmatex">\(0 \leq p_X(k) \leq 1\)</span> for each <span class="arithmatex">\(k\)</span> ✓</p>
 </li>
 </ul>
 
