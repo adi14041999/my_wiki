@@ -1,4 +1,4 @@
-# Monty Hall Problem and Simpson's Paradox
+# Some famous problems
 
 ## The Monty Hall Problem
 
@@ -147,6 +147,5 @@ The paradox occurs when:
 This happens because the $n_{ij}$ values (group sizes) create different weights in the overall calculation.
 
 Simpson's Paradox teaches us that **aggregated data can be misleading**. The relationship between variables can change dramatically when we combine different groups, especially when those groups have different sizes or characteristics. This is why it's essential to examine data both individually and collectively to understand the true underlying relationships.
-
 
 
