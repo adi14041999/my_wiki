@@ -1244,6 +1244,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#hypergeometric-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hypergeometric Distribution
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1550,7 +1559,7 @@
 </li>
 </ol>
 <h2 id="distribution-of-a-random-variable">Distribution of a Random Variable</h2>
-<p>The <strong>distribution</strong> of a random variable <span class="arithmatex">\(X\)</span> describes how the probability mass (or density) is distributed across all possible values that <span class="arithmatex">\(X\)</span> can take. It tells us the complete probabilistic behavior of <span class="arithmatex">\(X\)</span>. It can be represented in various ways, including a PMF, a cumulative distribution function (CDF), or other methods.</p>
+<p>The <strong>distribution</strong> of a random variable <span class="arithmatex">\(X\)</span> describes how the probability mass (or density) is distributed across all possible values that <span class="arithmatex">\(X\)</span> can take. <strong>It tells us the complete probabilistic behavior of <span class="arithmatex">\(X\)</span>.</strong> It can be represented in various ways, including a PMF, a cumulative distribution function (CDF), or other methods.</p>
 <p>The distribution answers the question: "What is the probability that <span class="arithmatex">\(X\)</span> takes on a particular value or falls within a particular range?"</p>
 <p>Consider the die-rolling random variable <span class="arithmatex">\(X\)</span>:</p>
 <ul>
@@ -1724,6 +1733,237 @@
 </li>
 <li>
 <p>Therefore, <span class="arithmatex">\(0 \leq p_X(k) \leq 1\)</span> for each <span class="arithmatex">\(k\)</span> ✓</p>
+</li>
+</ul>
+<p>One of the most important properties of the binomial distribution is the <strong>addition property</strong>, which states that the sum of two independent binomial random variables is also binomial under certain conditions.</p>
+<p><strong>Theorem</strong>: If <span class="arithmatex">\(X \sim \text{Binomial}(n_1, p)\)</span> and <span class="arithmatex">\(Y \sim \text{Binomial}(n_2, p)\)</span> are <strong>independent</strong> random variables with the <strong>same success probability</strong> <span class="arithmatex">\(p\)</span>, then:</p>
+<div class="arithmatex">\[X + Y \sim \text{Binomial}(n_1 + n_2, p)\]</div>
+<p>This property makes intuitive sense:</p>
+<ul>
+<li>
+<p><strong><span class="arithmatex">\(X\)</span></strong>: Random variable outputting number of successes in <span class="arithmatex">\(n_1\)</span> trials with success probability <span class="arithmatex">\(p\)</span></p>
+</li>
+<li>
+<p><strong><span class="arithmatex">\(Y\)</span></strong>: Random variable outputting number of successes in <span class="arithmatex">\(n_2\)</span> trials with success probability <span class="arithmatex">\(p\)</span></p>
+</li>
+<li>
+<p><strong><span class="arithmatex">\(X + Y\)</span></strong>: Random variable outputting number total number of successes in <span class="arithmatex">\(n_1 + n_2\)</span> trials with success probability <span class="arithmatex">\(p\)</span></p>
+</li>
+</ul>
+<h2 id="hypergeometric-distribution">Hypergeometric Distribution</h2>
+<p>The <strong>hypergeometric distribution</strong> models situations where we sample <strong>without replacement</strong> from a finite population, making it fundamentally different from the binomial distribution.</p>
+<p>Imagine you're on a treasure hunt with a group of friends. You've discovered an ancient chest containing <strong>20 precious gems</strong>:</p>
+<ul>
+<li>
+<p><strong>8 diamonds</strong> (the rare, valuable ones)</p>
+</li>
+<li>
+<p><strong>12 emeralds</strong> (still beautiful, but less valuable)</p>
+</li>
+</ul>
+<p>The chest is sealed with a magical lock that only opens if you can correctly identify the composition of gems inside. Here's the catch: you can only <strong>draw 5 gems</strong> to examine them, and once you draw a gem, you <strong>cannot put it back</strong> (no replacement).</p>
+<p><strong>Your mission</strong>: What's the probability that exactly <strong>3 of your 5 draws are diamonds</strong>?</p>
+<p>Understanding the Problem:</p>
+<p><strong>Population</strong>: 20 total gems</p>
+<ul>
+<li>
+<p><strong>Success items</strong>: 8 diamonds (what we're interested in)</p>
+</li>
+<li>
+<p><strong>Failure items</strong>: 12 emeralds</p>
+</li>
+<li>
+<p><strong>Sample size</strong>: 5 gems drawn</p>
+</li>
+<li>
+<p><strong>Target</strong>: Exactly 3 diamonds</p>
+</li>
+</ul>
+<p><strong>Key difference from binomial</strong>: In the binomial case, you'd put each gem back after examining it, so the probability of drawing a diamond would stay constant at <span class="arithmatex">\(\frac{8}{20} = 0.4\)</span>. But here, each draw affects the remaining population!</p>
+<p>For a hypergeometric random variable <span class="arithmatex">\(X\)</span> with parameters:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(N\)</span> = total population size</p>
+</li>
+<li>
+<p><span class="arithmatex">\(K\)</span> = number of success items in population</p>
+</li>
+<li>
+<p><span class="arithmatex">\(n\)</span> = sample size</p>
+</li>
+</ul>
+<p>The PMF is:</p>
+<div class="arithmatex">\[P(X = k) = \frac{\binom{K}{k} \cdot \binom{N-K}{n-k}}{\binom{N}{n}}\]</div>
+<p>Where <span class="arithmatex">\(k\)</span> is the number of success items in your sample.</p>
+<p><strong>Numerator</strong>: <span class="arithmatex">\(\binom{K}{k} \cdot \binom{N-K}{n-k}\)</span></p>
+<ul>
+<li>
+<p><span class="arithmatex">\(\binom{K}{k}\)</span>: Ways to choose <span class="arithmatex">\(k\)</span> diamonds from <span class="arithmatex">\(K\)</span> diamonds</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\binom{N-K}{n-k}\)</span>: Ways to choose <span class="arithmatex">\((n-k)\)</span> emeralds from <span class="arithmatex">\((N-K)\)</span> emeralds</p>
+</li>
+<li>
+<p><strong>Product</strong>: Total ways to get exactly <span class="arithmatex">\(k\)</span> diamonds and <span class="arithmatex">\((n-k)\)</span> emeralds</p>
+</li>
+</ul>
+<p><strong>Denominator</strong>: <span class="arithmatex">\(\binom{N}{n}\)</span></p>
+<ul>
+<li>Total ways to choose any <span class="arithmatex">\(n\)</span> gems from <span class="arithmatex">\(N\)</span> gems</li>
+</ul>
+<p><strong>Result</strong>: Probability of getting exactly <span class="arithmatex">\(k\)</span> diamonds</p>
+<p><strong>Solution</strong>:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(N = 20\)</span> (total gems)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(K = 8\)</span> (diamonds)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(n = 5\)</span> (sample size)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(k = 3\)</span> (target diamonds)</p>
+</li>
+</ul>
+<p><strong>Calculation</strong>:</p>
+<div class="arithmatex">\[P(X = 3) = \frac{\binom{8}{3} \cdot \binom{12}{2}}{\binom{20}{5}}\]</div>
+<p><strong>Computing the combinations</strong>:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(\binom{8}{3} = \frac{8!}{3! \cdot 5!} = 56\)</span> (ways to choose 3 diamonds)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\binom{12}{2} = \frac{12!}{2! \cdot 10!} = 66\)</span> (ways to choose 2 emeralds)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\binom{20}{5} = \frac{20!}{5! \cdot 15!} = 15,504\)</span> (total ways to choose 5 gems)</p>
+</li>
+</ul>
+<p><strong>Final probability</strong>:</p>
+<div class="arithmatex">\[P(X = 3) = \frac{56 \cdot 66}{15,504} = \frac{3,696}{15,504} \approx 0.238\]</div>
+<p>So there's about a <strong>23.8% chance</strong> of drawing exactly 3 diamonds!</p>
+<p><strong>Key insight</strong>: The hypergeometric distribution captures the <strong>dependence between draws</strong> that occurs in finite populations, unlike the binomial distribution which assumes independence.</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Binomial</th>
+<th>Hypergeometric</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Replacement</strong></td>
+<td>With replacement</td>
+<td>Without replacement</td>
+</tr>
+<tr>
+<td><strong>Probability</strong></td>
+<td>Constant <span class="arithmatex">\(p\)</span></td>
+<td>Changes with each draw</td>
+</tr>
+<tr>
+<td><strong>Independence</strong></td>
+<td>Independent trials</td>
+<td>Dependent trials</td>
+</tr>
+<tr>
+<td><strong>Population</strong></td>
+<td>Infinite/very large</td>
+<td>Finite</td>
+</tr>
+<tr>
+<td><strong>Formula</strong></td>
+<td><span class="arithmatex">\(\binom{n}{k} p^k(1-p)^{n-k}\)</span></td>
+<td><span class="arithmatex">\(\frac{\binom{K}{k} \binom{N-K}{n-k}}{\binom{N}{n}}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Let's verify that the hypergeometric PMF <span class="arithmatex">\(P(X = k) = \frac{\binom{K}{k} \cdot \binom{N-K}{n-k}}{\binom{N}{n}}\)</span> satisfies all the required properties of a valid PMF.</p>
+<p>Property 1: Non-negativity</p>
+<p>We need to show that <span class="arithmatex">\(P(X = k) \geq 0\)</span> for all valid values of <span class="arithmatex">\(k\)</span>.</p>
+<p><strong>Proof</strong>: </p>
+<ul>
+<li>
+<p><span class="arithmatex">\(\binom{K}{k} \geq 0\)</span> (combinatorial coefficient is always non-negative)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\binom{N-K}{n-k} \geq 0\)</span> (combinatorial coefficient is always non-negative)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\binom{N}{n} &gt; 0\)</span> (denominator is positive since <span class="arithmatex">\(n \leq N\)</span>)</p>
+</li>
+</ul>
+<p>Since all factors are non-negative and the denominator is positive, the ratio <span class="arithmatex">\(P(X = k) \geq 0\)</span> ✓</p>
+<p><strong>Note</strong>: <span class="arithmatex">\(k\)</span> must satisfy <span class="arithmatex">\(0 \leq k \leq \min(K, n)\)</span> and <span class="arithmatex">\(n-k \leq N-K\)</span> (i.e., <span class="arithmatex">\(k \geq \max(0, n-(N-K))\)</span>).</p>
+<p>Property 2: Sum to 1</p>
+<p>We need to show that <span class="arithmatex">\(\sum_{k} P(X = k) = 1\)</span> over all valid values of <span class="arithmatex">\(k\)</span>.</p>
+<p><strong>Proof</strong>: </p>
+<div class="arithmatex">\[\sum_{k} P(X = k) = \sum_{k} \frac{\binom{K}{k} \cdot \binom{N-K}{n-k}}{\binom{N}{n}}\]</div>
+<p>The valid range for <span class="arithmatex">\(k\)</span> is <span class="arithmatex">\(\max(0, n-(N-K)) \leq k \leq \min(K, n)\)</span>. Let's call this range <span class="arithmatex">\(k_{\min}\)</span> to <span class="arithmatex">\(k_{\max}\)</span>.</p>
+<div class="arithmatex">\[\sum_{k=k_{\min}}^{k_{\max}} P(X = k) = \frac{1}{\binom{N}{n}} \sum_{k=k_{\min}}^{k_{\max}} \binom{K}{k} \cdot \binom{N-K}{n-k}\]</div>
+<p><strong>Key insight</strong>: This sum equals <span class="arithmatex">\(\binom{N}{n}\)</span> by the <strong>Vandermonde identity</strong>!</p>
+<p>The Vandermonde identity states:</p>
+<div class="arithmatex">\[\sum_{k=0}^{\min(K,n)} \binom{K}{k} \binom{N-K}{n-k} = \binom{N}{n}\]</div>
+<p>Therefore, <span class="arithmatex">\(\sum_{k=k_{\min}}^{k_{\max}} P(X = k) = \frac{1}{\binom{N}{n}} \cdot \binom{N}{n} = 1\)</span> ✓</p>
+<p>Property 3: Probability Interpretation</p>
+<p>We need to show that <span class="arithmatex">\(0 \leq P(X = k) \leq 1\)</span> for each valid <span class="arithmatex">\(k\)</span>.</p>
+<p><strong>Proof</strong>: </p>
+<ul>
+<li>
+<p>We already showed <span class="arithmatex">\(P(X = k) \geq 0\)</span> (Property 1)</p>
+</li>
+<li>
+<p>Since <span class="arithmatex">\(\sum_{k} P(X = k) = 1\)</span> (Property 2) and all terms are non-negative, no individual term can exceed 1</p>
+</li>
+<li>
+<p>Therefore, <span class="arithmatex">\(0 \leq P(X = k) \leq 1\)</span> for each valid <span class="arithmatex">\(k\)</span> ✓</p>
+</li>
+</ul>
+<p>Let's verify these properties for our treasure hunt example:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(N = 20\)</span> (total gems)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(K = 8\)</span> (diamonds)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(n = 5\)</span> (sample size)</p>
+</li>
+</ul>
+<p><strong>Valid range for <span class="arithmatex">\(k\)</span></strong>: <span class="arithmatex">\(\max(0, 5-(20-8)) = \max(0, -7) = 0\)</span> to <span class="arithmatex">\(\min(8, 5) = 5\)</span></p>
+<p>So <span class="arithmatex">\(k\)</span> can be 0, 1, 2, 3, 4, or 5.</p>
+<p><strong>PMF values</strong>:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(P(X = 0) = \frac{\binom{8}{0} \cdot \binom{12}{5}}{\binom{20}{5}} = \frac{1 \cdot 792}{15,504} \approx 0.051\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(P(X = 1) = \frac{\binom{8}{1} \cdot \binom{12}{4}}{\binom{20}{5}} = \frac{8 \cdot 495}{15,504} \approx 0.255\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(P(X = 2) = \frac{\binom{8}{2} \cdot \binom{12}{3}}{\binom{20}{5}} = \frac{28 \cdot 220}{15,504} \approx 0.397\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(P(X = 3) = \frac{\binom{8}{3} \cdot \binom{12}{2}}{\binom{20}{5}} = \frac{56 \cdot 66}{15,504} \approx 0.238\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(P(X = 4) = \frac{\binom{8}{4} \cdot \binom{12}{1}}{\binom{20}{5}} = \frac{70 \cdot 12}{15,504} \approx 0.054\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(P(X = 5) = \frac{\binom{8}{5} \cdot \binom{12}{0}}{\binom{20}{5}} = \frac{56 \cdot 1}{15,504} \approx 0.004\)</span></p>
+</li>
+<li>
+<p><strong>Non-negativity</strong>: All values are positive ✓</p>
+</li>
+<li>
+<p><strong>Sum to 1</strong>: <span class="arithmatex">\(0.051 + 0.255 + 0.397 + 0.238 + 0.054 + 0.004 = 0.999 \approx 1\)</span> (small rounding error) ✓</p>
+</li>
+<li>
+<p><strong>Probability bounds</strong>: All values are between 0 and 1 ✓</p>
 </li>
 </ul>
 

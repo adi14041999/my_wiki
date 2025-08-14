@@ -64,7 +64,7 @@ Key Properties of CDF:
 
 ## Distribution of a Random Variable
 
-The **distribution** of a random variable $X$ describes how the probability mass (or density) is distributed across all possible values that $X$ can take. It tells us the complete probabilistic behavior of $X$. It can be represented in various ways, including a PMF, a cumulative distribution function (CDF), or other methods.
+The **distribution** of a random variable $X$ describes how the probability mass (or density) is distributed across all possible values that $X$ can take. **It tells us the complete probabilistic behavior of $X$.** It can be represented in various ways, including a PMF, a cumulative distribution function (CDF), or other methods.
 
 The distribution answers the question: "What is the probability that $X$ takes on a particular value or falls within a particular range?"
 
@@ -231,3 +231,193 @@ We need to show that $0 \leq p_X(k) \leq 1$ for each $k$.
 - Since $\sum_{k=0}^n p_X(k) = 1$ (Property 2) and all terms are non-negative, no individual term can exceed 1
 
 - Therefore, $0 \leq p_X(k) \leq 1$ for each $k$ ✓
+
+One of the most important properties of the binomial distribution is the **addition property**, which states that the sum of two independent binomial random variables is also binomial under certain conditions.
+
+**Theorem**: If $X \sim \text{Binomial}(n_1, p)$ and $Y \sim \text{Binomial}(n_2, p)$ are **independent** random variables with the **same success probability** $p$, then:
+
+$$X + Y \sim \text{Binomial}(n_1 + n_2, p)$$
+
+This property makes intuitive sense:
+
+- **$X$**: Random variable outputting number of successes in $n_1$ trials with success probability $p$
+
+- **$Y$**: Random variable outputting number of successes in $n_2$ trials with success probability $p$
+
+- **$X + Y$**: Random variable outputting number total number of successes in $n_1 + n_2$ trials with success probability $p$
+
+## Hypergeometric Distribution
+
+The **hypergeometric distribution** models situations where we sample **without replacement** from a finite population, making it fundamentally different from the binomial distribution.
+
+Imagine you're on a treasure hunt with a group of friends. You've discovered an ancient chest containing **20 precious gems**:
+
+- **8 diamonds** (the rare, valuable ones)
+
+- **12 emeralds** (still beautiful, but less valuable)
+
+The chest is sealed with a magical lock that only opens if you can correctly identify the composition of gems inside. Here's the catch: you can only **draw 5 gems** to examine them, and once you draw a gem, you **cannot put it back** (no replacement).
+
+**Your mission**: What's the probability that exactly **3 of your 5 draws are diamonds**?
+
+Understanding the Problem:
+
+**Population**: 20 total gems
+
+- **Success items**: 8 diamonds (what we're interested in)
+
+- **Failure items**: 12 emeralds
+
+- **Sample size**: 5 gems drawn
+
+- **Target**: Exactly 3 diamonds
+
+**Key difference from binomial**: In the binomial case, you'd put each gem back after examining it, so the probability of drawing a diamond would stay constant at $\frac{8}{20} = 0.4$. But here, each draw affects the remaining population!
+
+For a hypergeometric random variable $X$ with parameters:
+
+- $N$ = total population size
+
+- $K$ = number of success items in population
+
+- $n$ = sample size
+
+The PMF is:
+
+$$P(X = k) = \frac{\binom{K}{k} \cdot \binom{N-K}{n-k}}{\binom{N}{n}}$$
+
+Where $k$ is the number of success items in your sample.
+
+**Numerator**: $\binom{K}{k} \cdot \binom{N-K}{n-k}$
+
+- $\binom{K}{k}$: Ways to choose $k$ diamonds from $K$ diamonds
+
+- $\binom{N-K}{n-k}$: Ways to choose $(n-k)$ emeralds from $(N-K)$ emeralds
+
+- **Product**: Total ways to get exactly $k$ diamonds and $(n-k)$ emeralds
+
+**Denominator**: $\binom{N}{n}$
+
+- Total ways to choose any $n$ gems from $N$ gems
+
+**Result**: Probability of getting exactly $k$ diamonds
+
+**Solution**:
+
+- $N = 20$ (total gems)
+
+- $K = 8$ (diamonds)
+
+- $n = 5$ (sample size)
+
+- $k = 3$ (target diamonds)
+
+**Calculation**:
+
+$$P(X = 3) = \frac{\binom{8}{3} \cdot \binom{12}{2}}{\binom{20}{5}}$$
+
+**Computing the combinations**:
+
+- $\binom{8}{3} = \frac{8!}{3! \cdot 5!} = 56$ (ways to choose 3 diamonds)
+
+- $\binom{12}{2} = \frac{12!}{2! \cdot 10!} = 66$ (ways to choose 2 emeralds)
+
+- $\binom{20}{5} = \frac{20!}{5! \cdot 15!} = 15,504$ (total ways to choose 5 gems)
+
+**Final probability**:
+
+$$P(X = 3) = \frac{56 \cdot 66}{15,504} = \frac{3,696}{15,504} \approx 0.238$$
+
+So there's about a **23.8% chance** of drawing exactly 3 diamonds!
+
+**Key insight**: The hypergeometric distribution captures the **dependence between draws** that occurs in finite populations, unlike the binomial distribution which assumes independence.
+
+| Aspect | Binomial | Hypergeometric |
+|--------|----------|----------------|
+| **Replacement** | With replacement | Without replacement |
+| **Probability** | Constant $p$ | Changes with each draw |
+| **Independence** | Independent trials | Dependent trials |
+| **Population** | Infinite/very large | Finite |
+| **Formula** | $\binom{n}{k} p^k(1-p)^{n-k}$ | $\frac{\binom{K}{k} \binom{N-K}{n-k}}{\binom{N}{n}}$ |
+
+Let's verify that the hypergeometric PMF $P(X = k) = \frac{\binom{K}{k} \cdot \binom{N-K}{n-k}}{\binom{N}{n}}$ satisfies all the required properties of a valid PMF.
+
+Property 1: Non-negativity
+
+We need to show that $P(X = k) \geq 0$ for all valid values of $k$.
+
+**Proof**: 
+
+- $\binom{K}{k} \geq 0$ (combinatorial coefficient is always non-negative)
+
+- $\binom{N-K}{n-k} \geq 0$ (combinatorial coefficient is always non-negative)
+
+- $\binom{N}{n} > 0$ (denominator is positive since $n \leq N$)
+
+Since all factors are non-negative and the denominator is positive, the ratio $P(X = k) \geq 0$ ✓
+
+**Note**: $k$ must satisfy $0 \leq k \leq \min(K, n)$ and $n-k \leq N-K$ (i.e., $k \geq \max(0, n-(N-K))$).
+
+Property 2: Sum to 1
+
+We need to show that $\sum_{k} P(X = k) = 1$ over all valid values of $k$.
+
+**Proof**: 
+
+$$\sum_{k} P(X = k) = \sum_{k} \frac{\binom{K}{k} \cdot \binom{N-K}{n-k}}{\binom{N}{n}}$$
+
+The valid range for $k$ is $\max(0, n-(N-K)) \leq k \leq \min(K, n)$. Let's call this range $k_{\min}$ to $k_{\max}$.
+
+$$\sum_{k=k_{\min}}^{k_{\max}} P(X = k) = \frac{1}{\binom{N}{n}} \sum_{k=k_{\min}}^{k_{\max}} \binom{K}{k} \cdot \binom{N-K}{n-k}$$
+
+**Key insight**: This sum equals $\binom{N}{n}$ by the **Vandermonde identity**!
+
+The Vandermonde identity states:
+
+$$\sum_{k=0}^{\min(K,n)} \binom{K}{k} \binom{N-K}{n-k} = \binom{N}{n}$$
+
+Therefore, $\sum_{k=k_{\min}}^{k_{\max}} P(X = k) = \frac{1}{\binom{N}{n}} \cdot \binom{N}{n} = 1$ ✓
+
+Property 3: Probability Interpretation
+
+We need to show that $0 \leq P(X = k) \leq 1$ for each valid $k$.
+
+**Proof**: 
+
+- We already showed $P(X = k) \geq 0$ (Property 1)
+
+- Since $\sum_{k} P(X = k) = 1$ (Property 2) and all terms are non-negative, no individual term can exceed 1
+
+- Therefore, $0 \leq P(X = k) \leq 1$ for each valid $k$ ✓
+
+Let's verify these properties for our treasure hunt example:
+
+- $N = 20$ (total gems)
+
+- $K = 8$ (diamonds)
+
+- $n = 5$ (sample size)
+
+**Valid range for $k$**: $\max(0, 5-(20-8)) = \max(0, -7) = 0$ to $\min(8, 5) = 5$
+
+So $k$ can be 0, 1, 2, 3, 4, or 5.
+
+**PMF values**:
+
+- $P(X = 0) = \frac{\binom{8}{0} \cdot \binom{12}{5}}{\binom{20}{5}} = \frac{1 \cdot 792}{15,504} \approx 0.051$
+
+- $P(X = 1) = \frac{\binom{8}{1} \cdot \binom{12}{4}}{\binom{20}{5}} = \frac{8 \cdot 495}{15,504} \approx 0.255$
+
+- $P(X = 2) = \frac{\binom{8}{2} \cdot \binom{12}{3}}{\binom{20}{5}} = \frac{28 \cdot 220}{15,504} \approx 0.397$
+
+- $P(X = 3) = \frac{\binom{8}{3} \cdot \binom{12}{2}}{\binom{20}{5}} = \frac{56 \cdot 66}{15,504} \approx 0.238$
+
+- $P(X = 4) = \frac{\binom{8}{4} \cdot \binom{12}{1}}{\binom{20}{5}} = \frac{70 \cdot 12}{15,504} \approx 0.054$
+
+- $P(X = 5) = \frac{\binom{8}{5} \cdot \binom{12}{0}}{\binom{20}{5}} = \frac{56 \cdot 1}{15,504} \approx 0.004$
+
+- **Non-negativity**: All values are positive ✓
+
+- **Sum to 1**: $0.051 + 0.255 + 0.397 + 0.238 + 0.054 + 0.004 = 0.999 \approx 1$ (small rounding error) ✓
+
+- **Probability bounds**: All values are between 0 and 1 ✓
