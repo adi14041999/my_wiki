@@ -1258,6 +1258,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#proof-of-linearity-of-expectation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Proof of Linearity of Expectation
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1685,7 +1694,31 @@
 <p><strong>Key difference</strong>: <span class="arithmatex">\(\frac{K}{N}\)</span> vs. <span class="arithmatex">\(p\)</span> - the proportion of successes in the population</p>
 </li>
 </ul>
-<p>The hypergeometric expectation shows that even without replacement, the expected proportion of successes in our sample equals the proportion in the population, which is intuitively satisfying.</p>
+<h2 id="proof-of-linearity-of-expectation">Proof of Linearity of Expectation</h2>
+<p>Let's prove that expectation is a linear operator: <span class="arithmatex">\(E[aX + bY] = aE[X] + bE[Y]\)</span> for any random variables <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> and constants <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span>.</p>
+<p><strong>Step 1: Start with the definition</strong></p>
+<p><strong>Important</strong>: This step introduces a new concept - the <strong>joint expectation</strong> of random variables, which we haven't discussed yet in this document.</p>
+<p>The expectation of a function of two random variables is defined as:</p>
+<div class="arithmatex">\[E[g(X,Y)] = \sum_{x,y} g(x,y) \cdot P(X = x, Y = y)\]</div>
+<p>This is called the <strong>joint expectation</strong> because it involves the joint probability distribution <span class="arithmatex">\(P(X = x, Y = y)\)</span> of both random variables together.</p>
+<p>In our case, <span class="arithmatex">\(g(X,Y) = aX + bY\)</span>, so:</p>
+<div class="arithmatex">\[E[aX + bY] = \sum_{x,y} (ax + by) \cdot P(X = x, Y = y)\]</div>
+<p><strong>Step 2: Distribute the sum</strong></p>
+<div class="arithmatex">\[E[aX + bY] = \sum_{x,y} ax \cdot P(X = x, Y = y) + \sum_{x,y} by \cdot P(X = x, Y = y)\]</div>
+<p><strong>Step 3: Factor out constants</strong></p>
+<div class="arithmatex">\[E[aX + bY] = a \sum_{x,y} x \cdot P(X = x, Y = y) + b \sum_{x,y} y \cdot P(X = x, Y = y)\]</div>
+<p><strong>Step 4: Use the law of total probability</strong></p>
+<p>For any event <span class="arithmatex">\(A\)</span>, the law of total probability states:</p>
+<div class="arithmatex">\[P(A) = \sum_B P(A \cap B) = \sum_B P(A, B)\]</div>
+<p>In our derivation, we're using this to "marginalize out" one variable:</p>
+<p>For the first sum:</p>
+<div class="arithmatex">\[\sum_{x,y} x \cdot P(X = x, Y = y) = \sum_x x \sum_y P(X = x, Y = y) = \sum_x x \cdot P(X = x) = E[X]\]</div>
+<p>Here, we're summing over all possible <span class="arithmatex">\(y\)</span> values for each fixed <span class="arithmatex">\(x\)</span>, which gives us <span class="arithmatex">\(P(X = x)\)</span> by the law of total probability.</p>
+<p>For the second sum:</p>
+<div class="arithmatex">\[\sum_{x,y} y \cdot P(X = x, Y = y) = \sum_y y \sum_x P(X = x, Y = y) = \sum_y y \cdot P(Y = y) = E[Y]\]</div>
+<p>Here, we're summing over all possible <span class="arithmatex">\(x\)</span> values for each fixed <span class="arithmatex">\(y\)</span>, which gives us <span class="arithmatex">\(P(Y = y)\)</span> by the law of total probability.</p>
+<p><strong>Step 5: Final result</strong></p>
+<div class="arithmatex">\[E[aX + bY] = aE[X] + bE[Y]\]</div>
 
 
 

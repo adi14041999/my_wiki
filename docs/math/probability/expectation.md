@@ -240,4 +240,52 @@ This result connects beautifully to the binomial expectation:
 
 - **Key difference**: $\frac{K}{N}$ vs. $p$ - the proportion of successes in the population
 
-The hypergeometric expectation shows that even without replacement, the expected proportion of successes in our sample equals the proportion in the population, which is intuitively satisfying.
+## Proof of Linearity of Expectation
+
+Let's prove that expectation is a linear operator: $E[aX + bY] = aE[X] + bE[Y]$ for any random variables $X$ and $Y$ and constants $a$ and $b$.
+
+**Step 1: Start with the definition**
+
+**Important**: This step introduces a new concept - the **joint expectation** of random variables, which we haven't discussed yet in this document.
+
+The expectation of a function of two random variables is defined as:
+
+$$E[g(X,Y)] = \sum_{x,y} g(x,y) \cdot P(X = x, Y = y)$$
+
+This is called the **joint expectation** because it involves the joint probability distribution $P(X = x, Y = y)$ of both random variables together.
+
+In our case, $g(X,Y) = aX + bY$, so:
+
+$$E[aX + bY] = \sum_{x,y} (ax + by) \cdot P(X = x, Y = y)$$
+
+**Step 2: Distribute the sum**
+
+$$E[aX + bY] = \sum_{x,y} ax \cdot P(X = x, Y = y) + \sum_{x,y} by \cdot P(X = x, Y = y)$$
+
+**Step 3: Factor out constants**
+
+$$E[aX + bY] = a \sum_{x,y} x \cdot P(X = x, Y = y) + b \sum_{x,y} y \cdot P(X = x, Y = y)$$
+
+**Step 4: Use the law of total probability**
+
+For any event $A$, the law of total probability states:
+
+$$P(A) = \sum_B P(A \cap B) = \sum_B P(A, B)$$
+
+In our derivation, we're using this to "marginalize out" one variable:
+
+For the first sum:
+
+$$\sum_{x,y} x \cdot P(X = x, Y = y) = \sum_x x \sum_y P(X = x, Y = y) = \sum_x x \cdot P(X = x) = E[X]$$
+
+Here, we're summing over all possible $y$ values for each fixed $x$, which gives us $P(X = x)$ by the law of total probability.
+
+For the second sum:
+
+$$\sum_{x,y} y \cdot P(X = x, Y = y) = \sum_y y \sum_x P(X = x, Y = y) = \sum_y y \cdot P(Y = y) = E[Y]$$
+
+Here, we're summing over all possible $x$ values for each fixed $y$, which gives us $P(Y = y)$ by the law of total probability.
+
+**Step 5: Final result**
+
+$$E[aX + bY] = aE[X] + bE[Y]$$
