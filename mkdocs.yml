@@ -33,6 +33,7 @@ nav:
       - Conditional Probability: math/probability/conditional_probability.md
       - Some famous problems: math/probability/some_famous_problems.md
       - Random Variables: math/probability/random_variables.md
+      - Expectation: math/probability/expectation.md
   - Productivity:
     - How to Build Your Career in AI:
       - Three Steps to Career Growth: productivity/how_to_build_your_career_in_ai/three_steps_to_career_growth.md

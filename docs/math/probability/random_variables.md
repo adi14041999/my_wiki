@@ -421,3 +421,13 @@ So $k$ can be 0, 1, 2, 3, 4, or 5.
 - **Sum to 1**: $0.051 + 0.255 + 0.397 + 0.238 + 0.054 + 0.004 = 0.999 \approx 1$ (small rounding error) ✓
 
 - **Probability bounds**: All values are between 0 and 1 ✓
+
+## Independence of Random Variables
+
+**Independence** is one of the most important concepts in probability theory, as it allows us to simplify complex calculations and understand the structure of random phenomena.
+
+Two **discrete** random variables $X$ and $Y$ are **independent** if and only if their joint probability mass function (PMF) factors into the product of their individual PMFs:
+
+$$P(X = x, Y = y) = P(X = x) \cdot P(Y = y) \quad \text{for all } x, y$$
+
+Knowing the value of one random variable gives you **no information** about the value of the other.
