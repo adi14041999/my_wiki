@@ -53,3 +53,137 @@ $$\text{probability density} = \frac{\text{probability mass}}{\text{interval len
 This explains why $f_X(x)$ can be greater than 1 - it's not a probability, but a density!
 
 **Key insight**: While $P(X = x) = 0$, the density $f_X(x)$ tells us how likely $X$ is to fall near $x$ relative to other points.
+
+## Cumulative Distribution Function (CDF)
+
+The **Cumulative Distribution Function** (CDF) of a continuous random variable $X$ is defined as:
+
+$$F_X(x) = P(X \leq x) = \int_{-\infty}^x f_X(t) dt$$
+
+**What it represents**: $F_X(x)$ gives the probability that $X$ takes a value less than or equal to $x$. Here, $f_X(t)$ is the probability density function (PDF) of $X$.
+
+**Properties**
+
+1. **Non-decreasing**: $F_X(x_1) \leq F_X(x_2)$ whenever $x_1 \leq x_2$
+
+2. **Limits**: $\lim_{x \to -\infty} F_X(x) = 0$ and $\lim_{x \to \infty} F_X(x) = 1$
+
+3. **Right-continuous**: $F_X(x) = \lim_{h \to 0^+} F_X(x + h)$
+
+4. **Probability interpretation**: $P(a < X \leq b) = F_X(b) - F_X(a)$
+
+Since the CDF is the integral of the PDF, we can recover the PDF by differentiating the CDF:
+
+$$f_X(x) = \frac{d}{dx} F_X(x) = F_X'(x)$$
+
+**Example**: If $F_X(x) = 1 - e^{-x}$ for $x \geq 0$ (and $F_X(x) = 0$ for $x < 0$), then:
+
+$$f_X(x) = \frac{d}{dx} F_X(x) = \frac{d}{dx}(1 - e^{-x}) = e^{-x}$$
+
+This gives us the PDF: $f_X(x) = e^{-x}$ for $x \geq 0$ (and $f_X(x) = 0$ for $x < 0$).
+
+**Key insight**: The PDF tells us where the CDF is changing rapidly (high density) versus slowly (low density).
+
+**Why CDFs are useful**
+
+1. **Probability calculations**: Easy to find $P(X \leq x)$ or $P(a < X \leq b)$
+
+2. **Distribution comparison**: Can compare distributions by plotting CDFs
+
+3. **Quantiles**: The $p$-th quantile $x_p$ satisfies $F_X(x_p) = p$
+
+## Expectation of a Continuous Random Variable
+
+The **expectation** (or **expected value**) of a continuous random variable $X$ is defined as:
+
+$$E[X] = \int_{-\infty}^{\infty} x \cdot f_X(x) dx$$
+
+**What it represents**: $E[X]$ is the "center of mass" or "average value" of the distribution, representing the long-run average if we were to sample from this distribution many times. Here, $f_X(x)$ is the probability density function (PDF) of $X$.
+
+Think of the PDF as a "weight distribution" along the real line:
+
+- **$f_X(x)$**: How much "weight" (probability density) is at point $x$
+
+- **$x \cdot f_X(x)$**: The "weighted position" at point $x$
+
+- **$\int_{-\infty}^{\infty} x \cdot f_X(x) dx$**: The total "center of mass" of all the weight
+
+## Variance
+
+The **variance** of a random variable measures how spread out the distribution is around its mean. It's defined as the expected squared deviation from the mean.
+
+**For any random variable $X$ (discrete or continuous)**:
+
+$$\text{Var}(X) = E[(X - E[X])^2]$$
+
+**Why not other measures of deviation?**
+
+**Problem 1: $E[X - E[X]]$**
+
+This would always equal 0 because:
+
+$$E[X - E[X]] = E[X] - E[E[X]] = E[X] - E[X] = 0$$
+
+The average deviation from the mean is always 0, so this tells us nothing about spread.
+
+**Problem 2: $E[|X - E[X]|]$ (Mean Absolute Deviation)**
+
+While this measures spread, it has mathematical disadvantages:
+
+- **Non-differentiable**: The absolute value function isn't smooth, making calculus difficult
+
+- **Harder to work with**: Properties like additivity are more complex
+
+**Why $E[(X - E[X])^2]$ is perfect:**
+
+1. **Always positive**: $(X - E[X])^2 \geq 0$ for all $X$, so variance is always non-negative
+
+2. **Mathematically tractable**: Squaring gives smooth, differentiable functions
+
+3. **Additivity**: Variance of sum of independent variables equals sum of variances
+
+4. **Theoretical elegance**: Leads to beautiful results in probability theory
+
+5. **Statistical properties**: Optimal for many statistical procedures
+
+**Alternative formula** (often easier to compute):
+
+$$\text{Var}(X) = E[X^2] - (E[X])^2$$
+
+**Discrete Case**
+
+For a discrete random variable $X$ with PMF $p_X(x)$:
+
+$$\text{Var}(X) = \sum_x (x - E[X])^2 \cdot p_X(x) = \sum_x x^2 \cdot p_X(x) - (E[X])^2$$
+
+**Example**: For a Bernoulli random variable $X \sim \text{Bernoulli}(p)$:
+
+- $E[X] = p$
+
+- $E[X^2] = 0^2 \cdot (1-p) + 1^2 \cdot p = p$
+
+- $\text{Var}(X) = E[X^2] - (E[X])^2 = p - p^2 = p(1-p)$
+
+**Continuous Case**
+
+For a continuous random variable $X$ with PDF $f_X(x)$:
+
+$$\text{Var}(X) = \int_{-\infty}^{\infty} (x - E[X])^2 \cdot f_X(x) dx = \int_{-\infty}^{\infty} x^2 \cdot f_X(x) dx - (E[X])^2$$
+
+**Example**: For an exponential random variable $X \sim \text{Exponential}(\lambda)$:
+
+- $E[X] = \frac{1}{\lambda}$
+
+- $E[X^2] = \int_0^{\infty} x^2 \cdot \lambda e^{-\lambda x} dx = \frac{2}{\lambda^2}$ (using integration by parts)
+
+- $\text{Var}(X) = E[X^2] - (E[X])^2 = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}$
+
+## Standard Deviation
+
+The **standard deviation** of a random variable $X$ is the square root of its variance:
+
+$$\sigma_X = \sqrt{\text{Var}(X)} = \sqrt{E[(X - E[X])^2]}$$
+
+**What it represents**: Standard deviation measures spread in the same units as the original random variable, making it more interpretable than variance.
+
+Variance has units that are the square of the original units. For example, if $X$ measures height in meters, $\text{Var}(X)$ is in square meters. If $X$ measures time in seconds, $\text{Var}(X)$ is in square seconds. Standard deviation has the same units as $X$.

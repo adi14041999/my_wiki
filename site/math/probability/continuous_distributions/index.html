@@ -1291,6 +1291,42 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#cumulative-distribution-function-cdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cumulative Distribution Function (CDF)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#expectation-of-a-continuous-random-variable" class="md-nav__link">
+    <span class="md-ellipsis">
+      Expectation of a Continuous Random Variable
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#variance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Variance
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#standard-deviation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standard Deviation
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1566,6 +1602,133 @@
 <div class="arithmatex">\[\text{probability density} = \frac{\text{probability mass}}{\text{interval length}}\]</div>
 <p>This explains why <span class="arithmatex">\(f_X(x)\)</span> can be greater than 1 - it's not a probability, but a density!</p>
 <p><strong>Key insight</strong>: While <span class="arithmatex">\(P(X = x) = 0\)</span>, the density <span class="arithmatex">\(f_X(x)\)</span> tells us how likely <span class="arithmatex">\(X\)</span> is to fall near <span class="arithmatex">\(x\)</span> relative to other points.</p>
+<h2 id="cumulative-distribution-function-cdf">Cumulative Distribution Function (CDF)</h2>
+<p>The <strong>Cumulative Distribution Function</strong> (CDF) of a continuous random variable <span class="arithmatex">\(X\)</span> is defined as:</p>
+<div class="arithmatex">\[F_X(x) = P(X \leq x) = \int_{-\infty}^x f_X(t) dt\]</div>
+<p><strong>What it represents</strong>: <span class="arithmatex">\(F_X(x)\)</span> gives the probability that <span class="arithmatex">\(X\)</span> takes a value less than or equal to <span class="arithmatex">\(x\)</span>. Here, <span class="arithmatex">\(f_X(t)\)</span> is the probability density function (PDF) of <span class="arithmatex">\(X\)</span>.</p>
+<p><strong>Properties</strong></p>
+<ol>
+<li>
+<p><strong>Non-decreasing</strong>: <span class="arithmatex">\(F_X(x_1) \leq F_X(x_2)\)</span> whenever <span class="arithmatex">\(x_1 \leq x_2\)</span></p>
+</li>
+<li>
+<p><strong>Limits</strong>: <span class="arithmatex">\(\lim_{x \to -\infty} F_X(x) = 0\)</span> and <span class="arithmatex">\(\lim_{x \to \infty} F_X(x) = 1\)</span></p>
+</li>
+<li>
+<p><strong>Right-continuous</strong>: <span class="arithmatex">\(F_X(x) = \lim_{h \to 0^+} F_X(x + h)\)</span></p>
+</li>
+<li>
+<p><strong>Probability interpretation</strong>: <span class="arithmatex">\(P(a &lt; X \leq b) = F_X(b) - F_X(a)\)</span></p>
+</li>
+</ol>
+<p>Since the CDF is the integral of the PDF, we can recover the PDF by differentiating the CDF:</p>
+<div class="arithmatex">\[f_X(x) = \frac{d}{dx} F_X(x) = F_X'(x)\]</div>
+<p><strong>Example</strong>: If <span class="arithmatex">\(F_X(x) = 1 - e^{-x}\)</span> for <span class="arithmatex">\(x \geq 0\)</span> (and <span class="arithmatex">\(F_X(x) = 0\)</span> for <span class="arithmatex">\(x &lt; 0\)</span>), then:</p>
+<div class="arithmatex">\[f_X(x) = \frac{d}{dx} F_X(x) = \frac{d}{dx}(1 - e^{-x}) = e^{-x}\]</div>
+<p>This gives us the PDF: <span class="arithmatex">\(f_X(x) = e^{-x}\)</span> for <span class="arithmatex">\(x \geq 0\)</span> (and <span class="arithmatex">\(f_X(x) = 0\)</span> for <span class="arithmatex">\(x &lt; 0\)</span>).</p>
+<p><strong>Key insight</strong>: The PDF tells us where the CDF is changing rapidly (high density) versus slowly (low density).</p>
+<p><strong>Why CDFs are useful</strong></p>
+<ol>
+<li>
+<p><strong>Probability calculations</strong>: Easy to find <span class="arithmatex">\(P(X \leq x)\)</span> or <span class="arithmatex">\(P(a &lt; X \leq b)\)</span></p>
+</li>
+<li>
+<p><strong>Distribution comparison</strong>: Can compare distributions by plotting CDFs</p>
+</li>
+<li>
+<p><strong>Quantiles</strong>: The <span class="arithmatex">\(p\)</span>-th quantile <span class="arithmatex">\(x_p\)</span> satisfies <span class="arithmatex">\(F_X(x_p) = p\)</span></p>
+</li>
+</ol>
+<h2 id="expectation-of-a-continuous-random-variable">Expectation of a Continuous Random Variable</h2>
+<p>The <strong>expectation</strong> (or <strong>expected value</strong>) of a continuous random variable <span class="arithmatex">\(X\)</span> is defined as:</p>
+<div class="arithmatex">\[E[X] = \int_{-\infty}^{\infty} x \cdot f_X(x) dx\]</div>
+<p><strong>What it represents</strong>: <span class="arithmatex">\(E[X]\)</span> is the "center of mass" or "average value" of the distribution, representing the long-run average if we were to sample from this distribution many times. Here, <span class="arithmatex">\(f_X(x)\)</span> is the probability density function (PDF) of <span class="arithmatex">\(X\)</span>.</p>
+<p>Think of the PDF as a "weight distribution" along the real line:</p>
+<ul>
+<li>
+<p><strong><span class="arithmatex">\(f_X(x)\)</span></strong>: How much "weight" (probability density) is at point <span class="arithmatex">\(x\)</span></p>
+</li>
+<li>
+<p><strong><span class="arithmatex">\(x \cdot f_X(x)\)</span></strong>: The "weighted position" at point <span class="arithmatex">\(x\)</span></p>
+</li>
+<li>
+<p><strong><span class="arithmatex">\(\int_{-\infty}^{\infty} x \cdot f_X(x) dx\)</span></strong>: The total "center of mass" of all the weight</p>
+</li>
+</ul>
+<h2 id="variance">Variance</h2>
+<p>The <strong>variance</strong> of a random variable measures how spread out the distribution is around its mean. It's defined as the expected squared deviation from the mean.</p>
+<p><strong>For any random variable <span class="arithmatex">\(X\)</span> (discrete or continuous)</strong>:</p>
+<div class="arithmatex">\[\text{Var}(X) = E[(X - E[X])^2]\]</div>
+<p><strong>Why not other measures of deviation?</strong></p>
+<p><strong>Problem 1: <span class="arithmatex">\(E[X - E[X]]\)</span></strong></p>
+<p>This would always equal 0 because:</p>
+<div class="arithmatex">\[E[X - E[X]] = E[X] - E[E[X]] = E[X] - E[X] = 0\]</div>
+<p>The average deviation from the mean is always 0, so this tells us nothing about spread.</p>
+<p><strong>Problem 2: <span class="arithmatex">\(E[|X - E[X]|]\)</span> (Mean Absolute Deviation)</strong></p>
+<p>While this measures spread, it has mathematical disadvantages:</p>
+<ul>
+<li>
+<p><strong>Non-differentiable</strong>: The absolute value function isn't smooth, making calculus difficult</p>
+</li>
+<li>
+<p><strong>Harder to work with</strong>: Properties like additivity are more complex</p>
+</li>
+</ul>
+<p><strong>Why <span class="arithmatex">\(E[(X - E[X])^2]\)</span> is perfect:</strong></p>
+<ol>
+<li>
+<p><strong>Always positive</strong>: <span class="arithmatex">\((X - E[X])^2 \geq 0\)</span> for all <span class="arithmatex">\(X\)</span>, so variance is always non-negative</p>
+</li>
+<li>
+<p><strong>Mathematically tractable</strong>: Squaring gives smooth, differentiable functions</p>
+</li>
+<li>
+<p><strong>Additivity</strong>: Variance of sum of independent variables equals sum of variances</p>
+</li>
+<li>
+<p><strong>Theoretical elegance</strong>: Leads to beautiful results in probability theory</p>
+</li>
+<li>
+<p><strong>Statistical properties</strong>: Optimal for many statistical procedures</p>
+</li>
+</ol>
+<p><strong>Alternative formula</strong> (often easier to compute):</p>
+<div class="arithmatex">\[\text{Var}(X) = E[X^2] - (E[X])^2\]</div>
+<p><strong>Discrete Case</strong></p>
+<p>For a discrete random variable <span class="arithmatex">\(X\)</span> with PMF <span class="arithmatex">\(p_X(x)\)</span>:</p>
+<div class="arithmatex">\[\text{Var}(X) = \sum_x (x - E[X])^2 \cdot p_X(x) = \sum_x x^2 \cdot p_X(x) - (E[X])^2\]</div>
+<p><strong>Example</strong>: For a Bernoulli random variable <span class="arithmatex">\(X \sim \text{Bernoulli}(p)\)</span>:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(E[X] = p\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(E[X^2] = 0^2 \cdot (1-p) + 1^2 \cdot p = p\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(\text{Var}(X) = E[X^2] - (E[X])^2 = p - p^2 = p(1-p)\)</span></p>
+</li>
+</ul>
+<p><strong>Continuous Case</strong></p>
+<p>For a continuous random variable <span class="arithmatex">\(X\)</span> with PDF <span class="arithmatex">\(f_X(x)\)</span>:</p>
+<div class="arithmatex">\[\text{Var}(X) = \int_{-\infty}^{\infty} (x - E[X])^2 \cdot f_X(x) dx = \int_{-\infty}^{\infty} x^2 \cdot f_X(x) dx - (E[X])^2\]</div>
+<p><strong>Example</strong>: For an exponential random variable <span class="arithmatex">\(X \sim \text{Exponential}(\lambda)\)</span>:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(E[X] = \frac{1}{\lambda}\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(E[X^2] = \int_0^{\infty} x^2 \cdot \lambda e^{-\lambda x} dx = \frac{2}{\lambda^2}\)</span> (using integration by parts)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\text{Var}(X) = E[X^2] - (E[X])^2 = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}\)</span></p>
+</li>
+</ul>
+<h2 id="standard-deviation">Standard Deviation</h2>
+<p>The <strong>standard deviation</strong> of a random variable <span class="arithmatex">\(X\)</span> is the square root of its variance:</p>
+<div class="arithmatex">\[\sigma_X = \sqrt{\text{Var}(X)} = \sqrt{E[(X - E[X])^2]}\]</div>
+<p><strong>What it represents</strong>: Standard deviation measures spread in the same units as the original random variable, making it more interpretable than variance.</p>
+<p>Variance has units that are the square of the original units. For example, if <span class="arithmatex">\(X\)</span> measures height in meters, <span class="arithmatex">\(\text{Var}(X)\)</span> is in square meters. If <span class="arithmatex">\(X\)</span> measures time in seconds, <span class="arithmatex">\(\text{Var}(X)\)</span> is in square seconds. Standard deviation has the same units as <span class="arithmatex">\(X\)</span>.</p>
 
 
 
