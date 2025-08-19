@@ -1327,6 +1327,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#uniform-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Uniform Distribution
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1729,6 +1738,58 @@
 <div class="arithmatex">\[\sigma_X = \sqrt{\text{Var}(X)} = \sqrt{E[(X - E[X])^2]}\]</div>
 <p><strong>What it represents</strong>: Standard deviation measures spread in the same units as the original random variable, making it more interpretable than variance.</p>
 <p>Variance has units that are the square of the original units. For example, if <span class="arithmatex">\(X\)</span> measures height in meters, <span class="arithmatex">\(\text{Var}(X)\)</span> is in square meters. If <span class="arithmatex">\(X\)</span> measures time in seconds, <span class="arithmatex">\(\text{Var}(X)\)</span> is in square seconds. Standard deviation has the same units as <span class="arithmatex">\(X\)</span>.</p>
+<h2 id="uniform-distribution">Uniform Distribution</h2>
+<p>The <strong>uniform distribution</strong> is the simplest continuous distribution, where every value in an interval has equal probability density.</p>
+<p>A random variable <span class="arithmatex">\(X\)</span> follows a <strong>uniform distribution</strong> on the interval <span class="arithmatex">\([a, b]\)</span> (denoted <span class="arithmatex">\(X \sim \text{Uniform}(a, b)\)</span>) if its PDF is:</p>
+<div class="arithmatex">\[f_X(x) = \begin{cases} 
+\frac{1}{b-a} &amp; \text{if } a \leq x \leq b \\
+0 &amp; \text{otherwise}
+\end{cases}\]</div>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li>
+<p><strong><span class="arithmatex">\(a\)</span></strong>: Lower bound of the interval</p>
+</li>
+<li>
+<p><strong><span class="arithmatex">\(b\)</span></strong>: Upper bound of the interval (<span class="arithmatex">\(b &gt; a\)</span>)</p>
+</li>
+<li>
+<p><strong>Support</strong>: <span class="arithmatex">\(X\)</span> takes values in <span class="arithmatex">\([a, b]\)</span></p>
+</li>
+</ul>
+<p>Every point in <span class="arithmatex">\([a, b]\)</span> has the same probability density. The PDF is a horizontal line (rectangle). If you randomly pick a point from <span class="arithmatex">\([a, b]\)</span>, every point is equally likely</p>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li>
+<p>Random number generation between 0 and 1</p>
+</li>
+<li>
+<p>Random angle selection (0 to 2π)</p>
+</li>
+<li>
+<p>Random time selection within an hour</p>
+</li>
+<li>
+<p>Random position selection along a line segment</p>
+</li>
+</ul>
+<p>The cumulative distribution function is:</p>
+<div class="arithmatex">\[F_X(x) = \begin{cases}
+0 &amp; \text{if } x &lt; a \\
+\frac{x-a}{b-a} &amp; \text{if } a \leq x \leq b \\
+1 &amp; \text{if } x &gt; b
+\end{cases}\]</div>
+<p><span class="arithmatex">\(F_X(x)\)</span> increases linearly from 0 to 1 as <span class="arithmatex">\(x\)</span> goes from <span class="arithmatex">\(a\)</span> to <span class="arithmatex">\(b\)</span>.</p>
+<p><strong>Expectation</strong>:</p>
+<div class="arithmatex">\[E[X] = \int_a^b x \cdot \frac{1}{b-a} dx = \frac{1}{b-a} \int_a^b x dx = \frac{1}{b-a} \cdot \frac{b^2 - a^2}{2} = \frac{a + b}{2}\]</div>
+<p><strong>Variance</strong>:</p>
+<div class="arithmatex">\[\text{Var}(X) = E[X^2] - (E[X])^2\]</div>
+<p>First, calculate <span class="arithmatex">\(E[X^2]\)</span>:</p>
+<div class="arithmatex">\[E[X^2] = \int_a^b x^2 \cdot \frac{1}{b-a} dx = \frac{1}{b-a} \cdot \frac{b^3 - a^3}{3} = \frac{b^3 - a^3}{3(b-a)}\]</div>
+<p>Then:</p>
+<div class="arithmatex">\[\text{Var}(X) = \frac{b^3 - a^3}{3(b-a)} - \left(\frac{a + b}{2}\right)^2 = \frac{(b-a)^2}{12}\]</div>
+<p><strong>Standard deviation</strong>:</p>
+<div class="arithmatex">\[\sigma_X = \frac{b-a}{2\sqrt{3}}\]</div>
 
 
 

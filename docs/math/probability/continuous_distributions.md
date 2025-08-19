@@ -187,3 +187,64 @@ $$\sigma_X = \sqrt{\text{Var}(X)} = \sqrt{E[(X - E[X])^2]}$$
 **What it represents**: Standard deviation measures spread in the same units as the original random variable, making it more interpretable than variance.
 
 Variance has units that are the square of the original units. For example, if $X$ measures height in meters, $\text{Var}(X)$ is in square meters. If $X$ measures time in seconds, $\text{Var}(X)$ is in square seconds. Standard deviation has the same units as $X$.
+
+## Uniform Distribution
+
+The **uniform distribution** is the simplest continuous distribution, where every value in an interval has equal probability density.
+
+A random variable $X$ follows a **uniform distribution** on the interval $[a, b]$ (denoted $X \sim \text{Uniform}(a, b)$) if its PDF is:
+
+$$f_X(x) = \begin{cases} 
+\frac{1}{b-a} & \text{if } a \leq x \leq b \\
+0 & \text{otherwise}
+\end{cases}$$
+
+**Parameters**:
+
+- **$a$**: Lower bound of the interval
+
+- **$b$**: Upper bound of the interval ($b > a$)
+
+- **Support**: $X$ takes values in $[a, b]$
+
+Every point in $[a, b]$ has the same probability density. The PDF is a horizontal line (rectangle). If you randomly pick a point from $[a, b]$, every point is equally likely
+
+**Examples**:
+
+- Random number generation between 0 and 1
+
+- Random angle selection (0 to 2π)
+
+- Random time selection within an hour
+
+- Random position selection along a line segment
+
+The cumulative distribution function is:
+
+$$F_X(x) = \begin{cases}
+0 & \text{if } x < a \\
+\frac{x-a}{b-a} & \text{if } a \leq x \leq b \\
+1 & \text{if } x > b
+\end{cases}$$
+
+$F_X(x)$ increases linearly from 0 to 1 as $x$ goes from $a$ to $b$.
+
+**Expectation**:
+
+$$E[X] = \int_a^b x \cdot \frac{1}{b-a} dx = \frac{1}{b-a} \int_a^b x dx = \frac{1}{b-a} \cdot \frac{b^2 - a^2}{2} = \frac{a + b}{2}$$
+
+**Variance**:
+
+$$\text{Var}(X) = E[X^2] - (E[X])^2$$
+
+First, calculate $E[X^2]$:
+
+$$E[X^2] = \int_a^b x^2 \cdot \frac{1}{b-a} dx = \frac{1}{b-a} \cdot \frac{b^3 - a^3}{3} = \frac{b^3 - a^3}{3(b-a)}$$
+
+Then:
+
+$$\text{Var}(X) = \frac{b^3 - a^3}{3(b-a)} - \left(\frac{a + b}{2}\right)^2 = \frac{(b-a)^2}{12}$$
+
+**Standard deviation**:
+
+$$\sigma_X = \frac{b-a}{2\sqrt{3}}$$
