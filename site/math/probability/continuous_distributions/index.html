@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/math/probability/some_famous_problems/">
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/math/probability/continuous_distributions/">
       
       
-        <link rel="prev" href="../conditional_probability/">
+        <link rel="prev" href="../poisson_distribution/">
       
       
-        <link rel="next" href="../random_variables/">
+        <link rel="next" href="../../../productivity/how_to_build_your_career_in_ai/three_steps_to_career_growth/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Some famous problems - My Wiki</title>
+        <title>Continuous Distributions - My Wiki</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#some-famous-problems" class="md-skip">
+        <a href="#continuous-distributions" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Some famous problems
+              Continuous Distributions
             
           </span>
         </div>
@@ -1115,32 +1115,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Some famous problems
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../some_famous_problems/" class="md-nav__link">
         
   
   
@@ -1151,44 +1129,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#the-monty-hall-problem" class="md-nav__link">
-    <span class="md-ellipsis">
-      The Monty Hall Problem
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#simpsons-paradox" class="md-nav__link">
-    <span class="md-ellipsis">
-      Simpson's Paradox
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1290,10 +1230,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../continuous_distributions/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Continuous Distributions
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1304,6 +1266,35 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#probability-density-function-pdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      Probability Density Function (PDF)
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1533,175 +1524,48 @@
 
 
 
-<h1 id="some-famous-problems">Some famous problems</h1>
-<h2 id="the-monty-hall-problem">The Monty Hall Problem</h2>
-<p>The Monty Hall Problem is a famous probability puzzle named after the host of the television game show "Let's Make a Deal." It demonstrates how our intuition about probability can be misleading and how conditional probability can lead to counterintuitive results.</p>
-<p>You are a contestant on a game show. There are three doors:</p>
+<h1 id="continuous-distributions">Continuous Distributions</h1>
+<p>Continuous distributions are probability distributions for random variables that can take on any value in a continuous range (typically an interval of real numbers). Unlike discrete distributions, continuous random variables have probability density functions (PDFs) rather than probability mass functions (PMFs).</p>
+<p>For a continuous random variable <span class="arithmatex">\(X\)</span>, the probability of <span class="arithmatex">\(X\)</span> taking any specific value is exactly 0:</p>
+<div class="arithmatex">\[P(X = x) = 0 \quad \text{for any specific value } x\]</div>
+<p>Since <span class="arithmatex">\(X\)</span> can take uncountably many values in a continuous range, the probability of any single value must be 0. Otherwise, the total probability would exceed 1.</p>
+<p><strong>Consequence</strong>: We cannot use probability mass functions (PMFs) like we do for discrete random variables, because <span class="arithmatex">\(P(X = x)\)</span> is always 0. Instead, we need probability density functions (PDFs) to describe the distribution.</p>
+<h2 id="probability-density-function-pdf">Probability Density Function (PDF)</h2>
+<p><strong>Definition</strong>: A function <span class="arithmatex">\(f_X(x)\)</span> such that <span class="arithmatex">\(P(a \leq X \leq b) = \int_a^b f_X(x) dx\)</span> for all <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span>.</p>
+<p>When <span class="arithmatex">\(a = b\)</span>, the interval <span class="arithmatex">\([a, b]\)</span> becomes a single point, and we have:</p>
+<div class="arithmatex">\[P(a \leq X \leq a) = P(X = a) = \int_a^a f_X(x) dx = 0\]</div>
+<p>This confirms our earlier statement that <span class="arithmatex">\(P(X = x) = 0\)</span> for any specific value <span class="arithmatex">\(x\)</span> in a continuous distribution. The integral over a single point (which has zero length) is always 0.</p>
+<p><strong>Properties</strong>: </p>
 <ul>
 <li>
-<p><strong>Door 1</strong>: Behind one door is a car (the prize you want)</p>
+<p><span class="arithmatex">\(f_X(x) \geq 0\)</span> for all <span class="arithmatex">\(x\)</span></p>
 </li>
 <li>
-<p><strong>Door 2</strong>: Behind another door is a goat</p>
-</li>
-<li>
-<p><strong>Door 3</strong>: Behind the third door is another goat</p>
+<p><span class="arithmatex">\(\int_{-\infty}^{\infty} f_X(x) dx = 1\)</span></p>
 </li>
 </ul>
-<p>You pick a door (say Door 1). The host, who knows what's behind each door, opens another door (say Door 3) to reveal a goat. The host then asks: "Do you want to switch to the remaining unopened door (Door 2)?"</p>
-<p><strong>Question</strong>: Should you switch doors to maximize your probability of winning the car?</p>
-<p>Many people think that after one door is revealed, there are only two doors left, so the probability of winning the car is <span class="arithmatex">\(\frac{1}{2}\)</span> regardless of whether you switch or stay. This reasoning is <strong>incorrect</strong>.</p>
-<p>Correct Solution: always switch!</p>
-<p>The optimal strategy is to <strong>always switch</strong>. When you switch, your probability of winning the car is <span class="arithmatex">\(\frac{2}{3}\)</span>, while if you stay with your original choice, your probability is only <span class="arithmatex">\(\frac{1}{3}\)</span>.</p>
-<p><img alt="Monty Hall Problem tree diagram" src="../mh.jpg" /></p>
-<p>The above tree diagram shows all the paths the game is played with the probabilities. The two diagrams below show the probabilities for winning and losing if we <strong>always switch</strong>.</p>
-<p><img alt="Monty Hall Problem tree diagram losing" src="../mh_l.png" /></p>
-<p><img alt="Monty Hall Problem tree diagram wining" src="../mh_w.png" /></p>
-<p>Let's look at some logical reasoning to gain intuition. If we picked a goat first (diagram below), and decided to always switch, we are guaranteed to win! So the probability of winning is the probability of picking a goat first. Picking a goat first has the probability <span class="arithmatex">\(\frac{2}{3}\)</span>. And if we pick a car first, and decided to always switch, we are guaranteed to lose! So the probability of losing is the probability of picking a car first. Picking a car first has the probability <span class="arithmatex">\(\frac{1}{3}\)</span>.</p>
-<p><img alt="Monty Hall Problem tree diagram losing or wining" src="../mh_lw.png" /></p>
-<p>Let's use the <strong>Law of Total Probability</strong> to formally calculate the probability of success when our strategy is to always switch. Let's assume we initially pick door 1. The soultion is symmetric if we pick any other door initially.</p>
+<p><strong>What does <span class="arithmatex">\(f_X(x)\)</span> actually mean?</strong></p>
+<p>The PDF <span class="arithmatex">\(f_X(x)\)</span> represents the <strong>probability density</strong> at point <span class="arithmatex">\(x\)</span>. To understand this, consider a small interval around <span class="arithmatex">\(x\)</span>:</p>
+<div class="arithmatex">\[P(x - \frac{\epsilon}{2} \leq X \leq x + \frac{\epsilon}{2}) = \int_{x - \frac{\epsilon}{2}}^{x + \frac{\epsilon}{2}} f_X(t) dt\]</div>
+<p>For very small <span class="arithmatex">\(\epsilon\)</span>, this integral is approximately:</p>
+<div class="arithmatex">\[P(x - \frac{\epsilon}{2} \leq X \leq x + \frac{\epsilon}{2}) \approx f_X(x) \cdot \epsilon\]</div>
+<div class="arithmatex">\[f_X(x) \approx \frac{P(x - \frac{\epsilon}{2} \leq X \leq x + \frac{\epsilon}{2})}{\epsilon}\]</div>
+<p><strong>Interpretation</strong>: <span class="arithmatex">\(f_X(x)\)</span> tells us how much probability "mass" is concentrated around the point <span class="arithmatex">\(x\)</span>. The probability of falling in a small interval around <span class="arithmatex">\(x\)</span> is approximately <span class="arithmatex">\(f_X(x)\)</span> times the length of that interval. Think of probability density like physical density:</p>
 <ul>
 <li>
-<p>Let <span class="arithmatex">\(S\)</span> be the event "We win by switching"</p>
+<p><strong>Probability mass</strong> = <span class="arithmatex">\(P(x - \frac{\epsilon}{2} \leq X \leq x + \frac{\epsilon}{2})\)</span> (the "amount" of probability)</p>
 </li>
 <li>
-<p>Let <span class="arithmatex">\(D_j\)</span> be the event "The car is behind door <span class="arithmatex">\(j\)</span>" for <span class="arithmatex">\(j = 1, 2, 3\)</span></p>
+<p><strong>Volume</strong> = <span class="arithmatex">\(\epsilon\)</span> (the "size" of the interval)</p>
+</li>
+<li>
+<p><strong>Density</strong> = <span class="arithmatex">\(f_X(x)\)</span> (how "concentrated" the probability is)</p>
 </li>
 </ul>
-<p>The law of total probability states that:</p>
-<div class="arithmatex">\[P(S) = P(S|D_1)P(D_1) + P(S|D_2)P(D_2) + P(S|D_3)P(D_3)\]</div>
-<p><strong>1. <span class="arithmatex">\(P(S|D_1)\)</span> - Probability of winning by switching given car is behind Door 1</strong></p>
-<ul>
-<li>
-<p>If the car is behind Door 1, we initially picked the correct door</p>
-</li>
-<li>
-<p>When we switch, we must switch to a door with a goat</p>
-</li>
-<li>
-<p>Therefore, <span class="arithmatex">\(P(S|D_1) = 0\)</span></p>
-</li>
-</ul>
-<p><strong>2. <span class="arithmatex">\(P(S|D_2)\)</span> - Probability of winning by switching given car is behind Door 2</strong></p>
-<ul>
-<li>
-<p>If the car is behind Door 2, we initially picked Door 1 (incorrect)</p>
-</li>
-<li>
-<p>Monty opens Door 3 (revealing a goat)</p>
-</li>
-<li>
-<p>When we switch, we switch to Door 2 (which has the car)</p>
-</li>
-<li>
-<p>Therefore, <span class="arithmatex">\(P(S|D_2) = 1\)</span></p>
-</li>
-</ul>
-<p><strong>3. <span class="arithmatex">\(P(S|D_3)\)</span> - Probability of winning by switching given car is behind Door 3</strong></p>
-<ul>
-<li>
-<p>If the car is behind Door 3, we initially picked Door 1 (incorrect)</p>
-</li>
-<li>
-<p>Monty opens Door 2 (revealing a goat)</p>
-</li>
-<li>
-<p>When we switch, we switch to Door 3 (which has the car)</p>
-</li>
-<li>
-<p>Therefore, <span class="arithmatex">\(P(S|D_3) = 1\)</span></p>
-</li>
-</ul>
-<p><strong>4. Prior Probabilities</strong></p>
-<ul>
-<li>
-<p><span class="arithmatex">\(P(D_1) = \frac{1}{3}\)</span> (car equally likely to be behind any door initially)</p>
-</li>
-<li>
-<p><span class="arithmatex">\(P(D_2) = \frac{1}{3}\)</span></p>
-</li>
-<li>
-<p><span class="arithmatex">\(P(D_3) = \frac{1}{3}\)</span></p>
-</li>
-</ul>
-<p>Substituting into the law of total probability:</p>
-<div class="arithmatex">\[P(S) = P(S|D_1)P(D_1) + P(S|D_2)P(D_2) + P(S|D_3)P(D_3)\]</div>
-<div class="arithmatex">\[P(S) = 0 \cdot \frac{1}{3} + 1 \cdot \frac{1}{3} + 1 \cdot \frac{1}{3}\]</div>
-<div class="arithmatex">\[P(S) = 0 + \frac{1}{3} + \frac{1}{3} = \frac{2}{3}\]</div>
-<p>The law of total probability provides a rigorous mathematical foundation for why the switching strategy is optimal.</p>
-<p>To build stronger intuition for why switching is optimal, consider this thought experiment:</p>
-<p><strong>Scenario</strong>: There are <strong>1,000,000 doors</strong>. Behind one door is a car, and behind the other 999,999 doors are goats.</p>
-<ol>
-<li><strong>You pick one door</strong> (say Door 1)</li>
-<li><strong>The host opens 999,998 doors</strong>, revealing goats behind each one</li>
-<li><strong>Two doors remain</strong>: Your original choice (Door 1) and one other door (say Door 535,780)</li>
-<li><strong>The host asks</strong>: "Do you want to switch to the remaining unopened door?"</li>
-</ol>
-<p><strong>Intuition</strong>: In this case, it seems very intuitive to always switch because the probability that your initial pick is the car is literally <strong>1 in a million</strong>!</p>
-<p>The same logic applies to the original 3-door problem, just on a smaller scale. The million doors experiment helps us see that the 3-door problem is not a special case - it's a general principle that applies regardless of the number of doors.</p>
-<h2 id="simpsons-paradox">Simpson's Paradox</h2>
-<p>Simpson's Paradox is a statistical phenomenon where a trend appears in different groups of data but disappears or reverses when these groups are combined. This paradox demonstrates how aggregating data can sometimes hide important underlying relationships and why it's crucial to examine data at multiple levels.</p>
-<p>Simpson's Paradox occurs when <strong>Group A</strong> shows a trend in one direction, <strong>Group B</strong> shows the same trend in the same direction but the <strong>combined data</strong> shows the trend in the opposite direction.</p>
-<p>This happens because of <strong>confounding variables</strong> that affect the relationship between the variables of interest.</p>
-<p><strong>Example:</strong></p>
-<table>
-<thead>
-<tr>
-<th>Gender</th>
-<th>Department A</th>
-<th>Department B</th>
-<th>Overall</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td>Admit Rate</td>
-<td>Admit Rate</td>
-<td>Admit Rate</td>
-</tr>
-<tr>
-<td>Men</td>
-<td>300/400 (75%)</td>
-<td>50/100 (50%)</td>
-<td>350/500 (70%)</td>
-</tr>
-<tr>
-<td>Women</td>
-<td>100/100 (100%)</td>
-<td>25/100 (25%)</td>
-<td>125/200 (62.5%)</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Analysis by Department:</strong>
-<strong>Department A</strong>: Women (100%) &gt; Men (75%)
-<strong>Department B</strong>: Women (25%) &lt; Men (50%)</p>
-<p><strong>Overall Analysis:</strong>
-<strong>Combined</strong>: Men (70%) &gt; Women (62.5%)</p>
-<p><strong>This is Simpson's Paradox!</strong> Women have higher admission rates in both departments individually, but men have a higher overall admission rate.</p>
-<p>Let's denote:</p>
-<ul>
-<li>
-<p><span class="arithmatex">\(p_{ij}\)</span> = admission rate for gender <span class="arithmatex">\(i\)</span> in department <span class="arithmatex">\(j\)</span></p>
-</li>
-<li>
-<p><span class="arithmatex">\(n_{ij}\)</span> = number of applicants for gender <span class="arithmatex">\(i\)</span> in department <span class="arithmatex">\(j\)</span></p>
-</li>
-</ul>
-<p><strong>Overall admission rate for gender <span class="arithmatex">\(i\)</span>:</strong></p>
-<div class="arithmatex">\[P_i = \frac{\sum_j n_{ij} p_{ij}}{\sum_j n_{ij}}\]</div>
-<p>The paradox occurs when:</p>
-<ul>
-<li>
-<p><span class="arithmatex">\(p_{1A} &gt; p_{2A}\)</span> and <span class="arithmatex">\(p_{1B} &gt; p_{2B}\)</span> (women win in each department)</p>
-</li>
-<li>
-<p>But <span class="arithmatex">\(P_1 &lt; P_2\)</span> (men win overall)</p>
-</li>
-</ul>
-<p>This happens because the <span class="arithmatex">\(n_{ij}\)</span> values (group sizes) create different weights in the overall calculation.</p>
-<p>Simpson's Paradox teaches us that <strong>aggregated data can be misleading</strong>. The relationship between variables can change dramatically when we combine different groups, especially when those groups have different sizes or characteristics. This is why it's essential to examine data both individually and collectively to understand the true underlying relationships.</p>
+<p>Just as <span class="arithmatex">\(\text{density} = \frac{\text{mass}}{\text{volume}}\)</span> in physics, we have:</p>
+<div class="arithmatex">\[\text{probability density} = \frac{\text{probability mass}}{\text{interval length}}\]</div>
+<p>This explains why <span class="arithmatex">\(f_X(x)\)</span> can be greater than 1 - it's not a probability, but a density!</p>
+<p><strong>Key insight</strong>: While <span class="arithmatex">\(P(X = x) = 0\)</span>, the density <span class="arithmatex">\(f_X(x)\)</span> tells us how likely <span class="arithmatex">\(X\)</span> is to fall near <span class="arithmatex">\(x\)</span> relative to other points.</p>
 
 
 
