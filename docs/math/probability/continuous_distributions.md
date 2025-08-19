@@ -248,3 +248,53 @@ $$\text{Var}(X) = \frac{b^3 - a^3}{3(b-a)} - \left(\frac{a + b}{2}\right)^2 = \f
 **Standard deviation**:
 
 $$\sigma_X = \frac{b-a}{2\sqrt{3}}$$
+
+## Universality of the Uniform Distribution
+
+Given a $\text{Uniform}(0, 1)$ random variable, we can construct a random variable with any continuous distribution we want.
+
+We call this the **universality of the Uniform**, because it tells us the Uniform is a universal starting point for building random variables with other distributions.
+
+**Theorem (Universality of the Uniform)**. Let $F$ be a CDF which is a continuous function and strictly increasing on the support of the distribution. This ensures that the inverse function $F^{-1}$ exists, as a function from $(0, 1)$ to $\mathbb{R}$. We then have the following results:
+
+1. **Let $U \sim \text{Unif}(0, 1)$ and $X = F^{-1}(U)$. Then $X$ is a random variable with CDF $F$.**
+
+2. **Let $X$ be a random variable with CDF $F$. Then $F(X) \sim \text{Unif}(0, 1)$.**
+
+**Part 1** is the inverse CDF method we discussed earlier - it shows how to generate any distribution from uniform.
+
+**Part 2** is the **probability integral transform** - it shows that applying any CDF to its own random variable gives a uniform distribution.
+
+Let's make sure we understand what each part of the theorem is saying. The first part says that if we start with $U \sim \text{Unif}(0, 1)$ and a CDF $F$, then we can create a random variable whose CDF is $F$ by plugging $U$ into the inverse CDF $F^{-1}$. Since $F^{-1}$ is a function (known as the **quantile function**), $U$ is a random variable, and a function of a random variable is a random variable, $F^{-1}(U)$ is a random variable; universality of the Uniform says its CDF is $F$.
+
+The second part of the theorem goes in the reverse direction, starting from a random variable $X$ whose CDF is $F$ and then creating a $\text{Unif}(0, 1)$ random variable. Again, $F$ is a function, $X$ is a random variable, and a function of a random variable is a random variable, so $F(X)$ is a random variable. Since any CDF is between 0 and 1 everywhere, $F(X)$ must take values between 0 and 1. Universality of the Uniform says that the distribution of $F(X)$ is Uniform on $(0, 1)$.
+
+The second part of universality of the Uniform involves plugging a random variable $X$ into its own CDF $F$. This may seem strangely self-referential, but it makes sense because $F$ is just a function (that satisfies the properties of a valid CDF), and a function of a random variable is a random variable. There is a potential notational confusion, however: $F(x) = P(X \leq x)$ by definition, but it would be incorrect to say "$F(X) = P(X \leq X) = 1$". Rather, we should first find an expression for the CDF as a function of $x$, then replace $x$ with $X$ to obtain a random variable. For example, if the CDF of $X$ is $F(x) = 1 - e^{-x}$ for $x > 0$, then $F(X) = 1 - e^{-X}$.
+
+**Proof**.
+
+**Let $U \sim \text{Unif}(0, 1)$ and $X = F^{-1}(U)$**. For all real $x$,
+
+$$P(X \leq x) = P(F^{-1}(U) \leq x) = P(U \leq F(x)) = F(x);$$
+
+**Why does $P(F^{-1}(U) \leq x) = P(U \leq F(x))$ hold?**
+
+This is a key step that uses the properties of inverse functions. Since $F$ is strictly increasing, we have:
+
+$$F^{-1}(U) \leq x \quad \text{if and only if} \quad U \leq F(x)$$
+
+If the inverse function $F^{-1}$ applied to $U$ gives a value $\leq x$, then $U$ must be $\leq F(x)$. This is because $F^{-1}$ "undoes" what $F$ does, so the inequality reverses when we apply $F$ to both sides.
+
+This shows the two events are equivalent, so their probabilities are equal.
+
+**For the last equality, we used the fact that $P(U \leq u) = u$ for $u \in (0, 1)$.**
+
+This is the fundamental property of the uniform distribution on $(0, 1)$. Since $U \sim \text{Unif}(0, 1)$, the probability that $U$ falls in any interval $[0, u]$ is exactly the length of that interval, which is $u$.
+
+**In our proof**: We had $P(U \leq F(x))$, and since $F(x)$ is a value between 0 and 1 (because $F$ is a CDF), this equals exactly $F(x)$ by the uniform distribution property.
+
+**Let $X$ have CDF $F$, and find the CDF of $Y = F(X)$**. Since $Y$ takes values in $(0, 1)$, $P(Y \leq y)$ equals 0 for $y \leq 0$ and equals 1 for $y \geq 1$. For $y \in (0, 1)$,
+
+$$P(Y \leq y) = P(F(X) \leq y) = P(X \leq F^{-1}(y)) = F(F^{-1}(y)) = y.$$
+
+Thus $Y$ has the $\text{Unif}(0, 1)$ CDF.

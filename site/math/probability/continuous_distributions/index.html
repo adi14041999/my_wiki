@@ -1336,6 +1336,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#universality-of-the-uniform-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Universality of the Uniform Distribution
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1790,6 +1799,37 @@
 <div class="arithmatex">\[\text{Var}(X) = \frac{b^3 - a^3}{3(b-a)} - \left(\frac{a + b}{2}\right)^2 = \frac{(b-a)^2}{12}\]</div>
 <p><strong>Standard deviation</strong>:</p>
 <div class="arithmatex">\[\sigma_X = \frac{b-a}{2\sqrt{3}}\]</div>
+<h2 id="universality-of-the-uniform-distribution">Universality of the Uniform Distribution</h2>
+<p>Given a <span class="arithmatex">\(\text{Uniform}(0, 1)\)</span> random variable, we can construct a random variable with any continuous distribution we want.</p>
+<p>We call this the <strong>universality of the Uniform</strong>, because it tells us the Uniform is a universal starting point for building random variables with other distributions.</p>
+<p><strong>Theorem (Universality of the Uniform)</strong>. Let <span class="arithmatex">\(F\)</span> be a CDF which is a continuous function and strictly increasing on the support of the distribution. This ensures that the inverse function <span class="arithmatex">\(F^{-1}\)</span> exists, as a function from <span class="arithmatex">\((0, 1)\)</span> to <span class="arithmatex">\(\mathbb{R}\)</span>. We then have the following results:</p>
+<ol>
+<li>
+<p><strong>Let <span class="arithmatex">\(U \sim \text{Unif}(0, 1)\)</span> and <span class="arithmatex">\(X = F^{-1}(U)\)</span>. Then <span class="arithmatex">\(X\)</span> is a random variable with CDF <span class="arithmatex">\(F\)</span>.</strong></p>
+</li>
+<li>
+<p><strong>Let <span class="arithmatex">\(X\)</span> be a random variable with CDF <span class="arithmatex">\(F\)</span>. Then <span class="arithmatex">\(F(X) \sim \text{Unif}(0, 1)\)</span>.</strong></p>
+</li>
+</ol>
+<p><strong>Part 1</strong> is the inverse CDF method we discussed earlier - it shows how to generate any distribution from uniform.</p>
+<p><strong>Part 2</strong> is the <strong>probability integral transform</strong> - it shows that applying any CDF to its own random variable gives a uniform distribution.</p>
+<p>Let's make sure we understand what each part of the theorem is saying. The first part says that if we start with <span class="arithmatex">\(U \sim \text{Unif}(0, 1)\)</span> and a CDF <span class="arithmatex">\(F\)</span>, then we can create a random variable whose CDF is <span class="arithmatex">\(F\)</span> by plugging <span class="arithmatex">\(U\)</span> into the inverse CDF <span class="arithmatex">\(F^{-1}\)</span>. Since <span class="arithmatex">\(F^{-1}\)</span> is a function (known as the <strong>quantile function</strong>), <span class="arithmatex">\(U\)</span> is a random variable, and a function of a random variable is a random variable, <span class="arithmatex">\(F^{-1}(U)\)</span> is a random variable; universality of the Uniform says its CDF is <span class="arithmatex">\(F\)</span>.</p>
+<p>The second part of the theorem goes in the reverse direction, starting from a random variable <span class="arithmatex">\(X\)</span> whose CDF is <span class="arithmatex">\(F\)</span> and then creating a <span class="arithmatex">\(\text{Unif}(0, 1)\)</span> random variable. Again, <span class="arithmatex">\(F\)</span> is a function, <span class="arithmatex">\(X\)</span> is a random variable, and a function of a random variable is a random variable, so <span class="arithmatex">\(F(X)\)</span> is a random variable. Since any CDF is between 0 and 1 everywhere, <span class="arithmatex">\(F(X)\)</span> must take values between 0 and 1. Universality of the Uniform says that the distribution of <span class="arithmatex">\(F(X)\)</span> is Uniform on <span class="arithmatex">\((0, 1)\)</span>.</p>
+<p>The second part of universality of the Uniform involves plugging a random variable <span class="arithmatex">\(X\)</span> into its own CDF <span class="arithmatex">\(F\)</span>. This may seem strangely self-referential, but it makes sense because <span class="arithmatex">\(F\)</span> is just a function (that satisfies the properties of a valid CDF), and a function of a random variable is a random variable. There is a potential notational confusion, however: <span class="arithmatex">\(F(x) = P(X \leq x)\)</span> by definition, but it would be incorrect to say "<span class="arithmatex">\(F(X) = P(X \leq X) = 1\)</span>". Rather, we should first find an expression for the CDF as a function of <span class="arithmatex">\(x\)</span>, then replace <span class="arithmatex">\(x\)</span> with <span class="arithmatex">\(X\)</span> to obtain a random variable. For example, if the CDF of <span class="arithmatex">\(X\)</span> is <span class="arithmatex">\(F(x) = 1 - e^{-x}\)</span> for <span class="arithmatex">\(x &gt; 0\)</span>, then <span class="arithmatex">\(F(X) = 1 - e^{-X}\)</span>.</p>
+<p><strong>Proof</strong>.</p>
+<p><strong>Let <span class="arithmatex">\(U \sim \text{Unif}(0, 1)\)</span> and <span class="arithmatex">\(X = F^{-1}(U)\)</span></strong>. For all real <span class="arithmatex">\(x\)</span>,</p>
+<div class="arithmatex">\[P(X \leq x) = P(F^{-1}(U) \leq x) = P(U \leq F(x)) = F(x);\]</div>
+<p><strong>Why does <span class="arithmatex">\(P(F^{-1}(U) \leq x) = P(U \leq F(x))\)</span> hold?</strong></p>
+<p>This is a key step that uses the properties of inverse functions. Since <span class="arithmatex">\(F\)</span> is strictly increasing, we have:</p>
+<div class="arithmatex">\[F^{-1}(U) \leq x \quad \text{if and only if} \quad U \leq F(x)\]</div>
+<p>If the inverse function <span class="arithmatex">\(F^{-1}\)</span> applied to <span class="arithmatex">\(U\)</span> gives a value <span class="arithmatex">\(\leq x\)</span>, then <span class="arithmatex">\(U\)</span> must be <span class="arithmatex">\(\leq F(x)\)</span>. This is because <span class="arithmatex">\(F^{-1}\)</span> "undoes" what <span class="arithmatex">\(F\)</span> does, so the inequality reverses when we apply <span class="arithmatex">\(F\)</span> to both sides.</p>
+<p>This shows the two events are equivalent, so their probabilities are equal.</p>
+<p><strong>For the last equality, we used the fact that <span class="arithmatex">\(P(U \leq u) = u\)</span> for <span class="arithmatex">\(u \in (0, 1)\)</span>.</strong></p>
+<p>This is the fundamental property of the uniform distribution on <span class="arithmatex">\((0, 1)\)</span>. Since <span class="arithmatex">\(U \sim \text{Unif}(0, 1)\)</span>, the probability that <span class="arithmatex">\(U\)</span> falls in any interval <span class="arithmatex">\([0, u]\)</span> is exactly the length of that interval, which is <span class="arithmatex">\(u\)</span>.</p>
+<p><strong>In our proof</strong>: We had <span class="arithmatex">\(P(U \leq F(x))\)</span>, and since <span class="arithmatex">\(F(x)\)</span> is a value between 0 and 1 (because <span class="arithmatex">\(F\)</span> is a CDF), this equals exactly <span class="arithmatex">\(F(x)\)</span> by the uniform distribution property.</p>
+<p><strong>Let <span class="arithmatex">\(X\)</span> have CDF <span class="arithmatex">\(F\)</span>, and find the CDF of <span class="arithmatex">\(Y = F(X)\)</span></strong>. Since <span class="arithmatex">\(Y\)</span> takes values in <span class="arithmatex">\((0, 1)\)</span>, <span class="arithmatex">\(P(Y \leq y)\)</span> equals 0 for <span class="arithmatex">\(y \leq 0\)</span> and equals 1 for <span class="arithmatex">\(y \geq 1\)</span>. For <span class="arithmatex">\(y \in (0, 1)\)</span>,</p>
+<div class="arithmatex">\[P(Y \leq y) = P(F(X) \leq y) = P(X \leq F^{-1}(y)) = F(F^{-1}(y)) = y.\]</div>
+<p>Thus <span class="arithmatex">\(Y\)</span> has the <span class="arithmatex">\(\text{Unif}(0, 1)\)</span> CDF.</p>
 
 
 
