@@ -1337,6 +1337,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#general-normal-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      General Normal Distribution
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1638,6 +1647,37 @@
 <p>The standard Normal CDF <span class="arithmatex">\(\Phi\)</span> is the accumulated area under the PDF:</p>
 <div class="arithmatex">\[\Phi(z) = \int_{-\infty}^z f_Z(t) \, dt = \int_{-\infty}^z \frac{1}{\sqrt{2\pi}} e^{-t^2/2} \, dt\]</div>
 <p>Some people, upon seeing the function <span class="arithmatex">\(\Phi\)</span> for the first time, express dismay that it is left in terms of an integral. Unfortunately, we have little choice in the matter: it turns out to be mathematically impossible to find a closed-form expression for the antiderivative of <span class="arithmatex">\(f_Z\)</span>, meaning that we cannot express <span class="arithmatex">\(\Phi\)</span> as a finite sum of more familiar functions like polynomials or exponentials. But closed-form or no, it's still a well-defined function: if we give <span class="arithmatex">\(\Phi\)</span> an input <span class="arithmatex">\(z\)</span>, it returns the accumulated area under the PDF from <span class="arithmatex">\(-\infty\)</span> up to <span class="arithmatex">\(z\)</span>.</p>
+<h2 id="general-normal-distribution">General Normal Distribution</h2>
+<p>The <strong>general Normal distribution</strong> with mean <span class="arithmatex">\(\mu\)</span> and standard deviation <span class="arithmatex">\(\sigma\)</span> (or variance <span class="arithmatex">\(\sigma^2\)</span>) is obtained by applying a linear transformation to the standard normal distribution. If <span class="arithmatex">\(Z \sim N(0, 1)\)</span> is a standard normal random variable, then:</p>
+<div class="arithmatex">\[X = \mu + \sigma Z\]</div>
+<p>has a normal distribution with mean <span class="arithmatex">\(\mu\)</span> and standard deviation <span class="arithmatex">\(\sigma\)</span>. We write this as <span class="arithmatex">\(X \sim N(\mu, \sigma^2)\)</span>.</p>
+<p><strong>Mean and Variance</strong>: </p>
+<ul>
+<li>
+<p><span class="arithmatex">\(E[X] = E[\mu + \sigma Z] = \mu + \sigma E[Z] = \mu + \sigma \cdot 0 = \mu\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(\text{Var}(X) = \text{Var}(\mu + \sigma Z) = \sigma^2 \text{Var}(Z) = \sigma^2 \cdot 1 = \sigma^2\)</span></p>
+</li>
+</ul>
+<p><strong>CDF</strong>: The CDF of <span class="arithmatex">\(X \sim N(\mu, \sigma^2)\)</span> is:</p>
+<div class="arithmatex">\[F_X(x) = \Phi\left(\frac{x - \mu}{\sigma}\right)\]</div>
+<p>where <span class="arithmatex">\(\Phi\)</span> is the standard normal CDF.</p>
+<p><strong>Derivation of the CDF</strong>: Since <span class="arithmatex">\(X = \mu + \sigma Z\)</span>, we can find the CDF by:</p>
+<div class="arithmatex">\[F_X(x) = P(X \leq x) = P(\mu + \sigma Z \leq x) = P\left(Z \leq \frac{x - \mu}{\sigma}\right) = \Phi\left(\frac{x - \mu}{\sigma}\right)\]</div>
+<p><strong>PDF</strong>: The PDF of <span class="arithmatex">\(X \sim N(\mu, \sigma^2)\)</span> is:</p>
+<div class="arithmatex">\[f_X(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}, \quad -\infty &lt; x &lt; \infty\]</div>
+<p><strong>Derivation of the PDF from the CDF</strong>: We can derive the PDF by taking the derivative of the CDF with respect to <span class="arithmatex">\(x\)</span>:</p>
+<div class="arithmatex">\[f_X(x) = \frac{d}{dx} F_X(x) = \frac{d}{dx} \Phi\left(\frac{x - \mu}{\sigma}\right)\]</div>
+<p>Using the chain rule and the fact that <span class="arithmatex">\(\frac{d}{dz} \Phi(z) = \phi(z)\)</span> (where <span class="arithmatex">\(\phi(z)\)</span> is the standard normal PDF):</p>
+<div class="arithmatex">\[f_X(x) = \phi\left(\frac{x - \mu}{\sigma}\right) \cdot \frac{d}{dx}\left(\frac{x - \mu}{\sigma}\right)\]</div>
+<p>Since <span class="arithmatex">\(\frac{d}{dx}\left(\frac{x - \mu}{\sigma}\right) = \frac{1}{\sigma}\)</span>, we have:</p>
+<div class="arithmatex">\[f_X(x) = \phi\left(\frac{x - \mu}{\sigma}\right) \cdot \frac{1}{\sigma}\]</div>
+<p>Substituting the standard normal PDF <span class="arithmatex">\(\phi(z) = \frac{1}{\sqrt{2\pi}} e^{-z^2/2}\)</span>:</p>
+<div class="arithmatex">\[f_X(x) = \frac{1}{\sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}} \cdot \frac{1}{\sigma} = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}\]</div>
+<p><strong>Standardization</strong>: Any normal random variable <span class="arithmatex">\(X \sim N(\mu, \sigma^2)\)</span> can be standardized to a standard normal by:</p>
+<div class="arithmatex">\[Z = \frac{X - \mu}{\sigma} \sim N(0, 1)\]</div>
+<p>This is the inverse of the transformation <span class="arithmatex">\(X = \mu + \sigma Z\)</span>.</p>
 
 
 

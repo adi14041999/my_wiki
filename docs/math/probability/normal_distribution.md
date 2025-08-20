@@ -93,3 +93,53 @@ The standard Normal CDF $\Phi$ is the accumulated area under the PDF:
 $$\Phi(z) = \int_{-\infty}^z f_Z(t) \, dt = \int_{-\infty}^z \frac{1}{\sqrt{2\pi}} e^{-t^2/2} \, dt$$
 
 Some people, upon seeing the function $\Phi$ for the first time, express dismay that it is left in terms of an integral. Unfortunately, we have little choice in the matter: it turns out to be mathematically impossible to find a closed-form expression for the antiderivative of $f_Z$, meaning that we cannot express $\Phi$ as a finite sum of more familiar functions like polynomials or exponentials. But closed-form or no, it's still a well-defined function: if we give $\Phi$ an input $z$, it returns the accumulated area under the PDF from $-\infty$ up to $z$.
+
+## General Normal Distribution
+
+The **general Normal distribution** with mean $\mu$ and standard deviation $\sigma$ (or variance $\sigma^2$) is obtained by applying a linear transformation to the standard normal distribution. If $Z \sim N(0, 1)$ is a standard normal random variable, then:
+
+$$X = \mu + \sigma Z$$
+
+has a normal distribution with mean $\mu$ and standard deviation $\sigma$. We write this as $X \sim N(\mu, \sigma^2)$.
+
+**Mean and Variance**: 
+
+- $E[X] = E[\mu + \sigma Z] = \mu + \sigma E[Z] = \mu + \sigma \cdot 0 = \mu$
+
+- $\text{Var}(X) = \text{Var}(\mu + \sigma Z) = \sigma^2 \text{Var}(Z) = \sigma^2 \cdot 1 = \sigma^2$
+
+**CDF**: The CDF of $X \sim N(\mu, \sigma^2)$ is:
+
+$$F_X(x) = \Phi\left(\frac{x - \mu}{\sigma}\right)$$
+
+where $\Phi$ is the standard normal CDF.
+
+**Derivation of the CDF**: Since $X = \mu + \sigma Z$, we can find the CDF by:
+
+$$F_X(x) = P(X \leq x) = P(\mu + \sigma Z \leq x) = P\left(Z \leq \frac{x - \mu}{\sigma}\right) = \Phi\left(\frac{x - \mu}{\sigma}\right)$$
+
+**PDF**: The PDF of $X \sim N(\mu, \sigma^2)$ is:
+
+$$f_X(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}, \quad -\infty < x < \infty$$
+
+**Derivation of the PDF from the CDF**: We can derive the PDF by taking the derivative of the CDF with respect to $x$:
+
+$$f_X(x) = \frac{d}{dx} F_X(x) = \frac{d}{dx} \Phi\left(\frac{x - \mu}{\sigma}\right)$$
+
+Using the chain rule and the fact that $\frac{d}{dz} \Phi(z) = \phi(z)$ (where $\phi(z)$ is the standard normal PDF):
+
+$$f_X(x) = \phi\left(\frac{x - \mu}{\sigma}\right) \cdot \frac{d}{dx}\left(\frac{x - \mu}{\sigma}\right)$$
+
+Since $\frac{d}{dx}\left(\frac{x - \mu}{\sigma}\right) = \frac{1}{\sigma}$, we have:
+
+$$f_X(x) = \phi\left(\frac{x - \mu}{\sigma}\right) \cdot \frac{1}{\sigma}$$
+
+Substituting the standard normal PDF $\phi(z) = \frac{1}{\sqrt{2\pi}} e^{-z^2/2}$:
+
+$$f_X(x) = \frac{1}{\sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}} \cdot \frac{1}{\sigma} = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
+
+**Standardization**: Any normal random variable $X \sim N(\mu, \sigma^2)$ can be standardized to a standard normal by:
+
+$$Z = \frac{X - \mu}{\sigma} \sim N(0, 1)$$
+
+This is the inverse of the transformation $X = \mu + \sigma Z$.
