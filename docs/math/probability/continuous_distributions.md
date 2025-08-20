@@ -298,3 +298,37 @@ This is the fundamental property of the uniform distribution on $(0, 1)$. Since 
 $$P(Y \leq y) = P(F(X) \leq y) = P(X \leq F^{-1}(y)) = F(F^{-1}(y)) = y.$$
 
 Thus $Y$ has the $\text{Unif}(0, 1)$ CDF.
+
+**Example:** A large number of students take a certain exam, graded on a scale from 0 to 100. Let $X$ be the score of a random student. Continuous distributions are easier to deal with here, so let's approximate the discrete distribution of scores using a continuous distribution. Suppose that $X$ is continuous, with a CDF $F$ that is strictly increasing. In reality, there are only finitely many students and only finitely many possible scores, but a continuous distribution may be a good approximation.
+
+Suppose that the median score on the exam is 60, i.e., half of the students score above 60 and the other half score below 60 (a convenient aspect of assuming a continuous distribution is that we don't need to worry about how many students had scores equal to 60). That is, $F(60) = 1/2$; or, equivalently, $F^{-1}(1/2) = 60$.
+
+If Fred scores a 72 on the exam, then his percentile is the fraction of students who score below a 72. This is $F(72)$, which is some number in $(1/2, 1)$ since 72 is above the median. In general, a student with score $x$ has percentile $F(x)$. Going the other way, if we start with a percentile, say 0.95, then $F^{-1}(0.95)$ is the score that has that percentile. A percentile is also called a **quantile**, which is why $F^{-1}$ is called the **quantile function**. The function $F$ converts scores to quantiles, and the function $F^{-1}$ converts quantiles to scores.
+
+The strange operation of plugging $X$ into its own CDF now has a natural interpretation: $F(X)$ is the percentile attained by a random student. It often happens that the distribution of scores on an exam looks very non-Uniform. For example, there is no reason to think that 10% of the scores are between 70 and 80, even though $(70, 80)$ covers 10% of the range of possible scores.
+
+On the other hand, the distribution of percentiles of the students is Uniform: the universality property says that $F(X) \sim \text{Unif}(0, 1)$. For example, 50% of the students have a percentile of at least 0.5. Universality of the Uniform is expressing the fact that 10% of the students have a percentile between 0 and 0.1, 10% of the students have a percentile between 0.1 and 0.2, 10% of the students have a percentile between 0.2 and 0.3, and so on—a fact that is clear from the definition of percentile.
+
+**Example:** The Logistic CDF is
+
+$$F(x) = \frac{e^x}{1 + e^x}, \quad x \in \mathbb{R}$$
+
+Suppose we have $U \sim \text{Unif}(0, 1)$ and wish to generate a Logistic random variable. Part 1 of the universality property says that $F^{-1}(U) \sim \text{Logistic}$, so we first invert the CDF to get $F^{-1}$:
+
+$$F^{-1}(u) = \log\left(\frac{u}{1 - u}\right)$$
+
+Then we plug in $U$ for $u$:
+
+$$F^{-1}(U) = \log\left(\frac{U}{1 - U}\right)$$
+
+Therefore $\log\left(\frac{U}{1-U}\right) \sim \text{Logistic}$.
+
+We can verify directly that $\log\left(\frac{U}{1-U}\right)$ has the required CDF: start from the definition of CDF, do some algebra to isolate $U$ on one side of the inequality, and then use the CDF of the Uniform distribution. Let's work through these calculations once for practice:
+
+$$P\left(\log\left(\frac{U}{1 - U}\right) \leq x\right) = P\left(\frac{U}{1 - U} \leq e^x\right) = P(U \leq e^x(1 - U))$$
+
+$$= P\left(U \leq \frac{e^x}{1 + e^x}\right) = \frac{e^x}{1 + e^x}$$
+
+which is indeed the Logistic CDF.
+
+We can also use simulation to visualize how universality of the Uniform works. To this end, we generate 1 million $\text{Unif}(0, 1)$ random samples. We then transform each of these values $u$ into $\log\left(\frac{u}{1-u}\right)$; if the universality of the Uniform is correct, the transformed numbers should follow a Logistic distribution.
