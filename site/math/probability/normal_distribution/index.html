@@ -1288,6 +1288,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Normal Distribution
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1299,6 +1312,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#standard-normal-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standard Normal Distribution
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1530,6 +1571,73 @@
 
 
 <h1 id="normal-distribution">Normal Distribution</h1>
+<p>The <strong>Normal distribution</strong> (also called the <strong>Gaussian distribution</strong>) is one of the most important continuous distributions in probability and statistics. It appears naturally in many contexts due to the Central Limit Theorem and provides a foundation for many statistical methods.</p>
+<h2 id="standard-normal-distribution">Standard Normal Distribution</h2>
+<p>A continuous random variable <span class="arithmatex">\(Z\)</span> is said to have the <strong>standard Normal distribution</strong> if its PDF <span class="arithmatex">\(f_Z\)</span> is given by:</p>
+<div class="arithmatex">\[f_Z(z) = \frac{1}{\sqrt{2\pi}} e^{-z^2/2}, \quad -\infty &lt; z &lt; \infty\]</div>
+<p>We write this as <span class="arithmatex">\(Z \sim N(0, 1)\)</span> since, as we will show, <span class="arithmatex">\(Z\)</span> has mean 0 and variance 1.</p>
+<p>The constant <span class="arithmatex">\(\frac{1}{\sqrt{2\pi}}\)</span> in front of the PDF may look surprising (why is something with <span class="arithmatex">\(\pi\)</span> needed in front of something with <span class="arithmatex">\(e\)</span>, when there are no circles in sight?), but it's exactly what is needed to make the PDF integrate to 1. Such constants are called <strong>normalizing constants</strong> because they normalize the total area under the PDF to 1.</p>
+<p>By symmetry, the mean of the standard normal distribution is 0. Here's why:</p>
+<p>The standard normal PDF is symmetric about 0:</p>
+<div class="arithmatex">\[f_Z(z) = f_Z(-z) \quad \text{for all } z\]</div>
+<p>This means the distribution looks the same on both sides of 0. The mean is defined as:</p>
+<div class="arithmatex">\[E[Z] = \int_{-\infty}^{\infty} z \cdot f_Z(z) \, dz\]</div>
+<p>Let's split this integral into two parts:</p>
+<div class="arithmatex">\[E[Z] = \int_{-\infty}^0 z \cdot f_Z(z) \, dz + \int_0^{\infty} z \cdot f_Z(z) \, dz\]</div>
+<p><strong>First integral</strong> (<span class="arithmatex">\(-\infty\)</span> to 0): Let <span class="arithmatex">\(u = -z\)</span>, so <span class="arithmatex">\(z = -u\)</span> and <span class="arithmatex">\(dz = -du\)</span></p>
+<div class="arithmatex">\[\int_{-\infty}^0 z \cdot f_Z(z) \, dz = \int_{\infty}^0 (-u) \cdot f_Z(-u) \cdot (-du) = \int_0^{\infty} u \cdot f_Z(u) \, du\]</div>
+<p><strong>Second integral</strong> (0 to <span class="arithmatex">\(\infty\)</span>): This is already in the right form</p>
+<div class="arithmatex">\[\int_0^{\infty} z \cdot f_Z(z) \, dz\]</div>
+<div class="arithmatex">\[E[Z] = \int_0^{\infty} u \cdot f_Z(u) \, du + \int_0^{\infty} z \cdot f_Z(z) \, dz\]</div>
+<p>Since <span class="arithmatex">\(u\)</span> and <span class="arithmatex">\(z\)</span> are just dummy variables, we can write this as:</p>
+<div class="arithmatex">\[E[Z] = \int_0^{\infty} z \cdot f_Z(z) \, dz + \int_0^{\infty} z \cdot f_Z(z) \, dz = 2 \int_0^{\infty} z \cdot f_Z(z) \, dz\]</div>
+<p>The integrand <span class="arithmatex">\(z \cdot f_Z(z)\)</span> is <strong>odd</strong> because:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(f_Z(z) = f_Z(-z)\)</span> (even function)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(z\)</span> is odd</p>
+</li>
+<li>
+<p>Product of even and odd functions is odd</p>
+</li>
+</ul>
+<p>For odd functions, the integral from <span class="arithmatex">\(-\infty\)</span> to <span class="arithmatex">\(\infty\)</span> equals 0.</p>
+<p>Therefore, <span class="arithmatex">\(E[Z] = 0\)</span>.</p>
+<p>Now let's show that the variance of the standard normal distribution is 1. The variance is defined as:</p>
+<div class="arithmatex">\[\text{Var}(Z) = E[(Z - E[Z])^2] = E[Z^2]\]</div>
+<p>Since we already showed that <span class="arithmatex">\(E[Z] = 0\)</span>, we have <span class="arithmatex">\(\text{Var}(Z) = E[Z^2]\)</span>.</p>
+<p>Calculating <span class="arithmatex">\(E[Z^2]\)</span>:</p>
+<div class="arithmatex">\[E[Z^2] = \int_{-\infty}^{\infty} z^2 \cdot f_Z(z) \, dz = \int_{-\infty}^{\infty} z^2 \cdot \frac{1}{\sqrt{2\pi}} e^{-z^2/2} \, dz\]</div>
+<p>Let's use integration by parts with:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(u = z\)</span> and <span class="arithmatex">\(dv = z \cdot \frac{1}{\sqrt{2\pi}} e^{-z^2/2} \, dz\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(du = dz\)</span> and <span class="arithmatex">\(v = -\frac{1}{\sqrt{2\pi}} e^{-z^2/2}\)</span></p>
+</li>
+</ul>
+<p><strong>Integration by parts formula</strong>: <span class="arithmatex">\(\int u \, dv = uv - \int v \, du\)</span></p>
+<div class="arithmatex">\[E[Z^2] = \left[z \cdot \left(-\frac{1}{\sqrt{2\pi}} e^{-z^2/2}\right)\right]_{-\infty}^{\infty} - \int_{-\infty}^{\infty} \left(-\frac{1}{\sqrt{2\pi}} e^{-z^2/2}\right) \, dz\]</div>
+<p>The boundary term evaluates to 0:</p>
+<ul>
+<li>
+<p><strong>At <span class="arithmatex">\(z = \infty\)</span></strong>: <span class="arithmatex">\(z \cdot e^{-z^2/2} \to 0\)</span> (exponential decay dominates)</p>
+</li>
+<li>
+<p><strong>At <span class="arithmatex">\(z = -\infty\)</span></strong>: <span class="arithmatex">\(z \cdot e^{-z^2/2} \to 0\)</span> (exponential decay dominates)</p>
+</li>
+</ul>
+<p>Therefore:</p>
+<div class="arithmatex">\[E[Z^2] = 0 - \int_{-\infty}^{\infty} \left(-\frac{1}{\sqrt{2\pi}} e^{-z^2/2}\right) \, dz = \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-z^2/2} \, dz\]</div>
+<p>The remaining integral is exactly the integral of the PDF from <span class="arithmatex">\(-\infty\)</span> to <span class="arithmatex">\(\infty\)</span>, which equals 1:</p>
+<div class="arithmatex">\[E[Z^2] = \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-z^2/2} \, dz = 1\]</div>
+<p>Therefore, <span class="arithmatex">\(\text{Var}(Z) = E[Z^2] = 1\)</span>.</p>
+<p>The standard Normal CDF <span class="arithmatex">\(\Phi\)</span> is the accumulated area under the PDF:</p>
+<div class="arithmatex">\[\Phi(z) = \int_{-\infty}^z f_Z(t) \, dt = \int_{-\infty}^z \frac{1}{\sqrt{2\pi}} e^{-t^2/2} \, dt\]</div>
+<p>Some people, upon seeing the function <span class="arithmatex">\(\Phi\)</span> for the first time, express dismay that it is left in terms of an integral. Unfortunately, we have little choice in the matter: it turns out to be mathematically impossible to find a closed-form expression for the antiderivative of <span class="arithmatex">\(f_Z\)</span>, meaning that we cannot express <span class="arithmatex">\(\Phi\)</span> as a finite sum of more familiar functions like polynomials or exponentials. But closed-form or no, it's still a well-defined function: if we give <span class="arithmatex">\(\Phi\)</span> an input <span class="arithmatex">\(z\)</span>, it returns the accumulated area under the PDF from <span class="arithmatex">\(-\infty\)</span> up to <span class="arithmatex">\(z\)</span>.</p>
 
 
 
