@@ -1311,6 +1311,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Exponential Distribution
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1322,6 +1335,61 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#memory-less-property" class="md-nav__link">
+    <span class="md-ellipsis">
+      Memory-less property
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connection-to-poisson-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      Connection to Poisson Process
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cdf-of-the-exponential-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      CDF of the Exponential Distribution
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#expectation-and-variance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Expectation and Variance
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1553,6 +1621,130 @@
 
 
 <h1 id="exponential-distribution">Exponential Distribution</h1>
+<p>The <strong>Exponential distribution</strong> is a continuous probability distribution that describes the time between events in a Poisson process. It is characterized by its memoryless property and is fundamental in reliability theory, queuing theory, and survival analysis.</p>
+<p>A continuous random variable <span class="arithmatex">\(X\)</span> has an <strong>exponential distribution</strong> with parameter <span class="arithmatex">\(\lambda &gt; 0\)</span> if its PDF is:</p>
+<div class="arithmatex">\[f_X(x) = \begin{cases}
+\lambda e^{-\lambda x} &amp; \text{if } x \geq 0 \\
+0 &amp; \text{if } x &lt; 0
+\end{cases}\]</div>
+<p>We write this as <span class="arithmatex">\(X \sim \text{Exponential}(\lambda)\)</span> or <span class="arithmatex">\(X \sim \text{Exp}(\lambda)\)</span>.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><span class="arithmatex">\(\lambda\)</span>: <strong>rate parameter</strong> (events per unit time)</li>
+</ul>
+<h2 id="memory-less-property">Memory-less property</h2>
+<p>The exponential distribution is <strong>memoryless</strong>, meaning:</p>
+<div class="arithmatex">\[P(X &gt; s + t \mid X &gt; s) = P(X &gt; t)\]</div>
+<p>If you've already waited <span class="arithmatex">\(s\)</span> units of time, the probability of waiting an additional <span class="arithmatex">\(t\)</span> units is the same as if you were starting fresh.</p>
+<p><strong>Proof:</strong></p>
+<div class="arithmatex">\[P(X &gt; s + t \mid X &gt; s) = \frac{P(X &gt; s + t \text{ AND } X &gt; s)}{P(X &gt; s)}\]</div>
+<p>Since <span class="arithmatex">\(s + t &gt; s\)</span>, if <span class="arithmatex">\(X &gt; s + t\)</span>, then automatically <span class="arithmatex">\(X &gt; s\)</span>. Therefore:</p>
+<div class="arithmatex">\[P(X &gt; s + t \text{ AND } X &gt; s) = P(X &gt; s + t)\]</div>
+<p>Using the CDF of the exponential distribution:</p>
+<div class="arithmatex">\[P(X &gt; s + t) = 1 - P(X \leq s + t) = 1 - (1 - e^{-\lambda(s + t)}) = e^{-\lambda(s + t)}\]</div>
+<div class="arithmatex">\[P(X &gt; s) = 1 - P(X \leq s) = 1 - (1 - e^{-\lambda s}) = e^{-\lambda s}\]</div>
+<div class="arithmatex">\[P(X &gt; s + t \mid X &gt; s) = \frac{P(X &gt; s + t)}{P(X &gt; s)} = \frac{e^{-\lambda(s + t)}}{e^{-\lambda s}}\]</div>
+<div class="arithmatex">\[\frac{e^{-\lambda(s + t)}}{e^{-\lambda s}} = e^{-\lambda(s + t) + \lambda s} = e^{-\lambda t} = P(X &gt; t)\]</div>
+<p>Therefore:</p>
+<div class="arithmatex">\[P(X &gt; s + t \mid X &gt; s) = P(X &gt; t)\]</div>
+<p><strong>This proves the memoryless property!</strong></p>
+<p><strong>Example</strong>: If a light bulb has been working for 100 hours, the probability it works for another 50 hours is the same as the probability a new bulb works for 50 hours.</p>
+<h2 id="connection-to-poisson-process">Connection to Poisson Process</h2>
+<p>The exponential distribution describes the <strong>inter-arrival times</strong> in a Poisson process:</p>
+<ul>
+<li>
+<p><strong>Poisson process</strong>: Events occur at a constant average rate <span class="arithmatex">\(\lambda\)</span></p>
+</li>
+<li>
+<p><strong>Exponential distribution</strong>: Time between consecutive events</p>
+</li>
+<li>
+<p><strong>Relationship</strong>: If events occur at rate <span class="arithmatex">\(\lambda\)</span>, then inter-arrival times follow <span class="arithmatex">\(\text{Exp}(\lambda)\)</span></p>
+</li>
+</ul>
+<p><strong>Theorem</strong>: In a Poisson process with rate <span class="arithmatex">\(\lambda\)</span>, the inter-arrival times (time between consecutive events) are independent and identically distributed exponential random variables with parameter <span class="arithmatex">\(\lambda\)</span>.</p>
+<p><strong>Proof</strong>: Let <span class="arithmatex">\(T_1, T_2, T_3, \ldots\)</span> be the inter-arrival times. We need to show that each <span class="arithmatex">\(T_i \sim \text{Exp}(\lambda)\)</span>.</p>
+<p>In a Poisson process, events occur continuously over time. We need multiple random variables because:</p>
+<ol>
+<li><span class="arithmatex">\(T_1\)</span>: Time from start (time 0) until the <strong>first event</strong> occurs</li>
+<li><span class="arithmatex">\(T_2\)</span>: Time from the <strong>first event</strong> until the <strong>second event</strong> occurs  </li>
+<li><span class="arithmatex">\(T_3\)</span>: Time from the <strong>second event</strong> until the <strong>third event</strong> occurs</li>
+<li>And so on...: Each <span class="arithmatex">\(T_i\)</span> represents the time between the <span class="arithmatex">\((i-1)\)</span>th and <span class="arithmatex">\(i\)</span>th events</li>
+</ol>
+<p>Each <span class="arithmatex">\(T_i\)</span> represents a <strong>different time interval</strong> between consecutive events. Since events occur randomly, each of these time intervals is itself a random variable.</p>
+<p>The first event occurs at time <span class="arithmatex">\(T_1\)</span>. The probability that no events occur in time interval <span class="arithmatex">\([0, t]\)</span> is:</p>
+<div class="arithmatex">\[P(T_1 &gt; t) = P(\text{No events in } [0, t])\]</div>
+<p>Since the number of events in <span class="arithmatex">\([0, t]\)</span> follows <span class="arithmatex">\(\text{Poisson}(\lambda t)\)</span>:</p>
+<div class="arithmatex">\[P(T_1 &gt; t) = P(\text{Poisson}(\lambda t) = 0) = \frac{(\lambda t)^0}{0!} e^{-\lambda t} = e^{-\lambda t}\]</div>
+<p>Therefore:</p>
+<div class="arithmatex">\[P(T_1 \leq t) = 1 - P(T_1 &gt; t) = 1 - e^{-\lambda t}\]</div>
+<p>This is exactly the CDF of <span class="arithmatex">\(\text{Exp}(\lambda)\)</span>, so <span class="arithmatex">\(T_1 \sim \text{Exp}(\lambda)\)</span>.</p>
+<p><strong>Key insight</strong>: Each <span class="arithmatex">\(T_i\)</span> follows the same exponential distribution <span class="arithmatex">\(\text{Exp}(\lambda)\)</span> because:</p>
+<ol>
+<li>
+<p><strong>Stationary increments</strong>: The Poisson process has the same behavior regardless of when we start observing</p>
+</li>
+<li>
+<p><strong>Memoryless property</strong>: The exponential distribution "forgets" how long we've been waiting</p>
+</li>
+<li>
+<p><strong>Independent increments</strong>: Each time interval is independent of previous intervals</p>
+</li>
+</ol>
+<p><strong>Example</strong>: Consider a Poisson process with rate <span class="arithmatex">\(\lambda = 2\)</span> events per hour.</p>
+<p><strong>Poisson aspect</strong>: Number of events in 3 hours follows <span class="arithmatex">\(\text{Poisson}(2 \times 3) = \text{Poisson}(6)\)</span>.</p>
+<p><strong>Exponential aspect</strong>: Time between consecutive events follows <span class="arithmatex">\(\text{Exp}(2)\)</span>.</p>
+<p><strong>Verification</strong>: </p>
+<ul>
+<li>
+<p><strong>Expected events</strong> in 3 hours: <span class="arithmatex">\(E[\text{Poisson}(6)] = 6\)</span></p>
+</li>
+<li>
+<p><strong>Expected time</strong> between events: <span class="arithmatex">\(E[\text{Exp}(2)] = \frac{1}{2}\)</span> hour</p>
+</li>
+<li>
+<p><strong>Consistency</strong>: <span class="arithmatex">\(\frac{3 \text{ hours}}{6 \text{ events}} = \frac{1}{2} \text{ hour per event}\)</span> ✓</p>
+</li>
+</ul>
+<h2 id="cdf-of-the-exponential-distribution">CDF of the Exponential Distribution</h2>
+<p>The CDF of <span class="arithmatex">\(X \sim \text{Exp}(\lambda)\)</span> is:</p>
+<div class="arithmatex">\[F_X(x) = \begin{cases}
+1 - e^{-\lambda x} &amp; \text{if } x \geq 0 \\
+0 &amp; \text{if } x &lt; 0
+\end{cases}\]</div>
+<p><strong>Derivation</strong>: </p>
+<div class="arithmatex">\[F_X(x) = \int_0^x \lambda e^{-\lambda t} \, dt = \lambda \int_0^x e^{-\lambda t} \, dt = \lambda \left[-\frac{1}{\lambda} e^{-\lambda t}\right]_0^x = 1 - e^{-\lambda x}\]</div>
+<h2 id="expectation-and-variance">Expectation and Variance</h2>
+<p><strong>Expectation</strong></p>
+<div class="arithmatex">\[E[X] = \frac{1}{\lambda}\]</div>
+<p><strong>Proof</strong>:</p>
+<div class="arithmatex">\[E[X] = \int_0^{\infty} x \cdot \lambda e^{-\lambda x} \, dx\]</div>
+<p>Using integration by parts with <span class="arithmatex">\(u = x\)</span> and <span class="arithmatex">\(dv = \lambda e^{-\lambda x} \, dx\)</span>:</p>
+<div class="arithmatex">\[E[X] = \left[-x e^{-\lambda x}\right]_0^{\infty} - \int_0^{\infty} (-e^{-\lambda x}) \, dx\]</div>
+<p>The boundary term evaluates to 0:</p>
+<ul>
+<li>
+<p>At <span class="arithmatex">\(x = 0\)</span>: <span class="arithmatex">\(-0 \cdot e^0 = 0\)</span></p>
+</li>
+<li>
+<p>At <span class="arithmatex">\(x = \infty\)</span>: <span class="arithmatex">\(-x \cdot e^{-\lambda x} \to 0\)</span> (exponential decay dominates)</p>
+</li>
+</ul>
+<p>Therefore:</p>
+<div class="arithmatex">\[E[X] = \int_0^{\infty} e^{-\lambda x} \, dx = \left[-\frac{1}{\lambda} e^{-\lambda x}\right]_0^{\infty} = \frac{1}{\lambda}\]</div>
+<p><strong>Variance</strong></p>
+<div class="arithmatex">\[\text{Var}(X) = \frac{1}{\lambda^2}\]</div>
+<p><strong>Proof</strong>:</p>
+<div class="arithmatex">\[\text{Var}(X) = E[X^2] - (E[X])^2 = E[X^2] - \frac{1}{\lambda^2}\]</div>
+<p>We need to calculate <span class="arithmatex">\(E[X^2]\)</span>:</p>
+<div class="arithmatex">\[E[X^2] = \int_0^{\infty} x^2 \cdot \lambda e^{-\lambda x} \, dx\]</div>
+<p>Using integration by parts twice:</p>
+<div class="arithmatex">\[E[X^2] = \frac{2}{\lambda^2}\]</div>
+<p>Therefore:</p>
+<div class="arithmatex">\[\text{Var}(X) = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}\]</div>
+<p><strong>Standard Deviation</strong></p>
+<div class="arithmatex">\[\sigma_X = \frac{1}{\lambda}\]</div>
+<p><strong>Note</strong>: For the exponential distribution, the mean equals the standard deviation.</p>
 
 
 
