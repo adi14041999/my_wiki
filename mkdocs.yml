@@ -37,9 +37,10 @@ nav:
       - Indicator Random Variables: math/probability/indicator_random_variables.md
       - Poisson Distribution: math/probability/poisson_distribution.md
       - Continuous Distributions: math/probability/continuous_distributions.md
-      - Independence of Random Variables: math/probability/independence_of_random_variables.md
       - Normal Distribution: math/probability/normal_distribution.md
       - Exponential Distribution: math/probability/exponential_distribution.md
+      - Joint Distributions: math/probability/joint_distributions.md
+      - Independence of Random Variables: math/probability/independence_of_random_variables.md
   - Productivity:
     - How to Build Your Career in AI:
       - Three Steps to Career Growth: productivity/how_to_build_your_career_in_ai/three_steps_to_career_growth.md
