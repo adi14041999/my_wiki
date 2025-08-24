@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/math/probability/exponential_distribution/">
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/math/probability/conditional_distributions/">
       
       
-        <link rel="prev" href="../normal_distribution/">
+        <link rel="prev" href="../independence_of_random_variables/">
       
       
-        <link rel="next" href="../joint_distributions/">
+        <link rel="next" href="../../../productivity/how_to_build_your_career_in_ai/three_steps_to_career_growth/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Exponential Distribution - My Wiki</title>
+        <title>Conditional Distributions - My Wiki</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#exponential-distribution" class="md-skip">
+        <a href="#conditional-distributions" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Exponential Distribution
+              Conditional Distributions
             
           </span>
         </div>
@@ -1276,32 +1276,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Exponential Distribution
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../exponential_distribution/" class="md-nav__link">
         
   
   
@@ -1312,62 +1290,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#memory-less-property" class="md-nav__link">
-    <span class="md-ellipsis">
-      Memory-less property
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#connection-to-poisson-process" class="md-nav__link">
-    <span class="md-ellipsis">
-      Connection to Poisson Process
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cdf-of-the-exponential-distribution" class="md-nav__link">
-    <span class="md-ellipsis">
-      CDF of the Exponential Distribution
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#expectation-and-variance" class="md-nav__link">
-    <span class="md-ellipsis">
-      Expectation and Variance
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1423,10 +1345,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../conditional_distributions/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Conditional Distributions
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1437,6 +1381,53 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#discrete-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      Discrete Case
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuous-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      Continuous Case
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interpretation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interpretation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1666,131 +1657,92 @@
 
 
 
-<h1 id="exponential-distribution">Exponential Distribution</h1>
-<p>The <strong>Exponential distribution</strong> is a continuous probability distribution that describes the time between events in a Poisson process. It is characterized by its memoryless property and is fundamental in reliability theory, queuing theory, and survival analysis.</p>
-<p>A continuous random variable <span class="arithmatex">\(X\)</span> has an <strong>exponential distribution</strong> with parameter <span class="arithmatex">\(\lambda &gt; 0\)</span> if its PDF is:</p>
-<div class="arithmatex">\[f_X(x) = \begin{cases}
-\lambda e^{-\lambda x} &amp; \text{if } x \geq 0 \\
-0 &amp; \text{if } x &lt; 0
-\end{cases}\]</div>
-<p>We write this as <span class="arithmatex">\(X \sim \text{Exponential}(\lambda)\)</span> or <span class="arithmatex">\(X \sim \text{Exp}(\lambda)\)</span>.</p>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><span class="arithmatex">\(\lambda\)</span>: <strong>rate parameter</strong> (events per unit time)</li>
-</ul>
-<h2 id="memory-less-property">Memory-less property</h2>
-<p>The exponential distribution is <strong>memoryless</strong>, meaning:</p>
-<div class="arithmatex">\[P(X &gt; s + t \mid X &gt; s) = P(X &gt; t)\]</div>
-<p>If you've already waited <span class="arithmatex">\(s\)</span> units of time, the probability of waiting an additional <span class="arithmatex">\(t\)</span> units is the same as if you were starting fresh.</p>
-<p><strong>Proof:</strong></p>
-<div class="arithmatex">\[P(X &gt; s + t \mid X &gt; s) = \frac{P(X &gt; s + t \text{ AND } X &gt; s)}{P(X &gt; s)}\]</div>
-<p>Since <span class="arithmatex">\(s + t &gt; s\)</span>, if <span class="arithmatex">\(X &gt; s + t\)</span>, then automatically <span class="arithmatex">\(X &gt; s\)</span>. Therefore:</p>
-<div class="arithmatex">\[P(X &gt; s + t \text{ AND } X &gt; s) = P(X &gt; s + t)\]</div>
-<p>Using the CDF of the exponential distribution:</p>
-<div class="arithmatex">\[P(X &gt; s + t) = 1 - P(X \leq s + t) = 1 - (1 - e^{-\lambda(s + t)}) = e^{-\lambda(s + t)}\]</div>
-<div class="arithmatex">\[P(X &gt; s) = 1 - P(X \leq s) = 1 - (1 - e^{-\lambda s}) = e^{-\lambda s}\]</div>
-<div class="arithmatex">\[P(X &gt; s + t \mid X &gt; s) = \frac{P(X &gt; s + t)}{P(X &gt; s)} = \frac{e^{-\lambda(s + t)}}{e^{-\lambda s}}\]</div>
-<div class="arithmatex">\[\frac{e^{-\lambda(s + t)}}{e^{-\lambda s}} = e^{-\lambda(s + t) + \lambda s} = e^{-\lambda t} = P(X &gt; t)\]</div>
-<p>Therefore:</p>
-<div class="arithmatex">\[P(X &gt; s + t \mid X &gt; s) = P(X &gt; t)\]</div>
-<p><strong>This proves the memoryless property!</strong></p>
-<p><strong>Example</strong>: If a light bulb has been working for 100 hours, the probability it works for another 50 hours is the same as the probability a new bulb works for 50 hours.</p>
-<h2 id="connection-to-poisson-process">Connection to Poisson Process</h2>
-<p>The exponential distribution describes the <strong>inter-arrival times</strong> in a Poisson process:</p>
+<h1 id="conditional-distributions">Conditional Distributions</h1>
+<p>Conditional distributions describe the probability distribution of one random variable given that another random variable takes on a specific value. They are fundamental to understanding how random variables relate to each other.</p>
+<h2 id="discrete-case">Discrete Case</h2>
+<p>For two discrete random variables <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span>, the <strong>conditional probability mass function</strong> of <span class="arithmatex">\(X\)</span> given <span class="arithmatex">\(Y = y\)</span> is defined as:</p>
+<div class="arithmatex">\[p_{X|Y}(x|y) = \frac{p_{X,Y}(x,y)}{p_Y(y)}\]</div>
+<p>where <span class="arithmatex">\(p_Y(y) &gt; 0\)</span>.</p>
+<h2 id="continuous-case">Continuous Case</h2>
+<p>For two continuous random variables <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span>, the <strong>conditional probability density function</strong> of <span class="arithmatex">\(X\)</span> given <span class="arithmatex">\(Y = y\)</span> is defined as:</p>
+<div class="arithmatex">\[f_{X|Y}(x|y) = \frac{f_{X,Y}(x,y)}{f_Y(y)}\]</div>
+<p>where <span class="arithmatex">\(f_Y(y) &gt; 0\)</span>.</p>
+<h2 id="interpretation">Interpretation</h2>
+<p>The conditional distribution <span class="arithmatex">\(p_{X|Y}(x|y)\)</span> or <span class="arithmatex">\(f_{X|Y}(x|y)\)</span> represents:</p>
 <ul>
 <li>
-<p><strong>Poisson process</strong>: Events occur at a constant average rate <span class="arithmatex">\(\lambda\)</span></p>
+<p>The probability (or probability density) that <span class="arithmatex">\(X = x\)</span> given that we know <span class="arithmatex">\(Y = y\)</span></p>
 </li>
 <li>
-<p><strong>Exponential distribution</strong>: Time between consecutive events</p>
-</li>
-<li>
-<p><strong>Relationship</strong>: If events occur at rate <span class="arithmatex">\(\lambda\)</span>, then inter-arrival times follow <span class="arithmatex">\(\text{Exp}(\lambda)\)</span></p>
+<p>How the distribution of <span class="arithmatex">\(X\)</span> changes when we condition on different values of <span class="arithmatex">\(Y\)</span></p>
 </li>
 </ul>
-<p><strong>Theorem</strong>: In a Poisson process with rate <span class="arithmatex">\(\lambda\)</span>, the inter-arrival times (time between consecutive events) are independent and identically distributed exponential random variables with parameter <span class="arithmatex">\(\lambda\)</span>.</p>
-<p><strong>Proof</strong>: Let <span class="arithmatex">\(T_1, T_2, T_3, \ldots\)</span> be the inter-arrival times. We need to show that each <span class="arithmatex">\(T_i \sim \text{Exp}(\lambda)\)</span>.</p>
-<p>In a Poisson process, events occur continuously over time. We need multiple random variables because:</p>
+<p>The conditional distribution formulas work analogously to the familiar conditional probability formula:</p>
+<div class="arithmatex">\[P(A|B) = \frac{P(A \cap B)}{P(B)}\]</div>
+<p>In the discrete case, we have:</p>
+<div class="arithmatex">\[p_{X|Y}(x|y) = \frac{p_{X,Y}(x,y)}{p_Y(y)}\]</div>
+<p>This is exactly analogous to:</p>
+<div class="arithmatex">\[P(X = x | Y = y) = \frac{P(X = x, Y = y)}{P(Y = y)}\]</div>
+<p>The joint PMF <span class="arithmatex">\(p_{X,Y}(x,y)\)</span> represents <span class="arithmatex">\(P(X = x, Y = y)\)</span>, and the marginal PMF <span class="arithmatex">\(p_Y(y)\)</span> represents <span class="arithmatex">\(P(Y = y)\)</span>.</p>
+<p>For continuous variables, the PDF values themselves are not probabilities, but the <strong>ratio</strong> of PDFs works the same way:</p>
+<div class="arithmatex">\[f_{X|Y}(x|y) = \frac{f_{X,Y}(x,y)}{f_Y(y)}\]</div>
+<p>Think of it this way:</p>
 <ol>
-<li><span class="arithmatex">\(T_1\)</span>: Time from start (time 0) until the <strong>first event</strong> occurs</li>
-<li><span class="arithmatex">\(T_2\)</span>: Time from the <strong>first event</strong> until the <strong>second event</strong> occurs  </li>
-<li><span class="arithmatex">\(T_3\)</span>: Time from the <strong>second event</strong> until the <strong>third event</strong> occurs</li>
-<li>And so on...: Each <span class="arithmatex">\(T_i\)</span> represents the time between the <span class="arithmatex">\((i-1)\)</span>th and <span class="arithmatex">\(i\)</span>th events</li>
-</ol>
-<p>Each <span class="arithmatex">\(T_i\)</span> represents a <strong>different time interval</strong> between consecutive events. Since events occur randomly, each of these time intervals is itself a random variable.</p>
-<p>The first event occurs at time <span class="arithmatex">\(T_1\)</span>. The probability that no events occur in time interval <span class="arithmatex">\([0, t]\)</span> is:</p>
-<div class="arithmatex">\[P(T_1 &gt; t) = P(\text{No events in } [0, t])\]</div>
-<p>Since the number of events in <span class="arithmatex">\([0, t]\)</span> follows <span class="arithmatex">\(\text{Poisson}(\lambda t)\)</span>:</p>
-<div class="arithmatex">\[P(T_1 &gt; t) = P(\text{Poisson}(\lambda t) = 0) = \frac{(\lambda t)^0}{0!} e^{-\lambda t} = e^{-\lambda t}\]</div>
-<p>Therefore:</p>
-<div class="arithmatex">\[P(T_1 \leq t) = 1 - P(T_1 &gt; t) = 1 - e^{-\lambda t}\]</div>
-<p>This is exactly the CDF of <span class="arithmatex">\(\text{Exp}(\lambda)\)</span>, so <span class="arithmatex">\(T_1 \sim \text{Exp}(\lambda)\)</span>.</p>
-<p><strong>Key insight</strong>: Each <span class="arithmatex">\(T_i\)</span> follows the same exponential distribution <span class="arithmatex">\(\text{Exp}(\lambda)\)</span> because:</p>
-<ol>
+<li><strong>Joint PDF</strong> <span class="arithmatex">\(f_{X,Y}(x,y)\)</span> tells us how "dense" the probability is at point <span class="arithmatex">\((x,y)\)</span></li>
 <li>
-<p><strong>Stationary increments</strong>: The Poisson process has the same behavior regardless of when we start observing</p>
+<p><strong>Marginal PDF</strong> <span class="arithmatex">\(f_Y(y)\)</span> tells us how "dense" the probability is along the entire line <span class="arithmatex">\(Y = y\)</span></p>
 </li>
 <li>
-<p><strong>Memoryless property</strong>: The exponential distribution "forgets" how long we've been waiting</p>
-</li>
-<li>
-<p><strong>Independent increments</strong>: Each time interval is independent of previous intervals</p>
+<p><strong>Conditional PDF</strong> <span class="arithmatex">\(f_{X|Y}(x|y)\)</span> tells us how "dense" the probability is at <span class="arithmatex">\(X = x\)</span> when we're restricted to <span class="arithmatex">\(Y = y\)</span></p>
 </li>
 </ol>
-<p><strong>Example</strong>: Consider a Poisson process with rate <span class="arithmatex">\(\lambda = 2\)</span> events per hour.</p>
-<p><strong>Poisson aspect</strong>: Number of events in 3 hours follows <span class="arithmatex">\(\text{Poisson}(2 \times 3) = \text{Poisson}(6)\)</span>.</p>
-<p><strong>Exponential aspect</strong>: Time between consecutive events follows <span class="arithmatex">\(\text{Exp}(2)\)</span>.</p>
-<p><strong>Verification</strong>: </p>
+<p><strong>Example:</strong> Consider a chicken that lays eggs according to a Poisson process. Let <span class="arithmatex">\(N\)</span> be the total number of eggs laid, where <span class="arithmatex">\(N \sim \text{Poisson}(\lambda)\)</span>. Each egg has a probability <span class="arithmatex">\(p\)</span> of hatching. Let <span class="arithmatex">\(X\)</span> be the number of eggs that hatch, so <span class="arithmatex">\(X|N \sim \text{Binomial}(N,p)\)</span>. Let <span class="arithmatex">\(Y\)</span> be the number of eggs that don't hatch, so <span class="arithmatex">\(X + Y = N\)</span>. Find the joint distribution of <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span>, and determine if they are independent.</p>
+<p>We are given: 
+- <span class="arithmatex">\(N \sim \text{Poisson}(\lambda)\)</span>: Total eggs laid</p>
 <ul>
 <li>
-<p><strong>Expected events</strong> in 3 hours: <span class="arithmatex">\(E[\text{Poisson}(6)] = 6\)</span></p>
+<p><span class="arithmatex">\(X|N \sim \text{Binomial}(N,p)\)</span>: Eggs that hatch, given <span class="arithmatex">\(N\)</span> eggs</p>
 </li>
 <li>
-<p><strong>Expected time</strong> between events: <span class="arithmatex">\(E[\text{Exp}(2)] = \frac{1}{2}\)</span> hour</p>
+<p><span class="arithmatex">\(Y = N - X\)</span>: Eggs that don't hatch</p>
 </li>
 <li>
-<p><strong>Consistency</strong>: <span class="arithmatex">\(\frac{3 \text{ hours}}{6 \text{ events}} = \frac{1}{2} \text{ hour per event}\)</span> ✓</p>
+<p>We need to find <span class="arithmatex">\(p_{X,Y}(x,y)\)</span></p>
 </li>
 </ul>
-<h2 id="cdf-of-the-exponential-distribution">CDF of the Exponential Distribution</h2>
-<p>The CDF of <span class="arithmatex">\(X \sim \text{Exp}(\lambda)\)</span> is:</p>
-<div class="arithmatex">\[F_X(x) = \begin{cases}
-1 - e^{-\lambda x} &amp; \text{if } x \geq 0 \\
-0 &amp; \text{if } x &lt; 0
-\end{cases}\]</div>
-<p><strong>Derivation</strong>: </p>
-<div class="arithmatex">\[F_X(x) = \int_0^x \lambda e^{-\lambda t} \, dt = \lambda \int_0^x e^{-\lambda t} \, dt = \lambda \left[-\frac{1}{\lambda} e^{-\lambda t}\right]_0^x = 1 - e^{-\lambda x}\]</div>
-<h2 id="expectation-and-variance">Expectation and Variance</h2>
-<p><strong>Expectation</strong></p>
-<div class="arithmatex">\[E[X] = \frac{1}{\lambda}\]</div>
-<p><strong>Proof</strong>:</p>
-<div class="arithmatex">\[E[X] = \int_0^{\infty} x \cdot \lambda e^{-\lambda x} \, dx\]</div>
-<p>Using integration by parts with <span class="arithmatex">\(u = x\)</span> and <span class="arithmatex">\(dv = \lambda e^{-\lambda x} \, dx\)</span>:</p>
-<div class="arithmatex">\[E[X] = \left[-x e^{-\lambda x}\right]_0^{\infty} - \int_0^{\infty} (-e^{-\lambda x}) \, dx\]</div>
-<p>The boundary term evaluates to 0:</p>
-<ul>
-<li>
-<p>At <span class="arithmatex">\(x = 0\)</span>: <span class="arithmatex">\(-0 \cdot e^0 = 0\)</span></p>
-</li>
-<li>
-<p>At <span class="arithmatex">\(x = \infty\)</span>: <span class="arithmatex">\(-x \cdot e^{-\lambda x} \to 0\)</span> (exponential decay dominates)</p>
-</li>
-</ul>
+<p>Let's find the joint distribution. Since <span class="arithmatex">\(X + Y = N\)</span>, we can write:</p>
+<div class="arithmatex">\[p_{X,Y}(x,y) = P(X = x, Y = y) = P(X = x, N = x + y)\]</div>
+<p>Using the law of total probability and the conditional distribution:</p>
+<div class="arithmatex">\[p_{X,Y}(x,y) = P(X = x|N = x + y) \cdot P(N = x + y)\]</div>
+<p>Given <span class="arithmatex">\(X|N \sim \text{Binomial}(N,p)\)</span>:</p>
+<div class="arithmatex">\[P(X = x|N = x + y) = \binom{x + y}{x} p^x (1-p)^y\]</div>
+<p>And <span class="arithmatex">\(N \sim \text{Poisson}(\lambda)\)</span>:</p>
+<div class="arithmatex">\[P(N = x + y) = \frac{e^{-\lambda} \lambda^{x + y}}{(x + y)!}\]</div>
 <p>Therefore:</p>
-<div class="arithmatex">\[E[X] = \int_0^{\infty} e^{-\lambda x} \, dx = \left[-\frac{1}{\lambda} e^{-\lambda x}\right]_0^{\infty} = \frac{1}{\lambda}\]</div>
-<p><strong>Variance</strong></p>
-<div class="arithmatex">\[\text{Var}(X) = \frac{1}{\lambda^2}\]</div>
-<p><strong>Proof</strong>:</p>
-<div class="arithmatex">\[\text{Var}(X) = E[X^2] - (E[X])^2 = E[X^2] - \frac{1}{\lambda^2}\]</div>
-<p>We need to calculate <span class="arithmatex">\(E[X^2]\)</span>:</p>
-<div class="arithmatex">\[E[X^2] = \int_0^{\infty} x^2 \cdot \lambda e^{-\lambda x} \, dx\]</div>
-<p>Using integration by parts twice:</p>
-<div class="arithmatex">\[E[X^2] = \frac{2}{\lambda^2}\]</div>
-<p>Therefore:</p>
-<div class="arithmatex">\[\text{Var}(X) = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}\]</div>
-<p><strong>Standard Deviation</strong></p>
-<div class="arithmatex">\[\sigma_X = \frac{1}{\lambda}\]</div>
-<p><strong>Note</strong>: For the exponential distribution, the mean equals the standard deviation.</p>
+<div class="arithmatex">\[p_{X,Y}(x,y) = \binom{x + y}{x} p^x (1-p)^y \cdot \frac{e^{-\lambda} \lambda^{x + y}}{(x + y)!}\]</div>
+<p>Simplifying:</p>
+<div class="arithmatex">\[p_{X,Y}(x,y) = \frac{(x + y)!}{x! y!} p^x (1-p)^y \cdot \frac{e^{-\lambda} \lambda^{x + y}}{(x + y)!}\]</div>
+<div class="arithmatex">\[p_{X,Y}(x,y) = \frac{e^{-\lambda} \lambda^{x + y} p^x (1-p)^y}{x! y!}\]</div>
+<div class="arithmatex">\[p_{X,Y}(x,y) = \frac{e^{-\lambda} (\lambda p)^x (\lambda(1-p))^y}{x! y!}\]</div>
+<p>Let's find the marginal distributions.</p>
+<div class="arithmatex">\[p_X(x) = \sum_{y=0}^{\infty} p_{X,Y}(x,y) = \sum_{y=0}^{\infty} \frac{e^{-\lambda} (\lambda p)^x (\lambda(1-p))^y}{x! y!}\]</div>
+<div class="arithmatex">\[p_X(x) = \frac{e^{-\lambda} (\lambda p)^x}{x!} \sum_{y=0}^{\infty} \frac{(\lambda(1-p))^y}{y!}\]</div>
+<div class="arithmatex">\[p_X(x) = \frac{e^{-\lambda} (\lambda p)^x}{x!} e^{\lambda(1-p)} = \frac{e^{-\lambda p} (\lambda p)^x}{x!}\]</div>
+<p>This shows <span class="arithmatex">\(X \sim \text{Poisson}(\lambda p)\)</span>.</p>
+<p>Similarly:</p>
+<div class="arithmatex">\[p_Y(y) = \frac{e^{-\lambda(1-p)} (\lambda(1-p))^y}{y!}\]</div>
+<p>So <span class="arithmatex">\(Y \sim \text{Poisson}(\lambda(1-p))\)</span>.</p>
+<p>If <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> were independent, then:</p>
+<div class="arithmatex">\[p_{X,Y}(x,y) = p_X(x) \cdot p_Y(y)\]</div>
+<p>Let's check:</p>
+<div class="arithmatex">\[p_X(x) \cdot p_Y(y) = \frac{e^{-\lambda p} (\lambda p)^x}{x!} \cdot \frac{e^{-\lambda(1-p)} (\lambda(1-p))^y}{y!}\]</div>
+<div class="arithmatex">\[p_X(x) \cdot p_Y(y) = \frac{e^{-\lambda p - \lambda(1-p)} (\lambda p)^x (\lambda(1-p))^y}{x! y!}\]</div>
+<div class="arithmatex">\[p_X(x) \cdot p_Y(y) = \frac{e^{-\lambda} (\lambda p)^x (\lambda(1-p))^y}{x! y!}\]</div>
+<p>This equals <span class="arithmatex">\(p_{X,Y}(x,y)\)</span>, so <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are <strong>independent</strong>!</p>
+<p>The joint distribution is:</p>
+<div class="arithmatex">\[p_{X,Y}(x,y) = \frac{e^{-\lambda} (\lambda p)^x (\lambda(1-p))^y}{x! y!}\]</div>
+<p>And <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are independent random variables, each following Poisson distributions with parameters <span class="arithmatex">\(\lambda p\)</span> and <span class="arithmatex">\(\lambda(1-p)\)</span> respectively.</p>
+<p><strong>Note:</strong> It's crucial to distinguish between <span class="arithmatex">\(X|N \sim \text{Binomial}(N,p)\)</span> (conditional distribution where <span class="arithmatex">\(N\)</span> is random) and <span class="arithmatex">\(X \sim \text{Binomial}(N,p)\)</span> (unconditional distribution where <span class="arithmatex">\(N\)</span> would be fixed). The conditional notation is essential here since <span class="arithmatex">\(N\)</span> is a random variable.</p>
 
 
 
