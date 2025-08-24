@@ -1581,6 +1581,10 @@
 <div class="arithmatex">\[p_{X,Y}(x,y) = P(X = x, Y = y)\]</div>
 <p>For continuous random variables, the <strong>joint probability density function</strong> (joint PDF) satisfies:</p>
 <div class="arithmatex">\[P((X,Y) \in A) = \iint_A f_{X,Y}(x,y) \, dx \, dy\]</div>
+<p>The <strong>joint cumulative distribution function</strong> (joint CDF) is defined as:</p>
+<div class="arithmatex">\[F_{X,Y}(x,y) = P(X \leq x, Y \leq y)\]</div>
+<p>For discrete random variables, this becomes:</p>
+<div class="arithmatex">\[F_{X,Y}(x,y) = \sum_{i \leq x} \sum_{j \leq y} p_{X,Y}(i,j)\]</div>
 <p><strong>Example:</strong> Let's consider two Bernoulli random variables <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> with parameters <span class="arithmatex">\(p\)</span> and <span class="arithmatex">\(q\)</span> respectively:</p>
 <ul>
 <li>
@@ -1648,6 +1652,46 @@
 <p><span class="arithmatex">\(p_Y(1) = p_{X,Y}(0,1) + p_{X,Y}(1,1) = q\)</span></p>
 </li>
 </ul>
+<p>For continuous random variables, the marginal PDFs are obtained by integrating the joint PDF:</p>
+<div class="arithmatex">\[f_X(x) = \int_{-\infty}^{\infty} f_{X,Y}(x,y) \, dy\]</div>
+<div class="arithmatex">\[f_Y(y) = \int_{-\infty}^{\infty} f_{X,Y}(x,y) \, dx\]</div>
+<p><strong>Example:</strong> Consider two continuous random variables <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> with joint PDF:</p>
+<div class="arithmatex">\[f_{X,Y}(x,y) = \frac{1}{2\pi\sigma_X\sigma_Y\sqrt{1-\rho^2}} \exp\left(-\frac{1}{2(1-\rho^2)}\left[\frac{(x-\mu_X)^2}{\sigma_X^2} + \frac{(y-\mu_Y)^2}{\sigma_Y^2} - \frac{2\rho(x-\mu_X)(y-\mu_Y)}{\sigma_X\sigma_Y}\right]\right)\]</div>
+<p>To find the marginal PDF of <span class="arithmatex">\(X\)</span>, we integrate over <span class="arithmatex">\(y\)</span>:</p>
+<div class="arithmatex">\[f_X(x) = \int_{-\infty}^{\infty} f_{X,Y}(x,y) \, dy\]</div>
+<p>After some algebra, this gives us:</p>
+<div class="arithmatex">\[f_X(x) = \frac{1}{\sqrt{2\pi}\sigma_X} \exp\left(-\frac{(x-\mu_X)^2}{2\sigma_X^2}\right)\]</div>
+<p>This shows that the marginal distribution of <span class="arithmatex">\(X\)</span> is <span class="arithmatex">\(N(\mu_X, \sigma_X^2)\)</span>.</p>
+<p><strong>Example:</strong> Consider a uniform distribution over the disc <span class="arithmatex">\(x^2 + y^2 \leq c\)</span>. The joint PDF is:</p>
+<div class="arithmatex">\[f_{X,Y}(x,y) = \begin{cases}
+\frac{1}{\pi c} &amp; \text{if } x^2 + y^2 \leq c \\
+0 &amp; \text{otherwise}
+\end{cases}\]</div>
+<p>To find the marginal PDF of <span class="arithmatex">\(X\)</span>, we integrate over <span class="arithmatex">\(y\)</span>:</p>
+<div class="arithmatex">\[f_X(x) = \int_{-\infty}^{\infty} f_{X,Y}(x,y) \, dy\]</div>
+<p>For a given <span class="arithmatex">\(x\)</span> with <span class="arithmatex">\(|x| \leq \sqrt{c}\)</span>, the range of <span class="arithmatex">\(y\)</span> is from <span class="arithmatex">\(-\sqrt{c-x^2}\)</span> to <span class="arithmatex">\(\sqrt{c-x^2}\)</span>:</p>
+<div class="arithmatex">\[f_X(x) = \int_{-\sqrt{c-x^2}}^{\sqrt{c-x^2}} \frac{1}{\pi c} \, dy = \frac{2\sqrt{c-x^2}}{\pi c}\]</div>
+<p>For <span class="arithmatex">\(|x| &gt; \sqrt{c}\)</span>, <span class="arithmatex">\(f_X(x) = 0\)</span>.</p>
+<p>Similarly, the marginal PDF of <span class="arithmatex">\(Y\)</span> is:</p>
+<div class="arithmatex">\[f_Y(y) = \frac{2\sqrt{c-y^2}}{\pi c}\]</div>
+<p>This shows that the marginal distributions are not uniform - they follow a semi-circular distribution, even though the joint distribution is uniform over the disc.</p>
+<p>To show that <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are dependent, we need to verify that:</p>
+<div class="arithmatex">\[f_{X,Y}(x,y) \neq f_X(x) \cdot f_Y(y)\]</div>
+<p>Let's check this for a point inside the disc, say <span class="arithmatex">\((x,y) = (0,0)\)</span>:</p>
+<ul>
+<li>
+<p>Joint PDF: <span class="arithmatex">\(f_{X,Y}(0,0) = \frac{1}{\pi c}\)</span></p>
+</li>
+<li>
+<p>Marginal PDFs: <span class="arithmatex">\(f_X(0) = \frac{2\sqrt{c}}{\pi c}\)</span> and <span class="arithmatex">\(f_Y(0) = \frac{2\sqrt{c}}{\pi c}\)</span></p>
+</li>
+<li>
+<p>Product of marginals: <span class="arithmatex">\(f_X(0) \cdot f_Y(0) = \frac{4c}{\pi^2 c^2} = \frac{4}{\pi^2 c}\)</span></p>
+</li>
+</ul>
+<p>Since <span class="arithmatex">\(\frac{1}{\pi c} \neq \frac{4}{\pi^2 c}\)</span>, we have:</p>
+<div class="arithmatex">\[f_{X,Y}(0,0) \neq f_X(0) \cdot f_Y(0)\]</div>
+<p>This proves that <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are dependent random variables. The dependence arises from the geometric constraint <span class="arithmatex">\(x^2 + y^2 \leq c\)</span> - knowing the value of <span class="arithmatex">\(X\)</span> constrains the possible values of <span class="arithmatex">\(Y\)</span> and vice versa.</p>
 
 
 
