@@ -42,6 +42,7 @@ nav:
       - Joint Distributions: math/probability/joint_distributions.md
       - Independence of Random Variables: math/probability/independence_of_random_variables.md
       - Conditional Distributions: math/probability/conditional_distributions.md
+      - Multinomial Distribution: math/probability/multinomial_distribution.md
   - Productivity:
     - How to Build Your Career in AI:
       - Three Steps to Career Growth: productivity/how_to_build_your_career_in_ai/three_steps_to_career_growth.md
