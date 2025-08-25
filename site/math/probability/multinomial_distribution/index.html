@@ -1429,6 +1429,24 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#merging-categories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Merging Categories
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conditional-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conditional Distribution
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1712,6 +1730,27 @@
 <p>Let's take a look at the marginal distribution of <span class="arithmatex">\(X_i\)</span>, which is the <span class="arithmatex">\(i\)</span>th component of <span class="arithmatex">\(\mathbf{X}\)</span>. Were we to blindly apply the definition, we would have to sum the joint PMF over all components of <span class="arithmatex">\(\mathbf{X}\)</span> other than <span class="arithmatex">\(X_i\)</span>. The prospect of <span class="arithmatex">\(k-1\)</span> summations is an unpleasant one, to say the least.</p>
 <p>Fortunately, we can avoid tedious calculations if we instead use the story of the Multinomial distribution: <span class="arithmatex">\(X_i\)</span> is the number of objects in category <span class="arithmatex">\(i\)</span>, where each of the <span class="arithmatex">\(n\)</span> objects independently belongs to category <span class="arithmatex">\(i\)</span> with probability <span class="arithmatex">\(p_i\)</span>. Define success as landing in category <span class="arithmatex">\(i\)</span>. Then we just have <span class="arithmatex">\(n\)</span> independent Bernoulli trials, so the marginal distribution of <span class="arithmatex">\(X_i\)</span> is <span class="arithmatex">\(\text{Bin}(n, p_i)\)</span>.</p>
 <p><strong>The marginals of a Multinomial are Binomial.</strong> Specifically, if <span class="arithmatex">\(\mathbf{X} \sim \text{Mult}_k(n, \mathbf{p})\)</span>, then <span class="arithmatex">\(X_i \sim \text{Bin}(n, p_i)\)</span>.</p>
+<h2 id="merging-categories">Merging Categories</h2>
+<p>More generally, whenever we merge multiple categories together in a Multinomial random vector, we get another Multinomial random vector. For example, suppose we randomly sample <span class="arithmatex">\(n\)</span> people in a country with 5 political parties (if the sampling is done without replacement, the <span class="arithmatex">\(n\)</span> trials are not independent, but independence is a good approximation as long as the population is large relative to the sample). Let <span class="arithmatex">\(\mathbf{X} = (X_1, \ldots, X_5) \sim \text{Mult}_5(n, (p_1, \ldots, p_5))\)</span> represent the political party affiliations of the sample, i.e., <span class="arithmatex">\(X_j\)</span> is the number of people in the sample who support party <span class="arithmatex">\(j\)</span>.</p>
+<p>Suppose that parties 1 and 2 are the dominant parties, while parties 3 through 5 are minor third parties. If we decide that instead of keeping track of all 5 parties, we only want to count the number of people in party 1, party 2, or "other", then we can define a new random vector that lumps all the third parties into one category:</p>
+<div class="arithmatex">\[\mathbf{Y} = (X_1, X_2, X_3 + X_4 + X_5)\]</div>
+<p>By the story of the Multinomial,</p>
+<div class="arithmatex">\[\mathbf{Y} \sim \text{Mult}_3(n, (p_1, p_2, p_3 + p_4 + p_5))\]</div>
+<p>Of course, this idea applies to merging categories in any Multinomial, not just in the context of political parties.</p>
+<p><strong>General Rule:</strong> If <span class="arithmatex">\(\mathbf{X} \sim \text{Mult}_k(n, \mathbf{p})\)</span>, then for any distinct <span class="arithmatex">\(i\)</span> and <span class="arithmatex">\(j\)</span>, <span class="arithmatex">\(X_i + X_j \sim \text{Bin}(n, p_i + p_j)\)</span>. The random vector of counts obtained from merging categories <span class="arithmatex">\(i\)</span> and <span class="arithmatex">\(j\)</span> is still Multinomial. For example, merging categories 1 and 2 gives:</p>
+<div class="arithmatex">\[(X_1 + X_2, X_3, \ldots, X_k) \sim \text{Mult}_{k-1}(n, (p_1 + p_2, p_3, \ldots, p_k))\]</div>
+<h2 id="conditional-distribution">Conditional Distribution</h2>
+<p>Suppose we get to observe <span class="arithmatex">\(X_1\)</span>, the number of objects in category 1, and we wish to update our distribution for the other categories <span class="arithmatex">\((X_2, \ldots, X_k)\)</span>. One way to do this is with the definition of conditional PMF:</p>
+<div class="arithmatex">\[P(X_2 = n_2, \ldots, X_k = n_k|X_1 = n_1) = \frac{P(X_1 = n_1, X_2 = n_2, \ldots, X_k = n_k)}{P(X_1 = n_1)}\]</div>
+<p>The numerator is the joint PMF of the Multinomial, and the denominator is the marginal PMF of <span class="arithmatex">\(X_1\)</span>, both of which we have already derived. However, we prefer to use the Multinomial story to deduce the conditional distribution of <span class="arithmatex">\((X_2, \ldots, X_k)\)</span> without algebra.</p>
+<p>Given that there are <span class="arithmatex">\(n_1\)</span> objects in category 1, the remaining <span class="arithmatex">\(n - n_1\)</span> objects fall into categories 2 through <span class="arithmatex">\(k\)</span>, independently of one another. By Bayes' rule (<strong>Bayes' rule</strong>: <span class="arithmatex">\(P(\text{in category } j|\text{not in category } 1) = \frac{P(\text{in category } j \text{ AND not in category } 1)}{P(\text{not in category } 1)}\)</span>), the conditional probability of falling into category <span class="arithmatex">\(j\)</span> is:</p>
+<div class="arithmatex">\[P(\text{in category } j|\text{not in category } 1) = \frac{P(\text{in category } j)}{P(\text{not in category } 1)} = \frac{p_j}{p_2 + \cdots + p_k}\]</div>
+<p>for <span class="arithmatex">\(j = 2, \ldots, k\)</span>. This makes intuitive sense: the updated probabilities are proportional to the original probabilities <span class="arithmatex">\((p_2, \ldots, p_k)\)</span>, but these must be renormalized to yield a valid probability vector.</p>
+<p>Putting it all together, we have the following result:</p>
+<p><strong>If <span class="arithmatex">\(\mathbf{X} \sim \text{Mult}_k(n, \mathbf{p})\)</span>, then</strong></p>
+<div class="arithmatex">\[(X_2, \ldots, X_k)|X_1 = n_1 \sim \text{Mult}_{k-1}(n - n_1, (p'_2, \ldots, p'_k))\]</div>
+<p><strong>where <span class="arithmatex">\(p'_j = \frac{p_j}{p_2 + \cdots + p_k}\)</span>.</strong></p>
+<p>Finally, we know that components within a Multinomial random vector are dependent since they are constrained by <span class="arithmatex">\(X_1 + \cdots + X_k = n\)</span>.</p>
 
 
 
