@@ -1691,6 +1691,17 @@
 
 
 <h1 id="convolution">Convolution</h1>
+<p>A convolution is a sum of independent random variables. We often add independent random variables because the sum is a useful summary of an experiment (in <span class="arithmatex">\(n\)</span> Bernoulli trials, we may only care about the total number of successes), and because sums lead to averages, which are also useful (in <span class="arithmatex">\(n\)</span> Bernoulli trials, the proportion of successes).</p>
+<p>The main task is to determine the distribution of <span class="arithmatex">\(T = X + Y\)</span>, where <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are independent random variables whose distributions are known.</p>
+<p>The distribution of <span class="arithmatex">\(T\)</span> is found using a convolution sum or integral. As we'll see, a convolution sum is nothing more than the law of total probability, conditioning on the value of either <span class="arithmatex">\(X\)</span> or <span class="arithmatex">\(Y\)</span>; a convolution integral is analogous.</p>
+<p>Let <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> be independent random variables and <span class="arithmatex">\(T = X + Y\)</span> be their sum.</p>
+<p><strong>Discrete Case:</strong> If <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are discrete, then the PMF of <span class="arithmatex">\(T\)</span> is:</p>
+<div class="arithmatex">\[P(T = t) = \sum_x P(Y = t - x)P(X = x) = \sum_y P(X = t - y)P(Y = y)\]</div>
+<p><strong>Continuous Case:</strong> If <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are continuous, then the PDF of <span class="arithmatex">\(T\)</span> is:</p>
+<div class="arithmatex">\[f_T(t) = \int_{-\infty}^{\infty} f_Y(t - x)f_X(x)dx = \int_{-\infty}^{\infty} f_X(t - y)f_Y(y)dy\]</div>
+<p><strong>Proof:</strong> For the discrete case, we use the Law of Total Probability (LOTP), conditioning on <span class="arithmatex">\(X\)</span>:</p>
+<div class="arithmatex">\[P(T = t) = \sum_x P(X + Y = t|X = x)P(X = x) = \sum_x P(Y = t - x|X = x)P(X = x) = \sum_x P(Y = t - x)P(X = x)\]</div>
+<p>The last equality follows from the independence of <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span>. Conditioning on <span class="arithmatex">\(Y\)</span> instead, we obtain the second formula for the PMF of <span class="arithmatex">\(T\)</span>.</p>
 
 
 
