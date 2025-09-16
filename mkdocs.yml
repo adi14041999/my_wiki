@@ -44,7 +44,7 @@ nav:
       - Conditional Distributions: math/probability/conditional_distributions.md
       - Multinomial Distribution: math/probability/multinomial_distribution.md
       - Covariance and Correlation: math/probability/covariance_and_correlation.md
-      - Transformations of Random Variables: math/probability/
+      - Transformations of Random Variables: math/probability/transformations_of_random_variables.md
       - Convolution: math/probability/convolution.md
   - Productivity:
     - How to Build Your Career in AI:
