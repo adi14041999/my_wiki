@@ -18,6 +18,8 @@ nav:
       - Score Based Generative Modeling: ai/deep_generative_models/score_based_generative_modeling.md
       - Evaluating Generative Models: ai/deep_generative_models/evaluating_generative_models.md
       - Score Based Diffusion Models: ai/deep_generative_models/score_based_diffusion_models.md
+    - Deep Learning for Computer Vision:
+      - Introduction: ai/deep_learning_for_computer_vision/introduction.md
   - Math:
     - Linear Algebra:
       - Vectors, vector addition, and scalar multiplication: math/linear_algebra/vectors_vector_addition_and_scalar_multiplication.md
