@@ -20,6 +20,7 @@ nav:
       - Score Based Diffusion Models: ai/deep_generative_models/score_based_diffusion_models.md
     - Deep Learning for Computer Vision:
       - Introduction: ai/deep_learning_for_computer_vision/introduction.md
+      - Linear Classification: ai/deep_learning_for_computer_vision/linear_classification.md
   - Math:
     - Linear Algebra:
       - Vectors, vector addition, and scalar multiplication: math/linear_algebra/vectors_vector_addition_and_scalar_multiplication.md
