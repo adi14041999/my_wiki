@@ -77,6 +77,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#linear-classification" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -811,6 +816,21 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Linear Classification
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -823,6 +843,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#parameterized-mapping-from-images-to-label-scores" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameterized mapping from images to label scores
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1780,9 +1828,127 @@
 
 
 
-  <h1>Linear Classification</h1>
-
-
+<h1 id="linear-classification">Linear Classification</h1>
+<p>kNN has a number of disadvantages:</p>
+<ul>
+<li>The classifier must remember all of the training data and store it for future comparisons with the test data. This is space inefficient because datasets may easily be gigabytes in size.</li>
+<li>Classifying a test image is expensive since it requires a comparison to all training images.</li>
+</ul>
+<p>We are now going to develop a more powerful approach to image classification that we will eventually naturally extend to Neural Networks. The approach will have two major components: a score function that maps the raw data to class scores, and a loss function that quantifies the agreement between the predicted scores and the ground truth labels. We will then cast this as an optimization problem in which we will minimize the loss function with respect to the parameters of the score function.</p>
+<h2 id="parameterized-mapping-from-images-to-label-scores">Parameterized mapping from images to label scores</h2>
+<p>The first component of this approach is to define the score function that maps the pixel values of an image to confidence scores for each class. We will develop the approach with a concrete example. Let's assume a training dataset of images <span class="arithmatex">\(x_i \in \mathbb{R}^D\)</span>, each associated with a label <span class="arithmatex">\(y_i\)</span>. Here <span class="arithmatex">\(i = 1 \ldots N\)</span> and <span class="arithmatex">\(y_i \in 1 \ldots K\)</span>. That is, we have <span class="arithmatex">\(N\)</span> examples (each with a dimensionality <span class="arithmatex">\(D\)</span>) and <span class="arithmatex">\(K\)</span> distinct categories. For example, in CIFAR-10 we have a training set of <span class="arithmatex">\(N = 50,000\)</span> images, each with <span class="arithmatex">\(D = 32 \times 32 \times 3 = 3072\)</span> pixels, and <span class="arithmatex">\(K = 10\)</span>, since there are 10 distinct classes (dog, cat, car, etc). We will now define the score function <span class="arithmatex">\(f: \mathbb{R}^D \mapsto \mathbb{R}^K\)</span> that maps the raw image pixels to class scores.</p>
+<p>We will start out with arguably the simplest possible function, a linear mapping:</p>
+<div class="arithmatex">\[f(x_i, W, b) = Wx_i + b\]</div>
+<p>In the above equation, we are assuming that the image <span class="arithmatex">\(x_i\)</span> has all of its pixels flattened out to a single column vector of shape <span class="arithmatex">\([D \times 1]\)</span>. The matrix <span class="arithmatex">\(W\)</span> (of size <span class="arithmatex">\([K \times D]\)</span>), and the vector <span class="arithmatex">\(b\)</span> (of size <span class="arithmatex">\([K \times 1]\)</span>) are the parameters of the function. In CIFAR-10, <span class="arithmatex">\(x_i\)</span> contains all pixels in the <span class="arithmatex">\(i\)</span>-th image flattened into a single <span class="arithmatex">\([3072 \times 1]\)</span> column, <span class="arithmatex">\(W\)</span> is <span class="arithmatex">\([10 \times 3072]\)</span> and <span class="arithmatex">\(b\)</span> is <span class="arithmatex">\([10 \times 1]\)</span>, so 3072 numbers come into the function (the raw pixel values) and 10 numbers come out (the class scores). The parameters in <span class="arithmatex">\(W\)</span> are often called the <strong>weights</strong>, and <span class="arithmatex">\(b\)</span> is called the <strong>bias vector</strong> because it influences the output scores, but without interacting with the actual data <span class="arithmatex">\(x_i\)</span>.</p>
+<p>There are a few things to note:</p>
+<ol>
+<li>
+<p><strong>First</strong>, note that the single matrix multiplication <span class="arithmatex">\(Wx_i\)</span> is effectively evaluating 10 separate classifiers in parallel (one for each class), where each classifier is a row of <span class="arithmatex">\(W\)</span>.</p>
+</li>
+<li>
+<p><strong>Notice also</strong> that we think of the input data <span class="arithmatex">\((x_i, y_i)\)</span> as given and fixed, but we have control over the setting of the parameters <span class="arithmatex">\(W, b\)</span>. Our goal will be to set these in such way that the computed scores match the ground truth labels across the whole training set. We will go into much more detail about how this is done, but intuitively we wish that the correct class has a score that is higher than the scores of incorrect classes.</p>
+</li>
+<li>
+<p><strong>An advantage</strong> of this approach is that the training data is used to learn the parameters <span class="arithmatex">\(W, b\)</span>, but once the learning is complete we can discard the entire training set and only keep the learned parameters. That is because a new test image can be simply forwarded through the function and classified based on the computed scores.</p>
+</li>
+<li>
+<p><strong>Lastly</strong>, note that classifying the test image involves a single matrix multiplication and addition, which is significantly faster than comparing a test image to all training images.</p>
+</li>
+</ol>
+<p><strong>Example: Binary Classification</strong></p>
+<p>To make this more concrete, let's consider a simpler example with just two classes (e.g., "cat" vs "dog"). In this case:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(K = 2\)</span> (two classes)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(W\)</span> becomes a <span class="arithmatex">\([2 \times D]\)</span> matrix</p>
+</li>
+<li>
+<p><span class="arithmatex">\(b\)</span> becomes a <span class="arithmatex">\([2 \times 1]\)</span> vector</p>
+</li>
+<li>
+<p>The output <span class="arithmatex">\(f(x_i, W, b) = Wx_i + b\)</span> gives us two scores: <span class="arithmatex">\([s_{\text{cat}}, s_{\text{dog}}]\)</span></p>
+</li>
+</ul>
+<p>For a <span class="arithmatex">\(32 \times 32 \times 3\)</span> image, we'd have:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(W\)</span>: <span class="arithmatex">\([2 \times 3072]\)</span> matrix</p>
+</li>
+<li>
+<p><span class="arithmatex">\(b\)</span>: <span class="arithmatex">\([2 \times 1]\)</span> vector  </p>
+</li>
+<li>
+<p>Input: <span class="arithmatex">\([3072 \times 1]\)</span> flattened image</p>
+</li>
+<li>
+<p>Output: <span class="arithmatex">\([2 \times 1]\)</span> vector with cat and dog scores</p>
+</li>
+</ul>
+<p>The class with the higher score is our prediction. For example, if <span class="arithmatex">\(s_{\text{cat}} = 2.1\)</span> and <span class="arithmatex">\(s_{\text{dog}} = 0.8\)</span>, we predict "cat".</p>
+<p><strong>Geometric Interpretation: What about 1 class?</strong></p>
+<p>When we have just 1 class, the linear classifier becomes even simpler. In this case:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(K = 1\)</span> (one class)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(W\)</span> becomes a <span class="arithmatex">\([1 \times D]\)</span> vector (a single row)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(b\)</span> becomes a scalar</p>
+</li>
+<li>
+<p>The output is a single score: <span class="arithmatex">\(f(x_i, W, b) = Wx_i + b\)</span> (scalar)</p>
+</li>
+</ul>
+<p>Geometrically, this means we're computing the <strong>dot product</strong> between the weight vector <span class="arithmatex">\(W\)</span> and the input image <span class="arithmatex">\(x_i\)</span>, plus a bias term. The dot product <span class="arithmatex">\(W \cdot x_i\)</span> measures how "aligned" the input image is with the learned weight vector <span class="arithmatex">\(W\)</span>.</p>
+<ul>
+<li>
+<p>If <span class="arithmatex">\(W \cdot x_i + b &gt; 0\)</span>, we predict the positive class</p>
+</li>
+<li>
+<p>If <span class="arithmatex">\(W \cdot x_i + b &lt; 0\)</span>, we predict the negative class (or "not the class")</p>
+</li>
+<li>
+<p>The decision boundary is the hyperplane (a hyperplane is a flat, n-1 dimensional boundary that divides an n-dimensional space into two sections. In 2D, a hyperplane is a line, and in 3D, it's a plane. In machine learning, hyperplanes are used to categorize data by separating different classes) where <span class="arithmatex">\(W \cdot x_i + b = 0\)</span></p>
+</li>
+</ul>
+<p><strong>Why positive for positive class and negative for negative class?</strong></p>
+<p>This is actually just a <strong>convention</strong> - we could have chosen the opposite! The key insight is that we need a way to distinguish between the two classes, and using the sign of the output is a natural way to do this.</p>
+<p>The convention makes intuitive sense:
+- <strong>Positive score</strong> → "Yes, this image belongs to the target class"
+- <strong>Negative score</strong> → "No, this image does not belong to the target class"</p>
+<p>The actual values of <span class="arithmatex">\(W\)</span> and <span class="arithmatex">\(b\)</span> are learned during training to make this distinction meaningful. The learning process will adjust <span class="arithmatex">\(W\)</span> and <span class="arithmatex">\(b\)</span> so that:
+- Images of the target class tend to produce positive scores
+- Images of other classes tend to produce negative scores</p>
+<p>We could just as easily flip the convention and say "negative means positive class" - the math would work the same way, just with the signs flipped.</p>
+<p>This is essentially a <strong>linear separator</strong> in the high-dimensional pixel space. The weight vector <span class="arithmatex">\(W\)</span> can be thought of as a "template" - it learns what patterns in the pixel space are most indicative of the target class.</p>
+<p><strong>Geometric Visualization of the Hyperplane when K=1</strong></p>
+<p>When K=1, we're working in a very high-dimensional space (e.g., 3072 dimensions for CIFAR-10 images). While we can't visualize 3072 dimensions directly, we can understand the geometry:</p>
+<ol>
+<li>
+<p><strong>The Hyperplane</strong>: The equation <span class="arithmatex">\(W \cdot x_i + b = 0\)</span> defines a hyperplane in <span class="arithmatex">\(\mathbb{R}^{3072}\)</span>. This hyperplane has dimension 3071 (one less than the ambient space).</p>
+</li>
+<li>
+<p><strong>Normal Vector</strong>: The weight vector <span class="arithmatex">\(W\)</span> is <strong>perpendicular</strong> to the hyperplane. This means <span class="arithmatex">\(W\)</span> points in the direction of maximum "positive class-ness" - the direction that most increases the score.</p>
+</li>
+<li>
+<p><strong>Distance from Origin</strong>: The bias term <span class="arithmatex">\(b\)</span> determines how far the hyperplane is from the origin. Specifically, the distance from the origin to the hyperplane is <span class="arithmatex">\(\frac{|b|}{\|W\|}\)</span>.</p>
+</li>
+<li>
+<p><strong>Two Half-Spaces</strong>: The hyperplane divides the 3072-dimensional space into two regions:</p>
+</li>
+<li><strong>Positive half-space</strong>: <span class="arithmatex">\(W \cdot x_i + b &gt; 0\)</span> (predict positive class)</li>
+<li>
+<p><strong>Negative half-space</strong>: <span class="arithmatex">\(W \cdot x_i + b &lt; 0\)</span> (predict negative class)</p>
+</li>
+<li>
+<p><strong>Intuitive Picture in 2D</strong>: Imagine projecting this onto 2D - the hyperplane becomes a line, and <span class="arithmatex">\(W\)</span> is perpendicular to that line. Points on one side of the line are classified as positive, points on the other side as negative.</p>
+</li>
+</ol>
+<p>The key insight is that even though we're in 3072 dimensions, the decision boundary is still just a flat hyperplane - it's not curved or complex. This is what makes linear classifiers "linear"!</p>
 
 
 
