@@ -842,6 +842,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Regularization
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -853,6 +866,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cross-entropy-loss-with-l2-regularization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cross-Entropy Loss with L2 Regularization
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1834,6 +1875,53 @@
 
 
 <h1 id="regularization">Regularization</h1>
+<p>Increasing the amount of training data is one way of reducing overfitting. Fortunately, there are other techniques which can reduce overfitting, even when we have a fixed network and fixed training data. These are known as regularization techniques.</p>
+<h2 id="cross-entropy-loss-with-l2-regularization">Cross-Entropy Loss with L2 Regularization</h2>
+<p>The complete loss function for a softmax classifier with L2 regularization combines the cross-entropy loss with a regularization term:</p>
+<div class="arithmatex">\[L = \frac{1}{N} \sum_{i=1}^{N} L_i + \lambda R(W)\]</div>
+<p>where:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(L_i = -\log\left(\frac{e^{f_{y_i}}}{\sum_j e^{f_j}}\right)\)</span> is the cross-entropy loss for the <span class="arithmatex">\(i\)</span>-th sample</p>
+</li>
+<li>
+<p><span class="arithmatex">\(R(W) = \sum_k \sum_l W_{k,l}^2\)</span> is the L2 regularization term (sum of squared weights)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\lambda\)</span> is the regularization strength hyperparameter</p>
+</li>
+<li>
+<p><span class="arithmatex">\(N\)</span> is the number of training samples</p>
+</li>
+</ul>
+<p>Intuitively, the effect of regularization is to make it so the network prefers to learn small weights, all other things being equal. Put another way, regularization can be viewed as a way of compromising between finding small weights and minimizing the original loss function. The relative importance of the two elements of the compromise depends on the value of <span class="arithmatex">\(\lambda\)</span>: when <span class="arithmatex">\(\lambda\)</span> is small we prefer to minimize the original loss function, but when is large we prefer small weights.</p>
+<p>The compromise exists because the two objectives in our loss function can conflict with each other:</p>
+<ol>
+<li>
+<p><strong>Minimizing the original loss function</strong>: This encourages the model to fit the training data as well as possible, which often requires large weights to capture complex patterns and noise in the data. To understand why large weights are often needed, consider what happens when we try to fit training data perfectly. Real training data often contains noise, outliers, or mislabeled examples. To achieve near zero training error, the model must learn to classify these noisy examples correctly. The model must thus be sensitive to noisy samples. Having large weights makes the model sensitive to variation in input data. The model might learn to recognize very specific features of individual training examples (like particular pixel patterns, lighting conditions, or background elements) rather than generalizable features. This often requires large weights to amplify these specific signals. In essence, the original loss function asks: "How can I classify every training example correctly?". The answer often involves learning very specific, complex patterns with noise that require large weights to implement.</p>
+</li>
+<li>
+<p><strong>Minimizing the regularization term</strong>: This encourages small weights, which constrains the model's capacity to fit complex patterns.</p>
+</li>
+</ol>
+<p><strong>Example: Which weights does the regularizer prefer?</strong></p>
+<p>Consider the following example with input <span class="arithmatex">\(x = [1, 1, 1, 1]\)</span> and two different weight vectors:</p>
+<ul>
+<li><span class="arithmatex">\(w_1 = [1, 0, 0, 0]\)</span> </li>
+<li><span class="arithmatex">\(w_2 = [0.25, 0.25, 0.25, 0.25]\)</span></li>
+</ul>
+<p>Both weight vectors produce the same output: <span class="arithmatex">\(w_1 \cdot x = 1\)</span> and <span class="arithmatex">\(w_2 \cdot x = 1\)</span>. However, the L2 regularizer strongly prefers <span class="arithmatex">\(w_2\)</span> over <span class="arithmatex">\(w_1\)</span>.</p>
+<p><strong>L2 regularization calculation:</strong></p>
+<ul>
+<li>
+<p><span class="arithmatex">\(R(w_1) = \sum_{i} w_{1,i}^2 = 1^2 + 0^2 + 0^2 + 0^2 = 1\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(R(w_2) = \sum_{i} w_{2,i}^2 = 0.25^2 + 0.25^2 + 0.25^2 + 0.25^2 = 4 \times 0.0625 = 0.25\)</span></p>
+</li>
+</ul>
+<p>Even though both weight vectors produce identical predictions, the regularizer penalizes <span class="arithmatex">\(w_1\)</span> four times more heavily than <span class="arithmatex">\(w_2\)</span> because <span class="arithmatex">\(w_1\)</span> concentrates all its "weight" in a single dimension, while <span class="arithmatex">\(w_2\)</span> distributes the same total "influence" more evenly across all dimensions.</p>
+<p>This example illustrates why regularization encourages <strong>weight spreading</strong> rather than <strong>weight concentration</strong>- it prefers solutions that use many small weights rather than a few large ones, even when both approaches achieve the same functional result.</p>
 
 
 
