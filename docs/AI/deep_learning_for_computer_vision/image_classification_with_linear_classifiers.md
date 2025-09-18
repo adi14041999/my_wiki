@@ -1,3 +1,78 @@
+# Image Classification with Linear Classifiers
+
+## The Image Classification Task
+
+Image classification is a fundamental computer vision task where, given an image and a set of labels, the goal is to assign the image to one of the labels. This is essentially a supervised learning problem where we want to learn a mapping from input images to discrete class labels.
+
+Formally given a dataset $\mathcal{D} = \{(x_i, y_i)\}_{i=1}^n$ where:
+
+- $x_i$ is an input image (typically represented as a high-dimensional vector of pixel values)
+
+- $y_i$ is the corresponding class label from a predefined set of categories $\{1, 2, \ldots, C\}$
+
+- The task is to learn a function $f: \mathbb{R}^d \rightarrow \{1, 2, \ldots, C\}$ that can accurately predict the class label for new, unseen images
+
+**Key challenges**:
+
+- **High dimensionality**: Images are typically represented as very high-dimensional vectors (e.g., a 224×224 RGB image has 150,528 dimensions)
+
+- **Variability**: The same object can appear in different poses, lighting conditions, scales, backgrounds, camera movements, with background clutter, at different scales (zoom) within the image, with partial occlusion, deformation, and varying contextual information
+
+- **Intra-class variation**: Objects within the same class can look very different
+
+- **Inter-class similarity**: Objects from different classes can sometimes look very similar
+
+## Machine Learning: Data-Driven Approach
+
+The machine learning approach to image classification follows a systematic, data-driven methodology that can be broken down into three main steps:
+
+**1. Collect a Dataset of Images and Labels:** The first step involves gathering a comprehensive dataset where each image is paired with its corresponding class label.
+
+**2. Use ML Algorithms to Train a Classifier:** Once we have the dataset, we employ machine learning algorithms like Linear Regression, Support Vector Machines (SVM), or Logistic Regression to learn a mapping from images to class labels. The choice of algorithm depends on the complexity of the problem, dataset size, and computational constraints. 
+
+**3. Evaluate the Classifier on New Images:** The final step is to assess how well the trained classifier performs on previously unseen images. This evaluation process includes measuring accuracy, precision, recall, and F1-score on the held-out test set. Also includes validation techniques like k-fold cross-validation to get robust performance estimates.
+
+## k-Nearest Neighbors (k-NN) Algorithm
+
+The k-Nearest Neighbors algorithm is one of the simplest and most intuitive machine learning algorithms for classification. It's a non-parametric, instance-based learning method that makes predictions based on the similarity of new examples to previously seen training examples.
+
+**Training Phase**: k-NN is a "lazy learner" - it doesn't actually learn a model during training. Instead, it simply stores all the training examples and their labels.
+
+**Prediction Phase**: For a new test image, k-NN:
+
+1. Computes the distance between the test image and all training images
+
+2. Identifies the k nearest training examples (neighbors)
+
+3. Assigns the class label that appears most frequently among these k neighbors
+
+The choice of distance metric is crucial for k-NN performance:
+
+- **Euclidean Distance**: $d(x, y) = \sqrt{\sum_{i=1}^{n}(x_i - y_i)^2}$
+
+- **Manhattan Distance**: $d(x, y) = \sum_{i=1}^{n}|x_i - y_i|$
+
+- **Cosine Similarity**: $d(x, y) = 1 - \frac{x \cdot y}{||x|| \cdot ||y||}$
+
+Understanding the computational efficiency of k-NN requires analyzing its time complexity using Big O notation.
+
+**Big O Notation**: $O(f(n))$ describes how the runtime of an algorithm grows as the input size $n$ increases. It provides an upper bound on the worst-case performance, focusing on the dominant term and ignoring constants and lower-order terms.
+
+**k-NN Time Complexity**:
+
+- **Training Time**: $O(1)$ - k-NN doesn't perform any computation during training; it simply stores the training data
+
+- **Prediction Time**: $O(N)$ - For each prediction, k-NN must compute distances to all $N$ training examples
+
+In real-world applications, we typically want classifiers that are **fast at prediction** and can tolerate **slow training** because:
+
+1. **Training happens once**: We train the model offline, often overnight or over days, so training time is less critical
+2. **Prediction happens repeatedly**: Once deployed, the model makes thousands or millions of predictions per day
+3. **Real-time requirements**: Many applications (autonomous vehicles, medical diagnosis, security systems) need immediate predictions
+4. **Scalability**: As the dataset grows, k-NN prediction time grows linearly, making it impractical for large-scale systems
+
+This is why we often prefer **parametric models** (like linear classifiers) that invest computational effort upfront during training to enable fast predictions later.
+
 # Linear Classification
 
 kNN has a number of disadvantages:

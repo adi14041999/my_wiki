@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/ai/deep_learning_for_computer_vision/linear_classification/">
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/ai/deep_learning_for_computer_vision/image_classification_with_linear_classifiers/">
       
       
         <link rel="prev" href="../introduction/">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Linear Classification - My Wiki</title>
+        <title>Image Classification with Linear Classifiers - My Wiki</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#linear-classification" class="md-skip">
+        <a href="#image-classification-with-linear-classifiers" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Linear Classification
+              Image Classification with Linear Classifiers
             
           </span>
         </div>
@@ -824,7 +824,7 @@
   
   
   <span class="md-ellipsis">
-    Linear Classification
+    Image Classification with Linear Classifiers
     
   </span>
   
@@ -837,7 +837,7 @@
   
   
   <span class="md-ellipsis">
-    Linear Classification
+    Image Classification with Linear Classifiers
     
   </span>
   
@@ -860,9 +860,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#parameterized-mapping-from-images-to-label-scores" class="md-nav__link">
+  <a href="#the-image-classification-task" class="md-nav__link">
     <span class="md-ellipsis">
-      Parameterized mapping from images to label scores
+      The Image Classification Task
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#machine-learning-data-driven-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Machine Learning: Data-Driven Approach
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#k-nearest-neighbors-k-nn-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      k-Nearest Neighbors (k-NN) Algorithm
     </span>
   </a>
   
@@ -1828,6 +1846,87 @@
 
 
 
+<h1 id="image-classification-with-linear-classifiers">Image Classification with Linear Classifiers</h1>
+<h2 id="the-image-classification-task">The Image Classification Task</h2>
+<p>Image classification is a fundamental computer vision task where, given an image and a set of labels, the goal is to assign the image to one of the labels. This is essentially a supervised learning problem where we want to learn a mapping from input images to discrete class labels.</p>
+<p>Formally given a dataset <span class="arithmatex">\(\mathcal{D} = \{(x_i, y_i)\}_{i=1}^n\)</span> where:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(x_i\)</span> is an input image (typically represented as a high-dimensional vector of pixel values)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(y_i\)</span> is the corresponding class label from a predefined set of categories <span class="arithmatex">\(\{1, 2, \ldots, C\}\)</span></p>
+</li>
+<li>
+<p>The task is to learn a function <span class="arithmatex">\(f: \mathbb{R}^d \rightarrow \{1, 2, \ldots, C\}\)</span> that can accurately predict the class label for new, unseen images</p>
+</li>
+</ul>
+<p><strong>Key challenges</strong>:</p>
+<ul>
+<li>
+<p><strong>High dimensionality</strong>: Images are typically represented as very high-dimensional vectors (e.g., a 224×224 RGB image has 150,528 dimensions)</p>
+</li>
+<li>
+<p><strong>Variability</strong>: The same object can appear in different poses, lighting conditions, scales, backgrounds, camera movements, with background clutter, at different scales (zoom) within the image, with partial occlusion, deformation, and varying contextual information</p>
+</li>
+<li>
+<p><strong>Intra-class variation</strong>: Objects within the same class can look very different</p>
+</li>
+<li>
+<p><strong>Inter-class similarity</strong>: Objects from different classes can sometimes look very similar</p>
+</li>
+</ul>
+<h2 id="machine-learning-data-driven-approach">Machine Learning: Data-Driven Approach</h2>
+<p>The machine learning approach to image classification follows a systematic, data-driven methodology that can be broken down into three main steps:</p>
+<p><strong>1. Collect a Dataset of Images and Labels:</strong> The first step involves gathering a comprehensive dataset where each image is paired with its corresponding class label.</p>
+<p><strong>2. Use ML Algorithms to Train a Classifier:</strong> Once we have the dataset, we employ machine learning algorithms like Linear Regression, Support Vector Machines (SVM), or Logistic Regression to learn a mapping from images to class labels. The choice of algorithm depends on the complexity of the problem, dataset size, and computational constraints. </p>
+<p><strong>3. Evaluate the Classifier on New Images:</strong> The final step is to assess how well the trained classifier performs on previously unseen images. This evaluation process includes measuring accuracy, precision, recall, and F1-score on the held-out test set. Also includes validation techniques like k-fold cross-validation to get robust performance estimates.</p>
+<h2 id="k-nearest-neighbors-k-nn-algorithm">k-Nearest Neighbors (k-NN) Algorithm</h2>
+<p>The k-Nearest Neighbors algorithm is one of the simplest and most intuitive machine learning algorithms for classification. It's a non-parametric, instance-based learning method that makes predictions based on the similarity of new examples to previously seen training examples.</p>
+<p><strong>Training Phase</strong>: k-NN is a "lazy learner" - it doesn't actually learn a model during training. Instead, it simply stores all the training examples and their labels.</p>
+<p><strong>Prediction Phase</strong>: For a new test image, k-NN:</p>
+<ol>
+<li>
+<p>Computes the distance between the test image and all training images</p>
+</li>
+<li>
+<p>Identifies the k nearest training examples (neighbors)</p>
+</li>
+<li>
+<p>Assigns the class label that appears most frequently among these k neighbors</p>
+</li>
+</ol>
+<p>The choice of distance metric is crucial for k-NN performance:</p>
+<ul>
+<li>
+<p><strong>Euclidean Distance</strong>: <span class="arithmatex">\(d(x, y) = \sqrt{\sum_{i=1}^{n}(x_i - y_i)^2}\)</span></p>
+</li>
+<li>
+<p><strong>Manhattan Distance</strong>: <span class="arithmatex">\(d(x, y) = \sum_{i=1}^{n}|x_i - y_i|\)</span></p>
+</li>
+<li>
+<p><strong>Cosine Similarity</strong>: <span class="arithmatex">\(d(x, y) = 1 - \frac{x \cdot y}{||x|| \cdot ||y||}\)</span></p>
+</li>
+</ul>
+<p>Understanding the computational efficiency of k-NN requires analyzing its time complexity using Big O notation.</p>
+<p><strong>Big O Notation</strong>: <span class="arithmatex">\(O(f(n))\)</span> describes how the runtime of an algorithm grows as the input size <span class="arithmatex">\(n\)</span> increases. It provides an upper bound on the worst-case performance, focusing on the dominant term and ignoring constants and lower-order terms.</p>
+<p><strong>k-NN Time Complexity</strong>:</p>
+<ul>
+<li>
+<p><strong>Training Time</strong>: <span class="arithmatex">\(O(1)\)</span> - k-NN doesn't perform any computation during training; it simply stores the training data</p>
+</li>
+<li>
+<p><strong>Prediction Time</strong>: <span class="arithmatex">\(O(N)\)</span> - For each prediction, k-NN must compute distances to all <span class="arithmatex">\(N\)</span> training examples</p>
+</li>
+</ul>
+<p>In real-world applications, we typically want classifiers that are <strong>fast at prediction</strong> and can tolerate <strong>slow training</strong> because:</p>
+<ol>
+<li><strong>Training happens once</strong>: We train the model offline, often overnight or over days, so training time is less critical</li>
+<li><strong>Prediction happens repeatedly</strong>: Once deployed, the model makes thousands or millions of predictions per day</li>
+<li><strong>Real-time requirements</strong>: Many applications (autonomous vehicles, medical diagnosis, security systems) need immediate predictions</li>
+<li><strong>Scalability</strong>: As the dataset grows, k-NN prediction time grows linearly, making it impractical for large-scale systems</li>
+</ol>
+<p>This is why we often prefer <strong>parametric models</strong> (like linear classifiers) that invest computational effort upfront during training to enable fast predictions later.</p>
 <h1 id="linear-classification">Linear Classification</h1>
 <p>kNN has a number of disadvantages:</p>
 <ul>
