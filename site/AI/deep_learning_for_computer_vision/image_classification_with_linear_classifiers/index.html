@@ -923,6 +923,81 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#loss-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      Loss Function
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Loss Function">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multiclass-support-vector-machine-loss" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multiclass Support Vector Machine loss
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#softmax-classifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      Softmax Classifier
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Softmax Classifier">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-kl-divergence-connection" class="md-nav__link">
+    <span class="md-ellipsis">
+      The KL Divergence connection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practical-issues-numeric-stability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Practical issues: numeric stability
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#svm-vs-softmax" class="md-nav__link">
+    <span class="md-ellipsis">
+      SVM vs. Softmax
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#final-notes-on-terminology" class="md-nav__link">
+    <span class="md-ellipsis">
+      Final notes on terminology
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2106,6 +2181,96 @@
 <div class="arithmatex">\[f(x_i, W) = Wx_i\]</div>
 <p>With our CIFAR-10 example, <span class="arithmatex">\(x_i\)</span> is now <span class="arithmatex">\([3073 \times 1]\)</span> instead of <span class="arithmatex">\([3072 \times 1]\)</span> - (with the extra dimension holding the constant 1), and <span class="arithmatex">\(W\)</span> is now <span class="arithmatex">\([10 \times 3073]\)</span> instead of <span class="arithmatex">\([10 \times 3072]\)</span>. The extra column that <span class="arithmatex">\(W\)</span> now corresponds to the bias <span class="arithmatex">\(b\)</span>. An illustration might help clarify this transformation.</p>
 <p><img alt="Bias trick" src="../bias_trick.jpeg" /></p>
+<h3 id="loss-function">Loss Function</h3>
+<p>We are going to measure our unhappiness with outcomes such as this one with a loss function (or sometimes also referred to as the cost function or the objective). Intuitively, the loss will be high if we’re doing a poor job of classifying the training data, and it will be low if we’re doing well.</p>
+<h4 id="multiclass-support-vector-machine-loss">Multiclass Support Vector Machine loss</h4>
+<p>The SVM loss is set up so that the SVM "wants" the correct class for each image to have a score higher than the incorrect classes by some fixed margin <span class="arithmatex">\(\Delta\)</span>.</p>
+<p>Recall that for the <span class="arithmatex">\(i\)</span>-th example we are given the pixels of image <span class="arithmatex">\(x_i\)</span> and the label <span class="arithmatex">\(y_i\)</span> that specifies the index of the correct class. The score function takes the pixels and computes the vector <span class="arithmatex">\(f(x_i,W)\)</span> of class scores, which we will abbreviate to <span class="arithmatex">\(s\)</span> (short for scores). For example, the score for the <span class="arithmatex">\(j\)</span>-th class is the <span class="arithmatex">\(j\)</span>-th element: <span class="arithmatex">\(s_j = f(x_i,W)_j\)</span>. The Multiclass SVM loss for the <span class="arithmatex">\(i\)</span>-th example is then formalized as follows:</p>
+<div class="arithmatex">\[L_i = \sum_{j \neq y_i} \max(0, s_j - s_{y_i} + \Delta)\]</div>
+<p><strong>Example.</strong> Let's unpack this with an example to see how it works. Suppose that we have three classes that receive the scores <span class="arithmatex">\(s = [13, -7, 11]\)</span>, and that the first class is the true class (i.e. <span class="arithmatex">\(y_i = 0\)</span>). Also assume that <span class="arithmatex">\(\Delta\)</span> (a hyperparameter we will go into more detail about soon) is 10. The expression above sums over all incorrect classes (<span class="arithmatex">\(j \neq y_i\)</span>), so we get two terms:</p>
+<div class="arithmatex">\[L_i = \max(0, -7 - 13 + 10) + \max(0, 11 - 13 + 10)\]</div>
+<p>You can see that the first term gives zero since <span class="arithmatex">\([-7 - 13 + 10]\)</span> gives a negative number, which is then thresholded to zero with the <span class="arithmatex">\(\max(0, -)\)</span> function. We get zero loss for this pair because the correct class score (13) was greater than the incorrect class score (-7) by at least the margin 10. In fact the difference was 20, which is much greater than 10 but the SVM only cares that the difference is at least 10; any additional difference above the margin is clamped at zero with the max operation. The second term computes <span class="arithmatex">\([11 - 13 + 10]\)</span> which gives 8. That is, even though the correct class had a higher score than the incorrect class (13 &gt; 11), it was not greater by the desired margin of 10. The difference was only 2, which is why the loss comes out to 8 (i.e. how much higher the difference would have to be to meet the margin). In summary, the SVM loss function wants the score of the correct class <span class="arithmatex">\(y_i\)</span> to be larger than the incorrect class scores by at least by <span class="arithmatex">\(\Delta\)</span> (delta). If this is not the case, we will accumulate loss.</p>
+<p><img alt="Multiclass SVM loss" src="../svm_loss_margin.jpg" /></p>
+<h3 id="softmax-classifier">Softmax Classifier</h3>
+<p>Unlike the SVM which treats the outputs <span class="arithmatex">\(f(x_i,W)\)</span> as (uncalibrated and possibly difficult to interpret) scores for each class, the Softmax classifier gives a slightly more intuitive output (normalized class probabilities) and also has a probabilistic interpretation that we will describe shortly. In the Softmax classifier, the function mapping <span class="arithmatex">\(f(x_i;W) = Wx_i\)</span> stays unchanged, but we now interpret these scores as the unnormalized log probabilities for each class and replace the hinge loss with a cross-entropy loss. The function <span class="arithmatex">\(f_j(z) = \frac{e^{z_j}}{\sum_k e^{z_k}}\)</span> is called the softmax function: it takes a vector of arbitrary real-valued scores (in <span class="arithmatex">\(z\)</span>) and squashes it to a vector of values between zero and one that sum to one.</p>
+<p>The cross-entropy between a "true" distribution <span class="arithmatex">\(p\)</span> and an estimated distribution <span class="arithmatex">\(q\)</span> is defined as:</p>
+<div class="arithmatex">\[H(p, q) = -\sum_x p(x) \log q(x)\]</div>
+<p><em>Note: This derivation is for the <span class="arithmatex">\(i\)</span>-th sample, where <span class="arithmatex">\(y_i\)</span> is the correct class label for that sample.</em></p>
+<p>For the Softmax classifier, we have:</p>
+<ul>
+<li>
+<p>True distribution: <span class="arithmatex">\(p_i = [0, \ldots, 1, \ldots, 0]\)</span> (one-hot vector with 1 at position <span class="arithmatex">\(y_i\)</span>)</p>
+</li>
+<li>
+<p>Estimated distribution: <span class="arithmatex">\(q_{i,j} = \frac{e^{f_j}}{\sum_k e^{f_k}}\)</span> (softmax probabilities)</p>
+</li>
+</ul>
+<p>Substituting into the cross-entropy formula:</p>
+<div class="arithmatex">\[H(p_i,q_i) = -\sum_{j=1}^{K} p_{i,j} \log q_{i,j}\]</div>
+<p>Since <span class="arithmatex">\(p_i\)</span> is a one-hot vector, only <span class="arithmatex">\(p_{i,y_i} = 1\)</span> and all other <span class="arithmatex">\(p_{i,j} = 0\)</span>:</p>
+<div class="arithmatex">\[H(p_i,q_i) = -p_{i,y_i} \log q_{i,y_i} - \sum_{j \neq y_i} p_{i,j} \log q_{i,j} = -1 \cdot \log q_{i,y_i} - \sum_{j \neq y_i} 0 \cdot \log q_{i,j}\]</div>
+<div class="arithmatex">\[H(p_i,q_i) = -\log q_{i,y_i} = -\log\left(\frac{e^{f_{y_i}}}{\sum_k e^{f_k}}\right) = L_i\]</div>
+<div class="arithmatex">\[L_i = -\log\left(\frac{e^{f_{y_i}}}{\sum_j e^{f_j}}\right) \quad \text{or equivalently} \quad L_i = -f_{y_i} + \log\sum_j e^{f_j}\]</div>
+<p>where we are using the notation <span class="arithmatex">\(f_j\)</span> to mean the <span class="arithmatex">\(j\)</span>-th element of the vector of class scores <span class="arithmatex">\(f\)</span>. As before, the full loss for the dataset is the mean of <span class="arithmatex">\(L_i\)</span> over all training examples together with a regularization term <span class="arithmatex">\(R(W)\)</span>. The function <span class="arithmatex">\(f_j(z) = \frac{e^{z_j}}{\sum_k e^{z_k}}\)</span> is called the softmax function: it takes a vector of arbitrary real-valued scores (in <span class="arithmatex">\(z\)</span>) and squashes it to a vector of values between zero and one that sum to one.</p>
+<p>Therefore, the cross-entropy between the true one-hot distribution and the estimated softmax distribution is exactly the Softmax loss <span class="arithmatex">\(L_i\)</span>.</p>
+<p>The Softmax classifier is hence minimizing the cross-entropy between the estimated class probabilities (<span class="arithmatex">\(q_{i,j} = e^{f_{y_i}}/\sum_j e^{f_j}\)</span> as seen above) and the "true" distribution, which in this interpretation is the distribution where all probability mass is on the correct class (i.e. <span class="arithmatex">\(p_i = [0, \ldots, 1, \ldots, 0]\)</span> contains a single 1 at the <span class="arithmatex">\(y_i\)</span>-th position.).</p>
+<h4 id="the-kl-divergence-connection">The KL Divergence connection</h4>
+<p>Before diving into KL divergence, let's understand entropy. The entropy <span class="arithmatex">\(H(p)\)</span> of a distribution <span class="arithmatex">\(p\)</span> measures the average amount of information (or uncertainty) in the distribution:</p>
+<div class="arithmatex">\[H(p) = -\sum_x p_{x} \log p_{x}\]</div>
+<ul>
+<li>
+<p><strong>High entropy</strong>: Distribution is spread out, high uncertainty (e.g., uniform distribution)</p>
+</li>
+<li>
+<p><strong>Low entropy</strong>: Distribution is concentrated, low uncertainty (e.g., one-hot distribution)</p>
+</li>
+</ul>
+<p><em>Note: This derivation is for the <span class="arithmatex">\(i\)</span>-th sample, where <span class="arithmatex">\(y_i\)</span> is the correct class label for that sample.</em></p>
+<p>For our one-hot true distribution <span class="arithmatex">\(p_i\)</span> where <span class="arithmatex">\(p_{i,y_i} = 1\)</span> and <span class="arithmatex">\(p_{i,j} = 0\)</span> for <span class="arithmatex">\(j \neq y_i\)</span>:</p>
+<div class="arithmatex">\[H(p_i) = -p_{i,y_i} \log p_{i,y_i} - \sum_{j \neq y_i} p_{i,j} \log p_{i,j} = -1 \cdot \log 1 - \sum_{j \neq y_i} 0 \cdot \log 0 = 0\]</div>
+<p>The entropy is zero because there's no uncertainty - we know exactly which class is correct.</p>
+<p>The KL divergence <span class="arithmatex">\(D_{KL}(p||q)\)</span> measures how much information is lost when we use distribution <span class="arithmatex">\(q\)</span> to approximate distribution <span class="arithmatex">\(p\)</span>. It's defined as:</p>
+<div class="arithmatex">\[D_{KL}(p||q) = \sum_x p_{x} \log\left(\frac{p_{x}}{q_{x}}\right)\]</div>
+<p><em>Note: This derivation is for the <span class="arithmatex">\(i\)</span>-th sample, where <span class="arithmatex">\(y_i\)</span> is the correct class label for that sample.</em></p>
+<p>For our one-hot true distribution <span class="arithmatex">\(p_i\)</span> where <span class="arithmatex">\(p_{i,y_i} = 1\)</span> and <span class="arithmatex">\(p_{i,j} = 0\)</span> for <span class="arithmatex">\(j \neq y_i\)</span>:</p>
+<div class="arithmatex">\[D_{KL}(p_i||q_i) = p_{i,y_i} \log\left(\frac{p_{i,y_i}}{q_{i,y_i}}\right) + \sum_{j \neq y_i} p_{i,j} \log\left(\frac{p_{i,j}}{q_{i,j}}\right)\]</div>
+<div class="arithmatex">\[D_{KL}(p_i||q_i) = 1 \cdot \log\left(\frac{1}{q_{i,y_i}}\right) + \sum_{j \neq y_i} 0 \cdot \log\left(\frac{0}{q_{i,j}}\right) = -\log q_{i,y_i}\]</div>
+<p>Since <span class="arithmatex">\(H(p_i) = 0\)</span> (the entropy of a deterministic distribution is zero), we have:</p>
+<div class="arithmatex">\[H(p_i,q_i) = H(p_i) + D_{KL}(p_i||q_i) = 0 + (-\log q_{i,y_i}) = -\log q_{i,y_i} = L_i\]</div>
+<p>This shows that minimizing the cross-entropy loss is exactly equivalent to minimizing the KL divergence between the true one-hot distribution and the predicted softmax distribution. The KL divergence is zero only when <span class="arithmatex">\(q_{i,y_i} = 1\)</span> (perfect confidence in the correct class), and it increases as the predicted probability of the correct class decreases.</p>
+<h4 id="practical-issues-numeric-stability">Practical issues: numeric stability</h4>
+<p>When you're writing code for computing the Softmax function in practice, the intermediate terms <span class="arithmatex">\(e^{f_{y_i}}\)</span> and <span class="arithmatex">\(\sum_j e^{f_j}\)</span> may be very large due to the exponentials. Dividing large numbers can be numerically unstable, so it is important to use a normalization trick. Notice that if we multiply the top and bottom of the fraction by a constant <span class="arithmatex">\(C\)</span> and push it into the sum, we get the following (mathematically equivalent) expression:</p>
+<div class="arithmatex">\[\frac{e^{f_{y_i}}}{\sum_j e^{f_j}} = \frac{C e^{f_{y_i}}}{C \sum_j e^{f_j}} = \frac{e^{f_{y_i} + \log C}}{\sum_j e^{f_j + \log C}}\]</div>
+<p>We are free to choose the value of <span class="arithmatex">\(C\)</span>. This will not change any of the results, but we can use this value to improve the numerical stability of the computation. A common choice for <span class="arithmatex">\(C\)</span> is to set <span class="arithmatex">\(\log C = -\max_j f_j\)</span>. This simply states that we should shift the values inside the vector <span class="arithmatex">\(f\)</span> so that the highest value is zero.</p>
+<p><strong>Example code:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">123</span><span class="p">,</span> <span class="mi">456</span><span class="p">,</span> <span class="mi">789</span><span class="p">])</span> <span class="c1"># example with 3 classes and each having large scores</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">f</span><span class="p">))</span> <span class="c1"># Bad: Numeric problem, potential blowup</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># instead: first shift the values of f so that the highest number is 0:</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">f</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="c1"># f becomes [-666, -333, 0]</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">f</span><span class="p">))</span> <span class="c1"># safe to do, gives the correct answer</span>
+</code></pre></div>
+<h3 id="svm-vs-softmax">SVM vs. Softmax</h3>
+<p>A picture might help clarify the distinction between the Softmax and SVM classifiers using an example.</p>
+<p><img alt="SVM vs Softmax" src="../svmvssoftmax.png" /></p>
+<h3 id="final-notes-on-terminology">Final notes on terminology</h3>
+<p><strong>1. Softmax</strong></p>
+<p>The softmax function is not a classifier itself, but it is an essential component of a classifier. The term "softmax classifier" is often used informally to describe a multi-class classification model that uses the softmax function in its final layer. However, the actual classification work—the process of learning to predict the correct classes—is done by the entire model, not just the softmax layer.</p>
+<p><strong>2. SVM</strong></p>
+<p>A "linear classifier + SVM loss function" is a Linear SVM. This is not a new or different kind of model; it is simply a Support Vector Machine that uses a linear function to find the optimal decision boundary.</p>
+<p>The key components of a Linear SVM are:</p>
+<ul>
+<li>
+<p><strong>Linear decision function</strong>: <span class="arithmatex">\(f(x) = Wx + b\)</span></p>
+</li>
+<li>
+<p><strong>Hinge loss</strong>: <span class="arithmatex">\(L_i = \sum_{j \neq y_i} \max(0, s_j - s_{y_i} + \Delta)\)</span></p>
+</li>
+<li>
+<p><strong>Margin maximization</strong>: The SVM tries to maximize the margin between classes</p>
+</li>
+</ul>
+<p>The term "Linear SVM" emphasizes that the decision boundary is linear (a hyperplane), as opposed to kernel SVMs that can have non-linear decision boundaries through the kernel trick.</p>
 
 
 
