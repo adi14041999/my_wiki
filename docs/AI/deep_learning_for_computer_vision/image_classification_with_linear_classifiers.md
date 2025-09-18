@@ -73,7 +73,7 @@ In real-world applications, we typically want classifiers that are **fast at pre
 
 This is why we often prefer **parametric models** (like linear classifiers) that invest computational effort upfront during training to enable fast predictions later.
 
-# Linear Classification
+## Linear Classifiers
 
 kNN has a number of disadvantages:
 
@@ -82,7 +82,7 @@ kNN has a number of disadvantages:
 
 We are now going to develop a more powerful approach to image classification that we will eventually naturally extend to Neural Networks. The approach will have two major components: a score function that maps the raw data to class scores, and a loss function that quantifies the agreement between the predicted scores and the ground truth labels. We will then cast this as an optimization problem in which we will minimize the loss function with respect to the parameters of the score function.
 
-## Parameterized mapping from images to label scores
+### Parameterized mapping from images to label scores
 
 The first component of this approach is to define the score function that maps the pixel values of an image to confidence scores for each class. We will develop the approach with a concrete example. Let's assume a training dataset of images $x_i \in \mathbb{R}^D$, each associated with a label $y_i$. Here $i = 1 \ldots N$ and $y_i \in 1 \ldots K$. That is, we have $N$ examples (each with a dimensionality $D$) and $K$ distinct categories. For example, in CIFAR-10 we have a training set of $N = 50,000$ images, each with $D = 32 \times 32 \times 3 = 3072$ pixels, and $K = 10$, since there are 10 distinct classes (dog, cat, car, etc). We will now define the score function $f: \mathbb{R}^D \mapsto \mathbb{R}^K$ that maps the raw image pixels to class scores.
 
@@ -125,57 +125,3 @@ For a $32 \times 32 \times 3$ image, we'd have:
 - Output: $[2 \times 1]$ vector with cat and dog scores
 
 The class with the higher score is our prediction. For example, if $s_{\text{cat}} = 2.1$ and $s_{\text{dog}} = 0.8$, we predict "cat".
-
-**Geometric Interpretation: What about 1 class?**
-
-When we have just 1 class, the linear classifier becomes even simpler. In this case:
-
-- $K = 1$ (one class)
-
-- $W$ becomes a $[1 \times D]$ vector (a single row)
-
-- $b$ becomes a scalar
-
-- The output is a single score: $f(x_i, W, b) = Wx_i + b$ (scalar)
-
-Geometrically, this means we're computing the **dot product** between the weight vector $W$ and the input image $x_i$, plus a bias term. The dot product $W \cdot x_i$ measures how "aligned" the input image is with the learned weight vector $W$.
-
-- If $W \cdot x_i + b > 0$, we predict the positive class
-
-- If $W \cdot x_i + b < 0$, we predict the negative class (or "not the class")
-
-- The decision boundary is the hyperplane (a hyperplane is a flat, n-1 dimensional boundary that divides an n-dimensional space into two sections. In 2D, a hyperplane is a line, and in 3D, it's a plane. In machine learning, hyperplanes are used to categorize data by separating different classes) where $W \cdot x_i + b = 0$
-
-**Why positive for positive class and negative for negative class?**
-
-This is actually just a **convention** - we could have chosen the opposite! The key insight is that we need a way to distinguish between the two classes, and using the sign of the output is a natural way to do this.
-
-The convention makes intuitive sense:
-- **Positive score** → "Yes, this image belongs to the target class"
-- **Negative score** → "No, this image does not belong to the target class"
-
-The actual values of $W$ and $b$ are learned during training to make this distinction meaningful. The learning process will adjust $W$ and $b$ so that:
-- Images of the target class tend to produce positive scores
-- Images of other classes tend to produce negative scores
-
-We could just as easily flip the convention and say "negative means positive class" - the math would work the same way, just with the signs flipped.
-
-This is essentially a **linear separator** in the high-dimensional pixel space. The weight vector $W$ can be thought of as a "template" - it learns what patterns in the pixel space are most indicative of the target class.
-
-**Geometric Visualization of the Hyperplane when K=1**
-
-When K=1, we're working in a very high-dimensional space (e.g., 3072 dimensions for CIFAR-10 images). While we can't visualize 3072 dimensions directly, we can understand the geometry:
-
-1. **The Hyperplane**: The equation $W \cdot x_i + b = 0$ defines a hyperplane in $\mathbb{R}^{3072}$. This hyperplane has dimension 3071 (one less than the ambient space).
-
-2. **Normal Vector**: The weight vector $W$ is **perpendicular** to the hyperplane. This means $W$ points in the direction of maximum "positive class-ness" - the direction that most increases the score.
-
-3. **Distance from Origin**: The bias term $b$ determines how far the hyperplane is from the origin. Specifically, the distance from the origin to the hyperplane is $\frac{|b|}{\|W\|}$.
-
-4. **Two Half-Spaces**: The hyperplane divides the 3072-dimensional space into two regions:
-   - **Positive half-space**: $W \cdot x_i + b > 0$ (predict positive class)
-   - **Negative half-space**: $W \cdot x_i + b < 0$ (predict negative class)
-
-5. **Intuitive Picture in 2D**: Imagine projecting this onto 2D - the hyperplane becomes a line, and $W$ is perpendicular to that line. Points on one side of the line are classified as positive, points on the other side as negative.
-
-The key insight is that even though we're in 3072 dimensions, the decision boundary is still just a flat hyperplane - it's not curved or complex. This is what makes linear classifiers "linear"!
