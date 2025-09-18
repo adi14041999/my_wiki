@@ -102,26 +102,130 @@ There are a few things to note:
 
 4. **Lastly**, note that classifying the test image involves a single matrix multiplication and addition, which is significantly faster than comparing a test image to all training images.
 
-**Example: Binary Classification**
+**Geometric Interpretation**
 
-To make this more concrete, let's consider a simpler example with just two classes (e.g., "cat" vs "dog"). In this case:
+To understand linear classifiers geometrically, let's first consider the general form of a plane in ℝ³:
 
-- $K = 2$ (two classes)
+$$ax + by + cz = d$$
 
-- $W$ becomes a $[2 \times D]$ matrix
+where $(a, b, c)$ is the **normal vector** to the plane and $d$ determines the plane's position in space.
 
-- $b$ becomes a $[2 \times 1]$ vector
+- The normal vector $(a, b, c)$ is perpendicular to the plane
 
-- The output $f(x_i, W, b) = Wx_i + b$ gives us two scores: $[s_{\text{cat}}, s_{\text{dog}}]$
+- The plane divides 3D space into two half-spaces
 
-For a $32 \times 32 \times 3$ image, we'd have:
+- Points on one side of the plane satisfy $ax + by + cz > d$
 
-- $W$: $[2 \times 3072]$ matrix
+- Points on the other side satisfy $ax + by + cz < d$
 
-- $b$: $[2 \times 1]$ vector  
+- Points on the plane satisfy $ax + by + cz = d$
 
-- Input: $[3072 \times 1]$ flattened image
+**Example**: The plane $2x - 3y + 4z = 12$ has normal vector $(2, -3, 4)$.
 
-- Output: $[2 \times 1]$ vector with cat and dog scores
+Now, let's see how this relates to linear classifiers. In a binary classification problem, our linear classifier computes:
 
-The class with the higher score is our prediction. For example, if $s_{\text{cat}} = 2.1$ and $s_{\text{dog}} = 0.8$, we predict "cat".
+$$f(x) = w^T x + b$$
+
+where $w$ is the weight vector and $b$ is the bias.
+
+**The Decision Boundary**: The equation $w^T x + b = 0$ defines a **hyperplane** in the input space that separates the two classes. This is exactly analogous to the plane equation $ax + by + cz = d$. This is how:
+
+- $w$ is the **normal vector** to the hyperplane (just like $(a, b, c)$ in the plane equation)
+
+- $b$ determines the **position** of the hyperplane (just like $d$ in the plane equation)
+
+- The hyperplane divides the input space into two half-spaces
+
+- Points in one half-space are classified as class 1 ($w^T x + b > 0$)
+
+- Points in the other half-space are classified as class 2 ($w^T x + b < 0$)
+
+**Multi-class extension**: For $K$ classes, we have $K$ hyperplanes, each defined by a row of the weight matrix $W$. 
+
+In the multi-class case, we have $K$ score functions:
+
+$$f_1(x) = w_1^T x + b_1$$
+
+$$f_2(x) = w_2^T x + b_2$$
+
+$$\vdots$$
+
+$$f_K(x) = w_K^T x + b_K$$
+
+The classifier predicts class $i$ if $f_i(x) > f_j(x)$ for all $j \neq i$.
+
+The decision boundary between classes $i$ and $j$ is the set of points where the classifier is indifferent between the two classes, i.e., where $f_i(x) = f_j(x)$.
+
+Starting with:
+
+$$f_i(x) = f_j(x)$$
+
+Substituting the score functions:
+
+$$w_i^T x + b_i = w_j^T x + b_j$$
+
+Rearranging terms:
+
+$$w_i^T x - w_j^T x = b_j - b_i$$
+
+Factoring out $x$:
+
+$$(w_i - w_j)^T x = b_j - b_i$$
+
+Moving all terms to one side:
+
+$$(w_i - w_j)^T x + (b_i - b_j) = 0$$
+
+The decision boundary between classes $i$ and $j$ is the hyperplane:
+
+$$(w_i - w_j)^T x + (b_i - b_j) = 0$$
+
+Note:
+
+- The normal vector to this decision boundary is $(w_i - w_j)$
+
+- The bias term is $(b_i - b_j)$
+
+- Points on one side of this hyperplane are classified as class $i$
+
+- Points on the other side are classified as class $j$
+
+- Points on the hyperplane are exactly at the decision boundary
+
+**Why this matters**: This geometric interpretation helps us understand that:
+
+1. Linear classifiers create **linear decision boundaries**
+
+2. The weight vector $w$ determines the **orientation** of the decision boundary
+
+3. The bias $b$ determines the **position** of the decision boundary
+
+4. The classifier's performance depends on how well the data can be separated by these linear boundaries
+
+This connection between planes in ℝ³ and hyperplanes in linear classifiers provides an intuitive way to visualize and understand how linear classifiers work geometrically.
+
+Coming back to CIFAR-10, we cannot visualize 3072-dimensional spaces, but if we imagine squashing all those dimensions into only two dimensions, then we can try to visualize what the classifier might be doing.
+
+![Multi-class extension](linear_classifier.jpeg)
+
+Above figure shows a cartoon representation of the image space, where each image is a single point, and three classifiers are visualized. For example, take the car classifier (in red), where the red line shows all points in the space that get a score of zero for the car class. The red arrow shows the direction of increase, so all points to the right of the red line have positive (and linearly increasing) scores, and all points to the left have a negative (and linearly decreasing) scores.
+
+As we saw above, every row of $W$ is a classifier for one of the classes. The geometric interpretation of these numbers is that as we change one of the rows of $W$, the corresponding line in the pixel space will rotate in different directions. The biases $b$, on the other hand, allow our classifiers to translate the lines.
+
+### Template Matching interpretation
+
+Another interpretation for the weights $W$ is that each row of $W$ corresponds to a template (or sometimes also called a prototype) for one of the classes. The score of each class for an image is then obtained by comparing each template with the image using an inner product (or dot product) one by one to find the one that "fits" best. With this terminology, the linear classifier is doing template matching, where the templates are learned. Another way to think of it is that we are still effectively doing Nearest Neighbor, but instead of having thousands of training images we are only using a single image per class.
+
+### Bias Trick
+
+Recall that we defined the score function as:
+
+$$f(x_i, W, b) = Wx_i + b$$
+
+It is a little cumbersome to keep track of two sets of parameters (the biases $b$ and weights $W$) separately. A commonly used trick is to combine the two sets of parameters into a single matrix that holds both of them by extending the vector $x_i$ with one additional dimension that always holds the constant 1- a default bias dimension. With the extra dimension, the new score function will simplify to a single matrix multiply:
+
+$$f(x_i, W) = Wx_i$$
+
+With our CIFAR-10 example, $x_i$ is now $[3073 \times 1]$ instead of $[3072 \times 1]$ - (with the extra dimension holding the constant 1), and $W$ is now $[10 \times 3073]$ instead of $[10 \times 3072]$. The extra column that $W$ now corresponds to the bias $b$. An illustration might help clarify this transformation.
+
+![Bias trick](bias_trick.jpeg)

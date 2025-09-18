@@ -905,6 +905,24 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#template-matching-interpretation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Template Matching interpretation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bias-trick" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bias Trick
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1978,38 +1996,116 @@
 <p><strong>Lastly</strong>, note that classifying the test image involves a single matrix multiplication and addition, which is significantly faster than comparing a test image to all training images.</p>
 </li>
 </ol>
-<p><strong>Example: Binary Classification</strong></p>
-<p>To make this more concrete, let's consider a simpler example with just two classes (e.g., "cat" vs "dog"). In this case:</p>
+<p><strong>Geometric Interpretation</strong></p>
+<p>To understand linear classifiers geometrically, let's first consider the general form of a plane in ℝ³:</p>
+<div class="arithmatex">\[ax + by + cz = d\]</div>
+<p>where <span class="arithmatex">\((a, b, c)\)</span> is the <strong>normal vector</strong> to the plane and <span class="arithmatex">\(d\)</span> determines the plane's position in space.</p>
 <ul>
 <li>
-<p><span class="arithmatex">\(K = 2\)</span> (two classes)</p>
+<p>The normal vector <span class="arithmatex">\((a, b, c)\)</span> is perpendicular to the plane</p>
 </li>
 <li>
-<p><span class="arithmatex">\(W\)</span> becomes a <span class="arithmatex">\([2 \times D]\)</span> matrix</p>
+<p>The plane divides 3D space into two half-spaces</p>
 </li>
 <li>
-<p><span class="arithmatex">\(b\)</span> becomes a <span class="arithmatex">\([2 \times 1]\)</span> vector</p>
+<p>Points on one side of the plane satisfy <span class="arithmatex">\(ax + by + cz &gt; d\)</span></p>
 </li>
 <li>
-<p>The output <span class="arithmatex">\(f(x_i, W, b) = Wx_i + b\)</span> gives us two scores: <span class="arithmatex">\([s_{\text{cat}}, s_{\text{dog}}]\)</span></p>
+<p>Points on the other side satisfy <span class="arithmatex">\(ax + by + cz &lt; d\)</span></p>
+</li>
+<li>
+<p>Points on the plane satisfy <span class="arithmatex">\(ax + by + cz = d\)</span></p>
 </li>
 </ul>
-<p>For a <span class="arithmatex">\(32 \times 32 \times 3\)</span> image, we'd have:</p>
+<p><strong>Example</strong>: The plane <span class="arithmatex">\(2x - 3y + 4z = 12\)</span> has normal vector <span class="arithmatex">\((2, -3, 4)\)</span>.</p>
+<p>Now, let's see how this relates to linear classifiers. In a binary classification problem, our linear classifier computes:</p>
+<div class="arithmatex">\[f(x) = w^T x + b\]</div>
+<p>where <span class="arithmatex">\(w\)</span> is the weight vector and <span class="arithmatex">\(b\)</span> is the bias.</p>
+<p><strong>The Decision Boundary</strong>: The equation <span class="arithmatex">\(w^T x + b = 0\)</span> defines a <strong>hyperplane</strong> in the input space that separates the two classes. This is exactly analogous to the plane equation <span class="arithmatex">\(ax + by + cz = d\)</span>. This is how:</p>
 <ul>
 <li>
-<p><span class="arithmatex">\(W\)</span>: <span class="arithmatex">\([2 \times 3072]\)</span> matrix</p>
+<p><span class="arithmatex">\(w\)</span> is the <strong>normal vector</strong> to the hyperplane (just like <span class="arithmatex">\((a, b, c)\)</span> in the plane equation)</p>
 </li>
 <li>
-<p><span class="arithmatex">\(b\)</span>: <span class="arithmatex">\([2 \times 1]\)</span> vector  </p>
+<p><span class="arithmatex">\(b\)</span> determines the <strong>position</strong> of the hyperplane (just like <span class="arithmatex">\(d\)</span> in the plane equation)</p>
 </li>
 <li>
-<p>Input: <span class="arithmatex">\([3072 \times 1]\)</span> flattened image</p>
+<p>The hyperplane divides the input space into two half-spaces</p>
 </li>
 <li>
-<p>Output: <span class="arithmatex">\([2 \times 1]\)</span> vector with cat and dog scores</p>
+<p>Points in one half-space are classified as class 1 (<span class="arithmatex">\(w^T x + b &gt; 0\)</span>)</p>
+</li>
+<li>
+<p>Points in the other half-space are classified as class 2 (<span class="arithmatex">\(w^T x + b &lt; 0\)</span>)</p>
 </li>
 </ul>
-<p>The class with the higher score is our prediction. For example, if <span class="arithmatex">\(s_{\text{cat}} = 2.1\)</span> and <span class="arithmatex">\(s_{\text{dog}} = 0.8\)</span>, we predict "cat".</p>
+<p><strong>Multi-class extension</strong>: For <span class="arithmatex">\(K\)</span> classes, we have <span class="arithmatex">\(K\)</span> hyperplanes, each defined by a row of the weight matrix <span class="arithmatex">\(W\)</span>. </p>
+<p>In the multi-class case, we have <span class="arithmatex">\(K\)</span> score functions:</p>
+<div class="arithmatex">\[f_1(x) = w_1^T x + b_1\]</div>
+<div class="arithmatex">\[f_2(x) = w_2^T x + b_2\]</div>
+<div class="arithmatex">\[\vdots\]</div>
+<div class="arithmatex">\[f_K(x) = w_K^T x + b_K\]</div>
+<p>The classifier predicts class <span class="arithmatex">\(i\)</span> if <span class="arithmatex">\(f_i(x) &gt; f_j(x)\)</span> for all <span class="arithmatex">\(j \neq i\)</span>.</p>
+<p>The decision boundary between classes <span class="arithmatex">\(i\)</span> and <span class="arithmatex">\(j\)</span> is the set of points where the classifier is indifferent between the two classes, i.e., where <span class="arithmatex">\(f_i(x) = f_j(x)\)</span>.</p>
+<p>Starting with:</p>
+<div class="arithmatex">\[f_i(x) = f_j(x)\]</div>
+<p>Substituting the score functions:</p>
+<div class="arithmatex">\[w_i^T x + b_i = w_j^T x + b_j\]</div>
+<p>Rearranging terms:</p>
+<div class="arithmatex">\[w_i^T x - w_j^T x = b_j - b_i\]</div>
+<p>Factoring out <span class="arithmatex">\(x\)</span>:</p>
+<div class="arithmatex">\[(w_i - w_j)^T x = b_j - b_i\]</div>
+<p>Moving all terms to one side:</p>
+<div class="arithmatex">\[(w_i - w_j)^T x + (b_i - b_j) = 0\]</div>
+<p>The decision boundary between classes <span class="arithmatex">\(i\)</span> and <span class="arithmatex">\(j\)</span> is the hyperplane:</p>
+<div class="arithmatex">\[(w_i - w_j)^T x + (b_i - b_j) = 0\]</div>
+<p>Note:</p>
+<ul>
+<li>
+<p>The normal vector to this decision boundary is <span class="arithmatex">\((w_i - w_j)\)</span></p>
+</li>
+<li>
+<p>The bias term is <span class="arithmatex">\((b_i - b_j)\)</span></p>
+</li>
+<li>
+<p>Points on one side of this hyperplane are classified as class <span class="arithmatex">\(i\)</span></p>
+</li>
+<li>
+<p>Points on the other side are classified as class <span class="arithmatex">\(j\)</span></p>
+</li>
+<li>
+<p>Points on the hyperplane are exactly at the decision boundary</p>
+</li>
+</ul>
+<p><strong>Why this matters</strong>: This geometric interpretation helps us understand that:</p>
+<ol>
+<li>
+<p>Linear classifiers create <strong>linear decision boundaries</strong></p>
+</li>
+<li>
+<p>The weight vector <span class="arithmatex">\(w\)</span> determines the <strong>orientation</strong> of the decision boundary</p>
+</li>
+<li>
+<p>The bias <span class="arithmatex">\(b\)</span> determines the <strong>position</strong> of the decision boundary</p>
+</li>
+<li>
+<p>The classifier's performance depends on how well the data can be separated by these linear boundaries</p>
+</li>
+</ol>
+<p>This connection between planes in ℝ³ and hyperplanes in linear classifiers provides an intuitive way to visualize and understand how linear classifiers work geometrically.</p>
+<p>Coming back to CIFAR-10, we cannot visualize 3072-dimensional spaces, but if we imagine squashing all those dimensions into only two dimensions, then we can try to visualize what the classifier might be doing.</p>
+<p><img alt="Multi-class extension" src="../linear_classifier.jpeg" /></p>
+<p>Above figure shows a cartoon representation of the image space, where each image is a single point, and three classifiers are visualized. For example, take the car classifier (in red), where the red line shows all points in the space that get a score of zero for the car class. The red arrow shows the direction of increase, so all points to the right of the red line have positive (and linearly increasing) scores, and all points to the left have a negative (and linearly decreasing) scores.</p>
+<p>As we saw above, every row of <span class="arithmatex">\(W\)</span> is a classifier for one of the classes. The geometric interpretation of these numbers is that as we change one of the rows of <span class="arithmatex">\(W\)</span>, the corresponding line in the pixel space will rotate in different directions. The biases <span class="arithmatex">\(b\)</span>, on the other hand, allow our classifiers to translate the lines.</p>
+<h3 id="template-matching-interpretation">Template Matching interpretation</h3>
+<p>Another interpretation for the weights <span class="arithmatex">\(W\)</span> is that each row of <span class="arithmatex">\(W\)</span> corresponds to a template (or sometimes also called a prototype) for one of the classes. The score of each class for an image is then obtained by comparing each template with the image using an inner product (or dot product) one by one to find the one that "fits" best. With this terminology, the linear classifier is doing template matching, where the templates are learned. Another way to think of it is that we are still effectively doing Nearest Neighbor, but instead of having thousands of training images we are only using a single image per class.</p>
+<h3 id="bias-trick">Bias Trick</h3>
+<p>Recall that we defined the score function as:</p>
+<div class="arithmatex">\[f(x_i, W, b) = Wx_i + b\]</div>
+<p>It is a little cumbersome to keep track of two sets of parameters (the biases <span class="arithmatex">\(b\)</span> and weights <span class="arithmatex">\(W\)</span>) separately. A commonly used trick is to combine the two sets of parameters into a single matrix that holds both of them by extending the vector <span class="arithmatex">\(x_i\)</span> with one additional dimension that always holds the constant 1- a default bias dimension. With the extra dimension, the new score function will simplify to a single matrix multiply:</p>
+<div class="arithmatex">\[f(x_i, W) = Wx_i\]</div>
+<p>With our CIFAR-10 example, <span class="arithmatex">\(x_i\)</span> is now <span class="arithmatex">\([3073 \times 1]\)</span> instead of <span class="arithmatex">\([3072 \times 1]\)</span> - (with the extra dimension holding the constant 1), and <span class="arithmatex">\(W\)</span> is now <span class="arithmatex">\([10 \times 3073]\)</span> instead of <span class="arithmatex">\([10 \times 3072]\)</span>. The extra column that <span class="arithmatex">\(W\)</span> now corresponds to the bias <span class="arithmatex">\(b\)</span>. An illustration might help clarify this transformation.</p>
+<p><img alt="Bias trick" src="../bias_trick.jpeg" /></p>
 
 
 
