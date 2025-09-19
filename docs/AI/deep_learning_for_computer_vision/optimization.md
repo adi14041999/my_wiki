@@ -76,7 +76,7 @@ When the functions of interest take a vector of numbers instead of a single numb
 
 ## Computing the gradient
 
-There are two ways to compute the gradient: A slow, approximate but easy way (numerical gradient), and a fast, exact but more error-prone way that requires calculus (analytic gradient).
+There are two ways to compute the gradient: A slow, approximate but easy way (numerical gradient), and a fast, exact but more error-prone (implementation wise) way that requires calculus (analytic gradient).
 
 ### Computing the gradient numerically with finite differences
 

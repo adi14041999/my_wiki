@@ -2016,7 +2016,7 @@
 <div class="arithmatex">\[\frac{df(x)}{dx} = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}\]</div>
 <p>When the functions of interest take a vector of numbers instead of a single number, we call the derivatives partial derivatives, and the gradient is simply the vector of partial derivatives in each dimension.</p>
 <h2 id="computing-the-gradient">Computing the gradient</h2>
-<p>There are two ways to compute the gradient: A slow, approximate but easy way (numerical gradient), and a fast, exact but more error-prone way that requires calculus (analytic gradient).</p>
+<p>There are two ways to compute the gradient: A slow, approximate but easy way (numerical gradient), and a fast, exact but more error-prone (implementation wise) way that requires calculus (analytic gradient).</p>
 <h3 id="computing-the-gradient-numerically-with-finite-differences">Computing the gradient numerically with finite differences</h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">eval_numerical_gradient</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
