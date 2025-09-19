@@ -865,6 +865,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Optimization
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -876,6 +889,118 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#visualizing-the-loss-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visualizing the loss function
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Strategies
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Strategies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#strategy-1-a-first-very-bad-idea-solution-random-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      Strategy #1: A first very bad idea solution: Random search
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strategy-2-random-local-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      Strategy #2: Random Local Search
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strategy-3-following-the-gradient" class="md-nav__link">
+    <span class="md-ellipsis">
+      Strategy #3: Following the Gradient
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#computing-the-gradient" class="md-nav__link">
+    <span class="md-ellipsis">
+      Computing the gradient
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Computing the gradient">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#computing-the-gradient-numerically-with-finite-differences" class="md-nav__link">
+    <span class="md-ellipsis">
+      Computing the gradient numerically with finite differences
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#computing-the-gradient-analytically-with-calculus" class="md-nav__link">
+    <span class="md-ellipsis">
+      Computing the gradient analytically with Calculus
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gradient-descent" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gradient Descent
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1834,6 +1959,120 @@
 
 
 <h1 id="optimization">Optimization</h1>
+<h2 id="visualizing-the-loss-function">Visualizing the loss function</h2>
+<p>We can generate a random weight matrix <span class="arithmatex">\(W\)</span>, then march along a ray and record the loss function value along the way. That is, we can generate a random direction <span class="arithmatex">\(W_1\)</span> and compute the loss along this direction by evaluating <span class="arithmatex">\(L(W + aW_1)\)</span> for different values of <span class="arithmatex">\(a\)</span>. This process generates a simple plot with the value of <span class="arithmatex">\(a\)</span> as the x-axis and the value of the loss function as the y-axis. We can also carry out the same procedure with two dimensions by evaluating the loss <span class="arithmatex">\(L(W + aW_1 + bW_2)\)</span> as we vary <span class="arithmatex">\(a, b\)</span>. In a plot, <span class="arithmatex">\(a, b\)</span> could then correspond to the x-axis and the y-axis, and the value of the loss function can be visualized with a color.</p>
+<p><img alt="Visualizing loss" src="../loss_viz.png" /></p>
+<p>To reiterate, the loss function lets us quantify the quality of any particular set of weights W. The goal of optimization is to find W that minimizes the loss function.</p>
+<h2 id="strategies">Strategies</h2>
+<h3 id="strategy-1-a-first-very-bad-idea-solution-random-search">Strategy #1: A first very bad idea solution: Random search</h3>
+<p>Since it is so simple to check how good a given set of parameters <span class="arithmatex">\(W\)</span> is, the first (very bad) idea that may come to mind is to simply try out many different random weights and keep track of what works best. This procedure might look as follows.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># assume X_train is the data where each column is an example (e.g. 3073 x 50,000)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># assume Y_train are the labels (e.g. 1D array of 50,000)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># assume the function L evaluates the loss function</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">bestloss</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span> <span class="c1"># Python assigns the highest possible float value</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3073</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.0001</span> <span class="c1"># generate random parameters</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  <span class="n">loss</span> <span class="o">=</span> <span class="n">L</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span> <span class="c1"># get the loss over the entire training set</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  <span class="k">if</span> <span class="n">loss</span> <span class="o">&lt;</span> <span class="n">bestloss</span><span class="p">:</span> <span class="c1"># keep track of the best solution</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">bestloss</span> <span class="o">=</span> <span class="n">loss</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">bestW</span> <span class="o">=</span> <span class="n">W</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  <span class="nb">print</span> <span class="s1">&#39;in attempt </span><span class="si">%d</span><span class="s1"> the loss was </span><span class="si">%f</span><span class="s1">, best </span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">bestloss</span><span class="p">)</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="c1"># prints:</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="c1"># in attempt 0 the loss was 9.401632, best 9.401632</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="c1"># in attempt 1 the loss was 8.959668, best 8.959668</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="c1"># in attempt 2 the loss was 9.044034, best 8.959668</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="c1"># in attempt 3 the loss was 9.278948, best 8.959668</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="c1"># in attempt 4 the loss was 8.857370, best 8.857370</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="c1"># in attempt 5 the loss was 8.943151, best 8.857370</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="c1"># in attempt 6 the loss was 8.605604, best 8.605604</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="c1"># ... (trunctated: continues for 1000 lines)</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="c1"># Assume X_test is [3073 x 10000], Y_test [10000 x 1]</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="n">scores</span> <span class="o">=</span> <span class="n">bestW</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Xte_cols</span><span class="p">)</span> <span class="c1"># 10 x 10000, the class scores for all test examples</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="c1"># find the index with max score in each column (the predicted class)</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="n">Yte_predict</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="c1"># and calculate accuracy (fraction of predictions that are correct)</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Yte_predict</span> <span class="o">==</span> <span class="n">Yte</span><span class="p">)</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="c1"># returns 0.1555</span>
+</code></pre></div>
+<h3 id="strategy-2-random-local-search">Strategy #2: Random Local Search</h3>
+<p>The first strategy you may think of is to try to extend one foot in a random direction and then take a step only if it leads downhill. Concretely, we will start out with a random <span class="arithmatex">\(W\)</span>, generate random perturbations <span class="arithmatex">\(\delta W\)</span> to it and if the loss at the perturbed <span class="arithmatex">\(W + \delta W\)</span> is lower, we will perform an update. The code for this procedure is as follows.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3073</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.001</span> <span class="c1"># generate random starting W</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">bestloss</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  <span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.0001</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  <span class="n">Wtry</span> <span class="o">=</span> <span class="n">W</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3073</span><span class="p">)</span> <span class="o">*</span> <span class="n">step_size</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  <span class="n">loss</span> <span class="o">=</span> <span class="n">L</span><span class="p">(</span><span class="n">Xtr_cols</span><span class="p">,</span> <span class="n">Ytr</span><span class="p">,</span> <span class="n">Wtry</span><span class="p">)</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  <span class="k">if</span> <span class="n">loss</span> <span class="o">&lt;</span> <span class="n">bestloss</span><span class="p">:</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">W</span> <span class="o">=</span> <span class="n">Wtry</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">bestloss</span> <span class="o">=</span> <span class="n">loss</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  <span class="nb">print</span> <span class="s1">&#39;iter </span><span class="si">%d</span><span class="s1"> loss is </span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">bestloss</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="strategy-3-following-the-gradient">Strategy #3: Following the Gradient</h3>
+<p>In the previous strategy we tried to find a direction in the weight-space that would improve our weight vector (and give us a lower loss). It turns out that there is no need to randomly search for a good direction: we can compute the best direction along which we should change our weight vector that is mathematically guaranteed to be the direction of the steepest descent of the loss function. This direction will be related to the gradient of the loss function. In a hiking analogy, this approach roughly corresponds to feeling the slope of the hill below our feet and stepping down the direction that feels steepest.</p>
+<p>In one-dimensional functions, the slope is the instantaneous rate of change of the function at any point you might be interested in. The gradient is just a vector of slopes (more commonly referred to as derivatives) for each dimension in the input space. The mathematical expression for the derivative of a 1-D function with respect its input is:</p>
+<div class="arithmatex">\[\frac{df(x)}{dx} = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}\]</div>
+<p>When the functions of interest take a vector of numbers instead of a single number, we call the derivatives partial derivatives, and the gradient is simply the vector of partial derivatives in each dimension.</p>
+<h2 id="computing-the-gradient">Computing the gradient</h2>
+<p>There are two ways to compute the gradient: A slow, approximate but easy way (numerical gradient), and a fast, exact but more error-prone way that requires calculus (analytic gradient).</p>
+<h3 id="computing-the-gradient-numerically-with-finite-differences">Computing the gradient numerically with finite differences</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">eval_numerical_gradient</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="sd">  a naive implementation of numerical gradient of f at x</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="sd">  - f should be a function that takes a single argument</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="sd">  - x is the point (numpy array) to evaluate the gradient at</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="sd">  &quot;&quot;&quot;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  <span class="n">fx</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># evaluate function value at original point</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  <span class="n">grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>  <span class="n">h</span> <span class="o">=</span> <span class="mf">0.00001</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>  <span class="c1"># iterate over all indexes in x</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>  <span class="n">it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nditer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;multi_index&#39;</span><span class="p">],</span> <span class="n">op_flags</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;readwrite&#39;</span><span class="p">])</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>  <span class="k">while</span> <span class="ow">not</span> <span class="n">it</span><span class="o">.</span><span class="n">finished</span><span class="p">:</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    <span class="c1"># evaluate function at x+h</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>    <span class="n">ix</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">multi_index</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    <span class="n">old_value</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">ix</span><span class="p">]</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    <span class="n">x</span><span class="p">[</span><span class="n">ix</span><span class="p">]</span> <span class="o">=</span> <span class="n">old_value</span> <span class="o">+</span> <span class="n">h</span> <span class="c1"># increment by h</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>    <span class="n">fxh</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># evalute f(x + h)</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    <span class="n">x</span><span class="p">[</span><span class="n">ix</span><span class="p">]</span> <span class="o">=</span> <span class="n">old_value</span> <span class="c1"># restore to previous value (very important!)</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    <span class="c1"># compute the partial derivative</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>    <span class="n">grad</span><span class="p">[</span><span class="n">ix</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">fxh</span> <span class="o">-</span> <span class="n">fx</span><span class="p">)</span> <span class="o">/</span> <span class="n">h</span> <span class="c1"># the slope</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>    <span class="n">it</span><span class="o">.</span><span class="n">iternext</span><span class="p">()</span> <span class="c1"># step to next dimension</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>  <span class="k">return</span> <span class="n">grad</span>
+</code></pre></div>
+<p>You may have noticed that evaluating the numerical gradient has complexity linear in the number of parameters. If our example had 30730 parameters in total, we therefore would have had to perform 30,731 evaluations of the loss function to evaluate the gradient and to perform only a single parameter update. This problem only gets worse, since modern Neural Networks can easily have tens of millions of parameters. Clearly, this strategy is not scalable and we need something better.</p>
+<h3 id="computing-the-gradient-analytically-with-calculus">Computing the gradient analytically with Calculus</h3>
+<p>The numerical gradient is very simple to compute using the finite difference approximation, but the downside is that it is approximate (since we have to pick a small value of h, while the true gradient is defined as the limit as h goes to zero), and that it is very computationally expensive to compute. The second way to compute the gradient is analytically using Calculus, which allows us to derive a direct formula for the gradient (no approximations) that is also very fast to compute. However, unlike the numerical gradient it can be more error prone to implement, which is why in practice it is very common to compute the analytic gradient and compare it to the numerical gradient to check the correctness of your implementation. This is called a gradient check.</p>
+<p>Let's use the example of the SVM loss function for a single datapoint:</p>
+<div class="arithmatex">\[L_i = \sum_{j \neq y_i} \left[\max(0, w_j^T x_i - w_{y_i}^T x_i + \Delta)\right]\]</div>
+<p>We can differentiate the function with respect to the weights. For example, taking the gradient with respect to <span class="arithmatex">\(w_{y_i}\)</span> we obtain:</p>
+<div class="arithmatex">\[\nabla_{w_{y_i}} L_i = -\left(\sum_{j \neq y_i} \mathbb{1}(w_j^T x_i - w_{y_i}^T x_i + \Delta &gt; 0)\right) x_i\]</div>
+<p>where <span class="arithmatex">\(\mathbb{1}\)</span> is the indicator function that is one if the condition inside is true or zero otherwise. While the expression may look scary when it is written out, when you're implementing this in code you'd simply count the number of classes that didn't meet the desired margin (and hence contributed to the loss function) and then the data vector <span class="arithmatex">\(x_i\)</span> scaled by this number is the gradient. Notice that this is the gradient only with respect to the row of <span class="arithmatex">\(W\)</span> that corresponds to the correct class. For the other rows where <span class="arithmatex">\(j \neq y_i\)</span> the gradient is:</p>
+<div class="arithmatex">\[\nabla_{w_j} L_i = \mathbb{1}(w_j^T x_i - w_{y_i}^T x_i + \Delta &gt; 0) x_i\]</div>
+<p>Once you derive the expression for the gradient it is straight-forward to implement the expressions and use them to perform the gradient update.</p>
+<h2 id="gradient-descent">Gradient Descent</h2>
+<p>Now that we can compute the gradient of the loss function, the procedure of repeatedly evaluating the gradient and then performing a parameter update is called Gradient Descent. Its vanilla version looks as follows.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Vanilla Gradient Descent</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  <span class="n">weights_grad</span> <span class="o">=</span> <span class="n">evaluate_gradient</span><span class="p">(</span><span class="n">loss_fun</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  <span class="n">weights</span> <span class="o">+=</span> <span class="o">-</span> <span class="n">step_size</span> <span class="o">*</span> <span class="n">weights_grad</span> <span class="c1"># perform parameter update</span>
+</code></pre></div>
+<p>In large-scale applications, the training data can have on order of millions of examples. Hence, it seems wasteful to compute the full loss function over the entire training set in order to perform only a single parameter update. A very common approach to addressing this challenge is to compute the gradient over batches of the training data. For example, in current state of the art ConvNets, a typical batch contains 256 examples from the entire training set of 1.2 million. This batch is then used to perform a parameter update.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Vanilla Minibatch Gradient Descent</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  <span class="n">data_batch</span> <span class="o">=</span> <span class="n">sample_training_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span> <span class="c1"># sample 256 examples</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  <span class="n">weights_grad</span> <span class="o">=</span> <span class="n">evaluate_gradient</span><span class="p">(</span><span class="n">loss_fun</span><span class="p">,</span> <span class="n">data_batch</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>  <span class="n">weights</span> <span class="o">+=</span> <span class="o">-</span> <span class="n">step_size</span> <span class="o">*</span> <span class="n">weights_grad</span> <span class="c1"># perform parameter update</span>
+</code></pre></div>
+<p>The extreme case of this is a setting where the mini-batch contains only a single example. This process is called Stochastic Gradient Descent (SGD) (or also sometimes on-line gradient descent). Even though SGD technically refers to using a single example at a time to evaluate the gradient, you will hear people use the term SGD even when referring to mini-batch gradient descent. The size of the mini-batch is a hyperparameter but it is not very common to cross-validate it. It is usually based on memory constraints (if any), or set to some value, e.g. 32, 64 or 128. We use powers of 2 in practice because many vectorized operation implementations work faster when their inputs are sized in powers of 2.</p>
 
 
 
