@@ -12,7 +12,9 @@ $$f(x;\alpha,\beta) = \mathrm{constant} \cdot x^{\alpha-1}(1-x)^{\beta-1} = \fra
 
 The beta function, $\mathrm{B}$, is a normalization constant to ensure that the total probability is 1.
 
-**Example: Biased coin selection** Let's illustrate the beta distribution with a concrete example involving biased coins.
+## Case study: Biased coin selection 
+
+Let's illustrate the beta distribution with a concrete example involving biased coins.
 
 **Setup**: We have 11 coins with different bias probabilities:
 
@@ -142,6 +144,47 @@ The beta distribution Beta(8, 4) would have:
 Notice how the discrete results cluster around 0.7, which matches the mode of the continuous beta distribution!
 
 As we increase the number of discrete coins (from 11 to 101 to 1001, etc.), the discrete probability distribution approaches the continuous beta distribution.
+
+Let's see what happens when we flip the selected coin 100 times and observe 70 heads and 30 tails:
+
+**Setup**: Same 101 coins with probabilities from 0.00 to 1.00 in steps of 0.01.
+
+**Updated probabilities**: 
+
+$$P(X = p_i | \text{70 heads out of 100}) = \frac{p_i^{70} (1-p_i)^{30}}{\sum_{j=0}^{100} p_j^{70} (1-p_j)^{30}}$$
+
+The most likely coins after observing 70 heads out of 100 flips are:
+
+| Coin | P(H) | $p_i^{70} (1-p_i)^{30}$ | Probability |
+|------|------|-------------------------|-------------|
+| 70   | 0.70 | $0.70^{70} \cdot 0.30^{30}$ | ~99.9% |
+| 69   | 0.69 | $0.69^{70} \cdot 0.31^{30}$ | ~0.1% |
+| 71   | 0.71 | $0.71^{70} \cdot 0.29^{30}$ | ~0.1% |
+| 68   | 0.68 | $0.68^{70} \cdot 0.32^{30}$ | ~0.0% |
+| 72   | 0.72 | $0.72^{70} \cdot 0.28^{30}$ | ~0.0% |
+
+Comparison: 10 flips vs 100 flips:
+
+| Scenario | Most Likely Coin | Probability | Confidence |
+|----------|------------------|-------------|------------|
+| 7 heads out of 10 | Coin 70 (0.70) | ~25% | Low |
+| 70 heads out of 100 | Coin 70 (0.70) | ~99.9% | Very High |
+
+With 70 successes and 30 failures, the corresponding beta distribution is Beta(71, 31):
+
+- **Mean**: $\frac{71}{71+31} = \frac{71}{102} \approx 0.696$
+
+- **Mode**: $\frac{71-1}{71+31-2} = \frac{70}{100} = 0.7$
+
+**Key insights:**
+
+1. **More data = more confidence**: With 100 flips, we're 99.9% confident it's coin 70, compared to only 25% confidence with 10 flips.
+
+2. **Precision increases**: The probability mass concentrates much more tightly around the true value.
+
+3. **Beta distribution reflects this**: Beta(71, 31) has a much sharper peak than Beta(8, 4), showing how more data leads to more precise estimates.
+
+4. **Law of large numbers**: As we get more data, our estimate converges to the true probability (0.7 in this case).
 
 An animation of the beta distribution for different values of its parameters:
 

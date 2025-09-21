@@ -1664,6 +1664,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#case-study-biased-coin-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Case study: Biased coin selection
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1904,7 +1913,8 @@
 <p>The probability density function (PDF) of the beta distribution, for <span class="arithmatex">\(0 \leq x \leq 1\)</span> or <span class="arithmatex">\(0 &lt; x &lt; 1\)</span>, and shape parameters <span class="arithmatex">\(\alpha\)</span>, <span class="arithmatex">\(\beta &gt; 0\)</span>, is a power function of the variable <span class="arithmatex">\(x\)</span> and of its reflection <span class="arithmatex">\((1-x)\)</span> as follows:</p>
 <div class="arithmatex">\[f(x;\alpha,\beta) = \mathrm{constant} \cdot x^{\alpha-1}(1-x)^{\beta-1} = \frac{1}{\mathrm{B}(\alpha,\beta)}x^{\alpha-1}(1-x)^{\beta-1}\]</div>
 <p>The beta function, <span class="arithmatex">\(\mathrm{B}\)</span>, is a normalization constant to ensure that the total probability is 1.</p>
-<p><strong>Example: Biased coin selection</strong> Let's illustrate the beta distribution with a concrete example involving biased coins.</p>
+<h2 id="case-study-biased-coin-selection">Case study: Biased coin selection</h2>
+<p>Let's illustrate the beta distribution with a concrete example involving biased coins.</p>
 <p><strong>Setup</strong>: We have 11 coins with different bias probabilities:</p>
 <ul>
 <li>
@@ -2126,6 +2136,102 @@
 </ul>
 <p>Notice how the discrete results cluster around 0.7, which matches the mode of the continuous beta distribution!</p>
 <p>As we increase the number of discrete coins (from 11 to 101 to 1001, etc.), the discrete probability distribution approaches the continuous beta distribution.</p>
+<p>Let's see what happens when we flip the selected coin 100 times and observe 70 heads and 30 tails:</p>
+<p><strong>Setup</strong>: Same 101 coins with probabilities from 0.00 to 1.00 in steps of 0.01.</p>
+<p><strong>Updated probabilities</strong>: </p>
+<div class="arithmatex">\[P(X = p_i | \text{70 heads out of 100}) = \frac{p_i^{70} (1-p_i)^{30}}{\sum_{j=0}^{100} p_j^{70} (1-p_j)^{30}}\]</div>
+<p>The most likely coins after observing 70 heads out of 100 flips are:</p>
+<table>
+<thead>
+<tr>
+<th>Coin</th>
+<th>P(H)</th>
+<th><span class="arithmatex">\(p_i^{70} (1-p_i)^{30}\)</span></th>
+<th>Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>70</td>
+<td>0.70</td>
+<td><span class="arithmatex">\(0.70^{70} \cdot 0.30^{30}\)</span></td>
+<td>~99.9%</td>
+</tr>
+<tr>
+<td>69</td>
+<td>0.69</td>
+<td><span class="arithmatex">\(0.69^{70} \cdot 0.31^{30}\)</span></td>
+<td>~0.1%</td>
+</tr>
+<tr>
+<td>71</td>
+<td>0.71</td>
+<td><span class="arithmatex">\(0.71^{70} \cdot 0.29^{30}\)</span></td>
+<td>~0.1%</td>
+</tr>
+<tr>
+<td>68</td>
+<td>0.68</td>
+<td><span class="arithmatex">\(0.68^{70} \cdot 0.32^{30}\)</span></td>
+<td>~0.0%</td>
+</tr>
+<tr>
+<td>72</td>
+<td>0.72</td>
+<td><span class="arithmatex">\(0.72^{70} \cdot 0.28^{30}\)</span></td>
+<td>~0.0%</td>
+</tr>
+</tbody>
+</table>
+<p>Comparison: 10 flips vs 100 flips:</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Most Likely Coin</th>
+<th>Probability</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7 heads out of 10</td>
+<td>Coin 70 (0.70)</td>
+<td>~25%</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>70 heads out of 100</td>
+<td>Coin 70 (0.70)</td>
+<td>~99.9%</td>
+<td>Very High</td>
+</tr>
+</tbody>
+</table>
+<p>With 70 successes and 30 failures, the corresponding beta distribution is Beta(71, 31):</p>
+<ul>
+<li>
+<p><strong>Mean</strong>: <span class="arithmatex">\(\frac{71}{71+31} = \frac{71}{102} \approx 0.696\)</span></p>
+</li>
+<li>
+<p><strong>Mode</strong>: <span class="arithmatex">\(\frac{71-1}{71+31-2} = \frac{70}{100} = 0.7\)</span></p>
+</li>
+</ul>
+<p><strong>Key insights:</strong></p>
+<ol>
+<li>
+<p><strong>More data = more confidence</strong>: With 100 flips, we're 99.9% confident it's coin 70, compared to only 25% confidence with 10 flips.</p>
+</li>
+<li>
+<p><strong>Precision increases</strong>: The probability mass concentrates much more tightly around the true value.</p>
+</li>
+<li>
+<p><strong>Beta distribution reflects this</strong>: Beta(71, 31) has a much sharper peak than Beta(8, 4), showing how more data leads to more precise estimates.</p>
+</li>
+<li>
+<p><strong>Law of large numbers</strong>: As we get more data, our estimate converges to the true probability (0.7 in this case).</p>
+</li>
+</ol>
 <p>An animation of the beta distribution for different values of its parameters:</p>
 <p><img alt="animation" src="../PDF_of_the_Beta_distribution.gif" /></p>
 
