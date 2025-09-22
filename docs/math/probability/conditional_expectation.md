@@ -186,3 +186,173 @@ The joint density of $(X, Y)$ is $f_{X,Y}(x,y) = \frac{1}{Ly}$ for $0 \leq x \le
 - $E[X] = \int_0^L \int_0^y x \cdot \frac{1}{Ly} \, dx \, dy = \int_0^L \frac{y}{2L} \, dy = \frac{L}{4}$
 
 Both methods give the same result, confirming our calculation is correct.
+
+## General Properties
+
+**1. Taking out what's known**
+
+One of the most important properties of conditional expectation is the ability to "take out what's known":
+
+$$E[h(X)Y | X] = h(X)E[Y | X]$$
+
+where $h(X)$ is any function of $X$.
+
+**Intuitive explanation**: If we know the value of $X$, then $h(X)$ is just a constant (not random), so we can factor it out of the conditional expectation.
+
+**Proof for discrete case**:
+
+$$E[h(X)Y | X = x] = \sum_y h(x) \cdot y \cdot P(Y = y | X = x) = h(x) \sum_y y \cdot P(Y = y | X = x) = h(x)E[Y | X = x]$$
+
+**Proof for continuous case**:
+
+$$E[h(X)Y | X = x] = \int_{-\infty}^{\infty} h(x) \cdot y \cdot f_{Y|X}(y|x) \, dy = h(x) \int_{-\infty}^{\infty} y \cdot f_{Y|X}(y|x) \, dy = h(x)E[Y | X = x]$$
+
+**Examples**:
+
+- $E[X^2Y | X] = X^2E[Y | X]$ (since $X^2$ is a function of $X$)
+
+- $E[\sin(X)Y | X] = \sin(X)E[Y | X]$ (since $\sin(X)$ is a function of $X$)
+
+- $E[3Y | X] = 3E[Y | X]$ (since 3 is a constant function of $X$)
+
+**2. Independence property**
+
+If $X$ and $Y$ are independent, then:
+
+$$E[Y | X] = E[Y]$$
+
+**Intuitive explanation**: If $X$ and $Y$ are independent, then knowing the value of $X$ provides no information about $Y$. Therefore, the conditional expectation of $Y$ given $X$ is the same as the unconditional expectation of $Y$.
+
+**Proof for discrete case**:
+
+$$E[Y | X = x] = \sum_y y \cdot P(Y = y | X = x) = \sum_y y \cdot P(Y = y) = E[Y]$$
+
+where the second equality uses the fact that $P(Y = y | X = x) = P(Y = y)$ when $X$ and $Y$ are independent.
+
+**Proof for continuous case**:
+
+$$E[Y | X = x] = \int_{-\infty}^{\infty} y \cdot f_{Y|X}(y|x) \, dy = \int_{-\infty}^{\infty} y \cdot f_Y(y) \, dy = E[Y]$$
+
+where the second equality uses the fact that $f_{Y|X}(y|x) = f_Y(y)$ when $X$ and $Y$ are independent.
+
+**Examples**:
+
+- If $X \sim N(0,1)$ and $Y \sim N(0,1)$ are independent, then $E[Y | X] = E[Y] = 0$
+
+- If $X$ is the number of heads in 10 coin flips and $Y$ is the temperature tomorrow, and they're independent, then $E[Y | X] = E[Y]$
+
+**3. Iterated expectation (Adam's Law)**
+
+The expectation of a conditional expectation equals the original expectation:
+
+$$E[E[Y | X]] = E[Y]$$
+
+**Proof for discrete case**:
+
+$$E[E[Y | X]] = \sum_x E[Y | X = x] \cdot P(X = x) = \sum_x \left(\sum_y y \cdot P(Y = y | X = x)\right) \cdot P(X = x)$$
+
+$$= \sum_x \sum_y y \cdot P(Y = y | X = x) \cdot P(X = x) = \sum_x \sum_y y \cdot P(X = x, Y = y) = \sum_y y \cdot P(Y = y) = E[Y]$$
+
+**Proof for continuous case**:
+
+$$E[E[Y | X]] = \int_{-\infty}^{\infty} E[Y | X = x] \cdot f_X(x) \, dx = \int_{-\infty}^{\infty} \left(\int_{-\infty}^{\infty} y \cdot f_{Y|X}(y|x) \, dy\right) f_X(x) \, dx$$
+
+$$= \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} y \cdot f_{Y|X}(y|x) f_X(x) \, dy \, dx = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} y \cdot f_{X,Y}(x,y) \, dy \, dx = E[Y]$$
+
+**Examples**:
+
+- In our stick-breaking example: $E[E[X | Y]] = E\left[\frac{Y}{2}\right] = \frac{E[Y]}{2} = \frac{L}{4} = E[X]$
+
+- If $Y$ is test score and $X$ is study hours: $E[E[Y | X]] = E[Y]$ (the average test score across all students)
+
+**Why this matters**: This property is fundamental to many probability calculations. It allows us to compute expectations by first conditioning on another variable, then taking the expectation of the conditional expectation. It's often easier to compute $E[Y | X]$ first, then take its expectation, rather than computing $E[Y]$ directly.
+
+**4. Residual property**
+
+$$E[(Y - E[Y | X])h(X)] = 0$$
+
+**Proof**:
+
+$$E[(Y - E[Y | X])h(X)] = E[Y \cdot h(X) - E[Y | X] \cdot h(X)]$$
+
+$$= E[Y \cdot h(X)] - E[E[Y | X] \cdot h(X)]$$
+
+$$= E[Y \cdot h(X)] - E[h(X) \cdot E[Y | X]]$$
+
+Now, using the "taking out what's known" property:
+
+$$E[h(X) \cdot E[Y | X]] = E[h(X) \cdot E[Y | X]] = E[E[h(X) \cdot Y | X]] = E[h(X) \cdot Y]$$
+
+Therefore:
+
+$$E[(Y - E[Y | X])h(X)] = E[Y \cdot h(X)] - E[h(X) \cdot Y] = 0$$
+
+**Correlation interpretation**:
+
+Since $E[(Y - E[Y | X])h(X)] = 0$, we have:
+
+$$\text{Cov}(Y - E[Y | X], h(X)) = E[(Y - E[Y | X])h(X)] - E[Y - E[Y | X]] \cdot E[h(X)] = 0 - 0 \cdot E[h(X)] = 0$$
+
+This shows that the residual $Y - E[Y | X]$ is uncorrelated with any function $h(X)$ of $X$.
+
+**Intuitive explanation**: The residual $Y - E[Y | X]$ represents the part of $Y$ that cannot be predicted from $X$. Since we've already extracted all the information that $X$ can provide about $Y$ (in the form of $E[Y | X]$), the remaining part should be uncorrelated with any function of $X$.
+
+**Examples**:
+
+- $E[(Y - E[Y | X])X] = 0$ (residual is uncorrelated with $X$)
+
+- $E[(Y - E[Y | X])X^2] = 0$ (residual is uncorrelated with $X^2$)
+
+- $E[(Y - E[Y | X])\sin(X)] = 0$ (residual is uncorrelated with $\sin(X)$)
+
+**Geometric interpretation (Projection)**: The conditional expectation $E[Y | X]$ is the projection of $Y$ onto the space of all functions of $X$, shown below as a plane. This is because in a certain sense, $E[Y | X]$ is the function of $X$ that is closest to $Y$; we say that $E[Y | X]$ is the projection of $Y$ into the space of all functions of $X$.The residual $Y - E[Y | X]$ is orthogonal to the plane: it's perpendicular to (uncorrelated with) any function of $X$.
+
+![image](projection.png)
+
+ The "line" from $Y$ to $E[Y | X]$ in the figure is orthogonal (perpendicular) to the "plane", since any other route from $Y$ to $E[Y | X]$ would be longer. This orthogonality turns out to be the geometric interpretation of the residual property.
+
+## Conditional Expectation as the Best Predictor
+
+We can think of $E[Y | X]$ as a prediction for $Y$ based on $X$. This is an extremely common problem in statistics: predict or estimate the future observations or unknown parameters based on data. The projection interpretation of conditional expectation implies that $E[Y | X]$ is the best predictor of $Y$ based on $X$, in the sense that it is the function of $X$ with the lowest mean squared error (expected squared difference between $Y$ and the prediction of $Y$).
+
+**Mathematical statement**: For any function $g(X)$ of $X$:
+
+$$E[(Y - E[Y | X])^2] \leq E[(Y - g(X))^2]$$
+
+**Proof**: Let $g(X)$ be any function of $X$. Then:
+
+$$E[(Y - g(X))^2] = E[(Y - E[Y | X] + E[Y | X] - g(X))^2]$$
+
+$$= E[(Y - E[Y | X])^2] + E[(E[Y | X] - g(X))^2] + 2E[(Y - E[Y | X])(E[Y | X] - g(X))]$$
+
+The cross term is zero because $E[Y | X] - g(X)$ is a function of $X$, and we know that $Y - E[Y | X]$ is uncorrelated with any function of $X$. Therefore:
+
+$$E[(Y - g(X))^2] = E[(Y - E[Y | X])^2] + E[(E[Y | X] - g(X))^2] \geq E[(Y - E[Y | X])^2]$$
+
+The equality holds if and only if $g(X) = E[Y | X]$ (almost surely).
+
+**Why this matters**: This shows that conditional expectation is not just a convenient mathematical tool, but the optimal predictor in the mean squared error sense. This is why it's so fundamental to statistics, machine learning, and any field that involves prediction.
+
+### Case study: Linear Regression
+
+An extremely widely used method for data analysis in statistics is linear regression. In its most basic form, the linear regression model uses a single explanatory variable $X$ to predict a response variable $Y$, and it assumes that the conditional expectation of $Y$ is linear in $X$:
+
+$$E[Y | X] = a + bX$$
+
+**Show that an equivalent way to express this is to write**
+
+$$Y = a + bX + \epsilon$$
+
+where $\epsilon$ is an r.v. (called the error) with $E[\epsilon | X] = 0$.
+
+**Solution**: Let $Y = a + bX + \epsilon$, with $E[\epsilon | X] = 0$. Then by linearity:
+
+$$E[Y | X] = E[a | X] + E[bX | X] + E[\epsilon | X] = a + bX$$
+
+Conversely, suppose that $E[Y | X] = a + bX$, and define:
+
+$$\epsilon = Y - (a + bX)$$
+
+Then $Y = a + bX + \epsilon$, with:
+
+$$E[\epsilon | X] = E[Y | X] - E[a + bX | X] = E[Y | X] - (a + bX) = 0$$

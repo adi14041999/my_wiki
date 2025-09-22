@@ -1729,6 +1729,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#general-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      General Properties
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conditional-expectation-as-the-best-predictor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conditional Expectation as the Best Predictor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Conditional Expectation as the Best Predictor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#case-study-linear-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      Case study: Linear Regression
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2128,6 +2161,119 @@
 <li><span class="arithmatex">\(E[X] = \int_0^L \int_0^y x \cdot \frac{1}{Ly} \, dx \, dy = \int_0^L \frac{y}{2L} \, dy = \frac{L}{4}\)</span></li>
 </ul>
 <p>Both methods give the same result, confirming our calculation is correct.</p>
+<h2 id="general-properties">General Properties</h2>
+<p><strong>1. Taking out what's known</strong></p>
+<p>One of the most important properties of conditional expectation is the ability to "take out what's known":</p>
+<div class="arithmatex">\[E[h(X)Y | X] = h(X)E[Y | X]\]</div>
+<p>where <span class="arithmatex">\(h(X)\)</span> is any function of <span class="arithmatex">\(X\)</span>.</p>
+<p><strong>Intuitive explanation</strong>: If we know the value of <span class="arithmatex">\(X\)</span>, then <span class="arithmatex">\(h(X)\)</span> is just a constant (not random), so we can factor it out of the conditional expectation.</p>
+<p><strong>Proof for discrete case</strong>:</p>
+<div class="arithmatex">\[E[h(X)Y | X = x] = \sum_y h(x) \cdot y \cdot P(Y = y | X = x) = h(x) \sum_y y \cdot P(Y = y | X = x) = h(x)E[Y | X = x]\]</div>
+<p><strong>Proof for continuous case</strong>:</p>
+<div class="arithmatex">\[E[h(X)Y | X = x] = \int_{-\infty}^{\infty} h(x) \cdot y \cdot f_{Y|X}(y|x) \, dy = h(x) \int_{-\infty}^{\infty} y \cdot f_{Y|X}(y|x) \, dy = h(x)E[Y | X = x]\]</div>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(E[X^2Y | X] = X^2E[Y | X]\)</span> (since <span class="arithmatex">\(X^2\)</span> is a function of <span class="arithmatex">\(X\)</span>)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(E[\sin(X)Y | X] = \sin(X)E[Y | X]\)</span> (since <span class="arithmatex">\(\sin(X)\)</span> is a function of <span class="arithmatex">\(X\)</span>)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(E[3Y | X] = 3E[Y | X]\)</span> (since 3 is a constant function of <span class="arithmatex">\(X\)</span>)</p>
+</li>
+</ul>
+<p><strong>2. Independence property</strong></p>
+<p>If <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are independent, then:</p>
+<div class="arithmatex">\[E[Y | X] = E[Y]\]</div>
+<p><strong>Intuitive explanation</strong>: If <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are independent, then knowing the value of <span class="arithmatex">\(X\)</span> provides no information about <span class="arithmatex">\(Y\)</span>. Therefore, the conditional expectation of <span class="arithmatex">\(Y\)</span> given <span class="arithmatex">\(X\)</span> is the same as the unconditional expectation of <span class="arithmatex">\(Y\)</span>.</p>
+<p><strong>Proof for discrete case</strong>:</p>
+<div class="arithmatex">\[E[Y | X = x] = \sum_y y \cdot P(Y = y | X = x) = \sum_y y \cdot P(Y = y) = E[Y]\]</div>
+<p>where the second equality uses the fact that <span class="arithmatex">\(P(Y = y | X = x) = P(Y = y)\)</span> when <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are independent.</p>
+<p><strong>Proof for continuous case</strong>:</p>
+<div class="arithmatex">\[E[Y | X = x] = \int_{-\infty}^{\infty} y \cdot f_{Y|X}(y|x) \, dy = \int_{-\infty}^{\infty} y \cdot f_Y(y) \, dy = E[Y]\]</div>
+<p>where the second equality uses the fact that <span class="arithmatex">\(f_{Y|X}(y|x) = f_Y(y)\)</span> when <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are independent.</p>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li>
+<p>If <span class="arithmatex">\(X \sim N(0,1)\)</span> and <span class="arithmatex">\(Y \sim N(0,1)\)</span> are independent, then <span class="arithmatex">\(E[Y | X] = E[Y] = 0\)</span></p>
+</li>
+<li>
+<p>If <span class="arithmatex">\(X\)</span> is the number of heads in 10 coin flips and <span class="arithmatex">\(Y\)</span> is the temperature tomorrow, and they're independent, then <span class="arithmatex">\(E[Y | X] = E[Y]\)</span></p>
+</li>
+</ul>
+<p><strong>3. Iterated expectation (Adam's Law)</strong></p>
+<p>The expectation of a conditional expectation equals the original expectation:</p>
+<div class="arithmatex">\[E[E[Y | X]] = E[Y]\]</div>
+<p><strong>Proof for discrete case</strong>:</p>
+<div class="arithmatex">\[E[E[Y | X]] = \sum_x E[Y | X = x] \cdot P(X = x) = \sum_x \left(\sum_y y \cdot P(Y = y | X = x)\right) \cdot P(X = x)\]</div>
+<div class="arithmatex">\[= \sum_x \sum_y y \cdot P(Y = y | X = x) \cdot P(X = x) = \sum_x \sum_y y \cdot P(X = x, Y = y) = \sum_y y \cdot P(Y = y) = E[Y]\]</div>
+<p><strong>Proof for continuous case</strong>:</p>
+<div class="arithmatex">\[E[E[Y | X]] = \int_{-\infty}^{\infty} E[Y | X = x] \cdot f_X(x) \, dx = \int_{-\infty}^{\infty} \left(\int_{-\infty}^{\infty} y \cdot f_{Y|X}(y|x) \, dy\right) f_X(x) \, dx\]</div>
+<div class="arithmatex">\[= \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} y \cdot f_{Y|X}(y|x) f_X(x) \, dy \, dx = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} y \cdot f_{X,Y}(x,y) \, dy \, dx = E[Y]\]</div>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li>
+<p>In our stick-breaking example: <span class="arithmatex">\(E[E[X | Y]] = E\left[\frac{Y}{2}\right] = \frac{E[Y]}{2} = \frac{L}{4} = E[X]\)</span></p>
+</li>
+<li>
+<p>If <span class="arithmatex">\(Y\)</span> is test score and <span class="arithmatex">\(X\)</span> is study hours: <span class="arithmatex">\(E[E[Y | X]] = E[Y]\)</span> (the average test score across all students)</p>
+</li>
+</ul>
+<p><strong>Why this matters</strong>: This property is fundamental to many probability calculations. It allows us to compute expectations by first conditioning on another variable, then taking the expectation of the conditional expectation. It's often easier to compute <span class="arithmatex">\(E[Y | X]\)</span> first, then take its expectation, rather than computing <span class="arithmatex">\(E[Y]\)</span> directly.</p>
+<p><strong>4. Residual property</strong></p>
+<div class="arithmatex">\[E[(Y - E[Y | X])h(X)] = 0\]</div>
+<p><strong>Proof</strong>:</p>
+<div class="arithmatex">\[E[(Y - E[Y | X])h(X)] = E[Y \cdot h(X) - E[Y | X] \cdot h(X)]\]</div>
+<div class="arithmatex">\[= E[Y \cdot h(X)] - E[E[Y | X] \cdot h(X)]\]</div>
+<div class="arithmatex">\[= E[Y \cdot h(X)] - E[h(X) \cdot E[Y | X]]\]</div>
+<p>Now, using the "taking out what's known" property:</p>
+<div class="arithmatex">\[E[h(X) \cdot E[Y | X]] = E[h(X) \cdot E[Y | X]] = E[E[h(X) \cdot Y | X]] = E[h(X) \cdot Y]\]</div>
+<p>Therefore:</p>
+<div class="arithmatex">\[E[(Y - E[Y | X])h(X)] = E[Y \cdot h(X)] - E[h(X) \cdot Y] = 0\]</div>
+<p><strong>Correlation interpretation</strong>:</p>
+<p>Since <span class="arithmatex">\(E[(Y - E[Y | X])h(X)] = 0\)</span>, we have:</p>
+<div class="arithmatex">\[\text{Cov}(Y - E[Y | X], h(X)) = E[(Y - E[Y | X])h(X)] - E[Y - E[Y | X]] \cdot E[h(X)] = 0 - 0 \cdot E[h(X)] = 0\]</div>
+<p>This shows that the residual <span class="arithmatex">\(Y - E[Y | X]\)</span> is uncorrelated with any function <span class="arithmatex">\(h(X)\)</span> of <span class="arithmatex">\(X\)</span>.</p>
+<p><strong>Intuitive explanation</strong>: The residual <span class="arithmatex">\(Y - E[Y | X]\)</span> represents the part of <span class="arithmatex">\(Y\)</span> that cannot be predicted from <span class="arithmatex">\(X\)</span>. Since we've already extracted all the information that <span class="arithmatex">\(X\)</span> can provide about <span class="arithmatex">\(Y\)</span> (in the form of <span class="arithmatex">\(E[Y | X]\)</span>), the remaining part should be uncorrelated with any function of <span class="arithmatex">\(X\)</span>.</p>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(E[(Y - E[Y | X])X] = 0\)</span> (residual is uncorrelated with <span class="arithmatex">\(X\)</span>)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(E[(Y - E[Y | X])X^2] = 0\)</span> (residual is uncorrelated with <span class="arithmatex">\(X^2\)</span>)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(E[(Y - E[Y | X])\sin(X)] = 0\)</span> (residual is uncorrelated with <span class="arithmatex">\(\sin(X)\)</span>)</p>
+</li>
+</ul>
+<p><strong>Geometric interpretation (Projection)</strong>: The conditional expectation <span class="arithmatex">\(E[Y | X]\)</span> is the projection of <span class="arithmatex">\(Y\)</span> onto the space of all functions of <span class="arithmatex">\(X\)</span>, shown below as a plane. This is because in a certain sense, <span class="arithmatex">\(E[Y | X]\)</span> is the function of <span class="arithmatex">\(X\)</span> that is closest to <span class="arithmatex">\(Y\)</span>; we say that <span class="arithmatex">\(E[Y | X]\)</span> is the projection of <span class="arithmatex">\(Y\)</span> into the space of all functions of <span class="arithmatex">\(X\)</span>.The residual <span class="arithmatex">\(Y - E[Y | X]\)</span> is orthogonal to the plane: it's perpendicular to (uncorrelated with) any function of <span class="arithmatex">\(X\)</span>.</p>
+<p><img alt="image" src="../projection.png" /></p>
+<p>The "line" from <span class="arithmatex">\(Y\)</span> to <span class="arithmatex">\(E[Y | X]\)</span> in the figure is orthogonal (perpendicular) to the "plane", since any other route from <span class="arithmatex">\(Y\)</span> to <span class="arithmatex">\(E[Y | X]\)</span> would be longer. This orthogonality turns out to be the geometric interpretation of the residual property.</p>
+<h2 id="conditional-expectation-as-the-best-predictor">Conditional Expectation as the Best Predictor</h2>
+<p>We can think of <span class="arithmatex">\(E[Y | X]\)</span> as a prediction for <span class="arithmatex">\(Y\)</span> based on <span class="arithmatex">\(X\)</span>. This is an extremely common problem in statistics: predict or estimate the future observations or unknown parameters based on data. The projection interpretation of conditional expectation implies that <span class="arithmatex">\(E[Y | X]\)</span> is the best predictor of <span class="arithmatex">\(Y\)</span> based on <span class="arithmatex">\(X\)</span>, in the sense that it is the function of <span class="arithmatex">\(X\)</span> with the lowest mean squared error (expected squared difference between <span class="arithmatex">\(Y\)</span> and the prediction of <span class="arithmatex">\(Y\)</span>).</p>
+<p><strong>Mathematical statement</strong>: For any function <span class="arithmatex">\(g(X)\)</span> of <span class="arithmatex">\(X\)</span>:</p>
+<div class="arithmatex">\[E[(Y - E[Y | X])^2] \leq E[(Y - g(X))^2]\]</div>
+<p><strong>Proof</strong>: Let <span class="arithmatex">\(g(X)\)</span> be any function of <span class="arithmatex">\(X\)</span>. Then:</p>
+<div class="arithmatex">\[E[(Y - g(X))^2] = E[(Y - E[Y | X] + E[Y | X] - g(X))^2]\]</div>
+<div class="arithmatex">\[= E[(Y - E[Y | X])^2] + E[(E[Y | X] - g(X))^2] + 2E[(Y - E[Y | X])(E[Y | X] - g(X))]\]</div>
+<p>The cross term is zero because <span class="arithmatex">\(E[Y | X] - g(X)\)</span> is a function of <span class="arithmatex">\(X\)</span>, and we know that <span class="arithmatex">\(Y - E[Y | X]\)</span> is uncorrelated with any function of <span class="arithmatex">\(X\)</span>. Therefore:</p>
+<div class="arithmatex">\[E[(Y - g(X))^2] = E[(Y - E[Y | X])^2] + E[(E[Y | X] - g(X))^2] \geq E[(Y - E[Y | X])^2]\]</div>
+<p>The equality holds if and only if <span class="arithmatex">\(g(X) = E[Y | X]\)</span> (almost surely).</p>
+<p><strong>Why this matters</strong>: This shows that conditional expectation is not just a convenient mathematical tool, but the optimal predictor in the mean squared error sense. This is why it's so fundamental to statistics, machine learning, and any field that involves prediction.</p>
+<h3 id="case-study-linear-regression">Case study: Linear Regression</h3>
+<p>An extremely widely used method for data analysis in statistics is linear regression. In its most basic form, the linear regression model uses a single explanatory variable <span class="arithmatex">\(X\)</span> to predict a response variable <span class="arithmatex">\(Y\)</span>, and it assumes that the conditional expectation of <span class="arithmatex">\(Y\)</span> is linear in <span class="arithmatex">\(X\)</span>:</p>
+<div class="arithmatex">\[E[Y | X] = a + bX\]</div>
+<p><strong>Show that an equivalent way to express this is to write</strong></p>
+<div class="arithmatex">\[Y = a + bX + \epsilon\]</div>
+<p>where <span class="arithmatex">\(\epsilon\)</span> is an r.v. (called the error) with <span class="arithmatex">\(E[\epsilon | X] = 0\)</span>.</p>
+<p><strong>Solution</strong>: Let <span class="arithmatex">\(Y = a + bX + \epsilon\)</span>, with <span class="arithmatex">\(E[\epsilon | X] = 0\)</span>. Then by linearity:</p>
+<div class="arithmatex">\[E[Y | X] = E[a | X] + E[bX | X] + E[\epsilon | X] = a + bX\]</div>
+<p>Conversely, suppose that <span class="arithmatex">\(E[Y | X] = a + bX\)</span>, and define:</p>
+<div class="arithmatex">\[\epsilon = Y - (a + bX)\]</div>
+<p>Then <span class="arithmatex">\(Y = a + bX + \epsilon\)</span>, with:</p>
+<div class="arithmatex">\[E[\epsilon | X] = E[Y | X] - E[a + bX | X] = E[Y | X] - (a + bX) = 0\]</div>
 
 
 
