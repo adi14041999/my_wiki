@@ -1638,6 +1638,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Conditional Expectation
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1649,6 +1662,76 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-two-envelope-paradox" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Two Envelope Paradox
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#definition-of-conditional-expectation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definition of Conditional Expectation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Definition of Conditional Expectation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#discrete-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      Discrete Case
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continuous-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      Continuous Case
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-random-variable-ex-y-and-its-intuitive-meaning" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Random Variable \(E[X | Y]\) and its intuitive meaning
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1880,6 +1963,88 @@
 
 
 <h1 id="conditional-expectation">Conditional Expectation</h1>
+<h2 id="the-two-envelope-paradox">The Two Envelope Paradox</h2>
+<p>The two envelope paradox is a famous probability puzzle that challenges our intuition about conditional expectation and reveals subtle issues in reasoning about random variables.</p>
+<p>You are given two envelopes. One contains twice as much money as the other. You pick one envelope at random, open it, and see that it contains $X. You are then given the choice to either:</p>
+<ol>
+<li>Keep the envelope you have (containing $X)</li>
+<li>Switch to the other envelope</li>
+</ol>
+<p><strong>The question</strong>: Should you switch?</p>
+<p>At first glance, it seems like switching should be beneficial.</p>
+<p>The other envelope contains either $X/2 or $2X, each with probability 1/2. The expected value of switching is:</p>
+<div class="arithmatex">\[E[\text{other envelope}] = \frac{1}{2} \cdot \frac{X}{2} + \frac{1}{2} \cdot 2X = \frac{X}{4} + X = \frac{5X}{4}\]</div>
+<p>Since <span class="arithmatex">\(\frac{5X}{4} &gt; X\)</span>, you should always switch!</p>
+<p><strong>The paradox</strong>: This reasoning suggests you should always switch, regardless of which envelope you initially chose. But this is clearly wrong- if you always switch, you're back to a 50-50 choice!</p>
+<p>The error lies in assuming that the other envelope contains <span class="arithmatex">\(X/2\)</span> or <span class="arithmatex">\(2X\)</span> with equal probability 1/2.</p>
+<p>Let's be more careful about the random variables involved.</p>
+<p>Let <span class="arithmatex">\(A\)</span> be the amount in the first envelope, and <span class="arithmatex">\(2A\)</span> be the amount in the second envelope. The envelopes are chosen randomly, so:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(P(\text{you pick first}) = \frac{1}{2}\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(P(\text{you pick second}) = \frac{1}{2}\)</span></p>
+</li>
+</ul>
+<p><strong>Case 1</strong>: You picked the first envelope (contains <span class="arithmatex">\(A\)</span>)</p>
+<ul>
+<li>
+<p>The other envelope contains <span class="arithmatex">\(2A\)</span></p>
+</li>
+<li>
+<p>If you switch, you gain <span class="arithmatex">\(A\)</span></p>
+</li>
+</ul>
+<p><strong>Case 2</strong>: You picked the second envelope (contains <span class="arithmatex">\(2A\)</span>)</p>
+<ul>
+<li>
+<p>The other envelope contains <span class="arithmatex">\(A\)</span></p>
+</li>
+<li>
+<p>If you switch, you lose <span class="arithmatex">\(A\)</span></p>
+</li>
+</ul>
+<p><strong>Expected gain from switching</strong>:</p>
+<div class="arithmatex">\[E[\text{gain from switching}] = \frac{1}{2} \cdot A + \frac{1}{2} \cdot (-A) = 0\]</div>
+<p><strong>Conclusion</strong>: There is no expected gain from switching. The correct strategy is to be indifferent between keeping and switching.</p>
+<p>The original reasoning made a subtle error by treating <span class="arithmatex">\(X\)</span> as if it were independent of which envelope you chose. But <span class="arithmatex">\(X\)</span> is not independent- it depends on whether you picked the first or second envelope.</p>
+<h2 id="definition-of-conditional-expectation">Definition of Conditional Expectation</h2>
+<p>Conditional expectation is the expected value of a random variable given that we know the value of another random variable. It's a fundamental concept in probability theory that allows us to make predictions based on partial information.</p>
+<h3 id="discrete-case">Discrete Case</h3>
+<p>For discrete random variables <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span>, the conditional expectation of <span class="arithmatex">\(X\)</span> given <span class="arithmatex">\(Y = y\)</span> is:</p>
+<div class="arithmatex">\[E[X | Y = y] = \sum_x x \cdot P(X = x | Y = y) = \sum_x x \cdot \frac{P(X = x, Y = y)}{P(Y = y)}\]</div>
+<p><strong>Key properties:</strong></p>
+<ul>
+<li>
+<p><span class="arithmatex">\(E[X | Y = y]\)</span> is a function of <span class="arithmatex">\(y\)</span></p>
+</li>
+<li>
+<p>It represents the average value of <span class="arithmatex">\(X\)</span> when we know <span class="arithmatex">\(Y = y\)</span></p>
+</li>
+<li>
+<p>If <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are independent, then <span class="arithmatex">\(E[X | Y = y] = E[X]\)</span> for all <span class="arithmatex">\(y\)</span></p>
+</li>
+</ul>
+<h3 id="continuous-case">Continuous Case</h3>
+<p>For continuous random variables <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> with joint density <span class="arithmatex">\(f_{X,Y}(x,y)\)</span> and marginal density <span class="arithmatex">\(f_Y(y)\)</span>, the conditional expectation of <span class="arithmatex">\(X\)</span> given <span class="arithmatex">\(Y = y\)</span> is:</p>
+<div class="arithmatex">\[E[X | Y = y] = \int_{-\infty}^{\infty} x \cdot f_{X|Y}(x|y) \, dx = \int_{-\infty}^{\infty} x \cdot \frac{f_{X,Y}(x,y)}{f_Y(y)} \, dx\]</div>
+<p>where <span class="arithmatex">\(f_{X|Y}(x|y) = \frac{f_{X,Y}(x,y)}{f_Y(y)}\)</span> is the conditional density of <span class="arithmatex">\(X\)</span> given <span class="arithmatex">\(Y = y\)</span>.</p>
+<h2 id="the-random-variable-ex-y-and-its-intuitive-meaning">The Random Variable <span class="arithmatex">\(E[X | Y]\)</span> and its intuitive meaning</h2>
+<p>Conditional expectation is itself a random variable! We write <span class="arithmatex">\(E[X | Y]\)</span> to denote the random variable that takes the value <span class="arithmatex">\(E[X | Y = y]\)</span> when <span class="arithmatex">\(Y = y\)</span>.</p>
+<p>Conditional expectation answers the question: "What is the average value of <span class="arithmatex">\(X\)</span> when we know that <span class="arithmatex">\(Y\)</span> takes a specific value?"</p>
+<p><strong>Example</strong>: If <span class="arithmatex">\(X\)</span> is your test score and <span class="arithmatex">\(Y\)</span> is the number of hours you studied:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(E[X | Y = 0]\)</span> = average test score for students who didn't study</p>
+</li>
+<li>
+<p><span class="arithmatex">\(E[X | Y = 10]\)</span> = average test score for students who studied 10 hours</p>
+</li>
+<li>
+<p><span class="arithmatex">\(E[X | Y]\)</span> = a function that tells you the expected test score for any amount of study time</p>
+</li>
+</ul>
 
 
 
