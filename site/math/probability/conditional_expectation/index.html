@@ -2045,6 +2045,89 @@
 <p><span class="arithmatex">\(E[X | Y]\)</span> = a function that tells you the expected test score for any amount of study time</p>
 </li>
 </ul>
+<p><strong>Example</strong>: Let <span class="arithmatex">\(X \sim N(0, 1)\)</span> and <span class="arithmatex">\(Y = X^2\)</span>. What is <span class="arithmatex">\(E[Y | X]\)</span>?</p>
+<p>Since <span class="arithmatex">\(Y = X^2\)</span>, when we know the value of <span class="arithmatex">\(X\)</span>, we know exactly what <span class="arithmatex">\(Y\)</span> is. Therefore:</p>
+<div class="arithmatex">\[E[Y | X = x] = E[X^2 | X = x] = E[x^2 | X = x] = x^2\]</div>
+<p>This makes intuitive sense: if we know <span class="arithmatex">\(X = x\)</span>, then we know <span class="arithmatex">\(Y = x^2\)</span> with certainty, so the expected value of <span class="arithmatex">\(Y\)</span> given <span class="arithmatex">\(X = x\)</span> is simply <span class="arithmatex">\(x^2\)</span>.</p>
+<p><strong>Key insight</strong>: When <span class="arithmatex">\(Y\)</span> is a function of <span class="arithmatex">\(X\)</span>, the conditional expectation <span class="arithmatex">\(E[Y | X]\)</span> is just that function evaluated at <span class="arithmatex">\(X\)</span>. In this case, <span class="arithmatex">\(E[Y | X] = X^2\)</span>.</p>
+<p>It's important to distinguish between <span class="arithmatex">\(X^2\)</span> and <span class="arithmatex">\(x^2\)</span>. <strong><span class="arithmatex">\(X^2\)</span></strong> is a <strong>random variable</strong>- it represents the square of the random variable <span class="arithmatex">\(X\)</span>. Since <span class="arithmatex">\(X\)</span> can take different values, <span class="arithmatex">\(X^2\)</span> can also take different values. <strong><span class="arithmatex">\(x^2\)</span></strong> is a <strong>specific number</strong> - it's the square of a particular observed value <span class="arithmatex">\(x\)</span> of the random variable <span class="arithmatex">\(X\)</span>.</p>
+<p><strong>In our example:</strong></p>
+<ul>
+<li>
+<p><span class="arithmatex">\(X \sim N(0,1)\)</span> - <span class="arithmatex">\(X\)</span> is a random variable that can take any real value</p>
+</li>
+<li>
+<p><span class="arithmatex">\(X^2\)</span> - This is also a random variable (the square of <span class="arithmatex">\(X\)</span>)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(x\)</span> - This is a specific observed value of <span class="arithmatex">\(X\)</span> (like <span class="arithmatex">\(x = 1.5\)</span> or <span class="arithmatex">\(x = -0.3\)</span>)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(x^2\)</span> - This is the square of that specific value (like <span class="arithmatex">\(1.5^2 = 2.25\)</span> or <span class="arithmatex">\((-0.3)^2 = 0.09\)</span>)</p>
+</li>
+</ul>
+<p>When we write <span class="arithmatex">\(E[Y | X = x]\)</span>, we're asking: "What's the expected value of <span class="arithmatex">\(Y\)</span> given that <span class="arithmatex">\(X\)</span> takes the specific value <span class="arithmatex">\(x\)</span>?" Since <span class="arithmatex">\(Y = X^2\)</span>, when <span class="arithmatex">\(X = x\)</span>, we know <span class="arithmatex">\(Y = x^2\)</span> (a specific number). So <span class="arithmatex">\(E[Y | X = x] = E[x^2 | X = x] = x^2\)</span></p>
+<p>Now let's compute <span class="arithmatex">\(E[X | Y]\)</span> for the same example. This is more interesting because knowing <span class="arithmatex">\(Y = y\)</span> doesn't completely determine <span class="arithmatex">\(X\)</span>- there are two possible values of <span class="arithmatex">\(X\)</span> that give <span class="arithmatex">\(Y = y\)</span>.</p>
+<p>If <span class="arithmatex">\(Y = y\)</span>, then <span class="arithmatex">\(X = \pm\sqrt{y}\)</span> (since <span class="arithmatex">\(Y = X^2\)</span>).</p>
+<p>Since <span class="arithmatex">\(X \sim N(0,1)\)</span> is symmetric about 0, both <span class="arithmatex">\(+\sqrt{y}\)</span> and <span class="arithmatex">\(-\sqrt{y}\)</span> are equally likely when <span class="arithmatex">\(Y = y\)</span>.</p>
+<div class="arithmatex">\[E[X | Y = y] = \sqrt{y} \cdot P(X = \sqrt{y} | Y = y) + (-\sqrt{y}) \cdot P(X = -\sqrt{y} | Y = y)\]</div>
+<p>Since <span class="arithmatex">\(X \sim N(0,1)\)</span> is symmetric about 0:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(P(X = \sqrt{y}) = P(X = -\sqrt{y})\)</span> (by symmetry)</p>
+</li>
+<li>
+<p>Therefore: <span class="arithmatex">\(P(X = \sqrt{y} | Y = y) = P(X = -\sqrt{y} | Y = y)\)</span></p>
+</li>
+</ul>
+<p>Since these are the only two possibilities when <span class="arithmatex">\(Y = y\)</span>, and they're equal:</p>
+<div class="arithmatex">\[P(X = \sqrt{y} | Y = y) = P(X = -\sqrt{y} | Y = y) = \frac{1}{2}\]</div>
+<p>When we condition on <span class="arithmatex">\(Y = y\)</span>, we're essentially asking: "Given that <span class="arithmatex">\(X^2 = y\)</span>, what's the probability that <span class="arithmatex">\(X = \sqrt{y}\)</span> vs <span class="arithmatex">\(X = -\sqrt{y}\)</span>?"</p>
+<p>Since the normal distribution is symmetric about 0, the probability density at <span class="arithmatex">\(+\sqrt{y}\)</span> is exactly the same as the probability density at <span class="arithmatex">\(-\sqrt{y}\)</span>. When we condition on <span class="arithmatex">\(Y = y\)</span>, we're restricting ourselves to these two equally likely points.</p>
+<div class="arithmatex">\[E[X | Y = y] = \sqrt{y} \cdot \frac{1}{2} + (-\sqrt{y}) \cdot \frac{1}{2} = \frac{\sqrt{y} - \sqrt{y}}{2} = 0\]</div>
+<p><strong>Result</strong>: <span class="arithmatex">\(E[X | Y = y] = 0\)</span> for all <span class="arithmatex">\(y &gt; 0\)</span>.</p>
+<p><strong>Key insight</strong>: Even though knowing <span class="arithmatex">\(Y\)</span> gives us information about the magnitude of <span class="arithmatex">\(X\)</span> (since <span class="arithmatex">\(|X| = \sqrt{Y}\)</span>), it doesn't give us information about the sign of <span class="arithmatex">\(X\)</span>. Due to the symmetry of the normal distribution, the positive and negative values cancel out, giving an expected value of 0.</p>
+<p><strong>Example:</strong> Let's consider a more complex example involving continuous random variables and uniform distributions.</p>
+<p>We have a stick of length <span class="arithmatex">\(L\)</span>.
+<strong>First break</strong>: Break the stick at a point <span class="arithmatex">\(Y\)</span> chosen uniformly at random along its length. This means <span class="arithmatex">\(Y \sim \text{Uniform}(0, L)\)</span>.
+<strong>Second break</strong>: Take the remaining piece of the stick (which has length <span class="arithmatex">\(Y\)</span>) and break it at a point <span class="arithmatex">\(X\)</span> chosen uniformly at random along this remaining length.</p>
+<p><strong>Question</strong>: What is <span class="arithmatex">\(E[X | Y]\)</span>?</p>
+<p>Given that <span class="arithmatex">\(Y = y\)</span>, we know:</p>
+<ul>
+<li>
+<p>The remaining piece has length <span class="arithmatex">\(y\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(X\)</span> is chosen uniformly at random from <span class="arithmatex">\([0, y]\)</span></p>
+</li>
+<li>
+<p>Therefore: <span class="arithmatex">\(X | Y = y \sim \text{Uniform}(0, y)\)</span></p>
+</li>
+</ul>
+<p>For a uniform distribution on <span class="arithmatex">\([0, y]\)</span>, the expected value is the midpoint:</p>
+<div class="arithmatex">\[E[X | Y = y] = \frac{0 + y}{2} = \frac{y}{2}\]</div>
+<p><strong>Result</strong>: <span class="arithmatex">\(E[X | Y] = \frac{Y}{2}\)</span></p>
+<p>This makes perfect sense! If we know the remaining piece has length <span class="arithmatex">\(y\)</span>, then the expected position of the second break is exactly in the middle of that piece, which is <span class="arithmatex">\(\frac{y}{2}\)</span>.</p>
+<p>Let's verify this:</p>
+<p><strong>Step 1</strong>: Find <span class="arithmatex">\(E[X]\)</span> directly</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(Y \sim \text{Uniform}(0, L)\)</span>, so <span class="arithmatex">\(E[Y] = \frac{L}{2}\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(E[X] = E[E[X | Y]] = E\left[\frac{Y}{2}\right] = \frac{E[Y]}{2} = \frac{L}{4}\)</span> (we will prove later why <span class="arithmatex">\(E[X] = E[E[X | Y]] = E\left[\frac{Y}{2}\right]\)</span>, but it is a property)</p>
+</li>
+</ul>
+<p><strong>Step 2</strong>: Find <span class="arithmatex">\(E[X]\)</span> using the joint distribution</p>
+<ul>
+<li>Calculate the joint density</li>
+</ul>
+<div class="arithmatex">\[f_{X,Y}(x,y) = f_{X|Y}(x|y) \cdot f_Y(y) = \frac{1}{y} \cdot \frac{1}{L} = \frac{1}{Ly}\]</div>
+<p>The joint density of <span class="arithmatex">\((X, Y)\)</span> is <span class="arithmatex">\(f_{X,Y}(x,y) = \frac{1}{Ly}\)</span> for <span class="arithmatex">\(0 \leq x \leq y \leq L\)</span></p>
+<ul>
+<li><span class="arithmatex">\(E[X] = \int_0^L \int_0^y x \cdot \frac{1}{Ly} \, dx \, dy = \int_0^L \frac{y}{2L} \, dy = \frac{L}{4}\)</span></li>
+</ul>
+<p>Both methods give the same result, confirming our calculation is correct.</p>
 
 
 
