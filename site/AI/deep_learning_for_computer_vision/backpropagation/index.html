@@ -1015,6 +1015,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#additional-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional References
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2210,6 +2219,10 @@
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">dX</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">dD</span><span class="p">)</span>
 </code></pre></div>
 <p><strong>Tip: use dimension analysis!</strong> Note that you do not need to remember the expressions for <code>dW</code> and <code>dX</code> because they are easy to re-derive based on dimensions. For instance, we know that the gradient on the weights <code>dW</code> must be of the same size as <code>W</code> after it is computed, and that it must depend on matrix multiplication of <code>X</code> and <code>dD</code> (as is the case when both <code>X,W</code> are single numbers and not matrices). There is always exactly one way of achieving this so that the dimensions work out. For example, <code>X</code> is of size [10 x 3] and <code>dD</code> of size [5 x 3], so if we want <code>dW</code> and <code>W</code> has shape [5 x 10], then the only way of achieving this is with <code>dD.dot(X.T)</code>, as shown above.</p>
+<h2 id="additional-references">Additional References</h2>
+<ul>
+<li><a href="http://arxiv.org/abs/1502.05767">Automatic differentiation in machine learning: a survey</a></li>
+</ul>
 
 
 

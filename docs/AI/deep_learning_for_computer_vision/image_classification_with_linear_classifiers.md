@@ -364,3 +364,13 @@ The key components of a Linear SVM are:
 - **Margin maximization**: The SVM tries to maximize the margin between classes
 
 The term "Linear SVM" emphasizes that the decision boundary is linear (a hyperplane), as opposed to kernel SVMs that can have non-linear decision boundaries through the kernel trick.
+
+## Additional References
+
+Here are some (optional) links you may find interesting for further reading:
+
+[A Few Useful Things to Know about Machine Learning](https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf), where especially section 6 is related but the whole paper is a warmly recommended reading.
+
+[Recognizing and Learning Object Categories](https://people.csail.mit.edu/torralba/shortCourseRLOC/index.html), a short course of object categorization at ICCV 2005.
+
+[Deep Learning using Linear Support Vector Machines](https://arxiv.org/abs/1306.0239) from Charlie Tang 2013 presents some results claiming that the L2SVM outperforms Softmax.
