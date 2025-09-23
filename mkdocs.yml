@@ -23,6 +23,7 @@ nav:
       - Image Classification with Linear Classifiers: ai/deep_learning_for_computer_vision/image_classification_with_linear_classifiers.md
       - Regularization: ai/deep_learning_for_computer_vision/regularization.md
       - Optimization: ai/deep_learning_for_computer_vision/optimization.md
+      - Backpropagation: ai/deep_learning_for_computer_vision/backpropagation.md
   - Math:
     - Linear Algebra:
       - Vectors, vector addition, and scalar multiplication: math/linear_algebra/vectors_vector_addition_and_scalar_multiplication.md
