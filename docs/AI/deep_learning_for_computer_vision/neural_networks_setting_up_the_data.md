@@ -1,4 +1,4 @@
-# Neural Networks: Setting up the Data and the Loss
+# Neural Networks: Setting up the Data
 
 A Neural Network performs a sequence of linear mappings with interwoven non-linearities.
 
@@ -94,7 +94,7 @@ There are several ways of controlling the capacity of Neural Networks to prevent
 
 ### L2 regularization
 
-This is perhaps the most common form of regularization. It can be implemented by penalizing the squared magnitude of all parameters directly in the objective. That is, for every weight $w$ in the network, we add the term $\frac{1}{2} \lambda w^2$ to the objective, where $\lambda$ is the regularization strength. It is common to see the factor of $\frac{1}{2}$ in front because then the gradient of this term with respect to the parameter $w$ is simply $\lambda w$ instead of $2 \lambda w$. The L2 regularization has the intuitive interpretation of heavily penalizing peaky weight vectors and preferring diffuse weight vectors. As we discussed in the Linear Classification section, due to multiplicative interactions between weights and inputs this has the appealing property of encouraging the network to use all of its inputs a little rather than some of its inputs a lot.
+This is perhaps the most common form of regularization. It can be implemented by penalizing the squared magnitude of all parameters directly in the objective. That is, for every weight $w$ in the network, we add the term $\frac{1}{2} \lambda w^2$ to the objective, where $\lambda$ is the regularization strength. It is common to see the factor of $\frac{1}{2}$ in front because then the gradient of this term with respect to the parameter $w$ is simply $\lambda w$ instead of $2 \lambda w$. The L2 regularization has the intuitive interpretation of heavily penalizing peaky weight vectors and preferring diffuse weight vectors. Due to multiplicative interactions between weights and inputs this has the appealing property of encouraging the network to use all of its inputs a little rather than some of its inputs a lot. Lastly, notice that during gradient descent parameter update, using the L2 regularization ultimately means that every weight is decayed linearly: $W += -\lambda \cdot W$ towards zero.
 
 ### L1 regularization
 
@@ -110,7 +110,7 @@ This is an extremely effective, simple and recently introduced regularization te
 
 ![Dropout](dropout.jpeg)
 
-*Left: A standard 2-layer Neural Network. Right: An example of a 2-layer Neural Network with dropout applied. Crossed units have been randomly "dropped out" of the network.*
+*Left: A standard 2-layer Neural Network. Right: An example of a 2-layer Neural Network with dropout applied. Crossed units have been randomly "dropped out" of the network. During testing there is no dropout applied*
 
 Vanilla dropout in an example 3-layer Neural Network would be implemented as follows:
 
@@ -141,51 +141,34 @@ def predict(X):
   out = np.dot(W3, H2) + b3
 ```
 
-The key insight is that we can think of dropout as creating a kind of ensemble of neural networks. The number of possible "sub-networks" is exponential in the number of neurons, and each of these networks is seen during training, but none of them are seen in their entirety. At test time, we simply evaluate the full network without any dropout, but with the weights scaled down by the dropout probability. This ensures that for any neuron the expected output is the same as the expected output during training time. For example, if $p = 0.5$, then neurons are dropped out randomly with probability 0.5, and the remaining neurons are scaled by 2. The scaling ensures that the total input to the next layer is roughly the same.
+Crucially, note that in the predict function we are not dropping anymore, but we are performing a scaling of both hidden layer outputs by $p$. This is important because at test time all neurons see all their inputs, so we want the outputs of neurons at test time to be identical to their expected outputs at training time. For example, in case of $p=0.5$, the neurons must halve their outputs at test time to have the same output as they had during training time (in expectation). To see this, consider an output of a neuron $x$ (before dropout). With dropout, the expected output from this neuron will become $px+(1-p)0$, because the neuron's output will be set to zero with probability $1-p$. At test time, when we keep the neuron always active, we must adjust $x \rightarrow px$ to keep the same expected output.
 
-**Theme of noise in forward pass**. Dropout falls into a more general category of methods that introduce stochastic behavior in the forward pass of the network. During testing, the noise is marginalized over *analytically* (as is the case with dropout when multiplying by $p$), or numerically (e.g. via sampling, by performing several forward passes with different random decisions and then averaging over them). An example of other research in this direction includes [DropConnect](http://cs.nyu.edu/~wanli/dropc/), where individual connections, instead of entire neurons, are randomly set to zero during forward pass. As foreshadowing, Convolutional Neural Networks also take advantage of this theme with methods such as stochastic pooling, fractional pooling, and data augmentation. We will go into details of these methods in the sections ahead.
+The undesirable property of the scheme presented above is that we must scale the activations by $p$ at test time. Since test-time performance is so critical, it is always preferable to use inverted dropout, which performs the scaling at train time, leaving the forward pass at test time untouched. Additionally, this has the appealing property that the prediction code can remain untouched when you decide to tweak where you apply dropout, or if at all. Inverted dropout looks as follows.
 
-**Bias regularization**. As we already mentioned in the Linear Classification section, it is not common to regularize the bias parameters because they do not interact with the data through multiplicative interactions, and therefore do not have the interpretation of controlling the influence of a data dimension on the final objective. However, in practical applications (and with proper data preprocessing) regularizing the bias rarely leads to significantly worse performance. This is likely because there are very few bias terms compared to all the weights, so the classifier can "afford to" use the biases if it needs them to obtain a better data loss.
+```python
+""" 
+Inverted Dropout: Recommended implementation example.
+We drop and scale at train time and don't do anything at test time.
+"""
 
-**Per-layer regularization**. It is not very common to regularize different layers to different amounts (except perhaps the output layer). Relatively few results regarding this idea have been published in the literature.
+p = 0.5 # probability of keeping a unit active. higher = less dropout
 
-**In practice**: It is most common to use a single, global L2 regularization strength that is cross-validated. It is also common to combine this with dropout applied after all layers. The value of $p = 0.5$ is a reasonable default, but this can be tuned on validation data.
-
-## Loss Functions
-
-We have discussed the regularization loss part of the objective, which can be seen as penalizing some measure of complexity of the model. The second part of an objective is the *data loss*, which in a supervised learning problem measures the compatibility between a prediction (e.g. the class scores in classification) and the ground truth label. The data loss takes the form of an average over the data losses for every individual example. That is, $L = \frac{1}{N} \sum_i L_i$ where $N$ is the number of training data.
-
-**Classification** is the case that we have so far discussed at length. Here, we assume a dataset of examples and a single correct label (out of a fixed set) for each example. One of two most commonly seen cost functions in this setting is the SVM (e.g. the Weston Watkins formulation):
-
-$$L_i = \sum_{j \neq y_i} \max(0, f_j - f_{y_i} + 1)$$
-
-As we briefly alluded to, some people report better performance with the squared hinge loss (i.e. instead using $\max(0, f_j - f_{y_i} + 1)^2$), but it is not as common. The other common choice is the Cross-Entropy loss that we saw on the Softmax classifier:
-
-$$L_i = -\log\left(\frac{e^{f_{y_i}}}{\sum_j e^{f_j}}\right)$$
-
-**Problem: Large number of classes**. When the set of labels is very large (e.g. words in English dictionary, or ImageNet which contains 22,000 categories), computing the full softmax probabilities becomes expensive. For certain applications, approximate versions are popular. For instance, it may be helpful to use *Hierarchical Softmax* in natural language processing tasks (see one explanation [here](http://arxiv.org/pdf/1310.4546.pdf) (pdf)). The hierarchical softmax decomposes words as labels in a tree. Each label is then represented as a path along the tree, and a Softmax classifier is trained at every node of the tree to disambiguate between the left and right branch. The structure of the tree strongly impacts the performance and is generally problem-dependent.
-
-**Attribute classification**. Both losses above assume that there is a single correct answer $y_i$. But what if $y_i$ is a binary vector where every example may or may not have a certain attribute, and where the attributes are not mutually exclusive? For example, images on Instagram can be thought of as labeled with a certain hashtag, and a single image may have multiple hashtags, so the "ground truth" label $y_i$ would be a binary vector where the positive elements indicate the attributes that are present in the image. In this case, a sensible approach is to build a binary classifier for every single attribute independently. For example, a binary classifier for each category independently would take the form:
-
-$$L_i = \sum_j \max(0, 1 - y_{ij} f_j)$$
-
-where the sum is over all categories $j$, and $y_{ij}$ is either +1 or -1 depending on whether the i-th example is labeled with the j-th attribute, and the score vector $f_j$ will be positive when the class is predicted to be present and negative otherwise. Notice that loss is accumulated if a positive sample has score $< +1$ or if a negative sample has score $> -1$.
-
-An alternative to this loss would be to train a logistic regression classifier for every attribute independently. A binary logistic regression classifier has only two classes (0,1), and calculates the probability of class 1 as:
-
-$$P(y = 1 | x; w, b) = \sigma(\sum_i w_i x_i + b) = \frac{1}{1 + e^{-(\sum_i w_i x_i + b)}}$$
-
-Since the probabilities of class 1 and 0 sum to one, the probability of class 0 is $P(y = 0 | x; w, b) = 1 - P(y = 1 | x; w, b)$. Hence, an example is classified as a positive example (y = 1) if $\sigma(\sum_i w_i x_i + b) > 0.5$, or equivalently if the score $(\sum_i w_i x_i + b) > 0$. The loss function maximizes the log likelihood of this probability. You can convince yourself that this is simplified to:
-
-$$L_i = -\sum_j y_{ij} \log(\sigma(f_j)) + (1 - y_{ij}) \log(1 - \sigma(f_j))$$
-
-where the labels $y_{ij}$ are either 1 (positive) or 0 (negative), and $\sigma(\cdot)$ is the sigmoid function. The expression above can look scary but the gradient on $f$ is in fact extremely simple and intuitive: $\frac{\partial L_i}{\partial f_j} = y_{ij} - \sigma(f_j)$ (as you can double check yourself by taking the derivatives). This is beautiful: the gradient on the scores is simply the difference between the ground truth and the predicted probabilities.
-
-**Regression** is the task of predicting real-valued quantities, such as the price of houses or the length of fish in an image. For this task, it is common to compute the loss between the predicted quantity and the true answer and then measure the L2 squared norm, or L1 norm, of the difference. The L2 norm squared would compute the loss for a single example as:
-
-$$L_i = ||f - y_i||_2^2$$
-
-The reason the L2 norm is squared in the objective is that the gradient becomes much simpler, without changing the optimal parameters since squaring is a monotonic operation. The L1 norm would be formulated as $L_i = ||f - y_i||_1 = \sum_j |f_j - (y_i)_j|$. The L1 penalty is less sensitive to outliers than the L2 penalty, and has lower gradients for small values. However, the L1 penalty has a discontinuity at zero, which makes the optimization problem non-smooth and is the source of many technical difficulties. Therefore, it is much more common to see the L2 penalty instead of the L1 penalty in practice.
-
-**Word of caution**: It is important to note that the L2 loss is much harder to optimize than a more stable loss such as the Softmax. Intuitively, it requires a very fragile and specific property from the network to output exactly one correct value for each input (and its augmentations). In contrast, the Softmax classifier is much more robust to the exact values of the scores, for example it is very hard for the score distribution to be: [10, -10, -10] and for the classifier to be correct, but it is much more acceptable for it to give [10, -9, -9] (which is more diffuse) and still be correct. Additionally, the L2 loss penalizes large errors more heavily than small ones, which can be problematic if the input has outliers or incorrect labels. Because of this, a more common approach is to use a classification approach even for variables that seem to have continuous values, or to "bin" the target values and treat the problem as a classification problem.
-
+def train_step(X):
+  # forward pass for example 3-layer neural network
+  H1 = np.maximum(0, np.dot(W1, X) + b1)
+  U1 = (np.random.rand(*H1.shape) < p) / p # first dropout mask. Notice /p!
+  H1 *= U1 # drop!
+  H2 = np.maximum(0, np.dot(W2, H1) + b2)
+  U2 = (np.random.rand(*H2.shape) < p) / p # second dropout mask. Notice /p!
+  H2 *= U2 # drop!
+  out = np.dot(W3, H2) + b3
+  
+  # backward pass: compute gradients... (not shown)
+  # perform parameter update... (not shown)
+  
+def predict(X):
+  # ensembled forward pass
+  H1 = np.maximum(0, np.dot(W1, X) + b1) # no scaling necessary
+  H2 = np.maximum(0, np.dot(W2, H1) + b2)
+  out = np.dot(W3, H2) + b3
+```

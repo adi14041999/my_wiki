@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/ai/deep_learning_for_computer_vision/neural_networks_setting_up_the_data_and_the_loss/">
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/ai/deep_learning_for_computer_vision/neural_networks_setting_up_the_data/">
       
       
         <link rel="prev" href="../neural_networks_setting_up_the_architecture/">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Neural Networks- Setting up the Data and the Loss - My Wiki</title>
+        <title>Neural Networks- Setting up the Data - My Wiki</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#neural-networks-setting-up-the-data-and-the-loss" class="md-skip">
+        <a href="#neural-networks-setting-up-the-data" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Neural Networks- Setting up the Data and the Loss
+              Neural Networks- Setting up the Data
             
           </span>
         </div>
@@ -939,7 +939,7 @@
   
   
   <span class="md-ellipsis">
-    Neural Networks- Setting up the Data and the Loss
+    Neural Networks- Setting up the Data
     
   </span>
   
@@ -952,7 +952,7 @@
   
   
   <span class="md-ellipsis">
-    Neural Networks- Setting up the Data and the Loss
+    Neural Networks- Setting up the Data
     
   </span>
   
@@ -1148,15 +1148,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#loss-functions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Loss Functions
-    </span>
-  </a>
   
 </li>
       
@@ -2235,7 +2226,7 @@
 
 
 
-<h1 id="neural-networks-setting-up-the-data-and-the-loss">Neural Networks: Setting up the Data and the Loss</h1>
+<h1 id="neural-networks-setting-up-the-data">Neural Networks: Setting up the Data</h1>
 <p>A Neural Network performs a sequence of linear mappings with interwoven non-linearities.</p>
 <h2 id="data-preprocessing">Data Preprocessing</h2>
 <p>There are three common forms of data preprocessing a data matrix <code>X</code>, where we will assume that <code>X</code> is of size <code>[N x D]</code> (<code>N</code> is the number of data, <code>D</code> is their dimensionality).</p>
@@ -2294,7 +2285,7 @@
 <h2 id="regularization">Regularization</h2>
 <p>There are several ways of controlling the capacity of Neural Networks to prevent overfitting.</p>
 <h3 id="l2-regularization">L2 regularization</h3>
-<p>This is perhaps the most common form of regularization. It can be implemented by penalizing the squared magnitude of all parameters directly in the objective. That is, for every weight <span class="arithmatex">\(w\)</span> in the network, we add the term <span class="arithmatex">\(\frac{1}{2} \lambda w^2\)</span> to the objective, where <span class="arithmatex">\(\lambda\)</span> is the regularization strength. It is common to see the factor of <span class="arithmatex">\(\frac{1}{2}\)</span> in front because then the gradient of this term with respect to the parameter <span class="arithmatex">\(w\)</span> is simply <span class="arithmatex">\(\lambda w\)</span> instead of <span class="arithmatex">\(2 \lambda w\)</span>. The L2 regularization has the intuitive interpretation of heavily penalizing peaky weight vectors and preferring diffuse weight vectors. As we discussed in the Linear Classification section, due to multiplicative interactions between weights and inputs this has the appealing property of encouraging the network to use all of its inputs a little rather than some of its inputs a lot.</p>
+<p>This is perhaps the most common form of regularization. It can be implemented by penalizing the squared magnitude of all parameters directly in the objective. That is, for every weight <span class="arithmatex">\(w\)</span> in the network, we add the term <span class="arithmatex">\(\frac{1}{2} \lambda w^2\)</span> to the objective, where <span class="arithmatex">\(\lambda\)</span> is the regularization strength. It is common to see the factor of <span class="arithmatex">\(\frac{1}{2}\)</span> in front because then the gradient of this term with respect to the parameter <span class="arithmatex">\(w\)</span> is simply <span class="arithmatex">\(\lambda w\)</span> instead of <span class="arithmatex">\(2 \lambda w\)</span>. The L2 regularization has the intuitive interpretation of heavily penalizing peaky weight vectors and preferring diffuse weight vectors. Due to multiplicative interactions between weights and inputs this has the appealing property of encouraging the network to use all of its inputs a little rather than some of its inputs a lot. Lastly, notice that during gradient descent parameter update, using the L2 regularization ultimately means that every weight is decayed linearly: <span class="arithmatex">\(W += -\lambda \cdot W\)</span> towards zero.</p>
 <h3 id="l1-regularization">L1 regularization</h3>
 <p>This is another relatively common form of regularization, where for each weight <span class="arithmatex">\(w\)</span> we add the term <span class="arithmatex">\(\lambda |w|\)</span> to the objective. It is possible to combine the L1 regularization with the L2 regularization: <span class="arithmatex">\(\lambda_1 |w| + \lambda_2 w^2\)</span> (this is called <a href="http://web.stanford.edu/~hastie/Papers/elasticnet.pdf">Elastic net regularization</a>). The L1 regularization has the intriguing property that it leads the weight vectors to become sparse during optimization (i.e. very close to exactly zero). In other words, neurons with L1 regularization end up using only a sparse subset of their most important inputs and become nearly invariant to the "noisy" inputs. In comparison, final weight vectors from L2 regularization are usually diffuse, small numbers. In practice, if you are not concerned with explicit feature selection, L2 regularization can be expected to give better performance than L1.</p>
 <h3 id="max-norm-constraints">Max norm constraints</h3>
@@ -2302,7 +2293,7 @@
 <h3 id="dropout">Dropout</h3>
 <p>This is an extremely effective, simple and recently introduced regularization technique by Srivastava et al. in <a href="http://www.cs.toronto.edu/~rsalakhu/papers/srivastava14a.pdf">Dropout: A Simple Way to Prevent Neural Networks from Overfitting</a> (pdf) that complements the other methods (L1, L2, maxnorm). While training, dropout is implemented by only keeping a neuron active with some probability <span class="arithmatex">\(p\)</span> (a hyperparameter), or setting it to zero otherwise.</p>
 <p><img alt="Dropout" src="../dropout.jpeg" /></p>
-<p><em>Left: A standard 2-layer Neural Network. Right: An example of a 2-layer Neural Network with dropout applied. Crossed units have been randomly "dropped out" of the network.</em></p>
+<p><em>Left: A standard 2-layer Neural Network. Right: An example of a 2-layer Neural Network with dropout applied. Crossed units have been randomly "dropped out" of the network. During testing there is no dropout applied</em></p>
 <p>Vanilla dropout in an example 3-layer Neural Network would be implemented as follows:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="sd">&quot;&quot;&quot; Vanilla Dropout: Not recommended implementation (see notes below) &quot;&quot;&quot;</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
@@ -2329,30 +2320,34 @@
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>  <span class="n">H2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W2</span><span class="p">,</span> <span class="n">H1</span><span class="p">)</span> <span class="o">+</span> <span class="n">b2</span><span class="p">)</span> <span class="o">*</span> <span class="n">p</span> <span class="c1"># scale the activations</span>
 <a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>  <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W3</span><span class="p">,</span> <span class="n">H2</span><span class="p">)</span> <span class="o">+</span> <span class="n">b3</span>
 </code></pre></div>
-<p>The key insight is that we can think of dropout as creating a kind of ensemble of neural networks. The number of possible "sub-networks" is exponential in the number of neurons, and each of these networks is seen during training, but none of them are seen in their entirety. At test time, we simply evaluate the full network without any dropout, but with the weights scaled down by the dropout probability. This ensures that for any neuron the expected output is the same as the expected output during training time. For example, if <span class="arithmatex">\(p = 0.5\)</span>, then neurons are dropped out randomly with probability 0.5, and the remaining neurons are scaled by 2. The scaling ensures that the total input to the next layer is roughly the same.</p>
-<p><strong>Theme of noise in forward pass</strong>. Dropout falls into a more general category of methods that introduce stochastic behavior in the forward pass of the network. During testing, the noise is marginalized over <em>analytically</em> (as is the case with dropout when multiplying by <span class="arithmatex">\(p\)</span>), or numerically (e.g. via sampling, by performing several forward passes with different random decisions and then averaging over them). An example of other research in this direction includes <a href="http://cs.nyu.edu/~wanli/dropc/">DropConnect</a>, where individual connections, instead of entire neurons, are randomly set to zero during forward pass. As foreshadowing, Convolutional Neural Networks also take advantage of this theme with methods such as stochastic pooling, fractional pooling, and data augmentation. We will go into details of these methods in the sections ahead.</p>
-<p><strong>Bias regularization</strong>. As we already mentioned in the Linear Classification section, it is not common to regularize the bias parameters because they do not interact with the data through multiplicative interactions, and therefore do not have the interpretation of controlling the influence of a data dimension on the final objective. However, in practical applications (and with proper data preprocessing) regularizing the bias rarely leads to significantly worse performance. This is likely because there are very few bias terms compared to all the weights, so the classifier can "afford to" use the biases if it needs them to obtain a better data loss.</p>
-<p><strong>Per-layer regularization</strong>. It is not very common to regularize different layers to different amounts (except perhaps the output layer). Relatively few results regarding this idea have been published in the literature.</p>
-<p><strong>In practice</strong>: It is most common to use a single, global L2 regularization strength that is cross-validated. It is also common to combine this with dropout applied after all layers. The value of <span class="arithmatex">\(p = 0.5\)</span> is a reasonable default, but this can be tuned on validation data.</p>
-<h2 id="loss-functions">Loss Functions</h2>
-<p>We have discussed the regularization loss part of the objective, which can be seen as penalizing some measure of complexity of the model. The second part of an objective is the <em>data loss</em>, which in a supervised learning problem measures the compatibility between a prediction (e.g. the class scores in classification) and the ground truth label. The data loss takes the form of an average over the data losses for every individual example. That is, <span class="arithmatex">\(L = \frac{1}{N} \sum_i L_i\)</span> where <span class="arithmatex">\(N\)</span> is the number of training data.</p>
-<p><strong>Classification</strong> is the case that we have so far discussed at length. Here, we assume a dataset of examples and a single correct label (out of a fixed set) for each example. One of two most commonly seen cost functions in this setting is the SVM (e.g. the Weston Watkins formulation):</p>
-<div class="arithmatex">\[L_i = \sum_{j \neq y_i} \max(0, f_j - f_{y_i} + 1)\]</div>
-<p>As we briefly alluded to, some people report better performance with the squared hinge loss (i.e. instead using <span class="arithmatex">\(\max(0, f_j - f_{y_i} + 1)^2\)</span>), but it is not as common. The other common choice is the Cross-Entropy loss that we saw on the Softmax classifier:</p>
-<div class="arithmatex">\[L_i = -\log\left(\frac{e^{f_{y_i}}}{\sum_j e^{f_j}}\right)\]</div>
-<p><strong>Problem: Large number of classes</strong>. When the set of labels is very large (e.g. words in English dictionary, or ImageNet which contains 22,000 categories), computing the full softmax probabilities becomes expensive. For certain applications, approximate versions are popular. For instance, it may be helpful to use <em>Hierarchical Softmax</em> in natural language processing tasks (see one explanation <a href="http://arxiv.org/pdf/1310.4546.pdf">here</a> (pdf)). The hierarchical softmax decomposes words as labels in a tree. Each label is then represented as a path along the tree, and a Softmax classifier is trained at every node of the tree to disambiguate between the left and right branch. The structure of the tree strongly impacts the performance and is generally problem-dependent.</p>
-<p><strong>Attribute classification</strong>. Both losses above assume that there is a single correct answer <span class="arithmatex">\(y_i\)</span>. But what if <span class="arithmatex">\(y_i\)</span> is a binary vector where every example may or may not have a certain attribute, and where the attributes are not mutually exclusive? For example, images on Instagram can be thought of as labeled with a certain hashtag, and a single image may have multiple hashtags, so the "ground truth" label <span class="arithmatex">\(y_i\)</span> would be a binary vector where the positive elements indicate the attributes that are present in the image. In this case, a sensible approach is to build a binary classifier for every single attribute independently. For example, a binary classifier for each category independently would take the form:</p>
-<div class="arithmatex">\[L_i = \sum_j \max(0, 1 - y_{ij} f_j)\]</div>
-<p>where the sum is over all categories <span class="arithmatex">\(j\)</span>, and <span class="arithmatex">\(y_{ij}\)</span> is either +1 or -1 depending on whether the i-th example is labeled with the j-th attribute, and the score vector <span class="arithmatex">\(f_j\)</span> will be positive when the class is predicted to be present and negative otherwise. Notice that loss is accumulated if a positive sample has score <span class="arithmatex">\(&lt; +1\)</span> or if a negative sample has score <span class="arithmatex">\(&gt; -1\)</span>.</p>
-<p>An alternative to this loss would be to train a logistic regression classifier for every attribute independently. A binary logistic regression classifier has only two classes (0,1), and calculates the probability of class 1 as:</p>
-<div class="arithmatex">\[P(y = 1 | x; w, b) = \sigma(\sum_i w_i x_i + b) = \frac{1}{1 + e^{-(\sum_i w_i x_i + b)}}\]</div>
-<p>Since the probabilities of class 1 and 0 sum to one, the probability of class 0 is <span class="arithmatex">\(P(y = 0 | x; w, b) = 1 - P(y = 1 | x; w, b)\)</span>. Hence, an example is classified as a positive example (y = 1) if <span class="arithmatex">\(\sigma(\sum_i w_i x_i + b) &gt; 0.5\)</span>, or equivalently if the score <span class="arithmatex">\((\sum_i w_i x_i + b) &gt; 0\)</span>. The loss function maximizes the log likelihood of this probability. You can convince yourself that this is simplified to:</p>
-<div class="arithmatex">\[L_i = -\sum_j y_{ij} \log(\sigma(f_j)) + (1 - y_{ij}) \log(1 - \sigma(f_j))\]</div>
-<p>where the labels <span class="arithmatex">\(y_{ij}\)</span> are either 1 (positive) or 0 (negative), and <span class="arithmatex">\(\sigma(\cdot)\)</span> is the sigmoid function. The expression above can look scary but the gradient on <span class="arithmatex">\(f\)</span> is in fact extremely simple and intuitive: <span class="arithmatex">\(\frac{\partial L_i}{\partial f_j} = y_{ij} - \sigma(f_j)\)</span> (as you can double check yourself by taking the derivatives). This is beautiful: the gradient on the scores is simply the difference between the ground truth and the predicted probabilities.</p>
-<p><strong>Regression</strong> is the task of predicting real-valued quantities, such as the price of houses or the length of fish in an image. For this task, it is common to compute the loss between the predicted quantity and the true answer and then measure the L2 squared norm, or L1 norm, of the difference. The L2 norm squared would compute the loss for a single example as:</p>
-<div class="arithmatex">\[L_i = ||f - y_i||_2^2\]</div>
-<p>The reason the L2 norm is squared in the objective is that the gradient becomes much simpler, without changing the optimal parameters since squaring is a monotonic operation. The L1 norm would be formulated as <span class="arithmatex">\(L_i = ||f - y_i||_1 = \sum_j |f_j - (y_i)_j|\)</span>. The L1 penalty is less sensitive to outliers than the L2 penalty, and has lower gradients for small values. However, the L1 penalty has a discontinuity at zero, which makes the optimization problem non-smooth and is the source of many technical difficulties. Therefore, it is much more common to see the L2 penalty instead of the L1 penalty in practice.</p>
-<p><strong>Word of caution</strong>: It is important to note that the L2 loss is much harder to optimize than a more stable loss such as the Softmax. Intuitively, it requires a very fragile and specific property from the network to output exactly one correct value for each input (and its augmentations). In contrast, the Softmax classifier is much more robust to the exact values of the scores, for example it is very hard for the score distribution to be: [10, -10, -10] and for the classifier to be correct, but it is much more acceptable for it to give [10, -9, -9] (which is more diffuse) and still be correct. Additionally, the L2 loss penalizes large errors more heavily than small ones, which can be problematic if the input has outliers or incorrect labels. Because of this, a more common approach is to use a classification approach even for variables that seem to have continuous values, or to "bin" the target values and treat the problem as a classification problem.</p>
+<p>Crucially, note that in the predict function we are not dropping anymore, but we are performing a scaling of both hidden layer outputs by <span class="arithmatex">\(p\)</span>. This is important because at test time all neurons see all their inputs, so we want the outputs of neurons at test time to be identical to their expected outputs at training time. For example, in case of <span class="arithmatex">\(p=0.5\)</span>, the neurons must halve their outputs at test time to have the same output as they had during training time (in expectation). To see this, consider an output of a neuron <span class="arithmatex">\(x\)</span> (before dropout). With dropout, the expected output from this neuron will become <span class="arithmatex">\(px+(1-p)0\)</span>, because the neuron's output will be set to zero with probability <span class="arithmatex">\(1-p\)</span>. At test time, when we keep the neuron always active, we must adjust <span class="arithmatex">\(x \rightarrow px\)</span> to keep the same expected output.</p>
+<p>The undesirable property of the scheme presented above is that we must scale the activations by <span class="arithmatex">\(p\)</span> at test time. Since test-time performance is so critical, it is always preferable to use inverted dropout, which performs the scaling at train time, leaving the forward pass at test time untouched. Additionally, this has the appealing property that the prediction code can remain untouched when you decide to tweak where you apply dropout, or if at all. Inverted dropout looks as follows.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="sd">&quot;&quot;&quot; </span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="sd">Inverted Dropout: Recommended implementation example.</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="sd">We drop and scale at train time and don&#39;t do anything at test time.</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">p</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="c1"># probability of keeping a unit active. higher = less dropout</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">train_step</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>  <span class="c1"># forward pass for example 3-layer neural network</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  <span class="n">H1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W1</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span> <span class="o">+</span> <span class="n">b1</span><span class="p">)</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  <span class="n">U1</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="o">*</span><span class="n">H1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">p</span><span class="p">)</span> <span class="o">/</span> <span class="n">p</span> <span class="c1"># first dropout mask. Notice /p!</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  <span class="n">H1</span> <span class="o">*=</span> <span class="n">U1</span> <span class="c1"># drop!</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  <span class="n">H2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W2</span><span class="p">,</span> <span class="n">H1</span><span class="p">)</span> <span class="o">+</span> <span class="n">b2</span><span class="p">)</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>  <span class="n">U2</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="o">*</span><span class="n">H2</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">p</span><span class="p">)</span> <span class="o">/</span> <span class="n">p</span> <span class="c1"># second dropout mask. Notice /p!</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>  <span class="n">H2</span> <span class="o">*=</span> <span class="n">U2</span> <span class="c1"># drop!</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>  <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W3</span><span class="p">,</span> <span class="n">H2</span><span class="p">)</span> <span class="o">+</span> <span class="n">b3</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>  <span class="c1"># backward pass: compute gradients... (not shown)</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>  <span class="c1"># perform parameter update... (not shown)</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>  <span class="c1"># ensembled forward pass</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>  <span class="n">H1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W1</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span> <span class="o">+</span> <span class="n">b1</span><span class="p">)</span> <span class="c1"># no scaling necessary</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>  <span class="n">H2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W2</span><span class="p">,</span> <span class="n">H1</span><span class="p">)</span> <span class="o">+</span> <span class="n">b2</span><span class="p">)</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>  <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W3</span><span class="p">,</span> <span class="n">H2</span><span class="p">)</span> <span class="o">+</span> <span class="n">b3</span>
+</code></pre></div>
 
 
 
