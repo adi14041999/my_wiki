@@ -25,6 +25,7 @@ nav:
       - Optimization: ai/deep_learning_for_computer_vision/optimization.md
       - Backpropagation: ai/deep_learning_for_computer_vision/backpropagation.md
       - Neural Networks- Setting up the Architecture: ai/deep_learning_for_computer_vision/neural_networks_setting_up_the_architecture.md
+      - Neural Networks- Setting up the Data and the Loss: ai/deep_learning_for_computer_vision/neural_networks_setting_up_the_data_and_the_loss.md
   - Math:
     - Linear Algebra:
       - Vectors, vector addition, and scalar multiplication: math/linear_algebra/vectors_vector_addition_and_scalar_multiplication.md
