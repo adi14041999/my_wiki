@@ -1881,6 +1881,33 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#n-step-transition-probabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      n-Step Transition Probabilities
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conditional-distributions-encoded-in-transition-matrices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conditional Distributions encoded in Transition Matrices
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#marginal-distributions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Marginal Distributions
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2198,6 +2225,113 @@ S &amp; 1/2 &amp; 1/2 \\
 <p>The probabilities at each step are determined by the transition matrix</p>
 </li>
 </ul>
+<h2 id="n-step-transition-probabilities">n-Step Transition Probabilities</h2>
+<p>Once we have the transition matrix <span class="arithmatex">\(Q\)</span> of a Markov chain, we can work out the transition probabilities for longer timescales.</p>
+<p><strong>Definition (n-step transition probability):</strong> The n-step transition probability from <span class="arithmatex">\(i\)</span> to <span class="arithmatex">\(j\)</span> is the probability of being at <span class="arithmatex">\(j\)</span> exactly <span class="arithmatex">\(n\)</span> steps after being at <span class="arithmatex">\(i\)</span>. We denote this by <span class="arithmatex">\(q^{(n)}_{ij}\)</span>:</p>
+<div class="arithmatex">\[q^{(n)}_{ij} = P(X_n = j | X_0 = i)\]</div>
+<p>Note that</p>
+<div class="arithmatex">\[q^{(2)}_{ij} = \sum_k q_{ik} q_{kj}\]</div>
+<p>since to get from <span class="arithmatex">\(i\)</span> to <span class="arithmatex">\(j\)</span> in two steps, the chain must go from <span class="arithmatex">\(i\)</span> to some intermediary state <span class="arithmatex">\(k\)</span>, and then from <span class="arithmatex">\(k\)</span> to <span class="arithmatex">\(j\)</span>; these transitions are independent because of the Markov property. Since the right-hand side is the <span class="arithmatex">\((i, j)\)</span> entry of <span class="arithmatex">\(Q^2\)</span> by definition of matrix multiplication, we conclude that the matrix <span class="arithmatex">\(Q^2\)</span> gives the two-step transition probabilities.</p>
+<p><strong>Example:</strong> For our rainy-sunny Markov chain with transition matrix:</p>
+<div class="arithmatex">\[Q = \begin{pmatrix}
+1/3 &amp; 2/3 \\
+1/2 &amp; 1/2 \\
+\end{pmatrix}\]</div>
+<p>The two-step transition matrix is:</p>
+<div class="arithmatex">\[Q^2 = \begin{pmatrix}
+1/3 &amp; 2/3 \\
+1/2 &amp; 1/2 \\
+\end{pmatrix} \begin{pmatrix}
+1/3 &amp; 2/3 \\
+1/2 &amp; 1/2 \\
+\end{pmatrix} = \begin{pmatrix}
+\frac{1}{3} \cdot \frac{1}{3} + \frac{2}{3} \cdot \frac{1}{2} &amp; \frac{1}{3} \cdot \frac{2}{3} + \frac{2}{3} \cdot \frac{1}{2} \\
+\frac{1}{2} \cdot \frac{1}{3} + \frac{1}{2} \cdot \frac{1}{2} &amp; \frac{1}{2} \cdot \frac{2}{3} + \frac{1}{2} \cdot \frac{1}{2} \\
+\end{pmatrix}\]</div>
+<div class="arithmatex">\[= \begin{pmatrix}
+\frac{1}{9} + \frac{1}{3} &amp; \frac{2}{9} + \frac{1}{3} \\
+\frac{1}{6} + \frac{1}{4} &amp; \frac{1}{3} + \frac{1}{4} \\
+\end{pmatrix} = \begin{pmatrix}
+\frac{1}{9} + \frac{3}{9} &amp; \frac{2}{9} + \frac{3}{9} \\
+\frac{2}{12} + \frac{3}{12} &amp; \frac{4}{12} + \frac{3}{12} \\
+\end{pmatrix} = \begin{pmatrix}
+\frac{4}{9} &amp; \frac{5}{9} \\
+\frac{5}{12} &amp; \frac{7}{12} \\
+\end{pmatrix}\]</div>
+<p>Let's compute <span class="arithmatex">\(q^{(2)}_{RS}\)</span> (starting rainy, ending sunny after 2 steps) using the formula <span class="arithmatex">\(q^{(2)}_{ij} = \sum_k q_{ik} q_{kj}\)</span>:</p>
+<div class="arithmatex">\[q^{(2)}_{RS} = \sum_{k} q_{Rk} q_{kS} = q_{RR} \cdot q_{RS} + q_{RS} \cdot q_{SS}\]</div>
+<p>Substituting the values from our transition matrix:</p>
+<div class="arithmatex">\[q^{(2)}_{RS} = \frac{1}{3} \cdot \frac{2}{3} + \frac{2}{3} \cdot \frac{1}{2} = \frac{2}{9} + \frac{1}{3} = \frac{2}{9} + \frac{3}{9} = \frac{5}{9}\]</div>
+<p>The total probability is <span class="arithmatex">\(\frac{5}{9}\)</span>.</p>
+<p><strong>Verification:</strong> The <span class="arithmatex">\((R,S)\)</span> entry is indeed <span class="arithmatex">\(\frac{5}{9}\)</span>, which matches our calculation!</p>
+<p>By induction, the <span class="arithmatex">\(n\)</span>th power of the transition matrix gives the <span class="arithmatex">\(n\)</span>-step transition probabilities:</p>
+<p><span class="arithmatex">\(q^{(n)}_{ij}\)</span> is the <span class="arithmatex">\((i, j)\)</span> entry of <span class="arithmatex">\(Q^n\)</span>.</p>
+<h2 id="conditional-distributions-encoded-in-transition-matrices">Conditional Distributions encoded in Transition Matrices</h2>
+<p>The transition matrix <span class="arithmatex">\(Q\)</span> encodes the conditional distribution of <span class="arithmatex">\(X_1\)</span> given the initial state of the chain. Specifically, the <span class="arithmatex">\(i\)</span>th row of <span class="arithmatex">\(Q\)</span> is the conditional PMF of <span class="arithmatex">\(X_1\)</span> given <span class="arithmatex">\(X_0 = i\)</span>, displayed as a row vector. Similarly, the <span class="arithmatex">\(i\)</span>th row of <span class="arithmatex">\(Q^n\)</span> is the conditional PMF of <span class="arithmatex">\(X_n\)</span> given <span class="arithmatex">\(X_0 = i\)</span>.</p>
+<p><strong>Example:</strong> For our rainy-sunny Markov chain with transition matrix:</p>
+<div class="arithmatex">\[Q = \begin{pmatrix}
+1/3 &amp; 2/3 \\
+1/2 &amp; 1/2 \\
+\end{pmatrix}\]</div>
+<p><strong>One-step conditional distributions:</strong></p>
+<ul>
+<li><strong>Given <span class="arithmatex">\(X_0 = R\)</span> (rainy)</strong>: The first row <span class="arithmatex">\((1/3, 2/3)\)</span> gives the conditional PMF of <span class="arithmatex">\(X_1\)</span>:</li>
+<li><span class="arithmatex">\(P(X_1 = R | X_0 = R) = 1/3\)</span></li>
+<li>
+<p><span class="arithmatex">\(P(X_1 = S | X_0 = R) = 2/3\)</span></p>
+</li>
+<li>
+<p><strong>Given <span class="arithmatex">\(X_0 = S\)</span> (sunny)</strong>: The second row <span class="arithmatex">\((1/2, 1/2)\)</span> gives the conditional PMF of <span class="arithmatex">\(X_1\)</span>:</p>
+</li>
+<li><span class="arithmatex">\(P(X_1 = R | X_0 = S) = 1/2\)</span></li>
+<li><span class="arithmatex">\(P(X_1 = S | X_0 = S) = 1/2\)</span></li>
+</ul>
+<p><strong>Two-step conditional distributions:</strong></p>
+<p>From our calculated <span class="arithmatex">\(Q^2 = \begin{pmatrix} 4/9 &amp; 5/9 \\ 5/12 &amp; 7/12 \end{pmatrix}\)</span>:</p>
+<ul>
+<li><strong>Given <span class="arithmatex">\(X_0 = R\)</span></strong>: The first row <span class="arithmatex">\((4/9, 5/9)\)</span> gives the conditional PMF of <span class="arithmatex">\(X_2\)</span>:</li>
+<li><span class="arithmatex">\(P(X_2 = R | X_0 = R) = 4/9\)</span></li>
+<li>
+<p><span class="arithmatex">\(P(X_2 = S | X_0 = R) = 5/9\)</span></p>
+</li>
+<li>
+<p><strong>Given <span class="arithmatex">\(X_0 = S\)</span></strong>: The second row <span class="arithmatex">\((5/12, 7/12)\)</span> gives the conditional PMF of <span class="arithmatex">\(X_2\)</span>:</p>
+</li>
+<li><span class="arithmatex">\(P(X_2 = R | X_0 = S) = 5/12\)</span></li>
+<li><span class="arithmatex">\(P(X_2 = S | X_0 = S) = 7/12\)</span></li>
+</ul>
+<p><strong>Key insight:</strong> Each row of <span class="arithmatex">\(Q^n\)</span> sums to 1, representing a valid probability distribution over the state space, conditioned on the initial state.</p>
+<h2 id="marginal-distributions">Marginal Distributions</h2>
+<p>To get the marginal distributions of <span class="arithmatex">\(X_0, X_1, \ldots\)</span>, we need to specify not only the transition matrix, but also the initial conditions of the chain. The initial state <span class="arithmatex">\(X_0\)</span> can be specified deterministically, or randomly according to some distribution. Let <span class="arithmatex">\((t_1, t_2, \ldots, t_M)\)</span> be the PMF of <span class="arithmatex">\(X_0\)</span> displayed as a vector, that is, <span class="arithmatex">\(t_i = P(X_0 = i)\)</span>. Then the marginal distribution of the chain at any time can be computed from the transition matrix, averaging over all the states using LOTP.</p>
+<p><strong>Important note:</strong> The initial distribution vector <span class="arithmatex">\(t\)</span> is completely independent of the transition matrix <span class="arithmatex">\(Q\)</span>. The vector <span class="arithmatex">\(t\)</span> specifies how the chain starts (the probabilities of being in each state at time 0), while <span class="arithmatex">\(Q\)</span> specifies how the chain evolves from one time step to the next. We can choose any initial distribution <span class="arithmatex">\(t\)</span> we want - it doesn't need to be related to <span class="arithmatex">\(Q\)</span> in any way. For example, we could start deterministically in state 1 with <span class="arithmatex">\(t = (1, 0, 0, 0)\)</span>, or with any other probability distribution over the four states.</p>
+<p><strong>Proposition (Marginal distribution of <span class="arithmatex">\(X_n\)</span>):</strong> Define <span class="arithmatex">\(t = (t_1, t_2, \ldots, t_M)\)</span> by <span class="arithmatex">\(t_i = P(X_0 = i)\)</span>, and view <span class="arithmatex">\(t\)</span> as a row vector. Then the marginal distribution of <span class="arithmatex">\(X_n\)</span> is given by the vector <span class="arithmatex">\(tQ^n\)</span>. That is, the <span class="arithmatex">\(j\)</span>th component of <span class="arithmatex">\(tQ^n\)</span> is <span class="arithmatex">\(P(X_n = j)\)</span>.</p>
+<p><strong>Proof:</strong> By the law of total probability, conditioning on <span class="arithmatex">\(X_0\)</span>, the probability that the chain is in state <span class="arithmatex">\(j\)</span> after <span class="arithmatex">\(n\)</span> steps is</p>
+<div class="arithmatex">\[P(X_n = j) = \sum_{i=1}^{M} P(X_0 = i)P(X_n = j | X_0 = i) = \sum_{i=1}^{M} t_i q^{(n)}_{ij}\]</div>
+<p>which is the <span class="arithmatex">\(j\)</span>th component of <span class="arithmatex">\(tQ^n\)</span> by definition of matrix multiplication.</p>
+<p><strong>Example (Marginal distributions of 4-state Markov chain):</strong> Consider the 4-state Markov chain shown in the figure below. </p>
+<p><img alt="image" src="../4_chain.png" /></p>
+<p>Suppose that the initial conditions are <span class="arithmatex">\(t = (1/4, 1/4, 1/4, 1/4)\)</span>, meaning that the chain has equal probability of starting in each of the four states. When no probabilities are written over the arrows, as in this case, it means all arrows originating from a given state are equally likely. For example, there are 3 arrows originating from state 1, so the transitions 1-&gt;3, 1-&gt;2, and 1-&gt;1 all have probability 1/3.Let <span class="arithmatex">\(X_n\)</span> be the position of the chain at time <span class="arithmatex">\(n\)</span>. Then the marginal distribution of <span class="arithmatex">\(X_1\)</span> is</p>
+<div class="arithmatex">\[tQ = \begin{pmatrix}
+1/4 &amp; 1/4 &amp; 1/4 &amp; 1/4 \\
+\end{pmatrix} \begin{pmatrix}
+1/3 &amp; 1/3 &amp; 1/3 &amp; 0 \\
+0 &amp; 0 &amp; 1/2 &amp; 1/2 \\
+0 &amp; 1 &amp; 0 &amp; 0 \\
+1/2 &amp; 0 &amp; 0 &amp; 1/2 \\
+\end{pmatrix} = \begin{pmatrix}
+5/24 &amp; 1/3 &amp; 5/24 &amp; 1/4 \\
+\end{pmatrix}\]</div>
+<p>The marginal distribution of <span class="arithmatex">\(X_5\)</span> is</p>
+<div class="arithmatex">\[tQ^5 = \begin{pmatrix}
+1/4 &amp; 1/4 &amp; 1/4 &amp; 1/4 \\
+\end{pmatrix} \begin{pmatrix}
+853/3888 &amp; 509/1944 &amp; 52/243 &amp; 395/1296 \\
+173/864 &amp; 85/432 &amp; 31/108 &amp; 91/288 \\
+37/144 &amp; 29/72 &amp; 1/9 &amp; 11/48 \\
+499/2592 &amp; 395/1296 &amp; 71/324 &amp; 245/864 \\
+\end{pmatrix} = \begin{pmatrix}
+3379/15552 &amp; 2267/7776 &amp; 101/486 &amp; 1469/5184 \\
+\end{pmatrix}\]</div>
 
 
 
