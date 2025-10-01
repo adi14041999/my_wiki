@@ -111,3 +111,95 @@ $$f_Z(z) = \int_{-\infty}^{\infty} f_Y(z - x)f_X(x)dx = \int_{-\infty}^{\infty} 
 $$P(Z = z) = \sum_x P(X + Y = z|X = x)P(X = x) = \sum_x P(Y = z - x|X = x)P(X = x) = \sum_x P(Y = z - x)P(X = x)$$
 
 The last equality follows from the independence of $X$ and $Y$. Conditioning on $Y$ instead, we obtain the second formula for the PMF of $Z$.
+
+## Moving Averages
+
+Convolution has been demonstrated in one case where it serves as a natural and desirable operation—adding up two probability distributions. Moving away from probabilities, another common example is the moving average. Consider a long list of numbers and a smaller list of numbers that all add up to 1. 
+
+![mv](ma0.png)
+
+In this case, there is a small list of 5 values that are all equal to 1/5. When applying the sliding window convolution process, and ignoring what happens at the very beginning, once the smaller list of values entirely overlaps with the larger one, each term in this convolution has a clear meaning.
+
+![mv](ma1.png)
+![mv](ma2.png)
+
+At each iteration, the process multiplies each of the values from the data by 1/5 and adds them all together, which means taking an average of the data inside this small window. 
+
+![mv](ma3.png)
+![mv](ma4.png)
+![mv](ma5.png)
+![mv](ma6.png)
+
+Overall, the process produces a smoothed version of the original data. 
+
+![mv](ma7.png)
+
+This can be modified by starting with a different small list of numbers, and as long as that small list adds up to 1, it can still be interpreted as a moving average.
+
+![mv](ma8.png)
+
+In the example shown here, that moving average would give more weight towards the central value. This also results in a smoothed version of the data.
+
+![mv](ma9.png)
+
+## Image Processing
+
+A two-dimensional analog of convolution provides an algorithm for blurring images. 
+
+![ip](ip0.png)
+
+A small 3×3 grid of values marches along the original image. When zooming in, each value is 1/9, and at each iteration, each value is multiplied by the corresponding pixel it sits on top of. 
+
+![ip](ip1.png)
+
+In computer science, colors are represented as vectors of three values representing the red, green, and blue components. When multiplying all these values by 1/9 and adding them together, the result is an average along each color channel, and the corresponding pixel for the image on the right is defined to be that sum. 
+
+![ip](ip2.png)
+
+The overall effect, as this process is applied to every single pixel on the image, is that each pixel bleeds into all of its neighbors, creating a blurrier version than the original.
+
+![ip](ip3.png)
+
+In technical terms, the image on the right is a convolution of the original image with a small grid of values. More precisely, it is the convolution with a 180-degree rotated version of that small grid of values. While this distinction does not matter when the grid is symmetric, it is worth noting that the definition of convolution, as inherited from the pure mathematics context, always involves flipping around the second array.
+
+![ip](ip4.png)
+
+Blurring is far from the only application of this concept. Consider a small grid of values that involves some positive numbers on the left and some negative numbers on the right, colored blue and red respectively. Take a moment to predict what effect this will have on the final image.
+
+![ip](ip5.png)
+![ip](ip6.png)
+
+In this case, the image is considered grayscale instead of colored, so each pixel is represented by one number instead of three.
+
+![ip](ip7.png)
+
+One thing worth noticing is that as this convolution is performed, negative values can result. For example, at a certain point, if zooming in, the left half of the small grid sits entirely on top of black pixels, which have a value of zero, but the right half of negative values all sit on top of white pixels, which have a value of one. 
+
+![ip](ip8.png)
+![ip](ip9.png)
+
+When multiplying corresponding terms and adding them together, the results will be very negative. The way this is displayed in the image on the right is to color negative values red and positive values blue.
+
+![ip](ip10.png)
+
+Another thing to notice is that when on a patch that is all the same color, everything goes to zero, since the sum of the values in the small grid is zero. This is very different from the previous example where the sum of the small grid was one, which allowed interpretation as a moving average and hence a blur.
+
+![ip](ip11.png)
+
+Overall, this process basically detects wherever there is variation in the pixel value as one moves from left to right, providing a way to pick up on all the vertical edges in the image.
+
+![ip](ip12.png)
+
+This smaller grid is often called a kernel, and the beauty lies in how just by choosing a different kernel, different image processing effects can be achieved— not just blurring or edge detection, but also things like sharpening. 
+
+![ip](ip13.png)
+
+For those familiar with convolutional neural networks, the idea is to use data to determine what the kernels should be in the first place, as determined by whatever the neural network wants to detect.
+
+![ip](ip14.png)
+
+Convolutions as a pure mathematical operation always produce an array that is bigger than the two arrays that are started with, at least assuming one of them does not have a length of one. In certain computer science contexts, it is often desirable to deliberately truncate that output.
+
+Another thing worth highlighting is that in the computer science context, the notion of flipping around the kernel before letting it march across the original often feels unusual and unnecessary, but again, note that this is inherited from the pure mathematics context, where, as seen with the probabilities, it is an incredibly natural thing to do.
+
+## Polynomial Multiplication
