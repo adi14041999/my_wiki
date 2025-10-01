@@ -203,3 +203,21 @@ Convolutions as a pure mathematical operation always produce an array that is bi
 Another thing worth highlighting is that in the computer science context, the notion of flipping around the kernel before letting it march across the original often feels unusual and unnecessary, but again, note that this is inherited from the pure mathematics context, where, as seen with the probabilities, it is an incredibly natural thing to do.
 
 ## Polynomial Multiplication
+
+Recall that with the probability example, another way to think about convolution was to create a table of all the pairwise products and then add up those pairwise products along the diagonals. There is nothing specific to probability about this approach. Any time two different lists of numbers are convolved, this method can be used. Create a multiplication table with all pairwise products, and then each sum along the diagonal corresponds to one of the final outputs.
+
+![pm](pm0.png)
+
+One context where this view is especially natural is when multiplying together two polynomials. For example, take the small grid already established and replace the top terms with 1, 2x, and 3x², and replace the other terms with 4, 5x, and 6x². Now, consider what it means when creating all these different pairwise products between the two lists.
+
+![pm](pm1.png)
+
+What is being done is essentially expanding out the full product of the two polynomials written down, and then when adding up along the diagonal, that corresponds to collecting all like terms. 
+
+![pm](pm2.png)
+
+This is quite elegant. Expanding a polynomial and collecting like terms is exactly the same process as convolution.
+
+This allows for something quite interesting, because consider what is being stated here. The statement is that if two different functions are taken and multiplied together, which is a simple pointwise operation, that is the same thing as if the coefficients were first extracted from each one of those, assuming they are polynomials, and then a convolution of those two lists of coefficients was taken.
+
+![pm](pm3.png)
