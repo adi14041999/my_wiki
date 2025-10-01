@@ -82,32 +82,32 @@ The resulting distribution's PMF ($f_Z$) is the convolution of the input distrib
 
 For a fixed value $x$ of $X$, $Y$ must take the value $z-x$. Since $X$ and $Y$ are independent, the joint probability mass at $(x,z-x)$ is the product of their individual masses: $f_X(x) \cdot f_Y(z-x)$.
 
-Sum these products over all possible values of $x$ to find the total probability masses for the sum $Z$ to be $z$.
+Take the sum of these products over all possible values of $x$ to find the total probability mass when $Z$ is equal to $z$.
 
-- **Convolution**: $T = X + Y$ with PMF $P(T = k)$ for $k = 2, 3, \ldots, 12$
+- **Convolution**: $Z = X + Y$ with PMF $P(Z = z)$ for $z = 2, 3, \ldots, 12$
 
 ![rd](rd14.png)
 
-## Definition and Basic Properties
+## Definition
 
 A convolution is a sum of independent random variables. We often add independent random variables because the sum is a useful summary of an experiment (in $n$ Bernoulli trials, we may only care about the total number of successes), and because sums lead to averages, which are also useful (in $n$ Bernoulli trials, the proportion of successes).
 
-The main task is to determine the distribution of $T = X + Y$, where $X$ and $Y$ are independent random variables whose distributions are known.
+The main task is to determine the distribution of $Z = X + Y$, where $X$ and $Y$ are independent random variables whose distributions are known.
 
-The distribution of $T$ is found using a convolution sum or integral. As we'll see, a convolution sum is nothing more than the law of total probability, conditioning on the value of either $X$ or $Y$; a convolution integral is analogous.
+The distribution of $Z$ is found using a convolution sum or integral. As we'll see, a convolution sum is nothing more than the law of total probability, conditioning on the value of either $X$ or $Y$; a convolution integral is analogous.
 
-Let $X$ and $Y$ be independent random variables and $T = X + Y$ be their sum.
+Let $X$ and $Y$ be independent random variables and $Z = X + Y$ be their sum.
 
-**Discrete Case:** If $X$ and $Y$ are discrete, then the PMF of $T$ is:
+**Discrete Case:** If $X$ and $Y$ are discrete, then the PMF of $Z$ is:
 
-$$P(T = t) = \sum_x P(Y = t - x)P(X = x) = \sum_y P(X = t - y)P(Y = y)$$
+$$P(Z = z) = \sum_x P(Y = z - x)P(X = x) = \sum_y P(X = z - y)P(Y = y)$$
 
-**Continuous Case:** If $X$ and $Y$ are continuous, then the PDF of $T$ is:
+**Continuous Case:** If $X$ and $Y$ are continuous, then the PDF of $Z$ is:
 
-$$f_T(t) = \int_{-\infty}^{\infty} f_Y(t - x)f_X(x)dx = \int_{-\infty}^{\infty} f_X(t - y)f_Y(y)dy$$
+$$f_Z(z) = \int_{-\infty}^{\infty} f_Y(z - x)f_X(x)dx = \int_{-\infty}^{\infty} f_X(z - y)f_Y(y)dy$$
 
 **Proof:** For the discrete case, we use the Law of Total Probability (LOTP), conditioning on $X$:
 
-$$P(T = t) = \sum_x P(X + Y = t|X = x)P(X = x) = \sum_x P(Y = t - x|X = x)P(X = x) = \sum_x P(Y = t - x)P(X = x)$$
+$$P(Z = z) = \sum_x P(X + Y = z|X = x)P(X = x) = \sum_x P(Y = z - x|X = x)P(X = x) = \sum_x P(Y = z - x)P(X = x)$$
 
-The last equality follows from the independence of $X$ and $Y$. Conditioning on $Y$ instead, we obtain the second formula for the PMF of $T$.
+The last equality follows from the independence of $X$ and $Y$. Conditioning on $Y$ instead, we obtain the second formula for the PMF of $Z$.

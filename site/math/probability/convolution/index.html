@@ -1720,9 +1720,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#definition-and-basic-properties" class="md-nav__link">
+  <a href="#definition" class="md-nav__link">
     <span class="md-ellipsis">
-      Definition and Basic Properties
+      Definition
     </span>
   </a>
   
@@ -2171,23 +2171,23 @@
 <p>Here, we performed a convolution of their PMFs. </p>
 <p>The resulting distribution's PMF (<span class="arithmatex">\(f_Z\)</span>) is the convolution of the input distributions' PMFs (<span class="arithmatex">\(f_X\)</span> and <span class="arithmatex">\(f_Y\)</span>).</p>
 <p>For a fixed value <span class="arithmatex">\(x\)</span> of <span class="arithmatex">\(X\)</span>, <span class="arithmatex">\(Y\)</span> must take the value <span class="arithmatex">\(z-x\)</span>. Since <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are independent, the joint probability mass at <span class="arithmatex">\((x,z-x)\)</span> is the product of their individual masses: <span class="arithmatex">\(f_X(x) \cdot f_Y(z-x)\)</span>.</p>
-<p>Sum these products over all possible values of <span class="arithmatex">\(x\)</span> to find the total probability masses for the sum <span class="arithmatex">\(Z\)</span> to be <span class="arithmatex">\(z\)</span>.</p>
+<p>Take the sum of these products over all possible values of <span class="arithmatex">\(x\)</span> to find the total probability mass when <span class="arithmatex">\(Z\)</span> is equal to <span class="arithmatex">\(z\)</span>.</p>
 <ul>
-<li><strong>Convolution</strong>: <span class="arithmatex">\(T = X + Y\)</span> with PMF <span class="arithmatex">\(P(T = k)\)</span> for <span class="arithmatex">\(k = 2, 3, \ldots, 12\)</span></li>
+<li><strong>Convolution</strong>: <span class="arithmatex">\(Z = X + Y\)</span> with PMF <span class="arithmatex">\(P(Z = z)\)</span> for <span class="arithmatex">\(z = 2, 3, \ldots, 12\)</span></li>
 </ul>
 <p><img alt="rd" src="../rd14.png" /></p>
-<h2 id="definition-and-basic-properties">Definition and Basic Properties</h2>
+<h2 id="definition">Definition</h2>
 <p>A convolution is a sum of independent random variables. We often add independent random variables because the sum is a useful summary of an experiment (in <span class="arithmatex">\(n\)</span> Bernoulli trials, we may only care about the total number of successes), and because sums lead to averages, which are also useful (in <span class="arithmatex">\(n\)</span> Bernoulli trials, the proportion of successes).</p>
-<p>The main task is to determine the distribution of <span class="arithmatex">\(T = X + Y\)</span>, where <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are independent random variables whose distributions are known.</p>
-<p>The distribution of <span class="arithmatex">\(T\)</span> is found using a convolution sum or integral. As we'll see, a convolution sum is nothing more than the law of total probability, conditioning on the value of either <span class="arithmatex">\(X\)</span> or <span class="arithmatex">\(Y\)</span>; a convolution integral is analogous.</p>
-<p>Let <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> be independent random variables and <span class="arithmatex">\(T = X + Y\)</span> be their sum.</p>
-<p><strong>Discrete Case:</strong> If <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are discrete, then the PMF of <span class="arithmatex">\(T\)</span> is:</p>
-<div class="arithmatex">\[P(T = t) = \sum_x P(Y = t - x)P(X = x) = \sum_y P(X = t - y)P(Y = y)\]</div>
-<p><strong>Continuous Case:</strong> If <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are continuous, then the PDF of <span class="arithmatex">\(T\)</span> is:</p>
-<div class="arithmatex">\[f_T(t) = \int_{-\infty}^{\infty} f_Y(t - x)f_X(x)dx = \int_{-\infty}^{\infty} f_X(t - y)f_Y(y)dy\]</div>
+<p>The main task is to determine the distribution of <span class="arithmatex">\(Z = X + Y\)</span>, where <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are independent random variables whose distributions are known.</p>
+<p>The distribution of <span class="arithmatex">\(Z\)</span> is found using a convolution sum or integral. As we'll see, a convolution sum is nothing more than the law of total probability, conditioning on the value of either <span class="arithmatex">\(X\)</span> or <span class="arithmatex">\(Y\)</span>; a convolution integral is analogous.</p>
+<p>Let <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> be independent random variables and <span class="arithmatex">\(Z = X + Y\)</span> be their sum.</p>
+<p><strong>Discrete Case:</strong> If <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are discrete, then the PMF of <span class="arithmatex">\(Z\)</span> is:</p>
+<div class="arithmatex">\[P(Z = z) = \sum_x P(Y = z - x)P(X = x) = \sum_y P(X = z - y)P(Y = y)\]</div>
+<p><strong>Continuous Case:</strong> If <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are continuous, then the PDF of <span class="arithmatex">\(Z\)</span> is:</p>
+<div class="arithmatex">\[f_Z(z) = \int_{-\infty}^{\infty} f_Y(z - x)f_X(x)dx = \int_{-\infty}^{\infty} f_X(z - y)f_Y(y)dy\]</div>
 <p><strong>Proof:</strong> For the discrete case, we use the Law of Total Probability (LOTP), conditioning on <span class="arithmatex">\(X\)</span>:</p>
-<div class="arithmatex">\[P(T = t) = \sum_x P(X + Y = t|X = x)P(X = x) = \sum_x P(Y = t - x|X = x)P(X = x) = \sum_x P(Y = t - x)P(X = x)\]</div>
-<p>The last equality follows from the independence of <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span>. Conditioning on <span class="arithmatex">\(Y\)</span> instead, we obtain the second formula for the PMF of <span class="arithmatex">\(T\)</span>.</p>
+<div class="arithmatex">\[P(Z = z) = \sum_x P(X + Y = z|X = x)P(X = x) = \sum_x P(Y = z - x|X = x)P(X = x) = \sum_x P(Y = z - x)P(X = x)\]</div>
+<p>The last equality follows from the independence of <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span>. Conditioning on <span class="arithmatex">\(Y\)</span> instead, we obtain the second formula for the PMF of <span class="arithmatex">\(Z\)</span>.</p>
 
 
 
