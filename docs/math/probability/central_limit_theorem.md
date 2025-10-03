@@ -51,7 +51,7 @@ The basic idea of the central limit theorem is that if you increase the size of 
 
 It's actually worth taking a moment to write down that general idea. 
 
-The setup is that we have a random variable. We'll call that random number $X$. What we're doing is taking multiple different samples of that variable $X$ (or we could take different random variables that do the exact same thing, like $X1$, $X2$,.. that are independent and are the exact same function) and adding them all together. On our Galton board, that looks like letting the ball bounce off multiple different pegs on its way down to the bottom, and in the case of a die, you might imagine rolling many different dice and adding up the results. The claim of the central limit theorem is that as you let the size of that sum get bigger and bigger, then the distribution of that sum, how likely it is to fall into different possible values, will look more and more like a bell curve. That's it- that is the general idea.
+The setup is that we have a random variable. We'll call that random number $X$. What we're doing is taking multiple different samples of that variable $X$ (or we could take different random variables that do the exact same thing, like $X1$, $X2$,.. that are independent and are the exact same function, i.e., identical) and adding them all together. On our Galton board, that looks like letting the ball bounce off multiple different pegs on its way down to the bottom, and in the case of a die, you might imagine rolling many different dice and adding up the results. The claim of the central limit theorem is that as you let the size of that sum get bigger and bigger, then the distribution of that sum, how likely it is to fall into different possible values, will look more and more like a bell curve. That's it- that is the general idea.
 
 ![img](gen_idea.png)
 
@@ -59,33 +59,48 @@ The setup is that we have a random variable. We'll call that random number $X$. 
 
 Usually if you think of rolling a die, you think of the six outcomes as being equally probable, but the theorem actually doesn't care about that. We could start with a weighted die, something with a non-trivial distribution across the outcomes, and the core idea still holds.
 
-For the simulation, take some distribution like this one that is skewed towards lower values. Take 10 distinct samples from that distribution and then record the sum of that sample on the plot on the bottom. Then do this many, many different times, always with a sum of size 10, but keep track of where those sums ended up to give us a sense of the distribution.
-
-In fact, let the y direction be rescaled to give room to run an even larger number of samples. Let it go all the way up to a couple thousand, and as it does, you'll notice that the shape that starts to emerge looks like a bell curve. Maybe if you squint your eyes you can see it skews a tiny bit to the left, but it's neat that something so symmetric emerged from a starting point that was so asymmetric.
-
 To better illustrate what the central limit theorem is all about, let's run four of these simulations in parallel, where on the upper left we're doing it where we're only adding two dice at a time, on the upper right we're doing it where we're adding five dice at a time, the lower left is the one that we just saw adding 10 dice at a time, and then we'll do another one with a bigger sum, 15 at a time.
 
-Notice how on the upper left when we're just adding two dice, the resulting distribution doesn't really look like a bell curve—it looks a lot more reminiscent of the one we started with, skewed towards the left. But as we allow for more and more dice in each sum, the resulting shape that comes up in these distributions looks more and more symmetric. It has the lump in the middle and fade towards the tails shape of a bell curve.
+![img](ds0.png)
 
-And let it be emphasized again: you can start with any different distribution. Here it will be run again, but where most of the probability is tied up in the numbers 1 and 6, with very low probability for the mid values. Despite completely changing the distribution for an individual roll of the die, it's still the case that a bell curve shape will emerge as we consider the different sums.
+Notice how on the upper left when we're just adding two dice, the resulting distribution doesn't really look like a bell curve— it looks a lot more reminiscent of the one we started with, skewed towards the left. But as we allow for more and more dice in each sum, the resulting shape that comes up in these distributions looks more and more symmetric. It has the lump in the middle and fade towards the tails shape of a bell curve.
 
-Illustrating things with a simulation like this is very fun, and it's kind of neat to see order emerge from chaos, but it also feels a little imprecise. Like in this case, when the simulation is cut off at 3000 samples, even though it kind of looks like a bell curve, the different buckets seem pretty spiky, and you might wonder: is it supposed to look that way, or is that just an artifact of the randomness in the simulation? And if it is, how many samples do we need before we can be sure that what we're looking at is representative of the true distribution?
+![img](ds1.png)
+![img](ds2.png)
+
+And let it be emphasized again: you can start with any different distribution.
+
+Illustrating things with a simulation like this is very fun, and it's kind of neat to see order emerge from chaos, but it also feels a little imprecise. How many samples do we need before we can be sure that what we're looking at is representative of the true distribution?
 
 ## The true distributions for sums
 
-Instead of moving forward, let's get a little more theoretical and show the precise shape these distributions will take on in the long run. The easiest case to make this calculation is if we have a uniform distribution, where each possible face of the die has an equal probability, 1/6th.
+Let's get a little more theoretical and show the precise shape these distributions will take on in the long run. The easiest case to make this calculation is if we have a uniform distribution, where each possible face of the die has an equal probability, 1/6th.
+
+![img](tds0.png)
 
 For example, if you then want to know how likely different sums are for a pair of dice, it's essentially a counting game, where you count up how many distinct pairs take on the same sum, which in the diagram drawn, you can conveniently think about by going through all the different diagonals. Since each such pair has an equal chance of showing up, 1 in 36, all you have to do is count the sizes of these buckets.
 
-That gives us a definitive shape for the distribution describing a sum of two dice, and if we were to play the same game with all possible triplets, the resulting distribution would look like this. Now what's more challenging, but a lot more interesting, is to ask what happens if we have a non-uniform distribution for that single die. This was actually talked about in the last video.
+![img](tds1.png)
 
-You do essentially the same thing—you go through all the distinct pairs of dice which add up to the same value. It's just that instead of counting those pairs, for each pair you multiply the two probabilities of each particular face coming up, and then you add all those together. The computation that does this for all possible sums has a fancy name— it's called a [convolution](convolution.md) —but it's essentially just the weighted version of the counting game that anyone who's played with a pair of dice already finds familiar.
+That gives us a definitive shape for the distribution describing a sum of two dice, and if we were to play the same game with all possible triplets, the resulting distribution would look like this. 
 
-For our purposes in this lesson, the computer will calculate all that, simply display the results, and invite you to observe certain patterns, but under the hood, this is what's going on. So just to be crystal clear on what's being represented here: if you imagine sampling two different values from that top distribution, the one describing a single die, and adding them together, then the second distribution being drawn represents how likely you are to see various different sums.
+![img](tds2.png)
 
-Likewise, if you imagine sampling three distinct values from that top distribution, and adding them together, the next plot represents the probabilities for various different sums in that case. So if we compute what the distributions for these sums look like for larger and larger sums, well you know what's going to be said—it looks more and more like a bell curve.
+Now what's more challenging, but a lot more interesting, is to ask what happens if we have a non-uniform distribution for that single die. 
 
-But before we get to that, make a couple more simple observations. For example, these distributions seem to be wandering to the right, and also they seem to be getting more spread out, and a little bit more flat. You cannot describe the central limit theorem quantitatively without taking into account both of those effects, which in turn requires describing the mean and the standard deviation.
+![img](tds3.png)
+
+So just to be crystal clear on what's being represented here: if you imagine sampling two different values from that top distribution, the one describing a single die, and adding them together, then the second distribution being drawn represents how likely you are to see various different sums (this is equivalent to the [convolution](convolution.md) of the die's probability mass function with itself). Likewise, if you imagine sampling three distinct values from that top distribution, and adding them together, the next plot represents the probabilities for various different sums in that case. 
+
+![img](tds5.png)
+
+So if we compute what the distributions for these sums look like for larger and larger sums, it looks more and more like a bell curve.
+
+![img](tds6.png)
+
+But before we get to that, let's make a couple of simple observations. For example, these distributions seem to be wandering to the right, and also they seem to be getting more spread out, and a little bit more flat. You cannot describe the central limit theorem quantitatively without taking into account both of those effects, which in turn requires describing the mean and the standard deviation.
+
+![img](tds7.png)
 
 ## Mean, variance, and standard deviation
 
