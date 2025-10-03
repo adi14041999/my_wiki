@@ -2247,18 +2247,57 @@
 <p><img alt="img" src="../msd6.png" /></p>
 <p>And let it be said one more time: the real magic here is how we could have started with any distribution, describing a single roll of the die, and if we play the same game, considering what the distributions for the many different sums look like, and we realign them so that the means line up, and we rescale them so that the standard deviations are all one, we still approach that same universal shape, which is kind of mind-boggling.</p>
 <h2 id="unpacking-the-gaussian-formula">Unpacking the Gaussian formula</h2>
-<p>And now is probably as good a time as any to finally get into the formula for a normal distribution. The way to do this is to basically peel back all the layers and build it up one piece at a time.</p>
-<p>The function e to the x, or anything to the x, describes exponential growth, and if you make that exponent negative, which flips around the graph horizontally, you might think of it as describing exponential decay. To make this decay in both directions, you could do something to make sure the exponent is always negative and growing, like taking the negative absolute value. That would give us this kind of awkward sharp point in the middle, but if instead you make that exponent the negative square of x, you get a smoother version of the same thing, which decays in both directions.</p>
-<p>This gives us the basic bell curve shape. Now if you throw a constant in front of that x, and you scale that constant up and down, it lets you stretch and squish the graph horizontally, allowing you to describe narrow and wider bell curves. And a quick thing to point out here is that based on the rules of exponentiation, as we tweak around that constant c, you could also think about it as simply changing the base of the exponentiation.</p>
+<p>The function e to the x, or anything to the x, describes exponential growth, and if you make that exponent negative, which flips around the graph horizontally, you might think of it as describing exponential decay. </p>
+<p><img alt="img" src="../g0.png" />
+<img alt="img" src="../g1.png" /></p>
+<p>To make this decay in both directions, you could do something to make sure the exponent is always negative and growing, like taking the negative absolute value. </p>
+<p><img alt="img" src="../g2.png" /></p>
+<p>That would give us this kind of awkward sharp point in the middle, but if instead you make that exponent the negative square of x, you get a smoother version of the same thing, which decays in both directions.</p>
+<p><img alt="img" src="../g3.png" /></p>
+<p>This gives us the basic bell curve shape. Now if you throw a constant in front of that x, and you scale that constant up and down, it lets you stretch and squish the graph horizontally, allowing you to describe narrow and wider bell curves.</p>
+<p><img alt="img" src="../g4.png" />
+<img alt="img" src="../g5.png" />
+<img alt="img" src="../g6.png" /></p>
+<p>And a quick thing to point out here is that based on the rules of exponentiation, as we tweak around that constant c, you could also think about it as simply changing the base of the exponentiation.</p>
+<p><img alt="img" src="../g7.png" />
+<img alt="img" src="../g8.png" />
+<img alt="img" src="../g9.png" />
+<img alt="img" src="../g10.png" />
+<img alt="img" src="../g11.png" /></p>
 <p>And in that sense, the number e is not really all that special for our formula. We could replace it with any other positive constant, and you'll get the same family of curves as we tweak that constant. Make it a 2, same family of curves. Make it a 3, same family of curves. The reason we use e is that it gives that constant a very readable meaning.</p>
+<p><img alt="img" src="../g12.png" /></p>
 <p>Or rather, if we reconfigure things a little bit so that the exponent looks like negative 1/2 times x divided by a certain constant, which we'll suggestively call sigma squared, then once we turn this into a probability distribution, that constant sigma will be the standard deviation of that distribution. And that's very nice.</p>
-<p>But before we can interpret this as a probability distribution, we need the area under the curve to be 1. And the reason for that is how the curve is interpreted. Unlike discrete distributions, when it comes to something continuous, you don't ask about the probability of a particular point. Instead, you ask for the probability that a value falls between two different values. And what the curve is telling you is that that probability equals the area under the curve between those two values. There's a whole other video about this—they're called probability density functions.</p>
-<p>The main point right now is that the area under the entire curve represents the probability that something happens, that some number comes up. That should be 1, which is why we want the area under this to be 1. As it stands with the basic bell curve shape of e to the negative x squared, the area is not 1, it's actually the square root of pi. What is pi doing here? What does this have to do with circles? As mentioned at the start, this will be discussed in the next video.</p>
-<p>But if you can spare your excitement, for our purposes right now, all it means is that we should divide this function by the square root of pi, and it gives us the area we want. Throwing back in the constants we had earlier, the one half and the sigma, the effect there is to stretch out the graph by a factor of sigma times the square root of 2. So we also need to divide out by that in order to make sure it has an area of 1, and combining those fractions, the factor out front looks like 1 divided by sigma times the square root of 2 pi.</p>
-<p>This, finally, is a valid probability distribution. As we tweak that value sigma, resulting in narrower and wider curves, that constant in the front always guarantees that the area equals 1. The special case where sigma equals 1 has a specific name— we call it the standard normal distribution, which plays an especially important role in this lesson.</p>
-<p>And all possible normal distributions are not only parameterized with this value sigma, but we also subtract off another constant mu from the variable x, and this essentially just lets you slide the graph left and right so that you can prescribe the mean of this distribution. So in short, we have two parameters, one describing the mean, one describing the standard deviation, and they're all tied together in this big formula involving an e and a pi.</p>
-<p>Now that all of that is on the table, let's look back again at the idea of starting with some random variable and asking what the distributions for sums of that variable look like. As we've already gone over, when you increase the size of that sum, the resulting distribution will shift according to a growing mean, and it slowly spreads out according to a growing standard deviation. And putting some actual formulas to it, if we know the mean of our underlying random variable, we call it mu, and we also know its standard deviation, and we call it sigma, then the mean for the sum on the bottom will be mu times the size of the sum, and the standard deviation will be sigma times the square root of that size.</p>
+<p><img alt="img" src="../g13.png" />
+<img alt="img" src="../g14.png" />
+<img alt="img" src="../g16.png" /></p>
+<p>But before we can interpret this as a probability distribution, we need the area under the curve to be 1.</p>
+<p><img alt="img" src="../g17.png" /></p>
+<p>As it stands with the basic bell curve shape of e to the negative x squared, the area is not 1, it's actually the square root of pi.</p>
+<p><img alt="img" src="../g18.png" /></p>
+<p>For our purposes right now, all it means is that we should divide this function by the square root of pi, and it gives us the area we want. </p>
+<p><img alt="img" src="../g19.png" /></p>
+<p>Throwing back in the constants we had earlier, the one half and the sigma, the effect there is to stretch out the graph by a factor of sigma times the square root of 2. </p>
+<p><img alt="img" src="../g20.png" /></p>
+<p>So we also need to divide out by that in order to make sure it has an area of 1, and combining those fractions, the factor out front looks like 1 divided by sigma times the square root of 2 pi.</p>
+<p><img alt="img" src="../g21.png" />
+<img alt="img" src="../g22.png" /></p>
+<p>This, finally, is a valid probability distribution. As we tweak that value sigma, resulting in narrower and wider curves, that constant in the front always guarantees that the area equals 1. </p>
+<p><img alt="img" src="../g23.png" />
+<img alt="img" src="../g24.png" /></p>
+<p>The special case where sigma equals 1 has a specific name— we call it the standard normal distribution.</p>
+<p><img alt="img" src="../g25.png" /></p>
+<p>And all possible normal distributions are not only parameterized with this value sigma, but we also subtract off another constant mu from the variable x, and this essentially just lets you slide the graph left and right so that you can prescribe the mean of this distribution. </p>
+<p><img alt="img" src="../g26.png" />
+<img alt="img" src="../g27.png" />
+<img alt="img" src="../g28.png" /></p>
+<p>So in short, we have two parameters, one describing the mean, one describing the standard deviation, and they're all tied together in this big formula involving an e and a pi.</p>
+<p>Let's look back again at the idea of starting with some random variable and asking what the distributions for sums of that variable look like. When you increase the size of that sum, the resulting distribution will shift according to a growing mean, and it slowly spreads out according to a growing standard deviation. </p>
+<p><img alt="img" src="../g29.png" /></p>
+<p>And putting some actual formulas to it, if we know the mean of our underlying random variable, we call it mu, and we also know its standard deviation, and we call it sigma, then the mean for the sum on the bottom will be mu times the size of the sum, and the standard deviation will be sigma times the square root of that size.</p>
+<p><img alt="img" src="../g30.png" /></p>
 <p>So now, if we want to claim that this looks more and more like a bell curve, and a bell curve is only described by two different parameters, the mean and the standard deviation, you know what to do. You could plug those two values into the formula, and it gives you a highly explicit, albeit kind of complicated, formula for a curve that should closely fit our distribution.</p>
+<p><img alt="img" src="../g31.png" />
+<img alt="img" src="../g32.png" /></p>
 <h2 id="the-more-elegant-formulation">The more elegant formulation</h2>
 <p>But there's another way we can describe it that's a little more elegant and lends itself to a very fun visual that we can build up to. Instead of focusing on the sum of all of these random variables, let's modify this expression a little bit, where what we'll do is we'll look at the mean that we expect that sum to take, and we subtract it off so that our new expression has a mean of zero, and then we're going to look at the standard deviation we expect of our sum, and divide out by that, which basically just rescales the units so that the standard deviation of our expression will equal one.</p>
 <p>This might seem like a more complicated expression, but it actually has a highly readable meaning. It's essentially saying how many standard deviations away from the mean is this sum? For example, this bar here corresponds to a certain value that you might find when you roll 10 dice and you add them all up, and its position a little above negative one is telling you that that value is a little bit less than one standard deviation lower than the mean.</p>
