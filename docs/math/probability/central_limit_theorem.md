@@ -223,58 +223,36 @@ So now, if we want to claim that this looks more and more like a bell curve, and
 ![img](g31.png)
 ![img](g32.png)
 
-## The more elegant formulation
+## Formal Definition
 
-But there's another way we can describe it that's a little more elegant and lends itself to a very fun visual that we can build up to. Instead of focusing on the sum of all of these random variables, let's modify this expression a little bit, where what we'll do is we'll look at the mean that we expect that sum to take, and we subtract it off so that our new expression has a mean of zero, and then we're going to look at the standard deviation we expect of our sum, and divide out by that, which basically just rescales the units so that the standard deviation of our expression will equal one.
+Before stating the formal definition of the Central Limit Theorem, it's important to understand what **i.i.d.** means. This stands for "independent and identically distributed" and refers to a collection of random variables that satisfy two key properties:
 
-This might seem like a more complicated expression, but it actually has a highly readable meaning. It's essentially saying how many standard deviations away from the mean is this sum? For example, this bar here corresponds to a certain value that you might find when you roll 10 dice and you add them all up, and its position a little above negative one is telling you that that value is a little bit less than one standard deviation lower than the mean.
+1. **Independent**: The outcome of one variable doesn't influence the outcome of any other variable
 
-Also, by the way, in anticipation for the animation being built to here, the way things are being represented on that lower plot is that the area of each one of these bars is telling us the probability of the corresponding value rather than the height. You might think of the y-axis as representing not probability but a kind of probability density. The reason for this is to set the stage so that it aligns with the way we interpret continuous distributions, where the probability of falling between a range of values is equal to an area under a curve between those values. In particular, the area of all the bars together is going to be one.
+2. **Identically distributed**: All variables follow the same probability distribution
 
-Now, with all of that in place, let's have a little fun. Let's start by rolling things back so that the distribution on the bottom represents a relatively small sum, like adding together only three such random variables. Notice what happens as the distribution we start with changes. As it changes, the distribution on the bottom completely changes its shape. It's very dependent on what we started with.
+In our dice example, each die roll is independent of the others, and each die follows the same distribution (whether fair or weighted), making the sequence of die rolls i.i.d.
 
-If we let the size of our sum get a little bit bigger, say going up to 10, and as the distribution for x changes, it largely stays looking like a bell curve, but some distributions can be found that get it to change shape. For example, the really lopsided one where almost all the probability is in the numbers 1 or 6 results in this kind of spiky bell curve. And if you'll recall, earlier on this was actually shown in the form of a simulation. Though if you were wondering whether that spikiness was an artifact of the randomness or reflected the true distribution, it turns out it reflects the true distribution. In this case, 10 is not a large enough sum for the central limit theorem to kick in.
+Now, let $X_1, X_2, X_3, \ldots$ be i.i.d. random variables with mean $\mu$ and variance $\sigma^2$. Here, $\mu$ and $\sigma$ describe the underlying distribution that each individual $X_i$ follows:
 
-But if instead we let that sum grow and consider adding 50 different values, which is actually not that big, then no matter how the distribution for our underlying random variable changes, it has essentially no effect on the shape of the plot on the bottom. No matter where we start, all of the information and nuance for the distribution of x gets washed away, and we tend towards this single universal shape described by a very elegant function for the standard normal distribution: 1 over square root of 2 pi times e to the negative x squared over 2.
+- $\mu = E[X_i]$ is the **expected value** (mean) of any single random variable $X_i$
 
-This, this right here is what the central limit theorem is all about. Almost nothing you can do to this initial distribution changes the shape we tend towards.
+- $\sigma^2 = \text{Var}(X_i)$ is the **variance** of any single random variable $X_i$
 
-Now, the more theoretically minded among you might still be wondering what is the actual theorem, like what's the mathematical statement that could be proved or disproved that we're claiming here. If you want a nice formal statement, here's how it might go.
+- $\sigma = \sqrt{\sigma^2}$ is the **standard deviation** of any single random variable $X_i$
 
-Consider this value where we're summing up n different instantiations of our variable, but tweaked and tuned so that its mean and standard deviation are 1, again meaning you can read it as asking how many standard deviations away from the mean is the sum. Then the actual rigorous no-jokes-this-time statement of the central limit theorem is that if you consider the probability that this value falls between two given real numbers, a and b, and you consider the limit of that probability as the size of your sum goes to infinity, then that limit is equal to a certain integral, which basically describes the area under a standard normal distribution between those two values.
+For example, if we're rolling a fair die, then $\mu = 3.5$ and $\sigma = 1.71$. These are the mean and standard deviation of a single die roll.
 
-Again, there are three underlying assumptions that have yet to be told, but other than those, in all of its gory detail, this right here is the central limit theorem.
+The **sample mean** $\bar{X}_n$ is defined as:
 
-## A concrete example
+$$\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i = \frac{X_1 + X_2 + \cdots + X_n}{n}$$
 
-All of that is a bit theoretical, so it might be helpful to bring things back down to earth and turn back to the concrete example that was mentioned at the start, where you imagine rolling a die 100 times, and let's assume it's a fair die for this example, and you add together the results. The challenge is to find a range of values such that you're 95% sure that the sum will fall within this range.
+This represents the average of the first $n$ observations. For example, if we roll a die 100 times and get outcomes $X_1, X_2, \ldots, X_{100}$, then $\bar{X}_{100}$ would be the average of those 100 die rolls.
 
-For questions like this, there's a handy rule of thumb about normal distributions, which is that about 68% of your values are going to fall within one standard deviation of the mean, 95% of your values, the thing we care about, fall within two standard deviations of the mean, and a whopping 99.7% of your values will fall within three standard deviations of the mean. It's a rule of thumb that's commonly memorized by people who do a lot of probability and stats.
+The CLT states that for large $n$, the distribution of $\bar{X}_n$ after standardization approaches a standard normal distribution. By standardization, we mean that we subtract $\mu$ (the mean of any random variable $X_i$) and divide by $\sigma/\sqrt{n}$ (the standard deviation of the sample mean $\bar{X}_n$).
 
-Naturally, this gives us what we need for our example, and let's go ahead and draw out what this would look like, where the distribution for a fair die is shown up at the top, and the distribution for a sum of 100 such dice on the bottom, which by now as you know looks like a certain normal distribution.
+**Theorem (Central Limit Theorem):** As $n \to \infty$,
 
-Step 1 with a problem like this is to find the mean of your initial distribution, which in this case will look like 1/6th times 1 plus 1/6th times 2 on and on and on, and works out to be 3.5. We also need the standard deviation, which requires calculating the variance, which as you know involves adding all the squares of the differences between the values and the means, and it works out to be 2.92, square root of that comes out to be 1.71.
+$$\sqrt{n} \cdot \frac{\bar{X}_n - \mu}{\sigma} \to N(0, 1) \text{ in distribution}$$
 
-Those are the only two numbers we need, and you are invited again to reflect on how magical it is that those are the only two numbers you need to completely understand the bottom distribution. Its mean will be 100 times mu, which is 350, and its standard deviation will be the square root of 100 times sigma, so 10 times sigma, 17.1.
-
-Remembering our handy rule of thumb, we're looking for values two standard deviations away from the mean, and when you subtract 2 sigma from mean, you end up with about 316, and when you add 2 sigma you end up with 384. There you go, that gives us the answer.
-
-Instead of just asking about the sum of 100 die rolls, let's say we had you divide that number by 100, which basically means all the numbers in our diagram in the bottom get divided by 100. Take a moment to interpret what this all would be saying then. The expression essentially tells you the empirical average for 100 different die rolls, and that interval we found is now telling you what range you are expecting to see for that empirical average.
-
-In other words, you might expect it to be around 3.5, that's the expected value for a die roll, but what's much less obvious and what the central limit theorem lets you compute is how close to that expected value you'll reasonably find yourself. In particular, it's worth your time to take a moment mulling over what the standard deviation for this empirical average is, and what happens to it as you look at a bigger and bigger sample of die rolls.
-
-## Underlying assumptions
-
-Lastly, but probably most importantly, let's talk about the assumptions that go into this theorem. The first one is that all of these variables that we're adding up are independent from each other. The outcome of one process doesn't influence the outcome of any other process.
-
-The second is that all of these variables are drawn from the same distribution. Both of these have been implicitly assumed with our dice example. We've been treating the outcome of each die roll as independent from the outcome of all the others, and we're assuming that each die follows the same distribution. Sometimes in the literature you'll see these two assumptions lumped together under the initials IID for independent and identically distributed.
-
-One situation where these assumptions are decidedly not true would be the Galton board. Think about it. Is it the case that the way a ball bounces off of one of the pegs is independent from how it's going to bounce off the next peg? Absolutely not. Depending on the last bounce, it's coming in with a completely different trajectory. And is it the case that the distribution of possible outcomes off of each peg are the same for each peg that it hits? Again, almost certainly not.
-
-Maybe it hits one peg glancing to the left, meaning the outcomes are hugely skewed in that direction, and then hits the next one glancing to the right. When all those simplifying assumptions were made in the opening example, it wasn't just to make this easier to think about. It's also that those assumptions were necessary for this to actually be an example of the central limit theorem.
-
-Nevertheless, it seems to be true that for the real Galton board, despite violating both of these, a normal distribution does kind of come about? Part of the reason might be that there are generalizations of the theorem beyond the scope of this video that relax these assumptions, especially the second one. But there is a caution against the fact that many times people seem to assume that a variable is normally distributed, even when there's no actual justification to do so.
-
-The third assumption is actually fairly subtle. It's that the variance we've been computing for these variables is finite. This was never an issue for the dice example because there were only six possible outcomes. But in certain situations where you have an infinite set of outcomes, when you go to compute the variance, the sum ends up diverging off to infinity. These can be perfectly valid probability distributions, and they do come up in practice.
-
-But in those situations, as you consider adding many different instantiations of that variable and letting that sum approach infinity, even if the first two assumptions hold, it is very much a possibility that the thing you tend towards is not actually a normal distribution.
+This means that the standardized sample mean converges in distribution to a standard normal random variable as the sample size grows large.
