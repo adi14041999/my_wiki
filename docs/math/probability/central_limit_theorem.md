@@ -104,27 +104,32 @@ But before we get to that, let's make a couple of simple observations. For examp
 
 ## Mean, variance, and standard deviation
 
-The mean of a distribution, often denoted with the Greek letter mu, is a way of capturing the center of mass for that distribution. It's calculated as the expected value of our random variable, which is a way of saying you go through all of the different possible outcomes, and you multiply the probability of that outcome times the value of the variable. If higher values are more probable, that weighted sum is going to be bigger. If lower values are more probable, that weighted sum is going to be smaller.
+Looking back at our sequence of distributions, let's talk about the mean and standard deviation. If we call the mean of the initial distribution mu, which for the one illustrated happens to be 2.24, hopefully it won't be too surprising if it's said that the mean of the next one is 2 times mu. That is, you roll a pair of dice, you want to know the expected value of the sum, it's two times the expected value for a single die. Similarly, the expected value for our sum of size 3 is 3 times mu, and so on and so forth. The mean just marches steadily on to the right, which is why our distributions seem to be drifting off in that direction.
 
-A little more interesting is if you want to measure how spread out this distribution is, because there are multiple different ways you might do it. One of them is called the variance. The idea there is to look at the difference between each possible value and the mean, square that difference, and ask for its expected value. The idea is that whether your value is below or above the mean, when you square that difference, you get a positive number, and the larger the difference, the bigger that number.
+![img](msd0.png)
 
-Squaring it like this turns out to make the math much, much nicer than if we did something like an absolute value, but the downside is that it's hard to think about this as a distance in our diagram because the units are off— kind of like the units here are square units, whereas a distance in our diagram would be a kind of linear unit.
+A little more challenging, but very important, is to describe how the standard deviation changes. The key fact here is that if you have two different random variables, then the variance for the sum of those variables is the same as just adding together the original two variances. The main thing to highlight is how it's the variance that adds— it's not the standard deviation that adds. 
 
-So another way to measure spread is what's called the standard deviation, which is the square root of this value. That can be interpreted much more reasonably as a distance on our diagram, and it's commonly denoted with the Greek letter sigma, so you know mu for mean and sigma for standard deviation, but both in Greek.
+![img](msd1.png)
 
-Looking back at our sequence of distributions, let's talk about the mean and standard deviation. If we call the mean of the initial distribution mu, which for the one illustrated happens to be 2.24, hopefully it won't be too surprising if it's said that the mean of the next one is 2 times mu. That is, you roll a pair of dice, you want to know the expected value of the sum, it's two times the expected value for a single die. Similarly, the expected value for our sum of size 3 is 3 times mu, and so on and so forth.
+So, critically, if you were to take n different realizations of the same random variable and ask what the sum looks like, the variance of sum is n times the variance of your original variable, meaning the standard deviation, the square root of all this, is the square root of n times the original standard deviation.
 
-The mean just marches steadily on to the right, which is why our distributions seem to be drifting off in that direction.
-
-A little more challenging, but very important, is to describe how the standard deviation changes. The key fact here is that if you have two different random variables, then the variance for the sum of those variables is the same as just adding together the original two variances. This is one of those facts that you can just compute when you unpack all the definitions.
-
-There are a couple nice intuitions for why it's true. The tentative plan is to actually make a series about probability and talk about things like intuitions underlying variance and its cousins there. But right now, the main thing to highlight is how it's the variance that adds—it's not the standard deviation that adds. So, critically, if you were to take n different realizations of the same random variable and ask what the sum looks like, the variance of sum is n times the variance of your original variable, meaning the standard deviation, the square root of all this, is the square root of n times the original standard deviation.
+![img](msd2.png)
 
 For example, back in our sequence of distributions, if we label the standard deviation of our initial one with sigma, then the next standard deviation is going to be the square root of 2 times sigma, and after that it looks like the square root of 3 times sigma, and so on and so forth.
 
+![img](msd3.png)
+
 This, as mentioned, is very important. It means that even though our distributions are getting spread out, they're not spreading out all that quickly— they only do so in proportion to the square root of the size of the sum.
 
-As we prepare to make a more quantitative description of the central limit theorem, the core intuition to keep in your head is that we'll basically realign all of these distributions so that their means line up together, and then rescale them so that all of the standard deviations are just going to be equal to one. And when we do that, the shape that results gets closer and closer to a certain universal shape, described with an elegant little function that we'll unpack in just a moment.
+As we prepare to make a more quantitative description of the central limit theorem, the core intuition to keep in your head is that we'll basically realign all of these distributions so that their means line up together, and then rescale them so that all of the standard deviations are just going to be equal to one. 
+
+![img](msd4.png)
+![img](msd5.png)
+
+And when we do that, the shape that results gets closer and closer to a certain universal shape, described with an elegant little function that we'll unpack in just a moment.
+
+![img](msd6.png)
 
 And let it be said one more time: the real magic here is how we could have started with any distribution, describing a single roll of the die, and if we play the same game, considering what the distributions for the many different sums look like, and we realign them so that the means line up, and we rescale them so that the standard deviations are all one, we still approach that same universal shape, which is kind of mind-boggling.
 
