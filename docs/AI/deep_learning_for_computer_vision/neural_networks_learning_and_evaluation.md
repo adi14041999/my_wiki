@@ -134,30 +134,26 @@ Once the analytic gradient is computed with backpropagation, the gradients are u
 
 #### SGD and bells and whistles
 
-**Vanilla update**. The simplest form of update is to change the parameters along the negative gradient direction (since the gradient indicates the direction of increase, but we usually wish to minimize a loss function). Assuming a vector of parameters $x$ and the gradient $dx$, the simplest update has the form:
+**Vanilla update:** The simplest form of update is to change the parameters along the negative gradient direction (since the gradient indicates the direction of increase, but we usually wish to minimize a loss function). Assuming a vector of parameters $x$ and the gradient $dx$, the simplest update has the form:
 
 ```python
 # Vanilla update
 x += - learning_rate * dx
 ```
 
-where $learning\_rate$ is a hyperparameter - a fixed constant. When evaluated on the full dataset, and when the learning rate is low enough, this is guaranteed to make non-negative progress on the loss function.
+where $learning\_rate$ is a hyperparameter- a fixed constant. When evaluated on the full dataset, and when the learning rate is low enough, this is guaranteed to make non-negative progress on the loss function.
 
-**Momentum update** is another approach that almost always enjoys better converge rates on deep networks. This update can be motivated from a physical perspective of the optimization problem. In particular, the loss can be interpreted as the height of a hilly terrain (and therefore also to the potential energy since $U = mgh$). The optimization process can then be seen as simulating a particle sliding down the hilly landscape.
-
-Since the force on the particle is related to the gradient of potential energy (i.e. $F = -\nabla U$), the force felt by the particle is precisely the (negative) gradient of the loss function. Moreover, $F = ma$ so the (negative) gradient is in this view proportional to the acceleration of the particle. Note that this is different from the SGD update, where the gradient directly integrates the position. Instead, the physics view suggests an update in terms of velocity, which in turn is integrated to give the position. Here is the momentum update:
+**Momentum update:** Another approach that almost always enjoys better converge rates on deep networks. Here is the momentum update:
 
 ```python
 # Momentum update
-v = mu * v - learning_rate * dx # integrate velocity
-x += v # integrate position
+v = mu * v - learning_rate * dx
+x += v
 ```
 
-Here we see an introduction of a $v$ variable that is initialized at zero, and an additional hyperparameter ($mu$). As an unfortunate misnomer, this variable is in optimization referred to as *momentum* (its typical value is about 0.9), but its physical meaning is more consistent with the coefficient of friction. Effectively, this variable damps the velocity and reduces the kinetic energy of the system, or otherwise the particle would never come to a stop at the bottom of a hill. When cross-validated, this parameter is usually set to values such as [0.5, 0.9, 0.95, 0.99]. Similar to annealing schedules for learning rates (discussed later, below), optimization can sometimes benefit a little from momentum schedules, where the momentum is increased in later stages of learning. A typical setting is to start with momentum of about 0.5 and anneal it to 0.99 or so over multiple epochs.
+Here we see an introduction of a $v$ variable that is initialized at zero, and an additional hyperparameter ($mu$). As an unfortunate misnomer, this variable is in optimization referred to as *momentum* (its typical value is about 0.9), but its physical meaning is more consistent with the coefficient of friction. Effectively, this variable damps the effect of the learning rate. When cross-validated, this parameter is usually set to values such as [0.5, 0.9, 0.95, 0.99]. Similar to annealing schedules for learning rates (discussed later, below), optimization can sometimes benefit a little from momentum schedules, where the momentum is increased in later stages of learning.
 
-> With Momentum update, the parameter vector will build up velocity in any direction that has consistent gradient.
-
-**Nesterov Momentum** is a slightly different version of the momentum update that has recently been gaining popularity. It enjoys stronger theoretical converge guarantees for convex functions and in practice it also consistenly works slightly better than standard momentum.
+**Nesterov Momentum** is a slightly different version of the momentum update. It enjoys stronger theoretical converge guarantees for convex functions and in practice it also consistenly works slightly better than standard momentum.
 
 The core idea behind Nesterov momentum is that when the current parameter vector is at some position $x$, then looking at the momentum update above, we know that the momentum term alone (i.e. ignoring the second term with the gradient) is about to nudge the parameter vector by $mu \cdot v$. Therefore, if we are about to compute the gradient, we can treat the future approximate position $x + mu \cdot v$ as a "lookahead" - this is a point in the vicinity of where we are soon going to end up. Hence, it makes sense to compute the gradient at $x + mu \cdot v$ instead of at the "old/stale" position $x$.
 
@@ -174,51 +170,40 @@ v = mu * v - learning_rate * dx_ahead
 x += v
 ```
 
-However, in practice people prefer to express the update to look as similar to vanilla SGD or to the previous momentum update as possible. This is possible to achieve by manipulating the update above with a variable transform $x\_ahead = x + mu \cdot v$, and then expressing the update in terms of $x\_ahead$ instead of $x$. That is, the parameter vector we are actually storing is always the ahead version. The equations in terms of $x\_ahead$ (but renaming it back to $x$) then become:
-
-```python
-v_prev = v # back this up
-v = mu * v - learning_rate * dx # velocity update stays the same
-x += -mu * v_prev + (1 + mu) * v # position update changes form
-```
-
 #### Annealing the learning rate
 
 In training deep networks, it is usually helpful to anneal the learning rate over time. Good intuition to have in mind is that with a high learning rate, the system contains too much kinetic energy and the parameter vector bounces around chaotically, unable to settle down into deep, narrow valleys of the loss function (where the optimum might be). Knowing when to decay the learning rate can be tricky: Decay it slowly and you'll be wasting computation bouncing around chaotically with little improvement for a long time. But decay it too aggressively and the system will cool too quickly, unable to reach the best position it can.
 
 There are three common types of implementing the learning rate decay:
 
-**Step decay**: Reduce the learning rate by some factor every few epochs. Typical values might be reducing the learning rate by a half every 30 epochs, or by a factor of 0.1 every 10 epochs. These numbers depend heavily on the type of problem and the model. One heuristic you may see in practice is to watch the validation error while training with a base learning rate, and reduce the learning rate by a constant (e.g. 0.5) whenever the validation error stops improving.
+**Step decay**: Reduce the learning rate by some factor every few epochs. Typical values might be reducing the learning rate by a half every 5 epochs, or by a factor of 0.1 every 20 epochs. These numbers depend heavily on the type of problem and the model.
 
 **Exponential decay**: Has the mathematical form $\alpha = \alpha_0 e^{-kt}$, where $\alpha_0, k$ are hyperparameters and $t$ is the iteration number (but you can also use units of epochs).
 
 **1/t decay**: Has the mathematical form $\alpha = \alpha_0/(1+kt)$ where $\alpha_0, k$ are hyperparameters and $t$ is the iteration number.
 
-In practice, we find that the step decay is slightly preferable because the hyperparameters it involves (the fraction of decay and the step timings in units of epochs) are more interpretable than the hyperparameters involved in the other two methods. Moreover, if you use a good learning rate schedule, you can get away with a higher initial learning rate than you normally would, which can lead to faster training.
+In practice, we find that the step decay is slightly preferable because the hyperparameters it involves are more interpretable than the hyperparameters involved in the other two methods.
 
-#### Second-order methods
+#### Second order methods
 
-A second, popular group of methods for optimization is based on Newton's method, which is an iterative approach to finding the zero of a function. To apply this to optimization, we seek the zero of the gradient. The update rule for Newton's method is:
+A second, popular group of methods for optimization in context of deep learning is based on Newton's method, which iterates the following update:
 
 $$x \leftarrow x - [H f(x)]^{-1} \nabla f(x)$$
 
-where $H f(x)$ is the Hessian matrix, which is a square matrix of second-order partial derivatives of the function. The term $\nabla f(x)$ is the gradient vector, as seen before. Intuitively, the Hessian describes the local curvature of the loss function, which allows us to perform a more efficient update. In particular, multiplying by the inverse Hessian leads the optimization to take more aggressive steps in directions of shallow curvature and shorter steps in directions of steep curvature.
+Here, $H f(x)$ is the Hessian matrix, which is a square matrix of second-order partial derivatives of the function. The term $\nabla f(x)$ is the gradient vector, as seen in Gradient Descent. Intuitively, the Hessian describes the local curvature of the loss function, which allows us to perform a more efficient update. In particular, multiplying by the inverse Hessian leads the optimization to take more aggressive steps in directions of shallow curvature and shorter steps in directions of steep curvature. Note, crucially, the absence of any learning rate hyperparameters in the update formula, which the proponents of these methods cite this as a large advantage over first-order methods.
 
-In practice, applying Newton's method with the exact Hessian is usually not feasible for the following reasons:
+However, the update above is impractical for most deep learning applications because computing (and inverting) the Hessian in its explicit form is a very costly process in both space and time. For instance, a Neural Network with one million parameters would have a Hessian matrix of size $[1,000,000 \times 1,000,000]$, occupying approximately 3725 gigabytes of RAM. In practice, it is currently not common to second-order methods applied to large-scale Deep Learning and Convolutional Neural Networks. Instead, SGD variants based on (Nesterov's) momentum are more standard because they are simpler and scale more easily.
 
-1. Computing the Hessian is expensive, in $O(n^2)$ time
-2. The Hessian has $O(n^2)$ elements, so storing it requires $O(n^2)$ memory, which is infeasible for high-dimensional problems
-3. Inverting the Hessian is computationally expensive, in $O(n^3)$ time
+Additional references:
 
-Instead of using the full Hessian, various quasi-Newton methods have been developed that approximate the inverse Hessian. Among these, the most popular is L-BFGS, which uses the information in the gradients over time to form the approximation to the inverse Hessian (the matrix that is actually "quasi-Newton").
-
-However, even L-BFGS often isn't a great choice for batch optimization of neural networks. In particular, L-BFGS is a batch method, but neural networks are usually trained with mini-batches. L-BFGS would need to be modified to work with mini-batches, but even then, it isn't often a great choice because the mini-batches introduce a lot of noise into the gradient, which makes the approximation to the inverse Hessian very poor.
+- [Large Scale Distributed Deep Networks](https://papers.nips.cc/paper/2012/hash/6aca97005c68f1206823815f77529675-Abstract.html) is a paper from the Google Brain team, comparing L-BFGS and SGD variants in large-scale distributed optimization.
+- SFO algorithm strives to combine the advantages of SGD with advantages of L-BFGS.
 
 #### Per-parameter adaptive learning rates
 
 All previous approaches we've discussed so far manipulated the learning rate in a dimension-independent way. The following methods adapt the learning rate on a per-parameter basis, and can give more fine-grained control.
 
-**Adagrad** is an adaptive learning rate method originally proposed by [Duchi et al.](http://jmlr.org/papers/v12/duchi11a.html)
+**Adagrad:** Adaptive learning rate method originally proposed by [Duchi et al.](http://jmlr.org/papers/v12/duchi11a.html)
 
 ```python
 # Assume the gradient dx and parameter vector x
@@ -226,18 +211,18 @@ cache += dx**2
 x += - learning_rate * dx / (np.sqrt(cache) + eps)
 ```
 
-Notice that the variable $cache$ has size equal to the gradient matrix, and keeps track of per-parameter sum of squared gradients. This is then used to normalize the parameter update step, element-wise. The net effect is that parameters that receive big gradients will have their effective learning rate reduced, while parameters that receive small or infrequent updates will have their effective learning rate increased. The nice thing about Adagrad is that it requires no manual tuning of the learning rate, and it "just works". However, Adagrad's main weakness is its accumulation of the squared gradients in the denominator: Since every added term is positive, the accumulated sum keeps growing during training. This in turn causes the learning rate to shrink and eventually become infinitesimally small, at which point the algorithm is no longer able to acquire additional knowledge.
+Notice that the variable $cache$ has size equal to the gradient matrix, and keeps track of per-parameter sum of squared gradients. This is then used to normalize the parameter update step, element-wise. The net effect is that parameters that receive big gradients will have their effective learning rate reduced, while parameters that receive small or infrequent updates will have their effective learning rate increased. Amusingly, the square root operation turns out to be very important and without it the algorithm performs much worse. The smoothing term $eps$ (usually set somewhere in range from 1e-4 to 1e-8) avoids division by zero. A downside of Adagrad is that in case of Deep Learning, a monotonically decreasing learning rate usually proves too aggressive and stops learning too early.
 
-**RMSprop** is a very effective, but currently unpublished adaptive learning rate method. Amusingly, everyone who uses this method in their work currently cites slide 29 of [Lecture 6](http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf) of Geoff Hinton's Coursera class. The RMSProp update adjusts the Adagrad method in a very simple way in an attempt to reduce its aggressive, monotonically decreasing learning rate. In particular, it uses a moving average of squared gradients instead. Letting the running average be computed with discounting factor $\rho$:
+**RMSprop:** A very effective, but currently unpublished adaptive learning rate method. Amusingly, everyone who uses this method in their work currently cites slide 29 of [Lecture 6](http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf) of Geoff Hinton's Coursera class. The RMSProp update adjusts the Adagrad method in a very simple way in an attempt to reduce its aggressive, monotonically decreasing learning rate. In particular, it uses a moving average of squared gradients instead.
 
 ```python
 cache = decay_rate * cache + (1 - decay_rate) * dx**2
 x += - learning_rate * dx / (np.sqrt(cache) + eps)
 ```
 
-Here, $decay\_rate$ is a hyperparameter and typical values are [0.9, 0.99, 0.999]. Notice that the $x+=$ update is identical to Adagrad, but the $cache$ variable is a "leaky". Hence, RMSProp still modulates the learning rate of each weight based on the magnitudes of its gradients, which has a beneficial equalizing effect, but unlike Adagrad the updates do not get monotonically smaller.
+Here, $decay\_rate$ is a hyperparameter and typical values are [0.9, 0.99, 0.999]. Notice that the $x+=$ update is identical to Adagrad. Hence, RMSProp still modulates the learning rate of each weight based on the magnitudes of its gradients, which has a beneficial equalizing effect, but unlike Adagrad the updates do not get monotonically smaller.
 
-**Adam** is a recently proposed method that some say works well in practice and compares favorably to RMSProp. The full Adam update also includes a bias correction mechanism, but the information above should give you a reasonable idea of the method. For more details see the [paper](http://arxiv.org/abs/1412.6980), or the [slides](http://cs231n.github.io/neural-networks-3/#ada).
+**Adam:** Works well in practice and compares favorably to RMSProp. For more details see the [paper](http://arxiv.org/abs/1412.6980).
 
 ```python
 # Adam update
@@ -246,7 +231,25 @@ v = beta2*v + (1-beta2)*(dx**2)
 x += - learning_rate * m / (np.sqrt(v) + eps)
 ```
 
-Notice that the update looks exactly like RMSProp update, except the "smooth" version of the gradient $m$ is used instead of the raw gradient vector $dx$. The paper recommends to set $beta1=0.9$, $beta2=0.999$, and $eps=1e-8$. In practice Adam is currently recommended as the default algorithm to use, and often works slightly better than RMSProp. However, it is often also worth trying SGD+Nesterov Momentum as an alternative. The full Adam update also includes a bias correction mechanism, which we recommend you to read about in the paper if you are interested in learning more.
+Notice that the update looks exactly as RMSProp update. Recommended values in the paper are $eps = 1e-8$, $beta1 = 0.9$, $beta2 = 0.999$. In practice Adam is currently recommended as the default algorithm to use, and often works slightly better than RMSProp. However, it is often also worth trying SGD+Nesterov Momentum as an alternative. The full Adam update also includes a bias correction mechanism, which compensates for the fact that in the first few time steps the vectors $m,v$ are both initialized and therefore biased at zero, before they fully "warm up". With the bias correction mechanism, the update looks as follows:
+
+```python
+# t is your iteration counter going from 1 to infinity
+m = beta1*m + (1-beta1)*dx
+mt = m / (1-beta1**t)
+v = beta2*v + (1-beta2)*(dx**2)
+vt = v / (1-beta2**t)
+x += - learning_rate * mt / (np.sqrt(vt) + eps)
+```
+
+Note that the update is now a function of the iteration as well as the other parameters.
+
+[Unit Tests for Stochastic Optimization](https://arxiv.org/abs/1312.6055) proposes a series of tests as a standardized benchmark for stochastic optimization.
+
+![anim](opt2.gif)
+![anim](opt1.gif)
+
+*Animations that may help your intuitions about the learning process dynamics. Top: Contours of a loss surface and time evolution of different optimization algorithms. Notice the "overshooting" behavior of momentum-based methods, which make the optimization look like a ball rolling down the hill. Bottom: A visualization of a saddle point in the optimization landscape, where the curvature along different dimension has different signs (one dimension curves up and another down). Notice that SGD has a very hard time breaking symmetry and gets stuck on the top. Conversely, algorithms such as RMSprop will see very low gradients in the saddle direction. Due to the denominator term in the RMSprop update, this will increase the effective learning rate along this direction, helping RMSProp proceed.*
 
 ### Hyperparameter Optimization
 
