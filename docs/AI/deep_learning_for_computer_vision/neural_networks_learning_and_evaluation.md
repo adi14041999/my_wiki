@@ -75,9 +75,9 @@ Also keep in mind that the deeper the network, the higher the relative errors wi
 
 Here are a few sanity checks you might consider running before you plunge into expensive optimization.
 
-- **Look for correct loss at chance performance.** Make sure you're getting the loss you expect when you initialize with small parameters. It's best to first check the data loss alone (so set regularization strength to zero). For example, for CIFAR-10 with a Softmax classifier we would expect the initial loss to be 2.302, because we expect a diffuse probability of 0.1 for each class (since there are 10 classes), and Softmax loss is the negative log probability of the correct class so: -ln(0.1) = 2.302. For The Weston Watkins SVM, we expect all desired margins to be violated (since all scores are approximately zero), and hence expect a loss of 9 (since margin is 1 for each wrong class). If you're not seeing these losses there might be issue with initialization.
-- As a second sanity check, increasing the regularization strength should increase the loss
-- **Overfit a tiny subset of data**. Lastly and most importantly, before training on the full dataset try to train on a tiny portion (e.g. 20 examples) of your data and make sure you can achieve zero cost. For this experiment it's also best to set regularization to zero, otherwise this can prevent you from getting zero cost. Unless you pass this sanity check with a small dataset it is not worth proceeding to the full dataset. Note that it may happen that you can overfit very small dataset but still have an incorrect implementation. For instance, if your datapoints' features are random due to some bug, then it will be possible to overfit your small training set but you will never notice any generalization when you fold it your full dataset.
+- Make sure you're getting the loss you expect when you initialize with small parameters. It's best to first check the data loss alone (so set regularization strength to zero). For example, for CIFAR-10 with a Softmax classifier we would expect the initial loss to be 2.302, because we expect a diffuse probability of 0.1 for each class (since there are 10 classes), and Softmax loss is the negative log probability of the correct class so: -ln(0.1) = 2.302. If you're not seeing these losses there might be issue with initialization.
+- As a second sanity check, increasing the regularization strength should increase the loss.
+- Lastly and most importantly, before training on the full dataset try to train on a tiny portion (e.g. 20 examples) of your data and make sure you can achieve zero cost. For this experiment it's also best to set regularization to zero, otherwise this can prevent you from getting zero cost. Unless you pass this sanity check with a small dataset it is not worth proceeding to the full dataset.
 
 ### Babysitting the learning process
 
@@ -87,16 +87,14 @@ The x-axis of the plots below are always in units of epochs, which measure how m
 
 #### Loss function
 
-The first quantity that is useful to track during training is the loss, as it is evaluated on the individual batches during the forward pass. Below is a cartoon diagram showing the loss over time, and especially what the shape might tell you about the learning rate:
+The first quantity that is useful to track during training is the loss, as it is evaluated on the individual batches during the forward pass. Below is a cartoon diagram showing the loss over time, and especially what the shape might tell you about the learning rate.
 
 ![Learning rates](learningrates.jpeg)
 ![Loss function](loss.jpeg)
 
-*Left: A cartoon depicting the effects of different learning rates. With low learning rates the improvements will be linear. With high learning rates they will start to look more exponential. Higher learning rates will decay the loss faster, but they get stuck at worse values of loss (green line). This is because there is too much "energy" in the optimization and the parameters are bouncing around chaotically, unable to settle in a nice spot in the optimization landscape. Right: An example of a typical loss function over time, while training a small network on CIFAR-10 dataset. This loss function looks reasonable (it might indicate a slightly too small learning rate based on its speed of decay, but it's hard to say), and also indicates that the batch size might be a little too low (since the cost is a little too noisy).*
+*Top: A cartoon depicting the effects of different learning rates. With low learning rates the improvements will be linear. With high learning rates they will start to look more exponential. Higher learning rates will decay the loss faster, but they get stuck at worse values of loss (green line). This is because there is too much "energy" in the optimization and the parameters are bouncing around chaotically, unable to settle in a nice spot in the optimization landscape. Down: An example of a typical loss function over time, while training a small network on CIFAR-10 dataset. This loss function looks reasonable (it might indicate a slightly too small learning rate based on its speed of decay, but it's hard to say), and also indicates that the batch size might be a little too low (since the cost is a little too noisy).*
 
 The amount of "wiggle" in the loss is related to the batch size. When the batch size is 1, the wiggle will be relatively high. When the batch size is the full dataset, the wiggle will be minimal because every gradient update should be improving the loss function monotonically (unless the learning rate is set too high).
-
-Some people prefer to plot their loss functions in the log domain. Since learning progress generally takes an exponential form shape, the plot appears as a slightly more interpretable straight line, rather than a hockey stick. Additionally, if multiple cross-validated models are plotted on the same loss graph, the differences between them become more apparent.
 
 Sometimes loss functions can look funny [lossfunctions.tumblr.com](http://lossfunctions.tumblr.com/).
 
@@ -106,27 +104,33 @@ The second important quantity to track while training a classifier is the valida
 
 ![Accuracies](accuracies.jpeg)
 
-*The gap between the training and validation accuracy indicates the amount of overfitting. Two possible cases are shown in the diagram on the left. The blue validation error curve shows very small validation accuracy compared to the training accuracy, indicating strong overfitting (note, it's possible for the validation accuracy to even start to go down after some point). When you see this in practice you probably want to increase regularization (stronger L2 weight penalty, more dropout, etc.) or collect more data. The other possible case is when the validation accuracy tracks the training accuracy fairly well. This case indicates that your model capacity is not high enough: make the model larger by increasing the number of parameters.*
+*The gap between the training and validation accuracy indicates the amount of overfitting. Two possible cases are shown in the diagram on the left. The blue validation error curve shows very small validation accuracy compared to the training accuracy, indicating strong overfitting (note, it's possible for the validation accuracy to even start to go down after some point). When you see this in practice you probably want to increase regularization (stronger L2 weight penalty, more dropout, etc.) or collect more data. The other possible case is when the validation accuracy tracks the training accuracy fairly well.*
 
-#### Weights:Updates ratio
+#### Ratio of weights:updates
 
-The last quantity you might want to track is the ratio of the update magnitudes to the value magnitudes. Note: updates, not the raw gradients (e.g. in vanilla sgd this would be the gradient multiplied by the learning rate). You might want to evaluate and log the norm of the weights (or some subset of the weights), and the norm of the updates (or again, some subset). Looking at the ratio of these two quantities can be helpful. For a single weight this ratio should be somewhere around 1e-3. If it is much smaller than this then the learning rate might be too low. If it is much higher then the learning rate might be too high.
+The last quantity you might want to track is the ratio of the update magnitudes to the value magnitudes. Note: updates, not the raw gradients (e.g. in vanilla sgd this would be the gradient multiplied by the learning rate). You might want to evaluate and log the norm of the weights (or some subset of the weights), and the norm of the updates (or again, some subset). Looking at the ratio of these two quantities can be helpful. For a single weight this ratio should be somewhere around $1e-3$. If it is much smaller than this then the learning rate might be too low. If it is much higher then the learning rate might be too high.
 
-#### Activation/Gradient distributions per layer
+```python
+# assume parameter vector W and its gradient vector dW
+param_scale = np.linalg.norm(W.ravel())
+update = -learning_rate*dW # simple SGD update
+update_scale = np.linalg.norm(update.ravel())
+W += update # the actual update
+print update_scale / param_scale # want ~1e-3
+```
 
-An incorrect initialization can slow or even stall learning. It can be useful to dump the histograms of activations and gradients, per layer, at initialization and during training. For example, for tanh networks the activations should be small, centered around 0. If you see that the activations are saturated at -1 and 1, then the activations are saturated, and the gradients will be zero (because the gradient of tanh is zero at -1 and 1). This will lead to the gradients not flowing backward through the network.
+#### First-layer Visualizations
 
-#### Visualization
+Lastly, when one is working with image pixels it can be helpful and satisfying to plot the first-layer features visually.
 
-The final tool you might want to use for visualization is the first-layer weights. It is often useful to visualize the weights of the first layer in a ConvNet, because the first layer operates directly on the raw pixel data. In general, it might be hard to interpret the weights of layers that are deeper in the network. The weights in the first layer are usually interpretable and can help you get an intuition for the kinds of features that your network is trying to learn.
+![viz](weights.jpeg)
+![viz](cnnweights.jpg)
 
-For example, if the first layer is a ConvNet, it might be interesting to plot the filters, as we did in the Linear Classification section. If the first layer is fully connected, it might be interesting to plot the weight matrix as a color map.
+*Examples of visualized weights for the first layer of a neural network. Top: Noisy features indicate could be a symptom: Unconverged network, improperly set learning rate, very low weight regularization penalty. Bottom: Nice, smooth, clean and diverse features are a good indication that the training is proceeding well.*
 
 ### Parameter updates
 
 Once the analytic gradient is computed with backpropagation, the gradients are used to perform a parameter update. There are several approaches for performing the update, which we discuss next.
-
-We note that optimization for deep networks is currently a very active area of research. In this section we highlight some established and common techniques you may see in practice, briefly describe their intuition, but leave a detailed analysis outside of the scope of the class. We provide some further pointers for an interested reader.
 
 #### SGD and bells and whistles
 
