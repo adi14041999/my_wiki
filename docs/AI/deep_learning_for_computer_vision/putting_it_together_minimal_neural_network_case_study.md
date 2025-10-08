@@ -6,7 +6,7 @@ We’ll walk through a complete implementation of a toy Neural Network in 2 dime
 
 ## Generating some data
 
-Lets generate a classification dataset that is not easily linearly separable. Our favorite example is the spiral dataset, which can be generated as follows.
+Let's generate a classification dataset that is not easily linearly separable. Our favorite example is the spiral dataset, which can be generated as follows.
 
 ```python
 N = 100 # number of points per class
@@ -20,7 +20,7 @@ for j in range(K):
   t = np.linspace(j*4,(j+1)*4,N) + np.random.randn(N)*0.2 # theta
   X[ix] = np.c_[r*np.sin(t), r*np.cos(t)]
   y[ix] = j
-# lets visualize the data:
+# let's visualize the data:
 plt.scatter(X[:, 0], X[:, 1], c=y, s=40, cmap=plt.cm.Spectral)
 plt.show()
 ```
@@ -32,7 +32,7 @@ Normally we would want to preprocess the dataset so that each feature has zero m
 
 ### Initialize the parameters
 
-Lets first train a Softmax classifier on this classification dataset. As we saw in the previous sections, the Softmax classifier has a linear score function and uses the cross-entropy loss. The parameters of the linear classifier consist of a weight matrix $W$ and a bias vector $b$ for each class. Lets first initialize these parameters to be random numbers:
+Let's first train a Softmax classifier on this classification dataset. The parameters of the linear classifier consist of a weight matrix $W$ and a bias vector $b$ for each class. Let's first initialize these parameters to be random numbers:
 
 ```python
 # initialize parameters randomly
@@ -55,7 +55,7 @@ In this example we have 300 2-D points, so after this multiplication the array s
 
 ### Compute the loss
 
-The second key ingredient we need is a loss function, which is a differentiable objective that quantifies our unhappiness with the computed class scores. Intuitively, we want the correct class to have a higher score than the other classes. When this is the case, the loss should be low and otherwise the loss should be high. There are many ways to quantify this intuition, but in this example lets use the cross-entropy loss that is associated with the Softmax classifier. Recall that if $f$ is the array of class scores for a single example (e.g. array of 3 numbers here), then the Softmax classifier computes the loss for that example as:
+The second key ingredient we need is a loss function, which is a differentiable objective that quantifies our unhappiness with the computed class scores. Intuitively, we want the correct class to have a higher score than the other classes. When this is the case, the loss should be low and otherwise the loss should be high. There are many ways to quantify this intuition, but in this example let's use the cross-entropy loss that is associated with the Softmax classifier. Recall that if $f$ is the array of class scores for a single example (e.g. array of 3 numbers here), then the Softmax classifier computes the loss for that example as:
 
 $$L_i = -\log\left(\frac{e^{f_{y_i}}}{\sum_j e^{f_j}}\right)$$
 
@@ -94,7 +94,7 @@ In this code, the regularization strength $\lambda$ is stored inside the reg. Th
 
 ### Computing the Analytic Gradient with Backpropagation
 
-We have a way of evaluating the loss, and now we have to minimize it. We'll do so with gradient descent. That is, we start with random parameters (as shown above), and evaluate the gradient of the loss function with respect to the parameters, so that we know how we should change the parameters to decrease the loss. Lets introduce the intermediate variable $p$, which is a vector of the (normalized) probabilities. The loss for one example is:
+We have a way of evaluating the loss, and now we have to minimize it. We'll do so with gradient descent. That is, we start with random parameters (as shown above), and evaluate the gradient of the loss function with respect to the parameters, so that we know how we should change the parameters to decrease the loss. Let's introduce the intermediate variable $p$, which is a vector of the (normalized) probabilities. The loss for one example is:
 
 $$p_k = \frac{e^{f_k}}{\sum_j e^{f_j}}$$
 $$L_i = -\log(p_{y_i})$$
@@ -246,7 +246,7 @@ scores = np.dot(hidden_layer, W2) + b2
 
 Notice that the only change from before is one extra line of code, where we first compute the hidden layer representation and then the scores based on this hidden layer. Crucially, we've also added a non-linearity, which in this case is simple ReLU that thresholds the activations on the hidden layer at zero.
 
-Everything else remains the same. We compute the loss based on the scores exactly as before, and get the gradient for the scores dscores exactly as before. However, the way we backpropagate that gradient into the model parameters now changes form, of course. First lets backpropagate the second layer of the Neural Network. This looks identical to the code we had for the Softmax classifier, except we're replacing X (the raw data), with the variable hidden_layer):
+Everything else remains the same. We compute the loss based on the scores exactly as before, and get the gradient for the scores dscores exactly as before. However, the way we backpropagate that gradient into the model parameters now changes form, of course. First let's backpropagate the second layer of the Neural Network. This looks identical to the code we had for the Softmax classifier, except we're replacing X (the raw data), with the variable hidden_layer):
 
 ```python
 # backpropate the gradient to the parameters
