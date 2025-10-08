@@ -1971,6 +1971,42 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#chain-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      Chain rule
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gradient-vector-in-scalar-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gradient: Vector in, scalar out
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jacobian-vector-in-vector-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      Jacobian: Vector in, Vector out
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generalized-jacobian-tensor-in-tensor-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generalized Jacobian: Tensor in, Tensor out
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2229,22 +2265,67 @@
 
 <h1 id="derivatives">Derivatives</h1>
 <h2 id="scalar-case">Scalar case</h2>
-<p>You are probably familiar with the concept of a derivative in the scalar case:
-given a function f : R → R, the derivative of f at a point x ∈ R is defined as:</p>
-<p>f'(x) = lim_{h→0} (f(x + h) - f(x))/h</p>
-<p>Derivatives are a way to measure change. In the scalar case, the derivative
-of the function f at the point x tells us how much the function f changes as the
-input x changes by a small amount ε:</p>
-<p>f(x + ε) ≈ f(x) + εf'(x)</p>
-<p>For ease of notation we will commonly assign a name to the output of f,
-say y = f(x), and write ∂y/∂x for the derivative of y with respect to x. This
-notation emphasizes that ∂y/∂x is the rate of change between the variables x and
-y; concretely if x were to change by ε then y will change by approximately ε ∂y/∂x.</p>
+<p>You are probably familiar with the concept of a derivative in the scalar case.</p>
+<p>Given a function <span class="arithmatex">\(f: \mathbb{R} \to \mathbb{R}\)</span>, the derivative of <span class="arithmatex">\(f\)</span> at a point <span class="arithmatex">\(x \in \mathbb{R}\)</span> is defined as:</p>
+<div class="arithmatex">\[f'(x) = \lim_{h \to 0} \frac{f(x + h) - f(x)}{h}\]</div>
+<p>Derivatives are a way to measure change. In the scalar case, the derivative of the function <span class="arithmatex">\(f\)</span> at the point <span class="arithmatex">\(x\)</span> tells us how much the function <span class="arithmatex">\(f\)</span> changes as the input <span class="arithmatex">\(x\)</span> changes by a small amount <span class="arithmatex">\(\varepsilon\)</span>:</p>
+<div class="arithmatex">\[f(x + \varepsilon) \approx f(x) + \varepsilon f'(x)\]</div>
+<p>For ease of notation we will commonly assign a name to the output of <span class="arithmatex">\(f\)</span>, say <span class="arithmatex">\(y = f(x)\)</span>, and write <span class="arithmatex">\(\frac{\partial y}{\partial x}\)</span> for the derivative of <span class="arithmatex">\(y\)</span> with respect to <span class="arithmatex">\(x\)</span>. This notation emphasizes that <span class="arithmatex">\(\frac{\partial y}{\partial x}\)</span> is the rate of change between the variables <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span>; concretely if <span class="arithmatex">\(x\)</span> were to change by <span class="arithmatex">\(\varepsilon\)</span> then <span class="arithmatex">\(y\)</span> will change by approximately <span class="arithmatex">\(\varepsilon \frac{\partial y}{\partial x}\)</span>.</p>
 <p>We can write this relationship as</p>
-<p>x → x + Δx ⟹ y → y + (∂y/∂x)Δx</p>
-<p>You should read this as saying "changing x to x + Δx implies that y will
-change to approximately y + Δx ∂y/∂x". This notation is nonstandard, but I like
-it since it emphasizes the relationship between changes in x and changes in y.</p>
+<div class="arithmatex">\[x \to x + \Delta x \implies y \to y + \frac{\partial y}{\partial x} \Delta x\]</div>
+<p>You should read this as saying "changing <span class="arithmatex">\(x\)</span> to <span class="arithmatex">\(x + \Delta x\)</span> implies that <span class="arithmatex">\(y\)</span> will change to approximately <span class="arithmatex">\(y + \Delta x \frac{\partial y}{\partial x}\)</span>". This notation is nonstandard, but it emphasizes the relationship between changes in <span class="arithmatex">\(x\)</span> and changes in <span class="arithmatex">\(y\)</span>.</p>
+<h2 id="chain-rule">Chain rule</h2>
+<p>The chain rule tells us how to compute the derivative of the composition of functions. In the scalar case suppose that <span class="arithmatex">\(f, g: \mathbb{R} \to \mathbb{R}\)</span> and <span class="arithmatex">\(y = f(x)\)</span>, <span class="arithmatex">\(z = g(y)\)</span>; then we can also write <span class="arithmatex">\(z = (g \circ f)(x)\)</span>, or draw the following computational graph:</p>
+<div class="arithmatex">\[x \xrightarrow{f} y \xrightarrow{g} z\]</div>
+<p>The (scalar) chain rule tells us that</p>
+<div class="arithmatex">\[\frac{\partial z}{\partial x} = \frac{\partial z}{\partial y} \frac{\partial y}{\partial x}\]</div>
+<p>This equation makes intuitive sense. The derivatives <span class="arithmatex">\(\frac{\partial z}{\partial y}\)</span> and <span class="arithmatex">\(\frac{\partial y}{\partial x}\)</span> give:</p>
+<div class="arithmatex">\[x \to x + \Delta x \implies y \to y + \frac{\partial y}{\partial x} \Delta x\]</div>
+<div class="arithmatex">\[y \to y + \Delta y \implies z \to z + \frac{\partial z}{\partial y} \Delta y\]</div>
+<p>Combining these two rules lets us compute the effect of <span class="arithmatex">\(x\)</span> on <span class="arithmatex">\(z\)</span>: if <span class="arithmatex">\(x\)</span> changes by <span class="arithmatex">\(\Delta x\)</span> then <span class="arithmatex">\(y\)</span> will change by <span class="arithmatex">\(\frac{\partial y}{\partial x}\Delta x\)</span>, so we have <span class="arithmatex">\(\Delta y = \frac{\partial y}{\partial x}\Delta x\)</span>. If <span class="arithmatex">\(y\)</span> changes by <span class="arithmatex">\(\Delta y\)</span> then <span class="arithmatex">\(z\)</span> will change by <span class="arithmatex">\(\frac{\partial z}{\partial y}\Delta y = \frac{\partial z}{\partial y}\frac{\partial y}{\partial x}\Delta x\)</span> which is exactly what the chain rule tells us.</p>
+<h2 id="gradient-vector-in-scalar-out">Gradient: Vector in, scalar out</h2>
+<p>This same intuition carries over into the vector case. Now suppose that <span class="arithmatex">\(f: \mathbb{R}^N \to \mathbb{R}\)</span> takes a vector as input and produces a scalar. The derivative of <span class="arithmatex">\(f\)</span> at the point <span class="arithmatex">\(\mathbf{x} \in \mathbb{R}^N\)</span> is now called the gradient, and it is defined as:</p>
+<div class="arithmatex">\[\nabla_{\mathbf{x}} f(\mathbf{x}) = \lim_{\mathbf{h} \to \mathbf{0}} \frac{f(\mathbf{x} + \mathbf{h}) - f(\mathbf{x})}{\|\mathbf{h}\|}\]</div>
+<p>Now the gradient <span class="arithmatex">\(\nabla_{\mathbf{x}} f(\mathbf{x}) \in \mathbb{R}^N\)</span> is a vector, with the same intuition as the scalar case. If we set <span class="arithmatex">\(y = f(\mathbf{x})\)</span> then we have the relationship</p>
+<div class="arithmatex">\[\mathbf{x} \to \mathbf{x} + \Delta \mathbf{x} \implies y \to y + \frac{\partial y}{\partial \mathbf{x}} \cdot \Delta \mathbf{x}\]</div>
+<p>The formula changes a bit from the scalar case to account for the fact that <span class="arithmatex">\(\mathbf{x}\)</span>, <span class="arithmatex">\(\Delta \mathbf{x}\)</span>, and <span class="arithmatex">\(\frac{\partial y}{\partial \mathbf{x}}\)</span> are now vectors in <span class="arithmatex">\(\mathbb{R}^N\)</span> while <span class="arithmatex">\(y\)</span> is a scalar. In particular when multiplying <span class="arithmatex">\(\frac{\partial y}{\partial \mathbf{x}}\)</span> by <span class="arithmatex">\(\Delta \mathbf{x}\)</span> we use the dot product, which combines two vectors to give a scalar.</p>
+<p>One nice outcome of this formula is that it gives meaning to the individual elements of the gradient <span class="arithmatex">\(\frac{\partial y}{\partial \mathbf{x}}\)</span>. Suppose that <span class="arithmatex">\(\Delta \mathbf{x}\)</span> is the <span class="arithmatex">\(i\)</span>th basis vector <span class="arithmatex">\(\mathbf{e}_i\)</span>, so that the <span class="arithmatex">\(i\)</span>th coordinate of <span class="arithmatex">\(\Delta \mathbf{x}\)</span> is 1 and all other coordinates of <span class="arithmatex">\(\Delta \mathbf{x}\)</span> are 0. </p>
+<p>Then the dot product <span class="arithmatex">\(\frac{\partial y}{\partial \mathbf{x}} \cdot \Delta \mathbf{x}\)</span> here is simply the <span class="arithmatex">\(i\)</span>th coordinate of <span class="arithmatex">\(\frac{\partial y}{\partial \mathbf{x}}\)</span>. Thus the <span class="arithmatex">\(i\)</span>th coordinate of <span class="arithmatex">\(\frac{\partial y }{\partial \mathbf{x}}\)</span> times <span class="arithmatex">\(\varepsilon\)</span> tells us the amount by which <span class="arithmatex">\(y\)</span> will change if we move <span class="arithmatex">\(\mathbf{x}\)</span> by a small amount <span class="arithmatex">\(\varepsilon\)</span> along the <span class="arithmatex">\(i\)</span>th coordinate axis (meaning, if we change only the <span class="arithmatex">\(i\)</span>th component of <span class="arithmatex">\(\mathbf{x}\)</span> by <span class="arithmatex">\(\varepsilon\)</span>, where <span class="arithmatex">\(\varepsilon\)</span> is the <span class="arithmatex">\(i\)</span>th component of <span class="arithmatex">\(\Delta \mathbf{x}\)</span>).</p>
+<p>This means that we can also view the gradient <span class="arithmatex">\(\frac{\partial y}{\partial \mathbf{x}}\)</span> as a vector of partial derivatives:</p>
+<div class="arithmatex">\[\frac{\partial y}{\partial \mathbf{x}} = \left(\frac{\partial y}{\partial x_1}, \frac{\partial y}{\partial x_2}, \ldots, \frac{\partial y}{\partial x_N}\right)\]</div>
+<p>where <span class="arithmatex">\(x_i\)</span> is the <span class="arithmatex">\(i\)</span>th coordinate of the vector <span class="arithmatex">\(\mathbf{x}\)</span>, which is a scalar, so each partial derivative <span class="arithmatex">\(\frac{\partial y}{\partial x_i}\)</span> is also a scalar.</p>
+<h2 id="jacobian-vector-in-vector-out">Jacobian: Vector in, Vector out</h2>
+<p>Now suppose that <span class="arithmatex">\(f: \mathbb{R}^N \to \mathbb{R}^M\)</span> takes a vector as input and produces a vector as output. Then the derivative of <span class="arithmatex">\(f\)</span> at a point <span class="arithmatex">\(\mathbf{x}\)</span>, also called the Jacobian, is the <span class="arithmatex">\(M \times N\)</span> matrix of partial derivatives. If we again set <span class="arithmatex">\(\mathbf{y} = f(\mathbf{x})\)</span> then we can write:</p>
+<div class="arithmatex">\[\frac{\partial \mathbf{y}}{\partial \mathbf{x}} = \begin{pmatrix}
+\frac{\partial y_1}{\partial x_1} &amp; \cdots &amp; \frac{\partial y_1}{\partial x_N} \\
+\vdots &amp; \ddots &amp; \vdots \\
+\frac{\partial y_M}{\partial x_1} &amp; \cdots &amp; \frac{\partial y_M}{\partial x_N}
+\end{pmatrix}\]</div>
+<p>The Jacobian tells us the relationship between each element of <span class="arithmatex">\(\mathbf{x}\)</span> and each element of <span class="arithmatex">\(\mathbf{y}\)</span>: the <span class="arithmatex">\((i, j)\)</span>-th element of <span class="arithmatex">\(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\)</span> is equal to <span class="arithmatex">\(\frac{\partial y_i}{\partial x_j}\)</span>, so it tells us the amount by which <span class="arithmatex">\(y_i\)</span> will change if <span class="arithmatex">\(x_j\)</span> is changed by a small amount.</p>
+<p>Just as in the previous cases, the Jacobian tells us the relationship between changes in the input and changes in the output:</p>
+<div class="arithmatex">\[\mathbf{x} \to \mathbf{x} + \Delta \mathbf{x} \implies \mathbf{y} \to \mathbf{y} + \frac{\partial \mathbf{y}}{\partial \mathbf{x}} \Delta \mathbf{x}\]</div>
+<p>Here <span class="arithmatex">\(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\)</span> is a <span class="arithmatex">\(M \times N\)</span> matrix and <span class="arithmatex">\(\Delta \mathbf{x}\)</span> is an <span class="arithmatex">\(N\)</span>-dimensional vector, so the product <span class="arithmatex">\(\frac{\partial \mathbf{y}}{\partial \mathbf{x}} \Delta \mathbf{x}\)</span> is a matrix-vector multiplication resulting in an <span class="arithmatex">\(M\)</span>-dimensional vector.</p>
+<p>It's worth noting that each row of the Jacobian matrix <span class="arithmatex">\(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\)</span> is actually a gradient! Specifically, the <span class="arithmatex">\(i\)</span>th row of <span class="arithmatex">\(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\)</span> is the gradient of the scalar function <span class="arithmatex">\(y_i\)</span> with respect to <span class="arithmatex">\(\mathbf{x}\)</span>:</p>
+<div class="arithmatex">\[\text{Row } i \text{ of } \frac{\partial \mathbf{y}}{\partial \mathbf{x}} = \nabla_{\mathbf{x}} y_i = \left(\frac{\partial y_i}{\partial x_1}, \frac{\partial y_i}{\partial x_2}, \ldots, \frac{\partial y_i}{\partial x_N}\right)\]</div>
+<p>This makes sense because <span class="arithmatex">\(y_i\)</span> is a scalar function of the vector <span class="arithmatex">\(\mathbf{x}\)</span>, so its gradient is an <span class="arithmatex">\(N\)</span>-dimensional vector. When we stack all <span class="arithmatex">\(M\)</span> of these gradient vectors as rows, we get the <span class="arithmatex">\(M \times N\)</span> Jacobian matrix.</p>
+<p>This insight also explains why the matrix-vector multiplication <span class="arithmatex">\(\frac{\partial \mathbf{y}}{\partial \mathbf{x}} \Delta \mathbf{x}\)</span> works the way it does. Since each row of the Jacobian is a gradient, the multiplication is equivalent to computing the dot product of each gradient with <span class="arithmatex">\(\Delta \mathbf{x}\)</span>:</p>
+<div class="arithmatex">\[\frac{\partial \mathbf{y}}{\partial \mathbf{x}} \Delta \mathbf{x} = \begin{pmatrix}
+\nabla_{\mathbf{x}} y_1 \cdot \Delta \mathbf{x} \\
+\nabla_{\mathbf{x}} y_2 \cdot \Delta \mathbf{x} \\
+\vdots \\
+\nabla_{\mathbf{x}} y_M \cdot \Delta \mathbf{x}
+\end{pmatrix}\]</div>
+<p>In other words, the Jacobian-vector product is just a stack of gradient-vector products! Each component of the result tells us how much the corresponding output component <span class="arithmatex">\(y_i\)</span> changes when we move <span class="arithmatex">\(\mathbf{x}\)</span> by <span class="arithmatex">\(\Delta \mathbf{x}\)</span>.</p>
+<p>For example, if <span class="arithmatex">\(M = 2\)</span> and <span class="arithmatex">\(N = 3\)</span>, we might have:</p>
+<div class="arithmatex">\[\frac{\partial \mathbf{y}}{\partial \mathbf{x}} = \begin{pmatrix} 2 &amp; 1 &amp; 0 \\ 0 &amp; 3 &amp; 1 \end{pmatrix}, \quad \Delta \mathbf{x} = \begin{pmatrix} 0.1 \\ 0.2 \\ 0.3 \end{pmatrix}\]</div>
+<p>Then:</p>
+<div class="arithmatex">\[\frac{\partial \mathbf{y}}{\partial \mathbf{x}} \Delta \mathbf{x} = \begin{pmatrix} 2 &amp; 1 &amp; 0 \\ 0 &amp; 3 &amp; 1 \end{pmatrix} \begin{pmatrix} 0.1 \\ 0.2 \\ 0.3 \end{pmatrix} = \begin{pmatrix} 2(0.1) + 1(0.2) + 0(0.3) \\ 0(0.1) + 3(0.2) + 1(0.3) \end{pmatrix} = \begin{pmatrix} 0.4 \\ 0.9 \end{pmatrix}\]</div>
+<p>The chain rule can be extended to the vector case using Jacobian matrices. Suppose that <span class="arithmatex">\(f: \mathbb{R}^N \to \mathbb{R}^M\)</span> and <span class="arithmatex">\(g: \mathbb{R}^M \to \mathbb{R}^K\)</span>. Let <span class="arithmatex">\(\mathbf{x} \in \mathbb{R}^N\)</span>, <span class="arithmatex">\(\mathbf{y} \in \mathbb{R}^M\)</span>, and <span class="arithmatex">\(\mathbf{z} \in \mathbb{R}^K\)</span> with <span class="arithmatex">\(\mathbf{y} = f(\mathbf{x})\)</span> and <span class="arithmatex">\(\mathbf{z} = g(\mathbf{y})\)</span>, so we have the same computational graph as the scalar case:</p>
+<div class="arithmatex">\[\mathbf{x} \xrightarrow{f} \mathbf{y} \xrightarrow{g} \mathbf{z}\]</div>
+<p>The chain rule also has the same form as the scalar case:</p>
+<div class="arithmatex">\[\frac{\partial \mathbf{z}}{\partial \mathbf{x}} = \frac{\partial \mathbf{z}}{\partial \mathbf{y}} \frac{\partial \mathbf{y}}{\partial \mathbf{x}}\]</div>
+<p>However now each of these terms is a matrix: <span class="arithmatex">\(\frac{\partial \mathbf{z}}{\partial \mathbf{y}}\)</span> is a <span class="arithmatex">\(K \times M\)</span> matrix, <span class="arithmatex">\(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\)</span> is a <span class="arithmatex">\(M \times N\)</span> matrix, and <span class="arithmatex">\(\frac{\partial \mathbf{z}}{\partial \mathbf{x}}\)</span> is a <span class="arithmatex">\(K \times N\)</span> matrix; the multiplication of <span class="arithmatex">\(\frac{\partial \mathbf{z}}{\partial \mathbf{y}}\)</span> and <span class="arithmatex">\(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\)</span> is matrix multiplication.</p>
+<h2 id="generalized-jacobian-tensor-in-tensor-out">Generalized Jacobian: Tensor in, Tensor out</h2>
 
 
 
