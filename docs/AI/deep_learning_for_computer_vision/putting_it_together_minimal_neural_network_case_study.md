@@ -249,7 +249,7 @@ scores = np.dot(hidden_layer, W2) + b2
 
 Notice that the only change from before is one extra line of code, where we first compute the hidden layer representation and then the scores based on this hidden layer. Crucially, we've also added a non-linearity, which in this case is simple ReLU that thresholds the activations on the hidden layer at zero.
 
-Everything else remains the same. We compute the loss based on the scores exactly as before, and get the gradient for the scores dscores exactly as before. However, the way we backpropagate that gradient into the model parameters now changes form, of course. First let's backpropagate the second layer of the Neural Network. This looks identical to the code we had for the Softmax classifier, except we're replacing X (the raw data), with the variable hidden_layer):
+Everything else remains the same. We compute the loss based on the scores exactly as before, and get the gradient for the scores dscores exactly as before. However, the way we backpropagate that gradient into the model parameters now changes form, of course.
 
 ```python
 # backpropate the gradient to the parameters
