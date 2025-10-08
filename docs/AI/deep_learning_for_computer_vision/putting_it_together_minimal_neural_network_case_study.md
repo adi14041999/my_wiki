@@ -55,17 +55,17 @@ In this example we have 300 2-D points, so after this multiplication the array s
 
 ### Compute the loss
 
-The second key ingredient we need is a loss function, which is a differentiable objective that quantifies our unhappiness with the computed class scores. Intuitively, we want the correct class to have a higher score than the other classes. When this is the case, the loss should be low and otherwise the loss should be high. There are many ways to quantify this intuition, but in this example let's use the cross-entropy loss that is associated with the Softmax classifier. Recall that if $f$ is the array of class scores for a single example (e.g. array of 3 numbers here), then the Softmax classifier computes the loss for that example as:
+The second key ingredient we need is a loss function, which is a differentiable objective that quantifies our unhappiness with the computed class scores. Intuitively, we want the correct class to have a higher score than the other classes. When this is the case, the loss should be low and otherwise the loss should be high. Recall that if $f$ is the array of class scores for a single example (e.g. array of 3 numbers here), then the Softmax classifier computes the loss for that example as:
 
 $$L_i = -\log\left(\frac{e^{f_{y_i}}}{\sum_j e^{f_j}}\right)$$
 
-We can see that the Softmax classifier interprets every element of $f$ as holding the (unnormalized) log probabilities of the three classes. We exponentiate these to get (unnormalized) probabilities, and then normalize them to get probabilites. Therefore, the expression inside the log is the normalized probability of the correct class. Note how this expression works: this quantity is always between 0 and 1. When the probability of the correct class is very small (near 0), the loss will go towards (positive) infinity. Conversely, when the correct class probability goes towards 1, the loss will go towards zero because $\log(1) = 0$. Hence, the expression for $L_i$ is low when the correct class probability is high, and it's very high when it is low.
+Here, $y_i$ is the true class label for example $i$. We can see that the Softmax classifier interprets every element of $f$ as holding the (unnormalized) log probabilities of the three classes. We exponentiate these to get (unnormalized) probabilities, and then normalize them to get probabilites. Therefore, the expression inside the log is the normalized probability of the correct class. Note how this expression works: this quantity is always between 0 and 1. When the probability of the correct class is very small (near 0), the loss will go towards (positive) infinity. Conversely, when the correct class probability goes towards 1, the loss will go towards zero because $\log(1) = 0$. Hence, the expression for $L_i$ is low when the correct class probability is high, and it's very high when it is low.
 
 Recall also that the full Softmax classifier loss is then defined as the average cross-entropy loss over the training examples and the regularization:
 
 $$L = \frac{1}{N}\sum_i L_i + \frac{1}{2}\lambda\sum_k\sum_l W_{k,l}^2$$
 
-Given the array of scores we've computed above, we can compute the loss. First, the way to obtain the probabilities is straight forward:
+Given the array of scores we've computed above, we can compute the loss.
 
 ```python
 num_examples = X.shape[0]
@@ -90,16 +90,19 @@ reg_loss = 0.5*reg*np.sum(W*W)
 loss = data_loss + reg_loss
 ```
 
-In this code, the regularization strength $\lambda$ is stored inside the reg. The convenience factor of 0.5 multiplying the regularization will become clear in a second. Evaluating this in the beginning (with random parameters) might give us loss = 1.1, which is -np.log(1.0/3), since with small initial random weights all probabilities assigned to all classes are about one third. We now want to make the loss as low as possible, with loss = 0 as the absolute lower bound. But the lower the loss is, the higher are the probabilities assigned to the correct classes for all examples.
+In this code, the regularization strength $\lambda$ is stored inside the reg. The convenience factor of 0.5 multiplying the regularization will become clear in a second. Evaluating this in the beginning (with random parameters) might give us loss = 1.1, which is -np.log(1.0/3), since with small initial random weights all probabilities assigned to all classes are about one third. We now want to make the loss as low as possible, with loss = 0 as the absolute lower bound.
 
 ### Computing the Analytic Gradient with Backpropagation
 
 We have a way of evaluating the loss, and now we have to minimize it. We'll do so with gradient descent. That is, we start with random parameters (as shown above), and evaluate the gradient of the loss function with respect to the parameters, so that we know how we should change the parameters to decrease the loss. Let's introduce the intermediate variable $p$, which is a vector of the (normalized) probabilities. The loss for one example is:
 
 $$p_k = \frac{e^{f_k}}{\sum_j e^{f_j}}$$
+
 $$L_i = -\log(p_{y_i})$$
 
-We now wish to understand how the computed scores inside $f$ should change to decrease the loss $L_i$ that this example contributes to the full objective. In other words, we want to derive the gradient $\partial L_i/\partial f_k$. The loss $L_i$ is computed from $p$, which in turn depends on $f$. It's a fun exercise to the reader to use the chain rule to derive the gradient, but it turns out to be extremely simple and interpretible in the end, after a lot of things cancel out:
+We now wish to understand how the computed scores inside $f$ should change to decrease the loss $L_i$ that this example contributes to the full objective. In other words, we want to derive the gradient $\partial L_i/\partial f_k$. 
+
+Here, $y_i$ is the true class label for example $i$, and $k$ is an index over all possible classes (also $0, 1, \text{or } 2$). The gradient $\partial L_i/\partial f_k$ tells us how the loss for example $i$ changes when we modify the score $f_k$ for class $k$.
 
 $$\frac{\partial L_i}{\partial f_k} = p_k - \mathbb{1}(y_i = k)$$
 
