@@ -114,3 +114,89 @@ $$\frac{\partial \mathbf{z}}{\partial \mathbf{x}} = \frac{\partial \mathbf{z}}{\
 However now each of these terms is a matrix: $\frac{\partial \mathbf{z}}{\partial \mathbf{y}}$ is a $K \times M$ matrix, $\frac{\partial \mathbf{y}}{\partial \mathbf{x}}$ is a $M \times N$ matrix, and $\frac{\partial \mathbf{z}}{\partial \mathbf{x}}$ is a $K \times N$ matrix; the multiplication of $\frac{\partial \mathbf{z}}{\partial \mathbf{y}}$ and $\frac{\partial \mathbf{y}}{\partial \mathbf{x}}$ is matrix multiplication.
 
 ## Generalized Jacobian: Tensor in, Tensor out
+
+Just as a vector is a one-dimensional list of numbers and a matrix is a two-dimensional grid of numbers, a tensor is a $D$-dimensional grid of numbers. Many operations in deep learning accept tensors as inputs and produce tensors as outputs. For example an image is usually represented as a three-dimensional grid of numbers, where the three dimensions correspond to the height, width, and color channels (red, green, blue) of the image. We must therefore develop a derivative that is compatible with functions operating on general tensors.
+
+Suppose now that $f: \mathbb{R}^{N_1 \times \cdots \times N_{D_x}} \to \mathbb{R}^{M_1 \times \cdots \times M_{D_y}}$. Then the input to $f$ is a $D_x$-dimensional tensor of shape $N_1 \times \cdots \times N_{D_x}$, and the output of $f$ is a $D_y$-dimensional tensor of shape $M_1 \times \cdots \times M_{D_y}$. If $\mathbf{y} = f(\mathbf{x})$ then the derivative $\frac{\partial \mathbf{y}}{\partial \mathbf{x}}$ is a generalized Jacobian, which is an object with shape
+
+$$(M_1 \times \cdots \times M_{D_y}) \times (N_1 \times \cdots \times N_{D_x})$$
+
+Note that we have separated the dimensions of $\frac{\partial \mathbf{y}}{\partial \mathbf{x}}$ into two groups: the first group matches the dimensions of $\mathbf{y}$ and the second group matches the dimensions of $\mathbf{x}$. With this grouping, we can think of the generalized Jacobian as generalization of a matrix, where each "row" has the same shape as $\mathbf{y}$ and each "column" has the same shape as $\mathbf{x}$.
+
+Now if we let $\mathbf{i} \in \mathbb{Z}^{D_y}$ and $\mathbf{j} \in \mathbb{Z}^{D_x}$ be vectors of integer indices, then we can write
+
+$$\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{\mathbf{i},\mathbf{j}} = \frac{\partial y_{\mathbf{i}}}{\partial x_{\mathbf{j}}}$$
+
+For example, if $\mathbf{y}$ is a $2 \times 3$ tensor and $\mathbf{x}$ is a $4 \times 2$ tensor, then $\mathbf{i} = (i_1, i_2)$ where $i_1 \in \{0,1\}$ and $i_2 \in \{0,1,2\}$, and $\mathbf{j} = (j_1, j_2)$ where $j_1 \in \{0,1,2,3\}$ and $j_2 \in \{0,1\}$. So we might have:
+
+$$\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,2),(3,0)} = \frac{\partial y_{(1,2)}}{\partial x_{(3,0)}}$$
+
+This tells us how the element at position $(1,2)$ in $\mathbf{y}$ changes with respect to the element at position $(3,0)$ in $\mathbf{x}$.
+
+In this equation note that $y_{\mathbf{i}}$ and $x_{\mathbf{j}}$ are scalars, so the derivative $\frac{\partial y_{\mathbf{i}}}{\partial x_{\mathbf{j}}}$ is also a scalar. Using this notation we see that like the standard Jacobian, the generalized Jacobian tells us the relative rates of change between all elements of $\mathbf{x}$ and all elements of $\mathbf{y}$.
+
+The generalized Jacobian gives the same relationship between inputs and outputs as before:
+
+$$\mathbf{x} \to \mathbf{x} + \Delta \mathbf{x} \implies \mathbf{y} \to \mathbf{y} + \frac{\partial \mathbf{y}}{\partial \mathbf{x}} \Delta \mathbf{x}$$
+
+The difference is that now $\Delta \mathbf{x}$ is a tensor of shape $N_1 \times \cdots \times N_{D_x}$ and $\frac{\partial \mathbf{y}}{\partial \mathbf{x}}$ is a generalized matrix of shape $(M_1 \times \cdots \times M_{D_y}) \times (N_1 \times \cdots \times N_{D_x})$. The product $\frac{\partial \mathbf{y}}{\partial \mathbf{x}} \Delta \mathbf{x}$ is therefore a generalized matrix-vector multiply, which results in a tensor of shape $M_1 \times \cdots \times M_{D_y}$.
+
+The generalized matrix-vector multiply follows the same algebraic rules as a traditional matrix-vector multiply:
+
+$$\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}} \Delta \mathbf{x}\right)_{\mathbf{j}} = \sum_{\mathbf{i}} \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{\mathbf{i},\mathbf{j}} (\Delta \mathbf{x})_{\mathbf{i}} = \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{\mathbf{j},:} \cdot \Delta \mathbf{x}$$
+
+For example, continuing with our $2 \times 3$ output tensor $\mathbf{y}$ and $4 \times 2$ input tensor $\mathbf{x}$, the generalized Jacobian $\frac{\partial \mathbf{y}}{\partial \mathbf{x}}$ has shape $(2 \times 3) \times (4 \times 2)$. 
+
+Let's say we have specific values for the Jacobian entries at position $(1,1)$:
+
+$$\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(0,0)} = 2, \quad \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(0,1)} = 3$$
+
+$$\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(1,0)} = 1, \quad \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(1,1)} = 4$$
+
+$$\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(2,0)} = 5, \quad \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(2,1)} = 2$$
+
+$$\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(3,0)} = 3, \quad \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(3,1)} = 1$$
+
+And suppose:
+
+$$\Delta \mathbf{x} = \begin{pmatrix} 0.1 & 0.2 \\ 0.3 & 0.4 \\ 0.5 & 0.6 \\ 0.7 & 0.8 \end{pmatrix}$$
+
+Let's use the general formula.
+
+$$\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}} \Delta \mathbf{x}\right)_{(1,1)} = \sum_{\mathbf{i}} \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),\mathbf{i}} (\Delta \mathbf{x})_{\mathbf{i}}$$
+
+Here, $\mathbf{i}$ iterates over all input positions $(j_1, j_2)$ where $j_1 \in \{0,1,2,3\}$ and $j_2 \in \{0,1\}$:
+
+- $\mathbf{i} = (0,0)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(0,0)} (\Delta \mathbf{x})_{(0,0)} = 2 \times 0.1 = 0.2$
+
+- $\mathbf{i} = (0,1)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(0,1)} (\Delta \mathbf{x})_{(0,1)} = 3 \times 0.2 = 0.6$
+
+- $\mathbf{i} = (1,0)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(1,0)} (\Delta \mathbf{x})_{(1,0)} = 1 \times 0.3 = 0.3$
+
+- $\mathbf{i} = (1,1)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(1,1)} (\Delta \mathbf{x})_{(1,1)} = 4 \times 0.4 = 1.6$
+
+- $\mathbf{i} = (2,0)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(2,0)} (\Delta \mathbf{x})_{(2,0)} = 5 \times 0.5 = 2.5$
+
+- $\mathbf{i} = (2,1)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(2,1)} (\Delta \mathbf{x})_{(2,1)} = 2 \times 0.6 = 1.2$
+
+- $\mathbf{i} = (3,0)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(3,0)} (\Delta \mathbf{x})_{(3,0)} = 3 \times 0.7 = 2.1$
+
+- $\mathbf{i} = (3,1)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(3,1)} (\Delta \mathbf{x})_{(3,1)} = 1 \times 0.8 = 0.8$
+
+Summing all these terms gives us $0.2 + 0.6 + 0.3 + 1.6 + 2.5 + 1.2 + 2.1 + 0.8 = 9.3$.
+
+Thus, 
+
+$$\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}} \Delta \mathbf{x}\right)_{(1,1)} =  9.3$$
+
+The only difference is that the indices $\mathbf{i}$ and $\mathbf{j}$ are not scalars; instead they are vectors of indices. In the equation above the term $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{\mathbf{j},:}$ is the $\mathbf{j}$th "row" of the generalized matrix $\frac{\partial \mathbf{y}}{\partial \mathbf{x}}$, which is a tensor with the same shape as $\mathbf{x}$. We have also used the convention that the dot product between two tensors of the same shape is an elementwise product followed by a sum, identical to the dot product between vectors.
+
+The chain rule also looks the same in the case of tensor-valued functions. Suppose that $\mathbf{y} = f(\mathbf{x})$ and $\mathbf{z} = g(\mathbf{y})$, where $\mathbf{x}$ and $\mathbf{y}$ have the same shapes as above and $\mathbf{z}$ has shape $K_1 \times \cdots \times K_{D_z}$. Now the chain rule looks the same as before:
+
+$$\frac{\partial \mathbf{z}}{\partial \mathbf{x}} = \frac{\partial \mathbf{z}}{\partial \mathbf{y}} \frac{\partial \mathbf{y}}{\partial \mathbf{x}}$$
+
+The difference is that now $\frac{\partial \mathbf{z}}{\partial \mathbf{y}}$ is a generalized matrix of shape $(K_1 \times \cdots \times K_{D_z}) \times (M_1 \times \cdots \times M_{D_y})$, and $\frac{\partial \mathbf{y}}{\partial \mathbf{x}}$ is a generalized matrix of shape $(M_1 \times \cdots \times M_{D_y}) \times (N_1 \times \cdots \times N_{D_x})$; the product $\frac{\partial \mathbf{z}}{\partial \mathbf{y}} \frac{\partial \mathbf{y}}{\partial \mathbf{x}}$ is a generalized matrix-matrix multiply, resulting in an object of shape $(K_1 \times \cdots \times K_{D_z}) \times (N_1 \times \cdots \times N_{D_x})$. Like the generalized matrix-vector multiply defined above, the generalized matrix-matrix multiply follows the same algebraic rules as the traditional matrix-matrix multiply:
+
+$$\left(\frac{\partial \mathbf{z}}{\partial \mathbf{x}}\right)_{\mathbf{i},\mathbf{j}} = \sum_{\mathbf{k}} \left(\frac{\partial \mathbf{z}}{\partial \mathbf{y}}\right)_{\mathbf{i},\mathbf{k}} \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{\mathbf{k},\mathbf{j}} = \left(\frac{\partial \mathbf{z}}{\partial \mathbf{y}}\right)_{\mathbf{i},:} \cdot \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{:,\mathbf{j}}$$
+
+In this equation the indices $\mathbf{i}$, $\mathbf{j}$, $\mathbf{k}$ are vectors of indices, and the terms $\left(\frac{\partial \mathbf{z}}{\partial \mathbf{y}}\right)_{\mathbf{i},:}$ and $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{:,\mathbf{j}}$ are the $\mathbf{i}$th "row" of $\frac{\partial \mathbf{z}}{\partial \mathbf{y}}$ and the $\mathbf{j}$th "column" of $\frac{\partial \mathbf{y}}{\partial \mathbf{x}}$ respectively.
