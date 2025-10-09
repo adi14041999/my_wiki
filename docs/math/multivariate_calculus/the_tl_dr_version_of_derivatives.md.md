@@ -1,4 +1,4 @@
-# Derivatives
+# The TL;DR version of Derivatives
 
 ## Scalar case
 
