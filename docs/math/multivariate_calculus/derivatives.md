@@ -143,7 +143,7 @@ The difference is that now $\Delta \mathbf{x}$ is a tensor of shape $N_1 \times 
 
 The generalized matrix-vector multiply follows the same algebraic rules as a traditional matrix-vector multiply:
 
-$$\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}} \Delta \mathbf{x}\right)_{\mathbf{j}} = \sum_{\mathbf{i}} \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{\mathbf{i},\mathbf{j}} (\Delta \mathbf{x})_{\mathbf{i}} = \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{\mathbf{j},:} \cdot \Delta \mathbf{x}$$
+$$\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}} \Delta \mathbf{x}\right)_{\mathbf{i}} = \sum_{\mathbf{j}} \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{\mathbf{i},\mathbf{j}} (\Delta \mathbf{x})_{\mathbf{j}} = \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{\mathbf{i},:} \cdot \Delta \mathbf{x}$$
 
 For example, continuing with our $2 \times 3$ output tensor $\mathbf{y}$ and $4 \times 2$ input tensor $\mathbf{x}$, the generalized Jacobian $\frac{\partial \mathbf{y}}{\partial \mathbf{x}}$ has shape $(2 \times 3) \times (4 \times 2)$. 
 
@@ -163,25 +163,25 @@ $$\Delta \mathbf{x} = \begin{pmatrix} 0.1 & 0.2 \\ 0.3 & 0.4 \\ 0.5 & 0.6 \\ 0.7
 
 Let's use the general formula.
 
-$$\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}} \Delta \mathbf{x}\right)_{(1,1)} = \sum_{\mathbf{i}} \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),\mathbf{i}} (\Delta \mathbf{x})_{\mathbf{i}}$$
+$$\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}} \Delta \mathbf{x}\right)_{(1,1)} = \sum_{\mathbf{j}} \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),\mathbf{j}} (\Delta \mathbf{x})_{\mathbf{j}}$$
 
-Here, $\mathbf{i}$ iterates over all input positions $(j_1, j_2)$ where $j_1 \in \{0,1,2,3\}$ and $j_2 \in \{0,1\}$:
+Here, $\mathbf{j}$ iterates over all input positions $(j_1, j_2)$ where $j_1 \in \{0,1,2,3\}$ and $j_2 \in \{0,1\}$:
 
-- $\mathbf{i} = (0,0)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(0,0)} (\Delta \mathbf{x})_{(0,0)} = 2 \times 0.1 = 0.2$
+- $\mathbf{j} = (0,0)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(0,0)} (\Delta \mathbf{x})_{(0,0)} = 2 \times 0.1 = 0.2$
 
-- $\mathbf{i} = (0,1)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(0,1)} (\Delta \mathbf{x})_{(0,1)} = 3 \times 0.2 = 0.6$
+- $\mathbf{j} = (0,1)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(0,1)} (\Delta \mathbf{x})_{(0,1)} = 3 \times 0.2 = 0.6$
 
-- $\mathbf{i} = (1,0)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(1,0)} (\Delta \mathbf{x})_{(1,0)} = 1 \times 0.3 = 0.3$
+- $\mathbf{j} = (1,0)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(1,0)} (\Delta \mathbf{x})_{(1,0)} = 1 \times 0.3 = 0.3$
 
-- $\mathbf{i} = (1,1)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(1,1)} (\Delta \mathbf{x})_{(1,1)} = 4 \times 0.4 = 1.6$
+- $\mathbf{j} = (1,1)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(1,1)} (\Delta \mathbf{x})_{(1,1)} = 4 \times 0.4 = 1.6$
 
-- $\mathbf{i} = (2,0)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(2,0)} (\Delta \mathbf{x})_{(2,0)} = 5 \times 0.5 = 2.5$
+- $\mathbf{j} = (2,0)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(2,0)} (\Delta \mathbf{x})_{(2,0)} = 5 \times 0.5 = 2.5$
 
-- $\mathbf{i} = (2,1)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(2,1)} (\Delta \mathbf{x})_{(2,1)} = 2 \times 0.6 = 1.2$
+- $\mathbf{j} = (2,1)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(2,1)} (\Delta \mathbf{x})_{(2,1)} = 2 \times 0.6 = 1.2$
 
-- $\mathbf{i} = (3,0)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(3,0)} (\Delta \mathbf{x})_{(3,0)} = 3 \times 0.7 = 2.1$
+- $\mathbf{j} = (3,0)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(3,0)} (\Delta \mathbf{x})_{(3,0)} = 3 \times 0.7 = 2.1$
 
-- $\mathbf{i} = (3,1)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(3,1)} (\Delta \mathbf{x})_{(3,1)} = 1 \times 0.8 = 0.8$
+- $\mathbf{j} = (3,1)$: $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{(1,1),(3,1)} (\Delta \mathbf{x})_{(3,1)} = 1 \times 0.8 = 0.8$
 
 Summing all these terms gives us $0.2 + 0.6 + 0.3 + 1.6 + 2.5 + 1.2 + 2.1 + 0.8 = 9.3$.
 
@@ -189,7 +189,7 @@ Thus,
 
 $$\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}} \Delta \mathbf{x}\right)_{(1,1)} =  9.3$$
 
-The only difference is that the indices $\mathbf{i}$ and $\mathbf{j}$ are not scalars; instead they are vectors of indices. In the equation above the term $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{\mathbf{j},:}$ is the $\mathbf{j}$th "row" of the generalized matrix $\frac{\partial \mathbf{y}}{\partial \mathbf{x}}$, which is a tensor with the same shape as $\mathbf{x}$. We have also used the convention that the dot product between two tensors of the same shape is an elementwise product followed by a sum, identical to the dot product between vectors.
+The only difference is that the indices $\mathbf{i}$ and $\mathbf{j}$ are not scalars; instead they are vectors of indices. In the equation above the term $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{\mathbf{i},:}$ is the $\mathbf{i}$th "row" of the generalized matrix $\frac{\partial \mathbf{y}}{\partial \mathbf{x}}$, which is a tensor with the same shape as $\mathbf{x}$. We have also used the convention that the dot product between two tensors of the same shape is an elementwise product followed by a sum, identical to the dot product between vectors.
 
 The chain rule also looks the same in the case of tensor-valued functions. Suppose that $\mathbf{y} = f(\mathbf{x})$ and $\mathbf{z} = g(\mathbf{y})$, where $\mathbf{x}$ and $\mathbf{y}$ have the same shapes as above and $\mathbf{z}$ has shape $K_1 \times \cdots \times K_{D_z}$. Now the chain rule looks the same as before:
 
