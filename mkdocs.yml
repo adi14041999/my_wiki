@@ -24,6 +24,7 @@ nav:
       - Regularization: ai/deep_learning_for_computer_vision/regularization.md
       - Optimization: ai/deep_learning_for_computer_vision/optimization.md
       - Backpropagation: ai/deep_learning_for_computer_vision/backpropagation.md
+      - Backpropagation for a Linear Layer: ai/deep_learning_for_computer_vision/backpropagation_for_a_linear_layer.md
       - Neural Networks- Setting up the Architecture: ai/deep_learning_for_computer_vision/neural_networks_setting_up_the_architecture.md
       - Neural Networks- Setting up the Data: ai/deep_learning_for_computer_vision/neural_networks_setting_up_the_data.md
       - Neural Networks- Learning and Evaluation: ai/deep_learning_for_computer_vision/neural_networks_learning_and_evaluation.md
