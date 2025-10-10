@@ -200,3 +200,170 @@ The difference is that now $\frac{\partial \mathbf{z}}{\partial \mathbf{y}}$ is 
 $$\left(\frac{\partial \mathbf{z}}{\partial \mathbf{x}}\right)_{\mathbf{i},\mathbf{j}} = \sum_{\mathbf{k}} \left(\frac{\partial \mathbf{z}}{\partial \mathbf{y}}\right)_{\mathbf{i},\mathbf{k}} \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{\mathbf{k},\mathbf{j}} = \left(\frac{\partial \mathbf{z}}{\partial \mathbf{y}}\right)_{\mathbf{i},:} \cdot \left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{:,\mathbf{j}}$$
 
 In this equation the indices $\mathbf{i}$, $\mathbf{j}$, $\mathbf{k}$ are vectors of indices, and the terms $\left(\frac{\partial \mathbf{z}}{\partial \mathbf{y}}\right)_{\mathbf{i},:}$ and $\left(\frac{\partial \mathbf{y}}{\partial \mathbf{x}}\right)_{:,\mathbf{j}}$ are the $\mathbf{i}$th "row" of $\frac{\partial \mathbf{z}}{\partial \mathbf{y}}$ and the $\mathbf{j}$th "column" of $\frac{\partial \mathbf{y}}{\partial \mathbf{x}}$ respectively.
+
+## Some tips and tricks
+
+### Simplify, simplify, simplify
+
+Much of the confusion in taking derivatives involving arrays stems from trying to do too many things at once. These "things" include taking derivatives of multiple components simultaneously, taking derivatives in the presence of summation notation, and applying the chain rule.
+
+#### Expanding notation into explicit sums and equations for each component
+
+In order to simplify a given calculation, it is often useful to write out the explicit formula for a single scalar element of the output in terms of nothing but scalar variables. Once one has an explicit formula for a single scalar element of the output in terms of other scalar values, then one can use the calculus that you used as a beginner, which is much easier than trying to do matrix math, summations, and derivatives all at the same time.
+
+**Example:** Suppose we have a column vector $\mathbf{y}$ of length $C$ that is calculated by forming the product of a matrix $W$ that is $C$ rows by $D$ columns with a column vector $\mathbf{x}$ of length $D$:
+
+$$\mathbf{y} = W\mathbf{x} \quad$$
+
+Suppose we are interested in the derivative of $\mathbf{y}$ with respect to $\mathbf{x}$. A full characterization of this derivative requires the (partial) derivatives of each component of $\mathbf{y}$ with respect to each component of $\mathbf{x}$, which in this case will contain $C \times D$ values since there are $C$ components in $\mathbf{y}$ and $D$ components of $\mathbf{x}$.
+
+Let's start by computing one of these, say, the 3rd component of $\mathbf{y}$ with respect to the 7th component of $\mathbf{x}$. That is, we want to compute
+
+$$\frac{\partial y_3}{\partial x_7}$$
+
+which is just the derivative of one scalar with respect to another.
+
+The first thing to do is to write down the formula for computing $y_3$ so we can take its derivative. From the definition of matrix-vector multiplication, the value $y_3$ is computed by taking the dot product between the 3rd row of $W$ and the vector $\mathbf{x}$:
+
+$$y_3 = \sum_{j=1}^{D} W_{3,j} x_j \quad$$
+
+At this point, we have reduced the original matrix equation to a scalar equation. This makes it much easier to compute the desired derivatives.
+
+#### Completing the derivative: the Jacobian matrix
+
+Recall that our original goal was to compute the derivatives of each component of $\mathbf{y}$ with respect to each component of $\mathbf{x}$, and we noted that there would be $C \times D$ of these. They can be written out as a matrix in the following form:
+
+$$\begin{pmatrix}
+\frac{\partial y_1}{\partial x_1} & \frac{\partial y_1}{\partial x_2} & \frac{\partial y_1}{\partial x_3} & \cdots & \frac{\partial y_1}{\partial x_D} \\
+\frac{\partial y_2}{\partial x_1} & \frac{\partial y_2}{\partial x_2} & \frac{\partial y_2}{\partial x_3} & \cdots & \frac{\partial y_2}{\partial x_D} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+\frac{\partial y_C}{\partial x_1} & \frac{\partial y_C}{\partial x_2} & \frac{\partial y_C}{\partial x_3} & \cdots & \frac{\partial y_C}{\partial x_D}
+\end{pmatrix}$$
+
+In this particular case, this is called the Jacobian matrix, but this terminology is not too important for our purposes.
+
+Notice that for the equation $\mathbf{y} = W\mathbf{x}$, the partial of $y_3$ with respect to $x_7$ was simply given by $W_{3,7}$. If you go through the same process for other components, you will find that, for all $i$ and $j$,
+
+$$\frac{\partial y_i}{\partial x_j} = W_{i,j}$$
+
+This means that the matrix of partial derivatives is
+
+$$\begin{pmatrix}
+\frac{\partial y_1}{\partial x_1} & \frac{\partial y_1}{\partial x_2} & \frac{\partial y_1}{\partial x_3} & \cdots & \frac{\partial y_1}{\partial x_D} \\
+\frac{\partial y_2}{\partial x_1} & \frac{\partial y_2}{\partial x_2} & \frac{\partial y_2}{\partial x_3} & \cdots & \frac{\partial y_2}{\partial x_D} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+\frac{\partial y_C}{\partial x_1} & \frac{\partial y_C}{\partial x_2} & \frac{\partial y_C}{\partial x_3} & \cdots & \frac{\partial y_C}{\partial x_D}
+\end{pmatrix} = \begin{pmatrix}
+W_{1,1} & W_{1,2} & W_{1,3} & \cdots & W_{1,D} \\
+W_{2,1} & W_{2,2} & W_{2,3} & \cdots & W_{2,D} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+W_{C,1} & W_{C,2} & W_{C,3} & \cdots & W_{C,D}
+\end{pmatrix}$$
+
+This, of course, is just $W$ itself.
+
+Thus, after all this work, we have concluded that for $\mathbf{y} = W\mathbf{x}$, we have
+
+$$\frac{d\mathbf{y}}{d\mathbf{x}} = W$$
+
+### Row vectors instead of column vectors
+
+It is important in working with different neural networks packages to pay close attention to the arrangement of weight matrices, data matrices, and so on. For example, if a data matrix $X$ contains many different vectors, each of which represents an input, is each data vector a row or column of the data matrix $X$?
+
+In the previous example, we worked with a vector $\mathbf{x}$ that was a column vector. However, you should also be able to use the same basic ideas when $\mathbf{x}$ is a row vector.
+
+Let $\mathbf{y}$ be a row vector with $C$ components computed by taking the product of another row vector $\mathbf{x}$ with $D$ components and a matrix $W$ that is $D$ rows by $C$ columns:
+
+$$\mathbf{y} = \mathbf{x}W$$
+
+Importantly, despite the fact that $\mathbf{y}$ and $\mathbf{x}$ have the same number of components as before, the shape of $W$ is the transpose of the shape that we used before for $W$.
+
+In this case, you will see, by writing
+
+$$y_3 = \sum_{j=1}^{D} x_j W_{j,3}$$
+
+that
+
+$$\frac{\partial y_3}{\partial x_7} = W_{7,3}$$
+
+Notice that the indexing into $W$ is the opposite from what it was in the first example.
+
+However, when we assemble the full Jacobian matrix, we can still see that in this case as well,
+
+$$\frac{d\mathbf{y}}{d\mathbf{x}} = W$$
+
+### Dealing with more than two dimensions
+
+Let's consider another closely related problem, that of computing $\frac{d\mathbf{y}}{dW}$:
+
+In this case, $\mathbf{y}$ varies along one coordinate while $W$ varies along two coordinates. Thus, the entire derivative is most naturally contained in a three-dimensional array.
+
+Let's again compute a scalar derivative between one component of $\mathbf{y}$, say $y_3$ and one component of $W$, say $W_{7,8}$. Let's start with the same basic setup in which we write down an equation for $y_3$ in terms of other scalar components. Now we would like an equation that expresses $y_3$ in terms of scalar values, and shows the role that $W_{7,8}$ plays in its computation.
+
+However, what we see is that $W_{7,8}$ plays no role in the computation of $y_3$, since
+
+$$y_3 = x_1 W_{1,3} + x_2 W_{2,3} + \cdots + x_D W_{D,3} \quad$$
+
+In other words,
+
+$$\frac{\partial y_3}{\partial W_{7,8}} = 0$$
+
+However, the partials of $y_3$ with respect to elements of the 3rd column of $W$ will certainly be non-zero. For example, the derivative of $y_3$ with respect to $W_{2,3}$ is given by
+
+$$\frac{\partial y_3}{\partial W_{2,3}} = x_2 \quad$$
+
+as can be easily seen by examining the equation for $y_3$.
+
+In general, when the index of the $\mathbf{y}$ component is equal to the second index of $W$, the derivative will be non-zero, but will be zero otherwise. We can write:
+
+$$\frac{\partial y_j}{\partial W_{i,j}} = x_i$$
+
+but the other elements of the 3-d array will be 0. If we let $F$ represent the 3d array representing the derivative of $\mathbf{y}$ with respect to $W$, where
+
+$$F_{i,j,k} = \frac{\partial y_i}{\partial W_{j,k}}$$
+
+then
+
+$$F_{i,j,i} = x_j$$
+
+but all other entries of $F$ are zero.
+
+Finally, if we define a new two-dimensional array $G$ as
+
+$$G_{i,j} = F_{i,j,i}$$
+
+we can see that all of the information we need about $F$ can be stored in $G$, and that the non-trivial portion of $F$ is really two-dimensional, not three-dimensional.
+
+Representing the important part of derivative arrays in a compact way is critical to efficient implementations of neural networks.
+
+### Multiple data points
+
+Let's assume that each individual $\mathbf{x}$ is a row vector of length $D$, and that $X$ is a two-dimensional array with $N$ rows and $D$ columns. $W$ will be a matrix with $D$ rows and $C$ columns. $Y$, given by
+
+$$Y = XW$$
+
+will also be a matrix, with $N$ rows and $C$ columns. Thus, each row of $Y$ will give a row vector associated with the corresponding row of the input $X$.
+
+Sticking to our technique of writing down an expression for a given component of the output, we have
+
+$$Y_{i,j} = \sum_{k=1}^{D} X_{i,k} W_{k,j}$$
+
+We can see immediately from this equation that among the derivatives
+
+$$\frac{\partial Y_{a,b}}{\partial X_{c,d}}$$
+
+they are all zero unless $a = c$. That is, since each component of $Y$ is computed using only the corresponding row of $X$, derivatives of components between different rows of $Y$ and $X$ are all zero.
+
+Furthermore, we can see that
+
+$$\frac{\partial Y_{i,j}}{\partial X_{i,k}} = W_{k,j}$$
+
+doesn't depend at all upon which row of $Y$ and $X$ we are comparing.
+
+In fact, the matrix $W$ holds all of these partials as it is— we just have to remember to index into it according to the equation above to obtain the specific partial derivative that we want.
+
+If we let $Y_{i,:}$ be the $i$th row of $Y$ and let $X_{i,:}$ be the $i$th row of $X$, then we see that
+
+$$\frac{\partial Y_{i,:}}{\partial X_{i,:}} = W$$
+
+which is a simple generalization of our previous result.
