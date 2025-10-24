@@ -1214,6 +1214,102 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="ConvNet Architectures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#layer-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layer Patterns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Layer Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prefer-a-stack-of-small-filter-conv-to-one-large-receptive-field-conv-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prefer a stack of small filter CONV to one large receptive field CONV layer
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layer-sizing-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layer Sizing Patterns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Layer Sizing Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-use-stride-of-1-in-conv" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why use stride of 1 in CONV?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-use-padding" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why use padding?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#case-studies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Case studies
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Case studies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vggnet-in-detail" class="md-nav__link">
+    <span class="md-ellipsis">
+      VGGNet in detail
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional Resources
+    </span>
+  </a>
+  
 </li>
       
     </ul>
@@ -2809,7 +2905,107 @@
 <h3 id="fully-connected-layer">Fully-connected layer</h3>
 <p>Neurons in a fully connected layer have full connections to all activations in the previous layer, as seen in regular Neural Networks. Their activations can hence be computed with a matrix multiplication followed by a bias offset.</p>
 <h2 id="convnet-architectures">ConvNet Architectures</h2>
-<p>Watch YT lec 6 and then continue.</p>
+<h3 id="layer-patterns">Layer Patterns</h3>
+<p>The most common form of a ConvNet architecture stacks a few CONV-RELU layers, follows them with POOL layers, and repeats this pattern until the image has been merged spatially to a small size. At some point, it is common to transition to fully-connected layers. The last fully-connected layer holds the output, such as the class scores. In other words, the most common ConvNet architecture follows the pattern:</p>
+<p><strong>INPUT -&gt; [[CONV -&gt; RELU] * N -&gt; POOL?] * M -&gt; [FC -&gt; RELU] * K -&gt; FC</strong></p>
+<p>where the * indicates repetition, and the POOL? indicates an optional pooling layer. Moreover, N &gt;= 0 (and usually N &lt;= 3), M &gt;= 0, K &gt;= 0 (and usually K &lt; 3). For example, here are some common ConvNet architectures you may see that follow this pattern:</p>
+<ul>
+<li><strong>INPUT -&gt; FC</strong>, implements a linear classifier. Here N = M = K = 0.</li>
+<li><strong>INPUT -&gt; CONV -&gt; RELU -&gt; FC</strong></li>
+<li><strong>INPUT -&gt; [CONV -&gt; RELU -&gt; POOL] * 2 -&gt; FC -&gt; RELU -&gt; FC</strong>. Here we see that there is a single CONV layer between every POOL layer.</li>
+<li><strong>INPUT -&gt; [CONV -&gt; RELU -&gt; CONV -&gt; RELU -&gt; POOL] * 3 -&gt; [FC -&gt; RELU] * 2 -&gt; FC</strong> Here we see two CONV layers stacked before every POOL layer. This is generally a good idea for larger and deeper networks, because multiple stacked CONV layers can develop more complex features of the input volume before the destructive pooling operation.</li>
+</ul>
+<h4 id="prefer-a-stack-of-small-filter-conv-to-one-large-receptive-field-conv-layer">Prefer a stack of small filter CONV to one large receptive field CONV layer</h4>
+<p>Suppose that you stack three 3x3 CONV layers on top of each other (with non-linearities in between, of course). In this arrangement, each neuron on the first CONV layer has a 3x3 view of the input volume. A neuron on the second CONV layer has a 3x3 view of the first CONV layer, and hence by extension a 5x5 view of the input volume. Similarly, a neuron on the third CONV layer has a 3x3 view of the 2nd CONV layer, and hence a 7x7 view of the input volume. Suppose that instead of these three layers of 3x3 CONV, we only wanted to use a single CONV layer with 7x7 receptive fields. These neurons would have a receptive field size of the input volume that is identical in spatial extent (7x7), but with several disadvantages. First, the neurons would be computing a linear function over the input, while the three stacks of CONV layers contain non-linearities that make their features more expressive. Second, if we suppose that all the volumes have <span class="arithmatex">\(C\)</span> channels (in practice, you might see architectures that increase channels with depth (e.g., 64 → 128 → 256), but for this theoretical comparison, keeping <span class="arithmatex">\(C\)</span> constant makes the parameter count analysis clear and fair), then it can be seen that the single 7x7 CONV layer would contain <span class="arithmatex">\(C \times (7 \times 7 \times C) = 49C^2\)</span> parameters, while the three 3x3 CONV layers would only contain <span class="arithmatex">\(3 \times (C \times (3 \times 3 \times C)) = 27C^2\)</span> parameters.</p>
+<p>For the <strong>single 7×7 CONV layer</strong>:</p>
+<ul>
+<li>
+<p>Each filter has size <span class="arithmatex">\(7 \times 7 \times C\)</span> (7×7 spatial dimensions × C input channels)</p>
+</li>
+<li>
+<p>We have <span class="arithmatex">\(C\)</span> output channels (filters)</p>
+</li>
+<li>
+<p>Total parameters = <span class="arithmatex">\(C \times (7 \times 7 \times C) = C \times 49C = 49C^2\)</span></p>
+</li>
+</ul>
+<p>For the <strong>three stacked 3×3 CONV layers</strong>:</p>
+<ul>
+<li>
+<p>Each 3×3 filter has size <span class="arithmatex">\(3 \times 3 \times C\)</span> </p>
+</li>
+<li>
+<p>We have <span class="arithmatex">\(C\)</span> output channels (filters) per layer</p>
+</li>
+<li>
+<p>Total parameters per layer = <span class="arithmatex">\(C \times (3 \times 3 \times C) = C \times 9C = 9C^2\)</span></p>
+</li>
+<li>
+<p>Total for 3 layers = <span class="arithmatex">\(3 \times 9C^2 = 27C^2\)</span></p>
+</li>
+</ul>
+<p>Intuitively, stacking CONV layers with tiny filters as opposed to having one CONV layer with big filters allows us to express more powerful features of the input, and with fewer parameters. As a practical disadvantage, we might need more memory to hold all the intermediate CONV layer results if we plan to do backpropagation.</p>
+<h3 id="layer-sizing-patterns">Layer Sizing Patterns</h3>
+<p>Until now we've omitted mentions of common hyperparameters used in each of the layers in a ConvNet. We will first state the common rules of thumb for sizing the architectures.</p>
+<p><strong>The input layer</strong> (that contains the image) should be divisible by 2 many times. Common numbers include 32 (e.g. CIFAR-10), 64, 96 (e.g. STL-10), or 224 (e.g. common ImageNet ConvNets), 384, and 512.</p>
+<p><strong>The conv layers</strong> should be using small filters (e.g. 3x3 or at most 5x5), using a stride of <span class="arithmatex">\(S=1\)</span>, and crucially, padding the input volume with zeros in such way that the conv layer does not alter the spatial dimensions of the input. That is, when <span class="arithmatex">\(F=3\)</span>, then using <span class="arithmatex">\(P=1\)</span> will retain the original size of the input. When <span class="arithmatex">\(F=5\)</span>, <span class="arithmatex">\(P=2\)</span>. For a general <span class="arithmatex">\(F\)</span>, it can be seen that <span class="arithmatex">\(P=(F-1)/2\)</span> preserves the input size. If you must use bigger filter sizes (such as 7x7 or so), it is only common to see this on the very first conv layer that is looking at the input image.</p>
+<p><strong>The pool layers</strong> are in charge of downsampling the spatial dimensions of the input. The most common setting is to use max-pooling with 2x2 receptive fields (i.e. <span class="arithmatex">\(F=2\)</span>), and with a stride of 2 (i.e. <span class="arithmatex">\(S=2\)</span>). Note that this discards exactly 75% of the activations in an input volume (due to downsampling by 2 in both width and height). Another slightly less common setting is to use 3x3 receptive fields with a stride of 2, but this makes "fitting" more complicated (e.g., a 32x32x3 layer would require zero padding to be used with a max-pooling layer with 3x3 receptive field and stride 2). It is very uncommon to see receptive field sizes for max pooling that are larger than 3 because the pooling is then too lossy and aggressive. This usually leads to worse performance.</p>
+<h4 id="why-use-stride-of-1-in-conv">Why use stride of 1 in CONV?</h4>
+<p>Smaller strides work better in practice. Additionally, as already mentioned stride 1 allows us to leave all spatial down-sampling to the POOL layers, with the CONV layers only transforming the input volume depth-wise.</p>
+<h4 id="why-use-padding">Why use padding?</h4>
+<p>In addition to the aforementioned benefit of keeping the spatial sizes constant after CONV, doing this actually improves performance. If the CONV layers were to not zero-pad the inputs and only perform valid convolutions, then the size of the volumes would reduce by a small amount after each CONV, and the information at the borders would be "washed away" too quickly.</p>
+<h3 id="case-studies">Case studies</h3>
+<p>There are several architectures in the field of Convolutional Networks that have a name. The most common are:</p>
+<p><a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf"><strong>LeNet:</strong></a> The first successful applications of Convolutional Networks were developed by Yann LeCun in 1990's. Of these, the best known is the LeNet architecture that was used to read zip codes, digits, etc.</p>
+<p><a href="http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks"><strong>AlexNet:</strong></a> The first work that popularized Convolutional Networks in Computer Vision was the AlexNet, developed by Alex Krizhevsky, Ilya Sutskever and Geoff Hinton. The AlexNet was submitted to the <a href="http://www.image-net.org/challenges/LSVRC/2014/">ImageNet ILSVRC challenge</a> in 2012 and significantly outperformed the second runner-up (top 5 error of 16% compared to runner-up with 26% error). The Network had a very similar architecture to LeNet, but was deeper, bigger, and featured Convolutional Layers stacked on top of each other (previously it was common to only have a single CONV layer always immediately followed by a POOL layer).</p>
+<p><a href="http://arxiv.org/abs/1311.2901"><strong>ZF Net:</strong></a> The ILSVRC 2013 winner was a Convolutional Network from Matthew Zeiler and Rob Fergus. It became known as the ZFNet (short for Zeiler &amp; Fergus Net). It was an improvement on AlexNet by tweaking the architecture hyperparameters, in particular by expanding the size of the middle convolutional layers and making the stride and filter size on the first layer smaller.</p>
+<p><strong>GoogLeNet:</strong> The ILSVRC 2014 winner was a Convolutional Network from <a href="http://arxiv.org/abs/1409.4842">Szegedy et al</a>. from Google. Its main contribution was the development of an Inception Module that dramatically reduced the number of parameters in the network (4M, compared to AlexNet with 60M). Additionally, this paper uses Average Pooling instead of Fully Connected layers at the top of the ConvNet, eliminating a large amount of parameters that do not seem to matter much. There are also several followup versions to the GoogLeNet, most recently <a href="http://arxiv.org/abs/1602.07261">Inception-v4</a>.</p>
+<p><a href="http://www.robots.ox.ac.uk/~vgg/research/very_deep/"><strong>VGGNet:</strong></a> The runner-up in ILSVRC 2014 was the network from Karen Simonyan and Andrew Zisserman that became known as the VGGNet. Its main contribution was in showing that the depth of the network is a critical component for good performance. Their final best network contains 16 CONV/FC layers and, appealingly, features an extremely homogeneous architecture that only performs 3x3 convolutions and 2x2 pooling from the beginning to the end. Their <a href="http://www.robots.ox.ac.uk/~vgg/research/very_deep/">pretrained model</a> is available for plug and play use in Caffe. A downside of the VGGNet is that it is more expensive to evaluate and uses a lot more memory and parameters (140M). Most of these parameters are in the first fully connected layer, and it was since found that these FC layers can be removed with no performance downgrade, significantly reducing the number of necessary parameters.</p>
+<p><strong>ResNet:</strong> <a href="http://arxiv.org/abs/1512.03385">Residual Network</a> developed by Kaiming He et al. was the winner of ILSVRC 2015. It features special skip connections and a heavy use of <a href="http://arxiv.org/abs/1502.03167">batch normalization</a>. The architecture is also missing fully connected layers at the end of the network. The reader is also referred to Kaiming's presentation (<a href="https://www.youtube.com/watch?v=1PGLj-uKT1w">video</a>, <a href="http://research.microsoft.com/en-us/um/people/kahe/ilsvrc15/ilsvrc2015_deep_residual_learning_kaiminghe.pdf">slides</a>), and some <a href="https://github.com/gcr/torch-residual-networks">recent experiments</a> that reproduce these networks in Torch. ResNets are currently by far state of the art Convolutional Neural Network models and are the default choice for using ConvNets in practice (as of May 10, 2016). In particular, also see more recent developments that tweak the original architecture from <a href="https://arxiv.org/abs/1603.05027">Kaiming He et al. Identity Mappings in Deep Residual Networks</a> (published March 2016).</p>
+<h4 id="vggnet-in-detail">VGGNet in detail</h4>
+<p>Let's break down the VGGNet in more detail as a case study. The whole VGGNet is composed of CONV layers that perform 3x3 convolutions with stride 1 and pad 1, and of POOL layers that perform 2x2 max pooling with stride 2 (and no padding). We can write out the size of the representation at each step of the processing and keep track of both the representation size and the total number of weights:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>INPUT: [224x224x3]        memory:  224*224*3=150K   weights: 0
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>CONV3-64: [224x224x64]  memory:  224*224*64=3.2M   weights: (3*3*3)*64 = 1,728
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>CONV3-64: [224x224x64]  memory:  224*224*64=3.2M   weights: (3*3*64)*64 = 36,864
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>POOL2: [112x112x64]  memory:  112*112*64=800K   weights: 0
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>CONV3-128: [112x112x128]  memory:  112*112*128=1.6M   weights: (3*3*64)*128 = 73,728
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>CONV3-128: [112x112x128]  memory:  112*112*128=1.6M   weights: (3*3*128)*128 = 147,456
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>POOL2: [56x56x128]  memory:  56*56*128=400K   weights: 0
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>CONV3-256: [56x56x256]  memory:  56*56*256=800K   weights: (3*3*128)*256 = 294,912
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>CONV3-256: [56x56x256]  memory:  56*56*256=800K   weights: (3*3*256)*256 = 589,824
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>CONV3-256: [56x56x256]  memory:  56*56*256=800K   weights: (3*3*256)*256 = 589,824
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>POOL2: [28x28x256]  memory:  28*28*256=200K   weights: 0
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>CONV3-512: [28x28x512]  memory:  28*28*512=400K   weights: (3*3*256)*512 = 1,179,648
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>CONV3-512: [28x28x512]  memory:  28*28*512=400K   weights: (3*3*512)*512 = 2,359,296
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>CONV3-512: [28x28x512]  memory:  28*28*512=400K   weights: (3*3*512)*512 = 2,359,296
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>POOL2: [14x14x512]  memory:  14*14*512=100K   weights: 0
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>CONV3-512: [14x14x512]  memory:  14*14*512=100K   weights: (3*3*512)*512 = 2,359,296
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>CONV3-512: [14x14x512]  memory:  14*14*512=100K   weights: (3*3*512)*512 = 2,359,296
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>CONV3-512: [14x14x512]  memory:  14*14*512=100K   weights: (3*3*512)*512 = 2,359,296
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>POOL2: [7x7x512]  memory:  7*7*512=25K  weights: 0
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>FC: [1x1x4096]  memory:  4096  weights: 7*7*512*4096 = 102,760,448
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>FC: [1x1x4096]  memory:  4096  weights: 4096*4096 = 16,777,216
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>FC: [1x1x1000]  memory:  1000 weights: 4096*1000 = 4,096,000
+</code></pre></div>
+<p><strong>TOTAL memory:</strong> 24M * 4 bytes ~= 93MB / image (only forward! ~*2 for bwd)</p>
+<p><strong>TOTAL params:</strong> 138M parameters</p>
+<p>As is common with Convolutional Networks, notice that most of the memory (and also compute time) is used in the early CONV layers, and that most of the parameters are in the last FC layers. In this particular case, the first FC layer contains 100M weights, out of a total of 140M.</p>
+<h2 id="additional-resources">Additional Resources</h2>
+<p>Additional resources related to implementation:</p>
+<ol>
+<li>
+<p><a href="https://github.com/soumith/convnet-benchmarks">Soumith benchmarks for CONV performance</a></p>
+</li>
+<li>
+<p><a href="http://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html">ConvNetJS CIFAR-10 demo</a> allows you to play with ConvNet architectures and see the results and computations in real time, in the browser.</p>
+</li>
+<li>
+<p><a href="http://caffe.berkeleyvision.org/">Caffe</a>, one of the popular ConvNet libraries.</p>
+</li>
+<li>
+<p><a href="http://torch.ch/blog/2016/02/04/resnets.html">State of the art ResNets in Torch7</a></p>
+</li>
+</ol>
 
 
 
