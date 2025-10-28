@@ -66,6 +66,7 @@ nav:
       - Markov Chains: math/probability/markov_chains.md
     - Multivariate Calculus:
       - The TL;DR version of Derivatives: math/multivariate_calculus/the_tl_dr_version_of_derivatives.md
+      - Multivariable functions, level sets, and contour plots: math/multivariate_calculus/multivariable_functions_level_sets_and_contour_plots.md
         
   - Productivity:
     - How to Build Your Career in AI:
