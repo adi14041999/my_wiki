@@ -1202,6 +1202,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#batch-normalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Batch Normalization
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2927,6 +2936,49 @@
 <p>In addition to max pooling, the pooling units can also perform other functions, such as average pooling or even L2-norm pooling. Average pooling was often used historically but has recently fallen out of favor compared to the max pooling operation, which has been shown to work better in practice.</p>
 <h3 id="fully-connected-layer">Fully-connected layer</h3>
 <p>Neurons in a fully connected layer have full connections to all activations in the previous layer, as seen in regular Neural Networks. Their activations can hence be computed with a matrix multiplication followed by a bias offset.</p>
+<h3 id="batch-normalization">Batch Normalization</h3>
+<p>To understand the goal of batch normalization, it is important to first recognize that machine learning methods tend to perform better with input data consisting of uncorrelated features with zero mean and unit variance. When training a neural network, we can preprocess the data before feeding it to the network to explicitly decorrelate its features. This will ensure that the first layer of the network sees data that follows a nice distribution. However, even if we preprocess the input data, the activations at deeper layers of the network will likely no longer be decorrelated and will no longer have zero mean or unit variance, since they are output from earlier layers in the network. Even worse, during the training process the distribution of features at each layer of the network will shift as the weights of each layer are updated.</p>
+<p>The authors of [1] hypothesize that the shifting distribution of features inside deep neural networks may make training deep networks more difficult. To overcome this problem, they propose to insert into the network some layers that normalize batches. At training time, such a layer uses a minibatch of data to estimate the mean and standard deviation of each feature. These estimated means and standard deviations are then used to center and normalize the features of the minibatch. A running average of these means and standard deviations is kept during training, and at test time these running averages are used to center and normalize features.</p>
+<p>It is possible that this normalization strategy could reduce the representational power of the network, since it may sometimes be optimal for certain layers to have features that are not zero-mean or unit variance. To this end, the batch normalization layer includes learnable shift and scale parameters for each feature dimension.</p>
+<p><strong>Forward pass implementation:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">batchnorm_forward</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">bn_param</span><span class="p">):</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">mode</span> <span class="o">=</span> <span class="n">bn_param</span><span class="p">[</span><span class="s2">&quot;mode&quot;</span><span class="p">]</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">eps</span> <span class="o">=</span> <span class="n">bn_param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span> <span class="mf">1e-5</span><span class="p">)</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">momentum</span> <span class="o">=</span> <span class="n">bn_param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;momentum&quot;</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">N</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="n">running_mean</span> <span class="o">=</span> <span class="n">bn_param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;running_mean&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">))</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="n">running_var</span> <span class="o">=</span> <span class="n">bn_param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;running_var&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">))</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;train&quot;</span><span class="p">:</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="sd">        In NumPy, axis=0 refers to the first dimension of an array. In a two-dimensional</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="sd">        array, this corresponds to the rows. When you specify axis=0 for a calculation,</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="sd">        you are telling NumPy to perform the operation across the rows, collapsing them</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="sd">        and producing a result for each column. Here, for each feature, we&#39;re computing</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="sd">        the mean and variance across the mini-batch.</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="sd">        Thus, sample_mean = [mean_feature_0, mean_feature_1, ...]</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>        <span class="n">sample_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>        <span class="n">sample_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>        <span class="n">x_normalized</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">sample_mean</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sample_var</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>        <span class="n">out</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">x_normalized</span> <span class="o">+</span> <span class="n">beta</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>        <span class="n">running_mean</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">momentum</span><span class="p">)</span> <span class="o">*</span> <span class="n">running_mean</span> <span class="o">+</span> <span class="n">momentum</span> <span class="o">*</span> <span class="n">sample_mean</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>        <span class="n">running_var</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">momentum</span><span class="p">)</span> <span class="o">*</span> <span class="n">running_var</span> <span class="o">+</span> <span class="n">momentum</span> <span class="o">*</span> <span class="n">sample_var</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;test&quot;</span><span class="p">:</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>        <span class="n">x_normalized</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">running_mean</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">running_var</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>        <span class="n">out</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">x_normalized</span> <span class="o">+</span> <span class="n">beta</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid forward batchnorm mode &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">mode</span><span class="p">)</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>    <span class="n">bn_param</span><span class="p">[</span><span class="s2">&quot;running_mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">running_mean</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>    <span class="n">bn_param</span><span class="p">[</span><span class="s2">&quot;running_var&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">running_var</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>    <span class="k">return</span> <span class="n">out</span>
+</code></pre></div>
+<p>[1] <a href="https://arxiv.org/abs/1502.03167">Sergey Ioffe and Christian Szegedy, "Batch Normalization: Accelerating Deep Network Training by Reducing
+Internal Covariate Shift", ICML 2015.</a></p>
 <h2 id="convnet-architectures">ConvNet Architectures</h2>
 <h3 id="layer-patterns">Layer Patterns</h3>
 <p>The most common form of a ConvNet architecture stacks a few CONV-RELU layers, follows them with POOL layers, and repeats this pattern until the image has been merged spatially to a small size. At some point, it is common to transition to fully-connected layers. The last fully-connected layer holds the output, such as the class scores. In other words, the most common ConvNet architecture follows the pattern:</p>
@@ -2987,28 +3039,28 @@
 <p><strong>ResNet:</strong> <a href="http://arxiv.org/abs/1512.03385">Residual Network</a> developed by Kaiming He et al. was the winner of ILSVRC 2015. It features special skip connections and a heavy use of <a href="http://arxiv.org/abs/1502.03167">batch normalization</a>. The architecture is also missing fully connected layers at the end of the network. The reader is also referred to Kaiming's presentation (<a href="https://www.youtube.com/watch?v=1PGLj-uKT1w">video</a>, <a href="http://research.microsoft.com/en-us/um/people/kahe/ilsvrc15/ilsvrc2015_deep_residual_learning_kaiminghe.pdf">slides</a>), and some <a href="https://github.com/gcr/torch-residual-networks">recent experiments</a> that reproduce these networks in Torch. ResNets are currently by far state of the art Convolutional Neural Network models and are the default choice for using ConvNets in practice (as of May 10, 2016). In particular, also see more recent developments that tweak the original architecture from <a href="https://arxiv.org/abs/1603.05027">Kaiming He et al. Identity Mappings in Deep Residual Networks</a> (published March 2016).</p>
 <h4 id="vggnet-in-detail">VGGNet in detail</h4>
 <p>Let's break down the VGGNet in more detail as a case study. The whole VGGNet is composed of CONV layers that perform 3x3 convolutions with stride 1 and pad 1, and of POOL layers that perform 2x2 max pooling with stride 2 (and no padding). We can write out the size of the representation at each step of the processing and keep track of both the representation size and the total number of weights:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>INPUT: [224x224x3]        memory:  224*224*3=150K   weights: 0
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>CONV3-64: [224x224x64]  memory:  224*224*64=3.2M   weights: (3*3*3)*64 = 1,728
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>CONV3-64: [224x224x64]  memory:  224*224*64=3.2M   weights: (3*3*64)*64 = 36,864
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>POOL2: [112x112x64]  memory:  112*112*64=800K   weights: 0
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>CONV3-128: [112x112x128]  memory:  112*112*128=1.6M   weights: (3*3*64)*128 = 73,728
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>CONV3-128: [112x112x128]  memory:  112*112*128=1.6M   weights: (3*3*128)*128 = 147,456
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>POOL2: [56x56x128]  memory:  56*56*128=400K   weights: 0
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>CONV3-256: [56x56x256]  memory:  56*56*256=800K   weights: (3*3*128)*256 = 294,912
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>CONV3-256: [56x56x256]  memory:  56*56*256=800K   weights: (3*3*256)*256 = 589,824
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>CONV3-256: [56x56x256]  memory:  56*56*256=800K   weights: (3*3*256)*256 = 589,824
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>POOL2: [28x28x256]  memory:  28*28*256=200K   weights: 0
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>CONV3-512: [28x28x512]  memory:  28*28*512=400K   weights: (3*3*256)*512 = 1,179,648
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>CONV3-512: [28x28x512]  memory:  28*28*512=400K   weights: (3*3*512)*512 = 2,359,296
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>CONV3-512: [28x28x512]  memory:  28*28*512=400K   weights: (3*3*512)*512 = 2,359,296
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>POOL2: [14x14x512]  memory:  14*14*512=100K   weights: 0
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>CONV3-512: [14x14x512]  memory:  14*14*512=100K   weights: (3*3*512)*512 = 2,359,296
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>CONV3-512: [14x14x512]  memory:  14*14*512=100K   weights: (3*3*512)*512 = 2,359,296
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>CONV3-512: [14x14x512]  memory:  14*14*512=100K   weights: (3*3*512)*512 = 2,359,296
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>POOL2: [7x7x512]  memory:  7*7*512=25K  weights: 0
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>FC: [1x1x4096]  memory:  4096  weights: 7*7*512*4096 = 102,760,448
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>FC: [1x1x4096]  memory:  4096  weights: 4096*4096 = 16,777,216
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>FC: [1x1x1000]  memory:  1000 weights: 4096*1000 = 4,096,000
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>INPUT: [224x224x3]        memory:  224*224*3=150K   weights: 0
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>CONV3-64: [224x224x64]  memory:  224*224*64=3.2M   weights: (3*3*3)*64 = 1,728
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>CONV3-64: [224x224x64]  memory:  224*224*64=3.2M   weights: (3*3*64)*64 = 36,864
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>POOL2: [112x112x64]  memory:  112*112*64=800K   weights: 0
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>CONV3-128: [112x112x128]  memory:  112*112*128=1.6M   weights: (3*3*64)*128 = 73,728
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>CONV3-128: [112x112x128]  memory:  112*112*128=1.6M   weights: (3*3*128)*128 = 147,456
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>POOL2: [56x56x128]  memory:  56*56*128=400K   weights: 0
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>CONV3-256: [56x56x256]  memory:  56*56*256=800K   weights: (3*3*128)*256 = 294,912
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>CONV3-256: [56x56x256]  memory:  56*56*256=800K   weights: (3*3*256)*256 = 589,824
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>CONV3-256: [56x56x256]  memory:  56*56*256=800K   weights: (3*3*256)*256 = 589,824
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>POOL2: [28x28x256]  memory:  28*28*256=200K   weights: 0
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>CONV3-512: [28x28x512]  memory:  28*28*512=400K   weights: (3*3*256)*512 = 1,179,648
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>CONV3-512: [28x28x512]  memory:  28*28*512=400K   weights: (3*3*512)*512 = 2,359,296
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>CONV3-512: [28x28x512]  memory:  28*28*512=400K   weights: (3*3*512)*512 = 2,359,296
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>POOL2: [14x14x512]  memory:  14*14*512=100K   weights: 0
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>CONV3-512: [14x14x512]  memory:  14*14*512=100K   weights: (3*3*512)*512 = 2,359,296
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>CONV3-512: [14x14x512]  memory:  14*14*512=100K   weights: (3*3*512)*512 = 2,359,296
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>CONV3-512: [14x14x512]  memory:  14*14*512=100K   weights: (3*3*512)*512 = 2,359,296
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>POOL2: [7x7x512]  memory:  7*7*512=25K  weights: 0
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>FC: [1x1x4096]  memory:  4096  weights: 7*7*512*4096 = 102,760,448
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>FC: [1x1x4096]  memory:  4096  weights: 4096*4096 = 16,777,216
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>FC: [1x1x1000]  memory:  1000 weights: 4096*1000 = 4,096,000
 </code></pre></div>
 <p><strong>TOTAL memory:</strong> 24M * 4 bytes ~= 93MB / image (only forward! ~*2 for bwd)</p>
 <p><strong>TOTAL params:</strong> 138M parameters</p>

@@ -2040,6 +2040,24 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Composition
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#graphs-level-sets-and-contour-plots" class="md-nav__link">
+    <span class="md-ellipsis">
+      Graphs, level sets, and contour plots
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2321,6 +2339,46 @@
 <p><strong>Example:</strong> Vector-valued functions can encode ways to manipulate vectors geometrically. For example, the function <span class="arithmatex">\(T : \mathbb{R}^2 \rightarrow \mathbb{R}^2\)</span> given by</p>
 <div class="arithmatex">\[T\left(\begin{pmatrix} x \\ y \end{pmatrix}\right) = \begin{pmatrix} -y \\ x \end{pmatrix}\]</div>
 <p>is a rotation.</p>
+<h2 id="composition">Composition</h2>
+<p>For functions <span class="arithmatex">\(f : \mathbb{R} \rightarrow \mathbb{R}\)</span> and <span class="arithmatex">\(g : \mathbb{R} \rightarrow \mathbb{R}\)</span>, the composition <span class="arithmatex">\(f \circ g : \mathbb{R} \rightarrow \mathbb{R}\)</span> is defined by <span class="arithmatex">\((f \circ g)(x) = f(g(x))\)</span>. As an illustration, the function <span class="arithmatex">\(h(x) = \sin(x^2)\)</span> is the composition <span class="arithmatex">\(f \circ g\)</span> for <span class="arithmatex">\(g(x) = x^2\)</span> and <span class="arithmatex">\(f(u) = \sin(u)\)</span>.</p>
+<p>Just as with functions <span class="arithmatex">\(\mathbb{R} \rightarrow \mathbb{R}\)</span>, we can form the composition of vector-valued functions.</p>
+<p><strong>Definition.</strong> If <span class="arithmatex">\(g : \mathbb{R}^n \rightarrow \mathbb{R}^p\)</span> and <span class="arithmatex">\(f : \mathbb{R}^p \rightarrow \mathbb{R}^m\)</span> are multivariable functions (note that <span class="arithmatex">\(g\)</span> has output belonging to <span class="arithmatex">\(\mathbb{R}^p\)</span> on which <span class="arithmatex">\(f\)</span> is applied), we can form a new composite function: take an input in <span class="arithmatex">\(\mathbb{R}^n\)</span>; first apply <span class="arithmatex">\(g\)</span> to it, and then apply <span class="arithmatex">\(f\)</span>:</p>
+<div class="arithmatex">\[\text{input } \mathbf{x} \in \mathbb{R}^n \xrightarrow{g} \mathbb{R}^p \xrightarrow{f} \mathbb{R}^m\]</div>
+<p>As a shorthand, we write this new function as <span class="arithmatex">\(f \circ g\)</span>; the symbol <span class="arithmatex">\(\circ\)</span> is read as "composed with." In symbols, the new function is given by</p>
+<div class="arithmatex">\[(f \circ g)(\mathbf{x}) = (f \text{ applied to } g(\mathbf{x})) = f(g(\mathbf{x}))\]</div>
+<p><strong>Example:</strong> Consider the functions <span class="arithmatex">\(f : \mathbb{R}^2 \rightarrow \mathbb{R}^2\)</span> and <span class="arithmatex">\(g : \mathbb{R}^2 \rightarrow \mathbb{R}^2\)</span> defined by</p>
+<div class="arithmatex">\[f(u, v) = (uv, u + v), \quad g(x, y) = (e^{xy}, x - y)\]</div>
+<p>So <span class="arithmatex">\(f_1(u, v) = uv\)</span>, <span class="arithmatex">\(f_2(u, v) = u + v\)</span>, <span class="arithmatex">\(g_1(x, y) = e^{xy}\)</span>, <span class="arithmatex">\(g_2(x, y) = x - y\)</span>. Then <span class="arithmatex">\(f \circ g : \mathbb{R}^2 \rightarrow \mathbb{R}^2\)</span> evaluated at <span class="arithmatex">\((x, y) \in \mathbb{R}^2\)</span> equals</p>
+<div class="arithmatex">\[(f \circ g)(x, y) = f(g(x, y)) = f(e^{xy}, x - y) = (e^{xy}(x - y), e^{xy} + x - y).\]</div>
+<p>In this example, the composite function <span class="arithmatex">\(g \circ f : \mathbb{R}^2 \rightarrow \mathbb{R}^2\)</span> also makes sense. Its value on input <span class="arithmatex">\((u, v) \in \mathbb{R}^2\)</span> is</p>
+<div class="arithmatex">\[(g \circ f)(u, v) = g(f(u, v)) = g(uv, u + v) = (e^{uv(u+v)}, uv - (u + v)) = (e^{u^2v+uv^2}, uv - u - v).\]</div>
+<p>Observe that in this case, <span class="arithmatex">\(f \circ g\)</span> and <span class="arithmatex">\(g \circ f\)</span> are very different functions (just look at the formulas we have computed for each). The order of composition matters (familiar for scalar functions: <span class="arithmatex">\(\sin(x^2) \neq \sin(x)^2\)</span> as functions).</p>
+<p><strong>Example:</strong> For the functions <span class="arithmatex">\(g : \mathbb{R} \rightarrow \mathbb{R}^3\)</span> and <span class="arithmatex">\(f : \mathbb{R}^3 \rightarrow \mathbb{R}^2\)</span> defined by</p>
+<div class="arithmatex">\[g(t) = (t, \cos(t), \sin(t)), \quad f(x, y, z) = (y, z),\]</div>
+<p><span class="arithmatex">\(g\)</span> can be visualized as the path of a particle moving on a helix on the cylinder <span class="arithmatex">\(y^2 + z^2 = 1\)</span> of radius 1 around the <span class="arithmatex">\(x\)</span>-axis, and <span class="arithmatex">\(f\)</span> is the projection onto the <span class="arithmatex">\(yz\)</span>-plane. Then <span class="arithmatex">\(f \circ g : \mathbb{R} \rightarrow \mathbb{R}^2\)</span> is given by</p>
+<div class="arithmatex">\[(f \circ g)(t) = f(t, \cos(t), \sin(t)) = (\cos(t), \sin(t)),\]</div>
+<p>the path of the particle's "shadow" in the <span class="arithmatex">\(yz\)</span>-plane moving counterclockwise around a circle of radius 1 in the <span class="arithmatex">\(yz\)</span>-plane.</p>
+<p><img alt="img" src="../helix.png" /></p>
+<h2 id="graphs-level-sets-and-contour-plots">Graphs, level sets, and contour plots</h2>
+<p>In our experience with functions <span class="arithmatex">\(f(x)\)</span> of one variable, it can be quite helpful to visualize the function graphically.</p>
+<p>Much as the graph of a 1-variable function <span class="arithmatex">\(f(x)\)</span> is the subset of <span class="arithmatex">\(\mathbb{R}^2\)</span> defined as</p>
+<div class="arithmatex">\[\text{Graph}(f) = \{(x, y) \in \mathbb{R}^2 : y = f(x)\},\]</div>
+<p>for an <span class="arithmatex">\(n\)</span>-variable function <span class="arithmatex">\(f : \mathbb{R}^n \rightarrow \mathbb{R}\)</span> its graph is a subset of <span class="arithmatex">\(\mathbb{R}^{n+1}\)</span> defined as follows:</p>
+<p><strong>Definition:</strong> The graph of <span class="arithmatex">\(f : \mathbb{R}^n \rightarrow \mathbb{R}\)</span> is the subset of <span class="arithmatex">\(\mathbb{R}^{n+1}\)</span> (not <span class="arithmatex">\(\mathbb{R}^n\)</span>!) defined as</p>
+<div class="arithmatex">\[\text{Graph}(f) = \{(x_1, \cdots, x_n, z) \in \mathbb{R}^{n+1} : z = f(x_1, \cdots, x_n)\}.\]</div>
+<p><img alt="img" src="../fxy.png" /></p>
+<p><strong>Example:</strong> Let's work out the graph of the function <span class="arithmatex">\(f(x, y) = \sqrt{1 - x^2 - y^2}\)</span>.</p>
+<p>We can only take the square root of a nonnegative number, so we require <span class="arithmatex">\(1 - x^2 - y^2 \geq 0\)</span>, or equivalently <span class="arithmatex">\(x^2 + y^2 \leq 1\)</span>.</p>
+<p>This is the disk <span class="arithmatex">\(D\)</span> centered at the origin in <span class="arithmatex">\(\mathbb{R}^2\)</span> with radius 1. The graph of <span class="arithmatex">\(f\)</span> is therefore</p>
+<div class="arithmatex">\[\text{Graph}(f) = \{(x, y, z) \in \mathbb{R}^3 : (x, y) \in D, z = f(x, y)\} = \{(x, y, \sqrt{1 - x^2 - y^2}) : (x, y) \in D\}\]</div>
+<p>Notice that since <span class="arithmatex">\(z = \sqrt{1 - x^2 - y^2}\)</span>, we then have <span class="arithmatex">\(x^2 + y^2 + z^2 = 1\)</span> with <span class="arithmatex">\(z \geq 0\)</span>. This graph is the upper hemisphere of the sphere in <span class="arithmatex">\(\mathbb{R}^3\)</span> with radius 1 centered at <span class="arithmatex">\((0, 0, 0)\)</span>.</p>
+<p><img alt="img" src="../hemi.png" /></p>
+<p>If you are hiking in a park and you get a “contour map” (or “contour plot”) of the terrain you are about to hike in, it may look something like below.</p>
+<p><img alt="img" src="../cont.png" /></p>
+<p>The curves on the left in the figure above indicate where the terrain is at a fixed level. For example, the curve that is labeled by 400 represents where the terrain has an altitude of 400 feet. The mathematical way to think about this is to consider the altitude function,</p>
+<div class="arithmatex">\[z = A(x, y).\]</div>
+<p>The set of points <span class="arithmatex">\((x, y)\)</span> where <span class="arithmatex">\(A(x, y) = 400\)</span> is the curve on the contour map labeled 400. The set of points <span class="arithmatex">\((x, y)\)</span> where <span class="arithmatex">\(A(x, y) = 600\)</span> is the curve on the contour map labeled 600. In general, the set of points <span class="arithmatex">\((x, y)\)</span> where <span class="arithmatex">\(A(x, y) = c\)</span> is called the <strong>level curve</strong> of the function <span class="arithmatex">\(A\)</span> at level <span class="arithmatex">\(c\)</span> (and is also called a <strong>level set</strong>, or sometimes even a <strong>contour line</strong> even though it generally looks nothing at all like a line).</p>
+<p>The contour map consisting of a collection of level curves is very helpful in visualizing the altitude function <span class="arithmatex">\(z = A(x, y)\)</span>, and gives us a good understanding of the terrain. Of course, the contour map doesn't show the level curves <span class="arithmatex">\(A(x, y) = c\)</span> for every <span class="arithmatex">\(c\)</span>; that would be impossible. Rather, the contour map shows these level curves for "enough" values of <span class="arithmatex">\(c\)</span> that one can get a sense of the hilliness of the terrain for practical purposes. Between level curves drawn for values <span class="arithmatex">\(c_1 &lt; c_2\)</span> are level curves for intermediate values of <span class="arithmatex">\(c\)</span> that are omitted for clarity.</p>
 
 
 

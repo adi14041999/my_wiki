@@ -436,6 +436,57 @@ In addition to max pooling, the pooling units can also perform other functions, 
 
 Neurons in a fully connected layer have full connections to all activations in the previous layer, as seen in regular Neural Networks. Their activations can hence be computed with a matrix multiplication followed by a bias offset.
 
+### Batch Normalization
+
+To understand the goal of batch normalization, it is important to first recognize that machine learning methods tend to perform better with input data consisting of uncorrelated features with zero mean and unit variance. When training a neural network, we can preprocess the data before feeding it to the network to explicitly decorrelate its features. This will ensure that the first layer of the network sees data that follows a nice distribution. However, even if we preprocess the input data, the activations at deeper layers of the network will likely no longer be decorrelated and will no longer have zero mean or unit variance, since they are output from earlier layers in the network. Even worse, during the training process the distribution of features at each layer of the network will shift as the weights of each layer are updated.
+
+The authors of [1] hypothesize that the shifting distribution of features inside deep neural networks may make training deep networks more difficult. To overcome this problem, they propose to insert into the network some layers that normalize batches. At training time, such a layer uses a minibatch of data to estimate the mean and standard deviation of each feature. These estimated means and standard deviations are then used to center and normalize the features of the minibatch. A running average of these means and standard deviations is kept during training, and at test time these running averages are used to center and normalize features.
+
+It is possible that this normalization strategy could reduce the representational power of the network, since it may sometimes be optimal for certain layers to have features that are not zero-mean or unit variance. To this end, the batch normalization layer includes learnable shift and scale parameters for each feature dimension.
+
+**Forward pass implementation:**
+
+```python
+def batchnorm_forward(x, gamma, beta, bn_param):
+    mode = bn_param["mode"]
+    eps = bn_param.get("eps", 1e-5)
+    momentum = bn_param.get("momentum", 0.9)
+
+    N, D = x.shape
+    running_mean = bn_param.get("running_mean", np.zeros(D, dtype=x.dtype))
+    running_var = bn_param.get("running_var", np.zeros(D, dtype=x.dtype))
+
+    out = None
+    if mode == "train":
+        """
+        In NumPy, axis=0 refers to the first dimension of an array. In a two-dimensional
+        array, this corresponds to the rows. When you specify axis=0 for a calculation,
+        you are telling NumPy to perform the operation across the rows, collapsing them
+        and producing a result for each column. Here, for each feature, we're computing
+        the mean and variance across the mini-batch.
+        Thus, sample_mean = [mean_feature_0, mean_feature_1, ...]
+        """
+        sample_mean = np.mean(x, axis=0)
+        sample_var = np.var(x, axis=0)
+        x_normalized = (x - sample_mean) / np.sqrt(sample_var + eps)
+        out = gamma * x_normalized + beta
+        running_mean = (1 - momentum) * running_mean + momentum * sample_mean
+        running_var = (1 - momentum) * running_var + momentum * sample_var
+    elif mode == "test":
+        x_normalized = (x - running_mean) / np.sqrt(running_var + eps)
+        out = gamma * x_normalized + beta
+    else:
+        raise ValueError('Invalid forward batchnorm mode "%s"' % mode)
+
+    bn_param["running_mean"] = running_mean
+    bn_param["running_var"] = running_var
+    
+    return out
+```
+
+[1] [Sergey Ioffe and Christian Szegedy, "Batch Normalization: Accelerating Deep Network Training by Reducing
+Internal Covariate Shift", ICML 2015.](https://arxiv.org/abs/1502.03167)
+
 ## ConvNet Architectures
 
 ### Layer Patterns
