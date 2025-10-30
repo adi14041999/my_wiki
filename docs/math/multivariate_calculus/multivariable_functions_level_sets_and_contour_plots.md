@@ -127,3 +127,9 @@ $$z = A(x, y).$$
 The set of points $(x, y)$ where $A(x, y) = 400$ is the curve on the contour map labeled 400. The set of points $(x, y)$ where $A(x, y) = 600$ is the curve on the contour map labeled 600. In general, the set of points $(x, y)$ where $A(x, y) = c$ is called the **level curve** of the function $A$ at level $c$ (and is also called a **level set**, or sometimes even a **contour line** even though it generally looks nothing at all like a line).
 
 The contour map consisting of a collection of level curves is very helpful in visualizing the altitude function $z = A(x, y)$, and gives us a good understanding of the terrain. Of course, the contour map doesn't show the level curves $A(x, y) = c$ for every $c$; that would be impossible. Rather, the contour map shows these level curves for "enough" values of $c$ that one can get a sense of the hilliness of the terrain for practical purposes. Between level curves drawn for values $c_1 < c_2$ are level curves for intermediate values of $c$ that are omitted for clarity.
+
+**Definition:** Let $f : \mathbb{R}^n \rightarrow \mathbb{R}$ be a function. For any $c \in \mathbb{R}$, the level set of $f$ at level $c$ is the set of points $(x_1, \ldots, x_n) \in \mathbb{R}^n$ for which $f(x_1, \ldots, x_n) = c$. It is also called the $c$-level set of $f$.
+
+If $f$ is a function $\mathbb{R}^2 \rightarrow \mathbb{R}$ of 2 variables then a contour plot of $f$ is a picture in $\mathbb{R}^2$ that depicts the level sets of $f$ for many different values of $c$ (often values with some common difference for "consecutive" level sets, such as a common difference of 10, or 4, or 1, or 0.2, etc).
+
+Note: The website [Desmos](https://www.desmos.com/calculator/yrl1lft9tv) plots level curves $g(x, y) = c$ for varying $c$. To explore surface graphs, try [CalcPlot3D](https://c3d.libretexts.org/CalcPlot3D/index.html) or [GeoGebra](https://www.geogebra.org/m/jmTFk4eg).
