@@ -133,3 +133,5 @@ The contour map consisting of a collection of level curves is very helpful in vi
 If $f$ is a function $\mathbb{R}^2 \rightarrow \mathbb{R}$ of 2 variables then a contour plot of $f$ is a picture in $\mathbb{R}^2$ that depicts the level sets of $f$ for many different values of $c$ (often values with some common difference for "consecutive" level sets, such as a common difference of 10, or 4, or 1, or 0.2, etc).
 
 Note: The website [Desmos](https://www.desmos.com/calculator/yrl1lft9tv) plots level curves $g(x, y) = c$ for varying $c$. To explore surface graphs, try [CalcPlot3D](https://c3d.libretexts.org/CalcPlot3D/index.html) or [GeoGebra](https://www.geogebra.org/m/jmTFk4eg).
+
+## Exercises
