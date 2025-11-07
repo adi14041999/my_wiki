@@ -135,3 +135,57 @@ If $f$ is a function $\mathbb{R}^2 \rightarrow \mathbb{R}$ of 2 variables then a
 Note: The website [Desmos](https://www.desmos.com/calculator/yrl1lft9tv) plots level curves $g(x, y) = c$ for varying $c$. To explore surface graphs, try [CalcPlot3D](https://c3d.libretexts.org/CalcPlot3D/index.html) or [GeoGebra](https://www.geogebra.org/m/jmTFk4eg).
 
 ## Exercises
+
+**1(a)** Consider the set $S = \{(x, y, z) \in \mathbb{R}^3 : x^3 + z^3 + 3y^2z^3 + 5xy = 0\}$.
+
+Give functions $f, h : \mathbb{R}^3 \rightarrow \mathbb{R}$ for which $S$ is a level set of both $f(x, y, z)$ and $h(x, y, z)$.
+
+**Solution:** One straightforward choice is to define $f$ directly from the equation defining $S$:
+
+$$f(x, y, z) = x^3 + z^3 + 3y^2z^3 + 5xy$$
+
+Then $S$ is the $0$-level set of $f$, since $S = \{(x, y, z) \in \mathbb{R}^3 : f(x, y, z) = 0\}$.
+
+For $h$, we can choose any function that has the same zero set. For example:
+
+$$h(x, y, z) = 2(x^3 + z^3 + 3y^2z^3 + 5xy) = 2f(x, y, z)$$
+
+Then $h(x, y, z) = 0$ if and only if $f(x, y, z) = 0$, so $S$ is also the $0$-level set of $h$.
+
+Alternatively, we could choose $h(x, y, z) = (x^3 + z^3 + 3y^2z^3 + 5xy)^2$, which also has $S$ as its $0$-level set, since a square equals zero if and only if the base equals zero.
+
+**1(b)** By solving for $z$ in terms of $x$ and $y$, give a function $g : \mathbb{R}^2 \rightarrow \mathbb{R}$ for which $S$ is the graph of $g$.
+
+**Solution:** Starting from the equation $x^3 + z^3 + 3y^2z^3 + 5xy = 0$, we can factor out $z^3$:
+
+$$x^3 + z^3(1 + 3y^2) + 5xy = 0$$
+
+Since $1 + 3y^2 \geq 1 > 0$ for all $y \in \mathbb{R}$, we can solve for $z^3$:
+
+$$z = \sqrt[3]{\frac{-x^3 - 5xy}{1 + 3y^2}}$$
+
+Therefore, we can define the function $g : \mathbb{R}^2 \rightarrow \mathbb{R}$ by:
+
+$$g(x, y) = \sqrt[3]{\frac{-x^3 - 5xy}{1 + 3y^2}}$$
+
+Then $S$ is the graph of $g$, since $S = \{(x, y, z) \in \mathbb{R}^3 : z = g(x, y)\}$.
+
+**2.** Consider the function $g : \mathbb{R} \rightarrow \mathbb{R}^2$ defined by $g(t) = \left(\frac{e^t + e^{-t}}{2}, \frac{e^t - e^{-t}}{2}\right)$.
+
+Every point in the output of $g$ lies on the hyperbola $x^2 - y^2 = 1$. Are all points in the hyperbola $\{(x, y) \in \mathbb{R}^2 : x^2 - y^2 = 1\}$ in the output of $g$? If "yes" then explain why, and if "no" then explain why a specific point on the hyperbola is not in the output.
+
+**Solution:** The answer is **no**. 
+
+First, let's verify that every point in the output of $g$ lies on the hyperbola. For $g(t) = \left(\frac{e^t + e^{-t}}{2}, \frac{e^t - e^{-t}}{2}\right)$, we have:
+
+$$x^2 - y^2 = \left(\frac{e^t + e^{-t}}{2}\right)^2 - \left(\frac{e^t - e^{-t}}{2}\right)^2 = \frac{(e^t + e^{-t})^2 - (e^t - e^{-t})^2}{4}$$
+
+Expanding the squares,
+
+$$= \frac{e^{2t} + 2 + e^{-2t} - (e^{2t} - 2 + e^{-2t})}{4} = \frac{4}{4} = 1$$
+
+So indeed, every point in the output of $g$ satisfies $x^2 - y^2 = 1$.
+
+However, not all points on the hyperbola are in the output of $g$.  
+
+A point that is not in the output is $(-\sqrt{2}, -1)$ on the hyperbola. We have $(-\sqrt{2})^2 - (-1)^2 = 1$, so it's on the hyperbola. But since $\frac{e^t + e^{-t}}{2} \geq 1$ for all $t$, we cannot have the first coordinate equal to $-\sqrt{2} < 0$. Therefore, $(-\sqrt{2}, -1)$ is not in the output of $g$. 

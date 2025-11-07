@@ -2392,6 +2392,33 @@
 <p>If <span class="arithmatex">\(f\)</span> is a function <span class="arithmatex">\(\mathbb{R}^2 \rightarrow \mathbb{R}\)</span> of 2 variables then a contour plot of <span class="arithmatex">\(f\)</span> is a picture in <span class="arithmatex">\(\mathbb{R}^2\)</span> that depicts the level sets of <span class="arithmatex">\(f\)</span> for many different values of <span class="arithmatex">\(c\)</span> (often values with some common difference for "consecutive" level sets, such as a common difference of 10, or 4, or 1, or 0.2, etc).</p>
 <p>Note: The website <a href="https://www.desmos.com/calculator/yrl1lft9tv">Desmos</a> plots level curves <span class="arithmatex">\(g(x, y) = c\)</span> for varying <span class="arithmatex">\(c\)</span>. To explore surface graphs, try <a href="https://c3d.libretexts.org/CalcPlot3D/index.html">CalcPlot3D</a> or <a href="https://www.geogebra.org/m/jmTFk4eg">GeoGebra</a>.</p>
 <h2 id="exercises">Exercises</h2>
+<p><strong>1(a)</strong> Consider the set <span class="arithmatex">\(S = \{(x, y, z) \in \mathbb{R}^3 : x^3 + z^3 + 3y^2z^3 + 5xy = 0\}\)</span>.</p>
+<p>Give functions <span class="arithmatex">\(f, h : \mathbb{R}^3 \rightarrow \mathbb{R}\)</span> for which <span class="arithmatex">\(S\)</span> is a level set of both <span class="arithmatex">\(f(x, y, z)\)</span> and <span class="arithmatex">\(h(x, y, z)\)</span>.</p>
+<p><strong>Solution:</strong> One straightforward choice is to define <span class="arithmatex">\(f\)</span> directly from the equation defining <span class="arithmatex">\(S\)</span>:</p>
+<div class="arithmatex">\[f(x, y, z) = x^3 + z^3 + 3y^2z^3 + 5xy\]</div>
+<p>Then <span class="arithmatex">\(S\)</span> is the <span class="arithmatex">\(0\)</span>-level set of <span class="arithmatex">\(f\)</span>, since <span class="arithmatex">\(S = \{(x, y, z) \in \mathbb{R}^3 : f(x, y, z) = 0\}\)</span>.</p>
+<p>For <span class="arithmatex">\(h\)</span>, we can choose any function that has the same zero set. For example:</p>
+<div class="arithmatex">\[h(x, y, z) = 2(x^3 + z^3 + 3y^2z^3 + 5xy) = 2f(x, y, z)\]</div>
+<p>Then <span class="arithmatex">\(h(x, y, z) = 0\)</span> if and only if <span class="arithmatex">\(f(x, y, z) = 0\)</span>, so <span class="arithmatex">\(S\)</span> is also the <span class="arithmatex">\(0\)</span>-level set of <span class="arithmatex">\(h\)</span>.</p>
+<p>Alternatively, we could choose <span class="arithmatex">\(h(x, y, z) = (x^3 + z^3 + 3y^2z^3 + 5xy)^2\)</span>, which also has <span class="arithmatex">\(S\)</span> as its <span class="arithmatex">\(0\)</span>-level set, since a square equals zero if and only if the base equals zero.</p>
+<p><strong>1(b)</strong> By solving for <span class="arithmatex">\(z\)</span> in terms of <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span>, give a function <span class="arithmatex">\(g : \mathbb{R}^2 \rightarrow \mathbb{R}\)</span> for which <span class="arithmatex">\(S\)</span> is the graph of <span class="arithmatex">\(g\)</span>.</p>
+<p><strong>Solution:</strong> Starting from the equation <span class="arithmatex">\(x^3 + z^3 + 3y^2z^3 + 5xy = 0\)</span>, we can factor out <span class="arithmatex">\(z^3\)</span>:</p>
+<div class="arithmatex">\[x^3 + z^3(1 + 3y^2) + 5xy = 0\]</div>
+<p>Since <span class="arithmatex">\(1 + 3y^2 \geq 1 &gt; 0\)</span> for all <span class="arithmatex">\(y \in \mathbb{R}\)</span>, we can solve for <span class="arithmatex">\(z^3\)</span>:</p>
+<div class="arithmatex">\[z = \sqrt[3]{\frac{-x^3 - 5xy}{1 + 3y^2}}\]</div>
+<p>Therefore, we can define the function <span class="arithmatex">\(g : \mathbb{R}^2 \rightarrow \mathbb{R}\)</span> by:</p>
+<div class="arithmatex">\[g(x, y) = \sqrt[3]{\frac{-x^3 - 5xy}{1 + 3y^2}}\]</div>
+<p>Then <span class="arithmatex">\(S\)</span> is the graph of <span class="arithmatex">\(g\)</span>, since <span class="arithmatex">\(S = \{(x, y, z) \in \mathbb{R}^3 : z = g(x, y)\}\)</span>.</p>
+<p><strong>2.</strong> Consider the function <span class="arithmatex">\(g : \mathbb{R} \rightarrow \mathbb{R}^2\)</span> defined by <span class="arithmatex">\(g(t) = \left(\frac{e^t + e^{-t}}{2}, \frac{e^t - e^{-t}}{2}\right)\)</span>.</p>
+<p>Every point in the output of <span class="arithmatex">\(g\)</span> lies on the hyperbola <span class="arithmatex">\(x^2 - y^2 = 1\)</span>. Are all points in the hyperbola <span class="arithmatex">\(\{(x, y) \in \mathbb{R}^2 : x^2 - y^2 = 1\}\)</span> in the output of <span class="arithmatex">\(g\)</span>? If "yes" then explain why, and if "no" then explain why a specific point on the hyperbola is not in the output.</p>
+<p><strong>Solution:</strong> The answer is <strong>no</strong>. </p>
+<p>First, let's verify that every point in the output of <span class="arithmatex">\(g\)</span> lies on the hyperbola. For <span class="arithmatex">\(g(t) = \left(\frac{e^t + e^{-t}}{2}, \frac{e^t - e^{-t}}{2}\right)\)</span>, we have:</p>
+<div class="arithmatex">\[x^2 - y^2 = \left(\frac{e^t + e^{-t}}{2}\right)^2 - \left(\frac{e^t - e^{-t}}{2}\right)^2 = \frac{(e^t + e^{-t})^2 - (e^t - e^{-t})^2}{4}\]</div>
+<p>Expanding the squares,</p>
+<div class="arithmatex">\[= \frac{e^{2t} + 2 + e^{-2t} - (e^{2t} - 2 + e^{-2t})}{4} = \frac{4}{4} = 1\]</div>
+<p>So indeed, every point in the output of <span class="arithmatex">\(g\)</span> satisfies <span class="arithmatex">\(x^2 - y^2 = 1\)</span>.</p>
+<p>However, not all points on the hyperbola are in the output of <span class="arithmatex">\(g\)</span>.  </p>
+<p>A point that is not in the output is <span class="arithmatex">\((-\sqrt{2}, -1)\)</span> on the hyperbola. We have <span class="arithmatex">\((-\sqrt{2})^2 - (-1)^2 = 1\)</span>, so it's on the hyperbola. But since <span class="arithmatex">\(\frac{e^t + e^{-t}}{2} \geq 1\)</span> for all <span class="arithmatex">\(t\)</span>, we cannot have the first coordinate equal to <span class="arithmatex">\(-\sqrt{2} &lt; 0\)</span>. Therefore, <span class="arithmatex">\((-\sqrt{2}, -1)\)</span> is not in the output of <span class="arithmatex">\(g\)</span>. </p>
 
 
 
