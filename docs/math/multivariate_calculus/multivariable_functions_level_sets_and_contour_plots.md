@@ -136,7 +136,7 @@ Note: The website [Desmos](https://www.desmos.com/calculator/yrl1lft9tv) plots l
 
 ## Exercises
 
-**1(a)** Consider the set $S = \{(x, y, z) \in \mathbb{R}^3 : x^3 + z^3 + 3y^2z^3 + 5xy = 0\}$.
+**1(a).** Consider the set $S = \{(x, y, z) \in \mathbb{R}^3 : x^3 + z^3 + 3y^2z^3 + 5xy = 0\}$.
 
 Give functions $f, h : \mathbb{R}^3 \rightarrow \mathbb{R}$ for which $S$ is a level set of both $f(x, y, z)$ and $h(x, y, z)$.
 
@@ -154,7 +154,7 @@ Then $h(x, y, z) = 0$ if and only if $f(x, y, z) = 0$, so $S$ is also the $0$-le
 
 Alternatively, we could choose $h(x, y, z) = (x^3 + z^3 + 3y^2z^3 + 5xy)^2$, which also has $S$ as its $0$-level set, since a square equals zero if and only if the base equals zero.
 
-**1(b)** By solving for $z$ in terms of $x$ and $y$, give a function $g : \mathbb{R}^2 \rightarrow \mathbb{R}$ for which $S$ is the graph of $g$.
+**1(b).** By solving for $z$ in terms of $x$ and $y$, give a function $g : \mathbb{R}^2 \rightarrow \mathbb{R}$ for which $S$ is the graph of $g$.
 
 **Solution:** Starting from the equation $x^3 + z^3 + 3y^2z^3 + 5xy = 0$, we can factor out $z^3$:
 
@@ -188,4 +188,48 @@ So indeed, every point in the output of $g$ satisfies $x^2 - y^2 = 1$.
 
 However, not all points on the hyperbola are in the output of $g$.  
 
-A point that is not in the output is $(-\sqrt{2}, -1)$ on the hyperbola. We have $(-\sqrt{2})^2 - (-1)^2 = 1$, so it's on the hyperbola. But since $\frac{e^t + e^{-t}}{2} \geq 1$ for all $t$, we cannot have the first coordinate equal to $-\sqrt{2} < 0$. Therefore, $(-\sqrt{2}, -1)$ is not in the output of $g$. 
+A point that is not in the output is $(-\sqrt{2}, -1)$ on the hyperbola. We have $(-\sqrt{2})^2 - (-1)^2 = 1$, so it's on the hyperbola. But since $\frac{e^t + e^{-t}}{2} \geq 1$ for all $t$, we cannot have the first coordinate equal to $-\sqrt{2} < 0$. Therefore, $(-\sqrt{2}, -1)$ is not in the output of $g$.
+
+**3(a).** Let $S$ be a level set $\{(x, y, z) \in \mathbb{R}^3 : f(x, y, z) = c\}$ in $\mathbb{R}^3$. If $S$ is also the graph $\{(x, y, z) \in \mathbb{R}^3 : (x, y) \in D, z = g(x, y)\}$ of a function $g : D \rightarrow \mathbb{R}$ on some region $D$ in $\mathbb{R}^2$, explain why $S$ meets each vertical line $\{(a, b, t) : t \in \mathbb{R}\}$ (for $(a, b) \in \mathbb{R}^2$) in at most one point. A **vertical line** in $\mathbb{R}^3$ is a line parallel to the $z$-axis. For a fixed point $(a, b) \in \mathbb{R}^2$, the vertical line through $(a, b)$ is the set $\{(a, b, t) : t \in \mathbb{R}\}$— all points with the same $x$ and $y$ coordinates $(a, b)$, but with $z$ (denoted here as $t$) varying over all real numbers.
+
+**Solution:** Since $S$ is the graph of the function $g : D \rightarrow \mathbb{R}$, we have $S = \{(x, y, z) \in \mathbb{R}^3 : (x, y) \in D, z = g(x, y)\}$.
+
+Consider a vertical line $\{(a, b, t) : t \in \mathbb{R}\}$ for some fixed $(a, b) \in \mathbb{R}^2$. 
+
+If $(a, b) \notin D$, then no point on this vertical line is in $S$ (since $S$ only contains points whose first two coordinates $(x, y)$ are in $D$). So the intersection is empty (zero points).
+
+If $(a, b) \in D$, then by the definition of $S$ as a graph, there is exactly one point in $S$ with first two coordinates $(a, b)$, namely the point $(a, b, g(a, b))$. This point lies on the vertical line $\{(a, b, t) : t \in \mathbb{R}\}$ (specifically when $t = g(a, b)$). 
+
+Since $g$ is a function, it assigns exactly one value $g(a, b)$ to each input $(a, b) \in D$. Therefore, there cannot be two different points in $S$ with the same first two coordinates $(a, b)$, which means the vertical line can intersect $S$ in at most one point.
+
+**3(b).** For the sphere $S = \{(x, y, z) \in \mathbb{R}^3 : x^2 + y^2 + z^2 = 4\}$ of radius 2 centered at the origin, explain both algebraically and geometrically why $S$ violates the "vertical line test" in (a), so $S$ is not the graph of a function.
+
+**Solution:** 
+
+For a point $(a, b, z)$ on a vertical line to also be on the sphere $S$, we need:
+
+$$a^2 + b^2 + z^2 = 4$$
+
+Solving for $z$:
+
+$$z^2 = 4 - a^2 - b^2$$
+
+There are two solutions:
+
+$$z = \sqrt{4 - a^2 - b^2} \quad \text{and} \quad z = -\sqrt{4 - a^2 - b^2}$$
+
+This means the vertical line intersects the sphere in two distinct points: $(a, b, \sqrt{4 - a^2 - b^2})$ and $(a, b, -\sqrt{4 - a^2 - b^2})$.
+
+Since the vertical line intersects $S$ in more than one point, the sphere violates the "vertical line test" from part (a). Therefore, $S$ cannot be the graph of a function $g(x, y)$.
+
+The sphere $x^2 + y^2 + z^2 = 4$ is a closed surface centered at the origin. Consider any vertical line (parallel to the $z$-axis) that passes through a point $(a, b)$ inside the sphere where $a^2 + b^2 < 4$. 
+
+Geometrically, this vertical line will pierce through the sphere, intersecting it at two points. Specifically, the line intersects the sphere at the point on the "lower" hemisphere (where $z < 0$). And the line intersects the sphere at the point on the "upper" hemisphere (where $z > 0$). This violates the requirement that a graph of a function must intersect each vertical line in at most one point.
+
+**Note: Contrast with the upper hemisphere:** Now consider the **upper hemisphere** $S_{\text{upper}} = \{(x, y, z) \in \mathbb{R}^3 : x^2 + y^2 + z^2 = 4, z \geq 0\}$.
+
+For a vertical line through a point $(a, b)$ where $a^2 + b^2 < 4$, the equation $a^2 + b^2 + z^2 = 4$ still gives two solutions: $z = \sqrt{4 - a^2 - b^2}$ and $z = -\sqrt{4 - a^2 - b^2}$. However, since $S_{\text{upper}}$ only includes points with $z \geq 0$, only the positive solution $z = \sqrt{4 - a^2 - b^2}$ is in $S_{\text{upper}}$.
+
+Therefore, each vertical line through a point $(a, b)$ with $a^2 + b^2 < 4$ intersects $S_{\text{upper}}$ in exactly **one** point: $(a, b, \sqrt{4 - a^2 - b^2})$. This satisfies the "vertical line test" from part (a).
+
+Indeed, the upper hemisphere $S_{\text{upper}}$ **is** the graph of the function $g : D \rightarrow \mathbb{R}$ defined by $g(x, y) = \sqrt{4 - x^2 - y^2}$, where $D = \{(x, y) \in \mathbb{R}^2 : x^2 + y^2 \leq 4\}$. For a vertical line through a point $(a, b)$ where $a^2 + b^2 > 4$, the equation $a^2 + b^2 + z^2 = 4$ would require $z^2 = 4 - a^2 - b^2 < 0$, which has no real solutions. Therefore, such a vertical line does not intersect $S_{\text{upper}}$ at all (zero points), which also satisfies the "at most one point" requirement.
