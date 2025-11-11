@@ -134,6 +134,10 @@ If $f$ is a function $\mathbb{R}^2 \rightarrow \mathbb{R}$ of 2 variables then a
 
 Note: The website [Desmos](https://www.desmos.com/calculator/yrl1lft9tv) plots level curves $g(x, y) = c$ for varying $c$. To explore surface graphs, try [CalcPlot3D](https://c3d.libretexts.org/CalcPlot3D/index.html) or [GeoGebra](https://www.geogebra.org/m/jmTFk4eg).
 
+For example, here is a surface graph drawn using [GeoGebra](https://www.geogebra.org/m/jmTFk4eg) of the $f(x, y) = 2xy$.
+
+![2xy](2xy.gif)
+
 ## Exercises
 
 **1(a).** Consider the set $S = \{(x, y, z) \in \mathbb{R}^3 : x^3 + z^3 + 3y^2z^3 + 5xy = 0\}$.
