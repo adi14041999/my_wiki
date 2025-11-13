@@ -1113,9 +1113,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#vanilla-rnn-gradient-flow-vanishing-gradient-problem" class="md-nav__link">
+  <a href="#vanilla-rnn-gradient-flow-and-the-vanishing-gradient-problem" class="md-nav__link">
     <span class="md-ellipsis">
-      Vanilla RNN Gradient Flow &amp; Vanishing Gradient Problem
+      Vanilla RNN Gradient Flow and the Vanishing Gradient Problem
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lstm-formulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      LSTM Formulation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#does-lstm-solve-the-vanishing-gradient-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Does LSTM solve the vanishing gradient problem?
     </span>
   </a>
   
@@ -2341,7 +2359,37 @@
 
 <h1 id="long-short-term-memory-lstm-networks">Long-Short Term Memory (LSTM) Networks</h1>
 <p>In practice, we actually will rarely ever use the Vanilla RNN formula. Instead, we will use what we call a Long-Short Term Memory (LSTM) RNN.</p>
-<h2 id="vanilla-rnn-gradient-flow-vanishing-gradient-problem">Vanilla RNN Gradient Flow &amp; Vanishing Gradient Problem</h2>
+<h2 id="vanilla-rnn-gradient-flow-and-the-vanishing-gradient-problem">Vanilla RNN Gradient Flow and the Vanishing Gradient Problem</h2>
+<p>An RNN block takes in input <span class="arithmatex">\(x_t\)</span> and previous hidden representation <span class="arithmatex">\(h_{t-1}\)</span> and learns a transformation, which is then passed through <span class="arithmatex">\(\tanh\)</span> to produce the hidden representation <span class="arithmatex">\(h_t\)</span> for the next time step and output <span class="arithmatex">\(y_t\)</span> as shown in the equation below.</p>
+<div class="arithmatex">\[h_t = \tanh(W_{hh}h_{t-1} + W_{xh}x_t)\]</div>
+<p>The partial derivative of <span class="arithmatex">\(h_t\)</span> with respect to <span class="arithmatex">\(h_{t-1}\)</span> is written as:</p>
+<div class="arithmatex">\[\frac{\partial h_t}{\partial h_{t-1}} = \tanh'(W_{hh}h_{t-1} + W_{xh}x_t)W_{hh}\]</div>
+<p>We update the weights <span class="arithmatex">\(W_{hh}\)</span> by getting the derivative of the loss at the very last time step <span class="arithmatex">\(L_t\)</span> with respect to <span class="arithmatex">\(W_{hh}\)</span>:</p>
+<div class="arithmatex">\[\frac{\partial L_t}{\partial W_{hh}} = \frac{\partial L_t}{\partial h_t}\frac{\partial h_t}{\partial h_{t-1}}\ldots\frac{\partial h_1}{\partial W_{hh}} = \frac{\partial L_t}{\partial h_t}\left(\prod_{t=2}^{T}\frac{\partial h_t}{\partial h_{t-1}}\right)\frac{\partial h_1}{\partial W_{hh}} = \frac{\partial L_t}{\partial h_t}\left(\prod_{t=2}^{T}\tanh'(W_{hh}h_{t-1} + W_{xh}x_t)\right)W_{hh}^{T-1}\frac{\partial h_1}{\partial W_{hh}}\]</div>
+<p><strong>Vanishing gradient:</strong> We see that <span class="arithmatex">\(\tanh'(W_{hh}h_{t-1} + W_{xh}x_t)\)</span> will almost always be less than 1 because <span class="arithmatex">\(\tanh\)</span> is always between negative one and one. Thus, as <span class="arithmatex">\(t\)</span> gets larger (i.e., longer timesteps), the gradient <span class="arithmatex">\(\frac{\partial L_t}{\partial W}\)</span> will decrease in value and get close to zero. This will lead to the vanishing gradient problem, where gradients at future time steps rarely impact gradients at the very first time step. This is problematic when we model long sequences of inputs because the updates will be extremely slow.</p>
+<p><strong>Removing non-linearity (<span class="arithmatex">\(\tanh\)</span>):</strong> If we remove non-linearity (<span class="arithmatex">\(\tanh\)</span>) to solve the vanishing gradient problem, then we will be left with:</p>
+<div class="arithmatex">\[\frac{\partial L_t}{\partial W} = \frac{\partial L_t}{\partial h_t}\left(\prod_{t=2}^{T}W_{hh}\right)\frac{\partial h_1}{\partial W} = \frac{\partial L_t}{\partial h_t}W_{hh}^{T-1}\frac{\partial h_1}{\partial W}\]</div>
+<p>The <strong>singular values</strong> of a matrix tell us how much the matrix can stretch or compress vectors. For a matrix <span class="arithmatex">\(W_{hh}\)</span>, the <strong>largest singular value</strong> (also called the spectral norm) is the maximum factor by which <span class="arithmatex">\(W_{hh}\)</span> can stretch any vector. Mathematically, if <span class="arithmatex">\(\sigma_{\max}\)</span> is the largest singular value of <span class="arithmatex">\(W_{hh}\)</span>, then for any vector <span class="arithmatex">\(\mathbf{v}\)</span>, we have <span class="arithmatex">\(\|W_{hh}\mathbf{v}\| \leq \sigma_{\max}\|\mathbf{v}\|\)</span>. When we repeatedly multiply by <span class="arithmatex">\(W_{hh}\)</span> (as in <span class="arithmatex">\(W_{hh}^{T-1}\)</span>), the effect depends on whether <span class="arithmatex">\(\sigma_{\max} &gt; 1\)</span>, <span class="arithmatex">\(\sigma_{\max} = 1\)</span>, or <span class="arithmatex">\(\sigma_{\max} &lt; 1\)</span>.</p>
+<p>If the largest singular value of <span class="arithmatex">\(W_{hh}\)</span> is greater than 1, then the gradients will blow up and the model will get very large gradients coming back from future time steps. Exploding gradient often leads to getting gradients that are NaNs. If the largest singular value of <span class="arithmatex">\(W_{hh}\)</span> is smaller than 1, then we will have the vanishing gradient problem as mentioned above.</p>
+<h2 id="lstm-formulation">LSTM Formulation</h2>
+<p>The following is the precise formulation for LSTM. On step <span class="arithmatex">\(t\)</span>, there is a hidden state <span class="arithmatex">\(h_t\)</span> and a cell state <span class="arithmatex">\(c_t\)</span>. Both <span class="arithmatex">\(h_t\)</span> and <span class="arithmatex">\(c_t\)</span> are vectors of size <span class="arithmatex">\(n\)</span>. One distinction of LSTM from Vanilla RNN is that LSTM has this additional <span class="arithmatex">\(c_t\)</span> cell state, and intuitively it can be thought of as <span class="arithmatex">\(c_t\)</span> stores long-term information. LSTM can read, erase, and write information to and from this <span class="arithmatex">\(c_t\)</span> cell. The way LSTM alters <span class="arithmatex">\(c_t\)</span> cell is through three special gates: <span class="arithmatex">\(i\)</span>, <span class="arithmatex">\(f\)</span>, <span class="arithmatex">\(o\)</span> which correspond to "input", "forget", and "output" gates. The values of these gates vary from closed (0) to open (1). All <span class="arithmatex">\(i\)</span>, <span class="arithmatex">\(f\)</span>, <span class="arithmatex">\(o\)</span> gates are vectors of size <span class="arithmatex">\(n\)</span>.</p>
+<p>At every timestep we have an input vector <span class="arithmatex">\(x_t\)</span>, previous hidden state <span class="arithmatex">\(h_{t-1}\)</span>, previous cell state <span class="arithmatex">\(c_{t-1}\)</span>, and LSTM computes the next hidden state <span class="arithmatex">\(h_t\)</span> and next cell state <span class="arithmatex">\(c_t\)</span> at timestep <span class="arithmatex">\(t\)</span> as follows:</p>
+<div class="arithmatex">\[f_t = \sigma(W_{hf}h_{t-1} + W_{xf}x_t)\]</div>
+<div class="arithmatex">\[i_t = \sigma(W_{hi}h_{t-1} + W_{xi}x_t)\]</div>
+<div class="arithmatex">\[o_t = \sigma(W_{ho}h_{t-1} + W_{xo}x_t)\]</div>
+<div class="arithmatex">\[g_t = \tanh(W_{hg}h_{t-1} + W_{xg}x_t)\]</div>
+<p><img alt="img" src="../lstm_mformula_1.png" /></p>
+<p><img alt="img" src="../lstm_mformula_2.png" /></p>
+<p>where <span class="arithmatex">\(\odot\)</span> is an element-wise Hadamard product. <span class="arithmatex">\(g_t\)</span> in the above formulas is an intermediary calculation cache that's later used with <span class="arithmatex">\(o\)</span> gate in the above formulas.</p>
+<p>Since all <span class="arithmatex">\(f\)</span>, <span class="arithmatex">\(i\)</span>, <span class="arithmatex">\(o\)</span> gate vector values range from 0 to 1, because they were squashed by sigmoid function <span class="arithmatex">\(\sigma\)</span>, when multiplied element-wise, we can see that:</p>
+<p><strong>Forget Gate:</strong> Forget gate <span class="arithmatex">\(f_t\)</span> at time step <span class="arithmatex">\(t\)</span> controls how much information needs to be "removed" from the previous cell state <span class="arithmatex">\(c_{t-1}\)</span>. This forget gate learns to erase hidden representations from the previous time steps, which is why LSTM will have two hidden representations <span class="arithmatex">\(h_t\)</span> and cell state <span class="arithmatex">\(c_t\)</span>. This <span class="arithmatex">\(c_t\)</span> will get propagated over time and learn whether to forget the previous cell state or not.</p>
+<p><strong>Input Gate:</strong> Input gate <span class="arithmatex">\(i_t\)</span> at time step <span class="arithmatex">\(t\)</span> controls how much information needs to be "added" to the next cell state <span class="arithmatex">\(c_t\)</span> from previous hidden state <span class="arithmatex">\(h_{t-1}\)</span> and input <span class="arithmatex">\(x_t\)</span>. Instead of <span class="arithmatex">\(\tanh\)</span>, the "input" gate <span class="arithmatex">\(i\)</span> has a sigmoid function, which converts inputs to values between zero and one. This serves as a switch, where values are either almost always zero or almost always one. This "input" gate decides whether to take the RNN output that is produced by the "gate" gate <span class="arithmatex">\(g\)</span> and multiplies the output with input gate <span class="arithmatex">\(i\)</span>.</p>
+<p><strong>Output Gate:</strong> Output gate <span class="arithmatex">\(o_t\)</span> at time step <span class="arithmatex">\(t\)</span> controls how much information needs to be "shown" as output in the current hidden state <span class="arithmatex">\(h_t\)</span>.</p>
+<p>The key idea of LSTM is the cell state, the horizontal line running through between recurrent timesteps. You can imagine the cell state to be some kind of highway of information passing through straight down the entire chain, with only some minor linear interactions. Thus, even when there is a bunch of LSTMs stacked together, we can get an uninterrupted gradient flow where the gradients flow back through cell states instead of hidden states <span class="arithmatex">\(h\)</span> without vanishing in every time step. This greatly fixes the gradient vanishing/exploding problem we have outlined above.</p>
+<p><img alt="img" src="../lstm_highway.png" /></p>
+<h2 id="does-lstm-solve-the-vanishing-gradient-problem">Does LSTM solve the vanishing gradient problem?</h2>
+<p>LSTM architecture makes it easier for the RNN to preserve information over many recurrent time steps. For example, if the forget gate is set to 1, and the input gate is set to 0, then the information of the cell state will always be preserved over many recurrent time steps. For a Vanilla RNN, in contrast, it's much harder to preserve information in hidden states in recurrent time steps by just making use of a single weight matrix.</p>
+<p>LSTMs do not guarantee that there is no vanishing/exploding gradient problems, but it does provide an easier way for the model to learn long-distance dependencies.</p>
 
 
 
