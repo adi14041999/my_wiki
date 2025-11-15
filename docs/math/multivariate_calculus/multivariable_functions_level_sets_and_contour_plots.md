@@ -209,9 +209,7 @@ Since $g$ is a function, it assigns exactly one value $g(a, b)$ to each input $(
 
 **3(b).** For the sphere $S = \{(x, y, z) \in \mathbb{R}^3 : x^2 + y^2 + z^2 = 4\}$ of radius 2 centered at the origin, explain both algebraically and geometrically why $S$ violates the "vertical line test" in (a), so $S$ is not the graph of a function.
 
-**Solution:** 
-
-For a point $(a, b, z)$ on a vertical line to also be on the sphere $S$, we need:
+**Solution:** For a point $(a, b, z)$ on a vertical line to also be on the sphere $S$, we need:
 
 $$a^2 + b^2 + z^2 = 4$$
 
@@ -238,3 +236,41 @@ For a vertical line through a point $(a, b)$ where $a^2 + b^2 < 4$, the equation
 Therefore, each vertical line through a point $(a, b)$ with $a^2 + b^2 < 4$ intersects $S_{\text{upper}}$ in exactly **one** point: $(a, b, \sqrt{4 - a^2 - b^2})$. This satisfies the "vertical line test" from part (a).
 
 Indeed, the upper hemisphere $S_{\text{upper}}$ **is** the graph of the function $g : D \rightarrow \mathbb{R}$ defined by $g(x, y) = \sqrt{4 - x^2 - y^2}$, where $D = \{(x, y) \in \mathbb{R}^2 : x^2 + y^2 \leq 4\}$. For a vertical line through a point $(a, b)$ where $a^2 + b^2 > 4$, the equation $a^2 + b^2 + z^2 = 4$ would require $z^2 = 4 - a^2 - b^2 < 0$, which has no real solutions. Therefore, such a vertical line does not intersect $S_{\text{upper}}$ at all (zero points), which also satisfies the "at most one point" requirement.
+
+**4.** Consider the function $g(v, w) = v^2 - w^2$. For $c > 0$, check that $g(v/\sqrt{c}, w/\sqrt{c}) = 1$ precisely when $g(v, w) = c$. Explain why the level set $g(v, w) = c$ is the same as scaling up the level set $g(v, w) = 1$ by the factor $\sqrt{c}$.
+
+**Solution:** First, we verify that $g(v/\sqrt{c}, w/\sqrt{c}) = 1$ precisely when $g(v, w) = c$:
+
+$$g\left(\frac{v}{\sqrt{c}}, \frac{w}{\sqrt{c}}\right) = \left(\frac{v}{\sqrt{c}}\right)^2 - \left(\frac{w}{\sqrt{c}}\right)^2 = \frac{v^2}{c} - \frac{w^2}{c} = \frac{v^2 - w^2}{c} = \frac{g(v, w)}{c}$$
+
+Therefore, $g(v/\sqrt{c}, w/\sqrt{c}) = 1$ if and only if $\frac{g(v, w)}{c} = 1$, which is equivalent to $g(v, w) = c$.
+
+Now, suppose $(v, w)$ is a point on the level set $g(v, w) = c$. Then by the above, we have $g(v/\sqrt{c}, w/\sqrt{c}) = 1$, which means $(v/\sqrt{c}, w/\sqrt{c})$ is a point on the level set $g(v, w) = 1$.
+
+Conversely, if $(p, q)$ is a point on the level set $g(p, q) = 1$, then $g(\sqrt{c} \cdot p, \sqrt{c} \cdot q) = c$, which means $(\sqrt{c} \cdot p, \sqrt{c} \cdot q)$ is a point on the level set $g(v, w) = c$.
+
+The transformation $(p, q) \mapsto (\sqrt{c} \cdot p, \sqrt{c} \cdot q)$ is precisely scaling by the factor $\sqrt{c}$ in both coordinates. Therefore, the level set $g(v, w) = c$ is obtained by scaling the level set $g(v, w) = 1$ by the factor $\sqrt{c}$.
+
+**5.** Prove that the graph of $f(x, y) = x^2 - y$ is the 2-level set of some function $F(x, y, z)$.
+
+**Solution:** The graph of $f(x, y) = x^2 - y$ is the set:
+
+$$\text{Graph}(f) = \{(x, y, z) \in \mathbb{R}^3 : z = x^2 - y\}$$
+
+Define the function $F : \mathbb{R}^3 \rightarrow \mathbb{R}$ by:
+
+$$F(x, y, z) = z - (x^2 - y) + 2 = z - x^2 + y + 2$$
+
+Then $F(x, y, z) = 2$ if and only if:
+
+$$z - x^2 + y + 2 = 2$$
+
+$$z - x^2 + y = 0$$
+
+$$z = x^2 - y$$
+
+Therefore, the 2-level set of $F$ is:
+
+$$\{(x, y, z) \in \mathbb{R}^3 : F(x, y, z) = 2\} = \{(x, y, z) \in \mathbb{R}^3 : z = x^2 - y\} = \text{Graph}(f)$$
+
+**Note:** In general, the graph of any function $f : \mathbb{R}^n \rightarrow \mathbb{R}$ can be expressed as a level set. For the graph $\{(x_1, \ldots, x_n, z) : z = f(x_1, \ldots, x_n)\}$, we can define $F(x_1, \ldots, x_n, z) = z - f(x_1, \ldots, x_n) + c$ for any constant $c$, and the graph will be the $c$-level set of $F : \mathbb{R}^{n+1} \rightarrow \mathbb{R}$.
