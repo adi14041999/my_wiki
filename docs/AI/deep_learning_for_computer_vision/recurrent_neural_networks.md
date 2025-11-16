@@ -1,5 +1,56 @@
 # Recurrent Neural Networks
 
+## A friendly introduction
+
+![img](fi0.png)
+![img](fi1.png)
+![img](fi2.png)
+![img](fi3.png)
+![img](fi4.png)
+![img](fi5.png)
+![img](fi6.png)
+![img](fi7.png)
+![img](fi8.png)
+![img](fi9.png)
+![img](fi10.png)
+![img](fi11.png)
+![img](fi12.png)
+![img](fi13.png)
+![img](fi14.png)
+![img](fi15.png)
+![img](fi16.png)
+![img](fi17.png)
+![img](fi18.png)
+![img](fi19.png)
+![img](fi20.png)
+![img](fi21.png)
+![img](fi22.png)
+![img](fi23.png)
+![img](fi24.png)
+![img](fi25.png)
+![img](fi26.png)
+![img](fi27.png)
+![img](fi28.png)
+![img](fi29.png)
+![img](fi30.png)
+
+**..we can unroll the feedback loop by making a copy of the neural network for each input value.**
+
+![img](fi32.png)
+![img](fi33.png)
+![img](fi34.png)
+![img](fi35.png)
+![img](fi36.png)
+![img](fi37.png)
+![img](fi38.png)
+![img](fi39.png)
+![img](fi40.png)
+![img](fi41.png)
+![img](fi42.png)
+![img](fi43.png)
+
+**Note: Regardless of how many times we unroll an RNN, the weights and biases are shared across every input. So no matter how many times we unroll an RNN, we don't increase the number of weights and biases that we need to train.**
+
 ## Introduction
 
 While "vanilla" neural networks receive a single input and produce one label for that image, there are tasks where the model produces a sequence of outputs. Recurrent Neural Networks allow us to operate over sequences of input, output, or both at the same time.
@@ -51,7 +102,3 @@ RNNs can be stacked together in multiple layers, which gives more depth, and emp
 ![img](multilayer_rnn.png)
 
 In the illustration above, there are three separate RNNs each with their own set of weights. Three RNNs are stacked on top of each other, so the input of the second RNN (second RNN layer) is the vector of the hidden state vector of the first RNN (first RNN layer). All stacked RNNs are trained jointly, and the diagram represents one computational graph.
-
-
-
-

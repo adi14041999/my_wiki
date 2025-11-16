@@ -957,6 +957,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Recurrent Neural Networks
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -968,6 +981,76 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a-friendly-introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      A friendly introduction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Introduction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-are-existing-convnets-insufficient" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why are existing convnets insufficient?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multilayer-rnns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multilayer RNNs
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -2606,6 +2689,78 @@
 
 
 <h1 id="recurrent-neural-networks">Recurrent Neural Networks</h1>
+<h2 id="a-friendly-introduction">A friendly introduction</h2>
+<p><img alt="img" src="../fi0.png" />
+<img alt="img" src="../fi1.png" />
+<img alt="img" src="../fi2.png" />
+<img alt="img" src="../fi3.png" />
+<img alt="img" src="../fi4.png" />
+<img alt="img" src="../fi5.png" />
+<img alt="img" src="../fi6.png" />
+<img alt="img" src="../fi7.png" />
+<img alt="img" src="../fi8.png" />
+<img alt="img" src="../fi9.png" />
+<img alt="img" src="../fi10.png" />
+<img alt="img" src="../fi11.png" />
+<img alt="img" src="../fi12.png" />
+<img alt="img" src="../fi13.png" />
+<img alt="img" src="../fi14.png" />
+<img alt="img" src="../fi15.png" />
+<img alt="img" src="../fi16.png" />
+<img alt="img" src="../fi17.png" />
+<img alt="img" src="../fi18.png" />
+<img alt="img" src="../fi19.png" />
+<img alt="img" src="../fi20.png" />
+<img alt="img" src="../fi21.png" />
+<img alt="img" src="../fi22.png" />
+<img alt="img" src="../fi23.png" />
+<img alt="img" src="../fi24.png" />
+<img alt="img" src="../fi25.png" />
+<img alt="img" src="../fi26.png" />
+<img alt="img" src="../fi27.png" />
+<img alt="img" src="../fi28.png" />
+<img alt="img" src="../fi29.png" />
+<img alt="img" src="../fi30.png" /></p>
+<p><strong>..we can unroll the feedback loop by making a copy of the neural network for each input value.</strong></p>
+<p><img alt="img" src="../fi32.png" />
+<img alt="img" src="../fi33.png" />
+<img alt="img" src="../fi34.png" />
+<img alt="img" src="../fi35.png" />
+<img alt="img" src="../fi36.png" />
+<img alt="img" src="../fi37.png" />
+<img alt="img" src="../fi38.png" />
+<img alt="img" src="../fi39.png" />
+<img alt="img" src="../fi40.png" />
+<img alt="img" src="../fi41.png" />
+<img alt="img" src="../fi42.png" />
+<img alt="img" src="../fi43.png" /></p>
+<p><strong>Note: Regardless of how many times we unroll an RNN, the weights and biases are shared across every input. So no matter how many times we unroll an RNN, we don't increase the number of weights and biases that we need to train.</strong></p>
+<h2 id="introduction">Introduction</h2>
+<p>While "vanilla" neural networks receive a single input and produce one label for that image, there are tasks where the model produces a sequence of outputs. Recurrent Neural Networks allow us to operate over sequences of input, output, or both at the same time.</p>
+<p>An example of a one-to-many model is image captioning, where a fixed-sized image is given and a sequence of words that describe the content of that image is produced through an RNN.</p>
+<p>An example of a many-to-one task is sentiment classification in NLP, where a sequence of words of a sentence is given and then the sentiment (e.g., positive or negative) of that sentence is classified.</p>
+<p>An example of a many-to-many task is video captioning, where the input is a sequence of video frames and the output is a caption that describes what was in the video. Another example of a many-to-many task is machine translation in NLP, where an RNN takes a sequence of words of a sentence in English, and then this RNN is asked to produce a sequence of words of a sentence in French.</p>
+<p>There is also a variation of the many-to-many task, where the model generates an output at every timestep.</p>
+<p>In general, RNNs allow us to wire up an architecture where the prediction at every single timestep is a function of all the timesteps that have come before.</p>
+<p><img alt="img" src="../rnn_types.png" /></p>
+<h3 id="why-are-existing-convnets-insufficient">Why are existing convnets insufficient?</h3>
+<p>Existing convnets are insufficient to deal with tasks that have inputs and outputs with variable sequence lengths. In the example of video captioning, inputs have a variable number of frames (e.g., 10-minute and 10-hour long videos) and outputs are captions of variable length. Convnets can only take in inputs with a fixed size of width and height and cannot generalize over inputs with different sizes. In order to tackle this problem, Recurrent Neural Networks (RNNs) are introduced.</p>
+<h2 id="architecture">Architecture</h2>
+<p>If an RNN model is unrolled, then there are inputs (e.g., video frames) at different timesteps shown as <span class="arithmatex">\(x_1, x_2, x_3, \ldots, x_t\)</span>. The RNN at each timestep takes in two inputs— an input frame (<span class="arithmatex">\(x_i\)</span>) and the previous representation of what it has seen so far (i.e., history)— to generate an output <span class="arithmatex">\(y_i\)</span> and update its history, which will be forward propagated over time. All the RNN blocks are the same block that share the same parameters, but have different inputs and history at each timestep.</p>
+<p><img alt="img" src="../unrolledRNN.png" /></p>
+<p>More precisely, an RNN can be represented as a recurrence formula of some function <span class="arithmatex">\(f_W\)</span> with parameters <span class="arithmatex">\(W\)</span>:</p>
+<div class="arithmatex">\[h_t = f_W(h_{t-1}, x_t)\]</div>
+<p>where at every timestep it receives some previous state as a vector <span class="arithmatex">\(h_{t-1}\)</span> from the previous iteration at timestep <span class="arithmatex">\(t-1\)</span> and the current input vector <span class="arithmatex">\(x_t\)</span> to produce the current state as a vector <span class="arithmatex">\(h_t\)</span>. A fixed function <span class="arithmatex">\(f_W\)</span> with weights <span class="arithmatex">\(W\)</span> is applied at every single timestep, and that allows the Recurrent Neural Network to be used on sequences without having to commit to the size of the sequence because the exact same function is applied at every single timestep, no matter how long the input or output sequences are.</p>
+<p>In the simplest form of RNN, which is called a Vanilla RNN, there are weight matrices <span class="arithmatex">\(W_{hh}\)</span> and <span class="arithmatex">\(W_{xh}\)</span>, where they project both the hidden state <span class="arithmatex">\(h_{t-1}\)</span> from the previous timestep and the current input <span class="arithmatex">\(x_t\)</span>, and then those are summed and squished with a <span class="arithmatex">\(\tanh\)</span> function to update the hidden state <span class="arithmatex">\(h_t\)</span> at timestep <span class="arithmatex">\(t\)</span>.</p>
+<div class="arithmatex">\[h_t = \tanh(W_{hh}h_{t-1} + W_{xh}x_t)\]</div>
+<p><img alt="img" src="../vanilla_rnn_mformula_1.png" /></p>
+<p>Predictions can be based on <span class="arithmatex">\(h_t\)</span> by using another matrix projection on top of the hidden state. This is the simplest complete case in which a neural network can be wired up:</p>
+<div class="arithmatex">\[y_t = W_{hy}h_t\]</div>
+<p><img alt="img" src="../vanilla_rnn_mformula_2.png" /></p>
+<h2 id="multilayer-rnns">Multilayer RNNs</h2>
+<p>RNNs can be stacked together in multiple layers, which gives more depth, and empirically deeper architectures tend to work better.</p>
+<p><img alt="img" src="../multilayer_rnn.png" /></p>
+<p>In the illustration above, there are three separate RNNs each with their own set of weights. Three RNNs are stacked on top of each other, so the input of the second RNN (second RNN layer) is the vector of the hidden state vector of the first RNN (first RNN layer). All stacked RNNs are trained jointly, and the diagram represents one computational graph.</p>
 
 
 
