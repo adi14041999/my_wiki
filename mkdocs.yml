@@ -22,6 +22,7 @@ nav:
       - Long-Short Term Memory (LSTM) Networks: ai/deep_learning_for_computer_vision/long_short_term_memory_networks.md
     - Natural Language Processing:
       - Introduction: ai/natural_language_processing/introduction.md
+      - Representing words: ai/natural_language_processing/representing_words.md
     - Deep Generative Models:
       - Introduction: ai/deep_generative_models/introduction.md
       - Autoregressive Models: ai/deep_generative_models/autoregressive_models.md
