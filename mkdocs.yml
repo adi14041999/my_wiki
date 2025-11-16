@@ -24,6 +24,7 @@ nav:
       - Introduction: ai/natural_language_processing/introduction.md
       - Representing words: ai/natural_language_processing/representing_words.md
       - SVD based methods: ai/natural_language_processing/svd_based_methods.md
+      - Distributional semantics and Word2vec: ai/natural_language_processing/distributional_semantics_and_word2vec.md
     - Deep Generative Models:
       - Introduction: ai/deep_generative_models/introduction.md
       - Autoregressive Models: ai/deep_generative_models/autoregressive_models.md
