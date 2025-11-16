@@ -6,18 +6,6 @@ use_directory_urls: true
 nav:
   - Home: index.md
   - AI:
-    - Deep Generative Models:
-      - Introduction: ai/deep_generative_models/introduction.md
-      - Autoregressive Models: ai/deep_generative_models/autoregressive_models.md
-      - Variational Autoencoders: ai/deep_generative_models/variational_autoencoders.md
-      - Normalizing flow models: ai/deep_generative_models/normalizing_flow_models.md
-      - Recap at this point: ai/deep_generative_models/recap_at_this_point.md
-      - Generative Adversarial Networks: ai/deep_generative_models/generative_adversarial_networks.md
-      - Energy Based Models: ai/deep_generative_models/energy_based_models.md
-      - Score Based Models: ai/deep_generative_models/score_based_models.md
-      - Score Based Generative Modeling: ai/deep_generative_models/score_based_generative_modeling.md
-      - Evaluating Generative Models: ai/deep_generative_models/evaluating_generative_models.md
-      - Score Based Diffusion Models: ai/deep_generative_models/score_based_diffusion_models.md
     - Deep Learning for Computer Vision:
       - Introduction: ai/deep_learning_for_computer_vision/introduction.md
       - Image Classification with Linear Classifiers: ai/deep_learning_for_computer_vision/image_classification_with_linear_classifiers.md
@@ -32,6 +20,20 @@ nav:
       - Convolutional Neural Networks- Architectures, Convolution / Pooling Layers: ai/deep_learning_for_computer_vision/convolutional_neural_networks_architectures_convolution_pooling_layers.md
       - Recurrent Neural Networks: ai/deep_learning_for_computer_vision/recurrent_neural_networks.md
       - Long-Short Term Memory (LSTM) Networks: ai/deep_learning_for_computer_vision/long_short_term_memory_networks.md
+    - Natural Language Processing:
+      - Introduction: ai/natural_language_processing/introduction.md
+    - Deep Generative Models:
+      - Introduction: ai/deep_generative_models/introduction.md
+      - Autoregressive Models: ai/deep_generative_models/autoregressive_models.md
+      - Variational Autoencoders: ai/deep_generative_models/variational_autoencoders.md
+      - Normalizing flow models: ai/deep_generative_models/normalizing_flow_models.md
+      - Recap at this point: ai/deep_generative_models/recap_at_this_point.md
+      - Generative Adversarial Networks: ai/deep_generative_models/generative_adversarial_networks.md
+      - Energy Based Models: ai/deep_generative_models/energy_based_models.md
+      - Score Based Models: ai/deep_generative_models/score_based_models.md
+      - Score Based Generative Modeling: ai/deep_generative_models/score_based_generative_modeling.md
+      - Evaluating Generative Models: ai/deep_generative_models/evaluating_generative_models.md
+      - Score Based Diffusion Models: ai/deep_generative_models/score_based_diffusion_models.md
   - Math:
     - Linear Algebra:
       - Vectors, vector addition, and scalar multiplication: math/linear_algebra/vectors_vector_addition_and_scalar_multiplication.md
