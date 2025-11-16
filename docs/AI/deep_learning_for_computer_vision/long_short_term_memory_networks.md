@@ -1,5 +1,94 @@
 # Long-Short Term Memory (LSTM) Networks
 
+## A friendly introduction
+
+![img](lstm0.png)
+![img](lstm1.png)
+![img](lstm2.png)
+![img](lstm3.png)
+![img](lstm4.png)
+![img](lstm5.png)
+![img](lstm6.png)
+![img](lstm7.png)
+![img](lstm8.png)
+![img](lstm9.png)
+![img](lstm10.png)
+![img](lstm11.png)
+![img](lstm12.png)
+![img](lstm13.png)
+![img](lstm14.png)
+![img](lstm15.png)
+![img](lstm16.png)
+![img](lstm17.png)
+
+**Even though this part of the LSTM unit determines what percent of Long Term Memory will be remembered, it is usually called the Forget Gate.**
+
+![img](lstm19.png)
+
+**... to create a potential Long Term Memory.**
+
+![img](lstm20.png)
+![img](lstm21.png)
+![img](lstm22.png)
+![img](lstm23.png)
+
+**Remember: the tanh() activation function turns any input to a number between -1 and 1.** 
+
+![img](lstm25.png)
+![img](lstm26.png)
+
+**Now the LSTM has to decide how much of this potential memory to save. And this is done using the exact same method we used earlier, when we determined what percent of Long-Term Memory to remember.**
+
+![img](lstm29.png)
+![img](lstm30.png)
+
+**Even though this part of the LSTM unit determines how we should update the Long Term Memory, it is usually called the Input Gate.**
+
+![img](lstm32.png)
+![img](lstm33.png)
+![img](lstm34.png)
+![img](lstm35.png)
+
+**Now the LSTM has to decide how much of this Potential Short-Term Memory to pass on...**
+
+![img](lstm37.png)
+
+**In all three cases, we used the Sigmoid Activation Function to determine what percent the LSTM remembers.**
+
+![img](lstm39.png)
+![img](lstm40.png)
+
+**Because the New Short-Term Memory is the output of this entire LSTM unit, this stage is called the Output Gate.**
+
+![img](lstm42.png)
+![img](lstm43.png)
+![img](lstm44.png)
+![img](lstm45.png)
+![img](lstm46.png)
+![img](lstm47.png)
+![img](lstm48.png)
+![img](lstm49.png)
+![img](lstm40.png)
+![img](lstm51.png)
+
+**Then the LSTM does it's math, using the exact same Weights and Biases as before...**
+
+![img](lstm53.png)
+![img](lstm54.png)
+![img](lstm55.png)
+![img](lstm56.png)
+![img](lstm57.png)
+
+**Now that we have shown that the LSTM can correctly predict the value on Day 5 for Company A...**
+
+![img](lstm59.png)
+![img](lstm60.png)
+![img](lstm61.png)
+![img](lstm62.png)
+![img](lstm63.png)
+
+**... and that means we can unroll them more times to accommodate longer sequences of input data than a vanilla RNN.**
+
 In practice, we actually will rarely ever use the Vanilla RNN formula. Instead, we will use what we call a Long-Short Term Memory (LSTM) RNN.
 
 ## Vanilla RNN Gradient Flow and the Vanishing Gradient Problem
@@ -57,6 +146,20 @@ Since all $f$, $i$, $o$ gate vector values range from 0 to 1, because they were 
 The key idea of LSTM is the cell state, the horizontal line running through between recurrent timesteps. You can imagine the cell state to be some kind of highway of information passing through straight down the entire chain, with only some minor linear interactions. Thus, even when there is a bunch of LSTMs stacked together, we can get an uninterrupted gradient flow where the gradients flow back through cell states instead of hidden states $h$ without vanishing in every time step. This greatly fixes the gradient vanishing/exploding problem we have outlined above.
 
 ![img](lstm_highway.png)
+
+From the friendly introduction's terminology, we note down the following.
+
+- **Long-Term-Memory** = $c_{t-1}$
+
+- **New Long-Term-Memory** = $c_t$
+
+- **Short-Term-Memory** = $h_{t-1}$
+
+- **New Short-Term-Memory** = $h_t$
+
+- **Potential-Long-Term-Memory** = $g_t$
+
+- **Potential-Short-Term-Memory** = $\tanh(\text{New Long-Term-Memory}) = \tanh(c_t)$
 
 ## Does LSTM solve the vanishing gradient problem?
 

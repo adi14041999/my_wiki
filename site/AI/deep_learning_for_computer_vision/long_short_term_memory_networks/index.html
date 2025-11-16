@@ -806,6 +806,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#a-friendly-introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      A friendly introduction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#vanilla-rnn-gradient-flow-and-the-vanishing-gradient-problem" class="md-nav__link">
     <span class="md-ellipsis">
       Vanilla RNN Gradient Flow and the Vanishing Gradient Problem
@@ -2665,6 +2674,72 @@
 
 
 <h1 id="long-short-term-memory-lstm-networks">Long-Short Term Memory (LSTM) Networks</h1>
+<h2 id="a-friendly-introduction">A friendly introduction</h2>
+<p><img alt="img" src="../lstm0.png" />
+<img alt="img" src="../lstm1.png" />
+<img alt="img" src="../lstm2.png" />
+<img alt="img" src="../lstm3.png" />
+<img alt="img" src="../lstm4.png" />
+<img alt="img" src="../lstm5.png" />
+<img alt="img" src="../lstm6.png" />
+<img alt="img" src="../lstm7.png" />
+<img alt="img" src="../lstm8.png" />
+<img alt="img" src="../lstm9.png" />
+<img alt="img" src="../lstm10.png" />
+<img alt="img" src="../lstm11.png" />
+<img alt="img" src="../lstm12.png" />
+<img alt="img" src="../lstm13.png" />
+<img alt="img" src="../lstm14.png" />
+<img alt="img" src="../lstm15.png" />
+<img alt="img" src="../lstm16.png" />
+<img alt="img" src="../lstm17.png" /></p>
+<p><strong>Even though this part of the LSTM unit determines what percent of Long Term Memory will be remembered, it is usually called the Forget Gate.</strong></p>
+<p><img alt="img" src="../lstm19.png" /></p>
+<p><strong>... to create a potential Long Term Memory.</strong></p>
+<p><img alt="img" src="../lstm20.png" />
+<img alt="img" src="../lstm21.png" />
+<img alt="img" src="../lstm22.png" />
+<img alt="img" src="../lstm23.png" /></p>
+<p><strong>Remember: the tanh() activation function turns any input to a number between -1 and 1.</strong> </p>
+<p><img alt="img" src="../lstm25.png" />
+<img alt="img" src="../lstm26.png" /></p>
+<p><strong>Now the LSTM has to decide how much of this potential memory to save. And this is done using the exact same method we used earlier, when we determined what percent of Long-Term Memory to remember.</strong></p>
+<p><img alt="img" src="../lstm29.png" />
+<img alt="img" src="../lstm30.png" /></p>
+<p><strong>Even though this part of the LSTM unit determines how we should update the Long Term Memory, it is usually called the Input Gate.</strong></p>
+<p><img alt="img" src="../lstm32.png" />
+<img alt="img" src="../lstm33.png" />
+<img alt="img" src="../lstm34.png" />
+<img alt="img" src="../lstm35.png" /></p>
+<p><strong>Now the LSTM has to decide how much of this Potential Short-Term Memory to pass on...</strong></p>
+<p><img alt="img" src="../lstm37.png" /></p>
+<p><strong>In all three cases, we used the Sigmoid Activation Function to determine what percent the LSTM remembers.</strong></p>
+<p><img alt="img" src="../lstm39.png" />
+<img alt="img" src="../lstm40.png" /></p>
+<p><strong>Because the New Short-Term Memory is the output of this entire LSTM unit, this stage is called the Output Gate.</strong></p>
+<p><img alt="img" src="../lstm42.png" />
+<img alt="img" src="../lstm43.png" />
+<img alt="img" src="../lstm44.png" />
+<img alt="img" src="../lstm45.png" />
+<img alt="img" src="../lstm46.png" />
+<img alt="img" src="../lstm47.png" />
+<img alt="img" src="../lstm48.png" />
+<img alt="img" src="../lstm49.png" />
+<img alt="img" src="../lstm40.png" />
+<img alt="img" src="../lstm51.png" /></p>
+<p><strong>Then the LSTM does it's math, using the exact same Weights and Biases as before...</strong></p>
+<p><img alt="img" src="../lstm53.png" />
+<img alt="img" src="../lstm54.png" />
+<img alt="img" src="../lstm55.png" />
+<img alt="img" src="../lstm56.png" />
+<img alt="img" src="../lstm57.png" /></p>
+<p><strong>Now that we have shown that the LSTM can correctly predict the value on Day 5 for Company A...</strong></p>
+<p><img alt="img" src="../lstm59.png" />
+<img alt="img" src="../lstm60.png" />
+<img alt="img" src="../lstm61.png" />
+<img alt="img" src="../lstm62.png" />
+<img alt="img" src="../lstm63.png" /></p>
+<p><strong>... and that means we can unroll them more times to accommodate longer sequences of input data than a vanilla RNN.</strong></p>
 <p>In practice, we actually will rarely ever use the Vanilla RNN formula. Instead, we will use what we call a Long-Short Term Memory (LSTM) RNN.</p>
 <h2 id="vanilla-rnn-gradient-flow-and-the-vanishing-gradient-problem">Vanilla RNN Gradient Flow and the Vanishing Gradient Problem</h2>
 <p>An RNN block takes in input <span class="arithmatex">\(x_t\)</span> and previous hidden representation <span class="arithmatex">\(h_{t-1}\)</span> and learns a transformation, which is then passed through <span class="arithmatex">\(\tanh\)</span> to produce the hidden representation <span class="arithmatex">\(h_t\)</span> for the next time step and output <span class="arithmatex">\(y_t\)</span> as shown in the equation below.</p>
@@ -2694,6 +2769,27 @@
 <p><strong>Output Gate:</strong> Output gate <span class="arithmatex">\(o_t\)</span> at time step <span class="arithmatex">\(t\)</span> controls how much information needs to be "shown" as output in the current hidden state <span class="arithmatex">\(h_t\)</span>.</p>
 <p>The key idea of LSTM is the cell state, the horizontal line running through between recurrent timesteps. You can imagine the cell state to be some kind of highway of information passing through straight down the entire chain, with only some minor linear interactions. Thus, even when there is a bunch of LSTMs stacked together, we can get an uninterrupted gradient flow where the gradients flow back through cell states instead of hidden states <span class="arithmatex">\(h\)</span> without vanishing in every time step. This greatly fixes the gradient vanishing/exploding problem we have outlined above.</p>
 <p><img alt="img" src="../lstm_highway.png" /></p>
+<p>From the friendly introduction's terminology, we note down the following.</p>
+<ul>
+<li>
+<p><strong>Long-Term-Memory</strong> = <span class="arithmatex">\(c_{t-1}\)</span></p>
+</li>
+<li>
+<p><strong>New Long-Term-Memory</strong> = <span class="arithmatex">\(c_t\)</span></p>
+</li>
+<li>
+<p><strong>Short-Term-Memory</strong> = <span class="arithmatex">\(h_{t-1}\)</span></p>
+</li>
+<li>
+<p><strong>New Short-Term-Memory</strong> = <span class="arithmatex">\(h_t\)</span></p>
+</li>
+<li>
+<p><strong>Potential-Long-Term-Memory</strong> = <span class="arithmatex">\(g_t\)</span></p>
+</li>
+<li>
+<p><strong>Potential-Short-Term-Memory</strong> = <span class="arithmatex">\(\tanh(\text{New Long-Term-Memory}) = \tanh(c_t)\)</span></p>
+</li>
+</ul>
 <h2 id="does-lstm-solve-the-vanishing-gradient-problem">Does LSTM solve the vanishing gradient problem?</h2>
 <p>LSTM architecture makes it easier for the RNN to preserve information over many recurrent time steps. For example, if the forget gate is set to 1, and the input gate is set to 0, then the information of the cell state will always be preserved over many recurrent time steps. For a Vanilla RNN, in contrast, it's much harder to preserve information in hidden states in recurrent time steps by just making use of a single weight matrix.</p>
 <p>LSTMs do not guarantee that there is no vanishing/exploding gradient problems, but it does provide an easier way for the model to learn long-distance dependencies.</p>
