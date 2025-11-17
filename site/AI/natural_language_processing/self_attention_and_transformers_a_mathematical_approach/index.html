@@ -1,0 +1,3258 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A personal wiki for notes, ideas, and projects.">
+      
+      
+      
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/ai/natural_language_processing/self_attention_and_transformers_a_mathematical_approach/">
+      
+      
+        <link rel="prev" href="../differences_between_the_basic_transformer_and_the_decoder_only_transformer/">
+      
+      
+        <link rel="next" href="../../deep_generative_models/introduction/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Self-Attention and Transformers, a mathematical approach - My Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#self-attention-and-transformers-a-mathematical-approach" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="My Wiki" class="md-header__button md-logo" aria-label="My Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            My Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Self-Attention and Transformers, a mathematical approach
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="lime"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../deep_learning_for_computer_vision/introduction/" class="md-tabs__link">
+          
+  
+  
+  AI
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../math/linear_algebra/vectors_vector_addition_and_scalar_multiplication/" class="md-tabs__link">
+          
+  
+  
+  Math
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../productivity/how_to_build_your_career_in_ai/three_steps_to_career_growth/" class="md-tabs__link">
+          
+  
+  
+  Productivity
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="My Wiki" class="md-nav__button md-logo" aria-label="My Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    My Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    AI
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            AI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Deep Learning for Computer Vision
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Deep Learning for Computer Vision
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/image_classification_with_linear_classifiers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Image Classification with Linear Classifiers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/regularization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Regularization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/optimization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Optimization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/backpropagation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Backpropagation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/backpropagation_for_a_linear_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Backpropagation for a Linear Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/neural_networks_setting_up_the_architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Neural Networks- Setting up the Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/neural_networks_setting_up_the_data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Neural Networks- Setting up the Data
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/neural_networks_learning_and_evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Neural Networks- Learning and Evaluation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/putting_it_together_minimal_neural_network_case_study/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Putting it together- Minimal Neural Network Case Study
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/convolutional_neural_networks_architectures_convolution_pooling_layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Convolutional Neural Networks- Architectures, Convolution / Pooling Layers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/recurrent_neural_networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Recurrent Neural Networks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/long_short_term_memory_networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Long-Short Term Memory (LSTM) Networks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/seq2seq_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Seq2Seq Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/attention_mechanism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Attention Mechanism
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/how_large_language_models_work_a_visual_intro_to_transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    How large language models work, a visual intro to transformers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/attention_in_transformers_visually_explained/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Attention in transformers, visually explained
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Natural Language Processing
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Natural Language Processing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../representing_words/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Representing words
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../svd_based_methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SVD based methods
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../distributional_semantics_and_word2vec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Distributional semantics and Word2vec
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Language Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recurrent_neural_networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Recurrent Neural Networks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gated_recurrent_units/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gated Recurrent Units (GRUs)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../long_short_term_memory_networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Long-Short Term Memory (LSTM) Networks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../seq2seq_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Seq2Seq Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../attention_mechanism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Attention Mechanism
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how_large_language_models_work_a_visual_intro_to_transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    How large language models work, a visual intro to transformers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../attention_in_transformers_visually_explained/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Attention in transformers, visually explained
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../the_basic_transformer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    The basic Transformer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../decoder_only_transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Decoder-only Transformers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../differences_between_the_basic_transformer_and_the_decoder_only_transformer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Differences between the basic Transformer and the Decoder-Only Transformer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Self-Attention and Transformers, a mathematical approach
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Self-Attention and Transformers, a mathematical approach
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#notation-and-basics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Notation and basics
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problems-with-rnn" class="md-nav__link">
+    <span class="md-ellipsis">
+      Problems with RNN
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Problems with RNN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parallelization-issues-with-dependence-on-the-sequence-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parallelization issues with dependence on the sequence index
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-interaction-distance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Linear interaction distance
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-minimal-self-attention-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      A minimal self-attention architecture
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="A minimal self-attention architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-key-query-value-self-attention-mechanism" class="md-nav__link">
+    <span class="md-ellipsis">
+      The key-query-value self-attention mechanism
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#position-representations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Position representations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Position representations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#position-representation-through-learned-embeddings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Position representation through learned embeddings
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elementwise-nonlinearity" class="md-nav__link">
+    <span class="md-ellipsis">
+      Elementwise nonlinearity
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#future-masking" class="md-nav__link">
+    <span class="md-ellipsis">
+      Future masking
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-transformer" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Transformer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Transformer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-head-self-attention" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-head Self-Attention
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layer-norm" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layer Norm
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#residual-connections" class="md-nav__link">
+    <span class="md-ellipsis">
+      Residual Connections
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Residual Connections">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add-norm" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add &amp; Norm
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attention-logit-scaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Attention logit scaling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transformer-encoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transformer Encoder
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transformer-decoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transformer Decoder
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transformer-encoder-decoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transformer Encoder-Decoder
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Transformer Encoder-Decoder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cross-attention" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cross-Attention
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Deep Generative Models
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Deep Generative Models
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/autoregressive_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Autoregressive Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/variational_autoencoders/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Variational Autoencoders
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/normalizing_flow_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Normalizing flow models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/recap_at_this_point/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Recap at this point
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/generative_adversarial_networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Generative Adversarial Networks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/energy_based_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Energy Based Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/score_based_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Score Based Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/score_based_generative_modeling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Score Based Generative Modeling
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/evaluating_generative_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Evaluating Generative Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/score_based_diffusion_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Score Based Diffusion Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Math
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Math
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Linear Algebra
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Linear Algebra
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/vectors_vector_addition_and_scalar_multiplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Vectors, vector addition, and scalar multiplication
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/vector_geometry_in_mathbb_r_n_and_correlation_coefficients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Vector geometry in Rn and correlation coefficients
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/planes_in_r3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Planes in R3
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/span_subspaces_and_dimension/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Span, subspaces, and dimension
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/basis_and_orthogonality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Basis and orthogonality
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/projections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Projections
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/applications_of_projections_in_rn_orthogonal_bases_of_planes_and_linear_regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Applications of projections in Rn- orthogonal bases of planes and linear regression
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Probability
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Probability
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/probability_and_counting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Probability and Counting
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/story_proofs_and_axioms_of_probability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Story Proofs and Axioms of Probability
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/conditional_probability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Conditional Probability
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/some_famous_problems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Some famous problems
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/random_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Random Variables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/expectation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Expectation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/indicator_random_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Indicator Random Variables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/poisson_distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Poisson Distribution
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/continuous_distributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Continuous Distributions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/normal_distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Normal Distribution
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/exponential_distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Exponential Distribution
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/joint_distributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Joint Distributions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/independence_of_random_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Independence of Random Variables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/conditional_distributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Conditional Distributions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/multinomial_distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Multinomial Distribution
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/covariance_and_correlation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Covariance and Correlation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/transformations_of_random_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Transformations of Random Variables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/convolution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Convolution
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/beta_distributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Beta Distributions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/conditional_expectation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Conditional Expectation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/jensens_inequality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Jensen's inequality
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/central_limit_theorem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Central Limit Theorem
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/multivariate_normal_distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Multivariate Normal Distribution
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/markov_chains/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Markov Chains
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Multivariate Calculus
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Multivariate Calculus
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/multivariate_calculus/the_tl_dr_version_of_derivatives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    The TL;DR version of Derivatives
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/multivariate_calculus/multivariable_functions_level_sets_and_contour_plots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Multivariable functions, level sets, and contour plots
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Productivity
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Productivity
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    How to Build Your Career in AI
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            How to Build Your Career in AI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../productivity/how_to_build_your_career_in_ai/three_steps_to_career_growth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Three Steps to Career Growth
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../productivity/how_to_build_your_career_in_ai/phase_1_learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Phase 1- Learning
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../productivity/how_to_build_your_career_in_ai/phase_2_projects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Phase 2- Projects
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../productivity/how_to_build_your_career_in_ai/phase_3_job/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Phase 3- Job
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../productivity/how_to_build_your_career_in_ai/make_every_day_count/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Make Every Day Count
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="self-attention-and-transformers-a-mathematical-approach">Self-Attention and Transformers, a mathematical approach</h1>
+<h2 id="notation-and-basics">Notation and basics</h2>
+<p>Let <span class="arithmatex">\(w_{1:n}\)</span> be a sequence, where each <span class="arithmatex">\(w_i \in V\)</span>, a finite vocabulary. We'll also overload <span class="arithmatex">\(w_{1:n}\)</span> to be a matrix of one-hot vectors, <span class="arithmatex">\(w_{1:n} \in \mathbb{R}^{n \times |V|}\)</span>. We'll use <span class="arithmatex">\(w \in V\)</span> to represent an arbitrary vocabulary element, and <span class="arithmatex">\(w_i \in V\)</span> to pick out a specific indexed element of a sequence <span class="arithmatex">\(w_{1:n}\)</span>.</p>
+<p>We'll use the notation,</p>
+<div class="arithmatex">\[w_t \sim \text{softmax}(f(w_{1:t-1})),\]</div>
+<p>to mean that under a model, <span class="arithmatex">\(x_t\)</span> "is drawn from" the probability distribution defined by the right-hand-side of the tilde, <span class="arithmatex">\(\sim\)</span>. </p>
+<p>When we use the softmax function (as above), we'll use it without direct reference to the dimension being normalized over, and it should be interpreted as follows. If <span class="arithmatex">\(A\)</span> is a tensor of shape <span class="arithmatex">\(\mathbb{R}^{\ell,d}\)</span>, the softmax is computed as follows:</p>
+<div class="arithmatex">\[\text{softmax}(A)_{i,j} = \frac{\exp A_{i,j}}{\sum_{j'=1}^{d} \exp A_{i,j'}},\]</div>
+<p>for all <span class="arithmatex">\(i \in 1, \ldots, \ell\)</span>, <span class="arithmatex">\(j \in 1, \ldots, d\)</span>, and similarly for tensors of more than two axes. That is, if we had a tensor <span class="arithmatex">\(B \in \mathbb{R}^{m,\ell,d}\)</span>, we would define the softmax over the last dimension, similarly. At the risk of being verbose, we'll write it out:</p>
+<div class="arithmatex">\[\text{softmax}(B)_{q,i,j} = \frac{\exp B_{q,i,j}}{\sum_{j'=1}^{d} \exp B_{q,i,j'}}.\]</div>
+<p>In all of our methods, we'll assume an embedding matrix, <span class="arithmatex">\(E \in \mathbb{R}^{d \times |V|}\)</span>, mapping from the vocabulary space to the hidden dimensionality <span class="arithmatex">\(d\)</span>, written as <span class="arithmatex">\(Ew \in \mathbb{R}^d\)</span>.</p>
+<p>The embedding <span class="arithmatex">\(Ew_i\)</span> of a token in sequence <span class="arithmatex">\(w_{1:n}\)</span> is what's known as a non-contextual representation; despite <span class="arithmatex">\(w_i\)</span> appearing in a sequence, the representation <span class="arithmatex">\(Ew_i\)</span> is independent of context. Since we'll almost always be working on the embedded version of <span class="arithmatex">\(w_{1:n}\)</span>, we'll let <span class="arithmatex">\(x = Ew\)</span>, and <span class="arithmatex">\(x_{1:n} = w_{1:n}E^\top \in \mathbb{R}^{n \times d}\)</span>. An overarching goal of the methods discussed in this note is to develop strong contextual representations of tokens; that is, a representation <span class="arithmatex">\(h_i\)</span> that represents <span class="arithmatex">\(w_i\)</span> but is a function of the entire sequence <span class="arithmatex">\(x_{1:n}\)</span> (or a prefix <span class="arithmatex">\(x_{1:i}\)</span>, as in the case of language modeling).</p>
+<h2 id="problems-with-rnn">Problems with RNN</h2>
+<p>There were twofold issues with the recurrent neural network form, and they both had to do with the the dependence on the sequence index (often called the dependence on "time").</p>
+<h3 id="parallelization-issues-with-dependence-on-the-sequence-index">Parallelization issues with dependence on the sequence index</h3>
+<p>Modern graphics processing units (GPUs) are excellent at crunching through a lot of simple operations (like addition) in parallel. For example, when we have a matrix <span class="arithmatex">\(A \in \mathbb{R}^{n \times k}\)</span> and a matrix <span class="arithmatex">\(B \in \mathbb{R}^{k \times d}\)</span>, a GPU is just blazing fast at computing <span class="arithmatex">\(AB \in \mathbb{R}^{n \times d}\)</span>. The constraint of the operations occurring in parallel, however, is crucial – when computing <span class="arithmatex">\(AB\)</span> the simplest way, we're performing a bunch of multiplies and then a bunch of sums, most of which don't depend on the output of each other. However, in a recurrent neural network, when we compute</p>
+<div class="arithmatex">\[h_2 = \sigma(Wh_1 + Ux_2),\]</div>
+<p>we can't compute <span class="arithmatex">\(h_2\)</span> until we know the value of <span class="arithmatex">\(h_1\)</span>, so we can write it out as</p>
+<div class="arithmatex">\[h_2 = \sigma(W\sigma(Wh_0 + Ux_1) + Ux_2).\]</div>
+<p>Likewise if we wanted to compute <span class="arithmatex">\(h_3\)</span>, we can't compute it until we know <span class="arithmatex">\(h_2\)</span>, which we can't compute until we know <span class="arithmatex">\(h_1\)</span>, etc. As the sequence gets longer, there is only so much we can parallelize the computation of the network on a GPU because of the number of serial dependencies.</p>
+<h3 id="linear-interaction-distance">Linear interaction distance</h3>
+<p>A related issue with RNNs is the difficulty with which distant tokens in a sequence can interact with each other. By interact, we mean that the presence of one token (already observed in the past) gainfully affects the processing of another token.</p>
+<h2 id="a-minimal-self-attention-architecture">A minimal self-attention architecture</h2>
+<p>Attention, broadly construed, is a method for taking a query, and softly looking up information in a key-value store by picking the value(s) of the key(s) most like the query. By "picking" and "most like," we mean averaging overall values, putting more weight on those which correspond to the keys more like the query. In self-attention, we mean that we use the same elements to help us define the querys as we do the keys and values.</p>
+<h3 id="the-key-query-value-self-attention-mechanism">The key-query-value self-attention mechanism</h3>
+<p>Consider a token <span class="arithmatex">\(x_i\)</span> in the sequence <span class="arithmatex">\(x_{1:n}\)</span>. From it, we define a query <span class="arithmatex">\(q_i = Qx_i\)</span>, for matrix <span class="arithmatex">\(Q \in \mathbb{R}^{d \times d}\)</span>. Then, for each token in the sequence <span class="arithmatex">\(x_j \in \{x_1, \ldots, x_n\}\)</span>, we define both a key and a value similarly, with two other weight matrices: <span class="arithmatex">\(k_j = Kx_j\)</span>, and <span class="arithmatex">\(v_j = Vx_j\)</span> for <span class="arithmatex">\(K \in \mathbb{R}^{d \times d}\)</span> and <span class="arithmatex">\(V \in \mathbb{R}^{d \times d}\)</span>.</p>
+<p>Our contextual representation <span class="arithmatex">\(h_i\)</span> of <span class="arithmatex">\(x_i\)</span> is a linear combination (that is, a weighted sum) of the values of the sequence,</p>
+<div class="arithmatex">\[h_i = \sum_{j=1}^{n} \alpha_{ij}v_j,\]</div>
+<p>where the weights, these <span class="arithmatex">\(\alpha_{ij}\)</span> control the strength of contribution of each <span class="arithmatex">\(v_j\)</span>. Going back to our key-value store analogy, the <span class="arithmatex">\(\alpha_{ij}\)</span> softly selects what data to look up. We define these weights by computing the affinities between the keys and the query, <span class="arithmatex">\(q_i^\top k_j\)</span>, and then computing the softmax over the sequence:</p>
+<div class="arithmatex">\[\alpha_{ij} = \frac{\exp(q_i^\top k_j)}{\sum_{j'=1}^{n} \exp(q_i^\top k_{j'})}.\]</div>
+<p>Intuitively, what we've done by this operation is take our element <span class="arithmatex">\(x_i\)</span> and look in its own sequence <span class="arithmatex">\(x_{1:n}\)</span> to figure out what information (in an informal sense,) from what other tokens, should be used in representing <span class="arithmatex">\(x_i\)</span> in context. The use of matrices <span class="arithmatex">\(K\)</span>, <span class="arithmatex">\(Q\)</span>, <span class="arithmatex">\(V\)</span> intuitively allow us to use different views of the <span class="arithmatex">\(x_i\)</span> for the different roles of key, query, and value. We perform this operation to build <span class="arithmatex">\(h_i\)</span> for all <span class="arithmatex">\(i \in \{1, \ldots, n\}\)</span>.</p>
+<h3 id="position-representations">Position representations</h3>
+<p>Consider the sequence <em>the oven cooked the bread so</em>. This is a different sequence than <em>the bread cooked the oven so</em>, as you might guess. The former sentence has us making delicious bread, and the latter we might interpret as the bread somehow breaking the oven. In a recurrent neural network, the order of the sequence defines the order of the rollout, so the two sequences have different representations. In the self-attention operation, there's no built-in notion of order. The self-attention operation has no built-in notion of the sequence order.</p>
+<p>To see this, let's take a look at self-attention on this sequence. We have a set of vectors <span class="arithmatex">\(x_{1:n}\)</span> for <em>the oven cooked the bread so</em>, which we can write as</p>
+<div class="arithmatex">\[x_{1:n} = [x_{\text{the}}; x_{\text{oven}}; x_{\text{cooked}}; x_{\text{the}}; x_{\text{bread}}; x_{\text{so}}] \in \mathbb{R}^{6 \times d}.\]</div>
+<p>As an example, consider performing self-attention to represent the word <em>so</em> in context. The weights over the context are as follows, recalling that <span class="arithmatex">\(q_i = Qx_i\)</span> for all words, and <span class="arithmatex">\(k_i = Kx_i\)</span> likewise:</p>
+<div class="arithmatex">\[\alpha_{\text{so}} = \text{softmax}\left([q_{\text{so}}^\top k_{\text{the}}; q_{\text{so}}^\top k_{\text{oven}}; q_{\text{so}}^\top k_{\text{cooked}}; q_{\text{so}}^\top k_{\text{the}}; q_{\text{so}}^\top k_{\text{bread}}; q_{\text{so}}^\top k_{\text{so}}]\right).\]</div>
+<p>So, the weight <span class="arithmatex">\(\alpha_{\text{so},0}\)</span>, the amount that we look up the first word, (by writing out the softmax) is,</p>
+<div class="arithmatex">\[\alpha_{\text{so},0} = \frac{\exp(q_{\text{so}}^\top k_{\text{the}})}{\exp(q_{\text{so}}^\top k_{\text{the}}) + \cdots + \exp(q_{\text{so}}^\top k_{\text{bread}})}.\]</div>
+<p>So, <span class="arithmatex">\(\alpha \in \mathbb{R}^6\)</span> are our weights, and we compute the weighted average with these weights to compute <span class="arithmatex">\(h_{\text{so}}\)</span>.</p>
+<p>For the reordered sentence <em>the bread cooked the oven so</em>, note that <span class="arithmatex">\(\alpha_{\text{so},0}\)</span> is identical. The numerator hasn't changed, and the denominator hasn't changed; we've just rearranged terms in the sum. Likewise for <span class="arithmatex">\(\alpha_{\text{so},\text{bread}}\)</span> and <span class="arithmatex">\(\alpha_{\text{so},\text{oven}}\)</span>, you can compute that they too are identical independent of the ordering of the sequence. This all comes back down to the two facts that (1) the representation of <span class="arithmatex">\(x\)</span> is not position-dependent; it's just <span class="arithmatex">\(Ew\)</span> for whatever word <span class="arithmatex">\(w\)</span>, and (2) there's no dependence on position in the self-attention operations.</p>
+<h4 id="position-representation-through-learned-embeddings">Position representation through learned embeddings</h4>
+<p>To represent position in self-attention, you either need to (1) use vectors that are already position-dependent as inputs, or (2) change the self-attention operation itself. One common solution is a simple implementation of (1). We posit a new parameter matrix, <span class="arithmatex">\(P \in \mathbb{R}^{N \times d}\)</span>, where <span class="arithmatex">\(N\)</span> is the maximum length of any sequence that your model will be able to process.</p>
+<p>We then simply add embedded representation of the position of a word to its word embedding:</p>
+<div class="arithmatex">\[\tilde{x}_i = P_i + x_i,\]</div>
+<p>and perform self-attention as we otherwise would. Now, the self-attention operation can use the embedding <span class="arithmatex">\(P_i\)</span> to look at the word at position <span class="arithmatex">\(i\)</span> differently than if that word were at position <span class="arithmatex">\(j\)</span>.</p>
+<h3 id="elementwise-nonlinearity">Elementwise nonlinearity</h3>
+<p>Imagine if we were to stack self-attention layers. Would this be sufficient for a replacement for stacked LSTM layers? Intuitively, there's one thing that's missing: the elementwise nonlinearities that we've come to expect in standard deep learning architectures. In fact, if we stack two self-attention layers, we get something that looks a lot like a single self-attention layer:</p>
+<div class="arithmatex">\[o_i = \sum_{j=1}^{n} \alpha_{ij}V^{(2)}\left(\sum_{k=1}^{n} \alpha_{jk}V^{(1)}x_k\right)\]</div>
+<div class="arithmatex">\[= \sum_{k=1}^{n}\left(\alpha_{jk}\sum_{j=1}^{n}\alpha_{ij}\right)V^{(2)}V^{(1)}x_k\]</div>
+<div class="arithmatex">\[= \sum_{k=1}^{n} \alpha^*_{ik}V^*x_k,\]</div>
+<p>where <span class="arithmatex">\(\alpha^*_{ik} = \alpha_{jk}\sum_{j=1}^{n}\alpha_{ij}\)</span>, and <span class="arithmatex">\(V^* = V^{(2)}V^{(1)}\)</span>. So, this is just a linear combination of a linear transformation of the input, much like a single layer of self-attention! Is this good enough?</p>
+<p>In practice, after a layer of self-attention, it's common to apply feed-forward network independently to each word representation:</p>
+<div class="arithmatex">\[h_{\text{FF}} = W_2 \text{ReLU}(W_1h_{\text{self-attention}} + b_1) + b_2,\]</div>
+<p>where often, <span class="arithmatex">\(W_1 \in \mathbb{R}^{5d \times d}\)</span>, and <span class="arithmatex">\(W_2 \in \mathbb{R}^{d \times 5d}\)</span>. That is, the hidden dimension of the feed-forward network is substantially larger than the hidden dimension of the network, <span class="arithmatex">\(d\)</span>—this is done because this matrix multiply is an efficiently parallelizable operation, so it's an efficient place to put a lot of computation and parameters.</p>
+<h3 id="future-masking">Future masking</h3>
+<p>When performing language modeling like we've seen in this course (often called autoregressive modeling), we predict a word given all words so far:</p>
+<div class="arithmatex">\[w_t \sim \text{softmax}(f(w_{1:t-1})),\]</div>
+<p>where <span class="arithmatex">\(f\)</span> is function to map a sequence to a vector in <span class="arithmatex">\(\mathbb{R}^{|V|}\)</span>.</p>
+<p>One crucial aspect of this process is that we can't look at the future when predicting it—otherwise the problem becomes trivial. This idea is built-in to unidirectional RNNs. If we want to use an RNN for the function <span class="arithmatex">\(f\)</span>, we can use the hidden state for word <span class="arithmatex">\(w_{t-1}\)</span>:</p>
+<div class="arithmatex">\[w_t \sim \text{softmax}(h_{t-1}E)\]</div>
+<div class="arithmatex">\[h_{t-1} = \sigma(Wh_{t-2} + Ux_{t-1}),\]</div>
+<p>and by the rollout of the RNN, we haven't looked at the future. (In this case, the future is all the words <span class="arithmatex">\(w_t, \ldots, w_n\)</span>.)</p>
+<p>In a Transformer, there's nothing explicit in the self-attention weight <span class="arithmatex">\(\alpha\)</span> that says not to look at indices <span class="arithmatex">\(j &gt; i\)</span> when representing token <span class="arithmatex">\(i\)</span>. In practice, we enforce this constraint simply adding a large negative constant to the input to the softmax (or equivalently, setting <span class="arithmatex">\(\alpha_{ij} = 0\)</span> where <span class="arithmatex">\(j &gt; i\)</span>.)</p>
+<div class="arithmatex">\[\alpha_{ij,\text{masked}} = \begin{cases} \alpha_{ij} &amp; j \leq i \\ 0 &amp; \text{otherwise} \end{cases}\]</div>
+<p><img alt="img" src="../tm0.png" /></p>
+<h2 id="the-transformer">The Transformer</h2>
+<p>The Transformer is an architecture based on self-attention that consists of stacked Blocks, each of which contains self-attention and feedforward layers, and a few other components.</p>
+<p><img alt="img" src="../tm1.png" /></p>
+<h3 id="multi-head-self-attention">Multi-head Self-Attention</h3>
+<p>Intuitively, a single call of self-attention is best at picking out a single value (on average) from the input value set. It does so softly, by averaging over all of the values, but it requires a balancing game in the key-query dot products in order to carefully average two or more things.</p>
+<p>What we'll present now, multi-head self-attention, intuitively applies self-attention multiple times at once, each with different key, query, and value transformations of the same input, and then combines the outputs.</p>
+<p>For an integer number of heads <span class="arithmatex">\(k\)</span>, we define matrices <span class="arithmatex">\(K^{(\ell)}\)</span>, <span class="arithmatex">\(Q^{(\ell)}\)</span>, <span class="arithmatex">\(V^{(\ell)} \in \mathbb{R}^{d \times d/k}\)</span> for <span class="arithmatex">\(\ell\)</span> in <span class="arithmatex">\(\{1, \ldots, k\}\)</span>. We'll see why we have the dimensionality reduction to <span class="arithmatex">\(d/k\)</span> soon. These are the key, query, and value matrices for each head. Correspondingly, we get keys, queries, and values <span class="arithmatex">\(k^{(\ell)}_{1:n}\)</span>, <span class="arithmatex">\(q^{(\ell)}_{1:n}\)</span>, <span class="arithmatex">\(v^{(\ell)}_{1:n}\)</span>, as in single-head self-attention.</p>
+<p>We then perform self-attention with each head:</p>
+<div class="arithmatex">\[h^{(\ell)}_i = \sum_{j=1}^{n} \alpha^{(\ell)}_{ij} v^{(\ell)}_j\]</div>
+<div class="arithmatex">\[\alpha^{(\ell)}_{ij} = \frac{\exp(q^{(\ell)\top}_i k^{(\ell)}_j)}{\sum_{j'=1}^{n} \exp(q^{(\ell)\top}_i k^{(\ell)}_{j'})}\]</div>
+<p>Note that the output <span class="arithmatex">\(h^{(\ell)}_i\)</span> of each head is in reduced dimension <span class="arithmatex">\(d/k\)</span>.</p>
+<p>Finally, we define the output of multi-head self-attention as a linear transformation of the concatenation of the head outputs, letting <span class="arithmatex">\(O \in \mathbb{R}^{d \times d}\)</span>:</p>
+<div class="arithmatex">\[h_i = O[h^{(1)}_i; \cdots; h^{(k)}_i],\]</div>
+<p>where we concatenate the head outputs each of dimensionality <span class="arithmatex">\(d \times d/k\)</span> at their second axis, such that their concatenation has dimension <span class="arithmatex">\(d \times d\)</span>.</p>
+<p>To understand why we have the reduced dimension of each head output, it's instructive to get a bit closer to how multi-head self-attention is implemented in code. In practice, multi-head self-attention is no more expensive than single-head due to the low-rankness of the transformations we apply.</p>
+<p>For a single head, recall that <span class="arithmatex">\(x_{1:n}\)</span> is a matrix in <span class="arithmatex">\(\mathbb{R}^{n \times d}\)</span>. Then we can compute our value vectors as a matrix as <span class="arithmatex">\(x_{1:n}V\)</span>, and likewise our keys and queries <span class="arithmatex">\(x_{1:n}K\)</span> and <span class="arithmatex">\(x_{1:n}Q\)</span>, all matrices in <span class="arithmatex">\(\mathbb{R}^{n \times d}\)</span>. To compute self-attention, we can compute our weights in matrix operations:</p>
+<div class="arithmatex">\[\alpha = \text{softmax}(x_{1:n}QK^\top x_{1:n}^\top) \in \mathbb{R}^{n \times n}\]</div>
+<p>and then compute the self-attention operation for all <span class="arithmatex">\(x_{1:n}\)</span> via:</p>
+<div class="arithmatex">\[h_{1:n} = \text{softmax}(x_{1:n}QK^\top x_{1:n}^\top)x_{1:n}V \in \mathbb{R}^{n \times d}.\]</div>
+<p>Here's a diagram showing the matrix ops:</p>
+<p><img alt="img" src="../tm2.png" /></p>
+<p>When we perform multi-head self-attention in this matrix form, we first reshape <span class="arithmatex">\(x_{1:n}Q\)</span>, <span class="arithmatex">\(x_{1:n}K\)</span>, and <span class="arithmatex">\(x_{1:n}V\)</span> each into a matrix of shape <span class="arithmatex">\(\mathbb{R}^{n,k,d/k}\)</span>, splitting the model dimensionality into two axes, for the number of heads and the number of dimensions per head. We can then transpose the matrices to <span class="arithmatex">\(\mathbb{R}^{k,n,d/k}\)</span>, which intuitively should look like <span class="arithmatex">\(k\)</span> sequences of length <span class="arithmatex">\(n\)</span> and dimensionality <span class="arithmatex">\(d/k\)</span>. This allows us to perform the batched softmax operation in parallel across the heads, using the number of heads kind of like a batch axis (and indeed in practice we'll also have a separate batch axis.) So, the total computation (except the last linear transformation to combine the heads) is the same, just distributed across the (each lower-rank) heads. Here's a diagram like the single-head diagram, demonstrating how the multi-head operation ends up much like the single-head operation.</p>
+<p><img alt="img" src="../tm3.png" /></p>
+<h3 id="layer-norm">Layer Norm</h3>
+<p>One important learning aid in Transformers is layer normalization. The intuition of layer norm is to reduce uninformative variation in the activations at a layer, providing a more stable input to the next layer.</p>
+<h3 id="residual-connections">Residual Connections</h3>
+<p>Residual connections simply add the input of a layer to the output of that layer:</p>
+<div class="arithmatex">\[f_{\text{residual}}(h_{1:n}) = f(h_{1:n}) + h_{1:n},\]</div>
+<p>the intuition being that (1) the gradient flow of the identity function is great (the local gradient is 1 everywhere!) so the connection allows for learning much deeper networks, and (2) it is easier to learn the difference of a function from the identity function than it is to learn the function from scratch. As simple as these seem, they're massively useful in deep learning, not just in Transformers!</p>
+<h4 id="add-norm">Add &amp; Norm</h4>
+<p>In the Transformer diagrams you'll see the application of layer normalization and residual connection are often combined in a single visual block labeled Add &amp; Norm. Such a layer might look like:</p>
+<div class="arithmatex">\[h_{\text{pre-norm}} = f(\text{LN}(h)) + h,\]</div>
+<p>where <span class="arithmatex">\(f\)</span> is either a feed-forward operation or a self-attention operation, (this is known as pre-normalization), or like:</p>
+<div class="arithmatex">\[h_{\text{post-norm}} = \text{LN}(f(h) + h),\]</div>
+<p>which is known as post-normalization. It turns out that the gradients of pre-normalization are much better at initialization, leading to much faster training [Xiong et al., 2020].</p>
+<h3 id="attention-logit-scaling">Attention logit scaling</h3>
+<p>Another trick introduced in [Vaswani et al., 2017] they dub scaled dot product attention. The dot product part comes from the fact that we're computing dot products <span class="arithmatex">\(q_i^\top k_j\)</span>. The intuition of scaling is that, when the dimensionality <span class="arithmatex">\(d\)</span> of the vectors we're dotting grows large, the dot product of even random vectors (e.g., at initialization) grows roughly as <span class="arithmatex">\(\sqrt{d}\)</span>. So, we normalize the dot products by <span class="arithmatex">\(\sqrt{d}\)</span> to stop this scaling:</p>
+<div class="arithmatex">\[\alpha = \text{softmax}\left(\frac{x_{1:n}QK^\top x_{1:n}^\top}{\sqrt{d}}\right) \in \mathbb{R}^{n \times n}\]</div>
+<h3 id="transformer-encoder">Transformer Encoder</h3>
+<p>A Transformer Encoder takes a single sequence <span class="arithmatex">\(w_{1:n}\)</span>, and performs no future masking. It embeds the sequence with <span class="arithmatex">\(E\)</span> to make <span class="arithmatex">\(x_{1:n}\)</span>, adds the position representation, and then applies a stack of independently parameterized Encoder Blocks, each of which consisting of (1) multi-head attention and Add &amp; Norm, and (2) feed-forward and Add &amp; Norm. So, the output of each Block is the input to the next.</p>
+<p><img alt="img" src="../tm4.png" /></p>
+<p>A Transformer Encoder is great in contexts where you aren't trying to generate text autoregressively (there's no masking in the encoder so each position index can see the whole sequence,) and want strong representations for the whole sequence (again, possible because even the first token can see the whole future of the sequence when building its representation).</p>
+<h3 id="transformer-decoder">Transformer Decoder</h3>
+<p>To build a Transformer autoregressive language model, one uses a Transformer Decoder. These differ from Transformer Encoders simply by using future masking at each application of self-attention. This ensures that the informational constraint (no cheating by looking at the future!) holds throughout the architecture. Famous examples of this are GPT-2 [Radford et al., 2019], GPT-3 [Brown et al., 2020] and BLOOM [Workshop et al., 2022].</p>
+<h3 id="transformer-encoder-decoder">Transformer Encoder-Decoder</h3>
+<p>A Transformer encoder-decoder takes as input two sequences. The first sequence <span class="arithmatex">\(x_{1:n}\)</span> is passed through a Transformer Encoder to build contextual representations. The second sequence <span class="arithmatex">\(y_{1:m}\)</span> is encoded through a modified Transformer Decoder architecture in which cross-attention (which we haven't yet defined!) is applied from the encoded representation of <span class="arithmatex">\(y_{1:m}\)</span> to the output of the Encoder. So, let's take a quick detour to discuss cross-attention; it's not too different from what we've already seen.</p>
+<p><img alt="img" src="../tm5.png" /></p>
+<h4 id="cross-attention">Cross-Attention</h4>
+<p>Cross-attention uses one sequence to define the keys and values of self-attention, and another sequence to define the queries. You might think, hey wait, isn't that just what attention always was before we got into this self-attention business? Yeah, pretty much. So if</p>
+<div class="arithmatex">\[h^{(x)}_{1:n} = \text{TransformerEncoder}(w_{1:n}),\]</div>
+<p>and we have some intermediate representation <span class="arithmatex">\(h^{(y)}\)</span> of sequence <span class="arithmatex">\(y_{1:m}\)</span>, then we let</p>
+<div class="arithmatex">\[q_i = Qh^{(y)}_i \quad i \in \{1, \ldots, m\}\]</div>
+<div class="arithmatex">\[k_j = Kh^{(x)}_j \quad j \in \{1, \ldots, n\}\]</div>
+<div class="arithmatex">\[v_j = Vh^{(x)}_j \quad j \in \{1, \ldots, n\},\]</div>
+<p>and compute the attention on <span class="arithmatex">\(q\)</span>, <span class="arithmatex">\(k\)</span>, <span class="arithmatex">\(v\)</span> as we defined for self-attention. Note that in the Transformer Encoder-Decoder, cross-attention always applies to the output of the Transformer encoder.</p>
+<p>An encoder-decoder is used when we'd like bidirectional context on something (like an article to summarize) to build strong representations (i.e., each token can attend to all other tokens), but then generate an output according to an autoregressive decomposition as we can with a decoder. While such an architecture has been found to provide better performance than decoder-only models at modest scale [Raffel et al., 2020], it involves splitting parameters between encoder and decoder, and most of the largest Transformers are decoder-only.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      &copy; 2025 <a href="https://github.com/adi14041999"  target="_blank" rel="noopener">Aditya Prabhu</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
