@@ -22,6 +22,8 @@ nav:
       - Long-Short Term Memory (LSTM) Networks: ai/deep_learning_for_computer_vision/long_short_term_memory_networks.md
       - Seq2Seq Models: ai/deep_learning_for_computer_vision/seq2seq_models.md
       - Attention Mechanism: ai/deep_learning_for_computer_vision/attention_mechanism.md
+      - How large language models work, a visual intro to transformers: ai/deep_learning_for_computer_vision/how_large_language_models_work_a_visual_intro_to_transformers.md
+      - Attention in transformers, visually explained: ai/deep_learning_for_computer_vision/attention_in_transformers_visually_explained.md
     - Natural Language Processing:
       - Introduction: ai/natural_language_processing/introduction.md
       - Representing words: ai/natural_language_processing/representing_words.md
@@ -33,7 +35,8 @@ nav:
       - Long-Short Term Memory (LSTM) Networks: ai/natural_language_processing/long_short_term_memory_networks.md
       - Seq2Seq Models: ai/natural_language_processing/seq2seq_models.md
       - Attention Mechanism: ai/natural_language_processing/attention_mechanism.md
-      - Self-Attention and Transformers: ai/natural_language_processing/self_attention_and_transformers.md
+      - How large language models work, a visual intro to transformers: ai/natural_language_processing/how_large_language_models_work_a_visual_intro_to_transformers.md
+      - Attention in transformers, visually explained: ai/natural_language_processing/attention_in_transformers_visually_explained.md
     - Deep Generative Models:
       - Introduction: ai/deep_generative_models/introduction.md
       - Autoregressive Models: ai/deep_generative_models/autoregressive_models.md
