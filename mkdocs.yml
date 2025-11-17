@@ -20,6 +20,8 @@ nav:
       - Convolutional Neural Networks- Architectures, Convolution / Pooling Layers: ai/deep_learning_for_computer_vision/convolutional_neural_networks_architectures_convolution_pooling_layers.md
       - Recurrent Neural Networks: ai/deep_learning_for_computer_vision/recurrent_neural_networks.md
       - Long-Short Term Memory (LSTM) Networks: ai/deep_learning_for_computer_vision/long_short_term_memory_networks.md
+      - Seq2Seq Models: ai/deep_learning_for_computer_vision/seq2seq_models.md
+      - Attention Mechanism: ai/deep_learning_for_computer_vision/attention_mechanism.md
     - Natural Language Processing:
       - Introduction: ai/natural_language_processing/introduction.md
       - Representing words: ai/natural_language_processing/representing_words.md

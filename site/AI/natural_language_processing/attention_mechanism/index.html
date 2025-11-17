@@ -770,6 +770,52 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/seq2seq_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Seq2Seq Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/attention_mechanism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Attention Mechanism
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1049,6 +1095,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Attention Mechanism
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1060,6 +1119,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a-friendly-introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      A friendly introduction
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -2606,6 +2693,39 @@
 
 
 <h1 id="attention-mechanism">Attention Mechanism</h1>
+<p>When you hear the sentence "the ball is on the field," you don’t assign the same importance to all 6 words. You primarily take note of the words "ball," "on," and "field," since those are the words that are most "important" to you. Similarly, there is a flaw in using the final RNN hidden state as the single "context vector" for sequence-to-sequence models: often, different parts of an input have different levels of significance.</p>
+<p>Attention mechanisms make use of this observation by providing the decoder network with a look at the entire input sequence at every decoding step; the decoder can then decide what input words are important at any point in time.</p>
+<h2 id="a-friendly-introduction">A friendly introduction</h2>
+<p>Consider a long input we would like to translate.</p>
+<p><img alt="img" src="../att0.png" /></p>
+<p>But for longer phrases, even with LSTMs, words that are input early on can be forgotten easily. And in this case, if we forget the first word, <strong>Don't</strong>, then, <strong>Don't eat the delicious looking and smelling pizza</strong> turns into <strong>eat the delicious looking and smelling pizza</strong>. The main idea of LSTMs is that they provide separate paths for long and short memories. Even with separate paths, if we have a lot of data, both paths have to carry a lot of information. This means that a word at the start of the phrase can still get lost.</p>
+<p><img alt="img" src="../att1.png" />
+<img alt="img" src="../att2.png" />
+<img alt="img" src="../att3.png" /></p>
+<p><strong>Note:</strong> Although there are conventions, there are no rules for how <strong>Attention</strong> should be added to an <strong>Encoder-Decoder</strong> model. So what follows is just one example.</p>
+<p><img alt="img" src="../att4.png" />
+<img alt="img" src="../att5.png" />
+<img alt="img" src="../att6.png" />
+<img alt="img" src="../att7.png" />
+<img alt="img" src="../att8.png" /></p>
+<p><strong>We can instead do Dot Product as well for calculating Similarity.</strong></p>
+<p><img alt="img" src="../att9.png" /></p>
+<p>And since the score for <strong>go</strong> is higher, we want the encoding for <strong>go</strong> to have more influence on the first word that comes out of the <strong>Decoder</strong>.</p>
+<p><img alt="img" src="../att10.png" /></p>
+<p>So we can think of the output of the <strong>Softmax</strong> function as a way to determine what percentage of each encoded input word we should use when decoding.</p>
+<p><img alt="img" src="../att11.png" />
+<img alt="img" src="../att12.png" /></p>
+<p><strong>...and, lastly we add the scaled values together.</strong></p>
+<p><img alt="img" src="../att13.png" />
+<img alt="img" src="../att14.png" />
+<img alt="img" src="../att15.png" />
+<img alt="img" src="../att16.png" />
+<img alt="img" src="../att17.png" />
+<img alt="img" src="../att18.png" />
+<img alt="img" src="../att19.png" />
+<img alt="img" src="../att20.png" /></p>
+<p><strong>...and the second output from the Decoder is EOS so we are done decoding.</strong></p>
+<p>Another variation of this is where we concatenate the attention value (which is a weighted sum of encoder hidden states) with the decoder hidden state and proceed as in the non-attention encoder-decoder model.</p>
 
 
 
