@@ -16,34 +16,6 @@
 
 ![img](d7.png)
 
-![img](d8.png)
-
-![img](d9.png)
-
-![img](d10.png)
-
-![img](d11.png)
-
-![img](d12.png)
-
-![img](d13.png)
-
-![img](d14.png)
-
-![img](d15.png)
-
-![img](d16.png)
-
-![img](d17.png)
-
-![img](d18.png)
-
-![img](d19.png)
-
-![img](d20.png)
-
-![img](d21.png)
-
 ![img](d22.png)
 
 ![img](d23.png)
@@ -52,7 +24,7 @@
 
 ![img](d25.png)
 
-![img](d26.png)
+**One way to calculate similarities between the Query and the Keys is to calculate something called a Dot Product.**
 
 ![img](d27.png)
 
@@ -62,29 +34,23 @@
 
 ![img](d30.png)
 
-![img](d31.png)
+Now we use the **Query** and **Key** for **What** to calculate the similarity with itself...
 
 ![img](d32.png)
-
-![img](d33.png)
-
-![img](d34.png)
 
 ![img](d35.png)
 
 ![img](d36.png)
 
-![img](d37.png)
-
 ![img](d38.png)
 
 ![img](d39.png)
 
-![img](d40.png)
+Reusing the sets of **Weights** for the **Query**, **Key** and **Value** numbers lets the **Decoder-only Transformer** handle prompts that have different lengths.
 
 ![img](d41.png)
 
-![img](d42.png)
+Lastly, we need a way to use the encodings we have for each word in the prompt to generate the word that follows it and then to generate a response.
 
 ![img](d43.png)
 
@@ -92,11 +58,11 @@
 
 ![img](d45.png)
 
-![img](d46.png)
+Beacause this is a **Decoder-only Transformer**, we need one thing that can both encode the prompt and generate the output.
 
-![img](d47.png)
+Thus, even though we are not yet generating a response, we need to include the parts that will do that.
 
-![img](d48.png)
+Also, we can compare the known input to what the model generates when we train the model.
 
 ![img](d49.png)
 
@@ -104,19 +70,15 @@
 
 ![img](d51.png)
 
-![img](d52.png)
-
 ![img](d53.png)
 
 ![img](d54.png)
 
 ![img](d55.png)
 
-![img](d56.png)
+**Note: If we were training the Decoder-only Transformer, then we would use the fact that we made a mistake to modify the Weights and Biases.**
 
-![img](d57.png)
-
-![img](d58.png)
+In contrast, when we are using the model to generate responses, we don't really care what words come out.
 
 ![img](d59.png)
 
@@ -142,7 +104,7 @@ Let’s review.
 
 ![img](d69.png)
 
-![img](d70.png)
+However, it is also important to keep track of the relationships between the input sentence and the output.
 
 ![img](d71.png)
 
@@ -150,11 +112,11 @@ Let’s review.
 
 ![img](d73.png)
 
-![img](d74.png)
+...and these two sentences have completely opposite meanings.
 
-![img](d75.png)
+**So it is super important for the Decoder to keep track of the significant words in the input.**
 
-![img](d76.png)
+The nice thing, is that all we have to do to add this ability to our **Decoder-only Transformer** is just include the prompt when we do **Masked Self-Attention** while generating the output.
 
 ![img](d77.png)
 
@@ -162,7 +124,7 @@ Let’s review.
 
 ![img](d79.png)
 
-![img](d80.png)
+...and run everything through the Softmax function.
 
 ![img](d81.png)
 
@@ -178,7 +140,7 @@ Let’s review.
 
 ![img](d87.png)
 
-![img](d88.png)
+...and the Softmax function we used before.
 
 ![img](d89.png)
 
@@ -188,7 +150,7 @@ Let’s review.
 
 ![img](d92.png)
 
-![img](d93.png)
+Now we calculate the **Masked Self-Attention** values.
 
 ![img](d94.png)
 
@@ -200,6 +162,6 @@ Let’s review.
 
 ![img](d98.png)
 
-![img](d99.png)
+...and the Softmax function we used before.
 
 ![img](d100.png)

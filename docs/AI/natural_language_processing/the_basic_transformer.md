@@ -1,14 +1,16 @@
 # The basic Transformer
 
-![img](t0.png)
+So these two phrases...
 
-![img](t1.png)
+**'Squatch eats pizza!!!** and ***Pizza eats 'Squatch!!!**
 
-![img](t2.png)
+... use the exact same words, but have very different meanings.
 
-![img](t3.png)
+So keeping track of word order is super important.
 
-![img](t4.png)
+We'll start by showing how to add **Positional Encoding** to the phrase, **'Squatch eats pizza!!!**
+
+**Note:** There are a bunch of ways to do **Postional Encoding**, but we're going to talk about one popular method.
 
 ![img](t5.png)
 
@@ -38,17 +40,17 @@
 
 ![img](t18.png)
 
-![img](t19.png)
+... and we end up with word embeddings plus **Positional Encoding** for the whole sentence...
 
 ![img](t20.png)
 
-![img](t21.png)
+Thus, **Positional Encoding** allows a Transformer to keep track of word order.
 
 ![img](t22.png)
 
-![img](t23.png)
+...let's talk about how a Transformer keeps track of the relationships among words.
 
-![img](t24.png)
+For example, if the input sentence was this...
 
 ![img](t25.png)
 
@@ -56,9 +58,7 @@
 
 ![img](t27.png)
 
-![img](t28.png)
-
-![img](t29.png)
+**The good news is that Transformers have something called Self-Attention, which is a mechanism to correctly associate the word 'it' with 'pizza'. In general, Self-Attention works by seeing how similar each word is to all the words in the sentence, including itself.**
 
 ![img](t30.png)
 
@@ -90,17 +90,15 @@
 
 ![img](t44.png)
 
-![img](t45.png)
+**One way to calculate similarities between the Query and the Keys is to calculate something called a Dot Product.**
 
 ![img](t46.png)
 
-![img](t47.png)
+**...tells us Let's is much more similar to itself than it is to the word Go.**
 
 ![img](t48.png)
 
 ![img](t49.png)
-
-![img](t50.png)
 
 ![img](t51.png)
 
@@ -124,9 +122,7 @@
 
 ![img](t61.png)
 
-![img](t62.png)
-
-![img](t63.png)
+**First, the new Self-Attention values for each word contain input from all of the other words, and this helps give each word context**.
 
 ![img](t64.png)
 
@@ -134,17 +130,15 @@
 
 ![img](t66.png)
 
-![img](t67.png)
+And that is all we need to do encode the input for this simple Transformer.
 
 ![img](t68.png)
-
-![img](t69.png)
 
 ![img](t70.png)
 
 ![img](t71.png)
 
-![img](t72.png)
+**However, this time we create embedding values for the output vocabulary, which consists of the Spanish words...** 
 
 ![img](t73.png)
 
@@ -160,13 +154,11 @@
 
 ![img](t79.png)
 
-![img](t80.png)
+**Note: The sets of Weights we used to calculate the Decoder's Self-Attention Query, Key and Value are different from the sets we used in the Encoder.**
 
 ![img](t81.png)
 
-![img](t82.png)
-
-![img](t83.png)
+**Now, so far we have talked about how Self-Attention helps the Transformer keep track of how words are related within a sentence. However, since we're translating a sentence, we need to keep track of the relationships between the input sentence and the output.**
 
 ![img](t84.png)
 
@@ -174,11 +166,11 @@
 
 ![img](t86.png)
 
-![img](t87.png)
+...and these two sentences have completely opposite meanings.
 
-![img](t88.png)
+**So it is super important for the Decoder to keep track of the significant words in the input.**
 
-![img](t89.png)
+**So, the main idea of Encoder-Decoder Attention is to allow the Decoder to keep track of the significant words in the input.**
 
 ![img](t90.png)
 
@@ -192,9 +184,9 @@
 
 ![img](t95.png)
 
-![img](t96.png)
+Now that we know what percentage of each input word to use when determining what should be the first translated word...
 
-![img](t97.png)
+...we calculate **Values** for each input word.
 
 ![img](t98.png)
 
@@ -202,7 +194,7 @@
 
 ![img](t100.png)
 
-![img](t101.png)
+**Note: The weights we use to calculate the Queries, Keys and Values for Encoder-Decoder Attention are different from the sets of Weights we use for Self-Attention.** 
 
 ![img](t102.png)
 
@@ -216,9 +208,9 @@
 
 ![img](t107.png)
 
-![img](t108.png)
+First, we get the **Word Embeddings** for **vamos**...
 
-![img](t109.png)
+...then we add the **Positional Encoding**. 
 
 ![img](t110.png)
 

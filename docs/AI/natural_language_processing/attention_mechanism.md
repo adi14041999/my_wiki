@@ -4,8 +4,6 @@ When you hear the sentence "the ball is on the field," you don’t assign the sa
 
 Attention mechanisms make use of this observation by providing the decoder network with a look at the entire input sequence at every decoding step; the decoder can then decide what input words are important at any point in time.
 
-## A friendly introduction
-
 Consider a long input we would like to translate.
 
 ![img](att0.png)

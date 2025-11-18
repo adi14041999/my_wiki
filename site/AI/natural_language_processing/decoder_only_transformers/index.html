@@ -724,144 +724,6 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/recurrent_neural_networks/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Recurrent Neural Networks
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/long_short_term_memory_networks/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Long-Short Term Memory (LSTM) Networks
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/seq2seq_models/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Seq2Seq Models
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/attention_mechanism/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Attention Mechanism
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/how_large_language_models_work_a_visual_intro_to_transformers/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    How large language models work, a visual intro to transformers
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/attention_in_transformers_visually_explained/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Attention in transformers, visually explained
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
           </ul>
         </nav>
       
@@ -2821,57 +2683,38 @@
 <p><img alt="img" src="../d5.png" /></p>
 <p><img alt="img" src="../d6.png" /></p>
 <p><img alt="img" src="../d7.png" /></p>
-<p><img alt="img" src="../d8.png" /></p>
-<p><img alt="img" src="../d9.png" /></p>
-<p><img alt="img" src="../d10.png" /></p>
-<p><img alt="img" src="../d11.png" /></p>
-<p><img alt="img" src="../d12.png" /></p>
-<p><img alt="img" src="../d13.png" /></p>
-<p><img alt="img" src="../d14.png" /></p>
-<p><img alt="img" src="../d15.png" /></p>
-<p><img alt="img" src="../d16.png" /></p>
-<p><img alt="img" src="../d17.png" /></p>
-<p><img alt="img" src="../d18.png" /></p>
-<p><img alt="img" src="../d19.png" /></p>
-<p><img alt="img" src="../d20.png" /></p>
-<p><img alt="img" src="../d21.png" /></p>
 <p><img alt="img" src="../d22.png" /></p>
 <p><img alt="img" src="../d23.png" /></p>
 <p><img alt="img" src="../d24.png" /></p>
 <p><img alt="img" src="../d25.png" /></p>
-<p><img alt="img" src="../d26.png" /></p>
+<p><strong>One way to calculate similarities between the Query and the Keys is to calculate something called a Dot Product.</strong></p>
 <p><img alt="img" src="../d27.png" /></p>
 <p><img alt="img" src="../d28.png" /></p>
 <p><img alt="img" src="../d29.png" /></p>
 <p><img alt="img" src="../d30.png" /></p>
-<p><img alt="img" src="../d31.png" /></p>
+<p>Now we use the <strong>Query</strong> and <strong>Key</strong> for <strong>What</strong> to calculate the similarity with itself...</p>
 <p><img alt="img" src="../d32.png" /></p>
-<p><img alt="img" src="../d33.png" /></p>
-<p><img alt="img" src="../d34.png" /></p>
 <p><img alt="img" src="../d35.png" /></p>
 <p><img alt="img" src="../d36.png" /></p>
-<p><img alt="img" src="../d37.png" /></p>
 <p><img alt="img" src="../d38.png" /></p>
 <p><img alt="img" src="../d39.png" /></p>
-<p><img alt="img" src="../d40.png" /></p>
+<p>Reusing the sets of <strong>Weights</strong> for the <strong>Query</strong>, <strong>Key</strong> and <strong>Value</strong> numbers lets the <strong>Decoder-only Transformer</strong> handle prompts that have different lengths.</p>
 <p><img alt="img" src="../d41.png" /></p>
-<p><img alt="img" src="../d42.png" /></p>
+<p>Lastly, we need a way to use the encodings we have for each word in the prompt to generate the word that follows it and then to generate a response.</p>
 <p><img alt="img" src="../d43.png" /></p>
 <p><img alt="img" src="../d44.png" /></p>
 <p><img alt="img" src="../d45.png" /></p>
-<p><img alt="img" src="../d46.png" /></p>
-<p><img alt="img" src="../d47.png" /></p>
-<p><img alt="img" src="../d48.png" /></p>
+<p>Beacause this is a <strong>Decoder-only Transformer</strong>, we need one thing that can both encode the prompt and generate the output.</p>
+<p>Thus, even though we are not yet generating a response, we need to include the parts that will do that.</p>
+<p>Also, we can compare the known input to what the model generates when we train the model.</p>
 <p><img alt="img" src="../d49.png" /></p>
 <p><img alt="img" src="../d50.png" /></p>
 <p><img alt="img" src="../d51.png" /></p>
-<p><img alt="img" src="../d52.png" /></p>
 <p><img alt="img" src="../d53.png" /></p>
 <p><img alt="img" src="../d54.png" /></p>
 <p><img alt="img" src="../d55.png" /></p>
-<p><img alt="img" src="../d56.png" /></p>
-<p><img alt="img" src="../d57.png" /></p>
-<p><img alt="img" src="../d58.png" /></p>
+<p><strong>Note: If we were training the Decoder-only Transformer, then we would use the fact that we made a mistake to modify the Weights and Biases.</strong></p>
+<p>In contrast, when we are using the model to generate responses, we don't really care what words come out.</p>
 <p><img alt="img" src="../d59.png" /></p>
 <p><img alt="img" src="../d60.png" /></p>
 <p>Let’s review.</p>
@@ -2884,17 +2727,17 @@
 <p><img alt="img" src="../d67.png" /></p>
 <p><img alt="img" src="../d68.png" /></p>
 <p><img alt="img" src="../d69.png" /></p>
-<p><img alt="img" src="../d70.png" /></p>
+<p>However, it is also important to keep track of the relationships between the input sentence and the output.</p>
 <p><img alt="img" src="../d71.png" /></p>
 <p><img alt="img" src="../d72.png" /></p>
 <p><img alt="img" src="../d73.png" /></p>
-<p><img alt="img" src="../d74.png" /></p>
-<p><img alt="img" src="../d75.png" /></p>
-<p><img alt="img" src="../d76.png" /></p>
+<p>...and these two sentences have completely opposite meanings.</p>
+<p><strong>So it is super important for the Decoder to keep track of the significant words in the input.</strong></p>
+<p>The nice thing, is that all we have to do to add this ability to our <strong>Decoder-only Transformer</strong> is just include the prompt when we do <strong>Masked Self-Attention</strong> while generating the output.</p>
 <p><img alt="img" src="../d77.png" /></p>
 <p><img alt="img" src="../d78.png" /></p>
 <p><img alt="img" src="../d79.png" /></p>
-<p><img alt="img" src="../d80.png" /></p>
+<p>...and run everything through the Softmax function.</p>
 <p><img alt="img" src="../d81.png" /></p>
 <p><img alt="img" src="../d82.png" /></p>
 <p><img alt="img" src="../d83.png" /></p>
@@ -2902,18 +2745,18 @@
 <p><img alt="img" src="../d85.png" /></p>
 <p><img alt="img" src="../d86.png" /></p>
 <p><img alt="img" src="../d87.png" /></p>
-<p><img alt="img" src="../d88.png" /></p>
+<p>...and the Softmax function we used before.</p>
 <p><img alt="img" src="../d89.png" /></p>
 <p><img alt="img" src="../d90.png" /></p>
 <p><img alt="img" src="../d91.png" /></p>
 <p><img alt="img" src="../d92.png" /></p>
-<p><img alt="img" src="../d93.png" /></p>
+<p>Now we calculate the <strong>Masked Self-Attention</strong> values.</p>
 <p><img alt="img" src="../d94.png" /></p>
 <p><img alt="img" src="../d95.png" /></p>
 <p><img alt="img" src="../d96.png" /></p>
 <p><img alt="img" src="../d97.png" /></p>
 <p><img alt="img" src="../d98.png" /></p>
-<p><img alt="img" src="../d99.png" /></p>
+<p>...and the Softmax function we used before.</p>
 <p><img alt="img" src="../d100.png" /></p>
 
 

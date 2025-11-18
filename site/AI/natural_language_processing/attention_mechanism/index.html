@@ -724,144 +724,6 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/recurrent_neural_networks/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Recurrent Neural Networks
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/long_short_term_memory_networks/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Long-Short Term Memory (LSTM) Networks
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/seq2seq_models/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Seq2Seq Models
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/attention_mechanism/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Attention Mechanism
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/how_large_language_models_work_a_visual_intro_to_transformers/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    How large language models work, a visual intro to transformers
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/attention_in_transformers_visually_explained/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Attention in transformers, visually explained
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
           </ul>
         </nav>
       
@@ -1141,19 +1003,6 @@
         
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Attention Mechanism
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1165,34 +1014,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#a-friendly-introduction" class="md-nav__link">
-    <span class="md-ellipsis">
-      A friendly introduction
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
       
     </li>
   
@@ -2856,7 +2677,6 @@
 <h1 id="attention-mechanism">Attention Mechanism</h1>
 <p>When you hear the sentence "the ball is on the field," you don’t assign the same importance to all 6 words. You primarily take note of the words "ball," "on," and "field," since those are the words that are most "important" to you. Similarly, there is a flaw in using the final RNN hidden state as the single "context vector" for sequence-to-sequence models: often, different parts of an input have different levels of significance.</p>
 <p>Attention mechanisms make use of this observation by providing the decoder network with a look at the entire input sequence at every decoding step; the decoder can then decide what input words are important at any point in time.</p>
-<h2 id="a-friendly-introduction">A friendly introduction</h2>
 <p>Consider a long input we would like to translate.</p>
 <p><img alt="img" src="../att0.png" /></p>
 <p>But for longer phrases, even with LSTMs, words that are input early on can be forgotten easily. And in this case, if we forget the first word, <strong>Don't</strong>, then, <strong>Don't eat the delicious looking and smelling pizza</strong> turns into <strong>eat the delicious looking and smelling pizza</strong>. The main idea of LSTMs is that they provide separate paths for long and short memories. Even with separate paths, if we have a lot of data, both paths have to carry a lot of information. This means that a word at the start of the phrase can still get lost.</p>

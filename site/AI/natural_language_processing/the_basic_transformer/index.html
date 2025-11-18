@@ -724,144 +724,6 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/recurrent_neural_networks/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Recurrent Neural Networks
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/long_short_term_memory_networks/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Long-Short Term Memory (LSTM) Networks
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/seq2seq_models/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Seq2Seq Models
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/attention_mechanism/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Attention Mechanism
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/how_large_language_models_work_a_visual_intro_to_transformers/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    How large language models work, a visual intro to transformers
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deep_learning_for_computer_vision/attention_in_transformers_visually_explained/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Attention in transformers, visually explained
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
           </ul>
         </nav>
       
@@ -2813,11 +2675,12 @@
 
 
 <h1 id="the-basic-transformer">The basic Transformer</h1>
-<p><img alt="img" src="../t0.png" /></p>
-<p><img alt="img" src="../t1.png" /></p>
-<p><img alt="img" src="../t2.png" /></p>
-<p><img alt="img" src="../t3.png" /></p>
-<p><img alt="img" src="../t4.png" /></p>
+<p>So these two phrases...</p>
+<p><strong>'Squatch eats pizza!!!</strong> and <strong>*Pizza eats 'Squatch!!!</strong></p>
+<p>... use the exact same words, but have very different meanings.</p>
+<p>So keeping track of word order is super important.</p>
+<p>We'll start by showing how to add <strong>Positional Encoding</strong> to the phrase, <strong>'Squatch eats pizza!!!</strong></p>
+<p><strong>Note:</strong> There are a bunch of ways to do <strong>Postional Encoding</strong>, but we're going to talk about one popular method.</p>
 <p><img alt="img" src="../t5.png" /></p>
 <p><img alt="img" src="../t6.png" /></p>
 <p><img alt="img" src="../t7.png" /></p>
@@ -2832,17 +2695,16 @@
 <p><img alt="img" src="../t16.png" /></p>
 <p><img alt="img" src="../t17.png" /></p>
 <p><img alt="img" src="../t18.png" /></p>
-<p><img alt="img" src="../t19.png" /></p>
+<p>... and we end up with word embeddings plus <strong>Positional Encoding</strong> for the whole sentence...</p>
 <p><img alt="img" src="../t20.png" /></p>
-<p><img alt="img" src="../t21.png" /></p>
+<p>Thus, <strong>Positional Encoding</strong> allows a Transformer to keep track of word order.</p>
 <p><img alt="img" src="../t22.png" /></p>
-<p><img alt="img" src="../t23.png" /></p>
-<p><img alt="img" src="../t24.png" /></p>
+<p>...let's talk about how a Transformer keeps track of the relationships among words.</p>
+<p>For example, if the input sentence was this...</p>
 <p><img alt="img" src="../t25.png" /></p>
 <p><img alt="img" src="../t26.png" /></p>
 <p><img alt="img" src="../t27.png" /></p>
-<p><img alt="img" src="../t28.png" /></p>
-<p><img alt="img" src="../t29.png" /></p>
+<p><strong>The good news is that Transformers have something called Self-Attention, which is a mechanism to correctly associate the word 'it' with 'pizza'. In general, Self-Attention works by seeing how similar each word is to all the words in the sentence, including itself.</strong></p>
 <p><img alt="img" src="../t30.png" /></p>
 <p><img alt="img" src="../t31.png" /></p>
 <p><img alt="img" src="../t32.png" /></p>
@@ -2858,12 +2720,11 @@
 <p><img alt="img" src="../t42.png" /></p>
 <p><img alt="img" src="../t43.png" /></p>
 <p><img alt="img" src="../t44.png" /></p>
-<p><img alt="img" src="../t45.png" /></p>
+<p><strong>One way to calculate similarities between the Query and the Keys is to calculate something called a Dot Product.</strong></p>
 <p><img alt="img" src="../t46.png" /></p>
-<p><img alt="img" src="../t47.png" /></p>
+<p><strong>...tells us Let's is much more similar to itself than it is to the word Go.</strong></p>
 <p><img alt="img" src="../t48.png" /></p>
 <p><img alt="img" src="../t49.png" /></p>
-<p><img alt="img" src="../t50.png" /></p>
 <p><img alt="img" src="../t51.png" /></p>
 <p><img alt="img" src="../t52.png" /></p>
 <p><img alt="img" src="../t53.png" /></p>
@@ -2875,17 +2736,15 @@
 <p><img alt="img" src="../t59.png" /></p>
 <p><img alt="img" src="../t60.png" /></p>
 <p><img alt="img" src="../t61.png" /></p>
-<p><img alt="img" src="../t62.png" /></p>
-<p><img alt="img" src="../t63.png" /></p>
+<p><strong>First, the new Self-Attention values for each word contain input from all of the other words, and this helps give each word context</strong>.</p>
 <p><img alt="img" src="../t64.png" /></p>
 <p><img alt="img" src="../t65.png" /></p>
 <p><img alt="img" src="../t66.png" /></p>
-<p><img alt="img" src="../t67.png" /></p>
+<p>And that is all we need to do encode the input for this simple Transformer.</p>
 <p><img alt="img" src="../t68.png" /></p>
-<p><img alt="img" src="../t69.png" /></p>
 <p><img alt="img" src="../t70.png" /></p>
 <p><img alt="img" src="../t71.png" /></p>
-<p><img alt="img" src="../t72.png" /></p>
+<p><strong>However, this time we create embedding values for the output vocabulary, which consists of the Spanish words...</strong> </p>
 <p><img alt="img" src="../t73.png" /></p>
 <p><img alt="img" src="../t74.png" /></p>
 <p><img alt="img" src="../t75.png" /></p>
@@ -2893,36 +2752,35 @@
 <p><img alt="img" src="../t77.png" /></p>
 <p><img alt="img" src="../t78.png" /></p>
 <p><img alt="img" src="../t79.png" /></p>
-<p><img alt="img" src="../t80.png" /></p>
+<p><strong>Note: The sets of Weights we used to calculate the Decoder's Self-Attention Query, Key and Value are different from the sets we used in the Encoder.</strong></p>
 <p><img alt="img" src="../t81.png" /></p>
-<p><img alt="img" src="../t82.png" /></p>
-<p><img alt="img" src="../t83.png" /></p>
+<p><strong>Now, so far we have talked about how Self-Attention helps the Transformer keep track of how words are related within a sentence. However, since we're translating a sentence, we need to keep track of the relationships between the input sentence and the output.</strong></p>
 <p><img alt="img" src="../t84.png" /></p>
 <p><img alt="img" src="../t85.png" /></p>
 <p><img alt="img" src="../t86.png" /></p>
-<p><img alt="img" src="../t87.png" /></p>
-<p><img alt="img" src="../t88.png" /></p>
-<p><img alt="img" src="../t89.png" /></p>
+<p>...and these two sentences have completely opposite meanings.</p>
+<p><strong>So it is super important for the Decoder to keep track of the significant words in the input.</strong></p>
+<p><strong>So, the main idea of Encoder-Decoder Attention is to allow the Decoder to keep track of the significant words in the input.</strong></p>
 <p><img alt="img" src="../t90.png" /></p>
 <p><img alt="img" src="../t91.png" /></p>
 <p><img alt="img" src="../t92.png" /></p>
 <p><img alt="img" src="../t93.png" /></p>
 <p><img alt="img" src="../t94.png" /></p>
 <p><img alt="img" src="../t95.png" /></p>
-<p><img alt="img" src="../t96.png" /></p>
-<p><img alt="img" src="../t97.png" /></p>
+<p>Now that we know what percentage of each input word to use when determining what should be the first translated word...</p>
+<p>...we calculate <strong>Values</strong> for each input word.</p>
 <p><img alt="img" src="../t98.png" /></p>
 <p><img alt="img" src="../t99.png" /></p>
 <p><img alt="img" src="../t100.png" /></p>
-<p><img alt="img" src="../t101.png" /></p>
+<p><strong>Note: The weights we use to calculate the Queries, Keys and Values for Encoder-Decoder Attention are different from the sets of Weights we use for Self-Attention.</strong> </p>
 <p><img alt="img" src="../t102.png" /></p>
 <p><img alt="img" src="../t103.png" /></p>
 <p><img alt="img" src="../t104.png" /></p>
 <p><img alt="img" src="../t105.png" /></p>
 <p><img alt="img" src="../t106.png" /></p>
 <p><img alt="img" src="../t107.png" /></p>
-<p><img alt="img" src="../t108.png" /></p>
-<p><img alt="img" src="../t109.png" /></p>
+<p>First, we get the <strong>Word Embeddings</strong> for <strong>vamos</strong>...</p>
+<p>...then we add the <strong>Positional Encoding</strong>. </p>
 <p><img alt="img" src="../t110.png" /></p>
 <p><img alt="img" src="../t111.png" /></p>
 <p><img alt="img" src="../t112.png" /></p>
