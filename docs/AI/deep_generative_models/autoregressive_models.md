@@ -156,6 +156,26 @@ This is how RNADE is autoregressive. Example sequence showing autoregressive dep
 
 This sequential, conditional generation process is what makes RNADE an autoregressive model. The mixture of Gaussians is just the form of the conditional distribution, but the autoregressive property comes from how these distributions are parameterized based on previous variables.
 
+### RNNs and LLMs are examples of autoregressive models
+
+Recurrent Neural Networks (RNNs) and Large Language Models (LLMs) are prominent examples of autoregressive models in practice. Both architectures model sequences by factorizing the joint probability over tokens using the chain rule, where each token's probability depends on all previous tokens in the sequence.
+
+**RNNs** process sequences sequentially, maintaining a hidden state that encodes information about all previous tokens. At each time step $t$, an RNN computes:
+
+$$
+p(x_t \mid x_{<t}) = \text{softmax}(f(h_t))
+$$
+
+where $h_t$ is the hidden state that depends on the previous hidden state $h_{t-1}$ and the current input $x_{t-1}$. The hidden state acts as a compressed representation of the history $x_{<t}$, allowing the model to condition each token on all preceding context.
+
+**LLMs** (such as GPT, BERT's decoder variants, and Transformer-based language models) extend this autoregressive framework using attention mechanisms. Instead of maintaining a single hidden state, Transformers use self-attention to directly attend to all previous tokens when predicting the next token:
+
+$$
+p(x_t \mid x_{<t}) = \text{softmax}(\text{Attention}(x_1, \dots, x_{t-1}))
+$$
+
+The key autoregressive property in both cases is that generation proceeds sequentially: to sample a sequence, you must first sample $x_1$, then $x_2$ given $x_1$, then $x_3$ given $x_1, x_2$, and so on. This sequential dependency structure is what makes these models autoregressive, even though the underlying architectures (RNN vs. Transformer) differ in how they encode and utilize the conditioning context $x_{<t}$.
+
 ## Learning and inference
 
 Recall that learning a generative model involves optimizing the closeness between the data and model distributions. One commonly used notion of closeness is the KL divergence between the data and the model distributions:

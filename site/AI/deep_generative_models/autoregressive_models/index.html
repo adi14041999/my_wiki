@@ -1334,6 +1334,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Representation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rnns-and-llms-are-examples-of-autoregressive-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      RNNs and LLMs are examples of autoregressive models
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2892,6 +2907,18 @@ p_{\theta_i}(x_i \mid \mathbf{x}_{&lt;i}) = \frac{1}{K} \sum_{k=1}^K \mathcal{N}
   - Input to <span class="arithmatex">\(g_4\)</span>: <span class="arithmatex">\(\mathbf{x}_{&lt;4} = [x_1, x_2, x_3]\)</span>
   - Output: <span class="arithmatex">\(\{\mu_{4,k}, \Sigma_{4,k}\}_{k=1}^K\)</span> for <span class="arithmatex">\(p(x_4 \mid x_1, x_2, x_3)\)</span></p>
 <p>This sequential, conditional generation process is what makes RNADE an autoregressive model. The mixture of Gaussians is just the form of the conditional distribution, but the autoregressive property comes from how these distributions are parameterized based on previous variables.</p>
+<h3 id="rnns-and-llms-are-examples-of-autoregressive-models">RNNs and LLMs are examples of autoregressive models</h3>
+<p>Recurrent Neural Networks (RNNs) and Large Language Models (LLMs) are prominent examples of autoregressive models in practice. Both architectures model sequences by factorizing the joint probability over tokens using the chain rule, where each token's probability depends on all previous tokens in the sequence.</p>
+<p><strong>RNNs</strong> process sequences sequentially, maintaining a hidden state that encodes information about all previous tokens. At each time step <span class="arithmatex">\(t\)</span>, an RNN computes:</p>
+<div class="arithmatex">\[
+p(x_t \mid x_{&lt;t}) = \text{softmax}(f(h_t))
+\]</div>
+<p>where <span class="arithmatex">\(h_t\)</span> is the hidden state that depends on the previous hidden state <span class="arithmatex">\(h_{t-1}\)</span> and the current input <span class="arithmatex">\(x_{t-1}\)</span>. The hidden state acts as a compressed representation of the history <span class="arithmatex">\(x_{&lt;t}\)</span>, allowing the model to condition each token on all preceding context.</p>
+<p><strong>LLMs</strong> (such as GPT, BERT's decoder variants, and Transformer-based language models) extend this autoregressive framework using attention mechanisms. Instead of maintaining a single hidden state, Transformers use self-attention to directly attend to all previous tokens when predicting the next token:</p>
+<div class="arithmatex">\[
+p(x_t \mid x_{&lt;t}) = \text{softmax}(\text{Attention}(x_1, \dots, x_{t-1}))
+\]</div>
+<p>The key autoregressive property in both cases is that generation proceeds sequentially: to sample a sequence, you must first sample <span class="arithmatex">\(x_1\)</span>, then <span class="arithmatex">\(x_2\)</span> given <span class="arithmatex">\(x_1\)</span>, then <span class="arithmatex">\(x_3\)</span> given <span class="arithmatex">\(x_1, x_2\)</span>, and so on. This sequential dependency structure is what makes these models autoregressive, even though the underlying architectures (RNN vs. Transformer) differ in how they encode and utilize the conditioning context <span class="arithmatex">\(x_{&lt;t}\)</span>.</p>
 <h2 id="learning-and-inference">Learning and inference</h2>
 <p>Recall that learning a generative model involves optimizing the closeness between the data and model distributions. One commonly used notion of closeness is the KL divergence between the data and the model distributions:</p>
 <div class="arithmatex">\[
