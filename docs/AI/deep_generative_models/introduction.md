@@ -1,9 +1,11 @@
 # Introduction
+
 Natural agents excel at discovering patterns, extracting knowledge, and performing complex reasoning based on the data they observe. How can we build artificial learning systems to do the same?
 
 Generative models view the world under the lens of probability. **In such a worldview, we can think of any kind of observed data, say :black_square_button:, as a finite set of samples from an underlying distribution, say  pdata. At its very core, the goal of any generative model is then to approximate this data distribution given access to the dataset :black_square_button:.** The hope is that if we are able to  _learn_  a good generative model, we can use the learned model for downstream  _inference_.
 
 ## Learning
+
 We will be primarily interested in parametric approximations (parametric models assume a specific data distribution (like a normal distribution) and estimate parameters (like the mean and standard deviation) of that distribution, while non-parametric models make no assumptions about the underlying distribution) to the data distribution, which summarize all the information about the dataset :black_square_button: in a finite set of parameters. In contrast with non-parametric models, parametric models scale more efficiently with large datasets but are limited in the family of distributions they can represent.
 
 **In the parametric setting, we can think of the task of learning a generative model as picking the parameters within a family of model distributions that minimizes some notion of distance between the model distribution and the data distribution.**
@@ -26,14 +28,21 @@ We will be primarily interested in the following questions:
 -   What is the objective function  d(⋅)?
 -   What is the optimization procedure for minimizing  d(⋅)?
 
+## Generative vs Discriminative models
+
+![img](dis0.png)
+![img](dis1.png)
+![img](dis2.png)
+![img](dis3.png)
+![img](dis4.png)
+![img](dis5.png)
+![img](dis6.png)
+![img](dis7.png)
+![img](dis8.png)
+![img](dis9.png)
+
 ## Inference
-Discriminative models, also referred to as  conditional models, are a class of models frequently used for  [classification](https://en.wikipedia.org/wiki/Statistical_classification "Statistical classification"). They are typically used to solve  [binary classification](https://en.wikipedia.org/wiki/Binary_classification "Binary classification")  problems, i.e. assign labels, such as pass/fail, win/lose, alive/dead or healthy/sick, to existing datapoints.
 
-Types of discriminative models include  [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression "Logistic regression")  (LR),  [conditional random fields](https://en.wikipedia.org/wiki/Conditional_random_field "Conditional random field")  (CRFs),  [decision trees](https://en.wikipedia.org/wiki/Decision_trees "Decision trees")  among many others.  [Generative model](https://en.wikipedia.org/wiki/Generative_model "Generative model")  approaches which uses a joint probability distribution instead, include  [naive Bayes classifiers](https://en.wikipedia.org/wiki/Naive_Bayes_classifier "Naive Bayes classifier"),  [Gaussian mixture models](https://en.wikipedia.org/wiki/Gaussian_mixture_model "Gaussian mixture model"),  [variational autoencoders](https://en.wikipedia.org/wiki/Autoencoder#Variational_autoencoder_(VAE) "Autoencoder"),  [generative adversarial networks](https://en.wikipedia.org/wiki/Generative_adversarial_network "Generative adversarial network")  and others.
-
-**Unlike generative modelling, which studies the [joint probability](https://en.wikipedia.org/wiki/Joint_probability_distribution "Joint probability distribution")  P(x,y), discriminative modeling studies the P(y|x) or maps the given unobserved variable (target) x to a class label y dependent on the observed variables (training samples).** For example, in [object recognition](https://en.wikipedia.org/wiki/Object_recognition "Object recognition"), x is likely to be a vector of raw pixels (or features extracted from the raw pixels of the image). Within a probabilistic framework, this is done by modeling the [conditional probability distribution](https://en.wikipedia.org/wiki/Conditional_probability_distribution "Conditional probability distribution")  P(y|x), which can be used for predicting y from x.
-
-For a discriminative model such as logistic regression, the fundamental inference task is to predict a label for any given datapoint. Generative models, on the other hand, learn a joint distribution over the entire data.
 While the range of applications to which generative models have been used continue to grow, we can identify three fundamental inference queries for evaluating a generative model.:
 
 1.  _Density estimation:_  Given a datapoint  x, what is the probability assigned by the model, i.e.,  pθ(x)?
