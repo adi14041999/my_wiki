@@ -1351,9 +1351,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#representation" class="md-nav__link">
     <span class="md-ellipsis">
       Representation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-vaes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why VAEs?
     </span>
   </a>
   
@@ -2876,6 +2894,13 @@
 
 
 <h1 id="variational-autoencoders">Variational autoencoders</h1>
+<h2 id="introduction">Introduction</h2>
+<p><img alt="img" src="../vae0.png" />
+<img alt="img" src="../vae1.png" />
+<img alt="img" src="../vae2.png" />
+<img alt="img" src="../vae3.png" /></p>
+<p><strong>And that's what a VAE is! We force all z to come from a known distribution, like a Gaussian.</strong></p>
+<p><img alt="img" src="../vae4.png" /></p>
 <h2 id="representation">Representation</h2>
 <p>Consider a directed, latent variable model as shown below.</p>
 <p><img alt="Graphical model for a directed, latent variable model." src="../vae_zx.png" /></p>
@@ -2893,6 +2918,10 @@
 <li>Given a sample <span class="arithmatex">\(x\)</span> and a model <span class="arithmatex">\(p \in \mathcal{X,Z}\)</span>, what is the posterior distribution over the latent variables <span class="arithmatex">\(z\)</span>?</li>
 </ol>
 <p>The posterior distribution <span class="arithmatex">\(p(z|x)\)</span> represents our updated beliefs about the latent variables <span class="arithmatex">\(z\)</span> after observing the data <span class="arithmatex">\(x\)</span>. In other words, it tells us what values of <span class="arithmatex">\(z\)</span> are most likely to have generated the observed <span class="arithmatex">\(x\)</span>. This is particularly useful for tasks like feature extraction, where we want to understand what latent factors might have generated our observed data.</p>
+<h2 id="why-vaes">Why VAEs?</h2>
+<p>While VAEs only compute approximate densities through the ELBO rather than exact marginal likelihoods, they remain highly useful for several key reasons:</p>
+<p><strong>1. Learned Latent Representations</strong>: Learned latent representations (the approximate posterior <span class="arithmatex">\(q_\phi(z|x)\)</span> learned by the encoder; we'll get to what this means later) provides a meaningful compressed representation of the data. This latent space captures semantically relevant features and enables tasks like interpolation, manipulation, and feature extraction that would be difficult with exact but intractable inference methods.</p>
+<p><strong>2. Practical Benefits Outweigh Approximation Error</strong>: For most applications, the benefits of having a trainable, scalable generative model with a structured latent space far outweigh the approximation error introduced by using the ELBO. The approximation is often "good enough" for practical purposes, and the alternative—exact inference—is simply not feasible for complex, high-dimensional data.</p>
 <h2 id="learning-directed-latent-variable-models">Learning Directed Latent Variable Models</h2>
 <p>One way to measure how closely <span class="arithmatex">\(p(x,z)\)</span> fits the observed dataset <span class="arithmatex">\(\mathcal{D}\)</span> is to measure the Kullback-Leibler (KL) divergence between the data distribution (which we denote as <span class="arithmatex">\(p_{data}(x)\)</span>) and the model's marginal distribution <span class="arithmatex">\(p(x) = \int p(x,z)dz\)</span>. The distribution that "best" fits the data is thus obtained by minimizing the KL divergence.</p>
 <div class="arithmatex">\[\min_{p \in \mathcal{X,Z}} D_{KL}(p_{data}(x) \| p(x)).\]</div>

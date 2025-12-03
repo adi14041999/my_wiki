@@ -1,4 +1,16 @@
 # Variational autoencoders
+
+## Introduction
+
+![img](vae0.png)
+![img](vae1.png)
+![img](vae2.png)
+![img](vae3.png)
+
+**And that's what a VAE is! We force all z to come from a known distribution, like a Gaussian.**
+
+![img](vae4.png)
+
 ## Representation
 Consider a directed, latent variable model as shown below.
 
@@ -26,6 +38,14 @@ Given a dataset $\mathcal{D} = \{x^{(1)}, \ldots, x^{(n)}\}$, we are interested 
 2. Given a sample $x$ and a model $p \in \mathcal{X,Z}$, what is the posterior distribution over the latent variables $z$?
 
 The posterior distribution $p(z|x)$ represents our updated beliefs about the latent variables $z$ after observing the data $x$. In other words, it tells us what values of $z$ are most likely to have generated the observed $x$. This is particularly useful for tasks like feature extraction, where we want to understand what latent factors might have generated our observed data.
+
+## Why VAEs?
+
+While VAEs only compute approximate densities through the ELBO rather than exact marginal likelihoods, they remain highly useful for several key reasons:
+
+**1. Learned Latent Representations**: Learned latent representations (the approximate posterior $q_\phi(z|x)$ learned by the encoder; we'll get to what this means later) provides a meaningful compressed representation of the data. This latent space captures semantically relevant features and enables tasks like interpolation, manipulation, and feature extraction that would be difficult with exact but intractable inference methods.
+
+**2. Practical Benefits Outweigh Approximation Error**: For most applications, the benefits of having a trainable, scalable generative model with a structured latent space far outweigh the approximation error introduced by using the ELBO. The approximation is often "good enough" for practical purposes, and the alternative—exact inference—is simply not feasible for complex, high-dimensional data.
 
 ## Learning Directed Latent Variable Models
 
