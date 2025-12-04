@@ -85,6 +85,8 @@ The generator and discriminator both play a two player minimax game, where:
 
 Intuitively, the generator tries to fool the discriminator to the best of its ability by generating samples that look indistinguishable from $p_{data}$.
 
+![img](gan0.png)
+
 ### Formal Objective
 
 The GAN objective can be written as:

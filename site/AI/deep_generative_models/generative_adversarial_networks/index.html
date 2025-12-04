@@ -3115,6 +3115,7 @@
 - <strong>Generator</strong>: Minimizes a two-sample test objective (<span class="arithmatex">\(p_{data} = p_\theta\)</span>)
 - <strong>Discriminator</strong>: Maximizes the objective (<span class="arithmatex">\(p_{data} \neq p_\theta\)</span>)</p>
 <p>Intuitively, the generator tries to fool the discriminator to the best of its ability by generating samples that look indistinguishable from <span class="arithmatex">\(p_{data}\)</span>.</p>
+<p><img alt="img" src="../gan0.png" /></p>
 <h3 id="formal-objective">Formal Objective</h3>
 <p>The GAN objective can be written as:</p>
 <div class="arithmatex">\[\min_\theta \max_\phi V(G_\theta, D_\phi) = \mathbb{E}_{x \sim p_{data}}[\log D_\phi(x)] + \mathbb{E}_{z \sim p(z)}[\log(1-D_\phi(G_\theta(z)))]\]</div>
