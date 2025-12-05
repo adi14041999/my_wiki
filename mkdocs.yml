@@ -48,6 +48,7 @@ nav:
       - Score Based Models: ai/deep_generative_models/score_based_models.md
       - Score Based Generative Modeling: ai/deep_generative_models/score_based_generative_modeling.md
       - Evaluating Generative Models: ai/deep_generative_models/evaluating_generative_models.md
+      - Diffusion Models from an image generation perspective: ai/deep_generative_models/diffusion_models_from_an_image_generation_perspective.md
       - Score Based Diffusion Models: ai/deep_generative_models/score_based_diffusion_models.md
   - Math:
     - Linear Algebra:
