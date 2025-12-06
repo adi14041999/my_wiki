@@ -427,6 +427,12 @@ $$\mathcal{L}_{\text{Diff}} = \mathbb{E}_{x_0, \epsilon, t} \left[ \lambda_t \|\
 
 where $\lambda_t = \frac{\beta_t^2}{2\sigma_t^2 \alpha_t(1 - \bar{\alpha}_t)}$ is the weighting factor for each timestep.
 
+$\epsilon_\theta$ is a neural network model trained to predict the noise $\epsilon$ from the input noisy sample $x_t = \sqrt{\bar{\alpha}_t}x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon$. In other words, $\epsilon_\theta$ learns to denoise the input noisy image. It is a **Noise predictor** because $\epsilon_\theta(x_t, t) \approx \epsilon$. 
+
+**Note:** Predicting the noise is equivalent to predicting the clean sample. Given the forward diffusion equation $x_t = \sqrt{\bar{\alpha}_t}x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon$, if we predict $\hat{\epsilon} = \epsilon_\theta(x_t, t)$, we can recover the clean sample as:
+
+$$x_0 = \frac{x_t - \sqrt{1 - \bar{\alpha}_t} \hat{\epsilon}}{\sqrt{\bar{\alpha}_t}}$$
+
 **Note**
 In the original ELBO, we had two summation-terms:
 

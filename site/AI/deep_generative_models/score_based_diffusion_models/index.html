@@ -3079,6 +3079,9 @@
 <p>The diffusion model ELBO is equivalent to:</p>
 <div class="arithmatex">\[\mathcal{L}_{\text{Diff}} = \mathbb{E}_{x_0, \epsilon, t} \left[ \lambda_t \|\epsilon - \epsilon_\theta(\sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon, t)\|^2 \right]\]</div>
 <p>where <span class="arithmatex">\(\lambda_t = \frac{\beta_t^2}{2\sigma_t^2 \alpha_t(1 - \bar{\alpha}_t)}\)</span> is the weighting factor for each timestep.</p>
+<p><span class="arithmatex">\(\epsilon_\theta\)</span> is a neural network model trained to predict the noise <span class="arithmatex">\(\epsilon\)</span> from the input noisy sample <span class="arithmatex">\(x_t = \sqrt{\bar{\alpha}_t}x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon\)</span>. In other words, <span class="arithmatex">\(\epsilon_\theta\)</span> learns to denoise the input noisy image. It is a <strong>Noise predictor</strong> because <span class="arithmatex">\(\epsilon_\theta(x_t, t) \approx \epsilon\)</span>. </p>
+<p><strong>Note:</strong> Predicting the noise is equivalent to predicting the clean sample. Given the forward diffusion equation <span class="arithmatex">\(x_t = \sqrt{\bar{\alpha}_t}x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon\)</span>, if we predict <span class="arithmatex">\(\hat{\epsilon} = \epsilon_\theta(x_t, t)\)</span>, we can recover the clean sample as:</p>
+<div class="arithmatex">\[x_0 = \frac{x_t - \sqrt{1 - \bar{\alpha}_t} \hat{\epsilon}}{\sqrt{\bar{\alpha}_t}}\]</div>
 <p><strong>Note</strong>
 In the original ELBO, we had two summation-terms:</p>
 <ol>
