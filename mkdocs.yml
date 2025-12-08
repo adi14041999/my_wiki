@@ -19,6 +19,7 @@ nav:
       - Putting it together- Minimal Neural Network Case Study: ai/deep_learning_for_computer_vision/putting_it_together_minimal_neural_network_case_study.md
       - Convolutional Neural Networks- Architectures, Convolution / Pooling Layers: ai/deep_learning_for_computer_vision/convolutional_neural_networks_architectures_convolution_pooling_layers.md
       - A review of RNNs and Transformers: ai/deep_learning_for_computer_vision/a_review_of_rnns_and_transformers.md
+      - Self-Supervised Learning: ai/deep_learning_for_computer_vision/self_supervised_learning.md
       - A review of Generative Models: ai/deep_learning_for_computer_vision/a_review_of_generative_models.md
     - Natural Language Processing:
       - Introduction: ai/natural_language_processing/introduction.md

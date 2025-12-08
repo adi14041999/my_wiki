@@ -1,0 +1,3158 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A personal wiki for notes, ideas, and projects.">
+      
+      
+      
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/ai/deep_learning_for_computer_vision/self_supervised_learning/">
+      
+      
+        <link rel="prev" href="../a_review_of_rnns_and_transformers/">
+      
+      
+        <link rel="next" href="../a_review_of_generative_models/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Self-Supervised Learning - My Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#self-supervised-learning" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="My Wiki" class="md-header__button md-logo" aria-label="My Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            My Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Self-Supervised Learning
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="lime"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../introduction/" class="md-tabs__link">
+          
+  
+  
+  AI
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../math/linear_algebra/vectors_vector_addition_and_scalar_multiplication/" class="md-tabs__link">
+          
+  
+  
+  Math
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../productivity/how_to_build_your_career_in_ai/three_steps_to_career_growth/" class="md-tabs__link">
+          
+  
+  
+  Productivity
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="My Wiki" class="md-nav__button md-logo" aria-label="My Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    My Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    AI
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            AI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Deep Learning for Computer Vision
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Deep Learning for Computer Vision
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../image_classification_with_linear_classifiers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Image Classification with Linear Classifiers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../regularization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Regularization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optimization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Optimization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backpropagation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Backpropagation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backpropagation_for_a_linear_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Backpropagation for a Linear Layer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../neural_networks_setting_up_the_architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Neural Networks- Setting up the Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../neural_networks_setting_up_the_data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Neural Networks- Setting up the Data
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../neural_networks_learning_and_evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Neural Networks- Learning and Evaluation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../putting_it_together_minimal_neural_network_case_study/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Putting it together- Minimal Neural Network Case Study
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../convolutional_neural_networks_architectures_convolution_pooling_layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Convolutional Neural Networks- Architectures, Convolution / Pooling Layers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../a_review_of_rnns_and_transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    A review of RNNs and Transformers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Self-Supervised Learning
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Self-Supervised Learning
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#differences-between-attention-maps-of-supervised-and-self-supervised-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Differences between Attention Maps of Supervised and Self-Supervised models
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pretext-task-predict-rotations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pretext task: predict rotations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pretext-tasks-rearrangement-and-inpainting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pretext Tasks: Rearrangement and Inpainting
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reconstruction-based-learning-mae" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reconstruction-Based Learning (MAE)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reconstruction-Based Learning (MAE)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-mae-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      How MAE Works
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary-of-pretext-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary of pretext tasks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contrastive-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contrastive Learning
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contrastive Learning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#intuition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Intuition
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#formulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Formulation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simclr" class="md-nav__link">
+    <span class="md-ellipsis">
+      SimCLR
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SimCLR">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Results
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dino" class="md-nav__link">
+    <span class="md-ellipsis">
+      DINO
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DINO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-crop-training" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-crop Training
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#avoiding-collapse" class="md-nav__link">
+    <span class="md-ellipsis">
+      Avoiding Collapse
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../a_review_of_generative_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    A review of Generative Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Natural Language Processing
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Natural Language Processing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/representing_words/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Representing words
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/svd_based_methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SVD based methods
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/distributional_semantics_and_word2vec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Distributional semantics and Word2vec
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/language_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Language Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/recurrent_neural_networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Recurrent Neural Networks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/gated_recurrent_units/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gated Recurrent Units (GRUs)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/long_short_term_memory_networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Long-Short Term Memory (LSTM) Networks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/seq2seq_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Seq2Seq Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/attention_mechanism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Attention Mechanism
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/how_large_language_models_work_a_visual_intro_to_transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    How large language models work, a visual intro to transformers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/attention_in_transformers_visually_explained/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Attention in transformers, visually explained
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/the_basic_transformer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    The basic Transformer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/decoder_only_transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Decoder-only Transformers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/differences_between_the_basic_transformer_and_the_decoder_only_transformer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Differences between the basic Transformer and the Decoder-Only Transformer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/self_attention_and_transformers_a_mathematical_approach/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Self-Attention and Transformers, a mathematical approach
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Deep Generative Models
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Deep Generative Models
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/autoregressive_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Autoregressive Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/variational_autoencoders/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Variational Autoencoders
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/normalizing_flow_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Normalizing flow models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/recap_at_this_point/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Recap at this point
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/generative_adversarial_networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Generative Adversarial Networks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/energy_based_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Energy Based Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/score_based_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Score Based Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/score_based_generative_modeling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Score Based Generative Modeling
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/evaluating_generative_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Evaluating Generative Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/diffusion_models_from_an_image_generation_perspective/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Diffusion Models from an image generation perspective
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/score_based_diffusion_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Score Based Diffusion Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Math
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Math
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Linear Algebra
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Linear Algebra
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/vectors_vector_addition_and_scalar_multiplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Vectors, vector addition, and scalar multiplication
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/vector_geometry_in_mathbb_r_n_and_correlation_coefficients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Vector geometry in Rn and correlation coefficients
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/planes_in_r3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Planes in R3
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/span_subspaces_and_dimension/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Span, subspaces, and dimension
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/basis_and_orthogonality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Basis and orthogonality
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/projections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Projections
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/applications_of_projections_in_rn_orthogonal_bases_of_planes_and_linear_regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Applications of projections in Rn- orthogonal bases of planes and linear regression
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Probability
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Probability
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/probability_and_counting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Probability and Counting
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/story_proofs_and_axioms_of_probability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Story Proofs and Axioms of Probability
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/conditional_probability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Conditional Probability
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/some_famous_problems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Some famous problems
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/random_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Random Variables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/expectation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Expectation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/indicator_random_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Indicator Random Variables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/poisson_distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Poisson Distribution
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/continuous_distributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Continuous Distributions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/normal_distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Normal Distribution
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/exponential_distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Exponential Distribution
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/joint_distributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Joint Distributions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/independence_of_random_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Independence of Random Variables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/conditional_distributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Conditional Distributions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/multinomial_distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Multinomial Distribution
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/covariance_and_correlation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Covariance and Correlation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/transformations_of_random_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Transformations of Random Variables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/convolution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Convolution
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/beta_distributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Beta Distributions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/conditional_expectation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Conditional Expectation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/jensens_inequality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Jensen's inequality
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/central_limit_theorem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Central Limit Theorem
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/multivariate_normal_distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Multivariate Normal Distribution
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/markov_chains/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Markov Chains
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Multivariate Calculus
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Multivariate Calculus
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/multivariate_calculus/the_tl_dr_version_of_derivatives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    The TL;DR version of Derivatives
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/multivariate_calculus/multivariable_functions_level_sets_and_contour_plots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Multivariable functions, level sets, and contour plots
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Productivity
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Productivity
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    How to Build Your Career in AI
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            How to Build Your Career in AI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../productivity/how_to_build_your_career_in_ai/three_steps_to_career_growth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Three Steps to Career Growth
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../productivity/how_to_build_your_career_in_ai/phase_1_learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Phase 1- Learning
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../productivity/how_to_build_your_career_in_ai/phase_2_projects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Phase 2- Projects
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../productivity/how_to_build_your_career_in_ai/phase_3_job/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Phase 3- Job
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../productivity/how_to_build_your_career_in_ai/make_every_day_count/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Make Every Day Count
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="self-supervised-learning">Self-Supervised Learning</h1>
+<h2 id="introduction">Introduction</h2>
+<p>What is the problem with large-scale training?
+We need a lot of labelled data.
+Is there a way we can train neural networks without the need for huge manually labelled datasets?</p>
+<p><strong>Self-supervised learning</strong> is a paradigm where models learn representations from unlabeled data by creating supervisory signals from the data itself. Instead of relying on manual annotations, the model generates its own learning objectives by exploiting the inherent structure, relationships, or transformations present in the data.</p>
+<p>The key idea is to design a <strong>pretext task</strong>— a task that doesn't require labels but forces the model to learn useful representations that can later be transferred to downstream tasks (e.g., classification, detection).</p>
+<p><img alt="img" src="../ss0.png" />
+<img alt="img" src="../ss1.png" /></p>
+<p>Some examples of pretext tasks are:</p>
+<ol>
+<li>
+<p><strong>Masked Language Modeling (BERT)</strong>: Predict masked words in a sentence from surrounding context. The model learns linguistic representations by understanding word relationships and context.</p>
+</li>
+<li>
+<p><strong>Image Rotation Prediction</strong>: Rotate images by 0°, 90°, 180°, or 270° and train the model to predict the rotation angle. This forces the model to understand object orientation and spatial structure.</p>
+</li>
+<li>
+<p><strong>Jigsaw Puzzles</strong>: Shuffle image patches and train the model to predict the correct spatial arrangement. This encourages learning of spatial relationships and object parts.</p>
+</li>
+<li>
+<p><strong>Contrastive Learning (SimCLR, MoCo)</strong>: Create two augmented views of the same image and train the model to make their representations similar, while making representations of different images dissimilar. This learns robust, view-invariant features.</p>
+</li>
+<li>
+<p><strong>Temporal Consistency (Video)</strong>: In video sequences, predict future frames or track objects across time. The model learns motion without explicit labels.</p>
+</li>
+<li>
+<p><strong>Colorization</strong>: Convert grayscale images to color by predicting color channels from luminance. This requires understanding of object semantics and typical color associations.</p>
+</li>
+</ol>
+<p><img alt="img" src="../ss2.png" />
+<img alt="img" src="../ss3.png" /></p>
+<h2 id="differences-between-attention-maps-of-supervised-and-self-supervised-models">Differences between Attention Maps of Supervised and Self-Supervised models</h2>
+<p>Attention maps reveal what parts of an image a model focuses on when making predictions. There are fundamental differences between supervised and self-supervised models in what they attend to.</p>
+<p>Supervised models learn to attend primarily to <strong>discriminative features</strong>— parts of objects that help distinguish between classes. For example, when classifying birds, they might focus on beaks, wings, or distinctive markings that differentiate species. Attention is often concentrated on small, highly discriminative regions. The model learns to ignore background and irrelevant details, focusing only on what's needed for the classification task. The attention patterns are optimized for the specific labeled task (e.g., "is this a dog or cat?"), which can lead to overfitting to dataset-specific cues rather than learning general object structure. Attention maps tend to be sparse, highlighting only the most discriminative patches rather than the entire object.</p>
+<p>Self-supervised models learn to attend to <strong>entire object structures</strong> rather than just discriminative parts. They develop a more complete understanding of object shape, boundaries, and spatial relationships. Attention maps often cover larger regions, including object boundaries, edges, and structural elements. This is because pretext tasks like rotation prediction or jigsaw puzzles require understanding the full spatial structure of objects. Without task-specific labels, self-supervised models learn more general, transferable features that capture object semantics rather than class-specific discriminative cues. Attention maps typically show more uniform coverage of objects, attending to the whole object rather than just key parts. This makes them more suitable for tasks like object detection or segmentation where understanding the full object is important.</p>
+<p><img alt="img" src="../ss6.png" /></p>
+<h2 id="pretext-task-predict-rotations">Pretext task: predict rotations</h2>
+<p><img alt="img" src="../ss4.png" />
+<img alt="img" src="../ss5.png" /></p>
+<h2 id="pretext-tasks-rearrangement-and-inpainting">Pretext Tasks: Rearrangement and Inpainting</h2>
+<p><img alt="img" src="../ss6_2.png" />
+<img alt="img" src="../ss7.png" />
+<img alt="img" src="../ss8.png" />
+<img alt="img" src="../ss9.png" /></p>
+<h2 id="reconstruction-based-learning-mae">Reconstruction-Based Learning (MAE)</h2>
+<p><strong>Masked Autoencoders (MAE)</strong> are a self-supervised learning approach inspired by BERT's masked language modeling, but applied to images. The core idea is simple: mask out a large portion of image patches (typically 75%) and train the model to reconstruct the missing patches from the visible ones.</p>
+<h3 id="how-mae-works">How MAE Works</h3>
+<p><strong>Patch-based masking</strong>: The input image is divided into non-overlapping patches. A high percentage (e.g., 75%) of patches are randomly masked out.</p>
+<p><strong>Encoder-decoder architecture</strong>: </p>
+<ul>
+<li>
+<p>The <strong>encoder</strong> processes only the visible (unmasked) patches, learning to extract meaningful representations from partial observations.</p>
+</li>
+<li>
+<p>The <strong>decoder</strong> takes the encoded representations along with mask tokens and reconstructs the full image, including the masked patches.</p>
+</li>
+</ul>
+<p><img alt="img" src="../mae0.png" />
+<img alt="img" src="../mae2.png" />
+<img alt="img" src="../mae3.png" /></p>
+<p><strong>Reconstruction objective</strong>: The model is trained to predict the pixel values of masked patches, typically using mean squared error (MSE) loss between predicted and original patches.</p>
+<p><img alt="img" src="../mae4.png" /></p>
+<p>The high masking ratio (75%) is crucial—it prevents the model from relying on trivial interpolation between nearby patches. Instead, it must develop a deep understanding of object structure, semantics, and spatial relationships to successfully reconstruct masked regions. This makes MAE particularly effective for learning general visual representations that capture the essence of objects and scenes.</p>
+<h2 id="summary-of-pretext-tasks">Summary of pretext tasks</h2>
+<p><img alt="img" src="../mae5.png" />
+<img alt="img" src="../mae6.png" />
+<img alt="img" src="../mae7.png" /></p>
+<h2 id="contrastive-learning">Contrastive Learning</h2>
+<h3 id="intuition">Intuition</h3>
+<p><strong>Contrastive learning</strong> is based on a simple but powerful principle: <strong>learn representations by contrasting similar and dissimilar examples</strong>. The core idea is that an image and its augmented versions (e.g., rotated, cropped, color-jittered) should have similar representations, while different images should have dissimilar representations.</p>
+<p>The intuition is that good visual representations should be <strong>invariant</strong> to data augmentations (the same object under different views should map to similar embeddings) but <strong>discriminative</strong> across different objects (different objects should map to different embeddings). By learning to distinguish between "positive pairs" (augmented views of the same image) and "negative pairs" (different images), the model develops rich, semantically meaningful representations without any labels.</p>
+<p><img alt="img" src="../cl0.png" />
+<img alt="img" src="../cl1.png" /></p>
+<p>In contrastive learning, we start with a <strong>reference sample</strong> <span class="arithmatex">\(x\)</span> (an anchor image). <strong>Positive samples</strong> are augmented views of the same image <span class="arithmatex">\(x\)</span> (e.g., rotated, cropped, or color-jittered versions), which should have similar representations to <span class="arithmatex">\(x\)</span>. <strong>Negative samples</strong> are different images from the dataset, which should have dissimilar representations to <span class="arithmatex">\(x\)</span>. The model learns by pulling positive samples closer to the reference while pushing negative samples further away in the embedding space.</p>
+<p><img alt="img" src="../cl2.png" /></p>
+<h3 id="formulation">Formulation</h3>
+<p><img alt="img" src="../cl3.png" />
+<img alt="img" src="../cl4.png" />
+<img alt="img" src="../cl5.png" />
+<img alt="img" src="../cl6.png" /></p>
+<h3 id="simclr">SimCLR</h3>
+<p><img alt="img" src="../cl7.png" /></p>
+<p>In the above figure, <span class="arithmatex">\(\tilde{x}_i\)</span> and <span class="arithmatex">\(\tilde{x}_j\)</span> are <strong>positive samples</strong> created through data augmentation from the same original image. They represent two different augmented views (e.g., different random crops, color jittering, or rotations) of the same underlying image, and the model learns to make their representations similar.</p>
+<p><img alt="img" src="../cl8.png" />
+<img alt="img" src="../cl10.png" /></p>
+<h4 id="results">Results</h4>
+<p><img alt="img" src="../cl9.png" /></p>
+<p>As discussed in the contrastive learning formulation, the InfoNCE loss provides a lower bound on mutual information (MI). The larger the negative sample size <span class="arithmatex">\(N\)</span>, the tighter this bound becomes, meaning the loss <span class="arithmatex">\(-\mathcal{L}\)</span> more closely approximates the true mutual information between the representations of positive pairs. Thus, we need to use a large batch size in SimCLR.</p>
+<p><img alt="img" src="../cl11.png" /></p>
+<h3 id="dino">DINO</h3>
+<p>DINO takes an input image and creates two different augmented views: one goes to the student network and the other to the teacher network. Both networks output representations that pass through softmax to produce probability scores over a set of classes.</p>
+<p><img alt="img" src="../dino0.png" /></p>
+<p><strong>How did we get classes in an unsupervised method?</strong> While DINO doesn't use labeled data, it requires an estimate of the number of output classes. In the official implementation, the DINO head output dimensionality (default: 65,000) is much larger than ImageNet's 1,000 classes. This is due to <strong>over-segmentation</strong>. By using many classes, the model can learn to distinguish fine-grained parts (e.g., cat whiskers, ears, nose) rather than just whole objects.</p>
+<p><img alt="img" src="../dino1.png" /></p>
+<p>The training uses knowledge distillation: the teacher's output serves as the ground truth, and the student is trained to match it using cross-entropy loss. </p>
+<p><img alt="img" src="../dino2.png" /></p>
+<p>Importantly, the teacher is not pre-trained. It trains simultaneously with the student. Both networks have identical architectures and parameters, yet the teacher should produce better representations. This raises two questions: (1) How do we train the teacher? (2) Why is the teacher better?</p>
+<h4 id="multi-crop-training">Multi-crop Training</h4>
+<p><strong>Why the teacher is better</strong></p>
+<p>Multi-crop training uses two types of crops: <strong>global views</strong> (more than 50% of the image) and <strong>local views</strong> (less than 50% of the image). </p>
+<p><img alt="img" src="../dino3.png" />
+<img alt="img" src="../dino4.png" /></p>
+<p>During training, the student receives both global and local views, while the teacher receives only global views. The teacher produces better representations because global views contain more information than local views. When the student receives global views, it can match the teacher's performance, but on average, the teacher outperforms because it consistently receives global information.</p>
+<p><img alt="img" src="../dino5.png" /></p>
+<p><strong>How we train the teacher</strong></p>
+<p>Researchers tried different update strategies: copying student weights every iteration (0.1% accuracy), after each iteration (no improvement), and after each epoch (66.6% accuracy on ImageNet). Copying after each epoch works because it provides stable ground truth for the entire epoch, allowing the student to converge. If weights are copied every iteration, the teacher's outputs (ground truth) change constantly, preventing convergence.</p>
+<p>The optimal solution uses <strong>exponential moving average (EMA)</strong>: <span class="arithmatex">\(\theta_t \leftarrow \lambda \theta_t + (1-\lambda) \theta_s\)</span>, where <span class="arithmatex">\(\lambda\)</span> follows a cosine schedule from 0.996 to 1. This slowly updates teacher weights, incorporating student information gradually. Throughout training, both networks improve, with the teacher initially performing better due to global views. At convergence, both achieve similar performance.</p>
+<p><strong>Why attention focuses on objects</strong></p>
+<p>The student with local views (e.g., cat whiskers and fur) must match the teacher's representation from global views (most of the cat plus background). This local-global view difference is why DINO's attention maps naturally segment objects.</p>
+<p>However, implementing DINO without proper safeguards causes <strong>mode collapse</strong>, where the model outputs the same representation regardless of input.</p>
+<h4 id="avoiding-collapse">Avoiding Collapse</h4>
+<p>Two collapse scenarios can occur.</p>
+<ol>
+<li><strong>Uniform distribution collapse</strong>: Both teacher and student output uniform distributions across all classes for any input (cat, dog, building, etc.). This minimizes cross-entropy loss (since identical distributions have zero loss) but provides no discriminative information.</li>
+</ol>
+<p><img alt="img" src="../dino6.png" /></p>
+<ol>
+<li><strong>Single-dimension collapse</strong>: The output is dominated by a single dimension regardless of input (e.g., always predicting "cat").</li>
+</ol>
+<p><img alt="img" src="../dino7.png" /></p>
+<p><strong>Solution 1: Sharpening with temperature</strong>: To prevent uniform distributions, we add a temperature parameter <span class="arithmatex">\(\tau\)</span> to the softmax: <span class="arithmatex">\(P = \text{softmax}(\text{logits} / \tau)\)</span>. When logits are nearly equal, standard softmax (<span class="arithmatex">\(\tau=1\)</span>) produces a nearly uniform distribution. Lower temperatures (e.g., <span class="arithmatex">\(\tau=0.1\)</span> or <span class="arithmatex">\(0.05\)</span>) sharpen the distribution, making small differences in logits produce highly peaked probabilities. However, sharpening alone can cause single-dimension collapse.</p>
+<p><img alt="img" src="../dino8.png" /></p>
+<p><strong>Solution 2: Centering</strong>: To prevent single-dimension collapse, we apply centering to the teacher's logits: <span class="arithmatex">\(\text{logits}_t \leftarrow \text{logits}_t - c\)</span>, where <span class="arithmatex">\(c\)</span> is an exponential moving average of the mean teacher logits across all batch samples. This bias term <span class="arithmatex">\(c\)</span> is initially the mean of all teacher logits in the batch. Centering smooths the distribution and prevents collapse to a single mode. By combining sharpening (on both student and teacher) with centering (on teacher), we mitigate both collapse scenarios.  </p>
+<p><img alt="img" src="../dino9.png" /></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      &copy; 2025 <a href="https://github.com/adi14041999"  target="_blank" rel="noopener">Aditya Prabhu</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
