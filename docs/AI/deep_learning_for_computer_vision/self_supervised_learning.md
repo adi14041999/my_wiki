@@ -121,11 +121,34 @@ As discussed in the contrastive learning formulation, the InfoNCE loss provides 
 
 ![img](cl11.png)
 
+### CLIP
+
+Like SimCLR, [CLIP](https://github.com/openai/CLIP) uses a contrastive learning objective, but instead of contrasting two augmented views of the same image, it contrasts two different modalities: text and image. To train CLIP, OpenAI collected a large dataset of ~400M image-text pairs from the internet, including sources like Wikipedia and image alt text. The resulting model learns rich, high-level image features and has achieved impressive zero-shot performance on many vision benchmarks.
+
+As explained above, CLIP's training objective incorporates both text and images, building upon the principles of contrastive learning. 
+>The goal of the contrastive loss is to maximize agreement between the final vectors **$z_i = g(h_i)$** and **$z_j = g(h_j)$**.
+
+Similarly, CLIP is trained to maximize agreement between two vectors. However, because these vectors come from different modalities, CLIP uses two separate encoders: a transformer-based Text Encoder and a Vision Transformer (ViT)-based Image Encoder. Note that some smaller, more efficient versions of CLIP use a ResNet as the Image Encoder instead of a ViT.
+
+![img](clip.png)
+
+During the pretraining phase, each batch consists of multiple images along with their corresponding captions. Each image is independently processed by an Image Encoder— typically a visual model like a Vision Transformer (ViT) or a Convolutional Neural Network (ConvNet)— which produces an image embedding $I_n$. Likewise, each caption is independently processed by a Text Encoder to generate a corresponding text embedding $T_n$. Next, we compute the pairwise similarities between all image-text combinations, meaning each image is compared with every caption, and vice versa. The training objective is to maximize the similarity scores along the diagonal of the resulting similarity matrix- that is, the scores for the matching image-caption pairs $(I_n, T_n)$.  Through backpropagation, the model learns to assign higher similarity scores to true matches than to mismatched pairs.
+
+Through this setup, CLIP effectively learns to represent images and texts in a shared latent space. In this space, semantic concepts are encoded in a modality-independent way, enabling meaningful cross-modal comparisons between visual and textual inputs.
+
+As an example, for a batch of image-caption pairs, during training, the following could be a typical similarity-mapping.
+
+![img](clip1.png)
+
 ### DINO
 
-DINO takes an input image and creates two different augmented views: one goes to the student network and the other to the teacher network. Both networks output representations that pass through softmax to produce probability scores over a set of classes.
+Models trained with vanilla contrastive learning methods such as SimCLR and CLIP require very large batch sizes. This makes them computationally expensive and limits their accessibility. 
 
-![img](dino0.png)
+Similar to SimCLR, DINO is trained to maximize the agreement between two vectors derived from different views of the same image. However, unlike SimCLR, DINO uses two separate encoders which are trained differently. The student network is updated via backpropagation to match the outputs of the teacher network. The teacher network is not updated via backpropagation; instead, its weights are updated using an exponential moving average (EMA) of the student's weights. This means that the teacher model evolves more slowly and provides a stable target for the student to learn from.
+
+Both networks output representations that pass through softmax to produce probability scores over a set of classes.
+
+![gif](dino.gif)
 
 **How did we get classes in an unsupervised method?** While DINO doesn't use labeled data, it requires an estimate of the number of output classes. In the official implementation, the DINO head output dimensionality (default: 65,000) is much larger than ImageNet's 1,000 classes. This is due to **over-segmentation**. By using many classes, the model can learn to distinguish fine-grained parts (e.g., cat whiskers, ears, nose) rather than just whole objects.
 
@@ -166,11 +189,11 @@ However, implementing DINO without proper safeguards causes **mode collapse**, w
 
 Two collapse scenarios can occur.
 
-1. **Uniform distribution collapse**: Both teacher and student output uniform distributions across all classes for any input (cat, dog, building, etc.). This minimizes cross-entropy loss (since identical distributions have zero loss) but provides no discriminative information.
+**Uniform distribution collapse**: Both teacher and student output uniform distributions across all classes for any input (cat, dog, building, etc.). This minimizes cross-entropy loss (since identical distributions have zero loss) but provides no discriminative information.
 
 ![img](dino6.png)
 
-2. **Single-dimension collapse**: The output is dominated by a single dimension regardless of input (e.g., always predicting "cat").
+**Single-dimension collapse**: The output is dominated by a single dimension regardless of input (e.g., always predicting "cat").
 
 ![img](dino7.png)
 
@@ -181,3 +204,43 @@ Two collapse scenarios can occur.
 **Solution 2: Centering**: To prevent single-dimension collapse, we apply centering to the teacher's logits: $\text{logits}_t \leftarrow \text{logits}_t - c$, where $c$ is an exponential moving average of the mean teacher logits across all batch samples. This bias term $c$ is initially the mean of all teacher logits in the batch. Centering smooths the distribution and prevents collapse to a single mode. By combining sharpening (on both student and teacher) with centering (on teacher), we mitigate both collapse scenarios.  
 
 ![img](dino9.png)
+
+### Downstream application of DINO: A simple Segmentation Model over DINO Features
+
+As we saw earlier, DINO's attention maps naturally focus on entire object structures, making them excellent for segmentation tasks. The local-global view training paradigm forces the model to understand object boundaries and spatial relationships, which translates directly to segmentation capabilities. As a downstream task, let's consider an example of a simple segmentation model on the [DAVIS dataset](https://davischallenge.org).
+
+#### The DAVIS dataset
+
+The DAVIS dataset (Densely Annotated VIdeo Segmentation) was created for video object segmentation tasks. It provides frame-by-frame, pixel-level annotations of objects within videos. Each video sequence contains multiple frames, and for each frame, there are precise masks indicating which pixels belong to foreground objects versus the background. This makes DAVIS ideal for evaluating segmentation models, as it allows us to measure performance across entire video sequences and assess temporal consistency.
+
+The dataset is particularly well-suited because it contains diverse object categories, various motion patterns, and challenging scenarios like occlusions, fast motion, and appearance changes. This diversity helps us understand how well DINO features generalize across different visual contexts.
+
+#### One-Shot Learning Experiment
+
+As a simple but revealing experiment, we can think of training a model using the annotations from just a single frame of a video and see how well it performs on the remaining frames of the same video. This is a form of **one-shot learning**—learning to perform a task from a single example. The key question is: can DINO's rich, self-supervised features enable effective segmentation with minimal supervision?
+
+This experimental setup is intentionally different from standard practice. Typically, you would train on the full dataset (using annotations from many frames across multiple videos) and evaluate on a separate validation set containing different videos. This standard approach tests generalization across different video sequences and object instances. With this experiment, we can understand the one-shot capabilities of DINO features by seeing if they can transfer knowledge learned from a single annotated frame to other frames in the same video sequence.
+
+#### Model Architecture
+
+Our model will be intentionally minimal: we'll extract DINO features per patch and train a lightweight per-patch classifier using only the patches from that one annotated frame. Here's how it works:
+
+1. **Feature extraction**: Given an input frame, we divide it into non-overlapping patches (typically 16×16 or 8×8 pixels). Each patch is passed through a pre-trained DINO model to extract a feature vector. These DINO features capture rich semantic information about object structure, boundaries, and spatial relationships.
+
+2. **Training data**: From the single annotated frame, we extract all patches along with their corresponding labels (foreground or background, based on the pixel-level annotations). This gives us a small training set—just the patches from one frame.
+
+3. **Lightweight Classifier**: We train a simple classifier (e.g., a small neural network or even a linear classifier) that takes DINO features as input and predicts whether each patch belongs to the foreground object or the background. This classifier is trained only on patches from the single annotated frame.
+
+4. **Inference**: For all other frames in the video sequence, we extract DINO features for each patch and use our trained classifier to predict segmentation masks. The hope is that DINO's features are so semantically rich and object-aware that the classifier can generalize from the single training frame to other frames, even as objects move, change appearance, or get partially occluded.
+
+#### Why this tests DINO's capabilities
+
+This minimal setup is a rigorous test of DINO's feature quality. If DINO features truly capture object semantics and structure in a generalizable way, then a classifier trained on just one frame should be able to segment the same object in other frames, despite changes in pose, lighting, partial occlusions, or background context. The success of this experiment would demonstrate that:
+
+- DINO features encode object-level information that is robust to appearance variations
+
+- The features are discriminative enough to separate foreground objects from background using minimal supervision
+
+- The self-supervised pre-training has learned transferable visual representations that require very few labeled examples for downstream tasks
+
+This one-shot learning capability is particularly valuable in scenarios where labeled data is scarce or expensive to obtain, making DINO features highly practical for real-world applications.
