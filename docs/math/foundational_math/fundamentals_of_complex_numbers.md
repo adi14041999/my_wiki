@@ -1,4 +1,4 @@
-# Intro to Complex Numbers
+# Fundamentals of Complex Numbers
 
 A complex number is a number that can be written in the form $a + bi$, where $a$ and $b$ are real numbers, and $i$ is the imaginary unit defined by $i^2 = -1$.
 

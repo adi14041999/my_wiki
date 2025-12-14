@@ -55,7 +55,7 @@ nav:
     - Foundational Math:
       - The Quadratic Formula: math/foundational_math/the_quadratic_formula.md
       - Trigonometry fundamentals: math/foundational_math/trigonometry_fundamentals.md
-      - Intro to Complex Numbers: math/foundational_math/intro_to_complex_numbers.md
+      - Fundamentals of Complex Numbers: math/foundational_math/fundamentals_of_complex_numbers.md
     - Linear Algebra:
       - Vectors, vector addition, and scalar multiplication: math/linear_algebra/vectors_vector_addition_and_scalar_multiplication.md
       - Vector geometry in Rn and correlation coefficients: math/linear_algebra/vector_geometry_in_mathbb_r_n_and_correlation_coefficients.md
