@@ -29,6 +29,7 @@ Fractions filled in the gaps in our number line, and were basically cutting edge
 Without negatives, simple algebra problems like x + 3 = 2 have no answer. Before negatives were accepted, this problem would have no solution, just like we thought our original problem had no solution.
 
 ![img](c4.png)
+![img](c5.png)
 
 ## Definition
 
@@ -46,7 +47,17 @@ One beautiful way to visualize complex numbers is using the **complex plane** (a
 
 So the complex number $a + bi$ corresponds to the point $(a, b)$ in the plane. This geometric interpretation makes many operations on complex numbers intuitive and visual!
 
+![img](c9.png)
+
 ## Why is the Imaginary Axis perpendicular?
+
+Multiplying by a positive number maintains direction on the number line, while multiplying by a negative number switches direction. Squaring can never result in a negative number, because multiplying a positive time a postive maintains direction, while multiplying a negative by a negative flips us back in the positive direction.
+
+![img](c6.png)
+
+So what we need is something in the middle. A number that when we multiply by it, only rotates $90°$, not $180°$ as negatives do. That number is $i$. Multiplying by $i$ is rotation by $90°$. Multiplying $i$ by itself moves us a total of $180°$, exactly what we need to land on $-1$.
+
+![img](c7.png)
 
 The key insight is that **multiplying by a complex number is essentially a rotation operation**. Let's see why this forces the imaginary axis to be perpendicular to the real axis.
 
@@ -66,7 +77,11 @@ This suggests that **multiplying by $i$ rotates by $90°$** (a quarter turn)!
 
 If multiplying by $i$ rotates by $90°$, then $i$ itself must be positioned $90°$ away from $1$ on the real axis. This means $i$ lies on a line **perpendicular** to the real axis— the imaginary axis!
 
+![img](c8.png)
+
 More generally, multiplying any complex number by $i$ rotates it by $90°$ counterclockwise. This rotation property is fundamental to complex numbers and explains why we need a $2$D plane: the real numbers live on one axis, and multiplication by $i$ naturally creates a perpendicular axis for the imaginary numbers.
+
+Thus, the deeper meaning beneath imaginary numbers is thay they aren't just some random hack. They are the natural extension of our number system. **Numbers are two dimensional!**
 
 In the figure below, consider a complex number $z = 2 + i$. Multiplying by $1$ gives the same $z$, but multiplying by $i$ rotates $z$ by $90°$ counterclockwise.
 

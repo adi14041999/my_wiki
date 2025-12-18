@@ -54,8 +54,8 @@ nav:
   - Math:
     - Foundational Math:
       - The Quadratic Formula: math/foundational_math/the_quadratic_formula.md
-      - Trigonometry fundamentals: math/foundational_math/trigonometry_fundamentals.md
-      - Fundamentals of Complex Numbers: math/foundational_math/fundamentals_of_complex_numbers.md
+      - Trigonometry: math/foundational_math/trigonometry.md
+      - Complex Numbers: math/foundational_math/complex_numbers.md
       - Euler's Formula: math/foundational_math/eulers_formula.md
     - Linear Algebra:
       - Vectors, vector addition, and scalar multiplication: math/linear_algebra/vectors_vector_addition_and_scalar_multiplication.md

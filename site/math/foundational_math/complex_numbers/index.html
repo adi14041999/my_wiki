@@ -10,10 +10,10 @@
       
       
       
-        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/math/foundational_math/fundamentals_of_complex_numbers/">
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/math/foundational_math/complex_numbers/">
       
       
-        <link rel="prev" href="../trigonometry_fundamentals/">
+        <link rel="prev" href="../trigonometry/">
       
       
         <link rel="next" href="../eulers_formula/">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Fundamentals of Complex Numbers - My Wiki</title>
+        <title>Complex Numbers - My Wiki</title>
       
     
     
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Fundamentals of Complex Numbers
+              Complex Numbers
             
           </span>
         </div>
@@ -1672,12 +1672,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../trigonometry_fundamentals/" class="md-nav__link">
+      <a href="../trigonometry/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Trigonometry fundamentals
+    Trigonometry
     
   </span>
   
@@ -1709,7 +1709,7 @@
   
   
   <span class="md-ellipsis">
-    Fundamentals of Complex Numbers
+    Complex Numbers
     
   </span>
   
@@ -1722,7 +1722,7 @@
   
   
   <span class="md-ellipsis">
-    Fundamentals of Complex Numbers
+    Complex Numbers
     
   </span>
   
@@ -3004,7 +3004,8 @@
 <p>Early humans really only had use for the natural numbers, that is <span class="arithmatex">\(1, 2, 3, \ldots\)</span>. This makes sense because of how numbers were used. So to early humans, the number line would have just been a series of dots. As civilizations advanced, people needed answers to more sophisticated math questions– like when to plant seeds, how to divide land, and how to keep track of financial transactions. The natural numbers just weren’t cutting it anymore, so the Egyptians innovated and developed a new, high tech solution: fractions.</p>
 <p>Fractions filled in the gaps in our number line, and were basically cutting edge technology for a couple thousand years. The next big innovations to hit the number line were the number zero and negative numbers, but it took some time to get everyone on board. Since it’s not obvious what these numbers mean or how they fit into the real world, zero and negative numbers were met with skepticism, and largely avoided or ignored.</p>
 <p>Without negatives, simple algebra problems like x + 3 = 2 have no answer. Before negatives were accepted, this problem would have no solution, just like we thought our original problem had no solution.</p>
-<p><img alt="img" src="../c4.png" /></p>
+<p><img alt="img" src="../c4.png" />
+<img alt="img" src="../c5.png" /></p>
 <h2 id="definition">Definition</h2>
 <p>A complex number is a number that can be written in the form <span class="arithmatex">\(a + bi\)</span>, where <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> are real numbers, and <span class="arithmatex">\(i\)</span> is the imaginary unit defined by <span class="arithmatex">\(i^2 = -1\)</span>.</p>
 <p>The real part is <span class="arithmatex">\(a\)</span>, and the imaginary part is <span class="arithmatex">\(b\)</span>. For example, in <span class="arithmatex">\(3 + 4i\)</span>, the real part is <span class="arithmatex">\(3\)</span> and the imaginary part is <span class="arithmatex">\(4\)</span>.</p>
@@ -3019,7 +3020,12 @@
 </li>
 </ul>
 <p>So the complex number <span class="arithmatex">\(a + bi\)</span> corresponds to the point <span class="arithmatex">\((a, b)\)</span> in the plane. This geometric interpretation makes many operations on complex numbers intuitive and visual!</p>
+<p><img alt="img" src="../c9.png" /></p>
 <h2 id="why-is-the-imaginary-axis-perpendicular">Why is the Imaginary Axis perpendicular?</h2>
+<p>Multiplying by a positive number maintains direction on the number line, while multiplying by a negative number switches direction. Squaring can never result in a negative number, because multiplying a positive time a postive maintains direction, while multiplying a negative by a negative flips us back in the positive direction.</p>
+<p><img alt="img" src="../c6.png" /></p>
+<p>So what we need is something in the middle. A number that when we multiply by it, only rotates <span class="arithmatex">\(90°\)</span>, not <span class="arithmatex">\(180°\)</span> as negatives do. That number is <span class="arithmatex">\(i\)</span>. Multiplying by <span class="arithmatex">\(i\)</span> is rotation by <span class="arithmatex">\(90°\)</span>. Multiplying <span class="arithmatex">\(i\)</span> by itself moves us a total of <span class="arithmatex">\(180°\)</span>, exactly what we need to land on <span class="arithmatex">\(-1\)</span>.</p>
+<p><img alt="img" src="../c7.png" /></p>
 <p>The key insight is that <strong>multiplying by a complex number is essentially a rotation operation</strong>. Let's see why this forces the imaginary axis to be perpendicular to the real axis.</p>
 <p>Start with the real number <span class="arithmatex">\(1\)</span> on the real axis. What happens when we multiply by <span class="arithmatex">\(i\)</span>? We get <span class="arithmatex">\(1 \cdot i = i\)</span>. But what does this mean geometrically?</p>
 <p>Since <span class="arithmatex">\(i^2 = -1\)</span>, we have:</p>
@@ -3039,7 +3045,9 @@
 </ul>
 <p>This suggests that <strong>multiplying by <span class="arithmatex">\(i\)</span> rotates by <span class="arithmatex">\(90°\)</span></strong> (a quarter turn)! </p>
 <p>If multiplying by <span class="arithmatex">\(i\)</span> rotates by <span class="arithmatex">\(90°\)</span>, then <span class="arithmatex">\(i\)</span> itself must be positioned <span class="arithmatex">\(90°\)</span> away from <span class="arithmatex">\(1\)</span> on the real axis. This means <span class="arithmatex">\(i\)</span> lies on a line <strong>perpendicular</strong> to the real axis— the imaginary axis!</p>
+<p><img alt="img" src="../c8.png" /></p>
 <p>More generally, multiplying any complex number by <span class="arithmatex">\(i\)</span> rotates it by <span class="arithmatex">\(90°\)</span> counterclockwise. This rotation property is fundamental to complex numbers and explains why we need a <span class="arithmatex">\(2\)</span>D plane: the real numbers live on one axis, and multiplication by <span class="arithmatex">\(i\)</span> naturally creates a perpendicular axis for the imaginary numbers.</p>
+<p>Thus, the deeper meaning beneath imaginary numbers is thay they aren't just some random hack. They are the natural extension of our number system. <strong>Numbers are two dimensional!</strong></p>
 <p>In the figure below, consider a complex number <span class="arithmatex">\(z = 2 + i\)</span>. Multiplying by <span class="arithmatex">\(1\)</span> gives the same <span class="arithmatex">\(z\)</span>, but multiplying by <span class="arithmatex">\(i\)</span> rotates <span class="arithmatex">\(z\)</span> by <span class="arithmatex">\(90°\)</span> counterclockwise.</p>
 <p><img alt="img" src="../c0.png" /></p>
 <p><strong>Example:</strong> What is the complex number <span class="arithmatex">\(z\)</span> such that multiplying by <span class="arithmatex">\(z\)</span> rotates any complex number by <span class="arithmatex">\(30°\)</span> counterclockwise?</p>
