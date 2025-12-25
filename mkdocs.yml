@@ -57,6 +57,7 @@ nav:
       - Trigonometry: math/foundational_math/trigonometry.md
       - Complex Numbers: math/foundational_math/complex_numbers.md
       - Euler's Formula: math/foundational_math/eulers_formula.md
+      - Logarithms: math/foundational_math/logarithms.md
     - Linear Algebra:
       - Vectors, vector addition, and scalar multiplication: math/linear_algebra/vectors_vector_addition_and_scalar_multiplication.md
       - Vector geometry in Rn and correlation coefficients: math/linear_algebra/vector_geometry_in_mathbb_r_n_and_correlation_coefficients.md
