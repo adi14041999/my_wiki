@@ -3167,6 +3167,47 @@
 <li>We can verify: <span class="arithmatex">\(\log_{10}(100) = 2\)</span>, so <span class="arithmatex">\(\frac{1}{2} = \log_{100}(10)\)</span></li>
 <li>Check: <span class="arithmatex">\(100^{1/2} = 10\)</span> ✓</li>
 </ul>
+<p>Using the relationship we just established, we can prove the general change of base formula:</p>
+<div class="arithmatex">\[\log_b(x) = \frac{\log_a(x)}{\log_a(b)}\]</div>
+<p>Let's prove this by changing base from <span class="arithmatex">\(a\)</span> to <span class="arithmatex">\(b\)</span>.</p>
+<p>Let <span class="arithmatex">\(y = \log_a(x)\)</span>.</p>
+<p>By the definition of logarithms:</p>
+<div class="arithmatex">\[a^y = x\]</div>
+<p>Now, let's express this in terms of base <span class="arithmatex">\(b\)</span>. We know from the previous result that:</p>
+<div class="arithmatex">\[\log_a(b) = \frac{1}{\log_b(a)}\]</div>
+<p>But more directly, let's take the logarithm base <span class="arithmatex">\(b\)</span> of both sides of <span class="arithmatex">\(a^y = x\)</span>:</p>
+<div class="arithmatex">\[\log_b(a^y) = \log_b(x)\]</div>
+<p>Apply the power rule to the left side:</p>
+<div class="arithmatex">\[y \cdot \log_b(a) = \log_b(x)\]</div>
+<p>Substitute back <span class="arithmatex">\(y = \log_a(x)\)</span>:</p>
+<div class="arithmatex">\[\log_b(a) \cdot \log_a(x) = \log_b(x)\]</div>
+<p>Now, divide both sides by <span class="arithmatex">\(\log_b(a)\)</span>:</p>
+<div class="arithmatex">\[\log_a(x) = \frac{\log_b(x)}{\log_b(a)}\]</div>
+<p>Or equivalently, using the reciprocal relationship:</p>
+<div class="arithmatex">\[\log_b(x) = \frac{\log_a(x)}{\log_a(b)}\]</div>
+<p>This shows that to convert a logarithm from base <span class="arithmatex">\(a\)</span> to base <span class="arithmatex">\(b\)</span>, we divide the logarithm of the argument by the logarithm of the original base, both in the new base.</p>
+<p><strong>Example:</strong> Converting to base 8</p>
+<ul>
+<li><span class="arithmatex">\(\log_2(64) = \frac{\log_8(64)}{\log_8(2)} = \frac{2}{\log_8(2)}\)</span></li>
+<li>We can verify: <span class="arithmatex">\(\log_2(64) = 6\)</span> because <span class="arithmatex">\(2^6 = 64\)</span> ✓</li>
+<li>Also: <span class="arithmatex">\(\log_8(2) = \frac{1}{3}\)</span>, so <span class="arithmatex">\(\frac{2}{1/3} = 6\)</span> ✓</li>
+</ul>
+<p><strong>Example:</strong> Evaluate the sum</p>
+<div class="arithmatex">\[\frac{1}{\log_2(100!)} + \frac{1}{\log_3(100!)} + \frac{1}{\log_4(100!)} + \cdots + \frac{1}{\log_{100}(100!)}\]</div>
+<p><strong>Solution:</strong></p>
+<p>Using the reciprocal relationship <span class="arithmatex">\(\frac{1}{\log_b(a)} = \log_a(b)\)</span>, we can rewrite each term:</p>
+<div class="arithmatex">\[\frac{1}{\log_2(100!)} = \log_{100!}(2)\]</div>
+<div class="arithmatex">\[\frac{1}{\log_3(100!)} = \log_{100!}(3)\]</div>
+<div class="arithmatex">\[\frac{1}{\log_4(100!)} = \log_{100!}(4)\]</div>
+<div class="arithmatex">\[\vdots\]</div>
+<div class="arithmatex">\[\frac{1}{\log_{100}(100!)} = \log_{100!}(100)\]</div>
+<p>So the sum becomes:</p>
+<div class="arithmatex">\[\log_{100!}(2) + \log_{100!}(3) + \log_{100!}(4) + \cdots + \log_{100!}(100)\]</div>
+<p>Using the product rule for logarithms:</p>
+<div class="arithmatex">\[\log_{100!}(2) + \log_{100!}(3) + \cdots + \log_{100!}(100) = \log_{100!}(2 \cdot 3 \cdot 4 \cdots 100)\]</div>
+<p>Since <span class="arithmatex">\(2 \cdot 3 \cdot 4 \cdots 100 = 100!\)</span>, we have:</p>
+<div class="arithmatex">\[\log_{100!}(100!) = 1\]</div>
+<p>Therefore, the sum equals <strong>1</strong>.</p>
 
 
 

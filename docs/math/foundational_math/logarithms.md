@@ -195,3 +195,79 @@ This shows that the reciprocal of a logarithm equals the logarithm with the base
 - $\frac{1}{\log_{10}(100)} = \log_{100}(10)$
 - We can verify: $\log_{10}(100) = 2$, so $\frac{1}{2} = \log_{100}(10)$
 - Check: $100^{1/2} = 10$ ✓
+
+Using the relationship we just established, we can prove the general change of base formula:
+
+$$\log_b(x) = \frac{\log_a(x)}{\log_a(b)}$$
+
+Let's prove this by changing base from $a$ to $b$.
+
+Let $y = \log_a(x)$.
+
+By the definition of logarithms:
+
+$$a^y = x$$
+
+Now, let's express this in terms of base $b$. We know from the previous result that:
+
+$$\log_a(b) = \frac{1}{\log_b(a)}$$
+
+But more directly, let's take the logarithm base $b$ of both sides of $a^y = x$:
+
+$$\log_b(a^y) = \log_b(x)$$
+
+Apply the power rule to the left side:
+
+$$y \cdot \log_b(a) = \log_b(x)$$
+
+Substitute back $y = \log_a(x)$:
+
+$$\log_b(a) \cdot \log_a(x) = \log_b(x)$$
+
+Now, divide both sides by $\log_b(a)$:
+
+$$\log_a(x) = \frac{\log_b(x)}{\log_b(a)}$$
+
+Or equivalently, using the reciprocal relationship:
+
+$$\log_b(x) = \frac{\log_a(x)}{\log_a(b)}$$
+
+This shows that to convert a logarithm from base $a$ to base $b$, we divide the logarithm of the argument by the logarithm of the original base, both in the new base.
+
+**Example:** Converting to base 8
+
+- $\log_2(64) = \frac{\log_8(64)}{\log_8(2)} = \frac{2}{\log_8(2)}$
+- We can verify: $\log_2(64) = 6$ because $2^6 = 64$ ✓
+- Also: $\log_8(2) = \frac{1}{3}$, so $\frac{2}{1/3} = 6$ ✓
+
+**Example:** Evaluate the sum
+
+$$\frac{1}{\log_2(100!)} + \frac{1}{\log_3(100!)} + \frac{1}{\log_4(100!)} + \cdots + \frac{1}{\log_{100}(100!)}$$
+
+**Solution:**
+
+Using the reciprocal relationship $\frac{1}{\log_b(a)} = \log_a(b)$, we can rewrite each term:
+
+$$\frac{1}{\log_2(100!)} = \log_{100!}(2)$$
+
+$$\frac{1}{\log_3(100!)} = \log_{100!}(3)$$
+
+$$\frac{1}{\log_4(100!)} = \log_{100!}(4)$$
+
+$$\vdots$$
+
+$$\frac{1}{\log_{100}(100!)} = \log_{100!}(100)$$
+
+So the sum becomes:
+
+$$\log_{100!}(2) + \log_{100!}(3) + \log_{100!}(4) + \cdots + \log_{100!}(100)$$
+
+Using the product rule for logarithms:
+
+$$\log_{100!}(2) + \log_{100!}(3) + \cdots + \log_{100!}(100) = \log_{100!}(2 \cdot 3 \cdot 4 \cdots 100)$$
+
+Since $2 \cdot 3 \cdot 4 \cdots 100 = 100!$, we have:
+
+$$\log_{100!}(100!) = 1$$
+
+Therefore, the sum equals **1**.
