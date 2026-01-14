@@ -3260,6 +3260,7 @@
 <p>So <strong><span class="arithmatex">\(\exp(x)\)</span> represents the final amount you get when you start with $1 and let it grow continuously at rate <span class="arithmatex">\(x\)</span> for one unit of time.</strong></p>
 <p>What does "one unit of time" mean? In our setup, we divided the year into <span class="arithmatex">\(n\)</span> equal periods. After <span class="arithmatex">\(n\)</span> periods, we've completed one full year. So "one unit of time" refers to the total duration over which we're compounding— in this case, one year. The rate <span class="arithmatex">\(x\)</span> is the annual growth rate, and <span class="arithmatex">\(\exp(x)\)</span> tells you how much you'll have after one year of continuous compounding at that rate.</p>
 <p><strong>Example:</strong> If you invest $1 at a 100% annual interest rate (<span class="arithmatex">\(x = 1\)</span>), then:</p>
+<p><strong>After 1 year:</strong></p>
 <ul>
 <li>
 <p>Compounded once per year: <span class="arithmatex">\((1 + 1)^1 = 2\)</span> → You get $2</p>
@@ -3277,11 +3278,29 @@
 <p>Compounded continuously: <span class="arithmatex">\(\exp(1) = e \approx 2.718\)</span> → You get about $2.72</p>
 </li>
 </ul>
-<p>Notice how as we compound more frequently, the result approaches <span class="arithmatex">\(e\)</span> but never quite reaches it. The limit <span class="arithmatex">\(\exp(1) = e\)</span> represents the theoretical maximum you can achieve with continuous compounding.</p>
+<p><strong>After 2 years:</strong></p>
+<ul>
+<li>
+<p>Compounded once per year: <span class="arithmatex">\((1 + 1)^2 = 4\)</span> → You get $4</p>
+</li>
+<li>
+<p>Compounded twice per year: <span class="arithmatex">\(\left(1 + \frac{1}{2}\right)^4 = 5.0625\)</span> → You get $5.06</p>
+</li>
+<li>
+<p>Compounded monthly (<span class="arithmatex">\(n = 12\)</span>): <span class="arithmatex">\(\left(1 + \frac{1}{12}\right)^{24} \approx 6.727\)</span> → You get about $6.73</p>
+</li>
+<li>
+<p>Compounded daily (<span class="arithmatex">\(n = 365\)</span>): <span class="arithmatex">\(\left(1 + \frac{1}{365}\right)^{730} \approx 7.387\)</span> → You get about $7.39</p>
+</li>
+<li>
+<p>Compounded continuously: <span class="arithmatex">\(\exp(2) = e^2 \approx 7.389\)</span> → You get about $7.39</p>
+</li>
+</ul>
+<p>Notice how as we compound more frequently, the result after one year approaches <span class="arithmatex">\(e\)</span> but never quite reaches it. The limit <span class="arithmatex">\(\exp(1) = e\)</span> represents the theoretical maximum you can achieve with continuous compounding.</p>
 <p>This is why <span class="arithmatex">\(e\)</span> is sometimes called the "natural" base— it naturally arises when we consider continuous growth processes, which are ubiquitous in nature (population growth, radioactive decay, etc.).</p>
 <p>When <span class="arithmatex">\(x = 1\)</span>, this gives us a way to compute <span class="arithmatex">\(e\)</span>. Note that <span class="arithmatex">\(x = 1\)</span> represents a 100% growth rate, which means <strong>doubling</strong> your money. So this limit is asking: if you start with $1 and continuously compound at a 100% rate (doubling rate), what's the maximum amount you can get?</p>
 <div class="arithmatex">\[e = \exp(1) = \lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n\]</div>
-<p>This is the classic limit definition of <span class="arithmatex">\(e\)</span> that you might have seen before! The answer is <span class="arithmatex">\(e \approx 2.718\)</span>, which is slightly more than the $2 you'd get from simple doubling, thanks to the power of continuous compounding.</p>
+<p>This is the classic limit definition of <span class="arithmatex">\(e\)</span> that you might have seen before!</p>
 
 
 

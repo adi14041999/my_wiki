@@ -322,6 +322,8 @@ What does "one unit of time" mean? In our setup, we divided the year into $n$ eq
 
 **Example:** If you invest \$1 at a 100% annual interest rate ($x = 1$), then:
 
+**After 1 year:**
+
 - Compounded once per year: $(1 + 1)^1 = 2$ → You get \$2
 
 - Compounded twice per year: $\left(1 + \frac{1}{2}\right)^2 = 2.25$ → You get \$2.25
@@ -332,7 +334,19 @@ What does "one unit of time" mean? In our setup, we divided the year into $n$ eq
 
 - Compounded continuously: $\exp(1) = e \approx 2.718$ → You get about \$2.72
 
-Notice how as we compound more frequently, the result approaches $e$ but never quite reaches it. The limit $\exp(1) = e$ represents the theoretical maximum you can achieve with continuous compounding.
+**After 2 years:**
+
+- Compounded once per year: $(1 + 1)^2 = 4$ → You get \$4
+
+- Compounded twice per year: $\left(1 + \frac{1}{2}\right)^4 = 5.0625$ → You get \$5.06
+
+- Compounded monthly ($n = 12$): $\left(1 + \frac{1}{12}\right)^{24} \approx 6.727$ → You get about \$6.73
+
+- Compounded daily ($n = 365$): $\left(1 + \frac{1}{365}\right)^{730} \approx 7.387$ → You get about \$7.39
+
+- Compounded continuously: $\exp(2) = e^2 \approx 7.389$ → You get about \$7.39
+
+Notice how as we compound more frequently, the result after one year approaches $e$ but never quite reaches it. The limit $\exp(1) = e$ represents the theoretical maximum you can achieve with continuous compounding.
 
 This is why $e$ is sometimes called the "natural" base— it naturally arises when we consider continuous growth processes, which are ubiquitous in nature (population growth, radioactive decay, etc.).
 
@@ -340,4 +354,4 @@ When $x = 1$, this gives us a way to compute $e$. Note that $x = 1$ represents a
 
 $$e = \exp(1) = \lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n$$
 
-This is the classic limit definition of $e$ that you might have seen before! The answer is $e \approx 2.718$, which is slightly more than the \$2 you'd get from simple doubling, thanks to the power of continuous compounding.
+This is the classic limit definition of $e$ that you might have seen before!
