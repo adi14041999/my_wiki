@@ -1,4 +1,4 @@
-# Trigonometry fundamentals
+# Trigonometry
 
 Isn't it curious that the graph of $\cos^2(x)$ looks like the graph of $\cos(x)$ with twice the frequency?
 

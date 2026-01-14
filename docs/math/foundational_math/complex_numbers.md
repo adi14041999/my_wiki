@@ -1,4 +1,4 @@
-# Fundamentals of Complex Numbers
+# Complex Numbers
 
 ## Introduction
 
