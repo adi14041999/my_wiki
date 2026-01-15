@@ -469,3 +469,119 @@ The parameter $\omega$ directly represents the angular frequency—the rate at w
 **$e^{-x^2}$ and $e^{-x^2/2\sigma^2}$ for Gaussians:** In probability and statistics, the Gaussian (normal) distribution uses $e^{-x^2/2\sigma^2}$, where $\sigma$ directly represents the standard deviation. The factor of $1/2$ in the exponent comes naturally from the properties of $e^x$, making the relationship between the variance $\sigma^2$ and the distribution shape clear.
 
 If we used a different base, these constants would be multiplied by logarithms, making their physical or mathematical meanings less intuitive. **The simplicity of $e^x$'s derivative ensures that parameters in exponential expressions retain their direct, interpretable meanings.**
+
+### But why is the derivative of $e^x$ itself?
+
+Let's derive the derivative of $a^x$ (where $a > 0$ and $a \neq 1$) using the limit definition of the derivative:
+
+$$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
+
+For $f(x) = a^x$, we have:
+
+$$f'(x) = \lim_{h \to 0} \frac{a^{x+h} - a^x}{h}$$
+
+Using the property $a^{x+h} = a^x \cdot a^h$, we can factor out $a^x$:
+
+$$f'(x) = \lim_{h \to 0} \frac{a^x \cdot a^h - a^x}{h} = \lim_{h \to 0} \frac{a^x(a^h - 1)}{h}$$
+
+Since $a^x$ doesn't depend on $h$, we can factor it out of the limit:
+
+$$f'(x) = a^x \lim_{h \to 0} \frac{a^h - 1}{h}$$
+
+Now we need to evaluate the limit $\lim_{h \to 0} \frac{a^h - 1}{h}$.
+
+**Approach 1: Defining $e$ to make the derivative simple**
+
+We can define the number $e$ to be the unique positive number such that:
+
+$$\lim_{h \to 0} \frac{e^h - 1}{h} = 1$$
+
+This definition ensures that when we compute the derivative of $e^x$:
+
+$$\frac{d}{dx}e^x = e^x \lim_{h \to 0} \frac{e^h - 1}{h} = e^x \cdot 1 = e^x$$
+
+So by defining $e$ this way, we obtain the beautiful result that **$e^x$ is its own derivative**.
+
+For a general base $a$, we have:
+
+$$\frac{d}{dx}a^x = a^x \lim_{h \to 0} \frac{a^h - 1}{h}$$
+
+The limit $\lim_{h \to 0} \frac{a^h - 1}{h}$ depends on $a$. For $a = e$, it equals 1 (by definition). For other values of $a$, this limit equals $\ln(a)$, which we can show using the relationship between $a$ and $e$.
+
+To show this, we express $a$ in terms of $e$:
+
+$$a = e^{\ln(a)}$$
+
+Therefore:
+
+$$a^h = (e^{\ln(a)})^h = e^{h \ln(a)}$$
+
+Now we can evaluate the limit:
+
+$$\lim_{h \to 0} \frac{a^h - 1}{h} = \lim_{h \to 0} \frac{e^{h \ln(a)} - 1}{h}$$
+
+Let's make a substitution. Let $u = h \ln(a)$, so $h = \frac{u}{\ln(a)}$. As $h \to 0$, we also have $u \to 0$. Substituting:
+
+$$\lim_{h \to 0} \frac{e^{h \ln(a)} - 1}{h} = \lim_{u \to 0} \frac{e^u - 1}{u/\ln(a)} = \lim_{u \to 0} \ln(a) \cdot \frac{e^u - 1}{u}$$
+
+Since $\ln(a)$ is a constant, we can factor it out:
+
+$$= \ln(a) \cdot \lim_{u \to 0} \frac{e^u - 1}{u}$$
+
+But we know that $\lim_{u \to 0} \frac{e^u - 1}{u} = 1$ (this is how we defined $e$). Therefore:
+
+$$\lim_{h \to 0} \frac{a^h - 1}{h} = \ln(a) \cdot 1 = \ln(a)$$
+
+This completes the proof! For any base $a$, we have:
+
+$$\frac{d}{dx}a^x = a^x \cdot \ln(a)$$
+
+**Approach 2: Defining $\exp(x)$ as a power series (a better approach)**
+
+A more fundamental approach is to first define the exponential function using a power series:
+
+$$\exp(x) = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \frac{x^4}{4!} + \cdots = \sum_{n=0}^{\infty} \frac{x^n}{n!}$$
+
+This definition has several advantages:
+
+- It works for **all complex numbers** $x$, not just real numbers
+
+- It's a well-defined function from the start
+
+- It doesn't depend on any prior definition of $e$
+
+From this power series definition, we can verify two key properties:
+
+1. **$\exp(0) = 1$**: When $x = 0$, all terms except the first vanish, so $\exp(0) = 1$.
+
+2. **$\exp(a + b) = \exp(a) \cdot \exp(b)$**: This can be proven using the power series and the binomial theorem (as shown in the [Euler's Formula section](eulers_formula.md#introduction-understanding-ex)).
+
+Now, we can **define $e$ to be $\exp(1)$**:
+
+$$e = \exp(1) = 1 + 1 + \frac{1}{2!} + \frac{1}{3!} + \frac{1}{4!} + \cdots \approx 2.71828\ldots$$
+
+Since we have the two properties, we can show that for any real number $x$, we have $\exp(x) = e^x$ (where $e = \exp(1)$).
+
+Now let's show that $\frac{d}{dx}e^x = e^x$ using this definition.
+
+We differentiate the power series term by term:
+
+$$\frac{d}{dx}e^x = \frac{d}{dx}\exp(x) = \frac{d}{dx}\left(1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \frac{x^4}{4!} + \cdots\right)$$
+
+Differentiating term by term (which is valid for power series within their radius of convergence):
+
+$$= 0 + 1 + \frac{2x}{2!} + \frac{3x^2}{3!} + \frac{4x^3}{4!} + \cdots$$
+
+Simplifying:
+
+$$= 1 + \frac{x}{1!} + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots$$
+
+But this is exactly the power series for $\exp(x) = e^x$. Therefore:
+
+$$\frac{d}{dx}e^x = e^x$$
+
+**Why this approach is better:**
+
+1. **Works for complex numbers**: The power series definition naturally extends to complex arguments, which is essential for Euler's formula $e^{i\theta} = \cos(\theta) + i\sin(\theta)$.
+
+2. **More fundamental**: We don't need to assume anything about limits or the existence of $e$ beforehand. The function is defined directly.
