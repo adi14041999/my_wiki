@@ -1835,6 +1835,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#what-is-special-about-the-natural-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is special about the natural log?
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3208,6 +3217,37 @@
 <p>Since <span class="arithmatex">\(2 \cdot 3 \cdot 4 \cdots 100 = 100!\)</span>, we have:</p>
 <div class="arithmatex">\[\log_{100!}(100!) = 1\]</div>
 <p>Therefore, the sum equals <strong>1</strong>.</p>
+<h2 id="what-is-special-about-the-natural-log">What is special about the natural log?</h2>
+<p>The natural logarithm <span class="arithmatex">\(\ln(x)\)</span> has many special properties, but one of the most beautiful is its connection to infinite series. Let's explore a remarkable result.</p>
+<p>Consider the infinite series:</p>
+<div class="arithmatex">\[1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \frac{1}{5} - \frac{1}{6} + \cdots\]</div>
+<p>This is called the <strong>alternating harmonic series</strong>. Remarkably, this series converges to <span class="arithmatex">\(\ln(2)\)</span>:</p>
+<div class="arithmatex">\[1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \frac{1}{5} - \frac{1}{6} + \cdots = \ln(2)\]</div>
+<p>Now consider the <strong>harmonic series</strong> (without alternating signs):</p>
+<div class="arithmatex">\[1 + \frac{1}{2} + \frac{1}{3} + \frac{1}{4} + \frac{1}{5} + \cdots + \frac{1}{N}\]</div>
+<p>Unlike the alternating harmonic series, this series diverges (grows without bound) as <span class="arithmatex">\(N\)</span> increases. </p>
+<p>Precisely, as <span class="arithmatex">\(N\)</span> approaches infinity, the difference between the harmonic sum and <span class="arithmatex">\(\ln(N)\)</span> approaches a constant called <strong>Euler's constant</strong> (denoted <span class="arithmatex">\(\gamma\)</span>):</p>
+<div class="arithmatex">\[\lim_{N \to \infty} \left(1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{N} - \ln(N)\right) = \gamma \approx 0.57721\ldots\]</div>
+<p>So for large <span class="arithmatex">\(N\)</span>:</p>
+<div class="arithmatex">\[1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{N} \approx \ln(N) + \gamma\]</div>
+<p><strong>Example:</strong> Expressed as a power of 10, what is the smallest <span class="arithmatex">\(N\)</span> such that the harmonic series is larger than 1,000,000?</p>
+<p><strong>Solution:</strong></p>
+<p>We want to find the smallest <span class="arithmatex">\(N\)</span> such that:</p>
+<div class="arithmatex">\[1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{N} &gt; 1,000,000\]</div>
+<p>Using the approximation for large <span class="arithmatex">\(N\)</span>:</p>
+<div class="arithmatex">\[\ln(N) + \gamma \approx 1,000,000\]</div>
+<p>Since <span class="arithmatex">\(\gamma \approx 0.577\)</span> is much smaller than 1,000,000, we can approximate:</p>
+<div class="arithmatex">\[\ln(N) \approx 1,000,000\]</div>
+<p>To express <span class="arithmatex">\(N\)</span> as a power of 10, we use the change of base formula. Recall that <span class="arithmatex">\(\ln(N) = \frac{\log_{10}(N)}{\log_{10}(e)}\)</span>, or equivalently:</p>
+<div class="arithmatex">\[\ln(N) = \log_{10}(N) \cdot \ln(10)\]</div>
+<p>So:</p>
+<div class="arithmatex">\[\log_{10}(N) \cdot \ln(10) \approx 1,000,000\]</div>
+<p>Since <span class="arithmatex">\(\ln(10) \approx 2.302585\)</span>, we have:</p>
+<div class="arithmatex">\[\log_{10}(N) \approx \frac{1,000,000}{2.302585} \approx 434,294.48\]</div>
+<p>Therefore:</p>
+<div class="arithmatex">\[N \approx 10^{434,294.48} \approx 10^{434,294}\]</div>
+<p>So the smallest <span class="arithmatex">\(N\)</span> (expressed as a power of 10) such that the harmonic series exceeds 1,000,000 is approximately <strong><span class="arithmatex">\(10^{434,294}\)</span></strong>.</p>
+<p>This demonstrates the extremely slow growth of the harmonic series—it takes an astronomically large number of terms to reach even 1,000,000!</p>
 
 
 

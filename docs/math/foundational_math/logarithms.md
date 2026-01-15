@@ -271,3 +271,65 @@ Since $2 \cdot 3 \cdot 4 \cdots 100 = 100!$, we have:
 $$\log_{100!}(100!) = 1$$
 
 Therefore, the sum equals **1**.
+
+## What is special about the natural log?
+
+The natural logarithm $\ln(x)$ has many special properties, but one of the most beautiful is its connection to infinite series. Let's explore a remarkable result.
+
+Consider the infinite series:
+
+$$1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \frac{1}{5} - \frac{1}{6} + \cdots$$
+
+This is called the **alternating harmonic series**. Remarkably, this series converges to $\ln(2)$:
+
+$$1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \frac{1}{5} - \frac{1}{6} + \cdots = \ln(2)$$
+
+Now consider the **harmonic series** (without alternating signs):
+
+$$1 + \frac{1}{2} + \frac{1}{3} + \frac{1}{4} + \frac{1}{5} + \cdots + \frac{1}{N}$$
+
+Unlike the alternating harmonic series, this series diverges (grows without bound) as $N$ increases. 
+
+Precisely, as $N$ approaches infinity, the difference between the harmonic sum and $\ln(N)$ approaches a constant called **Euler's constant** (denoted $\gamma$):
+
+$$\lim_{N \to \infty} \left(1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{N} - \ln(N)\right) = \gamma \approx 0.57721\ldots$$
+
+So for large $N$:
+
+$$1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{N} \approx \ln(N) + \gamma$$
+
+**Example:** Expressed as a power of 10, what is the smallest $N$ such that the harmonic series is larger than 1,000,000?
+
+**Solution:**
+
+We want to find the smallest $N$ such that:
+
+$$1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{N} > 1,000,000$$
+
+Using the approximation for large $N$:
+
+$$\ln(N) + \gamma \approx 1,000,000$$
+
+Since $\gamma \approx 0.577$ is much smaller than 1,000,000, we can approximate:
+
+$$\ln(N) \approx 1,000,000$$
+
+To express $N$ as a power of 10, we use the change of base formula. Recall that $\ln(N) = \frac{\log_{10}(N)}{\log_{10}(e)}$, or equivalently:
+
+$$\ln(N) = \log_{10}(N) \cdot \ln(10)$$
+
+So:
+
+$$\log_{10}(N) \cdot \ln(10) \approx 1,000,000$$
+
+Since $\ln(10) \approx 2.302585$, we have:
+
+$$\log_{10}(N) \approx \frac{1,000,000}{2.302585} \approx 434,294.48$$
+
+Therefore:
+
+$$N \approx 10^{434,294.48} \approx 10^{434,294}$$
+
+So the smallest $N$ (expressed as a power of 10) such that the harmonic series exceeds 1,000,000 is approximately **$10^{434,294}$**.
+
+This demonstrates the extremely slow growth of the harmonic series—it takes an astronomically large number of terms to reach even 1,000,000!
