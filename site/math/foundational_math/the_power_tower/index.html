@@ -1831,51 +1831,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      Examples
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-infinite-power-tower" class="md-nav__link">
-    <span class="md-ellipsis">
-      The Infinite Power Tower
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#convergence-condition" class="md-nav__link">
-    <span class="md-ellipsis">
-      Convergence Condition
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#finding-the-value" class="md-nav__link">
-    <span class="md-ellipsis">
-      Finding the Value
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#special-cases" class="md-nav__link">
-    <span class="md-ellipsis">
-      Special Cases
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -3057,59 +3012,52 @@
 <h2 id="introduction">Introduction</h2>
 <p>A <strong>power tower</strong> (also called a <strong>tetration</strong>) is an expression of the form:</p>
 <div class="arithmatex">\[a^{a^{a^{\cdot^{\cdot^{\cdot}}}}}\]</div>
-<p>where we have repeated exponentiation. Power towers are written from top to bottom, meaning we evaluate from the top down.</p>
+<p>where we have repeated exponentiation. Power towers are written from top to bottom, meaning we evaluate from the top down. Let's see what happens if we evaluate from bottom to top.</p>
+<p>Consider a power tower of height 3: <span class="arithmatex">\(a^{a^a}\)</span></p>
+<p><strong>Evaluating from top to bottom (correct way):</strong></p>
+<div class="arithmatex">\[a^{a^a} = a^{(a^a)}\]</div>
+<p>We first compute <span class="arithmatex">\(a^a\)</span>, then raise <span class="arithmatex">\(a\)</span> to that power.</p>
+<p><strong>Evaluating from bottom to top (incorrect for power towers):</strong></p>
+<p>If we evaluated from bottom to top, we would compute:</p>
+<div class="arithmatex">\[(a^a)^a = a^{a \cdot a} = a^{a^2}\]</div>
+<p>This is just <strong>regular exponentiation</strong>— we're multiplying the exponents, which gives us <span class="arithmatex">\(a\)</span> raised to the power <span class="arithmatex">\(a^n\)</span>.</p>
 <h2 id="notation">Notation</h2>
 <p>For a finite power tower of height <span class="arithmatex">\(n\)</span>, we write:</p>
 <div class="arithmatex">\[{}^{n}a = a^{a^{a^{\cdot^{\cdot^{\cdot^{a}}}}}} \quad \text{($n$ copies of $a$)}\]</div>
-<p>For example:
-- <span class="arithmatex">\({}^{1}a = a\)</span>
-- <span class="arithmatex">\({}^{2}a = a^a\)</span>
-- <span class="arithmatex">\({}^{3}a = a^{a^a}\)</span>
-- <span class="arithmatex">\({}^{4}a = a^{a^{a^a}}\)</span></p>
-<h2 id="examples">Examples</h2>
-<p>Let's compute some simple power towers:</p>
-<p><strong>For <span class="arithmatex">\(a = 2\)</span>:</strong>
-- <span class="arithmatex">\({}^{1}2 = 2 = 2\)</span>
-- <span class="arithmatex">\({}^{2}2 = 2^2 = 4\)</span>
-- <span class="arithmatex">\({}^{3}2 = 2^{2^2} = 2^4 = 16\)</span>
-- <span class="arithmatex">\({}^{4}2 = 2^{2^{2^2}} = 2^{16} = 65,536\)</span></p>
-<p><strong>For <span class="arithmatex">\(a = \sqrt{2}\)</span>:</strong>
-- <span class="arithmatex">\({}^{1}\sqrt{2} = \sqrt{2} \approx 1.414\)</span>
-- <span class="arithmatex">\({}^{2}\sqrt{2} = (\sqrt{2})^{\sqrt{2}} \approx 1.633\)</span>
-- <span class="arithmatex">\({}^{3}\sqrt{2} = (\sqrt{2})^{(\sqrt{2})^{\sqrt{2}}} \approx 1.761\)</span></p>
-<p>Notice that for <span class="arithmatex">\(\sqrt{2}\)</span>, the values seem to be converging!</p>
-<h2 id="the-infinite-power-tower">The Infinite Power Tower</h2>
-<p>For an infinite power tower, we consider the limit:</p>
-<div class="arithmatex">\[y = a^{a^{a^{\cdot^{\cdot^{\cdot}}}}} = \lim_{n \to \infty} {}^{n}a\]</div>
-<p>If this limit exists, we say the infinite power tower <strong>converges</strong>.</p>
-<h2 id="convergence-condition">Convergence Condition</h2>
-<p>The infinite power tower <span class="arithmatex">\(a^{a^{a^{\cdot^{\cdot^{\cdot}}}}}\)</span> converges if and only if:</p>
-<div class="arithmatex">\[e^{-e} \leq a \leq e^{1/e}\]</div>
-<p>where <span class="arithmatex">\(e \approx 2.718\)</span> is Euler's number.</p>
-<p>This means:
-- For <span class="arithmatex">\(a\)</span> in the range <span class="arithmatex">\([e^{-e}, e^{1/e}] \approx [0.066, 1.445]\)</span>, the infinite power tower converges
-- For <span class="arithmatex">\(a &gt; e^{1/e}\)</span> or <span class="arithmatex">\(a &lt; e^{-e}\)</span>, the infinite power tower diverges</p>
-<h2 id="finding-the-value">Finding the Value</h2>
-<p>If the infinite power tower converges to <span class="arithmatex">\(y\)</span>, then:</p>
-<div class="arithmatex">\[y = a^{a^{a^{\cdot^{\cdot^{\cdot}}}}} = a^y\]</div>
-<p>Taking the natural logarithm of both sides:</p>
-<div class="arithmatex">\[\ln(y) = \ln(a^y) = y \ln(a)\]</div>
-<p>Therefore:</p>
-<div class="arithmatex">\[y \ln(a) = \ln(y)\]</div>
-<p>Or equivalently:</p>
-<div class="arithmatex">\[a = y^{1/y}\]</div>
-<p>This gives us a way to find the value of the infinite power tower for a given <span class="arithmatex">\(a\)</span>.</p>
-<h2 id="special-cases">Special Cases</h2>
-<p><strong>When <span class="arithmatex">\(a = e^{1/e}\)</span>:</strong></p>
-<p>The infinite power tower converges to <span class="arithmatex">\(e\)</span>:</p>
-<div class="arithmatex">\[e^{1/e^{e^{1/e^{\cdot^{\cdot^{\cdot}}}}} = e\]</div>
-<p><strong>When <span class="arithmatex">\(a = \sqrt{2}\)</span>:</strong></p>
-<p>The infinite power tower converges to <span class="arithmatex">\(2\)</span>:</p>
-<div class="arithmatex">\[\sqrt{2}^{\sqrt{2}^{\sqrt{2}^{\cdot^{\cdot^{\cdot}}}}} = 2\]</div>
-<p>We can verify this: if <span class="arithmatex">\(y = 2\)</span>, then <span class="arithmatex">\(a = y^{1/y} = 2^{1/2} = \sqrt{2}\)</span> ✓</p>
-<p><strong>When <span class="arithmatex">\(a = 1\)</span>:</strong></p>
-<p>The infinite power tower is simply <span class="arithmatex">\(1\)</span>:</p>
-<div class="arithmatex">\[1^{1^{1^{\cdot^{\cdot^{\cdot}}}}} = 1\]</div>
+<p>A power tower can be defined recursively.</p>
+<p><strong>Base case:</strong></p>
+<div class="arithmatex">\[{}^{1}a = a\]</div>
+<p><strong>Recursive case:</strong></p>
+<div class="arithmatex">\[{}^{n}a = a^{({}^{n-1}a)} \quad \text{for } n &gt; 1\]</div>
+<p>In words, a power tower of height <span class="arithmatex">\(n\)</span> is <span class="arithmatex">\(a\)</span> raised to the power of a power tower of height <span class="arithmatex">\(n-1\)</span>.</p>
+<p>Let's compute some simple power towers.</p>
+<p><strong>For <span class="arithmatex">\(a = 2\)</span>:</strong></p>
+<ul>
+<li>
+<p><span class="arithmatex">\({}^{1}2 = 2 = 2\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\({}^{2}2 = 2^2 = 4\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\({}^{3}2 = 2^{2^2} = 2^4 = 16\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\({}^{4}2 = 2^{2^{2^2}} = 2^{16} = 65,536\)</span></p>
+</li>
+</ul>
+<p><strong>For <span class="arithmatex">\(a = \sqrt{2}\)</span>:</strong></p>
+<ul>
+<li>
+<p><span class="arithmatex">\({}^{1}\sqrt{2} = \sqrt{2} \approx 1.414\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\({}^{2}\sqrt{2} = (\sqrt{2})^{\sqrt{2}} \approx 1.633\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\({}^{3}\sqrt{2} = (\sqrt{2})^{(\sqrt{2})^{\sqrt{2}}} \approx 1.761\)</span></p>
+</li>
+</ul>
 
 
 
