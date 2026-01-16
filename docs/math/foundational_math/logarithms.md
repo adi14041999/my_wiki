@@ -276,19 +276,11 @@ Therefore, the sum equals **1**.
 
 The natural logarithm $\ln(x)$ has many special properties, but one of the most beautiful is its connection to infinite series. Let's explore a remarkable result.
 
-Consider the infinite series:
-
-$$1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \frac{1}{5} - \frac{1}{6} + \cdots$$
-
-This is called the **alternating harmonic series**. Remarkably, this series converges to $\ln(2)$:
-
-$$1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \frac{1}{5} - \frac{1}{6} + \cdots = \ln(2)$$
-
-Now consider the **harmonic series** (without alternating signs):
+Consider the **harmonic series**:
 
 $$1 + \frac{1}{2} + \frac{1}{3} + \frac{1}{4} + \frac{1}{5} + \cdots + \frac{1}{N}$$
 
-Unlike the alternating harmonic series, this series diverges (grows without bound) as $N$ increases. 
+This series diverges (grows without bound) as $N$ increases. 
 
 Precisely, as $N$ approaches infinity, the difference between the harmonic sum and $\ln(N)$ approaches a constant called **Euler's constant** (denoted $\gamma$):
 
@@ -585,3 +577,82 @@ $$\frac{d}{dx}e^x = e^x$$
 1. **Works for complex numbers**: The power series definition naturally extends to complex arguments, which is essential for Euler's formula $e^{i\theta} = \cos(\theta) + i\sin(\theta)$.
 
 2. **More fundamental**: We don't need to assume anything about limits or the existence of $e$ beforehand. The function is defined directly.
+
+### The Natural Logarithm $\ln(x)$
+
+Now that we understand the exponential function $\exp(x) = e^x$, we can define its inverse: the **natural logarithm** $\ln(x)$.
+
+The natural logarithm $\ln(x)$ is defined as the inverse function of $e^x$. That is, for any positive real number $x$:
+
+$$y = \ln(x) \quad \text{if and only if} \quad e^y = x$$
+
+In words: $\ln(x)$ answers the question "To what power must I raise $e$ to get $x$?"
+
+**Examples:**
+
+- $\ln(e) = 1$ because $e^1 = e$
+- $\ln(1) = 0$ because $e^0 = 1$
+- $\ln(e^2) = 2$ because $e^2 = e^2$
+- $\ln\left(\frac{1}{e}\right) = -1$ because $e^{-1} = \frac{1}{e}$
+
+Let's find the derivative of $\ln(x)$ using the limit definition of the derivative:
+
+$$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
+
+For $f(x) = \ln(x)$, we have:
+
+$$\frac{d}{dx}\ln(x) = \lim_{h \to 0} \frac{\ln(x+h) - \ln(x)}{h}$$
+
+Using the quotient rule for logarithms, $\ln(x+h) - \ln(x) = \ln\left(\frac{x+h}{x}\right) = \ln\left(1 + \frac{h}{x}\right)$:
+
+$$\frac{d}{dx}\ln(x) = \lim_{h \to 0} \frac{\ln\left(1 + \frac{h}{x}\right)}{h}$$
+
+Let's make a substitution. Let $u = \frac{h}{x}$, so $h = ux$. As $h \to 0$, we also have $u \to 0$. Substituting:
+
+$$\frac{d}{dx}\ln(x) = \lim_{u \to 0} \frac{\ln(1 + u)}{ux} = \frac{1}{x} \lim_{u \to 0} \frac{\ln(1 + u)}{u}$$
+
+Now, let $v = \ln(1 + u)$, so $e^v = 1 + u$, which means $u = e^v - 1$. As $u \to 0$, we have $v \to 0$ (since $\ln(1) = 0$).
+
+Substituting:
+
+$$\lim_{u \to 0} \frac{\ln(1 + u)}{u} = \lim_{v \to 0} \frac{v}{e^v - 1} = \lim_{v \to 0} \frac{1}{\frac{e^v - 1}{v}} = \frac{1}{1} = 1$$
+
+Therefore:
+
+$$\lim_{u \to 0} \frac{\ln(1 + u)}{u} = 1$$
+
+Substituting back into our derivative:
+
+$$\frac{d}{dx}\ln(x) = \frac{1}{x} \cdot 1 = \frac{1}{x}$$
+
+**Result:**
+
+$$\frac{d}{dx}\ln(x) = \frac{1}{x}$$
+
+### The area under $\frac{1}{x}$ and its connection to the Harmonic Series
+
+Now that we know $\frac{d}{dx}\ln(x) = \frac{1}{x}$, we can use the **Fundamental Theorem of Calculus** to find the area under the curve $y = \frac{1}{x}$ from $x = 1$ to $x = N$, where $N$ is a positive integer.
+
+The Fundamental Theorem of Calculus states that if $F'(x) = f(x)$, then:
+
+$$\int_a^b f(x) \, dx = F(b) - F(a)$$
+
+Since $\frac{d}{dx}\ln(x) = \frac{1}{x}$, we have:
+
+$$\int_1^N \frac{1}{x} \, dx = \ln(N) - \ln(1) = \ln(N) - 0 = \ln(N)$$
+
+**Result:**
+
+The area under the curve $y = \frac{1}{x}$ from $x = 1$ to $x = N$ is exactly $\ln(N)$:
+
+$$\int_1^N \frac{1}{x} \, dx = \ln(N)$$
+
+This result connects beautifully to the harmonic series we discussed earlier. The area under $\frac{1}{x}$ from $1$ to $N$ can be approximated by rectangles.
+
+![img](rs.png)
+
+In fact, we showed earlier that:
+
+$$1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{N} \approx \ln(N) + \gamma$$
+
+where $\gamma \approx 0.57721\ldots$ is Euler's constant. This makes sense: the harmonic series is approximately the integral plus a constant correction term.
