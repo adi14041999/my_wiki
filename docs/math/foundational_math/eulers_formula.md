@@ -368,7 +368,7 @@ $$z = \ln(|b|) + i(\theta + 2\pi k) \quad \text{for any integer } k$$
 
 where $\ln(|b|)$ is the real natural logarithm of the magnitude.
 
-**Key insight:** For any nonzero complex number $b$, the equation $e^z = b$ has infinitely many solutions, differing by integer multiples of $2\pi i$. This is why we need to be careful when working with complex logarithms and complex powers—they are multi-valued functions.
+**Key insight:** For any nonzero complex number $b$, the equation $e^z = b$ (strictly speaking, $exp(z) = b$) has infinitely many solutions, differing by integer multiples of $2\pi i$. This is why we need to be careful when working with complex logarithms and complex powers— they are multi-valued functions.
 
 ## $\exp(x)$ as a Limit
 
