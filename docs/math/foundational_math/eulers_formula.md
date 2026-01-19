@@ -244,6 +244,132 @@ This perfectly explains why $\exp(i\theta)$ always lies on the unit circle. Also
 
 As $\theta$ increases, $\exp(i\theta)$ moves counterclockwise around the unit circle, with $\theta$ representing the angle (in radians) measured from the positive real axis. When $\theta = 0$, we're at the point $(1, 0)$ on the real axis. When $\theta = \frac{\pi}{2}$, we're at $(0, 1)$ on the imaginary axis. When $\theta = \pi$, we're at $(-1, 0)$, and so on.
 
+## Solutions to $e^z = b$
+
+Let's start this discussion with an example.
+
+**Example:** Euler's formula allows us to evaluate seemingly impossible expressions like $i^i$. Let's see how!
+
+First, we need to express $i$ in exponential form. Using Euler's formula:
+
+$$i = 0 + 1i = \cos\left(\frac{\pi}{2}\right) + i\sin\left(\frac{\pi}{2}\right) = e^{i\pi/2}$$
+
+Now, we can compute $i^i$:
+
+$$i^i = (e^{i\pi/2})^i = e^{i^2 \pi/2} = e^{-\pi/2}$$
+
+Since $i^2 = -1$, we get:
+
+$$i^i = e^{-\pi/2} \approx 0.2079\ldots$$
+
+**Remarkable result:** $i^i$ is a **real number**! This is one of the most surprising and beautiful consequences of Euler's formula.
+
+**Note on multiple values:** Since $e^{i\theta}$ is periodic with period $2\pi$, we have $i = e^{i(\pi/2 + 2\pi k)}$ for any integer $k$. Therefore:
+
+$$i^i = e^{-\pi/2 - 2\pi k} \quad \text{for any integer } k$$
+
+The **principal value** (when $k = 0$) is $e^{-\pi/2} \approx 0.2079$. All other values are also real numbers, but they're different real numbers!
+
+- When $k = 0$: $i^i = e^{-\pi/2} \approx 0.2079$ (principal value)
+- When $k = 1$: $i^i = e^{-\pi/2 - 2\pi} = e^{-5\pi/2} \approx 0.000388$ (much smaller)
+- When $k = -1$: $i^i = e^{-\pi/2 + 2\pi} = e^{3\pi/2} \approx 111.32$ (much larger)
+- When $k = 2$: $i^i = e^{-\pi/2 - 4\pi} = e^{-9\pi/2} \approx 0.00000151$ (even smaller)
+
+As $k$ increases (becomes more positive), the values get exponentially smaller. As $k$ decreases (becomes more negative), the values get exponentially larger. All of these are valid real values of $i^i$.
+
+The $i^i$ example illustrates a fundamental property of the complex exponential function: **the equation $e^z = b$ has infinitely many solutions for any nonzero complex number $b$**.
+
+This is because $e^z$ is periodic with period $2\pi i$. If $e^z = b$, then for any integer $k$:
+
+$$e^{z + 2\pi i k} = e^z \cdot e^{2\pi i k} = e^z \cdot 1 = b$$
+
+So if $r$ is a solution to $e^z = b$, then $r + 2\pi i k$ is also a solution for any integer $k$.
+
+**Example: $e^z = 2$**
+
+Suppose we want to solve $e^z = 2$ for complex $z$.
+
+One solution is $z = \ln(2)$ (the real logarithm). But since $e^z$ is periodic with period $2\pi i$, we have infinitely many solutions:
+
+$$z = \ln(2) + 2\pi i k \quad \text{for any integer } k$$
+
+- When $k = 0$: $z = \ln(2) \approx 0.693$ (real solution)
+
+- When $k = 1$: $z = \ln(2) + 2\pi i \approx 0.693 + 6.283i$
+
+- When $k = -1$: $z = \ln(2) - 2\pi i \approx 0.693 - 6.283i$
+
+- And so on...
+
+**Example: $e^z = i$**
+
+To solve $e^z = i$, we can use Euler's formula. We know that $i = e^{i\pi/2}$.
+
+So one solution is $z = i\pi/2$. But again, we have infinitely many solutions:
+
+$$z = i\pi/2 + 2\pi i k = i(\pi/2 + 2\pi k) \quad \text{for any integer } k$$
+
+- When $k = 0$: $z = i\pi/2$
+
+- When $k = 1$: $z = i(5\pi/2)$
+
+- When $k = -1$: $z = i(-3\pi/2)$
+
+- And so on...
+
+**Example: $e^z = -1$**
+
+To solve $e^z = -1$, we know from Euler's formula that $-1 = e^{i\pi}$.
+
+So the solutions are:
+
+$$z = i\pi + 2\pi i k = i\pi(1 + 2k) \quad \text{for any integer } k$$
+
+- When $k = 0$: $z = i\pi$
+
+- When $k = 1$: $z = 3i\pi$
+
+- When $k = -1$: $z = -i\pi$
+
+- And so on...
+
+**General Case: $e^z = b$ for any complex number $b$**
+
+For any nonzero complex number $b$, we can write $b$ in **polar form**: $b = |b|e^{i\theta}$ where $|b|$ is the magnitude and $\theta$ is the argument.
+
+**What is polar form?**
+
+The polar form of a complex number expresses it in terms of its distance from the origin (magnitude) and its angle from the positive real axis (argument).
+
+If we have a complex number $b = a + bi$ (where $a$ and $b$ are real numbers), then:
+
+- **Magnitude**: $|b| = \sqrt{a^2 + b^2}$ (the distance from the origin)
+
+- **Argument**: $\theta = \arg(b)$ (the angle in radians, measured counterclockwise from the positive real axis)
+
+Using Euler's formula, we can write:
+
+$$b = |b|(\cos(\theta) + i\sin(\theta)) = |b|e^{i\theta}$$
+
+This is the **polar form** of the complex number.
+
+**Examples:**
+
+- For $b = 1 + i$: $|b| = \sqrt{2}$, $\theta = \pi/4$, so $b = \sqrt{2}e^{i\pi/4}$
+- For $b = i$: $|b| = 1$, $\theta = \pi/2$, so $b = e^{i\pi/2}$
+- For $b = -1$: $|b| = 1$, $\theta = \pi$, so $b = e^{i\pi}$
+- For $b = 2$: $|b| = 2$, $\theta = 0$, so $b = 2e^{i0}$
+
+Now, for any nonzero complex number $b$ in polar form $b = |b|e^{i\theta}$:
+
+Then $e^z = b$ has solutions:
+
+$$z = \ln(|b|) + i(\theta + 2\pi k) \quad \text{for any integer } k$$
+
+where $\ln(|b|)$ is the real natural logarithm of the magnitude.
+
+**Key insight:** For any nonzero complex number $b$, the equation $e^z = b$ has infinitely many solutions, differing by integer multiples of $2\pi i$. This is why we need to be careful when working with complex logarithms and complex powers—they are multi-valued functions.
+
 ## $\exp(x)$ as a Limit
 
 There's another beautiful way to define the exponential function. It turns out that:
