@@ -1813,6 +1813,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#solutions-to-ez-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      Solutions to \(e^z = b\)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#expx-as-a-limit" class="md-nav__link">
     <span class="md-ellipsis">
       \(\exp(x)\) as a Limit
@@ -3234,6 +3243,112 @@
 </ul>
 <p>This perfectly explains why <span class="arithmatex">\(\exp(i\theta)\)</span> always lies on the unit circle. Also, <span class="arithmatex">\(\cos^2(\theta) + \sin^2(\theta) = 1\)</span> for all <span class="arithmatex">\(\theta\)</span>, which means the point <span class="arithmatex">\((\cos(\theta), \sin(\theta))\)</span> is always exactly one unit away from the origin.</p>
 <p>As <span class="arithmatex">\(\theta\)</span> increases, <span class="arithmatex">\(\exp(i\theta)\)</span> moves counterclockwise around the unit circle, with <span class="arithmatex">\(\theta\)</span> representing the angle (in radians) measured from the positive real axis. When <span class="arithmatex">\(\theta = 0\)</span>, we're at the point <span class="arithmatex">\((1, 0)\)</span> on the real axis. When <span class="arithmatex">\(\theta = \frac{\pi}{2}\)</span>, we're at <span class="arithmatex">\((0, 1)\)</span> on the imaginary axis. When <span class="arithmatex">\(\theta = \pi\)</span>, we're at <span class="arithmatex">\((-1, 0)\)</span>, and so on.</p>
+<h2 id="solutions-to-ez-b">Solutions to <span class="arithmatex">\(e^z = b\)</span></h2>
+<p>Let's start this discussion with an example.</p>
+<p><strong>Example:</strong> Euler's formula allows us to evaluate seemingly impossible expressions like <span class="arithmatex">\(i^i\)</span>. Let's see how!</p>
+<p>First, we need to express <span class="arithmatex">\(i\)</span> in exponential form. Using Euler's formula:</p>
+<div class="arithmatex">\[i = 0 + 1i = \cos\left(\frac{\pi}{2}\right) + i\sin\left(\frac{\pi}{2}\right) = e^{i\pi/2}\]</div>
+<p>Now, we can compute <span class="arithmatex">\(i^i\)</span>:</p>
+<div class="arithmatex">\[i^i = (e^{i\pi/2})^i = e^{i^2 \pi/2} = e^{-\pi/2}\]</div>
+<p>Since <span class="arithmatex">\(i^2 = -1\)</span>, we get:</p>
+<div class="arithmatex">\[i^i = e^{-\pi/2} \approx 0.2079\ldots\]</div>
+<p><strong>Remarkable result:</strong> <span class="arithmatex">\(i^i\)</span> is a <strong>real number</strong>! This is one of the most surprising and beautiful consequences of Euler's formula.</p>
+<p><strong>Note on multiple values:</strong> Since <span class="arithmatex">\(e^{i\theta}\)</span> is periodic with period <span class="arithmatex">\(2\pi\)</span>, we have <span class="arithmatex">\(i = e^{i(\pi/2 + 2\pi k)}\)</span> for any integer <span class="arithmatex">\(k\)</span>. Therefore:</p>
+<div class="arithmatex">\[i^i = e^{-\pi/2 - 2\pi k} \quad \text{for any integer } k\]</div>
+<p>The <strong>principal value</strong> (when <span class="arithmatex">\(k = 0\)</span>) is <span class="arithmatex">\(e^{-\pi/2} \approx 0.2079\)</span>. All other values are also real numbers, but they're different real numbers!</p>
+<ul>
+<li>When <span class="arithmatex">\(k = 0\)</span>: <span class="arithmatex">\(i^i = e^{-\pi/2} \approx 0.2079\)</span> (principal value)</li>
+<li>When <span class="arithmatex">\(k = 1\)</span>: <span class="arithmatex">\(i^i = e^{-\pi/2 - 2\pi} = e^{-5\pi/2} \approx 0.000388\)</span> (much smaller)</li>
+<li>When <span class="arithmatex">\(k = -1\)</span>: <span class="arithmatex">\(i^i = e^{-\pi/2 + 2\pi} = e^{3\pi/2} \approx 111.32\)</span> (much larger)</li>
+<li>When <span class="arithmatex">\(k = 2\)</span>: <span class="arithmatex">\(i^i = e^{-\pi/2 - 4\pi} = e^{-9\pi/2} \approx 0.00000151\)</span> (even smaller)</li>
+</ul>
+<p>As <span class="arithmatex">\(k\)</span> increases (becomes more positive), the values get exponentially smaller. As <span class="arithmatex">\(k\)</span> decreases (becomes more negative), the values get exponentially larger. All of these are valid real values of <span class="arithmatex">\(i^i\)</span>.</p>
+<p>The <span class="arithmatex">\(i^i\)</span> example illustrates a fundamental property of the complex exponential function: <strong>the equation <span class="arithmatex">\(e^z = b\)</span> has infinitely many solutions for any nonzero complex number <span class="arithmatex">\(b\)</span></strong>.</p>
+<p>This is because <span class="arithmatex">\(e^z\)</span> is periodic with period <span class="arithmatex">\(2\pi i\)</span>. If <span class="arithmatex">\(e^z = b\)</span>, then for any integer <span class="arithmatex">\(k\)</span>:</p>
+<div class="arithmatex">\[e^{z + 2\pi i k} = e^z \cdot e^{2\pi i k} = e^z \cdot 1 = b\]</div>
+<p>So if <span class="arithmatex">\(r\)</span> is a solution to <span class="arithmatex">\(e^z = b\)</span>, then <span class="arithmatex">\(r + 2\pi i k\)</span> is also a solution for any integer <span class="arithmatex">\(k\)</span>.</p>
+<p><strong>Example: <span class="arithmatex">\(e^z = 2\)</span></strong></p>
+<p>Suppose we want to solve <span class="arithmatex">\(e^z = 2\)</span> for complex <span class="arithmatex">\(z\)</span>.</p>
+<p>One solution is <span class="arithmatex">\(z = \ln(2)\)</span> (the real logarithm). But since <span class="arithmatex">\(e^z\)</span> is periodic with period <span class="arithmatex">\(2\pi i\)</span>, we have infinitely many solutions:</p>
+<div class="arithmatex">\[z = \ln(2) + 2\pi i k \quad \text{for any integer } k\]</div>
+<ul>
+<li>
+<p>When <span class="arithmatex">\(k = 0\)</span>: <span class="arithmatex">\(z = \ln(2) \approx 0.693\)</span> (real solution)</p>
+</li>
+<li>
+<p>When <span class="arithmatex">\(k = 1\)</span>: <span class="arithmatex">\(z = \ln(2) + 2\pi i \approx 0.693 + 6.283i\)</span></p>
+</li>
+<li>
+<p>When <span class="arithmatex">\(k = -1\)</span>: <span class="arithmatex">\(z = \ln(2) - 2\pi i \approx 0.693 - 6.283i\)</span></p>
+</li>
+<li>
+<p>And so on...</p>
+</li>
+</ul>
+<p><strong>Example: <span class="arithmatex">\(e^z = i\)</span></strong></p>
+<p>To solve <span class="arithmatex">\(e^z = i\)</span>, we can use Euler's formula. We know that <span class="arithmatex">\(i = e^{i\pi/2}\)</span>.</p>
+<p>So one solution is <span class="arithmatex">\(z = i\pi/2\)</span>. But again, we have infinitely many solutions:</p>
+<div class="arithmatex">\[z = i\pi/2 + 2\pi i k = i(\pi/2 + 2\pi k) \quad \text{for any integer } k\]</div>
+<ul>
+<li>
+<p>When <span class="arithmatex">\(k = 0\)</span>: <span class="arithmatex">\(z = i\pi/2\)</span></p>
+</li>
+<li>
+<p>When <span class="arithmatex">\(k = 1\)</span>: <span class="arithmatex">\(z = i(5\pi/2)\)</span></p>
+</li>
+<li>
+<p>When <span class="arithmatex">\(k = -1\)</span>: <span class="arithmatex">\(z = i(-3\pi/2)\)</span></p>
+</li>
+<li>
+<p>And so on...</p>
+</li>
+</ul>
+<p><strong>Example: <span class="arithmatex">\(e^z = -1\)</span></strong></p>
+<p>To solve <span class="arithmatex">\(e^z = -1\)</span>, we know from Euler's formula that <span class="arithmatex">\(-1 = e^{i\pi}\)</span>.</p>
+<p>So the solutions are:</p>
+<div class="arithmatex">\[z = i\pi + 2\pi i k = i\pi(1 + 2k) \quad \text{for any integer } k\]</div>
+<ul>
+<li>
+<p>When <span class="arithmatex">\(k = 0\)</span>: <span class="arithmatex">\(z = i\pi\)</span></p>
+</li>
+<li>
+<p>When <span class="arithmatex">\(k = 1\)</span>: <span class="arithmatex">\(z = 3i\pi\)</span></p>
+</li>
+<li>
+<p>When <span class="arithmatex">\(k = -1\)</span>: <span class="arithmatex">\(z = -i\pi\)</span></p>
+</li>
+<li>
+<p>And so on...</p>
+</li>
+</ul>
+<p><strong>General Case: <span class="arithmatex">\(e^z = b\)</span> for any complex number <span class="arithmatex">\(b\)</span></strong></p>
+<p>For any nonzero complex number <span class="arithmatex">\(b\)</span>, we can write <span class="arithmatex">\(b\)</span> in <strong>polar form</strong>: <span class="arithmatex">\(b = |b|e^{i\theta}\)</span> where <span class="arithmatex">\(|b|\)</span> is the magnitude and <span class="arithmatex">\(\theta\)</span> is the argument.</p>
+<p><strong>What is polar form?</strong></p>
+<p>The polar form of a complex number expresses it in terms of its distance from the origin (magnitude) and its angle from the positive real axis (argument).</p>
+<p>If we have a complex number <span class="arithmatex">\(b = a + bi\)</span> (where <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> are real numbers), then:</p>
+<ul>
+<li>
+<p><strong>Magnitude</strong>: <span class="arithmatex">\(|b| = \sqrt{a^2 + b^2}\)</span> (the distance from the origin)</p>
+</li>
+<li>
+<p><strong>Argument</strong>: <span class="arithmatex">\(\theta = \arg(b)\)</span> (the angle in radians, measured counterclockwise from the positive real axis)</p>
+</li>
+</ul>
+<p>Using Euler's formula, we can write:</p>
+<div class="arithmatex">\[b = |b|(\cos(\theta) + i\sin(\theta)) = |b|e^{i\theta}\]</div>
+<p>This is the <strong>polar form</strong> of the complex number.</p>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>For <span class="arithmatex">\(b = 1 + i\)</span>: <span class="arithmatex">\(|b| = \sqrt{2}\)</span>, <span class="arithmatex">\(\theta = \pi/4\)</span>, so <span class="arithmatex">\(b = \sqrt{2}e^{i\pi/4}\)</span></li>
+<li>For <span class="arithmatex">\(b = i\)</span>: <span class="arithmatex">\(|b| = 1\)</span>, <span class="arithmatex">\(\theta = \pi/2\)</span>, so <span class="arithmatex">\(b = e^{i\pi/2}\)</span></li>
+<li>For <span class="arithmatex">\(b = -1\)</span>: <span class="arithmatex">\(|b| = 1\)</span>, <span class="arithmatex">\(\theta = \pi\)</span>, so <span class="arithmatex">\(b = e^{i\pi}\)</span></li>
+<li>For <span class="arithmatex">\(b = 2\)</span>: <span class="arithmatex">\(|b| = 2\)</span>, <span class="arithmatex">\(\theta = 0\)</span>, so <span class="arithmatex">\(b = 2e^{i0}\)</span></li>
+</ul>
+<p>Now, for any nonzero complex number <span class="arithmatex">\(b\)</span> in polar form <span class="arithmatex">\(b = |b|e^{i\theta}\)</span>:</p>
+<p>Then <span class="arithmatex">\(e^z = b\)</span> has solutions:</p>
+<div class="arithmatex">\[z = \ln(|b|) + i(\theta + 2\pi k) \quad \text{for any integer } k\]</div>
+<p>where <span class="arithmatex">\(\ln(|b|)\)</span> is the real natural logarithm of the magnitude.</p>
+<p><strong>Key insight:</strong> For any nonzero complex number <span class="arithmatex">\(b\)</span>, the equation <span class="arithmatex">\(e^z = b\)</span> has infinitely many solutions, differing by integer multiples of <span class="arithmatex">\(2\pi i\)</span>. This is why we need to be careful when working with complex logarithms and complex powers—they are multi-valued functions.</p>
 <h2 id="expx-as-a-limit"><span class="arithmatex">\(\exp(x)\)</span> as a Limit</h2>
 <p>There's another beautiful way to define the exponential function. It turns out that:</p>
 <div class="arithmatex">\[\exp(x) = \lim_{n \to \infty} \left(1 + \frac{x}{n}\right)^n\]</div>
