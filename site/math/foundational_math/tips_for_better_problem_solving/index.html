@@ -1658,6 +1658,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Tips for better problem solving
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1669,6 +1682,58 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tldr" class="md-nav__link">
+    <span class="md-ellipsis">
+      TL;DR
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proving-cos2theta-frac121-cos2theta-using-the-inscribed-angle-theorem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Proving \(\cos^2(\theta) = \frac{1}{2}[1 + \cos(2\theta)]\) using the Inscribed Angle Theorem
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Proving \(\cos^2(\theta) = \frac{1}{2}[1 + \cos(2\theta)]\) using the Inscribed Angle Theorem">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-we-used-some-of-the-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      How we used some of the tips
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -2982,6 +3047,112 @@
 
 
 <h1 id="tips-for-better-problem-solving">Tips for better problem solving</h1>
+<h2 id="tldr">TL;DR</h2>
+<p>Some useful strategies to help you solve math problems better.</p>
+<ol>
+<li>Use the defining features of the setup</li>
+<li>Give things (meaningful) names</li>
+<li>Leverage symmetry</li>
+<li>Try describing one object in two different ways</li>
+<li>Draw a picture (numbers, plots)</li>
+<li>Ask or solve a simpler version of the problem</li>
+<li>Read a lot, and think about math problems a lot</li>
+<li>Always gut-check your answer!</li>
+<li>Learn at least a little bit of programming</li>
+</ol>
+<h2 id="proving-cos2theta-frac121-cos2theta-using-the-inscribed-angle-theorem">Proving <span class="arithmatex">\(\cos^2(\theta) = \frac{1}{2}[1 + \cos(2\theta)]\)</span> using the Inscribed Angle Theorem</h2>
+<p>We'll prove the identity <span class="arithmatex">\(\cos^2(\theta) = \frac{1}{2}[1 + \cos(2\theta)]\)</span> using a geometric approach with the inscribed angle theorem.</p>
+<p>Consider a circle with unit diameter. The circle has a center at <span class="arithmatex">\(O\)</span>. Let there be a diameter <span class="arithmatex">\(QR\)</span> of length <span class="arithmatex">\(1\)</span>. Let <span class="arithmatex">\(P\)</span> be a point on the circle not coinciding with <span class="arithmatex">\(Q\)</span> or <span class="arithmatex">\(R\)</span>. Let <span class="arithmatex">\(PM\)</span> be a line perpendicular to the diameter <span class="arithmatex">\(QR\)</span>. Thus, <span class="arithmatex">\(M\)</span> lies on the diameter. Below is a figure showing the circle.</p>
+<p><img alt="img" src="../iat.png" /></p>
+<p>Let <span class="arithmatex">\(\alpha = \angle PQR\)</span> (the inscribed angle) and <span class="arithmatex">\(\beta = \angle POR\)</span> (the central angle). By the inscribed angle theorem, <span class="arithmatex">\(\beta = 2\alpha\)</span>.</p>
+<p>Since <span class="arithmatex">\(QR\)</span> is a diameter and <span class="arithmatex">\(P\)</span> lies on the semicircle, <span class="arithmatex">\(\angle QPR = 90°\)</span>. This is a consequence of <strong>Thales' theorem</strong> (or the inscribed angle theorem): any angle inscribed in a semicircle (i.e., subtended by a diameter) is a right angle.</p>
+<p>Since <span class="arithmatex">\(QR\)</span> is of length <span class="arithmatex">\(1\)</span> (unit diameter), and triangle <span class="arithmatex">\(QPR\)</span> is right-angled at <span class="arithmatex">\(P\)</span>, we can use trigonometry. In triangle <span class="arithmatex">\(QPR\)</span>:</p>
+<ul>
+<li>
+<p>The hypotenuse is <span class="arithmatex">\(QR = 1\)</span></p>
+</li>
+<li>
+<p>The angle at <span class="arithmatex">\(Q\)</span> is <span class="arithmatex">\(\alpha\)</span></p>
+</li>
+<li>
+<p>Therefore, <span class="arithmatex">\(PQ = \cos(\alpha)\)</span></p>
+</li>
+</ul>
+<p>Now, we need to find the length of <span class="arithmatex">\(QM\)</span> in two different ways.</p>
+<p><strong>First way:</strong></p>
+<p>Consider triangle <span class="arithmatex">\(PMQ\)</span>, which is right-angled at <span class="arithmatex">\(M\)</span> (since <span class="arithmatex">\(PM\)</span> is perpendicular to <span class="arithmatex">\(QR\)</span>). In this triangle:</p>
+<ul>
+<li>
+<p>The angle at <span class="arithmatex">\(Q\)</span> is <span class="arithmatex">\(\alpha\)</span></p>
+</li>
+<li>
+<p>The hypotenuse is <span class="arithmatex">\(PQ\)</span></p>
+</li>
+<li>
+<p>The adjacent side to angle <span class="arithmatex">\(\alpha\)</span> is <span class="arithmatex">\(QM\)</span></p>
+</li>
+</ul>
+<p>Therefore, <span class="arithmatex">\(\cos(\alpha) = \frac{QM}{PQ}\)</span>.</p>
+<p>But we already know that <span class="arithmatex">\(PQ = \cos(\alpha)\)</span> Substituting:</p>
+<div class="arithmatex">\[\cos(\alpha) = \frac{QM}{\cos(\alpha)}\]</div>
+<p>Solving for <span class="arithmatex">\(QM\)</span>:</p>
+<div class="arithmatex">\[QM = \cos(\alpha) \cdot \cos(\alpha) = \cos^2(\alpha)\]</div>
+<p>Thus, the first way of finding <span class="arithmatex">\(QM\)</span> gives us <span class="arithmatex">\(QM = \cos^2(\alpha)\)</span>.</p>
+<p><strong>Second way:</strong></p>
+<p>Since <span class="arithmatex">\(M\)</span> lies on the diameter <span class="arithmatex">\(QR\)</span> between <span class="arithmatex">\(Q\)</span> and <span class="arithmatex">\(R\)</span>, we can express <span class="arithmatex">\(QM\)</span> as:</p>
+<div class="arithmatex">\[QM = QO + OM\]</div>
+<p>where <span class="arithmatex">\(QO\)</span> is the distance from <span class="arithmatex">\(Q\)</span> to the center <span class="arithmatex">\(O\)</span>, and <span class="arithmatex">\(OM\)</span> is the distance from the center <span class="arithmatex">\(O\)</span> to point <span class="arithmatex">\(M\)</span>.</p>
+<p>By the inscribed angle theorem, <span class="arithmatex">\(\beta = 2\alpha\)</span>, where <span class="arithmatex">\(\beta = \angle POR\)</span> is the central angle and <span class="arithmatex">\(\alpha = \angle PQR\)</span> is the inscribed angle.</p>
+<p>Now consider triangle <span class="arithmatex">\(POM\)</span>, which is right-angled at <span class="arithmatex">\(M\)</span> (since <span class="arithmatex">\(PM\)</span> is perpendicular to <span class="arithmatex">\(QR\)</span>). In this triangle:</p>
+<ul>
+<li>
+<p>The angle at <span class="arithmatex">\(O\)</span> is <span class="arithmatex">\(\beta = 2\alpha\)</span></p>
+</li>
+<li>
+<p>The hypotenuse is <span class="arithmatex">\(OP\)</span></p>
+</li>
+<li>
+<p>The adjacent side to angle <span class="arithmatex">\(\beta\)</span> is <span class="arithmatex">\(OM\)</span></p>
+</li>
+</ul>
+<p>Therefore, <span class="arithmatex">\(\cos(\beta) = \cos(2\alpha) = \frac{OM}{OP}\)</span>.</p>
+<p>But <span class="arithmatex">\(OP = \frac{1}{2}\)</span> (since it is the radius, and the diameter <span class="arithmatex">\(QR = 1\)</span>).</p>
+<p>Substituting:</p>
+<div class="arithmatex">\[\cos(2\alpha) = \frac{OM}{1/2}\]</div>
+<p>Solving for <span class="arithmatex">\(OM\)</span>:</p>
+<div class="arithmatex">\[OM = \frac{\cos(2\alpha)}{2}\]</div>
+<p>Now, to find <span class="arithmatex">\(QO\)</span>: Since <span class="arithmatex">\(Q\)</span> is one endpoint of the diameter <span class="arithmatex">\(QR\)</span> and <span class="arithmatex">\(O\)</span> is the center of the circle, <span class="arithmatex">\(QO\)</span> is the radius. Since the diameter <span class="arithmatex">\(QR = 1\)</span>, the radius is <span class="arithmatex">\(\frac{1}{2}\)</span>.</p>
+<p>Therefore:</p>
+<div class="arithmatex">\[QO = \frac{1}{2}\]</div>
+<p>Now we can compute <span class="arithmatex">\(QM\)</span> using the second way:</p>
+<div class="arithmatex">\[QM = QO + OM = \frac{1}{2} + \frac{\cos(2\alpha)}{2} = \frac{1 + \cos(2\alpha)}{2}\]</div>
+<p>Thus, the second way of finding <span class="arithmatex">\(QM\)</span> gives us <span class="arithmatex">\(QM = \frac{1 + \cos(2\alpha)}{2}\)</span>.</p>
+<p><strong>Completing the proof:</strong></p>
+<p>Since we found <span class="arithmatex">\(QM\)</span> in two different ways, we can equate them:</p>
+<div class="arithmatex">\[\cos^2(\alpha) = \frac{1 + \cos(2\alpha)}{2}\]</div>
+<p>This completes the proof!</p>
+<h3 id="how-we-used-some-of-the-tips">How we used some of the tips</h3>
+<p><strong>Use the defining features of the setup</strong>: We leveraged key properties.</p>
+<ul>
+<li><span class="arithmatex">\(QR\)</span> is a diameter (length 1)</li>
+<li>The circle has unit diameter, so radius is <span class="arithmatex">\(\frac{1}{2}\)</span></li>
+<li><span class="arithmatex">\(PM\)</span> is perpendicular to <span class="arithmatex">\(QR\)</span></li>
+<li><span class="arithmatex">\(P\)</span> lies on a semicircle, so <span class="arithmatex">\(\angle QPR = 90°\)</span> (Thales' theorem)</li>
+<li>The inscribed angle theorem: <span class="arithmatex">\(\beta = 2\alpha\)</span></li>
+</ul>
+<p><strong>Give things (meaningful) names</strong>: We used descriptive notation.</p>
+<ul>
+<li><span class="arithmatex">\(\alpha\)</span> for the inscribed angle <span class="arithmatex">\(\angle PQR\)</span></li>
+<li><span class="arithmatex">\(\beta\)</span> for the central angle <span class="arithmatex">\(\angle POR\)</span></li>
+<li>Points <span class="arithmatex">\(P\)</span>, <span class="arithmatex">\(Q\)</span>, <span class="arithmatex">\(R\)</span>, <span class="arithmatex">\(O\)</span>, <span class="arithmatex">\(M\)</span> with clear geometric meanings</li>
+<li>These names made it easy to refer to specific angles and lengths</li>
+</ul>
+<p><strong>Try describing one object in two different ways</strong>: This was the key strategy!</p>
+<ul>
+<li>We found <span class="arithmatex">\(QM\)</span> using triangle <span class="arithmatex">\(PMQ\)</span>. <span class="arithmatex">\(QM = \cos^2(\alpha)\)</span></li>
+<li>We found <span class="arithmatex">\(QM\)</span> using the diameter <span class="arithmatex">\(QM = QO + OM = \frac{1 + \cos(2\alpha)}{2}\)</span></li>
+<li>Equating these two expressions gave us the desired identity</li>
+</ul>
 
 
 
