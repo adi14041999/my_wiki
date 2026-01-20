@@ -53,6 +53,7 @@ nav:
       - Score Based Diffusion Models: ai/deep_generative_models/score_based_diffusion_models.md
   - Math:
     - Foundational Math:
+      - Tips for better problem solving: math/foundational_math/tips_for_better_problem_solving.md
       - The Quadratic Formula: math/foundational_math/the_quadratic_formula.md
       - Trigonometry: math/foundational_math/trigonometry.md
       - Complex Numbers: math/foundational_math/complex_numbers.md
