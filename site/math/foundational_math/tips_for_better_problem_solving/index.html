@@ -1708,17 +1708,41 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#proving-cos2theta-frac121-cos2theta-using-the-inscribed-angle-theorem" class="md-nav__link">
+  <a href="#case-study-proving-cos2theta-frac121-cos2theta-using-the-inscribed-angle-theorem" class="md-nav__link">
     <span class="md-ellipsis">
-      Proving \(\cos^2(\theta) = \frac{1}{2}[1 + \cos(2\theta)]\) using the Inscribed Angle Theorem
+      Case study: Proving \(\cos^2(\theta) = \frac{1}{2}[1 + \cos(2\theta)]\) using the Inscribed Angle Theorem
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Proving \(\cos^2(\theta) = \frac{1}{2}[1 + \cos(2\theta)]\) using the Inscribed Angle Theorem">
+    <nav class="md-nav" aria-label="Case study: Proving \(\cos^2(\theta) = \frac{1}{2}[1 + \cos(2\theta)]\) using the Inscribed Angle Theorem">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#how-we-used-some-of-the-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      How we used some of the tips
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#case-study-a-hidden-infinite-series" class="md-nav__link">
+    <span class="md-ellipsis">
+      Case study: A hidden infinite series
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Case study: A hidden infinite series">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-we-used-some-of-the-tips_1" class="md-nav__link">
     <span class="md-ellipsis">
       How we used some of the tips
     </span>
@@ -3052,15 +3076,15 @@
 <ol>
 <li>Use the defining features of the setup</li>
 <li>Give things (meaningful) names</li>
-<li>Leverage symmetry</li>
-<li>Try describing one object in two different ways</li>
 <li>Draw a picture (numbers, plots)</li>
+<li>Leverage symmetry</li>
 <li>Ask or solve a simpler version of the problem</li>
-<li>Read a lot, and think about math problems a lot</li>
-<li>Always gut-check your answer!</li>
+<li>Try describing one object in two different ways</li>
 <li>Learn at least a little bit of programming</li>
+<li>Always gut-check your answer!</li>
+<li>Read a lot, and think about math problems a lot </li>
 </ol>
-<h2 id="proving-cos2theta-frac121-cos2theta-using-the-inscribed-angle-theorem">Proving <span class="arithmatex">\(\cos^2(\theta) = \frac{1}{2}[1 + \cos(2\theta)]\)</span> using the Inscribed Angle Theorem</h2>
+<h2 id="case-study-proving-cos2theta-frac121-cos2theta-using-the-inscribed-angle-theorem">Case study: Proving <span class="arithmatex">\(\cos^2(\theta) = \frac{1}{2}[1 + \cos(2\theta)]\)</span> using the Inscribed Angle Theorem</h2>
 <p>We'll prove the identity <span class="arithmatex">\(\cos^2(\theta) = \frac{1}{2}[1 + \cos(2\theta)]\)</span> using a geometric approach with the inscribed angle theorem.</p>
 <p>Consider a circle with unit diameter. The circle has a center at <span class="arithmatex">\(O\)</span>. Let there be a diameter <span class="arithmatex">\(QR\)</span> of length <span class="arithmatex">\(1\)</span>. Let <span class="arithmatex">\(P\)</span> be a point on the circle not coinciding with <span class="arithmatex">\(Q\)</span> or <span class="arithmatex">\(R\)</span>. Let <span class="arithmatex">\(PM\)</span> be a line perpendicular to the diameter <span class="arithmatex">\(QR\)</span>. Thus, <span class="arithmatex">\(M\)</span> lies on the diameter. Below is a figure showing the circle.</p>
 <p><img alt="img" src="../iat.png" /></p>
@@ -3152,6 +3176,191 @@
 <li>We found <span class="arithmatex">\(QM\)</span> using triangle <span class="arithmatex">\(PMQ\)</span>. <span class="arithmatex">\(QM = \cos^2(\alpha)\)</span></li>
 <li>We found <span class="arithmatex">\(QM\)</span> using the diameter <span class="arithmatex">\(QM = QO + OM = \frac{1 + \cos(2\alpha)}{2}\)</span></li>
 <li>Equating these two expressions gave us the desired identity</li>
+</ul>
+<h2 id="case-study-a-hidden-infinite-series">Case study: A hidden infinite series</h2>
+<p><strong>Problem:</strong> 
+Suppose two numbers are chosen at random from the range <span class="arithmatex">\([0, 1]\)</span> according to a uniform distribution. Suppose <span class="arithmatex">\(p\)</span> is the probability that the ratio of the first number to second number rounds down to an even number (remember that <span class="arithmatex">\(0\)</span> is an even number). What is <span class="arithmatex">\(p\)</span> equal to?</p>
+<p><strong>Solution:</strong> </p>
+<p><strong>Simpler problem: Probability that <span class="arithmatex">\(\lfloor x/y \rfloor = 0\)</span></strong></p>
+<p>The floor function <span class="arithmatex">\(\lfloor x/y \rfloor = 0\)</span> when <span class="arithmatex">\(0 \leq x/y &lt; 1\)</span>, which means <span class="arithmatex">\(x &lt; y\)</span> (since <span class="arithmatex">\(x, y &gt; 0\)</span> with probability 1; the case <span class="arithmatex">\(y = 0\)</span> has probability 0 and can be ignored).</p>
+<p>So we want the probability that <span class="arithmatex">\(x &lt; y\)</span> when both <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> are chosen uniformly from <span class="arithmatex">\([0, 1]\)</span>.</p>
+<p>This is the area of the region in the unit square <span class="arithmatex">\([0,1] \times [0,1]\)</span> where <span class="arithmatex">\(x &lt; y\)</span>. This region is the triangle (upper left triangle) above the line <span class="arithmatex">\(y = x\)</span>. For any point <span class="arithmatex">\(P\)</span> in this region, <span class="arithmatex">\(\lfloor x/y \rfloor = 0\)</span>.</p>
+<p><img alt="img" src="../ult.png" /></p>
+<p>To find the area of the region where <span class="arithmatex">\(x &lt; y\)</span> in the unit square, we integrate over this region.</p>
+<p>For a fixed value of <span class="arithmatex">\(x \in [0, 1]\)</span>, the condition <span class="arithmatex">\(x &lt; y\)</span> means <span class="arithmatex">\(y\)</span> ranges from <span class="arithmatex">\(y = x\)</span> to <span class="arithmatex">\(y = 1\)</span>.</p>
+<p>So we can write the area as a double integral:</p>
+<div class="arithmatex">\[\text{Area} = \int_0^1 \int_x^1 dy \, dx\]</div>
+<p><strong>How the inner integral works:</strong> The inner integral <span class="arithmatex">\(\int_x^1 dy\)</span> computes the length of the vertical slice at a given <span class="arithmatex">\(x\)</span>. The integral of the constant function 1 over an interval gives us the <strong>length</strong> (or measure) of that interval. This is a fundamental property of integration:</p>
+<div class="arithmatex">\[\int_a^b 1 \cdot dy = \int_a^b dy = b - a\]</div>
+<p>This is why integrating 1 gives us lengths, areas, volumes, etc.—we're essentially "measuring" the size of the region. So in our case:</p>
+<div class="arithmatex">\[\int_x^1 dy = \int_x^1 1 \cdot dy = \left[ y \right]_x^1 = 1 - x\]</div>
+<p>This gives us the length of the interval <span class="arithmatex">\([x, 1]\)</span>, which is exactly the length of our vertical slice. So for each <span class="arithmatex">\(x\)</span>, the vertical slice has length <span class="arithmatex">\(1 - x\)</span>.</p>
+<p><strong>How the outer integral works:</strong> The outer integral <span class="arithmatex">\(\int_0^1 (1 - x) \, dx\)</span> sums up all the vertical slice lengths as <span class="arithmatex">\(x\)</span> varies from <span class="arithmatex">\(0\)</span> to <span class="arithmatex">\(1\)</span> We've computed that for each fixed <span class="arithmatex">\(x\)</span>, the vertical slice has length <span class="arithmatex">\(1 - x\)</span>. Now we want to find the total area of the region where <span class="arithmatex">\(x &lt; y\)</span>. To do this, we "add up" (integrate) all these vertical slice lengths as <span class="arithmatex">\(x\)</span> ranges from <span class="arithmatex">\(0\)</span> to <span class="arithmatex">\(1\)</span>. This is like slicing the region into infinitely many thin vertical strips, each of height <span class="arithmatex">\((1 - x)\)</span>, and summing their areas. Now we evaluate this integral:</p>
+<div class="arithmatex">\[\int_0^1 (1 - x) \, dx = \left[ x - \frac{x^2}{2} \right]_0^1\]</div>
+<div class="arithmatex">\[= \left(1 - \frac{1^2}{2}\right) - \left(0 - \frac{0^2}{2}\right) = 1 - \frac{1}{2} - 0 = \frac{1}{2}\]</div>
+<p>Therefore, the area of the region where <span class="arithmatex">\(x &lt; y\)</span> is <span class="arithmatex">\(\frac{1}{2}\)</span>, which means the probability that <span class="arithmatex">\(\lfloor x/y \rfloor = 0\)</span> is <span class="arithmatex">\(\frac{1}{2}\)</span>.</p>
+<p><strong>Next: Probability that <span class="arithmatex">\(\lfloor x/y \rfloor = 2\)</span></strong></p>
+<p>Now let's find the probability that <span class="arithmatex">\(\lfloor x/y \rfloor = 2\)</span>. For <span class="arithmatex">\(\lfloor x/y \rfloor = 2\)</span>, we need <span class="arithmatex">\(2 \leq x/y &lt; 3\)</span>, which means <span class="arithmatex">\(2y \leq x &lt; 3y\)</span>. However, we also have the constraint that <span class="arithmatex">\(x \leq 1\)</span> (since <span class="arithmatex">\(x \in [0, 1]\)</span>).
+The condition <span class="arithmatex">\(2 \leq x/y &lt; 3\)</span> can be rewritten as:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(x/y \geq 2\)</span> means <span class="arithmatex">\(y \leq x/2\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(x/y &lt; 3\)</span> means <span class="arithmatex">\(y &gt; x/3\)</span></p>
+</li>
+</ul>
+<p>So the region where <span class="arithmatex">\(\lfloor x/y \rfloor = 2\)</span> is bounded by:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(y = x/3\)</span> (lower boundary)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(y = x/2\)</span> (upper boundary)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(x = 1\)</span> (right boundary, since we're in the unit square)</p>
+</li>
+</ul>
+<p>These three lines form a triangle with vertices:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\((0, 0)\)</span>: intersection of <span class="arithmatex">\(y = x/3\)</span> and <span class="arithmatex">\(y = x/2\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\((1, 1/3)\)</span>: intersection of <span class="arithmatex">\(y = x/3\)</span> and <span class="arithmatex">\(x = 1\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\((1, 1/2)\)</span>: intersection of <span class="arithmatex">\(y = x/2\)</span> and <span class="arithmatex">\(x = 1\)</span></p>
+</li>
+</ul>
+<p>For any point <span class="arithmatex">\(P\)</span> in this region, <span class="arithmatex">\(\lfloor x/y \rfloor = 2\)</span>.</p>
+<p><img alt="img" src="../ult1.png" /></p>
+<p>To find the area of this triangle, we can use the formula for the area of a triangle:</p>
+<div class="arithmatex">\[\text{Area} = \frac{1}{2} \times \text{base} \times \text{height}\]</div>
+<p>The base is the vertical line segment from <span class="arithmatex">\((1, 1/3)\)</span> to <span class="arithmatex">\((1, 1/2)\)</span>, so:</p>
+<div class="arithmatex">\[\text{base} = \frac{1}{2} - \frac{1}{3} = \frac{3 - 2}{6} = \frac{1}{6}\]</div>
+<p>The height is the horizontal distance from the base (at <span class="arithmatex">\(x = 1\)</span>) to the opposite vertex (at the origin), which is <span class="arithmatex">\(1\)</span>.</p>
+<div class="arithmatex">\[\text{Area} = \frac{1}{2} \times \frac{1}{6} \times 1 = \frac{1}{12}\]</div>
+<p>So the probability that <span class="arithmatex">\(\lfloor x/y \rfloor = 2\)</span> is <span class="arithmatex">\(\frac{1}{12}\)</span>.</p>
+<p>Notice that we can rewrite this as:</p>
+<div class="arithmatex">\[\text{Area} = \frac{1}{2} \times \left(\frac{1}{2} - \frac{1}{3}\right) = \frac{1}{2}\left(\frac{1}{2} - \frac{1}{3}\right)\]</div>
+<p>This is a cleaner form that reveals a pattern!</p>
+<p><strong>Pattern for other even numbers:</strong></p>
+<p>For <span class="arithmatex">\(\lfloor x/y \rfloor = 4\)</span>, we need <span class="arithmatex">\(4 \leq x/y &lt; 5\)</span>, which means <span class="arithmatex">\(x/5 &lt; y \leq x/4\)</span>.</p>
+<p>The triangle is bounded by:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(y = x/5\)</span> (lower boundary)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(y = x/4\)</span> (upper boundary)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(x = 1\)</span> (right boundary)</p>
+</li>
+</ul>
+<p>So the area is:</p>
+<div class="arithmatex">\[\text{Area} = \frac{1}{2}\left(\frac{1}{4} - \frac{1}{5}\right)\]</div>
+<p><strong>General pattern:</strong></p>
+<p>For <span class="arithmatex">\(\lfloor x/y \rfloor = 2k\)</span> where <span class="arithmatex">\(k\)</span> is a non-negative integer (so <span class="arithmatex">\(2k\)</span> is an even number including <span class="arithmatex">\(0\)</span>):</p>
+<p>We need <span class="arithmatex">\(2k \leq x/y &lt; 2k + 1\)</span>, which means <span class="arithmatex">\(x/(2k+1) &lt; y \leq x/(2k)\)</span>.</p>
+<p>The triangle is bounded by:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(y = x/(2k+1)\)</span> (lower boundary)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(y = x/(2k)\)</span> (upper boundary)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(x = 1\)</span> (right boundary)</p>
+</li>
+</ul>
+<p>So the area is:</p>
+<div class="arithmatex">\[\text{Area} = \frac{1}{4k(2k+1)} = \frac{1}{2}\left(\frac{1}{2k} - \frac{1}{2k+1}\right)\]</div>
+<p><strong>Summary:</strong> For any even number <span class="arithmatex">\(2k\)</span> (where <span class="arithmatex">\(k \geq 0\)</span>), the probability that <span class="arithmatex">\(\lfloor x/y \rfloor = 2k\)</span> is:</p>
+<ul>
+<li>
+<p>For <span class="arithmatex">\(k = 0\)</span>: <span class="arithmatex">\(P(\lfloor x/y \rfloor = 0) = \frac{1}{2}\)</span> (computed separately as the area of the triangle where <span class="arithmatex">\(x &lt; y\)</span>)</p>
+</li>
+<li>
+<p>For <span class="arithmatex">\(k \geq 1\)</span>: <span class="arithmatex">\(P(\lfloor x/y \rfloor = 2k) = \frac{1}{2}\left(\frac{1}{2k} - \frac{1}{2k+1}\right)\)</span></p>
+</li>
+</ul>
+<p><strong>Finding the total probability that <span class="arithmatex">\(\lfloor x/y \rfloor\)</span> is even:</strong></p>
+<p>The probability that <span class="arithmatex">\(\lfloor x/y \rfloor\)</span> is even is the sum of probabilities for all even values (<span class="arithmatex">\(0, 2, 4, 6, \ldots\)</span>):</p>
+<div class="arithmatex">\[p = P(\lfloor x/y \rfloor = 0) + P(\lfloor x/y \rfloor = 2) + P(\lfloor x/y \rfloor = 4) + P(\lfloor x/y \rfloor = 6) + \cdots\]</div>
+<p>Substituting our formulas:</p>
+<div class="arithmatex">\[p = \frac{1}{2} + \frac{1}{2}\left(\frac{1}{2} - \frac{1}{3}\right) + \frac{1}{2}\left(\frac{1}{4} - \frac{1}{5}\right) + \frac{1}{2}\left(\frac{1}{6} - \frac{1}{7}\right) + \cdots\]</div>
+<p>Factoring out <span class="arithmatex">\(\frac{1}{2}\)</span>:</p>
+<div class="arithmatex">\[p = \frac{1}{2} + \frac{1}{2}\left[\left(\frac{1}{2} - \frac{1}{3}\right) + \left(\frac{1}{4} - \frac{1}{5}\right) + \left(\frac{1}{6} - \frac{1}{7}\right) + \cdots\right]\]</div>
+<div class="arithmatex">\[p = \frac{1}{2} + \frac{1}{2}\left(\frac{1}{2} - \frac{1}{3} + \frac{1}{4} - \frac{1}{5} + \frac{1}{6} - \frac{1}{7} + \cdots\right)\]</div>
+<p><strong>Solving the summation:</strong></p>
+<p>The series <span class="arithmatex">\(\frac{1}{2} - \frac{1}{3} + \frac{1}{4} - \frac{1}{5} + \frac{1}{6} - \frac{1}{7} + \cdots\)</span> is related to the <strong>alternating harmonic series</strong>.</p>
+<p>We know that the alternating harmonic series is:</p>
+<div class="arithmatex">\[1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \frac{1}{5} - \frac{1}{6} + \cdots = \ln(2)\]</div>
+<p>Notice that:</p>
+<div class="arithmatex">\[1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \frac{1}{5} - \frac{1}{6} + \cdots = 1 - \left(\frac{1}{2} - \frac{1}{3} + \frac{1}{4} - \frac{1}{5} + \frac{1}{6} - \cdots\right)\]</div>
+<p>Solving for our series:</p>
+<div class="arithmatex">\[\frac{1}{2} - \frac{1}{3} + \frac{1}{4} - \frac{1}{5} + \cdots = 1 - \ln(2)\]</div>
+<p>Substituting back into our expression for <span class="arithmatex">\(p\)</span>:</p>
+<div class="arithmatex">\[p = \frac{1}{2} + \frac{1}{2}(1 - \ln(2)) = \frac{1}{2} + \frac{1}{2} - \frac{1}{2}\ln(2) = 1 - \frac{1}{2}\ln(2)\]</div>
+<p><strong>Final answer:</strong></p>
+<p>The probability that <span class="arithmatex">\(\lfloor x/y \rfloor\)</span> is even is:</p>
+<div class="arithmatex">\[p = 1 - \frac{1}{2}\ln(2) \approx 1 - 0.3466 = 0.6534\]</div>
+<p>For any point <span class="arithmatex">\(P\)</span> in the shaded region below, <span class="arithmatex">\(\lfloor x/y \rfloor\)</span> is even.</p>
+<p><img alt="img" src="../ult2.png" /></p>
+<h3 id="how-we-used-some-of-the-tips_1">How we used some of the tips</h3>
+<p><strong>Ask or solve a simpler version of the problem:</strong> We started by solving the simpler problem of finding the probability that <span class="arithmatex">\(\lfloor x/y \rfloor = 0\)</span>. This gave us insight into the geometric structure and helped us understand the pattern before tackling the full problem.</p>
+<p><strong>Use the defining features of the setup:</strong> We leveraged key properties.</p>
+<ul>
+<li>
+<p>Both <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> are uniformly distributed on <span class="arithmatex">\([0, 1]\)</span></p>
+</li>
+<li>
+<p>We're working in the unit square <span class="arithmatex">\([0,1] \times [0,1]\)</span></p>
+</li>
+<li>
+<p>The constraint <span class="arithmatex">\(x \leq 1\)</span> is crucial for determining valid regions</p>
+</li>
+<li>
+<p>The floor function creates distinct regions bounded by lines of the form <span class="arithmatex">\(y = x/n\)</span></p>
+</li>
+</ul>
+<p><strong>Give things (meaningful) names:</strong> We used clear notation.</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> for the two random numbers</p>
+</li>
+<li>
+<p><span class="arithmatex">\(k\)</span> for the parameter in even numbers <span class="arithmatex">\(2k\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(p\)</span> for the probability we're seeking</p>
+</li>
+</ul>
+<p><strong>Try describing one object in two different ways:</strong> We found the same probability using different approaches.</p>
+<ul>
+<li>
+<p>For <span class="arithmatex">\(\lfloor x/y \rfloor = 2\)</span>, we could compute it via integration</p>
+</li>
+<li>
+<p>The geometric approach revealed the elegant pattern <span class="arithmatex">\(\frac{1}{2}\left(\frac{1}{2k} - \frac{1}{2k+1}\right)\)</span></p>
+</li>
+</ul>
+<p><strong>Draw a picture:</strong> Visualizing the regions in the unit square was crucial. Diagrams helped us understand the geometric structure and compute areas.</p>
+<p><strong>Always gut-check your answer!:</strong> Our final answer <span class="arithmatex">\(p = 1 - \frac{1}{2}\ln(2) \approx 0.6534\)</span> makes sense.</p>
+<ul>
+<li>
+<p>It's between 0 and 1 (a valid probability)</p>
+</li>
+<li>
+<p>It's greater than 0.5, which is reasonable since floor = 0 alone contributes 0.5</p>
+</li>
+<li>
+<p>The alternating series converges (we can verify this)</p>
+</li>
 </ul>
 
 
