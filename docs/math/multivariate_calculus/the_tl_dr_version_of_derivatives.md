@@ -8,6 +8,8 @@ Given a function $f: \mathbb{R} \to \mathbb{R}$, the derivative of $f$ at a poin
 
 $$f'(x) = \lim_{h \to 0} \frac{f(x + h) - f(x)}{h}$$
 
+where $h \in \mathbb{R}$ is a scalar representing a small change in the input $x$.
+
 Derivatives are a way to measure change. In the scalar case, the derivative of the function $f$ at the point $x$ tells us how much the function $f$ changes as the input $x$ changes by a small amount $\varepsilon$:
 
 $$f(x + \varepsilon) \approx f(x) + \varepsilon f'(x)$$
@@ -40,11 +42,7 @@ Combining these two rules lets us compute the effect of $x$ on $z$: if $x$ chang
 
 ## Gradient: Vector in, scalar out
 
-This same intuition carries over into the vector case. Now suppose that $f: \mathbb{R}^N \to \mathbb{R}$ takes a vector as input and produces a scalar. The derivative of $f$ at the point $\mathbf{x} \in \mathbb{R}^N$ is now called the gradient, and it is defined as:
-
-$$\nabla_{\mathbf{x}} f(\mathbf{x}) = \lim_{\mathbf{h} \to \mathbf{0}} \frac{f(\mathbf{x} + \mathbf{h}) - f(\mathbf{x})}{\|\mathbf{h}\|}$$
-
-Now the gradient $\nabla_{\mathbf{x}} f(\mathbf{x}) \in \mathbb{R}^N$ is a vector, with the same intuition as the scalar case. If we set $y = f(\mathbf{x})$ then we have the relationship
+Now suppose that $f: \mathbb{R}^N \to \mathbb{R}$ takes a vector as input and produces a scalar. Now the gradient $\nabla_{\mathbf{x}} f(\mathbf{x}) \in \mathbb{R}^N$ is a vector, with the same intuition as the scalar case. If we set $y = f(\mathbf{x})$ then we have the relationship
 
 $$\mathbf{x} \to \mathbf{x} + \Delta \mathbf{x} \implies y \to y + \frac{\partial y}{\partial \mathbf{x}} \cdot \Delta \mathbf{x}$$
 
