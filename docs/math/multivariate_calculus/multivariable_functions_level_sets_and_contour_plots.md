@@ -108,7 +108,7 @@ $$\text{Graph}(f) = \{(x_1, \cdots, x_n, z) \in \mathbb{R}^{n+1} : z = f(x_1, \c
 
 We can only take the square root of a nonnegative number, so we require $1 - x^2 - y^2 \geq 0$, or equivalently $x^2 + y^2 \leq 1$.
 
-This is the disk $D$ centered at the origin in $\mathbb{R}^2$ with radius 1. The graph of $f$ is therefore
+This means the domain of $f$ is the disk $D$ centered at the origin in $\mathbb{R}^2$ with radius 1, i.e., $D = \{(x, y) \in \mathbb{R}^2 : x^2 + y^2 \leq 1\}$. The graph of $f$ is therefore
 
 $$\text{Graph}(f) = \{(x, y, z) \in \mathbb{R}^3 : (x, y) \in D, z = f(x, y)\} = \{(x, y, \sqrt{1 - x^2 - y^2}) : (x, y) \in D\}$$
 
