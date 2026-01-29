@@ -6,6 +6,8 @@ use_directory_urls: true
 nav:
   - Home: index.md
   - AI:
+    - Primer on AI:
+      - Model Taxonomy: ai/primer_on_ai/model_taxonomy.md
     - Deep Learning for Computer Vision:
       - Introduction: ai/deep_learning_for_computer_vision/introduction.md
       - Image Classification with Linear Classifiers: ai/deep_learning_for_computer_vision/image_classification_with_linear_classifiers.md

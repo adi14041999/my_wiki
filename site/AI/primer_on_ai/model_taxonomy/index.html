@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/ai/natural_language_processing/gated_recurrent_units/">
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/ai/primer_on_ai/model_taxonomy/">
       
       
-        <link rel="prev" href="../recurrent_neural_networks/">
+        <link rel="prev" href="../../..">
       
       
-        <link rel="next" href="../long_short_term_memory_networks/">
+        <link rel="next" href="../../deep_learning_for_computer_vision/introduction/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Gated Recurrent Units (GRUs) - My Wiki</title>
+        <title>Model Taxonomy - My Wiki</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#gated-recurrent-units-grus" class="md-skip">
+        <a href="#model-taxonomy" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Gated Recurrent Units (GRUs)
+              Model Taxonomy
             
           </span>
         </div>
@@ -247,7 +247,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../primer_on_ai/model_taxonomy/" class="md-tabs__link">
+        <a href="./" class="md-tabs__link">
           
   
   
@@ -445,6 +445,8 @@
                 
   
   
+    
+  
   
   
     
@@ -460,11 +462,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
         
           
           <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
@@ -485,7 +487,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2_1">
             <span class="md-nav__icon md-icon"></span>
             
@@ -500,10 +502,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../primer_on_ai/model_taxonomy/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Taxonomy
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -519,6 +548,115 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#models-as-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models as functions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#three-lenses-for-understanding-the-ml-landscape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three lenses for understanding the ML landscape
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Three lenses for understanding the ML landscape">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-learning-paradigms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Learning paradigms
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-model-complexity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Model complexity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-task-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Task types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Task types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caveat-task-types-are-limiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caveat: task types are limiting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practical-framework" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical framework
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -991,8 +1129,6 @@
                 
   
   
-    
-  
   
   
     
@@ -1008,11 +1144,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
         
           
           <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="">
@@ -1033,7 +1169,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1051,7 +1187,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../introduction/" class="md-nav__link">
+      <a href="../../natural_language_processing/introduction/" class="md-nav__link">
         
   
   
@@ -1079,7 +1215,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../representing_words/" class="md-nav__link">
+      <a href="../../natural_language_processing/representing_words/" class="md-nav__link">
         
   
   
@@ -1107,7 +1243,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../svd_based_methods/" class="md-nav__link">
+      <a href="../../natural_language_processing/svd_based_methods/" class="md-nav__link">
         
   
   
@@ -1135,7 +1271,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../distributional_semantics_and_word2vec/" class="md-nav__link">
+      <a href="../../natural_language_processing/distributional_semantics_and_word2vec/" class="md-nav__link">
         
   
   
@@ -1163,7 +1299,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language_models/" class="md-nav__link">
+      <a href="../../natural_language_processing/language_models/" class="md-nav__link">
         
   
   
@@ -1191,7 +1327,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../recurrent_neural_networks/" class="md-nav__link">
+      <a href="../../natural_language_processing/recurrent_neural_networks/" class="md-nav__link">
         
   
   
@@ -1216,19 +1352,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/gated_recurrent_units/" class="md-nav__link">
         
   
   
@@ -1244,7 +1371,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -1257,7 +1383,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../long_short_term_memory_networks/" class="md-nav__link">
+      <a href="../../natural_language_processing/long_short_term_memory_networks/" class="md-nav__link">
         
   
   
@@ -1285,7 +1411,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../seq2seq_models/" class="md-nav__link">
+      <a href="../../natural_language_processing/seq2seq_models/" class="md-nav__link">
         
   
   
@@ -1313,7 +1439,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../attention_mechanism/" class="md-nav__link">
+      <a href="../../natural_language_processing/attention_mechanism/" class="md-nav__link">
         
   
   
@@ -1341,7 +1467,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../how_large_language_models_work_a_visual_intro_to_transformers/" class="md-nav__link">
+      <a href="../../natural_language_processing/how_large_language_models_work_a_visual_intro_to_transformers/" class="md-nav__link">
         
   
   
@@ -1369,7 +1495,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../attention_in_transformers_visually_explained/" class="md-nav__link">
+      <a href="../../natural_language_processing/attention_in_transformers_visually_explained/" class="md-nav__link">
         
   
   
@@ -1397,7 +1523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../the_basic_transformer/" class="md-nav__link">
+      <a href="../../natural_language_processing/the_basic_transformer/" class="md-nav__link">
         
   
   
@@ -1425,7 +1551,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../decoder_only_transformers/" class="md-nav__link">
+      <a href="../../natural_language_processing/decoder_only_transformers/" class="md-nav__link">
         
   
   
@@ -1453,7 +1579,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../differences_between_the_basic_transformer_and_the_decoder_only_transformer/" class="md-nav__link">
+      <a href="../../natural_language_processing/differences_between_the_basic_transformer_and_the_decoder_only_transformer/" class="md-nav__link">
         
   
   
@@ -1481,7 +1607,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../self_attention_and_transformers_a_mathematical_approach/" class="md-nav__link">
+      <a href="../../natural_language_processing/self_attention_and_transformers_a_mathematical_approach/" class="md-nav__link">
         
   
   
@@ -3639,7 +3765,46 @@
 
 
 
-<h1 id="gated-recurrent-units-grus">Gated Recurrent Units (GRUs)</h1>
+<h1 id="model-taxonomy">Model Taxonomy</h1>
+<h2 id="models-as-functions">Models as functions</h2>
+<p>In many ways, ML models behave like software functions: they have <strong>parameters</strong>, take <strong>inputs</strong>, and produce <strong>outputs</strong>. You can <strong>compose</strong> them (pipe the output of one into another) and <strong>decompose</strong> them (treat submodules as smaller functions). That analogy helps when reading code or designing systems— you can reason about models as black boxes with a clear signature.</p>
+<p>The crucial difference is <em>how</em> that mapping from input to output is defined. A traditional function encodes <strong>handcrafted logic</strong>. A human writes rules, conditionals, and formulas, and the program executes them. A model, by contrast, is a <strong>statistical estimator</strong>. Its parameters are not written by hand but <strong>trained on data</strong>. The input–output behavior is learned from examples (e.g. supervised learning) or from interaction with an environment (e.g. reinforcement learning), rather than from explicit rules. So while the <em>interface</em> looks like a function, the <em>implementation</em> is a fitted statistical object.</p>
+<h2 id="three-lenses-for-understanding-the-ml-landscape">Three lenses for understanding the ML landscape</h2>
+<p>You can organize models and methods along three axes: how they learn, how big they are, and what kind of task it is supposed to do.</p>
+<h3 id="1-learning-paradigms">1. Learning paradigms</h3>
+<p><strong>Supervised:</strong> The model learns from <strong>labeled data</strong>— each input is paired with a correct answer. Examples: image classification (image → class label), spam detection (email → spam/not spam), house price prediction (features → price). The model’s job is to approximate the input–output mapping implied by the labels.</p>
+<p><strong>Self-supervised:</strong> No human-provided labels; the <strong>labels are derived from the data itself</strong>. The model is trained to predict missing or corrupted parts of the input. Examples: language models that predict the next token or a masked word (e.g. BERT’s “fill in the blank”), vision models that predict rotated orientation or missing image patches. Self-supervised learning is widely used for pretraining before fine-tuning on a downstream task.</p>
+<p><strong>Unsupervised:</strong> No labels at all. The goal is to find <strong>patterns, clusters, or structure</strong> in raw data. Examples: k-means clustering (group points by similarity), topic modeling (discover themes in documents), anomaly detection (flag points that don’t fit the learned distribution). You don’t have a “correct” target; you explore the data’s structure.</p>
+<p><strong>Reinforcement:</strong> The model learns <strong>actions</strong> from <strong>states</strong> and <strong>rewards</strong> provided by an environment. It isn’t given correct input–output pairs; it discovers good behavior by trial and error. Examples: game-playing agents (AlphaGo, DQN), robotics control, recommendation systems that optimize long-term engagement. The “label” is implicit in the reward signal.</p>
+<h3 id="2-model-complexity">2. Model complexity</h3>
+<p><strong>Shallow learning:</strong> Relatively <strong>few parameters</strong>, often <strong>interpretable</strong>, <strong>fast and cheap</strong> to train and run. Suited to <strong>single, well-defined tasks</strong> and smaller datasets. Examples: linear/logistic regression, decision trees, small feedforward nets, classical ML (SVMs, k-NN). You can often inspect weights or rules and reason about why the model behaved as it did.</p>
+<p><strong>Deep learning:</strong> <strong>Millions to billions of parameters</strong>, usually <strong>black box</strong>, <strong>expensive</strong> in compute and data. Can exhibit <strong>emergent capabilities</strong> (e.g. in-context learning, chain-of-thought) that weren’t explicitly programmed. Examples: ResNets for vision, transformers for language and multimodal tasks. Complexity buys <strong>representational power</strong>— the ability to capture intricate structure and transformations— but at the cost of interpretability and resource requirements.</p>
+<h3 id="3-task-types">3. Task types</h3>
+<p>Common ways to frame what a model is asked to do (only listed a few here). </p>
+<ul>
+<li>
+<p><strong>Regression:</strong> Predict <strong>continuous</strong> numerical outputs. Examples: predicting temperature, stock price, or the probability of an event. Loss is often mean squared error (MSE) or similar.</p>
+</li>
+<li>
+<p><strong>Classification:</strong> Assign inputs to <strong>discrete classes</strong>. Examples: spam vs not spam, digit recognition (0–9), object categories in images. Can be binary or multiclass; outputs are typically class labels or class probabilities.</p>
+</li>
+<li>
+<p><strong>Clustering (unsupervised):</strong> <strong>Group</strong> data points by similarity without using labels. Examples: segmenting customers, organizing documents into themes, discovering modes in a dataset. Algorithms include k-means, hierarchical clustering, and density-based methods.</p>
+</li>
+<li>
+<p><strong>Dimensionality reduction:</strong> <strong>Compress</strong> data (fewer dimensions) while preserving as much structure as possible. Examples: visualization (e.g. t-SNE, UMAP), noise reduction, preprocessing for other models. PCA is a common tool.</p>
+</li>
+</ul>
+<h4 id="caveat-task-types-are-limiting">Caveat: task types are limiting</h4>
+<p>The same problem can often be solved with different tasks in mind— e.g. anomaly detection can be framed as <strong>classification</strong> (normal vs anomalous) or as <strong>clustering</strong> (flag points far from any cluster). Large models further blur the boundaries: LLMs do classification in the process of doing next-token prediction rather than as separate task-specific heads. Use task types as an <strong>initial filtering heuristic</strong> (e.g. “do I need a continuous output or discrete classes?”), not as a rigid categorization.</p>
+<h2 id="practical-framework">Practical framework</h2>
+<p>When selecting models, ask:</p>
+<ol>
+<li><strong>What task needs accomplishing?</strong> (e.g. regression, classification, clustering, generation)</li>
+<li><strong>What data is available?</strong> Labeled vs unlabeled, volume, and modality (text, image, tabular, etc.)</li>
+<li><strong>What complexity can you afford?</strong> Computational resources, latency, cost.</li>
+</ol>
+<p>Task types provide the fastest path from business need to model selection, even if not theoretically rigorous.</p>
 
 
 
