@@ -66,6 +66,8 @@ now varying the $x_2$-coordinate and holding $x_1$ fixed at the value $a$.
 
 Just as for functions of one variable, we can think of partial derivatives in either of the two directions as new functions. Thus $\frac{\partial f}{\partial x_1}$ (or $f_{x_1}$) is the instantaneous rate of change of $f$ in the $x_1$-direction at any point $(x_1, x_2)$, and $\frac{\partial f}{\partial x_2}$ is the instantaneous rate of change of $f$ in the $x_2$-direction at any point $(x_1, x_2)$.
 
+Just as for functions of one variable, there are however lots of functions that are not differentiable at some points. The simplest example is the function $f(x) = |x|$, which is not differentiable at $x = 0$. Likewise in the multivariable setting, the function $f(x_1, x_2) = |x_1 + x_2|$ does not admit a partial derivative $f_{x_1}$ or $f_{x_2}$ at $(0, 0)$ (that is, the limit defining such partial derivatives at $(0, 0)$ does not exist), and similarly at all points on the line where $x_1 + x_2 = 0$.
+
 ## Partial derivatives in $n$ variables, and two ways to compute them
 
 If $f(x_1, \ldots, x_n)$ is a function of $n$ variables, then at the point $(a_1, \ldots, a_n)$ its **$i$th partial derivative**, or equivalently its partial derivative with respect to $x_i$ for any $i = 1, \ldots, n$, is denoted in any of the equivalent ways
@@ -79,3 +81,9 @@ It can be computed in two ways.
 **Method 2 (numerical):** Replace $x_j$ with $a_j$ in $f$ for every $j \neq i$, and then differentiate the resulting function $f(a_1, \ldots, a_{i-1}, x_i, a_{i+1}, \ldots, a_n)$ of one variable $x_i$ using the rules from single-variable calculus. Finally, after that, set $x_i = a_i$.
 
 Why mention two methods which look almost identical? In practice one uses the symbolic method, but thinking in terms of the numerical method illuminates more vividly how partial derivatives are related to single-variable derivatives.
+
+## Partial derivatives, graphically
+
+Here is a contour plot (showing level sets at values in increments of 0.2) for a function $F(x, y)$ which may represent some experimental measurements (i.e., we may have no explicit formula for $F(x, y)$).
+
+![img](contour_plot.png)

@@ -3355,6 +3355,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#partial-derivatives-graphically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partial derivatives, graphically
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3689,6 +3700,7 @@
 <div class="arithmatex">\[\frac{\partial f}{\partial x_2}(a, b) = \lim_{h \to 0} \frac{f(a, b + h) - f(a, b)}{h},\]</div>
 <p>now varying the <span class="arithmatex">\(x_2\)</span>-coordinate and holding <span class="arithmatex">\(x_1\)</span> fixed at the value <span class="arithmatex">\(a\)</span>.</p>
 <p>Just as for functions of one variable, we can think of partial derivatives in either of the two directions as new functions. Thus <span class="arithmatex">\(\frac{\partial f}{\partial x_1}\)</span> (or <span class="arithmatex">\(f_{x_1}\)</span>) is the instantaneous rate of change of <span class="arithmatex">\(f\)</span> in the <span class="arithmatex">\(x_1\)</span>-direction at any point <span class="arithmatex">\((x_1, x_2)\)</span>, and <span class="arithmatex">\(\frac{\partial f}{\partial x_2}\)</span> is the instantaneous rate of change of <span class="arithmatex">\(f\)</span> in the <span class="arithmatex">\(x_2\)</span>-direction at any point <span class="arithmatex">\((x_1, x_2)\)</span>.</p>
+<p>Just as for functions of one variable, there are however lots of functions that are not differentiable at some points. The simplest example is the function <span class="arithmatex">\(f(x) = |x|\)</span>, which is not differentiable at <span class="arithmatex">\(x = 0\)</span>. Likewise in the multivariable setting, the function <span class="arithmatex">\(f(x_1, x_2) = |x_1 + x_2|\)</span> does not admit a partial derivative <span class="arithmatex">\(f_{x_1}\)</span> or <span class="arithmatex">\(f_{x_2}\)</span> at <span class="arithmatex">\((0, 0)\)</span> (that is, the limit defining such partial derivatives at <span class="arithmatex">\((0, 0)\)</span> does not exist), and similarly at all points on the line where <span class="arithmatex">\(x_1 + x_2 = 0\)</span>.</p>
 <h2 id="partial-derivatives-in-n-variables-and-two-ways-to-compute-them">Partial derivatives in <span class="arithmatex">\(n\)</span> variables, and two ways to compute them</h2>
 <p>If <span class="arithmatex">\(f(x_1, \ldots, x_n)\)</span> is a function of <span class="arithmatex">\(n\)</span> variables, then at the point <span class="arithmatex">\((a_1, \ldots, a_n)\)</span> its <strong><span class="arithmatex">\(i\)</span>th partial derivative</strong>, or equivalently its partial derivative with respect to <span class="arithmatex">\(x_i\)</span> for any <span class="arithmatex">\(i = 1, \ldots, n\)</span>, is denoted in any of the equivalent ways</p>
 <div class="arithmatex">\[f_{x_i}(a_1, \ldots, a_n), \quad \frac{\partial f}{\partial x_i}(a_1, \ldots, a_n), \quad \left.\frac{\partial f}{\partial x_i}\right|_{(a_1,\ldots,a_n)}.\]</div>
@@ -3696,6 +3708,9 @@
 <p><strong>Method 1 (symbolic):</strong> Think of the <span class="arithmatex">\(x_j\)</span>'s for <span class="arithmatex">\(j \neq i\)</span> as constant (without specifying their values) and apply the familiar single-variable differentiation rules in terms of <span class="arithmatex">\(x_i\)</span> to obtain the new function of <span class="arithmatex">\(n\)</span> variables, <span class="arithmatex">\(f_{x_i}(x_1, \ldots, x_n)\)</span>. Then substitute <span class="arithmatex">\((a_1, \ldots, a_n)\)</span> for <span class="arithmatex">\((x_1, \ldots, x_n)\)</span> throughout.</p>
 <p><strong>Method 2 (numerical):</strong> Replace <span class="arithmatex">\(x_j\)</span> with <span class="arithmatex">\(a_j\)</span> in <span class="arithmatex">\(f\)</span> for every <span class="arithmatex">\(j \neq i\)</span>, and then differentiate the resulting function <span class="arithmatex">\(f(a_1, \ldots, a_{i-1}, x_i, a_{i+1}, \ldots, a_n)\)</span> of one variable <span class="arithmatex">\(x_i\)</span> using the rules from single-variable calculus. Finally, after that, set <span class="arithmatex">\(x_i = a_i\)</span>.</p>
 <p>Why mention two methods which look almost identical? In practice one uses the symbolic method, but thinking in terms of the numerical method illuminates more vividly how partial derivatives are related to single-variable derivatives.</p>
+<h2 id="partial-derivatives-graphically">Partial derivatives, graphically</h2>
+<p>Here is a contour plot (showing level sets at values in increments of 0.2) for a function <span class="arithmatex">\(F(x, y)\)</span> which may represent some experimental measurements (i.e., we may have no explicit formula for <span class="arithmatex">\(F(x, y)\)</span>).</p>
+<p><img alt="img" src="../contour_plot.png" /></p>
 
 
 
