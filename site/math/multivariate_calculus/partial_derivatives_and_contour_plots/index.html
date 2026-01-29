@@ -3325,6 +3325,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Partial derivatives, a first look">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition-of-partial-derivatives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition of partial derivatives
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partial-derivatives-in-n-variables-and-two-ways-to-compute-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partial derivatives in \(n\) variables, and two ways to compute them
+      
+    </span>
+  </a>
+  
 </li>
       
     </ul>
@@ -3646,6 +3674,28 @@
 <h2 id="partial-derivatives-a-first-look">Partial derivatives, a first look</h2>
 <p>The main idea for "partial" derivatives is to consider the function <span class="arithmatex">\(f(x_1, x_2)\)</span> as a collection of functions of one variable, which we can do in two different ways. Firstly, for each value <span class="arithmatex">\(x_2 = b\)</span>, the function <span class="arithmatex">\(f(x_1, b)\)</span> is a function of one variable, and as we choose different values of <span class="arithmatex">\(b\)</span>, we get different functions of <span class="arithmatex">\(x_1\)</span>.</p>
 <p><strong>Example:</strong> Suppose <span class="arithmatex">\(f(x_1, x_2) = \sin(x_1 + x_2^2)\)</span>. At <span class="arithmatex">\(x_2 = 1\)</span> the resulting function <span class="arithmatex">\(f(x_1, 1)\)</span> of one variable is <span class="arithmatex">\(\sin(x_1 + 1)\)</span>. Likewise at <span class="arithmatex">\(x_2 = 1/2\)</span> it is <span class="arithmatex">\(f(x_1, 1/2) = \sin(x_1 + 1/4)\)</span>, at <span class="arithmatex">\(x_2 = 0\)</span> it is <span class="arithmatex">\(f(x_1, 0) = \sin(x_1)\)</span>, and so on. On the other hand, we could equally well think of <span class="arithmatex">\(x_1\)</span> as being equal to some fixed value <span class="arithmatex">\(a\)</span>, and then consider the function of one variable <span class="arithmatex">\(f(a, x_2)\)</span>. For <span class="arithmatex">\(f(x_1, x_2) = \sin(x_1 + x_2^2)\)</span>, when <span class="arithmatex">\(x_1 = 0\)</span> we get <span class="arithmatex">\(\sin(x_2^2)\)</span>, when <span class="arithmatex">\(x_1 = 1\)</span> we get <span class="arithmatex">\(\sin(1 + x_2^2)\)</span>, and so on.</p>
+<p>Let's interpret this visually via the graph of <span class="arithmatex">\(f\)</span> in <span class="arithmatex">\(\mathbb{R}^3\)</span>: the set of points <span class="arithmatex">\((x_1, x_2, f(x_1, x_2))\)</span>. It is a surface in space whose height over <span class="arithmatex">\((x_1, x_2)\)</span> is <span class="arithmatex">\(f(x_1, x_2)\)</span>. If we set <span class="arithmatex">\(x_2\)</span> equal to some value, say <span class="arithmatex">\(x_2 = 3\)</span>, then we are considering the function <span class="arithmatex">\(f(x_1, 3)\)</span>; the graph of this function of one variable is where the graph of <span class="arithmatex">\(f\)</span> meets the vertical plane <span class="arithmatex">\(x_2 = 3\)</span>. If we set <span class="arithmatex">\(x_2\)</span> equal to another value, say <span class="arithmatex">\(x_2 = 4\)</span>, this corresponds to sliding the vertical plane over to <span class="arithmatex">\(x_2 = 4\)</span>, which meets the graph of <span class="arithmatex">\(f\)</span> in a different curve. Thus we can think of the surface graph of <span class="arithmatex">\(f\)</span> as a collection of curves, each obtained where the surface meets a vertical plane <span class="arithmatex">\(x_2 = b\)</span>. Algebraically we go from the function of two variables <span class="arithmatex">\(f(x_1, x_2)\)</span> to a collection of functions <span class="arithmatex">\(f(x_1, b)\)</span> of one variable, to which we can apply what we know from single-variable calculus. Geometrically, we think of the graph of <span class="arithmatex">\(f\)</span> as the collection of graphs of single-variable functions. Slicing the surface graph with the planes <span class="arithmatex">\(x_1 = a\)</span> in another direction could have been considered instead. That would correspond to working with the function <span class="arithmatex">\(f(a, x_2)\)</span> for various <span class="arithmatex">\(a\)</span>.</p>
+<p>The figure below shows the graph of <span class="arithmatex">\(f(x_1, x_2)\)</span> and its slices by the planes <span class="arithmatex">\(x_2 = 0\)</span>, <span class="arithmatex">\(x_2 = 1/4\)</span>, <span class="arithmatex">\(x_2 = 1/2\)</span>, <span class="arithmatex">\(x_2 = 3/4\)</span>, <span class="arithmatex">\(x_2 = 1\)</span> as the respective graphs of <span class="arithmatex">\(f(x_1, 0)\)</span>, <span class="arithmatex">\(f(x_1, 1/4)\)</span>, <span class="arithmatex">\(f(x_1, 1/2)\)</span>, <span class="arithmatex">\(f(x_1, 3/4)\)</span>, <span class="arithmatex">\(f(x_1, 1)\)</span>.</p>
+<p><img alt="img" src="../surface_slices.png" /></p>
+<h3 id="definition-of-partial-derivatives">Definition of partial derivatives</h3>
+<p>The <strong>partial derivative of <span class="arithmatex">\(f\)</span> with respect to <span class="arithmatex">\(x_1\)</span> at the point <span class="arithmatex">\((a, b)\)</span></strong>, denoted in any of the equivalent ways</p>
+<div class="arithmatex">\[\frac{\partial f}{\partial x_1}(a, b), \quad \left.\frac{\partial f}{\partial x_1}\right|_{(a,b)}, \quad f_{x_1}(a, b),\]</div>
+<p>means the derivative of the function <span class="arithmatex">\(f(x_1, b)\)</span> at <span class="arithmatex">\(x_1 = a\)</span>. Said differently, the partial derivative of <span class="arithmatex">\(f\)</span> with respect to <span class="arithmatex">\(x_1\)</span> at <span class="arithmatex">\((a, b)\)</span> is the <strong>instantaneous rate of change of <span class="arithmatex">\(f\)</span> at the point <span class="arithmatex">\((a, b)\)</span> if we only move in the <span class="arithmatex">\(x_1\)</span>-direction</strong> (so <span class="arithmatex">\(x_2\)</span> is held constant at the value <span class="arithmatex">\(b\)</span>). The formal definition is once again as a limit of difference quotients:</p>
+<div class="arithmatex">\[\frac{\partial f}{\partial x_1}(a, b) = \lim_{h \to 0} \frac{f(a + h, b) - f(a, b)}{h}.\]</div>
+<p>We repeat for emphasis: <span class="arithmatex">\(\partial f / \partial x_1\)</span> entails <strong>keeping <span class="arithmatex">\(x_2\)</span> constant</strong>.</p>
+<p>In precisely the same way, we can define the <strong>partial derivative of <span class="arithmatex">\(f\)</span> with respect to <span class="arithmatex">\(x_2\)</span> at <span class="arithmatex">\((a, b)\)</span></strong>, denoted</p>
+<div class="arithmatex">\[\frac{\partial f}{\partial x_2}(a, b), \quad \left.\frac{\partial f}{\partial x_2}\right|_{(a,b)}, \quad f_{x_2}(a, b).\]</div>
+<p>As above, the actual definition is the limit of difference quotients:</p>
+<div class="arithmatex">\[\frac{\partial f}{\partial x_2}(a, b) = \lim_{h \to 0} \frac{f(a, b + h) - f(a, b)}{h},\]</div>
+<p>now varying the <span class="arithmatex">\(x_2\)</span>-coordinate and holding <span class="arithmatex">\(x_1\)</span> fixed at the value <span class="arithmatex">\(a\)</span>.</p>
+<p>Just as for functions of one variable, we can think of partial derivatives in either of the two directions as new functions. Thus <span class="arithmatex">\(\frac{\partial f}{\partial x_1}\)</span> (or <span class="arithmatex">\(f_{x_1}\)</span>) is the instantaneous rate of change of <span class="arithmatex">\(f\)</span> in the <span class="arithmatex">\(x_1\)</span>-direction at any point <span class="arithmatex">\((x_1, x_2)\)</span>, and <span class="arithmatex">\(\frac{\partial f}{\partial x_2}\)</span> is the instantaneous rate of change of <span class="arithmatex">\(f\)</span> in the <span class="arithmatex">\(x_2\)</span>-direction at any point <span class="arithmatex">\((x_1, x_2)\)</span>.</p>
+<h2 id="partial-derivatives-in-n-variables-and-two-ways-to-compute-them">Partial derivatives in <span class="arithmatex">\(n\)</span> variables, and two ways to compute them</h2>
+<p>If <span class="arithmatex">\(f(x_1, \ldots, x_n)\)</span> is a function of <span class="arithmatex">\(n\)</span> variables, then at the point <span class="arithmatex">\((a_1, \ldots, a_n)\)</span> its <strong><span class="arithmatex">\(i\)</span>th partial derivative</strong>, or equivalently its partial derivative with respect to <span class="arithmatex">\(x_i\)</span> for any <span class="arithmatex">\(i = 1, \ldots, n\)</span>, is denoted in any of the equivalent ways</p>
+<div class="arithmatex">\[f_{x_i}(a_1, \ldots, a_n), \quad \frac{\partial f}{\partial x_i}(a_1, \ldots, a_n), \quad \left.\frac{\partial f}{\partial x_i}\right|_{(a_1,\ldots,a_n)}.\]</div>
+<p>It can be computed in two ways.</p>
+<p><strong>Method 1 (symbolic):</strong> Think of the <span class="arithmatex">\(x_j\)</span>'s for <span class="arithmatex">\(j \neq i\)</span> as constant (without specifying their values) and apply the familiar single-variable differentiation rules in terms of <span class="arithmatex">\(x_i\)</span> to obtain the new function of <span class="arithmatex">\(n\)</span> variables, <span class="arithmatex">\(f_{x_i}(x_1, \ldots, x_n)\)</span>. Then substitute <span class="arithmatex">\((a_1, \ldots, a_n)\)</span> for <span class="arithmatex">\((x_1, \ldots, x_n)\)</span> throughout.</p>
+<p><strong>Method 2 (numerical):</strong> Replace <span class="arithmatex">\(x_j\)</span> with <span class="arithmatex">\(a_j\)</span> in <span class="arithmatex">\(f\)</span> for every <span class="arithmatex">\(j \neq i\)</span>, and then differentiate the resulting function <span class="arithmatex">\(f(a_1, \ldots, a_{i-1}, x_i, a_{i+1}, \ldots, a_n)\)</span> of one variable <span class="arithmatex">\(x_i\)</span> using the rules from single-variable calculus. Finally, after that, set <span class="arithmatex">\(x_i = a_i\)</span>.</p>
+<p>Why mention two methods which look almost identical? In practice one uses the symbolic method, but thinking in terms of the numerical method illuminates more vividly how partial derivatives are related to single-variable derivatives.</p>
 
 
 
