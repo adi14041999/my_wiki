@@ -31,3 +31,7 @@ The figure below shows the graph of $f(x) = x^3$ over the interval $[-1, 1]$.
 ![img](x3.png)
 
 ## Partial derivatives, a first look
+
+The main idea for "partial" derivatives is to consider the function $f(x_1, x_2)$ as a collection of functions of one variable, which we can do in two different ways. Firstly, for each value $x_2 = b$, the function $f(x_1, b)$ is a function of one variable, and as we choose different values of $b$, we get different functions of $x_1$.
+
+**Example:** Suppose $f(x_1, x_2) = \sin(x_1 + x_2^2)$. At $x_2 = 1$ the resulting function $f(x_1, 1)$ of one variable is $\sin(x_1 + 1)$. Likewise at $x_2 = 1/2$ it is $f(x_1, 1/2) = \sin(x_1 + 1/4)$, at $x_2 = 0$ it is $f(x_1, 0) = \sin(x_1)$, and so on. On the other hand, we could equally well think of $x_1$ as being equal to some fixed value $a$, and then consider the function of one variable $f(a, x_2)$. For $f(x_1, x_2) = \sin(x_1 + x_2^2)$, when $x_1 = 0$ we get $\sin(x_2^2)$, when $x_1 = 1$ we get $\sin(1 + x_2^2)$, and so on.
