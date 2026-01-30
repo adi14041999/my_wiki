@@ -3480,6 +3480,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Partial derivatives, graphically">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interpretation-of-partial-derivatives-on-a-contour-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interpretation of partial derivatives on a contour plot
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -3827,6 +3844,30 @@
 <h2 id="partial-derivatives-graphically">Partial derivatives, graphically</h2>
 <p>Here is a contour plot (showing level sets at values in increments of 0.2) for a function <span class="arithmatex">\(F(x, y)\)</span> which may represent some experimental measurements (i.e., we may have no explicit formula for <span class="arithmatex">\(F(x, y)\)</span>).</p>
 <p><img alt="img" src="../contour_plot.png" /></p>
+<p>This contour plot is in the <span class="arithmatex">\(xy\)</span>-plane, and the label on each curve indicates the <span class="arithmatex">\(F\)</span>-value on that curve (in increments of 0.2).</p>
+<p>Imagine that you are walking from west to east along the red line <span class="arithmatex">\(y = 0\)</span> in the above figure while on the surface graph <span class="arithmatex">\(z = F(x, y)\)</span>. Let us analyze what you observe as you do this. The contour plot is a bird's-eye view of the graph <span class="arithmatex">\(z = F(x, y)\)</span>: your path looks like a straight line from the bird's perspective, but as you walk along the line <span class="arithmatex">\(y = 0\)</span> the function <span class="arithmatex">\(f(x) = F(x, 0)\)</span> on this line varies in its values and the graph of <span class="arithmatex">\(f(x)\)</span> as shown in the figure below keeps track of elevation as one walks along the red line.</p>
+<p><img alt="img" src="../cp1.png" /></p>
+<p>By definition the derivative <span class="arithmatex">\(f'(x)\)</span> of <span class="arithmatex">\(f(x) = F(x, 0)\)</span> is the partial derivative <span class="arithmatex">\(\frac{\partial F}{\partial x}\)</span> at <span class="arithmatex">\((x, 0)\)</span>.</p>
+<p>Here are some observations:</p>
+<ul>
+<li>The regions where <span class="arithmatex">\(f'(x) = \frac{\partial F}{\partial x}(x, 0)\)</span> is <strong>positive</strong> are those where you are walking <strong>uphill</strong> in the contour plot above as you walk from west to east (i.e., where the labels <span class="arithmatex">\(f(x) = F(x, 0)\)</span> increase). For example, along the interval of <span class="arithmatex">\(x\)</span>-values in <span class="arithmatex">\([-1, 0]\)</span> (with <span class="arithmatex">\(y = 0\)</span>) is all uphill.</li>
+<li>The regions where <span class="arithmatex">\(f'(x) = \frac{\partial F}{\partial x}(x, 0)\)</span> is <strong>negative</strong> are those where you are walking <strong>downhill</strong>, again as you walk from west to east. The region along <span class="arithmatex">\([-2, -1]\)</span> is downhill.</li>
+<li>When the absolute value <span class="arithmatex">\(|f'| = \left|\frac{\partial F}{\partial x}\right|\)</span> is <strong>large</strong>, the path is very steep. For example, it seems dangerously steep at <span class="arithmatex">\(x = 1\)</span>. Notice that the contours (shown at uniform increments, 0.2 in this case) are closer together near <span class="arithmatex">\(x = 1\)</span>. On the other hand, when the slope is more gradual (i.e., <span class="arithmatex">\(|f'| = \left|\frac{\partial F}{\partial x}\right|\)</span> is near 0), the contour curves (shown at uniform increments) are further apart. For instance, the slope is more gradual near <span class="arithmatex">\(x = 2\)</span>.</li>
+<li>At points where <span class="arithmatex">\(f' = \frac{\partial F}{\partial x} = 0\)</span>, the path momentarily <strong>flattens out</strong> (in the <span class="arithmatex">\(x\)</span>-direction): this occurs here in the valley near <span class="arithmatex">\(x = -1\)</span> and on the peak to the left of <span class="arithmatex">\(x = 1\)</span>, and also presumably in the flat area at <span class="arithmatex">\(x = 0\)</span>.</li>
+</ul>
+<h3 id="interpretation-of-partial-derivatives-on-a-contour-plot">Interpretation of partial derivatives on a contour plot</h3>
+<p>Visualize <span class="arithmatex">\(F(x, y)\)</span> as the height above <span class="arithmatex">\((x, y)\)</span> on the surface graph <span class="arithmatex">\(z = F(x, y)\)</span>, where <span class="arithmatex">\(x\)</span> is the east–west coordinate and <span class="arithmatex">\(y\)</span> is the north–south coordinate (so larger values of <span class="arithmatex">\(x\)</span> mean further east, and larger values of <span class="arithmatex">\(y\)</span> mean further north). Then:</p>
+<ul>
+<li><span class="arithmatex">\(\frac{\partial F}{\partial x}(a, b)\)</span> equals the <strong>slope</strong> (instantaneous change in altitude) experienced by someone walking on the surface <span class="arithmatex">\(z = F(x, y)\)</span> just as they go past the point <span class="arithmatex">\((a, b)\)</span> <strong>from west to east</strong>.</li>
+<li><span class="arithmatex">\(\frac{\partial F}{\partial y}(a, b)\)</span> equals the <strong>slope</strong> (instantaneous change in altitude) experienced by someone walking on the surface <span class="arithmatex">\(z = F(x, y)\)</span> as they walk past the point <span class="arithmatex">\((a, b)\)</span> <strong>from south to north</strong>.</li>
+</ul>
+<p>As an example, if <span class="arithmatex">\(\frac{\partial F}{\partial y}(0, 0) &gt; 0\)</span> then a northerly path on the surface <span class="arithmatex">\(z = F(x, y)\)</span> is going uphill as it passes over <span class="arithmatex">\((0, 0)\)</span>.</p>
+<p>On a contour plot of the function <span class="arithmatex">\(F(x, y)\)</span>, the partial derivatives can be interpreted as follows:</p>
+<ul>
+<li>The <strong>sign</strong> of <span class="arithmatex">\(\frac{\partial F}{\partial x}(a, b)\)</span> tells us whether the labels of the contours (which represent the values of <span class="arithmatex">\(F\)</span>) are increasing or decreasing as we walk through <span class="arithmatex">\((a, b)\)</span> from west to east.</li>
+<li>The <strong>sign</strong> of <span class="arithmatex">\(\frac{\partial F}{\partial y}(a, b)\)</span> tells us whether the values of <span class="arithmatex">\(F\)</span> on the contours are increasing or decreasing as we walk through <span class="arithmatex">\((a, b)\)</span> from south to north.</li>
+<li>If <span class="arithmatex">\(\frac{\partial F}{\partial x}(a_1, b_1) &gt; \frac{\partial F}{\partial x}(a_2, b_2) &gt; 0\)</span>, then in the <span class="arithmatex">\(x\)</span>-direction the slope at <span class="arithmatex">\((a_1, b_1)\)</span> is steeper than the slope at <span class="arithmatex">\((a_2, b_2)\)</span>, so the contours (when shown for uniform increments in <span class="arithmatex">\(F\)</span>-values) are spaced closer together as we move east across <span class="arithmatex">\((a_1, b_1)\)</span> than they are as we move east across <span class="arithmatex">\((a_2, b_2)\)</span>. There is a corresponding statement for negative <span class="arithmatex">\(x\)</span>-partial derivatives (still moving east). The situation for <span class="arithmatex">\(\frac{\partial F}{\partial y}\)</span> can be described in very similar terms (for moving north).</li>
+</ul>
 
 
 

@@ -87,3 +87,33 @@ Why mention two methods which look almost identical? In practice one uses the sy
 Here is a contour plot (showing level sets at values in increments of 0.2) for a function $F(x, y)$ which may represent some experimental measurements (i.e., we may have no explicit formula for $F(x, y)$).
 
 ![img](contour_plot.png)
+
+This contour plot is in the $xy$-plane, and the label on each curve indicates the $F$-value on that curve (in increments of 0.2).
+
+Imagine that you are walking from west to east along the red line $y = 0$ in the above figure while on the surface graph $z = F(x, y)$. Let us analyze what you observe as you do this. The contour plot is a bird's-eye view of the graph $z = F(x, y)$: your path looks like a straight line from the bird's perspective, but as you walk along the line $y = 0$ the function $f(x) = F(x, 0)$ on this line varies in its values and the graph of $f(x)$ as shown in the figure below keeps track of elevation as one walks along the red line.
+
+![img](cp1.png)
+
+By definition the derivative $f'(x)$ of $f(x) = F(x, 0)$ is the partial derivative $\frac{\partial F}{\partial x}$ at $(x, 0)$.
+
+Here are some observations:
+
+- The regions where $f'(x) = \frac{\partial F}{\partial x}(x, 0)$ is **positive** are those where you are walking **uphill** in the contour plot above as you walk from west to east (i.e., where the labels $f(x) = F(x, 0)$ increase). For example, along the interval of $x$-values in $[-1, 0]$ (with $y = 0$) is all uphill.
+- The regions where $f'(x) = \frac{\partial F}{\partial x}(x, 0)$ is **negative** are those where you are walking **downhill**, again as you walk from west to east. The region along $[-2, -1]$ is downhill.
+- When the absolute value $|f'| = \left|\frac{\partial F}{\partial x}\right|$ is **large**, the path is very steep. For example, it seems dangerously steep at $x = 1$. Notice that the contours (shown at uniform increments, 0.2 in this case) are closer together near $x = 1$. On the other hand, when the slope is more gradual (i.e., $|f'| = \left|\frac{\partial F}{\partial x}\right|$ is near 0), the contour curves (shown at uniform increments) are further apart. For instance, the slope is more gradual near $x = 2$.
+- At points where $f' = \frac{\partial F}{\partial x} = 0$, the path momentarily **flattens out** (in the $x$-direction): this occurs here in the valley near $x = -1$ and on the peak to the left of $x = 1$, and also presumably in the flat area at $x = 0$.
+
+### Interpretation of partial derivatives on a contour plot
+
+Visualize $F(x, y)$ as the height above $(x, y)$ on the surface graph $z = F(x, y)$, where $x$ is the east–west coordinate and $y$ is the north–south coordinate (so larger values of $x$ mean further east, and larger values of $y$ mean further north). Then:
+
+- $\frac{\partial F}{\partial x}(a, b)$ equals the **slope** (instantaneous change in altitude) experienced by someone walking on the surface $z = F(x, y)$ just as they go past the point $(a, b)$ **from west to east**.
+- $\frac{\partial F}{\partial y}(a, b)$ equals the **slope** (instantaneous change in altitude) experienced by someone walking on the surface $z = F(x, y)$ as they walk past the point $(a, b)$ **from south to north**.
+
+As an example, if $\frac{\partial F}{\partial y}(0, 0) > 0$ then a northerly path on the surface $z = F(x, y)$ is going uphill as it passes over $(0, 0)$.
+
+On a contour plot of the function $F(x, y)$, the partial derivatives can be interpreted as follows:
+
+- The **sign** of $\frac{\partial F}{\partial x}(a, b)$ tells us whether the labels of the contours (which represent the values of $F$) are increasing or decreasing as we walk through $(a, b)$ from west to east.
+- The **sign** of $\frac{\partial F}{\partial y}(a, b)$ tells us whether the values of $F$ on the contours are increasing or decreasing as we walk through $(a, b)$ from south to north.
+- If $\frac{\partial F}{\partial x}(a_1, b_1) > \frac{\partial F}{\partial x}(a_2, b_2) > 0$, then in the $x$-direction the slope at $(a_1, b_1)$ is steeper than the slope at $(a_2, b_2)$, so the contours (when shown for uniform increments in $F$-values) are spaced closer together as we move east across $(a_1, b_1)$ than they are as we move east across $(a_2, b_2)$. There is a corresponding statement for negative $x$-partial derivatives (still moving east). The situation for $\frac{\partial F}{\partial y}$ can be described in very similar terms (for moving north).
