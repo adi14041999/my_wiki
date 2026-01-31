@@ -117,3 +117,35 @@ On a contour plot of the function $F(x, y)$, the partial derivatives can be inte
 - The **sign** of $\frac{\partial F}{\partial x}(a, b)$ tells us whether the labels of the contours (which represent the values of $F$) are increasing or decreasing as we walk through $(a, b)$ from west to east.
 - The **sign** of $\frac{\partial F}{\partial y}(a, b)$ tells us whether the values of $F$ on the contours are increasing or decreasing as we walk through $(a, b)$ from south to north.
 - If $\frac{\partial F}{\partial x}(a_1, b_1) > \frac{\partial F}{\partial x}(a_2, b_2) > 0$, then in the $x$-direction the slope at $(a_1, b_1)$ is steeper than the slope at $(a_2, b_2)$, so the contours (when shown for uniform increments in $F$-values) are spaced closer together as we move east across $(a_1, b_1)$ than they are as we move east across $(a_2, b_2)$. There is a corresponding statement for negative $x$-partial derivatives (still moving east). The situation for $\frac{\partial F}{\partial y}$ can be described in very similar terms (for moving north).
+
+## Second partial derivatives
+
+There is a notion of "second derivative" for multivariable functions $f \colon \mathbb{R}^n \to \mathbb{R}$, defined similarly to the case of single-variable functions: we compute a **partial derivative of a partial derivative**. The new issue when $n > 1$ is that we have the freedom to choose **in which direction** to form each successive partial derivative.
+
+As an example with $n = 2$, consider
+
+$$f(x, y) = x^3 - 7x^2 y + 5y^4.$$
+
+Note that $f_x = \frac{\partial f}{\partial x}$ is equal to $3x^2 - 14xy$ and $f_y = \frac{\partial f}{\partial y}$ is equal to $-7x^2 + 20y^3$. Now we have the following options for a second derivative: we can differentiate $f_x$ with respect to $x$ or with respect to $y$, or we can differentiate $f_y$ with respect to $x$ or with respect to $y$.
+
+We introduce notation for all of these possibilities:
+
+$$\frac{\partial^2 f}{\partial x^2} = \frac{\partial}{\partial x}\left(\frac{\partial f}{\partial x}\right) \quad \text{denotes the $x$-partial derivative of $f_x$};$$
+
+$$\frac{\partial^2 f}{\partial y \, \partial x} = \frac{\partial}{\partial y}\left(\frac{\partial f}{\partial x}\right) \quad \text{denotes the $y$-partial derivative of $f_x$};$$
+
+$$\frac{\partial^2 f}{\partial x \, \partial y} = \frac{\partial}{\partial x}\left(\frac{\partial f}{\partial y}\right) \quad \text{denotes the $x$-partial derivative of $f_y$};$$
+
+$$\frac{\partial^2 f}{\partial y^2} = \frac{\partial}{\partial y}\left(\frac{\partial f}{\partial y}\right) \quad \text{denotes the $y$-partial derivative of $f_y$}.$$
+
+### Theorem (Clairaut–Schwarz) 
+
+Consider a function $f(x_1, \ldots, x_n)$ that is continuous, and for $1 \leq i, j \leq n$ suppose that the partial derivatives $\frac{\partial f}{\partial x_i}$ and $\frac{\partial f}{\partial x_j}$ as well as the second partial derivatives $\frac{\partial^2 f}{\partial x_i \, \partial x_j}$ and $\frac{\partial^2 f}{\partial x_j \, \partial x_i}$ exist and are continuous. Then the order of applying $\frac{\partial}{\partial x_i}$ and $\frac{\partial}{\partial x_j}$ to $f$ does not matter:
+
+$$\frac{\partial^2 f}{\partial x_i \, \partial x_j} = \frac{\partial^2 f}{\partial x_j \, \partial x_i}.$$
+
+(Due to the equality, we often denote this second partial derivative by the notation $f_{x_i x_j}$ or $f_{x_j x_i}$.)
+
+For example, in the case of a 3-variable function $f(x, y, z)$, equality of mixed partials says that there are really only 6 possibly "different" second partial derivatives:
+
+$$\frac{\partial^2 f}{\partial x^2}, \quad \frac{\partial^2 f}{\partial y^2}, \quad \frac{\partial^2 f}{\partial z^2}, \quad \frac{\partial^2 f}{\partial x \, \partial y} = \frac{\partial^2 f}{\partial y \, \partial x}, \quad \frac{\partial^2 f}{\partial x \, \partial z} = \frac{\partial^2 f}{\partial z \, \partial x}, \quad \frac{\partial^2 f}{\partial y \, \partial z} = \frac{\partial^2 f}{\partial z \, \partial y}.$$

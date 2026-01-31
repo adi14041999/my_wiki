@@ -3499,6 +3499,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#second-partial-derivatives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Second partial derivatives
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Second partial derivatives">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#theorem-clairautschwarz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Theorem (Clairaut–Schwarz)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3868,6 +3896,22 @@
 <li>The <strong>sign</strong> of <span class="arithmatex">\(\frac{\partial F}{\partial y}(a, b)\)</span> tells us whether the values of <span class="arithmatex">\(F\)</span> on the contours are increasing or decreasing as we walk through <span class="arithmatex">\((a, b)\)</span> from south to north.</li>
 <li>If <span class="arithmatex">\(\frac{\partial F}{\partial x}(a_1, b_1) &gt; \frac{\partial F}{\partial x}(a_2, b_2) &gt; 0\)</span>, then in the <span class="arithmatex">\(x\)</span>-direction the slope at <span class="arithmatex">\((a_1, b_1)\)</span> is steeper than the slope at <span class="arithmatex">\((a_2, b_2)\)</span>, so the contours (when shown for uniform increments in <span class="arithmatex">\(F\)</span>-values) are spaced closer together as we move east across <span class="arithmatex">\((a_1, b_1)\)</span> than they are as we move east across <span class="arithmatex">\((a_2, b_2)\)</span>. There is a corresponding statement for negative <span class="arithmatex">\(x\)</span>-partial derivatives (still moving east). The situation for <span class="arithmatex">\(\frac{\partial F}{\partial y}\)</span> can be described in very similar terms (for moving north).</li>
 </ul>
+<h2 id="second-partial-derivatives">Second partial derivatives</h2>
+<p>There is a notion of "second derivative" for multivariable functions <span class="arithmatex">\(f \colon \mathbb{R}^n \to \mathbb{R}\)</span>, defined similarly to the case of single-variable functions: we compute a <strong>partial derivative of a partial derivative</strong>. The new issue when <span class="arithmatex">\(n &gt; 1\)</span> is that we have the freedom to choose <strong>in which direction</strong> to form each successive partial derivative.</p>
+<p>As an example with <span class="arithmatex">\(n = 2\)</span>, consider</p>
+<div class="arithmatex">\[f(x, y) = x^3 - 7x^2 y + 5y^4.\]</div>
+<p>Note that <span class="arithmatex">\(f_x = \frac{\partial f}{\partial x}\)</span> is equal to <span class="arithmatex">\(3x^2 - 14xy\)</span> and <span class="arithmatex">\(f_y = \frac{\partial f}{\partial y}\)</span> is equal to <span class="arithmatex">\(-7x^2 + 20y^3\)</span>. Now we have the following options for a second derivative: we can differentiate <span class="arithmatex">\(f_x\)</span> with respect to <span class="arithmatex">\(x\)</span> or with respect to <span class="arithmatex">\(y\)</span>, or we can differentiate <span class="arithmatex">\(f_y\)</span> with respect to <span class="arithmatex">\(x\)</span> or with respect to <span class="arithmatex">\(y\)</span>.</p>
+<p>We introduce notation for all of these possibilities:</p>
+<div class="arithmatex">\[\frac{\partial^2 f}{\partial x^2} = \frac{\partial}{\partial x}\left(\frac{\partial f}{\partial x}\right) \quad \text{denotes the $x$-partial derivative of $f_x$};\]</div>
+<div class="arithmatex">\[\frac{\partial^2 f}{\partial y \, \partial x} = \frac{\partial}{\partial y}\left(\frac{\partial f}{\partial x}\right) \quad \text{denotes the $y$-partial derivative of $f_x$};\]</div>
+<div class="arithmatex">\[\frac{\partial^2 f}{\partial x \, \partial y} = \frac{\partial}{\partial x}\left(\frac{\partial f}{\partial y}\right) \quad \text{denotes the $x$-partial derivative of $f_y$};\]</div>
+<div class="arithmatex">\[\frac{\partial^2 f}{\partial y^2} = \frac{\partial}{\partial y}\left(\frac{\partial f}{\partial y}\right) \quad \text{denotes the $y$-partial derivative of $f_y$}.\]</div>
+<h3 id="theorem-clairautschwarz">Theorem (Clairaut–Schwarz)</h3>
+<p>Consider a function <span class="arithmatex">\(f(x_1, \ldots, x_n)\)</span> that is continuous, and for <span class="arithmatex">\(1 \leq i, j \leq n\)</span> suppose that the partial derivatives <span class="arithmatex">\(\frac{\partial f}{\partial x_i}\)</span> and <span class="arithmatex">\(\frac{\partial f}{\partial x_j}\)</span> as well as the second partial derivatives <span class="arithmatex">\(\frac{\partial^2 f}{\partial x_i \, \partial x_j}\)</span> and <span class="arithmatex">\(\frac{\partial^2 f}{\partial x_j \, \partial x_i}\)</span> exist and are continuous. Then the order of applying <span class="arithmatex">\(\frac{\partial}{\partial x_i}\)</span> and <span class="arithmatex">\(\frac{\partial}{\partial x_j}\)</span> to <span class="arithmatex">\(f\)</span> does not matter:</p>
+<div class="arithmatex">\[\frac{\partial^2 f}{\partial x_i \, \partial x_j} = \frac{\partial^2 f}{\partial x_j \, \partial x_i}.\]</div>
+<p>(Due to the equality, we often denote this second partial derivative by the notation <span class="arithmatex">\(f_{x_i x_j}\)</span> or <span class="arithmatex">\(f_{x_j x_i}\)</span>.)</p>
+<p>For example, in the case of a 3-variable function <span class="arithmatex">\(f(x, y, z)\)</span>, equality of mixed partials says that there are really only 6 possibly "different" second partial derivatives:</p>
+<div class="arithmatex">\[\frac{\partial^2 f}{\partial x^2}, \quad \frac{\partial^2 f}{\partial y^2}, \quad \frac{\partial^2 f}{\partial z^2}, \quad \frac{\partial^2 f}{\partial x \, \partial y} = \frac{\partial^2 f}{\partial y \, \partial x}, \quad \frac{\partial^2 f}{\partial x \, \partial z} = \frac{\partial^2 f}{\partial z \, \partial x}, \quad \frac{\partial^2 f}{\partial y \, \partial z} = \frac{\partial^2 f}{\partial z \, \partial y}.\]</div>
 
 
 
