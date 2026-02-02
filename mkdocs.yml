@@ -7,6 +7,7 @@ nav:
   - Home: index.md
   - AI:
     - Primer on AI:
+      - Introduction to Artificial Intelligence: ai/primer_on_ai/introduction_to_artificial_intelligence.md
       - Model Taxonomy: ai/primer_on_ai/model_taxonomy.md
       - Spatializing Data: ai/primer_on_ai/spatializing_data.md
     - Deep Learning for Computer Vision:
