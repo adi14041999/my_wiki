@@ -151,3 +151,5 @@ For example, in the case of a 3-variable function $f(x, y, z)$, equality of mixe
 $$\frac{\partial^2 f}{\partial x^2}, \quad \frac{\partial^2 f}{\partial y^2}, \quad \frac{\partial^2 f}{\partial z^2}, \quad \frac{\partial^2 f}{\partial x \, \partial y} = \frac{\partial^2 f}{\partial y \, \partial x}, \quad \frac{\partial^2 f}{\partial x \, \partial z} = \frac{\partial^2 f}{\partial z \, \partial x}, \quad \frac{\partial^2 f}{\partial y \, \partial z} = \frac{\partial^2 f}{\partial z \, \partial y}.$$
 
 **Note:** The equality can fail for somewhat peculiar $f(x, y)$ whose graph doesn’t look at all strange near the point where the equality breaks down.
+
+## Exercises
