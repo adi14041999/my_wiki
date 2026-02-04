@@ -153,3 +153,28 @@ $$\frac{\partial^2 f}{\partial x^2}, \quad \frac{\partial^2 f}{\partial y^2}, \q
 **Note:** The equality can fail for somewhat peculiar $f(x, y)$ whose graph doesn’t look at all strange near the point where the equality breaks down.
 
 ## Exercises
+
+**1.** Use partial derivatives to approximate the following values of the function $f(-1.2, 5)$, where $f(x_1, x_2) = \sqrt{x_1 + 2x_2^2}$.
+
+**Solution** Use the linear approximation at a nearby point $(a, b)$ that is easy to evaluate:
+
+$$f(x_1, x_2) \approx f(a, b) + \frac{\partial f}{\partial x_1}(a, b)(x_1 - a) + \frac{\partial f}{\partial x_2}(a, b)(x_2 - b).$$
+
+In many multivariable calculus contexts, you might see this written more compactly using the gradient ($\nabla$) and vectors:
+
+$$f(\mathbf{x}) \approx f(\mathbf{a}) + \nabla f(\mathbf{a}) \cdot (\mathbf{x} - \mathbf{a})$$
+
+$\mathbf{x} = (x_1, x_2)$, $\mathbf{a} = (a, b)$, and
+
+$$\nabla f(\mathbf{a}) = \left\langle \frac{\partial f}{\partial x_1}(\mathbf{a}), \frac{\partial f}{\partial x_2}(\mathbf{a}) \right\rangle$$
+
+Take $(a, b) = (-1, 5)$. Then $f(-1, 5) = \sqrt{-1 + 2(25)} = \sqrt{49} = 7$.
+
+The partial derivatives of $f(x_1, x_2) = (x_1 + 2x_2^2)^{1/2}$ are:
+
+$$\frac{\partial f}{\partial x_1} = \frac{1}{2}(x_1 + 2x_2^2)^{-1/2} = \frac{1}{2\sqrt{x_1 + 2x_2^2}}, \qquad \frac{\partial f}{\partial x_2} = \frac{2x_2}{\sqrt{x_1 + 2x_2^2}}$$
+
+At $(-1, 5)$ we have $\sqrt{x_1 + 2x_2^2} = 7$, so $\frac{\partial f}{\partial x_1}(-1, 5) = \frac{1}{14}$ and $\frac{\partial f}{\partial x_2}(-1, 5) = \frac{10}{7}$
+
+$$f(-1.2, 5) \approx f(-1, 5) + \frac{\partial f}{\partial x_1}(-1, 5)(-1.2 - (-1)) + \frac{\partial f}{\partial x_2}(-1, 5)(5 - 5) = 7 + \frac{1}{14}(-0.2) + 0 = 7 - \frac{1}{70} = \frac{489}{70}$$
+

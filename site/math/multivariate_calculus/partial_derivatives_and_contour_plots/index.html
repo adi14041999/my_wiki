@@ -3953,6 +3953,18 @@
 <div class="arithmatex">\[\frac{\partial^2 f}{\partial x^2}, \quad \frac{\partial^2 f}{\partial y^2}, \quad \frac{\partial^2 f}{\partial z^2}, \quad \frac{\partial^2 f}{\partial x \, \partial y} = \frac{\partial^2 f}{\partial y \, \partial x}, \quad \frac{\partial^2 f}{\partial x \, \partial z} = \frac{\partial^2 f}{\partial z \, \partial x}, \quad \frac{\partial^2 f}{\partial y \, \partial z} = \frac{\partial^2 f}{\partial z \, \partial y}.\]</div>
 <p><strong>Note:</strong> The equality can fail for somewhat peculiar <span class="arithmatex">\(f(x, y)\)</span> whose graph doesn’t look at all strange near the point where the equality breaks down.</p>
 <h2 id="exercises">Exercises</h2>
+<p><strong>1.</strong> Use partial derivatives to approximate the following values of the function <span class="arithmatex">\(f(-1.2, 5)\)</span>, where <span class="arithmatex">\(f(x_1, x_2) = \sqrt{x_1 + 2x_2^2}\)</span>.</p>
+<p><strong>Solution</strong> Use the linear approximation at a nearby point <span class="arithmatex">\((a, b)\)</span> that is easy to evaluate:</p>
+<div class="arithmatex">\[f(x_1, x_2) \approx f(a, b) + \frac{\partial f}{\partial x_1}(a, b)(x_1 - a) + \frac{\partial f}{\partial x_2}(a, b)(x_2 - b).\]</div>
+<p>In many multivariable calculus contexts, you might see this written more compactly using the gradient (<span class="arithmatex">\(\nabla\)</span>) and vectors:</p>
+<div class="arithmatex">\[f(\mathbf{x}) \approx f(\mathbf{a}) + \nabla f(\mathbf{a}) \cdot (\mathbf{x} - \mathbf{a})\]</div>
+<p><span class="arithmatex">\(\mathbf{x} = (x_1, x_2)\)</span>, <span class="arithmatex">\(\mathbf{a} = (a, b)\)</span>, and</p>
+<div class="arithmatex">\[\nabla f(\mathbf{a}) = \left\langle \frac{\partial f}{\partial x_1}(\mathbf{a}), \frac{\partial f}{\partial x_2}(\mathbf{a}) \right\rangle\]</div>
+<p>Take <span class="arithmatex">\((a, b) = (-1, 5)\)</span>. Then <span class="arithmatex">\(f(-1, 5) = \sqrt{-1 + 2(25)} = \sqrt{49} = 7\)</span>.</p>
+<p>The partial derivatives of <span class="arithmatex">\(f(x_1, x_2) = (x_1 + 2x_2^2)^{1/2}\)</span> are:</p>
+<div class="arithmatex">\[\frac{\partial f}{\partial x_1} = \frac{1}{2}(x_1 + 2x_2^2)^{-1/2} = \frac{1}{2\sqrt{x_1 + 2x_2^2}}, \qquad \frac{\partial f}{\partial x_2} = \frac{2x_2}{\sqrt{x_1 + 2x_2^2}}\]</div>
+<p>At <span class="arithmatex">\((-1, 5)\)</span> we have <span class="arithmatex">\(\sqrt{x_1 + 2x_2^2} = 7\)</span>, so <span class="arithmatex">\(\frac{\partial f}{\partial x_1}(-1, 5) = \frac{1}{14}\)</span> and <span class="arithmatex">\(\frac{\partial f}{\partial x_2}(-1, 5) = \frac{10}{7}\)</span></p>
+<div class="arithmatex">\[f(-1.2, 5) \approx f(-1, 5) + \frac{\partial f}{\partial x_1}(-1, 5)(-1.2 - (-1)) + \frac{\partial f}{\partial x_2}(-1, 5)(5 - 5) = 7 + \frac{1}{14}(-0.2) + 0 = 7 - \frac{1}{70} = \frac{489}{70}\]</div>
 
 
 
