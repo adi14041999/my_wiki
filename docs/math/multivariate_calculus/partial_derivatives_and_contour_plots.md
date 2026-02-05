@@ -225,3 +225,49 @@ $$\frac{\partial f}{\partial x_1}(x_1, 2) = \cos(x_1 + 4) = 0, \qquad \frac{\par
 
 The answer does not depend on the specific point: both partials are **0** at every point of the level set with $x_2 = 2$ (and in fact at every point on the level set $f = 1$, the gradient is zero because the level set is a “ridge” where $f$ is constant).
 
+**4.** One of the most famous equations in physics is **Laplace's equation**: for functions $f(x, y)$ of two variables, it is
+
+$$\frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial y^2} = 0$$
+
+Functions satisfying this equation are called **harmonic**; they arise in the study of equilibrium configurations in the natural sciences.
+
+**(a).** Determine which 2-variable cubic polynomials
+
+$$f(x, y) = A + Bx + Cy + Dx^2 + Exy + Fy^2 + Gx^3 + Hx^2 y + Ixy^2 + Jy^3$$
+
+(with constants $A, B, \ldots, I, J$) are harmonic.
+
+**Solution:** Compute second partials of $f$:
+
+$$\frac{\partial f}{\partial x} = B + 2Dx + Ey + 3Gx^2 + 2Hxy + Iy^2, \qquad \frac{\partial^2 f}{\partial x^2} = 2D + 6Gx + 2Hy$$
+
+$$\frac{\partial f}{\partial y} = C + Ex + 2Fy + Hx^2 + 2Ixy + 3Jy^2, \qquad \frac{\partial^2 f}{\partial y^2} = 2F + 2Ix + 6Jy$$
+
+Laplace's equation $\frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial y^2} = 0$ becomes
+
+$$(2D + 2F) + (6G + 2I)x + (2H + 6J)y = 0 \quad \text{for all } x, y$$
+
+So the coefficients of $1$, $x$, and $y$ must vanish: $2D + 2F = 0$, $6G + 2I = 0$, $2H + 6J = 0$. Hence $F = -D$, $I = -3G$, $H = -3J$. The harmonic cubic polynomials are therefore those of the form
+
+$$f(x, y) = A + Bx + Cy + Dx^2 + Exy - Dy^2 + Gx^3 - 3J\,x^2 y - 3G\,xy^2 + Jy^3$$
+
+with $A, B, C, D, E, G, J$ arbitrary constants (and $F = -D$, $H = -3J$, $I = -3G$).
+
+**(b).** Show that $f_1(x, y) = e^x \sin y$ and $f_2(x, y) = \ln(x^2 + y^2)$ are harmonic (for $f_2$ we only consider $(x, y) \neq (0, 0)$).
+
+**Solution:** For $f_1(x, y) = e^x \sin y$: $\frac{\partial f_1}{\partial x} = e^x \sin y$, $\frac{\partial^2 f_1}{\partial x^2} = e^x \sin y$; $\frac{\partial f_1}{\partial y} = e^x \cos y$, $\frac{\partial^2 f_1}{\partial y^2} = -e^x \sin y$. So $\frac{\partial^2 f_1}{\partial x^2} + \frac{\partial^2 f_1}{\partial y^2} = e^x \sin y - e^x \sin y = 0$.
+
+For $f_2(x, y) = \ln(x^2 + y^2)$ (with $(x, y) \neq (0, 0)$): $\frac{\partial f_2}{\partial x} = \frac{2x}{x^2 + y^2}$, so $\frac{\partial^2 f_2}{\partial x^2} = \frac{2(x^2 + y^2) - 2x \cdot 2x}{(x^2 + y^2)^2} = \frac{2y^2 - 2x^2}{(x^2 + y^2)^2}$. 
+
+Similarly $\frac{\partial f_2}{\partial y} = \frac{2y}{x^2 + y^2}$ and $\frac{\partial^2 f_2}{\partial y^2} = \frac{2x^2 - 2y^2}{(x^2 + y^2)^2}$. Thus $\frac{\partial^2 f_2}{\partial x^2} + \frac{\partial^2 f_2}{\partial y^2} = \frac{2y^2 - 2x^2 + 2x^2 - 2y^2}{(x^2 + y^2)^2} = 0$. So both $f_1$ and $f_2$ are harmonic.
+
+**5.** Briefly justify whether the following statement is true (always true) or false (sometimes not true): There is a continuous $f(x, y)$ with continuous $f_x$, $f_y$, $f_{xx}$, $f_{yy}$, $f_{xy}$ and $f_{yx}$ for which $f_x(x, y) = \sin x + y e^{xy}$ and $f_y(x, y) = \cos y - x e^{xy}$.
+
+**Solution:** **False.** If such an $f$ existed, then by Clairaut's theorem we would have $f_{xy} = f_{yx}$. Compute the mixed partials from the given first partials:
+
+$$f_{xy} = \frac{\partial}{\partial y}(\sin x + y e^{xy}) = e^{xy} + y \cdot x e^{xy} = e^{xy}(1 + xy)$$
+
+$$f_{yx} = \frac{\partial}{\partial x}(\cos y - x e^{xy}) = -e^{xy} - x \cdot y e^{xy} = -e^{xy}(1 + xy)$$
+
+So $f_{xy} = e^{xy}(1 + xy)$ and $f_{yx} = -e^{xy}(1 + xy)$ differ (they are negatives). Hence no such $f$ exists.
+
