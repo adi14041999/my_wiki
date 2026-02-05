@@ -118,6 +118,11 @@ On a contour plot of the function $F(x, y)$, the partial derivatives can be inte
 - The **sign** of $\frac{\partial F}{\partial y}(a, b)$ tells us whether the values of $F$ on the contours are increasing or decreasing as we walk through $(a, b)$ from south to north.
 - If $\frac{\partial F}{\partial x}(a_1, b_1) > \frac{\partial F}{\partial x}(a_2, b_2) > 0$, then in the $x$-direction the slope at $(a_1, b_1)$ is steeper than the slope at $(a_2, b_2)$, so the contours (when shown for uniform increments in $F$-values) are spaced closer together as we move east across $(a_1, b_1)$ than they are as we move east across $(a_2, b_2)$. There is a corresponding statement for negative $x$-partial derivatives (still moving east). The situation for $\frac{\partial F}{\partial y}$ can be described in very similar terms (for moving north).
 
+| Goal | Movement | What to look for |
+|------|----------|------------------|
+| Check $\frac{\partial F}{\partial x}$ | Move horizontally | Contour line is **vertical** at that point? Derivative is **high**. Contour line is **horizontal** (tangent to your path)? Derivative is **zero**. |
+| Check $\frac{\partial F}{\partial y}$ | Move vertically | Contour line is **horizontal** at that point? Derivative is **high**. Contour line is **vertical** (tangent to your path)? Derivative is **zero**. |
+
 ## Second partial derivatives
 
 There is a notion of "second derivative" for multivariable functions $f \colon \mathbb{R}^n \to \mathbb{R}$, defined similarly to the case of single-variable functions: we compute a **partial derivative of a partial derivative**. The new issue when $n > 1$ is that we have the freedom to choose **in which direction** to form each successive partial derivative.
@@ -156,7 +161,7 @@ $$\frac{\partial^2 f}{\partial x^2}, \quad \frac{\partial^2 f}{\partial y^2}, \q
 
 **1.** Use partial derivatives to approximate the following values of the function $f(-1.2, 5)$, where $f(x_1, x_2) = \sqrt{x_1 + 2x_2^2}$.
 
-**Solution** Use the linear approximation at a nearby point $(a, b)$ that is easy to evaluate:
+**Solution:** Use the linear approximation at a nearby point $(a, b)$ that is easy to evaluate:
 
 $$f(x_1, x_2) \approx f(a, b) + \frac{\partial f}{\partial x_1}(a, b)(x_1 - a) + \frac{\partial f}{\partial x_2}(a, b)(x_2 - b).$$
 
@@ -177,4 +182,30 @@ $$\frac{\partial f}{\partial x_1} = \frac{1}{2}(x_1 + 2x_2^2)^{-1/2} = \frac{1}{
 At $(-1, 5)$ we have $\sqrt{x_1 + 2x_2^2} = 7$, so $\frac{\partial f}{\partial x_1}(-1, 5) = \frac{1}{14}$ and $\frac{\partial f}{\partial x_2}(-1, 5) = \frac{10}{7}$
 
 $$f(-1.2, 5) \approx f(-1, 5) + \frac{\partial f}{\partial x_1}(-1, 5)(-1.2 - (-1)) + \frac{\partial f}{\partial x_2}(-1, 5)(5 - 5) = 7 + \frac{1}{14}(-0.2) + 0 = 7 - \frac{1}{70} = \frac{489}{70}$$
+
+**2.** Suppose a function $f \colon \mathbb{R}^2 \to \mathbb{R}$ has the following values: $f(1, 1) = 25$, $f(1.01, 1) = 22$, and $f(1, 0.99) = 23$. Also, let $g(x, y) = 1 + \ln(x^2 y^2)$, and define $h(x, y) = f(x, y) \cdot g(x, y)$.
+
+**(a).** Estimate $f_x(1, 1)$ and $f_y(1, 1)$.
+
+**Solution** Use difference quotients with the given points:
+
+$$f_x(1, 1) \approx \frac{f(1.01, 1) - f(1, 1)}{1.01 - 1} = \frac{22 - 25}{0.01} = -300$$
+
+$$f_y(1, 1) \approx \frac{f(1, 0.99) - f(1, 1)}{0.99 - 1} = \frac{23 - 25}{-0.01} = 200$$
+
+**(b).** Using the symbolic method, compute $g_y(1, 1)$.
+
+**Solution:** We have $g(x, y) = 1 + \ln(x^2 y^2) = 1 + \ln(x^2) + \ln(y^2) = 1 + 2\ln|x| + 2\ln|y|$. For $x > 0$, $y > 0$, $\frac{\partial g}{\partial y} = \frac{2}{y}$. Hence $g_y(1, 1) = 2$.
+
+**(c).** Estimate $\frac{\partial h}{\partial y}(1, 1)$.
+
+**Solution:** 
+
+Since $h = f \cdot g$, the product rule gives $\frac{\partial h}{\partial y} = \frac{\partial f}{\partial y} \, g + f \, \frac{\partial g}{\partial y}$. At $(1, 1)$:
+
+$$\frac{\partial h}{\partial y}(1, 1) = f_y(1, 1) \cdot g(1, 1) + f(1, 1) \cdot g_y(1, 1)$$
+
+We have $g(1, 1) = 1 + \ln(1) = 1$, and from (a) and (b): $f_y(1, 1) \approx 200$, $g_y(1, 1) = 2$, $f(1, 1) = 25$ 
+
+$$\frac{\partial h}{\partial y}(1, 1) \approx 200 \cdot 1 + 25 \cdot 2 = 250.$$
 

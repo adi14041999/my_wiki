@@ -3935,6 +3935,27 @@
 <li>The <strong>sign</strong> of <span class="arithmatex">\(\frac{\partial F}{\partial y}(a, b)\)</span> tells us whether the values of <span class="arithmatex">\(F\)</span> on the contours are increasing or decreasing as we walk through <span class="arithmatex">\((a, b)\)</span> from south to north.</li>
 <li>If <span class="arithmatex">\(\frac{\partial F}{\partial x}(a_1, b_1) &gt; \frac{\partial F}{\partial x}(a_2, b_2) &gt; 0\)</span>, then in the <span class="arithmatex">\(x\)</span>-direction the slope at <span class="arithmatex">\((a_1, b_1)\)</span> is steeper than the slope at <span class="arithmatex">\((a_2, b_2)\)</span>, so the contours (when shown for uniform increments in <span class="arithmatex">\(F\)</span>-values) are spaced closer together as we move east across <span class="arithmatex">\((a_1, b_1)\)</span> than they are as we move east across <span class="arithmatex">\((a_2, b_2)\)</span>. There is a corresponding statement for negative <span class="arithmatex">\(x\)</span>-partial derivatives (still moving east). The situation for <span class="arithmatex">\(\frac{\partial F}{\partial y}\)</span> can be described in very similar terms (for moving north).</li>
 </ul>
+<table>
+<thead>
+<tr>
+<th>Goal</th>
+<th>Movement</th>
+<th>What to look for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Check <span class="arithmatex">\(\frac{\partial F}{\partial x}\)</span></td>
+<td>Move horizontally</td>
+<td>Contour line is <strong>vertical</strong> at that point? Derivative is <strong>high</strong>. Contour line is <strong>horizontal</strong> (tangent to your path)? Derivative is <strong>zero</strong>.</td>
+</tr>
+<tr>
+<td>Check <span class="arithmatex">\(\frac{\partial F}{\partial y}\)</span></td>
+<td>Move vertically</td>
+<td>Contour line is <strong>horizontal</strong> at that point? Derivative is <strong>high</strong>. Contour line is <strong>vertical</strong> (tangent to your path)? Derivative is <strong>zero</strong>.</td>
+</tr>
+</tbody>
+</table>
 <h2 id="second-partial-derivatives">Second partial derivatives</h2>
 <p>There is a notion of "second derivative" for multivariable functions <span class="arithmatex">\(f \colon \mathbb{R}^n \to \mathbb{R}\)</span>, defined similarly to the case of single-variable functions: we compute a <strong>partial derivative of a partial derivative</strong>. The new issue when <span class="arithmatex">\(n &gt; 1\)</span> is that we have the freedom to choose <strong>in which direction</strong> to form each successive partial derivative.</p>
 <p>As an example with <span class="arithmatex">\(n = 2\)</span>, consider</p>
@@ -3954,7 +3975,7 @@
 <p><strong>Note:</strong> The equality can fail for somewhat peculiar <span class="arithmatex">\(f(x, y)\)</span> whose graph doesn’t look at all strange near the point where the equality breaks down.</p>
 <h2 id="exercises">Exercises</h2>
 <p><strong>1.</strong> Use partial derivatives to approximate the following values of the function <span class="arithmatex">\(f(-1.2, 5)\)</span>, where <span class="arithmatex">\(f(x_1, x_2) = \sqrt{x_1 + 2x_2^2}\)</span>.</p>
-<p><strong>Solution</strong> Use the linear approximation at a nearby point <span class="arithmatex">\((a, b)\)</span> that is easy to evaluate:</p>
+<p><strong>Solution:</strong> Use the linear approximation at a nearby point <span class="arithmatex">\((a, b)\)</span> that is easy to evaluate:</p>
 <div class="arithmatex">\[f(x_1, x_2) \approx f(a, b) + \frac{\partial f}{\partial x_1}(a, b)(x_1 - a) + \frac{\partial f}{\partial x_2}(a, b)(x_2 - b).\]</div>
 <p>In many multivariable calculus contexts, you might see this written more compactly using the gradient (<span class="arithmatex">\(\nabla\)</span>) and vectors:</p>
 <div class="arithmatex">\[f(\mathbf{x}) \approx f(\mathbf{a}) + \nabla f(\mathbf{a}) \cdot (\mathbf{x} - \mathbf{a})\]</div>
@@ -3965,6 +3986,19 @@
 <div class="arithmatex">\[\frac{\partial f}{\partial x_1} = \frac{1}{2}(x_1 + 2x_2^2)^{-1/2} = \frac{1}{2\sqrt{x_1 + 2x_2^2}}, \qquad \frac{\partial f}{\partial x_2} = \frac{2x_2}{\sqrt{x_1 + 2x_2^2}}\]</div>
 <p>At <span class="arithmatex">\((-1, 5)\)</span> we have <span class="arithmatex">\(\sqrt{x_1 + 2x_2^2} = 7\)</span>, so <span class="arithmatex">\(\frac{\partial f}{\partial x_1}(-1, 5) = \frac{1}{14}\)</span> and <span class="arithmatex">\(\frac{\partial f}{\partial x_2}(-1, 5) = \frac{10}{7}\)</span></p>
 <div class="arithmatex">\[f(-1.2, 5) \approx f(-1, 5) + \frac{\partial f}{\partial x_1}(-1, 5)(-1.2 - (-1)) + \frac{\partial f}{\partial x_2}(-1, 5)(5 - 5) = 7 + \frac{1}{14}(-0.2) + 0 = 7 - \frac{1}{70} = \frac{489}{70}\]</div>
+<p><strong>2.</strong> Suppose a function <span class="arithmatex">\(f \colon \mathbb{R}^2 \to \mathbb{R}\)</span> has the following values: <span class="arithmatex">\(f(1, 1) = 25\)</span>, <span class="arithmatex">\(f(1.01, 1) = 22\)</span>, and <span class="arithmatex">\(f(1, 0.99) = 23\)</span>. Also, let <span class="arithmatex">\(g(x, y) = 1 + \ln(x^2 y^2)\)</span>, and define <span class="arithmatex">\(h(x, y) = f(x, y) \cdot g(x, y)\)</span>.</p>
+<p><strong>(a).</strong> Estimate <span class="arithmatex">\(f_x(1, 1)\)</span> and <span class="arithmatex">\(f_y(1, 1)\)</span>.</p>
+<p><strong>Solution</strong> Use difference quotients with the given points:</p>
+<div class="arithmatex">\[f_x(1, 1) \approx \frac{f(1.01, 1) - f(1, 1)}{1.01 - 1} = \frac{22 - 25}{0.01} = -300\]</div>
+<div class="arithmatex">\[f_y(1, 1) \approx \frac{f(1, 0.99) - f(1, 1)}{0.99 - 1} = \frac{23 - 25}{-0.01} = 200\]</div>
+<p><strong>(b).</strong> Using the symbolic method, compute <span class="arithmatex">\(g_y(1, 1)\)</span>.</p>
+<p><strong>Solution:</strong> We have <span class="arithmatex">\(g(x, y) = 1 + \ln(x^2 y^2) = 1 + \ln(x^2) + \ln(y^2) = 1 + 2\ln|x| + 2\ln|y|\)</span>. For <span class="arithmatex">\(x &gt; 0\)</span>, <span class="arithmatex">\(y &gt; 0\)</span>, <span class="arithmatex">\(\frac{\partial g}{\partial y} = \frac{2}{y}\)</span>. Hence <span class="arithmatex">\(g_y(1, 1) = 2\)</span>.</p>
+<p><strong>(c).</strong> Estimate <span class="arithmatex">\(\frac{\partial h}{\partial y}(1, 1)\)</span>.</p>
+<p><strong>Solution:</strong> </p>
+<p>Since <span class="arithmatex">\(h = f \cdot g\)</span>, the product rule gives <span class="arithmatex">\(\frac{\partial h}{\partial y} = \frac{\partial f}{\partial y} \, g + f \, \frac{\partial g}{\partial y}\)</span>. At <span class="arithmatex">\((1, 1)\)</span>:</p>
+<div class="arithmatex">\[\frac{\partial h}{\partial y}(1, 1) = f_y(1, 1) \cdot g(1, 1) + f(1, 1) \cdot g_y(1, 1)\]</div>
+<p>We have <span class="arithmatex">\(g(1, 1) = 1 + \ln(1) = 1\)</span>, and from (a) and (b): <span class="arithmatex">\(f_y(1, 1) \approx 200\)</span>, <span class="arithmatex">\(g_y(1, 1) = 2\)</span>, <span class="arithmatex">\(f(1, 1) = 25\)</span> </p>
+<div class="arithmatex">\[\frac{\partial h}{\partial y}(1, 1) \approx 200 \cdot 1 + 25 \cdot 2 = 250.\]</div>
 
 
 
