@@ -209,3 +209,19 @@ We have $g(1, 1) = 1 + \ln(1) = 1$, and from (a) and (b): $f_y(1, 1) \approx 200
 
 $$\frac{\partial h}{\partial y}(1, 1) \approx 200 \cdot 1 + 25 \cdot 2 = 250.$$
 
+**3.** Consider the function $f \colon \mathbb{R}^2 \to \mathbb{R}$ given by $f(x_1, x_2) = \sin(x_1 + x_2^2)$. We would like to consider the level set of $f$ at level $+1$. Give a point in the level set whose $x_2$-coordinate is $2$. Compute $\frac{\partial f}{\partial x_1}(x_1, 2)$ and $\frac{\partial f}{\partial x_2}(x_1, 2)$ at the point you gave. The answer should not depend on the point you chose.
+
+**Solution**
+
+The level set $f = 1$ is $\sin(x_1 + x_2^2) = 1$, so $x_1 + x_2^2 = \frac{\pi}{2} + 2\pi k$ for some integer $k$. Taking $k = 0$, we need $x_1 + x_2^2 = \frac{\pi}{2}$. For $x_2 = 2$, we get $x_1 + 4 = \frac{\pi}{2}$, so $x_1 = \frac{\pi}{2} - 4$. One point in the level set with $x_2 = 2$ is therefore $\bigl(\frac{\pi}{2} - 4, 2\bigr)$.
+
+The partial derivatives of $f(x_1, x_2) = \sin(x_1 + x_2^2)$ are
+
+$$\frac{\partial f}{\partial x_1} = \cos(x_1 + x_2^2), \qquad \frac{\partial f}{\partial x_2} = 2x_2 \cos(x_1 + x_2^2)$$
+
+At any point on the level set $f = 1$, we have $\sin(x_1 + x_2^2) = 1$, so $x_1 + x_2^2 = \frac{\pi}{2}$ (mod $2\pi$) and hence $\cos(x_1 + x_2^2) = 0$. Thus at any $(x_1, 2)$ on this level set:
+
+$$\frac{\partial f}{\partial x_1}(x_1, 2) = \cos(x_1 + 4) = 0, \qquad \frac{\partial f}{\partial x_2}(x_1, 2) = 2 \cdot 2 \cdot \cos(x_1 + 4) = 0$$
+
+The answer does not depend on the specific point: both partials are **0** at every point of the level set with $x_2 = 2$ (and in fact at every point on the level set $f = 1$, the gradient is zero because the level set is a “ridge” where $f$ is constant).
+
