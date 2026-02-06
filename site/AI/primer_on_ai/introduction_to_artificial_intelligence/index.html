@@ -565,6 +565,28 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#neurons-and-hebbian-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Neurons and Hebbian learning
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#brains-automata-and-the-birth-of-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Brains, automata, and the birth of AI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#state-space-search" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3783,6 +3805,18 @@
 
 
 <h1 id="introduction-to-artificial-intelligence">Introduction to Artificial Intelligence</h1>
+<h2 id="neurons-and-hebbian-learning">Neurons and Hebbian learning</h2>
+<p><strong>John McCarthy</strong> named and helped found the field of AI. His thinking was influenced by the <strong>Hixon Symposium on Cerebral Mechanisms in Behavior</strong>, which he attended. To appreciate the analogy between brains and machines, it helps to have a minimal picture of how neurons work.</p>
+<p>A <strong>neuron</strong> has <strong>dendrites</strong> (inputs), a <strong>cell body</strong>, an <strong>axon hillock</strong> (where signals are summed), an <strong>axon</strong> (output cable), and <strong>axon terminals</strong> that meet other neurons at <strong>synapses</strong>. The neuron is in a <strong>resting state</strong> until the combined input at the axon hillock exceeds a threshold. Then it fires an electrical signal (ion flow) propagates down the axon. The signal is all-or-nothing (same magnitude each time), so in a coarse model the axon output is binary (off or on). At a synapse, the presynaptic terminal releases <strong>neurotransmitters</strong> from <strong>synaptic vesicles</strong>. They bind to <strong>receptors</strong> on the postsynaptic neuron (often compared to a key fitting a lock). Depending on the receptor type, the effect is <strong>excitatory</strong> (pushes the postsynaptic neuron toward firing) or <strong>inhibitory</strong> (pushes it away from firing). <strong>Motor neurons</strong> drive muscle contraction by releasing neurotransmitters that open ion channels in muscle cells. <strong>Sensory neurons</strong> carry information from sense organs. <strong>Interneurons</strong> connect other neurons.</p>
+<p><img alt="img" src="../neuron.png" /></p>
+<p><strong>Hebbian learning</strong> is the idea that when a presynaptic neuron repeatedly helps activate a postsynaptic neuron, the connection between them is strengthened (e.g. more receptors, more neurotransmitter release, or both). The next time, the same presynaptic activity is more likely to trigger the postsynaptic neuron. In this way the brain learns <strong>associations</strong>— e.g. a “lightning” pattern and a “thunder” pattern that often occur together come to strengthen each other’s pathways. Knowledge is stored in the <strong>strength and direction</strong> of synaptic connections. The flip side is <strong>“use it or lose it”</strong>: connections weaken when presynaptic and postsynaptic activity no longer co-occur, which is one basis for forgetting.</p>
+<h2 id="brains-automata-and-the-birth-of-ai">Brains, automata, and the birth of AI</h2>
+<p><strong>Von Neumann</strong> argued that brains and computers were both implementing the same kind of <strong>automaton</strong>: a system that moves through discrete states according to fixed rules and inputs. An automaton is an abstract machine whose next state is determined by its current state and the current input. As a toy illustration, networks of simple <strong>threshold units</strong> (a neuron fires if weighted input ≥ <em>T</em>) can implement <strong>logic gates</strong> (AND, OR, NOT, etc.), so in principle neuron-like elements can perform logical computation.</p>
+<p><strong>John McCarthy</strong> famously asked whether <strong>computers could be intelligent</strong>. <strong>Marvin Minsky</strong> built the <strong>SNARC</strong> (Stochastic Neural Analog Reinforcement Calculator), which implemented a small network of 40 “neurons” using vacuum tubes and included a form of <strong>reinforcement</strong> (strengthening successful pathways). That was an early step toward both neural and symbolic approaches to intelligence.</p>
+<p>In 1955, McCarthy and others drafted <strong>“A Proposal for the Dartmouth Summer Research Project on Artificial Intelligence.”</strong> The proposal framed seven research themes: (1) <strong>Automatic computers</strong>— any machine can be simulated by a program; the bottleneck is programming, not hardware. (2) <strong>Using language</strong>— model thought as manipulating words by rules; generalize by new words and rules. (3) <strong>Neuron nets</strong>— how to wire hypothetical neurons to form concepts (partial work by Pitts, McCulloch, Minsky, others). (4) <strong>Size of a calculation</strong>— need a theory of complexity and efficiency (early work by Shannon, McCarthy). (5) <strong>Self-improvement</strong>— machines that improve themselves. (6) <strong>Abstractions</strong>— classify types and how machines could form them from data. Very much like feature extraction. (7) <strong>Randomness and creativity</strong>— creativity as guided randomness (e.g. hunches) in orderly thought.</p>
+<p>The 1956 Dartmouth workshop is often taken as the <strong>birth of AI as a named field</strong>.</p>
+<p><img alt="img" src="../dartmouth.png" /></p>
+<p><strong>Arthur Samuel</strong> worked on checkers-playing programs and wrote “Some Studies in Machine Learning Using the Game of Checkers.” He is credited with coining the term <strong>machine learning</strong>.</p>
 <h2 id="state-space-search">State space search</h2>
 <p>Tasks that involve finding a sequence of actions from an initial situation to a goal can be framed as <strong>state space search</strong> consisting of a set of <strong>states</strong>, a <strong>transition function</strong> (actions → new states), and one or more <strong>goal states</strong>. The structure is often drawn as a <strong>state space graph</strong>. Nodes are states, edges are actions, and solving the problem means finding a path from an initial state to a goal.</p>
 <ul>
@@ -3803,7 +3837,7 @@
 <li>Pour 1 → 2: pour <span class="arithmatex">\(\min(a, y - b)\)</span> liters → <span class="arithmatex">\((a - \min(a, y - b), b + \min(a, y - b))\)</span></li>
 <li>Pour 2 → 1: pour <span class="arithmatex">\(\min(b, x - a)\)</span> liters → <span class="arithmatex">\((a + \min(b, x - a), b - \min(b, x - a))\)</span></li>
 </ol>
-<p><strong>Algorithm:</strong> BFS from <span class="arithmatex">\((0, 0)\)</span>, applying all legal actions from each state and skipping states already visited. If any reached state is a goal, return true; if the frontier is exhausted, return false.</p>
+<p><strong>Algorithm:</strong> BFS from <span class="arithmatex">\((0, 0)\)</span>, applying all legal actions from each state and skipping states already visited. If any reached state is a goal, return true. If the frontier is exhausted, return false.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>function CAN_MEASURE(x, y, z):
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    if z &gt; x + y or z &lt; 0: return false
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    if z == 0: return true
@@ -3841,7 +3875,7 @@
 </ol>
 <p>The shorter-queue strategy is a heuristic that tends to minimize the total number of nodes processed. You expand the smaller frontier first, which often keeps the combined search more balanced and reduces redundant work compared to fixed alternation.</p>
 <h2 id="early-ai-thinking-as-search-and-moravecs-paradox">Early AI: thinking as search and Moravec’s paradox</h2>
-<p>Early AI practitioners often equated <strong>thinking with search</strong>. The idea was that intelligence meant exploring a state space efficiently; <strong>faster search</strong> implied <strong>superior intelligence</strong>. Tasks that machines could solve well in this way— e.g. playing chess, solving puzzles— were the ones that were then regarded as “intelligent.”</p>
+<p>Early AI practitioners often equated <strong>thinking with search</strong>. The idea was that intelligence meant exploring a state space efficiently. <strong>Faster search</strong> implied <strong>superior intelligence</strong>. Tasks that machines could solve well in this way— e.g. playing chess, solving puzzles— were the ones that were then regarded as “intelligent.”</p>
 <p>At the same time, tasks that humans find effortless—recognizing faces, speaking grammatical sentences, navigating a room—were very hard for computers. <strong>Moravec’s paradox</strong> is the observation that what is easy for humans (perception, movement, language) was difficult for machines, while what is hard for humans (abstract logic, formal math) was relatively easier to automate.</p>
 <p>One explanation is <strong>evolution and development</strong>. Skills that humans have had for tens of thousands of years (vision, motor control, social communication) are deeply ingrained and mostly unconscious. Abstract logical reasoning and formal mathematics are evolutionarily recent and require deliberate effort. Our brains are <strong>plastic</strong>. With practice, even hard tasks become more automatic, but the “easy” human skills are already highly optimized by evolution.</p>
 <h2 id="two-modes-of-thinking-system-1-and-system-2">Two modes of thinking: System 1 and System 2</h2>
@@ -3852,7 +3886,7 @@
 </ul>
 <p>System 2 is slow in humans in part because <strong>working memory is limited</strong> and because reasoning is <strong>largely serial</strong>: we think step by step and do not truly multitask across demanding reasoning tasks.</p>
 <ul>
-<li><strong>State space search</strong> is a computational analogue of <strong>System 2</strong> thinking: explicit states, actions, and paths; algorithms (e.g. BFS, A*) explore the space in a structured way.</li>
+<li><strong>State space search</strong> is a computational analogue of <strong>System 2</strong> thinking: explicit states, actions, and paths. Algorithms (e.g. BFS, A*) explore the space in a structured way.</li>
 <li><strong>Neural networks</strong> are well suited to <strong>System 1</strong>-style tasks: pattern recognition, intuitive prediction, perception. They typically need a lot of data and compute and could not be scaled on early computers.</li>
 </ul>
 <p>Neural networks often err (e.g. hallucination, inconsistent logic) doing System 2, so search and classical algorithms remain important. Modern systems often combine both: neural networks handle System 1 (language, vision, heuristics), while System 2 is delegated to tools such as calculators, code execution, and search (e.g. retrieval, planning).</p>
