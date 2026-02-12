@@ -129,3 +129,9 @@ System 2 is slow in humans in part because working memory is limited and because
 - Neural networks are well suited to System 1-style tasks—pattern recognition, intuitive prediction, perception. They typically need a lot of data and compute and could not be scaled on early computers.
 
 Neural networks often err (e.g. hallucination, inconsistent logic) doing System 2, so search and classical algorithms remain important. Modern systems often combine both. Neural networks handle System 1 (language, vision, heuristics), while System 2 is delegated to tools such as calculators, code execution, and search (e.g. retrieval, planning).
+
+## Dijkstra's perspective
+
+In many state space search problems, actions are not equal. Each action can have a cost, so the goal is not only to reach a target state but to reach it with minimum total cost. This is the setting for shortest-path methods such as Dijkstra's algorithm. A simple example is route planning on a weighted graph where edges represent travel times and Dijkstra returns the least-cost path from a start node to every reachable node.
+
+In Dijkstra's words, "Computer science is no more about computers than astronomy is about telescopes." The computer is a tool that executes algorithms. The core intellectual object is the algorithm, which predates modern computers by centuries.
