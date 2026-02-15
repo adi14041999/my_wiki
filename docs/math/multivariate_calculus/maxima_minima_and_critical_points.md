@@ -86,3 +86,12 @@ We do not yet have any general methods for determining when a critical point is 
 
 But the behavior of $f(x, y)$ on the line $y = -x$ is encoded in the function $g(x) = f(x, -x) = x e^{-2x} - x + \sin^2(-x) = x(e^{-2x} - 1) + \sin^2(x)$ that has a critical point at $x = 0$ (because $g'(x) = (1 - 2x)e^{-2x} - 1 + \sin(2x)$ satisfies $g'(0) = 0$) yet that is a local maximum for $g(x)$ since $g''(x) = 4(x - 1)e^{-2x} + \sin(4x)$ satisfies $g''(0) = -4 < 0$. Hence, $f$ has a saddle point at the origin.
 
+**Example:** The contour plot in the figure below for a function $f(x, y)$ shows several types of critical
+points.
+
+![img](critical_contour.png)
+
+Near the critical points, the locations of the level sets for a common small step size in the function value (.2 in the plot shown here) become rather “spread out”; i.e., not as densely packed as elsewhere. Why is this?
+
+The visual picture of spreading-out of level sets near a critical point is saying in numerical terms that at a place where the partial derivatives are all small, to attain a given numerical change in the function value towards a local extremum (such as increments of $\pm 0.15$) seems to require moving a bigger distance than at a place where the partial derivatives are not all small. This formulation also makes sense as a possible property for functions $f \colon \mathbb{R}^n \to \mathbb{R}$ near a critical point for any $n$ (not just $n = 2$).
+
