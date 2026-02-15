@@ -3521,6 +3521,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#fitting-curves-to-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fitting curves to data
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extrema-on-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extrema on boundaries
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3870,6 +3892,25 @@ points.</p>
 <p><img alt="img" src="../critical_contour.png" /></p>
 <p>Near the critical points, the locations of the level sets for a common small step size in the function value (.2 in the plot shown here) become rather “spread out”; i.e., not as densely packed as elsewhere. Why is this?</p>
 <p>The visual picture of spreading-out of level sets near a critical point is saying in numerical terms that at a place where the partial derivatives are all small, to attain a given numerical change in the function value towards a local extremum (such as increments of <span class="arithmatex">\(\pm 0.15\)</span>) seems to require moving a bigger distance than at a place where the partial derivatives are not all small. This formulation also makes sense as a possible property for functions <span class="arithmatex">\(f \colon \mathbb{R}^n \to \mathbb{R}\)</span> near a critical point for any <span class="arithmatex">\(n\)</span> (not just <span class="arithmatex">\(n = 2\)</span>).</p>
+<h2 id="fitting-curves-to-data">Fitting curves to data</h2>
+<p><strong>Example:</strong> Suppose we are given a collection of data points <span class="arithmatex">\((x_i, y_i)\)</span>, <span class="arithmatex">\(i = 1, \ldots, n\)</span>, not all on the same vertical line; i.e., not all the <span class="arithmatex">\(x_i\)</span> have the same value. If they all have the same value, a vertical line fits the data precisely! We want to find the value of <span class="arithmatex">\((m, b)\)</span> which minimizes</p>
+<div class="arithmatex">\[E(m, b) = \sum_{i=1}^{n} (y_i - m x_i - b)^2\]</div>
+<p>We begin by computing the two partial derivatives:</p>
+<div class="arithmatex">\[\frac{\partial E}{\partial b} = \sum_{i=1}^{n} (-2)(y_i - m x_i - b), \qquad \frac{\partial E}{\partial m} = \sum_{i=1}^{n} (-2)x_i(y_i - m x_i - b)\]</div>
+<p>The values of <span class="arithmatex">\(m\)</span> and <span class="arithmatex">\(b\)</span> we are looking for must satisfy <span class="arithmatex">\(E_m(m, b) = 0\)</span>, <span class="arithmatex">\(E_b(m, b) = 0\)</span>, so we need to solve the system of simultaneous linear equations</p>
+<div class="arithmatex">\[\sum_{i=1}^{n} (y_i - m x_i - b) = 0, \qquad \sum_{i=1}^{n} x_i(y_i - m x_i - b) = 0\]</div>
+<p>It looks like a mess, but remember that each of <span class="arithmatex">\(x_i\)</span> and <span class="arithmatex">\(y_i\)</span> are numbers that we know beforehand. So we can rewrite this in a more transparent way as</p>
+<div class="arithmatex">\[m \sum_{i=1}^{n} x_i + n b = \sum_{i=1}^{n} y_i, \qquad m \sum_{i=1}^{n} x_i^2 + b \sum_{i=1}^{n} x_i = \sum_{i=1}^{n} x_i y_i\]</div>
+<p>This is "2 equations in 2 unknowns" <span class="arithmatex">\(m\)</span> and <span class="arithmatex">\(b\)</span> (the coefficients involve expressions in the known data points <span class="arithmatex">\((x_i, y_i)\)</span> and <span class="arithmatex">\(n\)</span>, so they are known numbers).</p>
+<p><strong>Example:</strong> Here is a closely related example which builds on the idea that sometimes we want to find more complicated curves which best fit a certain set of data. So now let us find constants <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span>, <span class="arithmatex">\(C\)</span> for which the function <span class="arithmatex">\(y = A\sin(Bx + C)\)</span> best fits data points <span class="arithmatex">\((x_1, y_1), \ldots, (x_N, y_N)\)</span>. When the data represents some phenomenon which we expect to be periodic (e.g., temperatures in a given location over a several-year period), it is quite reasonable to use the periodic sine function as a model for the change over the seasons.</p>
+<p>We proceed just as before, by trying to find a minimum of the total squared error</p>
+<div class="arithmatex">\[E(A, B, C) = \sum_{i=1}^{N} \bigl( y_i - A\sin(Bx_i + C) \bigr)^2\]</div>
+<p>We compute the three partial derivatives <span class="arithmatex">\(\partial E/\partial A\)</span>, <span class="arithmatex">\(\partial E/\partial B\)</span> and <span class="arithmatex">\(\partial E/\partial C\)</span>, and this requires a bit more work than in the previous example. Please make sure you understand the following computation:</p>
+<div class="arithmatex">\[\frac{\partial E}{\partial A} = \sum_{i=1}^{N} (-2)\sin(Bx_i + C)\,\bigl(y_i - A\sin(Bx_i + C)\bigr)\]</div>
+<div class="arithmatex">\[\frac{\partial E}{\partial B} = \sum_{i=1}^{N} (-2)A x_i \cos(Bx_i + C)\,\bigl(y_i - A\sin(Bx_i + C)\bigr)\]</div>
+<div class="arithmatex">\[\frac{\partial E}{\partial C} = \sum_{i=1}^{N} (-2)A \cos(Bx_i + C)\,\bigl(y_i - A\sin(Bx_i + C)\bigr)\]</div>
+<p>This is an instructive example because this system of equations is pretty complicated and it is very unlikely that we can find the exact values of the solutions <span class="arithmatex">\((A, B, C)\)</span> in terms of the data points <span class="arithmatex">\((x_i, y_i)\)</span>. For such a system of equations it is reasonable to try to think about how to find a numerical approximation to critical points <span class="arithmatex">\((A, B, C)\)</span>.</p>
+<h2 id="extrema-on-boundaries">Extrema on boundaries</h2>
 
 
 

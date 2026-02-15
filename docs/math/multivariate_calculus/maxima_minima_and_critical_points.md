@@ -95,3 +95,40 @@ Near the critical points, the locations of the level sets for a common small ste
 
 The visual picture of spreading-out of level sets near a critical point is saying in numerical terms that at a place where the partial derivatives are all small, to attain a given numerical change in the function value towards a local extremum (such as increments of $\pm 0.15$) seems to require moving a bigger distance than at a place where the partial derivatives are not all small. This formulation also makes sense as a possible property for functions $f \colon \mathbb{R}^n \to \mathbb{R}$ near a critical point for any $n$ (not just $n = 2$).
 
+## Fitting curves to data
+
+**Example:** Suppose we are given a collection of data points $(x_i, y_i)$, $i = 1, \ldots, n$, not all on the same vertical line; i.e., not all the $x_i$ have the same value. If they all have the same value, a vertical line fits the data precisely! We want to find the value of $(m, b)$ which minimizes
+
+$$E(m, b) = \sum_{i=1}^{n} (y_i - m x_i - b)^2$$
+
+We begin by computing the two partial derivatives:
+
+$$\frac{\partial E}{\partial b} = \sum_{i=1}^{n} (-2)(y_i - m x_i - b), \qquad \frac{\partial E}{\partial m} = \sum_{i=1}^{n} (-2)x_i(y_i - m x_i - b)$$
+
+The values of $m$ and $b$ we are looking for must satisfy $E_m(m, b) = 0$, $E_b(m, b) = 0$, so we need to solve the system of simultaneous linear equations
+
+$$\sum_{i=1}^{n} (y_i - m x_i - b) = 0, \qquad \sum_{i=1}^{n} x_i(y_i - m x_i - b) = 0$$
+
+It looks like a mess, but remember that each of $x_i$ and $y_i$ are numbers that we know beforehand. So we can rewrite this in a more transparent way as
+
+$$m \sum_{i=1}^{n} x_i + n b = \sum_{i=1}^{n} y_i, \qquad m \sum_{i=1}^{n} x_i^2 + b \sum_{i=1}^{n} x_i = \sum_{i=1}^{n} x_i y_i$$
+
+This is "2 equations in 2 unknowns" $m$ and $b$ (the coefficients involve expressions in the known data points $(x_i, y_i)$ and $n$, so they are known numbers).
+
+**Example:** Here is a closely related example which builds on the idea that sometimes we want to find more complicated curves which best fit a certain set of data. So now let us find constants $A$, $B$, $C$ for which the function $y = A\sin(Bx + C)$ best fits data points $(x_1, y_1), \ldots, (x_N, y_N)$. When the data represents some phenomenon which we expect to be periodic (e.g., temperatures in a given location over a several-year period), it is quite reasonable to use the periodic sine function as a model for the change over the seasons.
+
+We proceed just as before, by trying to find a minimum of the total squared error
+
+$$E(A, B, C) = \sum_{i=1}^{N} \bigl( y_i - A\sin(Bx_i + C) \bigr)^2$$
+
+We compute the three partial derivatives $\partial E/\partial A$, $\partial E/\partial B$ and $\partial E/\partial C$, and this requires a bit more work than in the previous example. Please make sure you understand the following computation:
+
+$$\frac{\partial E}{\partial A} = \sum_{i=1}^{N} (-2)\sin(Bx_i + C)\,\bigl(y_i - A\sin(Bx_i + C)\bigr)$$
+
+$$\frac{\partial E}{\partial B} = \sum_{i=1}^{N} (-2)A x_i \cos(Bx_i + C)\,\bigl(y_i - A\sin(Bx_i + C)\bigr)$$
+
+$$\frac{\partial E}{\partial C} = \sum_{i=1}^{N} (-2)A \cos(Bx_i + C)\,\bigl(y_i - A\sin(Bx_i + C)\bigr)$$
+
+This is an instructive example because this system of equations is pretty complicated and it is very unlikely that we can find the exact values of the solutions $(A, B, C)$ in terms of the data points $(x_i, y_i)$. For such a system of equations it is reasonable to try to think about how to find a numerical approximation to critical points $(A, B, C)$.
+
+## Extrema on boundaries
