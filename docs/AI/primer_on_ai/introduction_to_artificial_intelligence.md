@@ -195,4 +195,20 @@ Below is a figure showing stages in an $A^*$ search for Bucharest. Nodes are lab
 
 ![img](astar.png)
 
-$A^*$ search is complete, assuming all action costs are > ǫ > 0, and the state space either has a solution or is finite (just like BFS and Dijkstra's). Whether $A^*$ is cost-optimal depends on certain properties of the heuristic.
+$A^*$ search is complete, assuming all action costs are > ǫ > 0, and the state space either has a solution or is 
+finite (just like BFS and Dijkstra's). Whether $A^*$ is cost-optimal depends on certain properties of the 
+heuristic.
+
+**Consistency (a “triangle inequality” for the heuristic)**
+
+A heuristic $h(n)$ is **consistent** if, for every node $n$ and every successor $n'$ of $n$ (reached by taking some action $a$ with cost $c(n, a, n')$), we have:
+
+$$h(n) \leq c(n, a, n') + h(n')$$
+
+In words, the estimate from $n$ to the goal is never more than the cost of going from $n$ to $n'$ plus the estimate from $n'$ to the goal. This is a form of the **triangle inequality**: one “side” (the estimate from $n$) cannot be longer than the sum of the other two “sides” (the step cost $c(n,a,n')$ and the estimate from $n'$). The straight-line distance $h_{SLD}$ to Bucharest is an example of a consistent heuristic.
+
+![img](triangle.png)
+
+With a consistent heuristic, the first time we reach a state we do so on an optimal path. So we never need to re-add that state to the frontier (min priority queue) or update its entry in *reached*.
+
+Note: *Reached* is the data structure— e.g. a set or table that records which states we have already seen and, in graph search, often the best path cost we have found so far for each. We check *reached* to avoid expanding the same state twice. With an inconsotintent heuristic we might have to sometimes re-add a state to the frontier (min priority queue) or update its entry in *reached*.
