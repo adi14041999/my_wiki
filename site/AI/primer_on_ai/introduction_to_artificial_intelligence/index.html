@@ -669,6 +669,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#review-of-uninformed-search-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review of Uninformed Search Strategies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#informed-heuristic-search-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Informed (Heuristic) Search Strategies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Informed (Heuristic) Search Strategies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#greedy-best-first-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Greedy best-first search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        \(A^*\) search
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3934,7 +3984,7 @@
 <li>Pour 1 → 2: pour <span class="arithmatex">\(\min(a, y - b)\)</span> liters → <span class="arithmatex">\((a - \min(a, y - b), b + \min(a, y - b))\)</span></li>
 <li>Pour 2 → 1: pour <span class="arithmatex">\(\min(b, x - a)\)</span> liters → <span class="arithmatex">\((a + \min(b, x - a), b - \min(b, x - a))\)</span></li>
 </ol>
-<p><strong>Algorithm:</strong> BFS from <span class="arithmatex">\((0, 0)\)</span>, applying all legal actions from each state and skipping states already visited. If any reached state is a goal, return true. If the frontier is exhausted, return false.</p>
+<p><strong>Algorithm:</strong> BFS from <span class="arithmatex">\((0, 0)\)</span>, applying all legal actions from each state and skipping states already visited. If any reached state is a goal, return true. If the queue is exhausted, return false.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>function CAN_MEASURE(x, y, z):
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    if z &gt; x + y or z &lt; 0: return false
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    if z == 0: return true
@@ -3990,6 +4040,37 @@
 <h2 id="dijkstras-perspective">Dijkstra's perspective</h2>
 <p>In many state space search problems, actions are not equal. Each action can have a cost, so the goal is not only to reach a target state but to reach it with minimum total cost. This is the setting for shortest-path methods such as Dijkstra's algorithm. A simple example is route planning on a weighted graph where edges represent travel times and Dijkstra returns the least-cost path from a start node to every reachable node.</p>
 <p>In Dijkstra's words, "Computer science is no more about computers than astronomy is about telescopes." The computer is a tool that executes algorithms. The core intellectual object is the algorithm, which predates modern computers by centuries.</p>
+<h2 id="review-of-uninformed-search-strategies">Review of Uninformed Search Strategies</h2>
+<p>An uninformed search algorithm is given no clue about how close a state is to the goal(s). </p>
+<p>When all actions have the same cost, an appropriate strategy is breadth-first search, in which the root node is expanded first, then all the successors of the root node are expanded next, then their successors, and so on. This is a systematic search strategy that is therefore complete provided the state space either has a solution or is finite. </p>
+<p>When actions have different costs, an obvious choice is Dijkstra’s algorithm by the theoretical computer science community, and uniform-cost search by the AI community. The idea is that while breadth-first search spreads out in waves of uniform depth— first depth 1, then depth 2, and so on— uniform-cost search spreads out in waves of uniform path-cost. Uniform-cost search is cost-optimal, because the first solution it finds will have a cost that is at least as low as the cost of any other node added to the queue of nodes to explore. Uniform cost search considers all paths systematically in order of increasing cost, never getting caught going down a single infinite path (assuming that all action costs are &gt; ǫ &gt; 0). It is therefore complete provided the state space either has a solution or is finite.</p>
+<p>Depth-first search always expands the deepest node first. Depth-first search is not cost-optimal; it returns the first solution it finds, even if it is not cheapest. For finite state spaces that are trees it is efficient and complete; for acyclic state spaces it may end up expanding the same state many times via different paths, but will (eventually) systematically explore the entire space. In cyclic state spaces it can get stuck in an infinite loop; therefore some implementations of depth-first search check each new node for cycles. Finally, in infinite state spaces, depthfirst search is not systematic: it can get stuck going down an infinite path, even if there are no cycles. Thus, depth-first search is incomplete. </p>
+<h2 id="informed-heuristic-search-strategies">Informed (Heuristic) Search Strategies</h2>
+<p>An informed search strategy uses domain-specific hints about the location of goals and can find solutions more efficiently than an uninformed strategy. The hints come in the form of a heuristic function, denoted <span class="arithmatex">\(h(n)\)</span>.</p>
+<p><span class="arithmatex">\(h(n)\)</span> = estimated cost of the cheapest path from the state at node <span class="arithmatex">\(n\)</span> to a goal state</p>
+<p>But how do we decide which node to expand next? A very general approach is called <strong>best-first search</strong>, in which we choose a node, <span class="arithmatex">\(n\)</span>, with minimum value of some evaluation function, <span class="arithmatex">\(f(n)\)</span>. On each iteration we choose a node with minimum <span class="arithmatex">\(f(n)\)</span> value. We will maintain a min priority queue which will always contain the node with the least <span class="arithmatex">\(f(n)\)</span>.</p>
+<p>Concretely, when we expand a node <span class="arithmatex">\(N\)</span>, we look at every node connected to <span class="arithmatex">\(N\)</span> (e.g. <span class="arithmatex">\(n_1, n_2, n_3\)</span>), compute <span class="arithmatex">\(f(n_1)\)</span>, <span class="arithmatex">\(f(n_2)\)</span>, <span class="arithmatex">\(f(n_3)\)</span>, and insert those nodes into the min priority queue (each with its <span class="arithmatex">\(f\)</span>-value). The queue then holds <em>all</em> nodes we have reached but not yet expanded. We always expand next the node at the front of the queue— the one with the smallest <span class="arithmatex">\(f(n)\)</span>. That node need not be a direct neighbor of the node we just expanded; it might be a node that was added in an earlier step. </p>
+<p><strong>Example:</strong> Consider a small tree: root <span class="arithmatex">\(A\)</span> with children <span class="arithmatex">\(B\)</span> and <span class="arithmatex">\(C\)</span>; <span class="arithmatex">\(C\)</span> has children <span class="arithmatex">\(D\)</span> and <span class="arithmatex">\(E\)</span>. We expand <span class="arithmatex">\(A\)</span>, compute <span class="arithmatex">\(f(B)\)</span> and <span class="arithmatex">\(f(C)\)</span>, and add <span class="arithmatex">\(B\)</span> and <span class="arithmatex">\(C\)</span> to the queue. Suppose <span class="arithmatex">\(f(B) = 3\)</span> and <span class="arithmatex">\(f(C) = 1\)</span>. The queue is <span class="arithmatex">\([C, B]\)</span>. We pop <span class="arithmatex">\(C\)</span> and expand it. When we expand <span class="arithmatex">\(C\)</span>, we add its children <span class="arithmatex">\(D\)</span> and <span class="arithmatex">\(E\)</span> to the queue with, say, <span class="arithmatex">\(f(D) = 5\)</span> and <span class="arithmatex">\(f(E) = 4\)</span>. The queue is now <span class="arithmatex">\([B, E, D]\)</span> (since <span class="arithmatex">\(f(B)=3\)</span> is less than <span class="arithmatex">\(f(E)=4\)</span> and <span class="arithmatex">\(f(D)=5\)</span>). So <span class="arithmatex">\(B\)</span> is still at the front even though we just expanded <span class="arithmatex">\(C\)</span> and pushed <span class="arithmatex">\(D\)</span> and <span class="arithmatex">\(E\)</span>. We expand <span class="arithmatex">\(B\)</span> next— a sibling of <span class="arithmatex">\(C\)</span>, not a child of the node we just expanded. The next node we expand is always the one with minimum <span class="arithmatex">\(f\)</span> in the queue, which may be an "older" node like <span class="arithmatex">\(B\)</span> rather than a newly added neighbor.</p>
+<p>Below is a figure of a simplified road map of part of Romania, with road distances in miles, which we'll use for our analysis of Informed Search Strategies.</p>
+<p><img alt="img" src="../romania.png" /></p>
+<p>Let's also assume that our destination is Bucharest. Below is the list of straight line distances to Bucharest.</p>
+<p><img alt="img" src="../hsld.png" /></p>
+<h3 id="greedy-best-first-search">Greedy best-first search</h3>
+<p>Greedy best-first search expands first the node with the lowest <span class="arithmatex">\(h(n)\)</span> value— the node that appears to be closest to the goal— on the grounds that this is likely to lead to a solution quickly.</p>
+<p>So the evaluation function <span class="arithmatex">\(f(n) = h(n)\)</span>.</p>
+<p>Let us see how this works for route-finding problems in Romania; we use the straightline distance heuristic, which we will call <span class="arithmatex">\(h_{SLD}\)</span>.</p>
+<p>Below is a figure of stages in our greedy best-first tree-like search for Arad to Bucharest with the straight-line
+distance heuristic <span class="arithmatex">\(h_{SLD}\)</span>. Nodes are labeled with their h-values.</p>
+<p><img alt="img" src="../befs.png" /></p>
+<p>The solution it found does not have optimal cost. The path via Sibiu and Fagaras to Bucharest is 32 miles longer than the path through Rimnicu Vilcea and Pitesti. This is why the algorithm is called “greedy”— on each iteration it tries to get as close to a goal as it can, but greediness can lead to worse results than being careful. Greedy best-first graph search is complete in finite state spaces, but not in infinite ones.</p>
+<h3 id="a-search"><span class="arithmatex">\(A^*\)</span> search</h3>
+<p>The flaw with Greedy best-first search is that it does not consider the cost to get to the next node.</p>
+<p>The most common informed search algorithm is <span class="arithmatex">\(A^*\)</span> search (pronounced “A-star search”), a best-first search that uses the evaluation function</p>
+<div class="arithmatex">\[f(n) = g(n) + h(n)\]</div>
+<p>where <span class="arithmatex">\(g(n)\)</span> is the path cost from the initial state to node <span class="arithmatex">\(n\)</span>, and <span class="arithmatex">\(h(n)\)</span> is the estimated cost of the shortest path from <span class="arithmatex">\(n\)</span> to a goal state.</p>
+<p>Below is a figure showing stages in an <span class="arithmatex">\(A^*\)</span> search for Bucharest. Nodes are labeled with <span class="arithmatex">\(f=g+h\)</span>. The <span class="arithmatex">\(h\)</span> values are the straight-line distances to Bucharest.</p>
+<p><img alt="img" src="../astar.png" /></p>
+<p><span class="arithmatex">\(A^*\)</span> search is complete, assuming all action costs are &gt; ǫ &gt; 0, and the state space either has a solution or is finite (just like BFS and Dijkstra's). Whether <span class="arithmatex">\(A^*\)</span> is cost-optimal depends on certain properties of the heuristic.</p>
 
 
 

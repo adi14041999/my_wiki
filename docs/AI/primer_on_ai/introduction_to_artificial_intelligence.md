@@ -65,7 +65,7 @@ A classic example is the Water and Jug Problem (featured in Die Hard 3), which c
 5. Pour 1 → 2: pour $\min(a, y - b)$ liters → $(a - \min(a, y - b), b + \min(a, y - b))$
 6. Pour 2 → 1: pour $\min(b, x - a)$ liters → $(a + \min(b, x - a), b - \min(b, x - a))$
 
-**Algorithm:** BFS from $(0, 0)$, applying all legal actions from each state and skipping states already visited. If any reached state is a goal, return true. If the frontier is exhausted, return false.
+**Algorithm:** BFS from $(0, 0)$, applying all legal actions from each state and skipping states already visited. If any reached state is a goal, return true. If the queue is exhausted, return false.
 
 ```
 function CAN_MEASURE(x, y, z):
@@ -135,3 +135,64 @@ Neural networks often err (e.g. hallucination, inconsistent logic) doing System 
 In many state space search problems, actions are not equal. Each action can have a cost, so the goal is not only to reach a target state but to reach it with minimum total cost. This is the setting for shortest-path methods such as Dijkstra's algorithm. A simple example is route planning on a weighted graph where edges represent travel times and Dijkstra returns the least-cost path from a start node to every reachable node.
 
 In Dijkstra's words, "Computer science is no more about computers than astronomy is about telescopes." The computer is a tool that executes algorithms. The core intellectual object is the algorithm, which predates modern computers by centuries.
+
+## Review of Uninformed Search Strategies
+
+An uninformed search algorithm is given no clue about how close a state is to the goal(s). 
+
+When all actions have the same cost, an appropriate strategy is breadth-first search, in which the root node is expanded first, then all the successors of the root node are expanded next, then their successors, and so on. This is a systematic search strategy that is therefore complete provided the state space either has a solution or is finite. 
+
+When actions have different costs, an obvious choice is Dijkstra’s algorithm by the theoretical computer science community, and uniform-cost search by the AI community. The idea is that while breadth-first search spreads out in waves of uniform depth— first depth 1, then depth 2, and so on— uniform-cost search spreads out in waves of uniform path-cost. Uniform-cost search is cost-optimal, because the first solution it finds will have a cost that is at least as low as the cost of any other node added to the queue of nodes to explore. Uniform cost search considers all paths systematically in order of increasing cost, never getting caught going down a single infinite path (assuming that all action costs are > ǫ > 0). It is therefore complete provided the state space either has a solution or is finite.
+
+Depth-first search always expands the deepest node first. Depth-first search is not cost-optimal; it returns the first solution it finds, even if it is not cheapest. For finite state spaces that are trees it is efficient and complete; for acyclic state spaces it may end up expanding the same state many times via different paths, but will (eventually) systematically explore the entire space. In cyclic state spaces it can get stuck in an infinite loop; therefore some implementations of depth-first search check each new node for cycles. Finally, in infinite state spaces, depthfirst search is not systematic: it can get stuck going down an infinite path, even if there are no cycles. Thus, depth-first search is incomplete. 
+
+## Informed (Heuristic) Search Strategies
+
+An informed search strategy uses domain-specific hints about the location of goals and can find solutions more efficiently than an uninformed strategy. The hints come in the form of a heuristic function, denoted $h(n)$.
+
+$h(n)$ = estimated cost of the cheapest path from the state at node $n$ to a goal state
+
+But how do we decide which node to expand next? A very general approach is called **best-first search**, in which we choose a node, $n$, with minimum value of some evaluation function, $f(n)$. On each iteration we choose a node with minimum $f(n)$ value. We will maintain a min priority queue which will always contain the node with the least $f(n)$.
+
+Concretely, when we expand a node $N$, we look at every node connected to $N$ (e.g. $n_1, n_2, n_3$), compute $f(n_1)$, $f(n_2)$, $f(n_3)$, and insert those nodes into the min priority queue (each with its $f$-value). The queue then holds *all* nodes we have reached but not yet expanded. We always expand next the node at the front of the queue— the one with the smallest $f(n)$. That node need not be a direct neighbor of the node we just expanded; it might be a node that was added in an earlier step. 
+
+**Example:** Consider a small tree: root $A$ with children $B$ and $C$; $C$ has children $D$ and $E$. We expand $A$, compute $f(B)$ and $f(C)$, and add $B$ and $C$ to the queue. Suppose $f(B) = 3$ and $f(C) = 1$. The queue is $[C, B]$. We pop $C$ and expand it. When we expand $C$, we add its children $D$ and $E$ to the queue with, say, $f(D) = 5$ and $f(E) = 4$. The queue is now $[B, E, D]$ (since $f(B)=3$ is less than $f(E)=4$ and $f(D)=5$). So $B$ is still at the front even though we just expanded $C$ and pushed $D$ and $E$. We expand $B$ next— a sibling of $C$, not a child of the node we just expanded. The next node we expand is always the one with minimum $f$ in the queue, which may be an "older" node like $B$ rather than a newly added neighbor.
+
+Below is a figure of a simplified road map of part of Romania, with road distances in miles, which we'll use for our analysis of Informed Search Strategies.
+
+![img](romania.png)
+
+Let's also assume that our destination is Bucharest. Below is the list of straight line distances to Bucharest.
+
+![img](hsld.png)
+
+### Greedy best-first search
+
+Greedy best-first search expands first the node with the lowest $h(n)$ value— the node that appears to be closest to the goal— on the grounds that this is likely to lead to a solution quickly.
+
+So the evaluation function $f(n) = h(n)$.
+
+Let us see how this works for route-finding problems in Romania; we use the straightline distance heuristic, which we will call $h_{SLD}$.
+
+Below is a figure of stages in our greedy best-first tree-like search for Arad to Bucharest with the straight-line
+distance heuristic $h_{SLD}$. Nodes are labeled with their h-values.
+
+![img](befs.png)
+
+The solution it found does not have optimal cost. The path via Sibiu and Fagaras to Bucharest is 32 miles longer than the path through Rimnicu Vilcea and Pitesti. This is why the algorithm is called “greedy”— on each iteration it tries to get as close to a goal as it can, but greediness can lead to worse results than being careful. Greedy best-first graph search is complete in finite state spaces, but not in infinite ones.
+
+### $A^*$ search
+
+The flaw with Greedy best-first search is that it does not consider the cost to get to the next node.
+
+The most common informed search algorithm is $A^*$ search (pronounced “A-star search”), a best-first search that uses the evaluation function
+
+$$f(n) = g(n) + h(n)$$
+
+where $g(n)$ is the path cost from the initial state to node $n$, and $h(n)$ is the estimated cost of the shortest path from $n$ to a goal state.
+
+Below is a figure showing stages in an $A^*$ search for Bucharest. Nodes are labeled with $f=g+h$. The $h$ values are the straight-line distances to Bucharest.
+
+![img](astar.png)
+
+$A^*$ search is complete, assuming all action costs are > ǫ > 0, and the state space either has a solution or is finite (just like BFS and Dijkstra's). Whether $A^*$ is cost-optimal depends on certain properties of the heuristic.
