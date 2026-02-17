@@ -4073,13 +4073,6 @@ distance heuristic <span class="arithmatex">\(h_{SLD}\)</span>. Nodes are labele
 <p><span class="arithmatex">\(A^*\)</span> search is complete, assuming all action costs are &gt; ǫ &gt; 0, and the state space either has a solution or is 
 finite (just like BFS and Dijkstra's). Whether <span class="arithmatex">\(A^*\)</span> is cost-optimal depends on certain properties of the 
 heuristic.</p>
-<p><strong>Consistency (a “triangle inequality” for the heuristic)</strong></p>
-<p>A heuristic <span class="arithmatex">\(h(n)\)</span> is <strong>consistent</strong> if, for every node <span class="arithmatex">\(n\)</span> and every successor <span class="arithmatex">\(n'\)</span> of <span class="arithmatex">\(n\)</span> (reached by taking some action <span class="arithmatex">\(a\)</span> with cost <span class="arithmatex">\(c(n, a, n')\)</span>), we have:</p>
-<div class="arithmatex">\[h(n) \leq c(n, a, n') + h(n')\]</div>
-<p>In words, the estimate from <span class="arithmatex">\(n\)</span> to the goal is never more than the cost of going from <span class="arithmatex">\(n\)</span> to <span class="arithmatex">\(n'\)</span> plus the estimate from <span class="arithmatex">\(n'\)</span> to the goal. This is a form of the <strong>triangle inequality</strong>: one “side” (the estimate from <span class="arithmatex">\(n\)</span>) cannot be longer than the sum of the other two “sides” (the step cost <span class="arithmatex">\(c(n,a,n')\)</span> and the estimate from <span class="arithmatex">\(n'\)</span>). The straight-line distance <span class="arithmatex">\(h_{SLD}\)</span> to Bucharest is an example of a consistent heuristic.</p>
-<p><img alt="img" src="../triangle.png" /></p>
-<p>With a consistent heuristic, the first time we reach a state we do so on an optimal path. So we never need to re-add that state to the frontier (min priority queue) or update its entry in <em>reached</em>.</p>
-<p>Note: <em>Reached</em> is the data structure— e.g. a set or table that records which states we have already seen and, in graph search, often the best path cost we have found so far for each. We check <em>reached</em> to avoid expanding the same state twice. With an inconsotintent heuristic we might have to sometimes re-add a state to the frontier (min priority queue) or update its entry in <em>reached</em>.</p>
 
 
 
