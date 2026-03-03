@@ -726,6 +726,39 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#consistency-implies-admissibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consistency implies admissibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#some-practical-examples-where-a-is-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Some practical examples where \(A^*\) is used
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4085,6 +4118,7 @@ distance heuristic <span class="arithmatex">\(h_{SLD}\)</span>. Nodes are labele
 <p>The most common informed search algorithm is <span class="arithmatex">\(A^*\)</span> search (pronounced “A-star search”), a best-first search that uses the evaluation function</p>
 <div class="arithmatex">\[f(n) = g(n) + h(n)\]</div>
 <p>where <span class="arithmatex">\(g(n)\)</span> is the path cost from the initial state to node <span class="arithmatex">\(n\)</span>, and <span class="arithmatex">\(h(n)\)</span> is the estimated cost of the shortest path from <span class="arithmatex">\(n\)</span> to a goal state.</p>
+<p><strong>When <span class="arithmatex">\(h(v) = 0\)</span> for all <span class="arithmatex">\(v\)</span>: <span class="arithmatex">\(A^*\)</span> becomes Dijkstra’s algorithm.</strong> If we completely ignore the heuristic by setting <span class="arithmatex">\(h(v) = 0\)</span> for every vertex <span class="arithmatex">\(v\)</span>, then <span class="arithmatex">\(f(n) = g(n) + 0 = g(n)\)</span>. So we always expand the node with smallest <span class="arithmatex">\(g\)</span>-value (smallest cost from the start so far). That is exactly <strong>Dijkstra’s algorithm</strong> (or <strong>uniform-cost search</strong>). In that case, <span class="arithmatex">\(A^*\)</span> uses no information about the goal—it is <strong>uninformed</strong> (blind) search. We explore in order of increasing path cost from the source, with no bias toward the goal. So <span class="arithmatex">\(A^*\)</span> generalizes Dijkstra. With <span class="arithmatex">\(h = 0\)</span> we get Dijkstra. With a good consistent heuristic we get goal-directed, often much faster, search while still guaranteeing optimality.</p>
 <p>Below is a figure showing stages in an <span class="arithmatex">\(A^*\)</span> search for Bucharest. Nodes are labeled with <span class="arithmatex">\(f=g+h\)</span>. The <span class="arithmatex">\(h\)</span> values are the straight-line distances to Bucharest.</p>
 <p><img alt="img" src="../astar.png" /></p>
 <p><span class="arithmatex">\(A^*\)</span> search is complete, assuming all action costs are &gt; ǫ &gt; 0, and the state space either has a solution or is 
@@ -4093,45 +4127,65 @@ heuristic.</p>
 <h4 id="how-do-we-know-a-search-is-cost-optimal">How do we know <span class="arithmatex">\(A^*\)</span> search is cost-optimal?</h4>
 <p>We prove that whenever <span class="arithmatex">\(A^*\)</span> <strong>expands</strong> a vertex <span class="arithmatex">\(v\)</span> (i.e. pulls it out of the min priority queue and expands it), the cost <span class="arithmatex">\(g(v)\)</span> of the path we have from the source <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span> is the <strong>optimal</strong> cost from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span>. The goal <span class="arithmatex">\(G\)</span> is just the special case where <span class="arithmatex">\(v\)</span> is a goal; so when we expand <span class="arithmatex">\(G\)</span>, <span class="arithmatex">\(g(G)\)</span> is the optimal cost to the goal. We use mathematical induction.</p>
 <p><strong>Base case:</strong> The first vertex expanded is the source <span class="arithmatex">\(S\)</span>. We have <span class="arithmatex">\(g(S) = 0\)</span>, and the optimal cost from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(S\)</span> is <span class="arithmatex">\(0\)</span>, so the claim holds.</p>
-<p><strong>Inductive step:</strong> Assume that for every vertex we have expanded so far, at the time we expanded it we had the optimal cost to that vertex. 
-Now, <em>to expand</em> a vertex means:</p>
+<p><strong>Inductive step:</strong> Assume that for every vertex we have expanded so far, at the time we expanded it we had the optimal cost to that vertex.</p>
+<p>Now, <em>to expand</em> a vertex means:</p>
 <p>(1) <strong>pull it out</strong> of the min priority queue (it had the smallest <span class="arithmatex">\(f\)</span>-value), and </p>
 <p>(2) <strong>expand from it</strong>— i.e. look at all its successors, compute their <span class="arithmatex">\(g\)</span> and <span class="arithmatex">\(f\)</span> values, and add them to the queue. </p>
 <p>So “<span class="arithmatex">\(v\)</span> is the next vertex we pull out after we pull out <span class="arithmatex">\(u\)</span> and expand from <span class="arithmatex">\(u\)</span>” means: we expanded <span class="arithmatex">\(u\)</span>, added its successors to the queue, and then the node with minimum <span class="arithmatex">\(f\)</span> in the queue is <span class="arithmatex">\(v\)</span> (which might be one of those successors or some other node that was already in the queue). </p>
-<p>We must show that when we expand <span class="arithmatex">\(v\)</span>, <span class="arithmatex">\(g(v)\)</span> is the optimal cost from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span>.</p>
-<p>After some number of steps we have a <strong>closed set</strong>: vertices that have already been expanded (i.e. captured— pulled out of the priority queue and expanded). </p>
-<p>Suppose that <span class="arithmatex">\(u\)</span> was the last vertex captured (the last one we expanded), and <span class="arithmatex">\(v\)</span> is the next vertex we expand. The path we have to <span class="arithmatex">\(v\)</span> might go through <span class="arithmatex">\(u\)</span> (so <span class="arithmatex">\(g(v) = g(u) + w(u,v)\)</span> where <span class="arithmatex">\(w(u,v)\)</span> is the edge weight). </p>
-<p>We need to show <span class="arithmatex">\(g(v)\)</span> is optimal. <span class="arithmatex">\(v\)</span> is chosen because it has the <strong>minimum <span class="arithmatex">\(f\)</span>-value</strong> among all vertices currently in the priority queue.</p>
-<p><strong>When could <span class="arithmatex">\(g(v)\)</span> fail to be optimal?</strong> </p>
-<p>Only if there is another path from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span> with strictly lower cost. So suppose there is an optimal path from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span> that goes through some vertex <span class="arithmatex">\(y\)</span>, and suppose <span class="arithmatex">\(y\)</span> is still in the priority queue (not yet expanded). We are about to expand <span class="arithmatex">\(v\)</span>, so <span class="arithmatex">\(v\)</span> has minimum <span class="arithmatex">\(f\)</span> in the queue. Therefore <span class="arithmatex">\(f(y) \geq f(v)\)</span>.</p>
-<p>If <span class="arithmatex">\(A^*\)</span> is to be cost-optimal, then any vertex <span class="arithmatex">\(y\)</span> on an optimal path to <span class="arithmatex">\(v\)</span> ought to be expanded before <span class="arithmatex">\(v\)</span>— so we need <span class="arithmatex">\(f(y) \leq f(v)\)</span>. That would force <span class="arithmatex">\(y\)</span> to be pulled out before <span class="arithmatex">\(v\)</span>. So we want to prove that for any such <span class="arithmatex">\(y\)</span> on an optimal path from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span>, we have <span class="arithmatex">\(f(y) \leq f(v)\)</span>.</p>
-<p><strong>Proving <span class="arithmatex">\(f(y) \leq f(v)\)</span></strong> </p>
-<p>We want <span class="arithmatex">\(g(y) + h(y) \leq g(v) + h(v)\)</span>. Let <span class="arithmatex">\(c\)</span> be the cost of the edge from <span class="arithmatex">\(y\)</span> to <span class="arithmatex">\(v\)</span> along the optimal path (so the segment <span class="arithmatex">\(y \to v\)</span> on that path has cost <span class="arithmatex">\(c\)</span>). </p>
-<p>Adding <span class="arithmatex">\(c\)</span> to both sides, it is enough to show <span class="arithmatex">\(g(y) + c + h(y) \leq g(v) + h(v) + c\)</span>. </p>
-<p>On the optimal path from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span> via <span class="arithmatex">\(y\)</span>, the cost from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(y\)</span> is <span class="arithmatex">\(g(y)\)</span> and the cost from <span class="arithmatex">\(y\)</span> to <span class="arithmatex">\(v\)</span> along that path is <span class="arithmatex">\(c\)</span>, so the total cost from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span> is <span class="arithmatex">\(g(y) + c\)</span>. </p>
-<p>But that equals <span class="arithmatex">\(g(v)\)</span>. </p>
-<p>So <strong><span class="arithmatex">\(g(y) + c = g(v)\)</span></strong> means: the cost of the optimal path from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span> that goes through <span class="arithmatex">\(y\)</span> is exactly <span class="arithmatex">\(g(y)\)</span> (optimal to <span class="arithmatex">\(y\)</span>) plus the edge cost <span class="arithmatex">\(c\)</span> from <span class="arithmatex">\(y\)</span> to <span class="arithmatex">\(v\)</span>, and that sum equals the optimal cost <span class="arithmatex">\(g(v)\)</span> to <span class="arithmatex">\(v\)</span>. </p>
-<p>Substituting <span class="arithmatex">\(g(v)\)</span> for <span class="arithmatex">\(g(y)+c\)</span>, the inequality becomes <span class="arithmatex">\(g(v) + h(y) \leq g(v) + h(v) + c\)</span>, i.e. <strong><span class="arithmatex">\(h(y) \leq h(v) + c\)</span></strong>.</p>
-<p>So if we can prove <span class="arithmatex">\(h(y) \leq h(v) + c\)</span>, we get <span class="arithmatex">\(f(y) \leq f(v)\)</span>. </p>
-<p>That inequality is exactly <strong>consistency</strong>: the heuristic at <span class="arithmatex">\(y\)</span> is at most the cost of the step from <span class="arithmatex">\(y\)</span> to <span class="arithmatex">\(v\)</span> plus the heuristic at <span class="arithmatex">\(v\)</span>. In Euclidean geometry this is the triangle inequality (the straight-line distance from <span class="arithmatex">\(y\)</span> to the goal cannot exceed the distance from <span class="arithmatex">\(y\)</span> to <span class="arithmatex">\(v\)</span> plus the distance from <span class="arithmatex">\(v\)</span> to the goal). So for any <strong>consistent</strong> heuristic, <span class="arithmatex">\(h(y) \leq h(v) + c\)</span> holds, hence <span class="arithmatex">\(f(y) \leq f(v)\)</span>.</p>
-<p><img alt="img" src="../ineq.png" /></p>
-<p>We assumed <span class="arithmatex">\(y\)</span> was still in the queue and <span class="arithmatex">\(v\)</span> is expanded next, so <span class="arithmatex">\(f(y) \geq f(v)\)</span>. We just proved <span class="arithmatex">\(f(y) \leq f(v)\)</span>. So <span class="arithmatex">\(f(y) = f(v)\)</span> at best—but then <span class="arithmatex">\(y\)</span> would be expanded before or together with <span class="arithmatex">\(v\)</span> (or we’d have expanded <span class="arithmatex">\(y\)</span> already). </p>
-<p>The real contradiction is: if <span class="arithmatex">\(y\)</span> lies on an optimal path to <span class="arithmatex">\(v\)</span> and <span class="arithmatex">\(h\)</span> is consistent, then <span class="arithmatex">\(f(y) \leq f(v)\)</span>, so we would expand <span class="arithmatex">\(y\)</span> before expanding <span class="arithmatex">\(v\)</span>. So there cannot exist an optimal path from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span> that goes through a vertex <span class="arithmatex">\(y\)</span> that is still in the queue when we expand <span class="arithmatex">\(v\)</span>. Every vertex on an optimal path to <span class="arithmatex">\(v\)</span> must already have been expanded. So the path we have to <span class="arithmatex">\(v\)</span> (the one we got when we added <span class="arithmatex">\(v\)</span> to the queue from some already-expanded vertex) is optimal: <span class="arithmatex">\(g(v)\)</span> is the optimal cost from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span>.</p>
+<p>We must show that when we expand <span class="arithmatex">\(v\)</span>, <span class="arithmatex">\(g(v)\)</span> is the optimal cost from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span>. Denote by <span class="arithmatex">\(g^*(v)\)</span> the optimal cost from the source <span class="arithmatex">\(S\)</span> to any vertex <span class="arithmatex">\(v\)</span>. Then we need to show that for any vertex <span class="arithmatex">\(v\)</span> that we expand, <span class="arithmatex">\(g(v) = g^*(v)\)</span>.</p>
+<p>After some number of steps we have a closed set: vertices that have already been expanded (i.e. captured— pulled out of the priority queue and expanded).</p>
+<p>Assume that for every vertex we have expanded so far, at the time we expanded it we had the optimal cost to that vertex. In other words, for any vertex <span class="arithmatex">\(v'\)</span> that has been expanded so far, <span class="arithmatex">\(g(v') = g^*(v')\)</span>.</p>
+<p>Suppose that <span class="arithmatex">\(v\)</span> is the next vertex to be pulled out from the priority queue. Then <span class="arithmatex">\(v\)</span> was added to the queue at some earlier step. <span class="arithmatex">\(v\)</span> is chosen because it has the minimum <span class="arithmatex">\(f\)</span>-value among all vertices currently in the priority queue. <span class="arithmatex">\(v\)</span> was added to the queue at some earlier step when we expanded some vertex <span class="arithmatex">\(u\)</span> of which <span class="arithmatex">\(v\)</span> is an outgoing neighbor. In other words, <span class="arithmatex">\(u\)</span> is the <strong>parent</strong> of <span class="arithmatex">\(v\)</span> in the <span class="arithmatex">\(A^*\)</span> search tree: we had <span class="arithmatex">\(u\)</span> in the queue, we expanded <span class="arithmatex">\(u\)</span> (captured <span class="arithmatex">\(u\)</span>), and when we did so we added <span class="arithmatex">\(v\)</span> to the queue with <span class="arithmatex">\(g(v) = g(u) + w(u,v)\)</span>.</p>
+<p>This does <em>not</em> mean that <span class="arithmatex">\(v\)</span> is captured immediately after <span class="arithmatex">\(u\)</span>. We always expand the node with <em>minimum <span class="arithmatex">\(f\)</span>-value</em> in the queue. So after we expand <span class="arithmatex">\(u\)</span>, the next node we pull out is whichever node in the queue has the smallest <span class="arithmatex">\(f\)</span>—and that might be <span class="arithmatex">\(v\)</span>, or it might be some other node (e.g. another successor of <span class="arithmatex">\(u\)</span>, or a node that was added to the queue in an even earlier step). So <span class="arithmatex">\(u\)</span> is the parent of <span class="arithmatex">\(v\)</span> in the sense that “we added <span class="arithmatex">\(v\)</span> when we expanded <span class="arithmatex">\(u\)</span>,” but there may be zero or more other vertices captured <em>between</em> <span class="arithmatex">\(u\)</span> and <span class="arithmatex">\(v\)</span>.</p>
+<p><span class="arithmatex">\(g(v) = g(u) + w(u,v)\)</span>. Equivalently, <span class="arithmatex">\(g(v) = g^*(u) + w(u,v)\)</span>, because <span class="arithmatex">\(u\)</span> was already expanded when we added <span class="arithmatex">\(v\)</span>, and by the inductive hypothesis <span class="arithmatex">\(g(u) = g^*(u)\)</span>.</p>
+<p><span class="arithmatex">\(v\)</span> is chosen because it has the minimum <span class="arithmatex">\(f\)</span>-value among all vertices currently in the priority queue. </p>
+<p>We need to thus prove in the inductive step that <span class="arithmatex">\(g(v) = g^*(v)\)</span>.</p>
+<p>Let's try to do this by <strong>proof by contradiction</strong>.</p>
+<p><strong>Case 1:</strong> </p>
+<p>Suppose there is a different optimal path from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span> that goes through some vertex <span class="arithmatex">\(y\)</span>, and suppose <span class="arithmatex">\(y\)</span> is still in the priority queue (not yet expanded). Suppose that the parent of <span class="arithmatex">\(y\)</span> in the search tree is <span class="arithmatex">\(x\)</span>. Suppose also that <span class="arithmatex">\(x\)</span> is captured. Thus, <span class="arithmatex">\(g(x) = g^*(x)\)</span> (by the inductive hypothesis, since <span class="arithmatex">\(x\)</span> has been expanded). There may be none or more vertices along the path from <span class="arithmatex">\(y\)</span> to <span class="arithmatex">\(v\)</span>. So the optimal path from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span> has the form <span class="arithmatex">\(S \to \cdots \to x \to y \to \cdots \to v\)</span>. Since this is an optimal path, its length is <span class="arithmatex">\(g^*(v)\)</span>.</p>
+<p>When <span class="arithmatex">\(x\)</span> was captured, <span class="arithmatex">\(y\)</span> was added to the priority queue with <span class="arithmatex">\(g(y) = g(x) + w(x,y)\)</span>, so <span class="arithmatex">\(f(y) = g(y) + h(y) = g(x) + w(x,y) + h(y)\)</span>.</p>
+<p>We are about to expand <span class="arithmatex">\(v\)</span> next, so <span class="arithmatex">\(v\)</span> has minimum <span class="arithmatex">\(f\)</span> in the queue. Therefore <span class="arithmatex">\(f(y) \geq f(v)\)</span>. Thus, <span class="arithmatex">\(g(y) + h(y) \geq g(v) + h(v)\)</span>. Since <span class="arithmatex">\(g(y) = g(x) + w(x,y)\)</span>, we have <span class="arithmatex">\(g(x) + w(x,y) + h(y) \geq g(v) + h(v)\)</span>.</p>
+<p>Let <span class="arithmatex">\(c\)</span> be the cost of the path from <span class="arithmatex">\(y\)</span> to <span class="arithmatex">\(v\)</span> along the optimal path (through zero or more vertices). Adding <span class="arithmatex">\(c\)</span> to both sides,</p>
+<div class="arithmatex">\[g(x) + w(x,y) + h(y) + c \geq g(v) + h(v) + c\]</div>
+<p>or</p>
+<div class="arithmatex">\[g(x) + w(x,y) + c + h(y) \geq g(v) + h(v) + c\]</div>
+<p>But <span class="arithmatex">\(g(x) + w(x,y) + c = g^*(v)\)</span>, since we assumed this is the optimal path from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span>. Thus,</p>
+<div class="arithmatex">\[g^*(v) + h(y) \geq g(v) + h(v) + c\]</div>
+<p>In the <span class="arithmatex">\(A^*\)</span> algorithm, we require the heuristic to satisfy <span class="arithmatex">\(h(y) \leq h(v) + c\)</span>. </p>
+<p>If this property holds, then <span class="arithmatex">\(g^*(v) + h(y) \leq g^*(v) + h(v) + c\)</span>. </p>
+<p>Together with <span class="arithmatex">\(g^*(v) + h(y) \geq g(v) + h(v) + c\)</span>, we obtain <span class="arithmatex">\(g(v) + h(v) + c \leq g^*(v) + h(v) + c\)</span>, so <span class="arithmatex">\(g^*(v) \geq g(v)\)</span>. </p>
+<p>But <span class="arithmatex">\(g^*(v)\)</span> is the optimal cost from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span>, so any path has cost at least <span class="arithmatex">\(g^*(v)\)</span>; in particular <span class="arithmatex">\(g(v) \geq g^*(v)\)</span>. </p>
+<p>Thus we have both <span class="arithmatex">\(g^*(v) \geq g(v)\)</span> and <span class="arithmatex">\(g(v) \geq g^*(v)\)</span>, so <span class="arithmatex">\(g(v) = g^*(v)\)</span>. This contradicts our assumption that there was an optimal path from <span class="arithmatex">\(S\)</span> to <span class="arithmatex">\(v\)</span> through a vertex <span class="arithmatex">\(y\)</span> still in the queue. So no such <span class="arithmatex">\(y\)</span> exists: when we expand <span class="arithmatex">\(v\)</span>, we have <span class="arithmatex">\(g(v) = g^*(v)\)</span>. </p>
+<p>That inequality is exactly <strong>consistency</strong>: the heuristic at <span class="arithmatex">\(y\)</span> is at most the cost of the step from <span class="arithmatex">\(y\)</span> to <span class="arithmatex">\(v\)</span> plus the heuristic at <span class="arithmatex">\(v\)</span>. In Euclidean geometry this is the triangle inequality (the straight-line distance from <span class="arithmatex">\(y\)</span> to the goal cannot exceed the distance from <span class="arithmatex">\(y\)</span> to <span class="arithmatex">\(v\)</span> plus the distance from <span class="arithmatex">\(v\)</span> to the goal). So for any consistent heuristic, <span class="arithmatex">\(h(y) \leq h(v) + c\)</span> holds.</p>
+<p><img alt="img" src="../triangle.png" /></p>
+<div class="admonition important">
+<p class="admonition-title">Consistency is required for optimality</p>
+<p>The heuristic <span class="arithmatex">\(h\)</span> must be <strong>consistent</strong> to formally guarantee that <span class="arithmatex">\(A^*\)</span> returns an optimal path. </p>
+</div>
+<p><strong>Case 2:</strong> The optimal path directly jumps to <span class="arithmatex">\(v\)</span> from another captured vertex <span class="arithmatex">\(x\)</span>.</p>
+<p>In this case, there must be a second copy of <span class="arithmatex">\(v\)</span> in the priority queue with a bigger <span class="arithmatex">\(f\)</span>-value (we added all successors of <span class="arithmatex">\(x\)</span> when we expanded <span class="arithmatex">\(x\)</span>). We are expanding the copy of <span class="arithmatex">\(v\)</span> that came from <span class="arithmatex">\(u\)</span> (with minimum <span class="arithmatex">\(f\)</span>), so <span class="arithmatex">\(f(v)\)</span> through <span class="arithmatex">\(x\)</span> <span class="arithmatex">\(\geq\)</span> <span class="arithmatex">\(f(v)\)</span> through <span class="arithmatex">\(u\)</span>:</p>
+<div class="arithmatex">\[g(x) + w(x,v) + h(v) \geq g(u) + w(u,v) + h(v)\]</div>
+<p>or</p>
+<div class="arithmatex">\[g(x) + w(x,v) \geq g(u) + w(u,v)\]</div>
+<p>Since we are assuming the path through <span class="arithmatex">\(x\)</span> is optimal, <span class="arithmatex">\(g(x) + w(x,v) = g^*(v)\)</span>. So <span class="arithmatex">\(g^*(v) \geq g(u) + w(u,v) = g(v)\)</span> (the cost of the path through <span class="arithmatex">\(u\)</span>). </p>
+<p>Thus <span class="arithmatex">\(g^*(v) \geq g(v)\)</span>. But <span class="arithmatex">\(g^*(v)\)</span> is the optimal cost to <span class="arithmatex">\(v\)</span>, so any path has cost at least <span class="arithmatex">\(g^*(v)\)</span>; in particular <span class="arithmatex">\(g(v) \geq g^*(v)\)</span>. </p>
+<p>So we have both <span class="arithmatex">\(g^*(v) \geq g(v)\)</span> and <span class="arithmatex">\(g(v) \geq g^*(v)\)</span>, hence <span class="arithmatex">\(g(v) = g^*(v)\)</span>. </p>
+<p>That contradicts the assumption that the optimal path to <span class="arithmatex">\(v\)</span> goes through <span class="arithmatex">\(x\)</span> while we expanded <span class="arithmatex">\(v\)</span> via <span class="arithmatex">\(u\)</span>— it shows the path through <span class="arithmatex">\(u\)</span> is already optimal, so when we expand <span class="arithmatex">\(v\)</span> we have <span class="arithmatex">\(g(v) = g^*(v)\)</span>.</p>
+<p>In both cases, we got a contradiction, which means the assumption that there exists a different optimal path to <span class="arithmatex">\(v\)</span> without going through <span class="arithmatex">\(u\)</span> is categorically <strong>false</strong>.</p>
 <p>By induction, whenever <span class="arithmatex">\(A^*\)</span> expands a vertex <span class="arithmatex">\(v\)</span>, <span class="arithmatex">\(g(v)\)</span> is optimal. In particular, when we expand a goal <span class="arithmatex">\(G\)</span>, we have found an optimal path to <span class="arithmatex">\(G\)</span>.</p>
-<p><strong>Consistency and the inequality <span class="arithmatex">\(h(y) \leq h(v) + c\)</span></strong> </p>
-<p>The condition we needed— <span class="arithmatex">\(h(y) \leq h(v) + c\)</span> for every edge <span class="arithmatex">\((y,v)\)</span> with cost <span class="arithmatex">\(c\)</span>— is exactly the <strong>consistency</strong> (triangle inequality) of the heuristic. So <span class="arithmatex">\(A^*\)</span> is cost-optimal for any heuristic <span class="arithmatex">\(h\)</span> that is consistent (e.g. straight-line distance in Euclidean space).</p>
-<p><strong><span class="arithmatex">\(f\)</span>-values increase along an optimal path</strong> </p>
-<p>Suppose the optimal path from source <span class="arithmatex">\(S\)</span> to goal <span class="arithmatex">\(G\)</span> is <span class="arithmatex">\(s \to u \to v \to v_1 \to v_2 \to \cdots \to G\)</span>. Using consistency we can show that along this path, <span class="arithmatex">\(f\)</span> is non-decreasing:</p>
-<div class="arithmatex">\[f(S) \leq f(u) \leq f(v) \leq f(v_1) \leq f(v_2) \leq \cdots \leq f(G)\]</div>
-<p><em>Proof:</em> Consistency gives <span class="arithmatex">\(h(s) \leq c(s,u) + h(u)\)</span>. So <span class="arithmatex">\(f(S) = g(s) + h(s) = 0 + h(s) \leq c(s,u) + h(u) = g(u) + h(u) = f(u)\)</span>. </p>
-<p>Similarly, <span class="arithmatex">\(h(u) \leq c(u,v) + h(v)\)</span>, so <span class="arithmatex">\(g(u) + h(u) \leq g(u) + c(u,v) + h(v) = g(v) + h(v)\)</span>, i.e. <span class="arithmatex">\(f(u) \leq f(v)\)</span>. </p>
-<p>Repeating along the path gives the full chain. So the first time we expand a node on this optimal path, we do so with the best possible <span class="arithmatex">\(g\)</span>-value, and we never need to re-expand a state on an optimal path with a better cost.</p>
-<p><strong>Consistency implies admissibility</strong> </p>
+<p>Repeating this!!</p>
+<div class="admonition important">
+<p class="admonition-title">Consistency is required for optimality</p>
+<p>The heuristic <span class="arithmatex">\(h\)</span> must be <strong>consistent</strong> to formally guarantee that <span class="arithmatex">\(A^*\)</span> returns an optimal path. </p>
+</div>
+<h4 id="consistency-implies-admissibility">Consistency implies admissibility</h4>
 <p>Consider the chain of vertices just before the goal on some path, e.g. <span class="arithmatex">\(s \to \cdots \to b_3 \to b_2 \to b_1 \to G\)</span>, with edge costs <span class="arithmatex">\(w_1\)</span> (from <span class="arithmatex">\(b_1\)</span> to <span class="arithmatex">\(G\)</span>), <span class="arithmatex">\(w_2\)</span> (from <span class="arithmatex">\(b_2\)</span> to <span class="arithmatex">\(b_1\)</span>), etc. </p>
 <p>We have <span class="arithmatex">\(h(G) = 0\)</span>. </p>
 <p>By consistency, <span class="arithmatex">\(h(b_1) \leq w_1 + h(G) = w_1\)</span>, <span class="arithmatex">\(h(b_2) \leq w_2 + h(b_1) \leq w_2 + w_1\)</span> (the true cost from <span class="arithmatex">\(b_2\)</span> to <span class="arithmatex">\(G\)</span>), and so on. </p>
 <p>So for every vertex <span class="arithmatex">\(v\)</span> on any path to <span class="arithmatex">\(G\)</span>, <span class="arithmatex">\(h(v)\)</span> is at most the actual cost from <span class="arithmatex">\(v\)</span> to <span class="arithmatex">\(G\)</span>. </p>
-<p>That is <strong>admissibility</strong>: <span class="arithmatex">\(h\)</span> never overestimates the cost to the goal. So <strong>consistency <span class="arithmatex">\(\Rightarrow\)</span> admissibility</strong>. The converse is false: a heuristic can be admissible but not consistent.</p>
+<p>That is <strong>admissibility</strong>: <span class="arithmatex">\(h\)</span> never overestimates the cost to the goal. So <strong>consistency <span class="arithmatex">\(\Rightarrow\)</span> admissibility</strong>. </p>
+<p>Why does admissibility matter? It is because creating an admissible heuristic is much easier than creating a consistent heuristic. For example, for the 8-sliding puzzle, an admissible heuristic can be the number of tiles that are out of place.</p>
+<p>The converse is false: a heuristic can be admissible but not consistent.</p>
 <p><strong>Example: admissible but not consistent:</strong> Consider the graph:</p>
 <ul>
 <li>
@@ -4153,8 +4207,18 @@ Now, <em>to expand</em> a vertex means:</p>
 <p>Expand <span class="arithmatex">\(C\)</span>: add <span class="arithmatex">\(G\)</span> with <span class="arithmatex">\(g(G)=6\)</span>, <span class="arithmatex">\(f(G)=6\)</span>. Queue = <span class="arithmatex">\(\{A(5), G(6)\}\)</span>.</p>
 <p>Expand <span class="arithmatex">\(A\)</span>: do nothing (no new nodes that change the outcome). Queue = <span class="arithmatex">\(\{G(6)\}\)</span>.</p>
 <p>Expand <span class="arithmatex">\(G\)</span>: we have reached the goal; terminate and return the path <span class="arithmatex">\(S \to B \to C \to G\)</span> with cost <span class="arithmatex">\(6\)</span>. So <span class="arithmatex">\(A^*\)</span> (in this tree-search style) returns a suboptimal path of cost <span class="arithmatex">\(6\)</span> instead of the optimal <span class="arithmatex">\(5\)</span>.</p>
-<p><strong>Summary</strong> </p>
+<h4 id="summary">Summary</h4>
 <p><span class="arithmatex">\(A^*\)</span> is cost-optimal if and only if the heuristic is <strong>consistent</strong>. Admissibility alone is not enough, as the example above shows.</p>
+<p>But in practice, most admissible heuristics tend to be consistent.</p>
+<h4 id="some-practical-examples-where-a-is-used">Some practical examples where <span class="arithmatex">\(A^*\)</span> is used</h4>
+<ol>
+<li>
+<p>Apps like Google Maps find a path that minimizes <strong>total travel time</strong> (or distance) between origin and destination. The underlying idea is to treat the road network as a graph and run a shortest-path algorithm. <span class="arithmatex">\(A^*\)</span> is a natural fit when we can estimate “remaining time to goal.”</p>
+</li>
+<li>
+<p>A robotic arm is described by its <strong>configuration</strong>: the joint angles (and possibly other degrees of freedom). The set of all configurations is <strong>configuration space</strong> (C-space). A point in C-space is one pose of the arm; obstacles in the real world become forbidden regions in C-space. The motion-planning problem is: find a path in C-space from the start configuration to the goal configuration that avoids collisions and often minimizes a cost (e.g. total joint motion or path length in C-space). We can discretize C-space and treat it as a graph: nodes are configurations, edges connect nearby configurations, and edge cost is the distance or "effort" to move between them. <span class="arithmatex">\(A^*\)</span> then finds a minimum-cost collision-free path. So <span class="arithmatex">\(A^*\)</span> is widely used in robotics for motion planning in configuration space.</p>
+</li>
+</ol>
 
 
 

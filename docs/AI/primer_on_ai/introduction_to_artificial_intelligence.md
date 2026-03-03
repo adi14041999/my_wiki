@@ -191,6 +191,8 @@ $$f(n) = g(n) + h(n)$$
 
 where $g(n)$ is the path cost from the initial state to node $n$, and $h(n)$ is the estimated cost of the shortest path from $n$ to a goal state.
 
+**When $h(v) = 0$ for all $v$: $A^*$ becomes Dijkstra’s algorithm.** If we completely ignore the heuristic by setting $h(v) = 0$ for every vertex $v$, then $f(n) = g(n) + 0 = g(n)$. So we always expand the node with smallest $g$-value (smallest cost from the start so far). That is exactly **Dijkstra’s algorithm** (or **uniform-cost search**). In that case, $A^*$ uses no information about the goal—it is **uninformed** (blind) search. We explore in order of increasing path cost from the source, with no bias toward the goal. So $A^*$ generalizes Dijkstra. With $h = 0$ we get Dijkstra. With a good consistent heuristic we get goal-directed, often much faster, search while still guaranteeing optimality.
+
 Below is a figure showing stages in an $A^*$ search for Bucharest. Nodes are labeled with $f=g+h$. The $h$ values are the straight-line distances to Bucharest.
 
 ![img](astar.png)
@@ -205,7 +207,8 @@ We prove that whenever $A^*$ **expands** a vertex $v$ (i.e. pulls it out of the 
 
 **Base case:** The first vertex expanded is the source $S$. We have $g(S) = 0$, and the optimal cost from $S$ to $S$ is $0$, so the claim holds.
 
-**Inductive step:** Assume that for every vertex we have expanded so far, at the time we expanded it we had the optimal cost to that vertex. 
+**Inductive step:** Assume that for every vertex we have expanded so far, at the time we expanded it we had the optimal cost to that vertex.
+
 Now, *to expand* a vertex means:
 
 (1) **pull it out** of the min priority queue (it had the smallest $f$-value), and 
@@ -214,63 +217,89 @@ Now, *to expand* a vertex means:
 
 So “$v$ is the next vertex we pull out after we pull out $u$ and expand from $u$” means: we expanded $u$, added its successors to the queue, and then the node with minimum $f$ in the queue is $v$ (which might be one of those successors or some other node that was already in the queue). 
 
-We must show that when we expand $v$, $g(v)$ is the optimal cost from $S$ to $v$.
+We must show that when we expand $v$, $g(v)$ is the optimal cost from $S$ to $v$. Denote by $g^*(v)$ the optimal cost from the source $S$ to any vertex $v$. Then we need to show that for any vertex $v$ that we expand, $g(v) = g^*(v)$.
 
-After some number of steps we have a **closed set**: vertices that have already been expanded (i.e. captured— pulled out of the priority queue and expanded). 
+After some number of steps we have a closed set: vertices that have already been expanded (i.e. captured— pulled out of the priority queue and expanded).
 
-Suppose that $u$ was the last vertex captured (the last one we expanded), and $v$ is the next vertex we expand. The path we have to $v$ might go through $u$ (so $g(v) = g(u) + w(u,v)$ where $w(u,v)$ is the edge weight). 
+Assume that for every vertex we have expanded so far, at the time we expanded it we had the optimal cost to that vertex. In other words, for any vertex $v'$ that has been expanded so far, $g(v') = g^*(v')$.
 
-We need to show $g(v)$ is optimal. $v$ is chosen because it has the **minimum $f$-value** among all vertices currently in the priority queue.
+Suppose that $v$ is the next vertex to be pulled out from the priority queue. Then $v$ was added to the queue at some earlier step. $v$ is chosen because it has the minimum $f$-value among all vertices currently in the priority queue. $v$ was added to the queue at some earlier step when we expanded some vertex $u$ of which $v$ is an outgoing neighbor. In other words, $u$ is the **parent** of $v$ in the $A^*$ search tree: we had $u$ in the queue, we expanded $u$ (captured $u$), and when we did so we added $v$ to the queue with $g(v) = g(u) + w(u,v)$.
 
-**When could $g(v)$ fail to be optimal?** 
+This does *not* mean that $v$ is captured immediately after $u$. We always expand the node with *minimum $f$-value* in the queue. So after we expand $u$, the next node we pull out is whichever node in the queue has the smallest $f$—and that might be $v$, or it might be some other node (e.g. another successor of $u$, or a node that was added to the queue in an even earlier step). So $u$ is the parent of $v$ in the sense that “we added $v$ when we expanded $u$,” but there may be zero or more other vertices captured *between* $u$ and $v$.
 
-Only if there is another path from $S$ to $v$ with strictly lower cost. So suppose there is an optimal path from $S$ to $v$ that goes through some vertex $y$, and suppose $y$ is still in the priority queue (not yet expanded). We are about to expand $v$, so $v$ has minimum $f$ in the queue. Therefore $f(y) \geq f(v)$.
+$g(v) = g(u) + w(u,v)$. Equivalently, $g(v) = g^*(u) + w(u,v)$, because $u$ was already expanded when we added $v$, and by the inductive hypothesis $g(u) = g^*(u)$.
 
-If $A^*$ is to be cost-optimal, then any vertex $y$ on an optimal path to $v$ ought to be expanded before $v$— so we need $f(y) \leq f(v)$. That would force $y$ to be pulled out before $v$. So we want to prove that for any such $y$ on an optimal path from $S$ to $v$, we have $f(y) \leq f(v)$.
+$v$ is chosen because it has the minimum $f$-value among all vertices currently in the priority queue. 
 
-**Proving $f(y) \leq f(v)$** 
+We need to thus prove in the inductive step that $g(v) = g^*(v)$.
 
-We want $g(y) + h(y) \leq g(v) + h(v)$. Let $c$ be the cost of the edge from $y$ to $v$ along the optimal path (so the segment $y \to v$ on that path has cost $c$). 
+Let's try to do this by **proof by contradiction**.
 
-Adding $c$ to both sides, it is enough to show $g(y) + c + h(y) \leq g(v) + h(v) + c$. 
+**Case 1:** 
 
-On the optimal path from $S$ to $v$ via $y$, the cost from $S$ to $y$ is $g(y)$ and the cost from $y$ to $v$ along that path is $c$, so the total cost from $S$ to $v$ is $g(y) + c$. 
+Suppose there is a different optimal path from $S$ to $v$ that goes through some vertex $y$, and suppose $y$ is still in the priority queue (not yet expanded). Suppose that the parent of $y$ in the search tree is $x$. Suppose also that $x$ is captured. Thus, $g(x) = g^*(x)$ (by the inductive hypothesis, since $x$ has been expanded). There may be none or more vertices along the path from $y$ to $v$. So the optimal path from $S$ to $v$ has the form $S \to \cdots \to x \to y \to \cdots \to v$. Since this is an optimal path, its length is $g^*(v)$.
 
-But that equals $g(v)$. 
+When $x$ was captured, $y$ was added to the priority queue with $g(y) = g(x) + w(x,y)$, so $f(y) = g(y) + h(y) = g(x) + w(x,y) + h(y)$.
 
-So **$g(y) + c = g(v)$** means: the cost of the optimal path from $S$ to $v$ that goes through $y$ is exactly $g(y)$ (optimal to $y$) plus the edge cost $c$ from $y$ to $v$, and that sum equals the optimal cost $g(v)$ to $v$. 
+We are about to expand $v$ next, so $v$ has minimum $f$ in the queue. Therefore $f(y) \geq f(v)$. Thus, $g(y) + h(y) \geq g(v) + h(v)$. Since $g(y) = g(x) + w(x,y)$, we have $g(x) + w(x,y) + h(y) \geq g(v) + h(v)$.
 
-Substituting $g(v)$ for $g(y)+c$, the inequality becomes $g(v) + h(y) \leq g(v) + h(v) + c$, i.e. **$h(y) \leq h(v) + c$**.
+Let $c$ be the cost of the path from $y$ to $v$ along the optimal path (through zero or more vertices). Adding $c$ to both sides,
 
-So if we can prove $h(y) \leq h(v) + c$, we get $f(y) \leq f(v)$. 
+$$g(x) + w(x,y) + h(y) + c \geq g(v) + h(v) + c$$
 
-That inequality is exactly **consistency**: the heuristic at $y$ is at most the cost of the step from $y$ to $v$ plus the heuristic at $v$. In Euclidean geometry this is the triangle inequality (the straight-line distance from $y$ to the goal cannot exceed the distance from $y$ to $v$ plus the distance from $v$ to the goal). So for any **consistent** heuristic, $h(y) \leq h(v) + c$ holds, hence $f(y) \leq f(v)$.
+or
 
-![img](ineq.png)
+$$g(x) + w(x,y) + c + h(y) \geq g(v) + h(v) + c$$
 
-We assumed $y$ was still in the queue and $v$ is expanded next, so $f(y) \geq f(v)$. We just proved $f(y) \leq f(v)$. So $f(y) = f(v)$ at best—but then $y$ would be expanded before or together with $v$ (or we’d have expanded $y$ already). 
+But $g(x) + w(x,y) + c = g^*(v)$, since we assumed this is the optimal path from $S$ to $v$. Thus,
 
-The real contradiction is: if $y$ lies on an optimal path to $v$ and $h$ is consistent, then $f(y) \leq f(v)$, so we would expand $y$ before expanding $v$. So there cannot exist an optimal path from $S$ to $v$ that goes through a vertex $y$ that is still in the queue when we expand $v$. Every vertex on an optimal path to $v$ must already have been expanded. So the path we have to $v$ (the one we got when we added $v$ to the queue from some already-expanded vertex) is optimal: $g(v)$ is the optimal cost from $S$ to $v$.
+$$g^*(v) + h(y) \geq g(v) + h(v) + c$$
+
+In the $A^*$ algorithm, we require the heuristic to satisfy $h(y) \leq h(v) + c$. 
+
+If this property holds, then $g^*(v) + h(y) \leq g^*(v) + h(v) + c$. 
+
+Together with $g^*(v) + h(y) \geq g(v) + h(v) + c$, we obtain $g(v) + h(v) + c \leq g^*(v) + h(v) + c$, so $g^*(v) \geq g(v)$. 
+
+But $g^*(v)$ is the optimal cost from $S$ to $v$, so any path has cost at least $g^*(v)$; in particular $g(v) \geq g^*(v)$. 
+
+Thus we have both $g^*(v) \geq g(v)$ and $g(v) \geq g^*(v)$, so $g(v) = g^*(v)$. This contradicts our assumption that there was an optimal path from $S$ to $v$ through a vertex $y$ still in the queue. So no such $y$ exists: when we expand $v$, we have $g(v) = g^*(v)$. 
+
+That inequality is exactly **consistency**: the heuristic at $y$ is at most the cost of the step from $y$ to $v$ plus the heuristic at $v$. In Euclidean geometry this is the triangle inequality (the straight-line distance from $y$ to the goal cannot exceed the distance from $y$ to $v$ plus the distance from $v$ to the goal). So for any consistent heuristic, $h(y) \leq h(v) + c$ holds.
+
+![img](triangle.png)
+
+!!! important "Consistency is required for optimality"
+    The heuristic $h$ must be **consistent** to formally guarantee that $A^*$ returns an optimal path. 
+
+**Case 2:** The optimal path directly jumps to $v$ from another captured vertex $x$.
+
+In this case, there must be a second copy of $v$ in the priority queue with a bigger $f$-value (we added all successors of $x$ when we expanded $x$). We are expanding the copy of $v$ that came from $u$ (with minimum $f$), so $f(v)$ through $x$ $\geq$ $f(v)$ through $u$:
+
+$$g(x) + w(x,v) + h(v) \geq g(u) + w(u,v) + h(v)$$
+
+or
+
+$$g(x) + w(x,v) \geq g(u) + w(u,v)$$
+
+Since we are assuming the path through $x$ is optimal, $g(x) + w(x,v) = g^*(v)$. So $g^*(v) \geq g(u) + w(u,v) = g(v)$ (the cost of the path through $u$). 
+
+Thus $g^*(v) \geq g(v)$. But $g^*(v)$ is the optimal cost to $v$, so any path has cost at least $g^*(v)$; in particular $g(v) \geq g^*(v)$. 
+
+So we have both $g^*(v) \geq g(v)$ and $g(v) \geq g^*(v)$, hence $g(v) = g^*(v)$. 
+
+That contradicts the assumption that the optimal path to $v$ goes through $x$ while we expanded $v$ via $u$— it shows the path through $u$ is already optimal, so when we expand $v$ we have $g(v) = g^*(v)$.
+
+In both cases, we got a contradiction, which means the assumption that there exists a different optimal path to $v$ without going through $u$ is categorically **false**.
 
 By induction, whenever $A^*$ expands a vertex $v$, $g(v)$ is optimal. In particular, when we expand a goal $G$, we have found an optimal path to $G$.
 
-**Consistency and the inequality $h(y) \leq h(v) + c$** 
+Repeating this!!
 
-The condition we needed— $h(y) \leq h(v) + c$ for every edge $(y,v)$ with cost $c$— is exactly the **consistency** (triangle inequality) of the heuristic. So $A^*$ is cost-optimal for any heuristic $h$ that is consistent (e.g. straight-line distance in Euclidean space).
+!!! important "Consistency is required for optimality"
+    The heuristic $h$ must be **consistent** to formally guarantee that $A^*$ returns an optimal path. 
 
-**$f$-values increase along an optimal path** 
-
-Suppose the optimal path from source $S$ to goal $G$ is $s \to u \to v \to v_1 \to v_2 \to \cdots \to G$. Using consistency we can show that along this path, $f$ is non-decreasing:
-
-$$f(S) \leq f(u) \leq f(v) \leq f(v_1) \leq f(v_2) \leq \cdots \leq f(G)$$
-
-*Proof:* Consistency gives $h(s) \leq c(s,u) + h(u)$. So $f(S) = g(s) + h(s) = 0 + h(s) \leq c(s,u) + h(u) = g(u) + h(u) = f(u)$. 
-
-Similarly, $h(u) \leq c(u,v) + h(v)$, so $g(u) + h(u) \leq g(u) + c(u,v) + h(v) = g(v) + h(v)$, i.e. $f(u) \leq f(v)$. 
-
-Repeating along the path gives the full chain. So the first time we expand a node on this optimal path, we do so with the best possible $g$-value, and we never need to re-expand a state on an optimal path with a better cost.
-
-**Consistency implies admissibility** 
+#### Consistency implies admissibility
 
 Consider the chain of vertices just before the goal on some path, e.g. $s \to \cdots \to b_3 \to b_2 \to b_1 \to G$, with edge costs $w_1$ (from $b_1$ to $G$), $w_2$ (from $b_2$ to $b_1$), etc. 
 
@@ -280,7 +309,11 @@ By consistency, $h(b_1) \leq w_1 + h(G) = w_1$, $h(b_2) \leq w_2 + h(b_1) \leq w
 
 So for every vertex $v$ on any path to $G$, $h(v)$ is at most the actual cost from $v$ to $G$. 
 
-That is **admissibility**: $h$ never overestimates the cost to the goal. So **consistency $\Rightarrow$ admissibility**. The converse is false: a heuristic can be admissible but not consistent.
+That is **admissibility**: $h$ never overestimates the cost to the goal. So **consistency $\Rightarrow$ admissibility**. 
+
+Why does admissibility matter? It is because creating an admissible heuristic is much easier than creating a consistent heuristic. For example, for the 8-sliding puzzle, an admissible heuristic can be the number of tiles that are out of place.
+
+The converse is false: a heuristic can be admissible but not consistent.
 
 **Example: admissible but not consistent:** Consider the graph:
 
@@ -308,6 +341,14 @@ Expand $A$: do nothing (no new nodes that change the outcome). Queue = $\{G(6)\}
 
 Expand $G$: we have reached the goal; terminate and return the path $S \to B \to C \to G$ with cost $6$. So $A^*$ (in this tree-search style) returns a suboptimal path of cost $6$ instead of the optimal $5$.
 
-**Summary** 
+#### Summary 
 
 $A^*$ is cost-optimal if and only if the heuristic is **consistent**. Admissibility alone is not enough, as the example above shows.
+
+But in practice, most admissible heuristics tend to be consistent.
+
+#### Some practical examples where $A^*$ is used
+
+1. Apps like Google Maps find a path that minimizes **total travel time** (or distance) between origin and destination. The underlying idea is to treat the road network as a graph and run a shortest-path algorithm. $A^*$ is a natural fit when we can estimate “remaining time to goal.”
+
+2. A robotic arm is described by its **configuration**: the joint angles (and possibly other degrees of freedom). The set of all configurations is **configuration space** (C-space). A point in C-space is one pose of the arm; obstacles in the real world become forbidden regions in C-space. The motion-planning problem is: find a path in C-space from the start configuration to the goal configuration that avoids collisions and often minimizes a cost (e.g. total joint motion or path length in C-space). We can discretize C-space and treat it as a graph: nodes are configurations, edges connect nearby configurations, and edge cost is the distance or "effort" to move between them. $A^*$ then finds a minimum-cost collision-free path. So $A^*$ is widely used in robotics for motion planning in configuration space.
