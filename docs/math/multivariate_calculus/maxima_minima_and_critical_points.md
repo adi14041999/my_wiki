@@ -132,3 +132,39 @@ $$\frac{\partial E}{\partial C} = \sum_{i=1}^{N} (-2)A \cos(Bx_i + C)\,\bigl(y_i
 This is an instructive example because this system of equations is pretty complicated and it is very unlikely that we can find the exact values of the solutions $(A, B, C)$ in terms of the data points $(x_i, y_i)$. For such a system of equations it is reasonable to try to think about how to find a numerical approximation to critical points $(A, B, C)$.
 
 ## Extrema on boundaries
+
+In practical applications we often need to find maxima or minima of $f$ when $f$ is regarded as a function only on some region $D$ in $\mathbb{R}^n$.
+
+**Example:** The coordinates $x_i$ may have a physical or other real-world meaning that constrains them to always be non-negative (e.g., height above the ground, or some temperature in Kelvin). In such cases we may use $D = \{ (x_1, \ldots, x_n) \in \mathbb{R}^n : x_i \geq 0 \text{ for all } i \}$.
+
+When seeking maximal and minimal values of a function on a region $D$ (rather than on the entirety of $\mathbb{R}^n$), extrema might be attained at points that are not among those where the partial derivatives vanish.
+
+**Example:** Consider the task of finding the maxima and minima of the function $f(x) = \frac{1}{3}x^3 - 3x^2 + 5x - 5$ on the interval $[-2, 6]$. 
+
+We have $f'(x) = x^2 - 6x + 5 = (x-1)(x-5)$, so the only critical points in the interior of $[-2, 6]$ are $x = 1$ and $x = 5$. 
+
+Below is a figure showing the graphs $y = f(x)$ (left) and $y = f'(x)$ (right).
+
+![img](endpoints.png)
+
+We must also check the **endpoints** $x = -2$ and $x = 6$. 
+
+Computing values: $f(-2) = -\frac{8}{3} - 12 - 10 - 5 = -\frac{89}{3}$, $f(1) = \frac{1}{3} - 3 + 5 - 5 = -\frac{8}{3}$, $f(5) = \frac{125}{3} - 75 + 25 - 5 = -\frac{40}{3}$, and $f(6) = 72 - 108 + 30 - 5 = -11$. 
+
+So the minimum value on $[-2, 6]$ is $f(-2) = -\frac{89}{3}$, attained at the **left endpoint** $x = -2$, and the maximum value is $f(1) = -\frac{8}{3}$, attained at the critical point $x = 1$. 
+
+The minimum is **not** at a critical point—it occurs at an endpoint, where $f'(-2) = 4 + 12 + 5 = 21 \neq 0$. So when the domain is restricted to an interval, we must always compare values at interior critical points with values at the boundary (here, the two endpoints).
+
+The moral of the preceding example is to remind us that in single-variable calculus, a local extremum $x = c$ for a function $f \colon I \to \mathbb{R}$ on an interval $I$ is necessarily a critical point only when $c$ is *not* an endpoint of $I$. It can happen (as in that example) that an endpoint of $I$ is a local extremum for $f$ on the interval $I$, and in such cases that endpoint need not be a point where $f'$ vanishes.
+
+It is natural to expect an analogue of this "endpoint" phenomenon—i.e., a local extremum on a region occurring at a non-critical point—in the multivariable setting when we study $f \colon D \to \mathbb{R}$ for a subset $D$ of $\mathbb{R}^n$. The replacement of "endpoint" for such $D$ is called a **boundary point**.
+
+**Example:** Let $D$ be the solid ball
+
+$$\{ (x, y, z) \in \mathbb{R}^3 : (x - 3)^2 + (y + 2)^2 + (z - 5)^2 \leq 9 = 3^2 \}$$
+
+of radius $3$ centered at $(3, -2, 5)$. In this case the points of the outer sphere
+
+$$\{ (x, y, z) \in \mathbb{R}^3 : (x - 3)^2 + (y + 2)^2 + (z - 5)^2 = 9 \}$$
+
+are called the **boundary points** of $D$, and the other points of $D$ are called its **interior points**. Explicitly, the interior points are those $(x, y, z) \in \mathbb{R}^3$ whose distance to the center of the ball is strictly less than $3$: $(x - 3)^2 + (y + 2)^2 + (z - 5)^2 < 9$.
