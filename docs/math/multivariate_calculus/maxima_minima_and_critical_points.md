@@ -153,11 +153,11 @@ Computing values: $f(-2) = -\frac{8}{3} - 12 - 10 - 5 = -\frac{89}{3}$, $f(1) = 
 
 So the minimum value on $[-2, 6]$ is $f(-2) = -\frac{89}{3}$, attained at the **left endpoint** $x = -2$, and the maximum value is $f(1) = -\frac{8}{3}$, attained at the critical point $x = 1$. 
 
-The minimum is **not** at a critical point—it occurs at an endpoint, where $f'(-2) = 4 + 12 + 5 = 21 \neq 0$. So when the domain is restricted to an interval, we must always compare values at interior critical points with values at the boundary (here, the two endpoints).
+The minimum is **not** at a critical point— it occurs at an endpoint, where $f'(-2) = 4 + 12 + 5 = 21 \neq 0$. So when the domain is restricted to an interval, we must always compare values at interior critical points with values at the boundary (here, the two endpoints).
 
 The moral of the preceding example is to remind us that in single-variable calculus, a local extremum $x = c$ for a function $f \colon I \to \mathbb{R}$ on an interval $I$ is necessarily a critical point only when $c$ is *not* an endpoint of $I$. It can happen (as in that example) that an endpoint of $I$ is a local extremum for $f$ on the interval $I$, and in such cases that endpoint need not be a point where $f'$ vanishes.
 
-It is natural to expect an analogue of this "endpoint" phenomenon—i.e., a local extremum on a region occurring at a non-critical point—in the multivariable setting when we study $f \colon D \to \mathbb{R}$ for a subset $D$ of $\mathbb{R}^n$. The replacement of "endpoint" for such $D$ is called a **boundary point**.
+It is natural to expect an analogue of this "endpoint" phenomenon— i.e., a local extremum on a region occurring at a non-critical point in the multivariable setting when we study $f \colon D \to \mathbb{R}$ for a subset $D$ of $\mathbb{R}^n$. The replacement of "endpoint" for such $D$ is called a **boundary point**.
 
 **Example:** Let $D$ be the solid ball
 
@@ -168,3 +168,43 @@ of radius $3$ centered at $(3, -2, 5)$. In this case the points of the outer sph
 $$\{ (x, y, z) \in \mathbb{R}^3 : (x - 3)^2 + (y + 2)^2 + (z - 5)^2 = 9 \}$$
 
 are called the **boundary points** of $D$, and the other points of $D$ are called its **interior points**. Explicitly, the interior points are those $(x, y, z) \in \mathbb{R}^3$ whose distance to the center of the ball is strictly less than $3$: $(x - 3)^2 + (y + 2)^2 + (z - 5)^2 < 9$.
+
+**Theorem:** Let $f \colon \mathbb{R}^n \to \mathbb{R}$ be a function and $D$ a region inside $\mathbb{R}^n$. Suppose that $f \colon D \to \mathbb{R}$ (i.e. $f$ restricted to $D$) has a local extremum at a point $\mathbf{a} \in D$— that is, $f(\mathbf{x}) \geq f(\mathbf{a})$ for all $\mathbf{x} \in D$ sufficiently close to $\mathbf{a}$ (local minimum), or $f(\mathbf{x}) \leq f(\mathbf{a})$ for all $\mathbf{x} \in D$ sufficiently close to $\mathbf{a}$ (local maximum). Then $\mathbf{a}$ must be a **critical point** of $f$ when $\mathbf{a}$ is in the **interior** of $D$. In particular, any local extremum of $f \colon D \to \mathbb{R}$ either is a critical point in the interior of $D$ or is a boundary point of $D$.
+
+This is a "constrained" sense of optimization— a constrained local maximum or minimum (the constraint being that we only consider points in $D$). Strictly speaking, in the theorem above we need to assume that $f$ is "differentiable" in an appropriate $n$-variable sense (so that the conclusion about critical points in the interior is valid).
+
+A huge difference between the study of local extrema at boundary points of regions $D$ in $\mathbb{R}^n$ when $n > 1$ as opposed to when $n = 1$ is that the possibilities for the **geometry of the boundary** of $D$ are much richer when $n > 1$ (even when $n = 2$) than when $n = 1$. For example, a closed disk in the plane has boundary a **circle**, whereas a closed bounded interval in $\mathbb{R}$ has boundary that is just a **pair of points**. This makes the study of local extrema of $f \colon D \to \mathbb{R}$ at boundary points much richer when $n > 1$.
+
+**Example:** Here is a case with a specific $f$ on a specific region in $\mathbb{R}^2$ to illustrate a complete calculation in practice. Consider the function
+
+$$f(x, y) = 3x^2 - 2y^2 + 2x + 2y - 1$$
+
+on the rectangle
+
+$$D = \{ (x, y) \in \mathbb{R}^2 : -1 \leq x \leq 1,\ -1 \leq y \leq 1 \}$$
+
+![img](rect_ex.png)
+
+The graph of $f(x, y) = 3x^2 - 2y^2 + 2x + 2y - 1$. The interior critical point is shown in red. The edge critical points are blue. The corner points are green. The extrema can only occur at these colored points.
+
+We first compute $f_x = 6x + 2$, $f_y = -4y + 2$, so $f_x = 0$ implies $x = -1/3$, and $f_y = 0$ implies $y = 1/2$. 
+
+Hence, the vanishing of both partial derivatives happens precisely at the single point $(-1/3, 1/2)$ (which we observe is in the interior of the rectangle $D$). Note that $f(-1/3, 1/2) = -5/6$. This single critical point in the interior is shown in red in the figure.
+
+Next, we analyze how $f$ behaves on the **edges** of $D$. Focusing on the bottom edge amounts to studying the function $f(x, -1) = 3x^2 + 2x - 5$ on the interval $[-1, 1]$. 
+
+This has derivative (with respect to $x$) $6x + 2$, which vanishes at precisely $x = -1/3$, so $(-1/3, -1)$ is another candidate. 
+
+We evaluate $f(-1/3, -1) = -16/3$. In a similar way along the other edges, we compute: 
+
+(i) $f_x(x, 1) = 0$ at precisely $x = -1/3$ (with $f(-1/3, 1) = -4/3$), 
+
+(ii) $f_y(-1, y) = 0$ at precisely $y = 1/2$ (with $f(-1, 1/2) = 1/2$), 
+
+(iii) $f_y(1, y) = 0$ at precisely $y = 1/2$ (with $f(1, 1/2) = 9/2$). These four critical points on the edges are shown in blue.
+
+Finally, evaluating at the four corners we have $f(-1, -1) = -4$, $f(-1, 1) = 0$, $f(1, -1) = 0$, $f(1, 1) = 4$. These points are shown on the graph in green.
+
+Comparing the values of $f$ at all of these points (the one critical point in the interior, the critical points on each edge away from the corners, and all four corners), we see that $f$ has its **global maximum** on $D$ at the boundary point $(1, 1/2)$, with $f(1, 1/2) = 9/2$, and its **global minimum** at the boundary point $(-1/3, -1)$, with $f(-1/3, -1) = -16/3$. 
+
+**Note:** *This method does not help at all in determining whether the other points we identified above are at least local maxima or minima over the domain, or whether the critical point in the interior is a saddle point.*
