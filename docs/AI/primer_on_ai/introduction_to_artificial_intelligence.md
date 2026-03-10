@@ -352,3 +352,21 @@ But in practice, most admissible heuristics tend to be consistent.
 1. Apps like Google Maps find a path that minimizes **total travel time** (or distance) between origin and destination. The underlying idea is to treat the road network as a graph and run a shortest-path algorithm. $A^*$ is a natural fit when we can estimate “remaining time to goal.”
 
 2. A robotic arm is described by its **configuration**: the joint angles (and possibly other degrees of freedom). The set of all configurations is **configuration space** (C-space). A point in C-space is one pose of the arm; obstacles in the real world become forbidden regions in C-space. The motion-planning problem is: find a path in C-space from the start configuration to the goal configuration that avoids collisions and often minimizes a cost (e.g. total joint motion or path length in C-space). We can discretize C-space and treat it as a graph: nodes are configurations, edges connect nearby configurations, and edge cost is the distance or "effort" to move between them. $A^*$ then finds a minimum-cost collision-free path. So $A^*$ is widely used in robotics for motion planning in configuration space.
+
+## Rough notes
+
+So far we have considered **state space search** with a clearly defined goal state (e.g. reach Bucharest, measure $z$ liters). Next we consider problems where:
+
+- The **goal is not a single state** but any state satisfying given **properties** (e.g. “no queen attacks another”).
+- The **start state can be chosen** (e.g. empty board, or partial assignment).
+
+Such problems are often formulated as **constraint satisfaction**. We have variables and constraints; a goal is any assignment satisfying all constraints.
+
+**Example: N-Queens:** Place $n$ queens on an $n \times n$ chessboard so that no two attack each other.
+
+- **Start state:** e.g. empty board (no queens).
+- **State:** any configuration with between $0$ and $n$ queens on the board. The number of such states is $\sum_{k=0}^{n} \binom{n^2}{k}$ (choose any subset of the $n^2$ squares with at most $n$ queens).
+- **Goal:** any state with exactly $n$ queens and no pair attacking.
+- **Action:** place one queen on an empty square.
+
+Deriving the exact count of *goal* states (valid $n$-queens configurations) is a classical combinatorics problem; the point here is that the state space is finite and the goal is specified by constraints, not by a single target state.

@@ -769,6 +769,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#rough-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rough notes
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4219,6 +4230,21 @@ heuristic.</p>
 <p>A robotic arm is described by its <strong>configuration</strong>: the joint angles (and possibly other degrees of freedom). The set of all configurations is <strong>configuration space</strong> (C-space). A point in C-space is one pose of the arm; obstacles in the real world become forbidden regions in C-space. The motion-planning problem is: find a path in C-space from the start configuration to the goal configuration that avoids collisions and often minimizes a cost (e.g. total joint motion or path length in C-space). We can discretize C-space and treat it as a graph: nodes are configurations, edges connect nearby configurations, and edge cost is the distance or "effort" to move between them. <span class="arithmatex">\(A^*\)</span> then finds a minimum-cost collision-free path. So <span class="arithmatex">\(A^*\)</span> is widely used in robotics for motion planning in configuration space.</p>
 </li>
 </ol>
+<h2 id="rough-notes">Rough notes</h2>
+<p>So far we have considered <strong>state space search</strong> with a clearly defined goal state (e.g. reach Bucharest, measure <span class="arithmatex">\(z\)</span> liters). Next we consider problems where:</p>
+<ul>
+<li>The <strong>goal is not a single state</strong> but any state satisfying given <strong>properties</strong> (e.g. “no queen attacks another”).</li>
+<li>The <strong>start state can be chosen</strong> (e.g. empty board, or partial assignment).</li>
+</ul>
+<p>Such problems are often formulated as <strong>constraint satisfaction</strong>. We have variables and constraints; a goal is any assignment satisfying all constraints.</p>
+<p><strong>Example: N-Queens:</strong> Place <span class="arithmatex">\(n\)</span> queens on an <span class="arithmatex">\(n \times n\)</span> chessboard so that no two attack each other.</p>
+<ul>
+<li><strong>Start state:</strong> e.g. empty board (no queens).</li>
+<li><strong>State:</strong> any configuration with between <span class="arithmatex">\(0\)</span> and <span class="arithmatex">\(n\)</span> queens on the board. The number of such states is <span class="arithmatex">\(\sum_{k=0}^{n} \binom{n^2}{k}\)</span> (choose any subset of the <span class="arithmatex">\(n^2\)</span> squares with at most <span class="arithmatex">\(n\)</span> queens).</li>
+<li><strong>Goal:</strong> any state with exactly <span class="arithmatex">\(n\)</span> queens and no pair attacking.</li>
+<li><strong>Action:</strong> place one queen on an empty square.</li>
+</ul>
+<p>Deriving the exact count of <em>goal</em> states (valid <span class="arithmatex">\(n\)</span>-queens configurations) is a classical combinatorics problem; the point here is that the state space is finite and the goal is specified by constraints, not by a single target state.</p>
 
 
 
