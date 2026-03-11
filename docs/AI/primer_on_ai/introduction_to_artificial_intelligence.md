@@ -353,7 +353,7 @@ But in practice, most admissible heuristics tend to be consistent.
 
 2. A robotic arm is described by its **configuration**: the joint angles (and possibly other degrees of freedom). The set of all configurations is **configuration space** (C-space). A point in C-space is one pose of the arm; obstacles in the real world become forbidden regions in C-space. The motion-planning problem is: find a path in C-space from the start configuration to the goal configuration that avoids collisions and often minimizes a cost (e.g. total joint motion or path length in C-space). We can discretize C-space and treat it as a graph: nodes are configurations, edges connect nearby configurations, and edge cost is the distance or "effort" to move between them. $A^*$ then finds a minimum-cost collision-free path. So $A^*$ is widely used in robotics for motion planning in configuration space.
 
-## Rough notes
+## Search with constraints
 
 So far we have considered **state space search** with a clearly defined goal state (e.g. reach Bucharest, measure $z$ liters). Next we consider problems where:
 
@@ -364,9 +364,50 @@ Such problems are often formulated as **constraint satisfaction**. We have varia
 
 **Example: N-Queens:** Place $n$ queens on an $n \times n$ chessboard so that no two attack each other.
 
-- **Start state:** e.g. empty board (no queens).
+- **Start state:** e.g. empty board (no queens) or any partial assignment.
 - **State:** any configuration with between $0$ and $n$ queens on the board. The number of such states is $\sum_{k=0}^{n} \binom{n^2}{k}$ (choose any subset of the $n^2$ squares with at most $n$ queens).
 - **Goal:** any state with exactly $n$ queens and no pair attacking.
 - **Action:** place one queen on an empty square.
 
-Deriving the exact count of *goal* states (valid $n$-queens configurations) is a classical combinatorics problem; the point here is that the state space is finite and the goal is specified by constraints, not by a single target state.
+The point here is that the goal is specified by constraints, not by a single target state.
+
+### Iterative improvement and the State Space Search landscape
+
+We restrict the state space to configurations with **exactly $n$ queens** on the board. The **start state** is any such configuration (e.g. one queen per column). The search uses **iterative improvement**: (1) start from a random or given configuration, and (2) repeatedly move to a neighboring state that has fewer conflicts until a goal state is reached.
+
+**Neighbors and the heuristic $h$:** Two states are **neighbors** if we can get from one to the other by **moving a single queen** to another square (following the rules of chess). Define $h(\text{state})$ = number of **conflicts**. Here, the number of **unordered pairs of queens that attack each other**. The goal state has $h = 0$. A neighbor is “better” if it has fewer conflicts (lower $h$).
+
+**Example walkthrough (4×4 board).** Fix one queen per column. Start with all four queens in column 0.
+
+- **Step 0 — Initial:** Queens at $(0,0)$, $(1,0)$, $(2,0)$, $(3,0)$. All four are in the same column, so every pair attacks: $\binom{4}{2} = 6$ pairs. **$h = 6$**.
+
+![img](h6.png)
+
+- **Step 1:** Move the queen in row 0 from $(0,0)$ to $(0,1)$. Queens are now at $(0,1)$, $(1,0)$, $(2,0)$, $(3,0)$. The queen at $(0,1)$ attacks $(1,0)$. The three queens still in column 0 give $\binom{3}{2} = 3$ pairs. This configuration can be reported as **$h = 4$**; the important point is that we then improve further.
+
+![img](h3.png)
+
+- **Step 2:** Move the queen in row 1 from $(1,0)$ to $(1,3)$. After this move, only one attacking pair remains. **$h = 1$**.
+
+![img](h1.png)
+
+- **Step 3:** Move the queen in row 3 from $(3,0)$ to $(3,2)$. No attacking pairs remain. **$h = 0$**. Goal state achieved.
+
+The walkthrough shows how iterative improvement reduces $h$ step by step until we reach a solution.
+
+#### State Space Landscape 
+
+Imagine the states as points in a 2D (or higher-dimensional) space and $h$ as a **height** perpendicular to that space. We get a **state space search landscape**: a surface whose elevation at each state is $h$. Valleys (low $h$) are bad configurations; the goal is the deepest valley ($h = 0$). Equivalently, define $\tilde{h} = -(\text{number of conflicts})$ so that the goal is a **global maximum** and we “climb” toward it. This 3D topography has peaks, valleys, and ridges and visualizes how the cost or fitness varies over the solution space.
+
+![img](landscape.png)
+
+Below is an example of an 8x8 board with 8 queens in a given state. The numbers on the board show the $h(state)$ values of the cells.
+
+![img](88.png)
+
+**How to traverse the landscape?** Common strategies:
+
+1. **Steepest-ascent hill climbing:** Evaluate all neighbors and move to the neighbor with the **highest** $h$ (or $\tilde{h}$). Greedy; can get stuck in local optima.
+2. **First-choice hill climbing:** Scan neighbors in some order and move to the **first** neighbor that improves the score. Faster per step; depends on scan order.
+3. **Stochastic hill climbing:** If several neighbors improve the score, choose among them **at random** (e.g. with probability proportional to the improvement). Adds randomness to escape shallow local optima.
+4. Many other variants exist (e.g. random restarts).

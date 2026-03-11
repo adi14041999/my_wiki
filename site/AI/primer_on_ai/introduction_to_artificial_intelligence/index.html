@@ -770,13 +770,47 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#rough-notes" class="md-nav__link">
+  <a href="#search-with-constraints" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Rough notes
+        Search with constraints
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Search with constraints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iterative-improvement-and-the-state-space-search-landscape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iterative improvement and the State Space Search landscape
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Iterative improvement and the State Space Search landscape">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#state-space-landscape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        State Space Landscape
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -4230,7 +4264,7 @@ heuristic.</p>
 <p>A robotic arm is described by its <strong>configuration</strong>: the joint angles (and possibly other degrees of freedom). The set of all configurations is <strong>configuration space</strong> (C-space). A point in C-space is one pose of the arm; obstacles in the real world become forbidden regions in C-space. The motion-planning problem is: find a path in C-space from the start configuration to the goal configuration that avoids collisions and often minimizes a cost (e.g. total joint motion or path length in C-space). We can discretize C-space and treat it as a graph: nodes are configurations, edges connect nearby configurations, and edge cost is the distance or "effort" to move between them. <span class="arithmatex">\(A^*\)</span> then finds a minimum-cost collision-free path. So <span class="arithmatex">\(A^*\)</span> is widely used in robotics for motion planning in configuration space.</p>
 </li>
 </ol>
-<h2 id="rough-notes">Rough notes</h2>
+<h2 id="search-with-constraints">Search with constraints</h2>
 <p>So far we have considered <strong>state space search</strong> with a clearly defined goal state (e.g. reach Bucharest, measure <span class="arithmatex">\(z\)</span> liters). Next we consider problems where:</p>
 <ul>
 <li>The <strong>goal is not a single state</strong> but any state satisfying given <strong>properties</strong> (e.g. “no queen attacks another”).</li>
@@ -4239,12 +4273,44 @@ heuristic.</p>
 <p>Such problems are often formulated as <strong>constraint satisfaction</strong>. We have variables and constraints; a goal is any assignment satisfying all constraints.</p>
 <p><strong>Example: N-Queens:</strong> Place <span class="arithmatex">\(n\)</span> queens on an <span class="arithmatex">\(n \times n\)</span> chessboard so that no two attack each other.</p>
 <ul>
-<li><strong>Start state:</strong> e.g. empty board (no queens).</li>
+<li><strong>Start state:</strong> e.g. empty board (no queens) or any partial assignment.</li>
 <li><strong>State:</strong> any configuration with between <span class="arithmatex">\(0\)</span> and <span class="arithmatex">\(n\)</span> queens on the board. The number of such states is <span class="arithmatex">\(\sum_{k=0}^{n} \binom{n^2}{k}\)</span> (choose any subset of the <span class="arithmatex">\(n^2\)</span> squares with at most <span class="arithmatex">\(n\)</span> queens).</li>
 <li><strong>Goal:</strong> any state with exactly <span class="arithmatex">\(n\)</span> queens and no pair attacking.</li>
 <li><strong>Action:</strong> place one queen on an empty square.</li>
 </ul>
-<p>Deriving the exact count of <em>goal</em> states (valid <span class="arithmatex">\(n\)</span>-queens configurations) is a classical combinatorics problem; the point here is that the state space is finite and the goal is specified by constraints, not by a single target state.</p>
+<p>The point here is that the goal is specified by constraints, not by a single target state.</p>
+<h3 id="iterative-improvement-and-the-state-space-search-landscape">Iterative improvement and the State Space Search landscape</h3>
+<p>We restrict the state space to configurations with <strong>exactly <span class="arithmatex">\(n\)</span> queens</strong> on the board. The <strong>start state</strong> is any such configuration (e.g. one queen per column). The search uses <strong>iterative improvement</strong>: (1) start from a random or given configuration, and (2) repeatedly move to a neighboring state that has fewer conflicts until a goal state is reached.</p>
+<p><strong>Neighbors and the heuristic <span class="arithmatex">\(h\)</span>:</strong> Two states are <strong>neighbors</strong> if we can get from one to the other by <strong>moving a single queen</strong> to another square (following the rules of chess). Define <span class="arithmatex">\(h(\text{state})\)</span> = number of <strong>conflicts</strong>. Here, the number of <strong>unordered pairs of queens that attack each other</strong>. The goal state has <span class="arithmatex">\(h = 0\)</span>. A neighbor is “better” if it has fewer conflicts (lower <span class="arithmatex">\(h\)</span>).</p>
+<p><strong>Example walkthrough (4×4 board).</strong> Fix one queen per column. Start with all four queens in column 0.</p>
+<ul>
+<li><strong>Step 0 — Initial:</strong> Queens at <span class="arithmatex">\((0,0)\)</span>, <span class="arithmatex">\((1,0)\)</span>, <span class="arithmatex">\((2,0)\)</span>, <span class="arithmatex">\((3,0)\)</span>. All four are in the same column, so every pair attacks: <span class="arithmatex">\(\binom{4}{2} = 6\)</span> pairs. <strong><span class="arithmatex">\(h = 6\)</span></strong>.</li>
+</ul>
+<p><img alt="img" src="../h6.png" /></p>
+<ul>
+<li><strong>Step 1:</strong> Move the queen in row 0 from <span class="arithmatex">\((0,0)\)</span> to <span class="arithmatex">\((0,1)\)</span>. Queens are now at <span class="arithmatex">\((0,1)\)</span>, <span class="arithmatex">\((1,0)\)</span>, <span class="arithmatex">\((2,0)\)</span>, <span class="arithmatex">\((3,0)\)</span>. The queen at <span class="arithmatex">\((0,1)\)</span> attacks <span class="arithmatex">\((1,0)\)</span>. The three queens still in column 0 give <span class="arithmatex">\(\binom{3}{2} = 3\)</span> pairs. This configuration can be reported as <strong><span class="arithmatex">\(h = 4\)</span></strong>; the important point is that we then improve further.</li>
+</ul>
+<p><img alt="img" src="../h3.png" /></p>
+<ul>
+<li><strong>Step 2:</strong> Move the queen in row 1 from <span class="arithmatex">\((1,0)\)</span> to <span class="arithmatex">\((1,3)\)</span>. After this move, only one attacking pair remains. <strong><span class="arithmatex">\(h = 1\)</span></strong>.</li>
+</ul>
+<p><img alt="img" src="../h1.png" /></p>
+<ul>
+<li><strong>Step 3:</strong> Move the queen in row 3 from <span class="arithmatex">\((3,0)\)</span> to <span class="arithmatex">\((3,2)\)</span>. No attacking pairs remain. <strong><span class="arithmatex">\(h = 0\)</span></strong>. Goal state achieved.</li>
+</ul>
+<p>The walkthrough shows how iterative improvement reduces <span class="arithmatex">\(h\)</span> step by step until we reach a solution.</p>
+<h4 id="state-space-landscape">State Space Landscape</h4>
+<p>Imagine the states as points in a 2D (or higher-dimensional) space and <span class="arithmatex">\(h\)</span> as a <strong>height</strong> perpendicular to that space. We get a <strong>state space search landscape</strong>: a surface whose elevation at each state is <span class="arithmatex">\(h\)</span>. Valleys (low <span class="arithmatex">\(h\)</span>) are bad configurations; the goal is the deepest valley (<span class="arithmatex">\(h = 0\)</span>). Equivalently, define <span class="arithmatex">\(\tilde{h} = -(\text{number of conflicts})\)</span> so that the goal is a <strong>global maximum</strong> and we “climb” toward it. This 3D topography has peaks, valleys, and ridges and visualizes how the cost or fitness varies over the solution space.</p>
+<p><img alt="img" src="../landscape.png" /></p>
+<p>Below is an example of an 8x8 board with 8 queens in a given state. The numbers on the board show the <span class="arithmatex">\(h(state)\)</span> values of the cells.</p>
+<p><img alt="img" src="../88.png" /></p>
+<p><strong>How to traverse the landscape?</strong> Common strategies:</p>
+<ol>
+<li><strong>Steepest-ascent hill climbing:</strong> Evaluate all neighbors and move to the neighbor with the <strong>highest</strong> <span class="arithmatex">\(h\)</span> (or <span class="arithmatex">\(\tilde{h}\)</span>). Greedy; can get stuck in local optima.</li>
+<li><strong>First-choice hill climbing:</strong> Scan neighbors in some order and move to the <strong>first</strong> neighbor that improves the score. Faster per step; depends on scan order.</li>
+<li><strong>Stochastic hill climbing:</strong> If several neighbors improve the score, choose among them <strong>at random</strong> (e.g. with probability proportional to the improvement). Adds randomness to escape shallow local optima.</li>
+<li>Many other variants exist (e.g. random restarts).</li>
+</ol>
 
 
 
