@@ -782,22 +782,22 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#iterative-improvement-and-the-state-space-search-landscape" class="md-nav__link">
+  <a href="#iterative-improvement" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Iterative improvement and the State Space Search landscape
+        Iterative improvement
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Iterative improvement and the State Space Search landscape">
+    <nav class="md-nav" aria-label="Iterative improvement">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#state-space-landscape" class="md-nav__link">
+  <a href="#state-space-search-landscape" class="md-nav__link">
     <span class="md-ellipsis">
       
-        State Space Landscape
+        State Space Search Landscape
       
     </span>
   </a>
@@ -4279,7 +4279,7 @@ heuristic.</p>
 <li><strong>Action:</strong> place one queen on an empty square.</li>
 </ul>
 <p>The point here is that the goal is specified by constraints, not by a single target state.</p>
-<h3 id="iterative-improvement-and-the-state-space-search-landscape">Iterative improvement and the State Space Search landscape</h3>
+<h3 id="iterative-improvement">Iterative improvement</h3>
 <p>We restrict the state space to configurations with <strong>exactly <span class="arithmatex">\(n\)</span> queens</strong> on the board. The <strong>start state</strong> is any such configuration (e.g. one queen per column). The search uses <strong>iterative improvement</strong>: (1) start from a random or given configuration, and (2) repeatedly move to a neighboring state that has fewer conflicts until a goal state is reached.</p>
 <p><strong>Neighbors and the heuristic <span class="arithmatex">\(h\)</span>:</strong> Two states are <strong>neighbors</strong> if we can get from one to the other by <strong>moving a single queen</strong> to another square (following the rules of chess). Define <span class="arithmatex">\(h(\text{state})\)</span> = number of <strong>conflicts</strong>. Here, the number of <strong>unordered pairs of queens that attack each other</strong>. The goal state has <span class="arithmatex">\(h = 0\)</span>. A neighbor is “better” if it has fewer conflicts (lower <span class="arithmatex">\(h\)</span>).</p>
 <p><strong>Example walkthrough (4×4 board).</strong> Fix one queen per column. Start with all four queens in column 0.</p>
@@ -4299,7 +4299,7 @@ heuristic.</p>
 <li><strong>Step 3:</strong> Move the queen in row 3 from <span class="arithmatex">\((3,0)\)</span> to <span class="arithmatex">\((3,2)\)</span>. No attacking pairs remain. <strong><span class="arithmatex">\(h = 0\)</span></strong>. Goal state achieved.</li>
 </ul>
 <p>The walkthrough shows how iterative improvement reduces <span class="arithmatex">\(h\)</span> step by step until we reach a solution.</p>
-<h4 id="state-space-landscape">State Space Landscape</h4>
+<h4 id="state-space-search-landscape">State Space Search Landscape</h4>
 <p>Imagine the states as points in a 2D (or higher-dimensional) space and <span class="arithmatex">\(h\)</span> as a <strong>height</strong> perpendicular to that space. We get a <strong>state space search landscape</strong>: a surface whose elevation at each state is <span class="arithmatex">\(h\)</span>. Valleys (low <span class="arithmatex">\(h\)</span>) are bad configurations; the goal is the deepest valley (<span class="arithmatex">\(h = 0\)</span>). Equivalently, define <span class="arithmatex">\(\tilde{h} = -(\text{number of conflicts})\)</span> so that the goal is a <strong>global maximum</strong> and we “climb” toward it. This 3D topography has peaks, valleys, and ridges and visualizes how the cost or fitness varies over the solution space.</p>
 <p><img alt="img" src="../landscape.png" /></p>
 <p>Below is an example of an 8x8 board with 8 queens in a given state. The numbers on the board show the <span class="arithmatex">\(h(state)\)</span> values of the cells.</p>
@@ -4311,6 +4311,21 @@ heuristic.</p>
 <li><strong>Stochastic hill climbing:</strong> If several neighbors improve the score, choose among them <strong>at random</strong> (e.g. with probability proportional to the improvement). Adds randomness to escape shallow local optima.</li>
 <li>Many other variants exist (e.g. random restarts).</li>
 </ol>
+<p>Unfortunately, there are states where traversal can get stuck at. Examples being local maxima and shoulders and "flat" local maxima.</p>
+<p><img alt="img" src="../landscape2.png" /></p>
+<p>So, hill climbing does not guarantee us getting to the global maximum.</p>
+<p>Why would we use hill climbing then? A few reasons.</p>
+<ul>
+<li>
+<p>Hill climbing is memory less (we save on space). Algorithms like <span class="arithmatex">\(A^*\)</span> need auxiliary space.</p>
+</li>
+<li>
+<p>In many real world scenarios, local maxima may be good enough and acceptable.</p>
+</li>
+<li>
+<p>We can do random restarts (re-run the algorithm from a different random start state) to tackle local maxima. Across these random restarts, we can save the best local maxima. If probability of landing at a state leading to the global maximum is <span class="arithmatex">\(p\)</span>, then we need roughly <span class="arithmatex">\(1/p\)</span> random restarts to get to it.</p>
+</li>
+</ul>
 
 
 

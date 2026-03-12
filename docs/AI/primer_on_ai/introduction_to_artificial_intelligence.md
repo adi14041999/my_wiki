@@ -371,7 +371,7 @@ Such problems are often formulated as **constraint satisfaction**. We have varia
 
 The point here is that the goal is specified by constraints, not by a single target state.
 
-### Iterative improvement and the State Space Search landscape
+### Iterative improvement
 
 We restrict the state space to configurations with **exactly $n$ queens** on the board. The **start state** is any such configuration (e.g. one queen per column). The search uses **iterative improvement**: (1) start from a random or given configuration, and (2) repeatedly move to a neighboring state that has fewer conflicts until a goal state is reached.
 
@@ -395,7 +395,7 @@ We restrict the state space to configurations with **exactly $n$ queens** on the
 
 The walkthrough shows how iterative improvement reduces $h$ step by step until we reach a solution.
 
-#### State Space Landscape 
+#### State Space Search Landscape 
 
 Imagine the states as points in a 2D (or higher-dimensional) space and $h$ as a **height** perpendicular to that space. We get a **state space search landscape**: a surface whose elevation at each state is $h$. Valleys (low $h$) are bad configurations; the goal is the deepest valley ($h = 0$). Equivalently, define $\tilde{h} = -(\text{number of conflicts})$ so that the goal is a **global maximum** and we “climb” toward it. This 3D topography has peaks, valleys, and ridges and visualizes how the cost or fitness varies over the solution space.
 
@@ -411,3 +411,17 @@ Below is an example of an 8x8 board with 8 queens in a given state. The numbers 
 2. **First-choice hill climbing:** Scan neighbors in some order and move to the **first** neighbor that improves the score. Faster per step; depends on scan order.
 3. **Stochastic hill climbing:** If several neighbors improve the score, choose among them **at random** (e.g. with probability proportional to the improvement). Adds randomness to escape shallow local optima.
 4. Many other variants exist (e.g. random restarts).
+
+Unfortunately, there are states where traversal can get stuck at. Examples being local maxima and shoulders and "flat" local maxima.
+
+![img](landscape2.png)
+
+So, hill climbing does not guarantee us getting to the global maximum.
+
+Why would we use hill climbing then? A few reasons.
+
+- Hill climbing is memory less (we save on space). Algorithms like $A^*$ need auxiliary space.
+
+- In many real world scenarios, local maxima may be good enough and acceptable.
+
+- We can do random restarts (re-run the algorithm from a different random start state) to tackle local maxima. Across these random restarts, we can save the best local maxima. If probability of landing at a state leading to the global maximum is $p$, then we need roughly $1/p$ random restarts to get to it.
