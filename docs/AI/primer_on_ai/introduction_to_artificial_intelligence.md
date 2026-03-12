@@ -181,6 +181,16 @@ distance heuristic $h_{SLD}$. Nodes are labeled with their h-values.
 
 The solution it found does not have optimal cost. The path via Sibiu and Fagaras to Bucharest is 32 miles longer than the path through Rimnicu Vilcea and Pitesti. This is why the algorithm is called “greedy”— on each iteration it tries to get as close to a goal as it can, but greediness can lead to worse results than being careful. Greedy best-first graph search is complete in finite state spaces, but not in infinite ones.
 
+### Beam search
+
+**Beam search** is a compromise between greedy search (which keeps a single candidate) and breadth-first search (which keeps all candidates). We fix a **beam width** $k$. At each step we expand the current set of nodes and obtain all their successors, then we **keep only the best $k$** of these successors (by some score, e.g. $h(n)$ or $f(n) = g(n) + h(n)$) and discard the rest. So we maintain at most $k$ nodes at any time—a "beam" of the most promising candidates.
+
+- **$k = 1$:** Beam search reduces to **greedy best-first search** (one candidate at a time).
+- **$k$ large enough:** If $k$ is at least as large as the maximum branching factor at any level, we never prune, so beam search behaves like **breadth-first search** (or best-first with a large frontier).
+- **Typical use:** Small $k$ (e.g. 5–20) keeps memory low while allowing several promising paths to be explored in parallel. This is especially common in **sequence generation**: e.g. in machine translation or text generation, we build the output token by token; at each step we have many possible next tokens, and beam search keeps the top-$k$ partial sequences (by log-probability or score) and extends only those. So we avoid the combinatorial explosion of keeping all possibilities while still exploring more than a single greedy path.
+
+Beam search is **not complete** in general (we may prune a branch that leads to the only solution) and **not optimal** (we may prune the branch that leads to the best solution). It is a heuristic that trades optimality and completeness for efficiency and is widely used when full search is too expensive.
+
 ### $A^*$ search
 
 The flaw with Greedy best-first search is that it does not consider the cost to get to the next node.
@@ -426,6 +436,10 @@ Why would we use hill climbing then? A few reasons.
 
 - Another way to get out of a local maximum is to **accept a move to a state with lower $h$** with some probability. When we consider such a downhill move, we **flip a coin that is biased with probability $p$** (e.g. $p$ = chance of heads). If the coin comes up heads, we accept the move; otherwise we reject it. This $p$ can vary over the run of the algorithm—during initial stages $p$ can be high, and later it can be low. **Reason:** Early on, high $p$ encourages **exploration** (we allow downhill moves to escape shallow local optima and reach other regions of the landscape). Later, low $p$ encourages **exploitation** (we mostly go uphill and settle into a good solution instead of wandering away).
 
+- **Tabu search** helps in two situations. **(1) Plateaus:** When the landscape has **plateaus** (flat regions where many neighbors have the same $h$), standard hill climbing may **cycle** between the same few states. Tabu search keeps a **tabu list**: a short memory of recently visited states (or recent moves) that are **forbidden** for the next few steps. When we choose a neighbor, we do not pick one on the tabu list (unless it improves the best solution seen so far), so we explore new directions and avoid cycles. **(2) Local maxima:** At a **local maximum**, every neighbor has lower $h$, so there is no improving move. We can allow a move to a **worse** neighbor (e.g. the least-bad one). We then add the current state (the local maximum we just left) to the tabu list, so we **cannot return to it** for a number of steps. We may walk down a **different side** of the peak. We have several worse neighbors to choose from, so we need not retrace the path we came up; going down another side can lead to a different part of the landscape and eventually to a better (or global) maximum. 
+
+![img](tabu.png)
+
 ### Hill climbing vs gradient ascent (or descent)
 
 | Aspect | Hill climbing | Gradient ascent / descent |
@@ -439,4 +453,3 @@ Why would we use hill climbing then? A few reasons.
 Both are **iterative** algorithms that take steps to improve the objective and can get stuck in local optima (hill climbing at a local maximum, gradient ascent at a local maximum).
 
 ![img](gd.png)
-
