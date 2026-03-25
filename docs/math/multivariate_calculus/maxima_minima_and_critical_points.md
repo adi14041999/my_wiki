@@ -6,6 +6,12 @@ A useful result in single-variable calculus is the **first derivative test**. If
 
 It is worth emphasizing that the **differentiability** of $f$ is necessary here. For example, the function $f(x) = |x|$ attains its minimum value of $0$ at $x = 0$, but since $f$ is not differentiable at that point we cannot say that $x = 0$ is a critical point for $f$. The first derivative test does not apply when the function fails to be differentiable at the point in question.
 
+Knowing that $f'(c) = 0$ does **not** by itself tell us whether $c$ is a local maximum, a local minimum, or neither (e.g. a flat point or inflection). Two standard ways to classify a critical point are:
+
+**First derivative test (sign change):** Suppose $f$ is continuous at $c$ and differentiable on a punctured neighborhood of $c$ (i.e. on $(c - \delta, c)$ and $(c, c + \delta)$ for some $\delta > 0$). If $f'$ is **positive to the left** of $c$ and **negative to the right**, then $f$ increases toward $c$ and decreases after $c$, so $f$ has a **local maximum** at $c$. If $f'$ is **negative to the left** and **positive to the right**, then $f$ has a **local minimum** at $c$. If the sign of $f'$ is the same on both sides (or $f'$ vanishes in whole intervals), this test may be inconclusive.
+
+**Second derivative test:** Suppose $f$ is twice differentiable at $c$ and $f'(c) = 0$. If $f''(c) > 0$, then the graph is **concave up** at $c$, so $f$ has a **local minimum** at $c$. If $f''(c) < 0$, the graph is **concave down** at $c$, so $f$ has a **local maximum** at $c$. If $f''(c) = 0$, the test gives **no conclusion** (e.g. $x^4$ and $x^3$ at $0$ behave differently).
+
 ## Motivation
 
 Optimization for functions of $n$ variables is one of the important applications of multivariable calculus.
@@ -212,3 +218,142 @@ Comparing the values of $f$ at all of these points (the one critical point in th
 Moving beyond two variables to the **3-variable case**, if we are instead considering a function $f \colon D \to \mathbb{R}$ for a region $D$ inside $\mathbb{R}^3$ such as a solid cube, then we first consider its extrema in the **interior** (which must be among the critical points). Then we need to find extrema on each of the **square faces**— which brings us back to an instance of the 2-dimensional extrema problem on a region with boundaries. In particular, the study of these square faces requires separate work on their **edges** and, in particular, at all of the **vertices** of the cube. As you can see, this is potentially a lot of work!
 
 We hope that the preceding examples convey a sense of how one can aim to find maxima and minima in any given situation on a reasonable region $D$ inside $\mathbb{R}^n$ by combining the technique of critical points on the interior with "lower-dimensional" extrema problems along the boundary.
+
+## Exercises
+
+**1.** Let
+
+$$f(x, y) = xy^2 - 4xy + \tfrac{1}{2}x^2 + 1.$$
+
+On the square
+
+$$S = \{ (x, y) \in \mathbb{R}^2 : -1 \leq x \leq 1,\ -1 \leq y \leq 1 \},$$
+
+analyze $f$ on each side of $S$, compare with $f(0, 0)$, and determine where $f$ attains its global maximum and global minimum on $S$.
+
+**Solution:** First,
+
+$$f_x = y^2 - 4y + x, \qquad f_y = 2xy - 4x = 2x(y - 2)$$
+
+On each edge we restrict $f$ to one variable and optimize on $[-1, 1]$. In every case the derivative has its only zero outside the open interval, so on each closed edge the extrema occur at the endpoints (the corners of $S$).
+
+- **$x = 1$:** $f(1, y) = y^2 - 4y + \tfrac{3}{2}$. Endpoints: $f(1, -1) = \tfrac{13}{2}$, $f(1, 1) = -\tfrac{3}{2}$.
+
+- **$x = -1$:** $f(-1, y) = -y^2 + 4y + \tfrac{3}{2}$. Endpoints: $f(-1, -1) = -\tfrac{7}{2}$, $f(-1, 1) = \tfrac{9}{2}$.
+
+- **$y = 1$:** $f(x, 1) = \tfrac{1}{2}x^2 - 3x + 1$. Endpoints: $f(-1, 1) = \tfrac{9}{2}$, $f(1, 1) = -\tfrac{3}{2}$.
+
+- **$y = -1$:** $f(x, -1) = \tfrac{1}{2}x^2 + 5x + 1$. Endpoints: $f(-1, -1) = -\tfrac{7}{2}$, $f(1, -1) = \tfrac{13}{2}$.
+
+The values to compare are $1$ at $(0, 0)$ and the four corner values above. The largest is $\tfrac{13}{2} = 6.5$ at $(1, -1)$; the smallest is $-\tfrac{7}{2} = -3.5$ at $(-1, -1)$.
+
+On $S$, $f$ attains its **maximum** $\tfrac{13}{2}$ at $(1, -1)$ and its **minimum** $-\tfrac{7}{2}$ at $(-1, -1)$. In particular $f(0, 0) = 1$ is neither maximal nor minimal on $S$ (it lies strictly between the min and max).
+
+**2.** Let
+
+$$f(x, y) = x^3 - 3x^2 - 6xy + 9x + 3y^2.$$
+
+**(a)** Show that $f$ has exactly two critical points: $(1, 1)$ and $(3, 3)$.
+
+**Solution:** Compute
+
+$$f_x = 3x^2 - 6x - 6y + 9 = 3(x^2 - 2x - 2y + 3), \qquad f_y = -6x + 6y = 6(y - x).$$
+
+From $f_y = 0$ we get $y = x$. Substitute into $f_x = 0$:
+
+$$x^2 - 2x - 2x + 3 = x^2 - 4x + 3 = (x - 1)(x - 3) = 0,$$
+
+so $x = 1$ or $x = 3$, hence $y = x$ gives $(1, 1)$ and $(3, 3)$. These are the only solutions of $f_x = f_y = 0$, so $f$ has **exactly two** critical points.
+
+**(b)** By examining $f$ on the lines $x = 1$ and $y = x$ through $(1, 1)$, explain why $(1, 1)$ is a saddle point. For completeness: $(3, 3)$ is a local minimum.
+
+**Solution:** Restrict to
+
+$$g(y) := f(1, y) = 1 - 3 - 6y + 9 + 3y^2 = 3y^2 - 6y + 7 = 3(y - 1)^2 + 4.$$
+
+Then $g(y) \geq 4 = g(1)$ for all $y$, with equality only at $y = 1$. So along $x = 1$, the point $(1, 1)$ is a **strict local minimum** (in fact along that entire line).
+
+**Line $y = x$:** Restrict to
+
+$$h(x) := f(x, x) = x^3 - 3x^2 - 6x^2 + 9x + 3x^2 = x^3 - 6x^2 + 9x = x(x - 3)^2.$$
+
+Then
+
+$$h'(x) = (x - 3)^2 + 2x(x - 3) = (x - 3)\bigl((x - 3) + 2x\bigr) = (x - 3)(3x - 3) = 3(x - 1)(x - 3).$$
+
+For $x$ slightly less than $1$, both factors $(x - 1)$ and $(x - 3)$ are negative, so $h'(x) > 0$; for $x$ slightly greater than $1$ (but still $< 3$), $(x - 1) > 0$ and $(x - 3) < 0$, so $h'(x) < 0$. Thus $h$ has a **local maximum** at $x = 1$, i.e. $(1, 1)$ is a local maximum along the line $y = x$.
+
+Since $(1, 1)$ is a local minimum along one line through it and a local maximum along another, it is a **saddle point** of $f$.
+
+**(c)** By examining $f$ on the $x$-axis, show that $f$ has no global maximum and no global minimum on $\mathbb{R}^2$.
+
+**Solution:** On the $x$-axis ($y = 0$), define the single-variable function
+
+$$\varphi(x) := f(x, 0) = x^3 - 3x^2 + 9x.$$
+
+Its derivatives are
+
+$$\varphi'(x) = 3x^2 - 6x + 9 = 3(x^2 - 2x + 3) = 3\bigl((x - 1)^2 + 2\bigr).$$
+
+Since $(x - 1)^2 + 2 > 0$ for every $x \in \mathbb{R}$, we have $\varphi'(x) > 0$ for all $x$. Thus $\varphi$ is **strictly increasing** on $\mathbb{R}$. In particular $\varphi$ has **no critical points** on the $x$-axis (so no interior candidate for a max or min of $f$ along that line beyond what monotonicity already tells us).
+
+A strictly increasing function on $\mathbb{R}$ is **unbounded above** and **unbounded below**. Equivalently $\lim_{x \to +\infty} \varphi(x) = +\infty$ and $\lim_{x \to -\infty} \varphi(x) = -\infty$.
+
+$f$ has **no global maximum** and **no global minimum** on $\mathbb{R}^2$.
+
+**3.** Let $f(x, y) = x^2 + 3xy + y^2$, and let $D$ be the region defined by $y \geq 1$ and $x^2 + y^2 \leq 10$. 
+
+**(a)** Find the critical points of $f$ in the interior of $D$.
+
+**Solution:** First,
+
+$$f_x = 2x + 3y, \qquad f_y = 3x + 2y.$$
+
+Critical points of $f$ on $\mathbb{R}^2$ satisfy $f_x = f_y = 0$, i.e.
+
+$$2x + 3y = 0, \qquad 3x + 2y = 0.$$
+
+The **interior** of $D$ (as a subset of $\mathbb{R}^2$) consists of points with **strict** inequalities: $y > 1$ and $x^2 + y^2 < 10$. The point $(0, 0)$ does not lie in $D$ at all, since it fails $y \geq 1$. Hence $(0, 0)$ is not in the interior of $D$.
+
+$f$ has **no** critical points in the interior of $D$.
+
+**(b)** With the same $f$ and $D$ as above, find the extrema of $f$ on the boundary of $D$ by describing both the bottom edge and the circular arc in terms of $x$ alone (so that each piece is a single-variable calculus problem). Combine with the interior analysis to find the extrema of $f$ on all of $D$—both the extreme values and the points where they are attained.
+
+**Solution:** The boundary of $D$ has two parts:
+
+1. **Bottom edge:** $y = 1$ with $x^2 + y^2 \leq 10$, i.e. $x^2 \leq 9$, so $x \in [-3, 3]$.
+2. **Circular arc:** $x^2 + y^2 = 10$ with $y \geq 1$. Then $y = \sqrt{10 - x^2}$ (positive root), and $y \geq 1$ forces $10 - x^2 \geq 1$, i.e. $x^2 \leq 9$, so again $x \in [-3, 3]$. The endpoints $(\pm 3, 1)$ are where the edge and the arc meet.
+
+**Bottom edge (parameter $x$):** Substitute $y = 1$:
+
+$$g(x) := f(x, 1) = x^2 + 3x + 1, \qquad x \in [-3, 3].$$
+
+Then $g'(x) = 2x + 3$, so $g'(x) = 0$ at $x = -\tfrac{3}{2}$ (which lies in $(-3, 3)$). Values:
+
+$$g\!\left(-\tfrac{3}{2}\right) = \tfrac{9}{4} - \tfrac{9}{2} + 1 = -\tfrac{5}{4}, \qquad g(-3) = 1, \qquad g(3) = 19.$$
+
+**Circular arc (parameter $x$):** Substitute $y = \sqrt{10 - x^2}$:
+
+$$f(x, y) = x^2 + 3x\sqrt{10 - x^2} + (10 - x^2) = 10 + 3x\sqrt{10 - x^2}.$$
+
+Define
+
+$$h(x) := 10 + 3x\sqrt{10 - x^2}, \qquad x \in [-3, 3].$$
+
+Then (for $x \in (-3, 3)$ where $\sqrt{10 - x^2} > 0$)
+
+$$h'(x) = 3\sqrt{10 - x^2} + 3x \cdot \frac{-x}{\sqrt{10 - x^2}} = \frac{3(10 - x^2) - 3x^2}{\sqrt{10 - x^2}} = \frac{3(10 - 2x^2)}{\sqrt{10 - x^2}}.$$
+
+Thus $h'(x) = 0$ when $x^2 = 5$, i.e. $x = \pm \sqrt{5}$. Both lie in $(-3, 3)$. Here $y = \sqrt{10 - 5} = \sqrt{5}$. Compute
+
+$$f(\sqrt{5}, \sqrt{5}) = 5 + 3 \cdot 5 + 5 = 25, \qquad f(-\sqrt{5}, \sqrt{5}) = 5 - 15 + 5 = -5.$$
+
+At the arc endpoints (same as the bottom corners), $h(\pm 3) = f(\pm 3, 1)$: $h(3) = 19$, $h(-3) = 1$.
+
+**Boundary extrema:** On the bottom edge, the minimum is $-\tfrac{5}{4}$ at $\left(-\tfrac{3}{2}, 1\right)$ and the maximum along that segment is $19$ at $(3, 1)$. On the arc, the maximum is $25$ at $(\sqrt{5}, \sqrt{5})$ and the minimum is $-5$ at $(-\sqrt{5}, \sqrt{5})$, with endpoint values $1$ and $19$ as above.
+
+**Global extrema on $D$:** There are no interior critical points in $D$, so the global maximum and minimum of $f$ on $D$ occur on the boundary. Comparing all candidate values:
+
+$$-5 < -\tfrac{5}{4} < 1 < 19 < 25.$$
+
+Hence $f$ attains its **maximum** $\mathbf{25}$ at $\mathbf{(\sqrt{5}, \sqrt{5})}$ and its **minimum** $\mathbf{-5}$ at $\mathbf{(-\sqrt{5}, \sqrt{5})}$ on $D$.

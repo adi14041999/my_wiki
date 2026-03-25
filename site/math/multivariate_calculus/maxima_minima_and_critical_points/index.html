@@ -3543,6 +3543,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercises
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3847,6 +3858,9 @@
 <h2 id="single-variable-recap-first-derivative-test">Single-variable recap: first derivative test</h2>
 <p>A useful result in single-variable calculus is the <strong>first derivative test</strong>. If <span class="arithmatex">\(f \colon (a, b) \to \mathbb{R}\)</span> is differentiable and attains a local maximum or local minimum at some point <span class="arithmatex">\(x = c\)</span> inside this open interval (i.e. <span class="arithmatex">\(a &lt; c &lt; b\)</span>), then <span class="arithmatex">\(f'(c) = 0\)</span>. Any point where <span class="arithmatex">\(f'(c) = 0\)</span> is called a <strong>critical point</strong> for <span class="arithmatex">\(f\)</span>, so local maxima and local minima of differentiable functions on an open interval are always critical points.</p>
 <p>It is worth emphasizing that the <strong>differentiability</strong> of <span class="arithmatex">\(f\)</span> is necessary here. For example, the function <span class="arithmatex">\(f(x) = |x|\)</span> attains its minimum value of <span class="arithmatex">\(0\)</span> at <span class="arithmatex">\(x = 0\)</span>, but since <span class="arithmatex">\(f\)</span> is not differentiable at that point we cannot say that <span class="arithmatex">\(x = 0\)</span> is a critical point for <span class="arithmatex">\(f\)</span>. The first derivative test does not apply when the function fails to be differentiable at the point in question.</p>
+<p>Knowing that <span class="arithmatex">\(f'(c) = 0\)</span> does <strong>not</strong> by itself tell us whether <span class="arithmatex">\(c\)</span> is a local maximum, a local minimum, or neither (e.g. a flat point or inflection). Two standard ways to classify a critical point are:</p>
+<p><strong>First derivative test (sign change):</strong> Suppose <span class="arithmatex">\(f\)</span> is continuous at <span class="arithmatex">\(c\)</span> and differentiable on a punctured neighborhood of <span class="arithmatex">\(c\)</span> (i.e. on <span class="arithmatex">\((c - \delta, c)\)</span> and <span class="arithmatex">\((c, c + \delta)\)</span> for some <span class="arithmatex">\(\delta &gt; 0\)</span>). If <span class="arithmatex">\(f'\)</span> is <strong>positive to the left</strong> of <span class="arithmatex">\(c\)</span> and <strong>negative to the right</strong>, then <span class="arithmatex">\(f\)</span> increases toward <span class="arithmatex">\(c\)</span> and decreases after <span class="arithmatex">\(c\)</span>, so <span class="arithmatex">\(f\)</span> has a <strong>local maximum</strong> at <span class="arithmatex">\(c\)</span>. If <span class="arithmatex">\(f'\)</span> is <strong>negative to the left</strong> and <strong>positive to the right</strong>, then <span class="arithmatex">\(f\)</span> has a <strong>local minimum</strong> at <span class="arithmatex">\(c\)</span>. If the sign of <span class="arithmatex">\(f'\)</span> is the same on both sides (or <span class="arithmatex">\(f'\)</span> vanishes in whole intervals), this test may be inconclusive.</p>
+<p><strong>Second derivative test:</strong> Suppose <span class="arithmatex">\(f\)</span> is twice differentiable at <span class="arithmatex">\(c\)</span> and <span class="arithmatex">\(f'(c) = 0\)</span>. If <span class="arithmatex">\(f''(c) &gt; 0\)</span>, then the graph is <strong>concave up</strong> at <span class="arithmatex">\(c\)</span>, so <span class="arithmatex">\(f\)</span> has a <strong>local minimum</strong> at <span class="arithmatex">\(c\)</span>. If <span class="arithmatex">\(f''(c) &lt; 0\)</span>, the graph is <strong>concave down</strong> at <span class="arithmatex">\(c\)</span>, so <span class="arithmatex">\(f\)</span> has a <strong>local maximum</strong> at <span class="arithmatex">\(c\)</span>. If <span class="arithmatex">\(f''(c) = 0\)</span>, the test gives <strong>no conclusion</strong> (e.g. <span class="arithmatex">\(x^4\)</span> and <span class="arithmatex">\(x^3\)</span> at <span class="arithmatex">\(0\)</span> behave differently).</p>
 <h2 id="motivation">Motivation</h2>
 <p>Optimization for functions of <span class="arithmatex">\(n\)</span> variables is one of the important applications of multivariable calculus.</p>
 <p><strong>Example:</strong> Suppose we look at the graph of the data points <span class="arithmatex">\((x_i, y_i)\)</span>, and notice that it looks approximately "periodic" (like the graph of sine or cosine) as in the figure below. This might suggest that it is more reasonable to try to fit the data with a function of the form <span class="arithmatex">\(A\sin(Bx + C)\)</span>. </p>
@@ -3951,6 +3965,88 @@ points.</p>
 <p><strong>Note:</strong> <em>This method does not help at all in determining whether the other points we identified above are at least local maxima or minima over the domain, or whether the critical point in the interior is a saddle point.</em></p>
 <p>Moving beyond two variables to the <strong>3-variable case</strong>, if we are instead considering a function <span class="arithmatex">\(f \colon D \to \mathbb{R}\)</span> for a region <span class="arithmatex">\(D\)</span> inside <span class="arithmatex">\(\mathbb{R}^3\)</span> such as a solid cube, then we first consider its extrema in the <strong>interior</strong> (which must be among the critical points). Then we need to find extrema on each of the <strong>square faces</strong>— which brings us back to an instance of the 2-dimensional extrema problem on a region with boundaries. In particular, the study of these square faces requires separate work on their <strong>edges</strong> and, in particular, at all of the <strong>vertices</strong> of the cube. As you can see, this is potentially a lot of work!</p>
 <p>We hope that the preceding examples convey a sense of how one can aim to find maxima and minima in any given situation on a reasonable region <span class="arithmatex">\(D\)</span> inside <span class="arithmatex">\(\mathbb{R}^n\)</span> by combining the technique of critical points on the interior with "lower-dimensional" extrema problems along the boundary.</p>
+<h2 id="exercises">Exercises</h2>
+<p><strong>1.</strong> Let</p>
+<div class="arithmatex">\[f(x, y) = xy^2 - 4xy + \tfrac{1}{2}x^2 + 1.\]</div>
+<p>On the square</p>
+<div class="arithmatex">\[S = \{ (x, y) \in \mathbb{R}^2 : -1 \leq x \leq 1,\ -1 \leq y \leq 1 \},\]</div>
+<p>analyze <span class="arithmatex">\(f\)</span> on each side of <span class="arithmatex">\(S\)</span>, compare with <span class="arithmatex">\(f(0, 0)\)</span>, and determine where <span class="arithmatex">\(f\)</span> attains its global maximum and global minimum on <span class="arithmatex">\(S\)</span>.</p>
+<p><strong>Solution:</strong> First,</p>
+<div class="arithmatex">\[f_x = y^2 - 4y + x, \qquad f_y = 2xy - 4x = 2x(y - 2)\]</div>
+<p>On each edge we restrict <span class="arithmatex">\(f\)</span> to one variable and optimize on <span class="arithmatex">\([-1, 1]\)</span>. In every case the derivative has its only zero outside the open interval, so on each closed edge the extrema occur at the endpoints (the corners of <span class="arithmatex">\(S\)</span>).</p>
+<ul>
+<li>
+<p><strong><span class="arithmatex">\(x = 1\)</span>:</strong> <span class="arithmatex">\(f(1, y) = y^2 - 4y + \tfrac{3}{2}\)</span>. Endpoints: <span class="arithmatex">\(f(1, -1) = \tfrac{13}{2}\)</span>, <span class="arithmatex">\(f(1, 1) = -\tfrac{3}{2}\)</span>.</p>
+</li>
+<li>
+<p><strong><span class="arithmatex">\(x = -1\)</span>:</strong> <span class="arithmatex">\(f(-1, y) = -y^2 + 4y + \tfrac{3}{2}\)</span>. Endpoints: <span class="arithmatex">\(f(-1, -1) = -\tfrac{7}{2}\)</span>, <span class="arithmatex">\(f(-1, 1) = \tfrac{9}{2}\)</span>.</p>
+</li>
+<li>
+<p><strong><span class="arithmatex">\(y = 1\)</span>:</strong> <span class="arithmatex">\(f(x, 1) = \tfrac{1}{2}x^2 - 3x + 1\)</span>. Endpoints: <span class="arithmatex">\(f(-1, 1) = \tfrac{9}{2}\)</span>, <span class="arithmatex">\(f(1, 1) = -\tfrac{3}{2}\)</span>.</p>
+</li>
+<li>
+<p><strong><span class="arithmatex">\(y = -1\)</span>:</strong> <span class="arithmatex">\(f(x, -1) = \tfrac{1}{2}x^2 + 5x + 1\)</span>. Endpoints: <span class="arithmatex">\(f(-1, -1) = -\tfrac{7}{2}\)</span>, <span class="arithmatex">\(f(1, -1) = \tfrac{13}{2}\)</span>.</p>
+</li>
+</ul>
+<p>The values to compare are <span class="arithmatex">\(1\)</span> at <span class="arithmatex">\((0, 0)\)</span> and the four corner values above. The largest is <span class="arithmatex">\(\tfrac{13}{2} = 6.5\)</span> at <span class="arithmatex">\((1, -1)\)</span>; the smallest is <span class="arithmatex">\(-\tfrac{7}{2} = -3.5\)</span> at <span class="arithmatex">\((-1, -1)\)</span>.</p>
+<p>On <span class="arithmatex">\(S\)</span>, <span class="arithmatex">\(f\)</span> attains its <strong>maximum</strong> <span class="arithmatex">\(\tfrac{13}{2}\)</span> at <span class="arithmatex">\((1, -1)\)</span> and its <strong>minimum</strong> <span class="arithmatex">\(-\tfrac{7}{2}\)</span> at <span class="arithmatex">\((-1, -1)\)</span>. In particular <span class="arithmatex">\(f(0, 0) = 1\)</span> is neither maximal nor minimal on <span class="arithmatex">\(S\)</span> (it lies strictly between the min and max).</p>
+<p><strong>2.</strong> Let</p>
+<div class="arithmatex">\[f(x, y) = x^3 - 3x^2 - 6xy + 9x + 3y^2.\]</div>
+<p><strong>(a)</strong> Show that <span class="arithmatex">\(f\)</span> has exactly two critical points: <span class="arithmatex">\((1, 1)\)</span> and <span class="arithmatex">\((3, 3)\)</span>.</p>
+<p><strong>Solution:</strong> Compute</p>
+<div class="arithmatex">\[f_x = 3x^2 - 6x - 6y + 9 = 3(x^2 - 2x - 2y + 3), \qquad f_y = -6x + 6y = 6(y - x).\]</div>
+<p>From <span class="arithmatex">\(f_y = 0\)</span> we get <span class="arithmatex">\(y = x\)</span>. Substitute into <span class="arithmatex">\(f_x = 0\)</span>:</p>
+<div class="arithmatex">\[x^2 - 2x - 2x + 3 = x^2 - 4x + 3 = (x - 1)(x - 3) = 0,\]</div>
+<p>so <span class="arithmatex">\(x = 1\)</span> or <span class="arithmatex">\(x = 3\)</span>, hence <span class="arithmatex">\(y = x\)</span> gives <span class="arithmatex">\((1, 1)\)</span> and <span class="arithmatex">\((3, 3)\)</span>. These are the only solutions of <span class="arithmatex">\(f_x = f_y = 0\)</span>, so <span class="arithmatex">\(f\)</span> has <strong>exactly two</strong> critical points.</p>
+<p><strong>(b)</strong> By examining <span class="arithmatex">\(f\)</span> on the lines <span class="arithmatex">\(x = 1\)</span> and <span class="arithmatex">\(y = x\)</span> through <span class="arithmatex">\((1, 1)\)</span>, explain why <span class="arithmatex">\((1, 1)\)</span> is a saddle point. For completeness: <span class="arithmatex">\((3, 3)\)</span> is a local minimum.</p>
+<p><strong>Solution:</strong> Restrict to</p>
+<div class="arithmatex">\[g(y) := f(1, y) = 1 - 3 - 6y + 9 + 3y^2 = 3y^2 - 6y + 7 = 3(y - 1)^2 + 4.\]</div>
+<p>Then <span class="arithmatex">\(g(y) \geq 4 = g(1)\)</span> for all <span class="arithmatex">\(y\)</span>, with equality only at <span class="arithmatex">\(y = 1\)</span>. So along <span class="arithmatex">\(x = 1\)</span>, the point <span class="arithmatex">\((1, 1)\)</span> is a <strong>strict local minimum</strong> (in fact along that entire line).</p>
+<p><strong>Line <span class="arithmatex">\(y = x\)</span>:</strong> Restrict to</p>
+<div class="arithmatex">\[h(x) := f(x, x) = x^3 - 3x^2 - 6x^2 + 9x + 3x^2 = x^3 - 6x^2 + 9x = x(x - 3)^2.\]</div>
+<p>Then</p>
+<div class="arithmatex">\[h'(x) = (x - 3)^2 + 2x(x - 3) = (x - 3)\bigl((x - 3) + 2x\bigr) = (x - 3)(3x - 3) = 3(x - 1)(x - 3).\]</div>
+<p>For <span class="arithmatex">\(x\)</span> slightly less than <span class="arithmatex">\(1\)</span>, both factors <span class="arithmatex">\((x - 1)\)</span> and <span class="arithmatex">\((x - 3)\)</span> are negative, so <span class="arithmatex">\(h'(x) &gt; 0\)</span>; for <span class="arithmatex">\(x\)</span> slightly greater than <span class="arithmatex">\(1\)</span> (but still <span class="arithmatex">\(&lt; 3\)</span>), <span class="arithmatex">\((x - 1) &gt; 0\)</span> and <span class="arithmatex">\((x - 3) &lt; 0\)</span>, so <span class="arithmatex">\(h'(x) &lt; 0\)</span>. Thus <span class="arithmatex">\(h\)</span> has a <strong>local maximum</strong> at <span class="arithmatex">\(x = 1\)</span>, i.e. <span class="arithmatex">\((1, 1)\)</span> is a local maximum along the line <span class="arithmatex">\(y = x\)</span>.</p>
+<p>Since <span class="arithmatex">\((1, 1)\)</span> is a local minimum along one line through it and a local maximum along another, it is a <strong>saddle point</strong> of <span class="arithmatex">\(f\)</span>.</p>
+<p><strong>(c)</strong> By examining <span class="arithmatex">\(f\)</span> on the <span class="arithmatex">\(x\)</span>-axis, show that <span class="arithmatex">\(f\)</span> has no global maximum and no global minimum on <span class="arithmatex">\(\mathbb{R}^2\)</span>.</p>
+<p><strong>Solution:</strong> On the <span class="arithmatex">\(x\)</span>-axis (<span class="arithmatex">\(y = 0\)</span>), define the single-variable function</p>
+<div class="arithmatex">\[\varphi(x) := f(x, 0) = x^3 - 3x^2 + 9x.\]</div>
+<p>Its derivatives are</p>
+<div class="arithmatex">\[\varphi'(x) = 3x^2 - 6x + 9 = 3(x^2 - 2x + 3) = 3\bigl((x - 1)^2 + 2\bigr).\]</div>
+<p>Since <span class="arithmatex">\((x - 1)^2 + 2 &gt; 0\)</span> for every <span class="arithmatex">\(x \in \mathbb{R}\)</span>, we have <span class="arithmatex">\(\varphi'(x) &gt; 0\)</span> for all <span class="arithmatex">\(x\)</span>. Thus <span class="arithmatex">\(\varphi\)</span> is <strong>strictly increasing</strong> on <span class="arithmatex">\(\mathbb{R}\)</span>. In particular <span class="arithmatex">\(\varphi\)</span> has <strong>no critical points</strong> on the <span class="arithmatex">\(x\)</span>-axis (so no interior candidate for a max or min of <span class="arithmatex">\(f\)</span> along that line beyond what monotonicity already tells us).</p>
+<p>A strictly increasing function on <span class="arithmatex">\(\mathbb{R}\)</span> is <strong>unbounded above</strong> and <strong>unbounded below</strong>. Equivalently <span class="arithmatex">\(\lim_{x \to +\infty} \varphi(x) = +\infty\)</span> and <span class="arithmatex">\(\lim_{x \to -\infty} \varphi(x) = -\infty\)</span>.</p>
+<p><span class="arithmatex">\(f\)</span> has <strong>no global maximum</strong> and <strong>no global minimum</strong> on <span class="arithmatex">\(\mathbb{R}^2\)</span>.</p>
+<p><strong>3.</strong> Let <span class="arithmatex">\(f(x, y) = x^2 + 3xy + y^2\)</span>, and let <span class="arithmatex">\(D\)</span> be the region defined by <span class="arithmatex">\(y \geq 1\)</span> and <span class="arithmatex">\(x^2 + y^2 \leq 10\)</span>. </p>
+<p><strong>(a)</strong> Find the critical points of <span class="arithmatex">\(f\)</span> in the interior of <span class="arithmatex">\(D\)</span>.</p>
+<p><strong>Solution:</strong> First,</p>
+<div class="arithmatex">\[f_x = 2x + 3y, \qquad f_y = 3x + 2y.\]</div>
+<p>Critical points of <span class="arithmatex">\(f\)</span> on <span class="arithmatex">\(\mathbb{R}^2\)</span> satisfy <span class="arithmatex">\(f_x = f_y = 0\)</span>, i.e.</p>
+<div class="arithmatex">\[2x + 3y = 0, \qquad 3x + 2y = 0.\]</div>
+<p>The <strong>interior</strong> of <span class="arithmatex">\(D\)</span> (as a subset of <span class="arithmatex">\(\mathbb{R}^2\)</span>) consists of points with <strong>strict</strong> inequalities: <span class="arithmatex">\(y &gt; 1\)</span> and <span class="arithmatex">\(x^2 + y^2 &lt; 10\)</span>. The point <span class="arithmatex">\((0, 0)\)</span> does not lie in <span class="arithmatex">\(D\)</span> at all, since it fails <span class="arithmatex">\(y \geq 1\)</span>. Hence <span class="arithmatex">\((0, 0)\)</span> is not in the interior of <span class="arithmatex">\(D\)</span>.</p>
+<p><span class="arithmatex">\(f\)</span> has <strong>no</strong> critical points in the interior of <span class="arithmatex">\(D\)</span>.</p>
+<p><strong>(b)</strong> With the same <span class="arithmatex">\(f\)</span> and <span class="arithmatex">\(D\)</span> as above, find the extrema of <span class="arithmatex">\(f\)</span> on the boundary of <span class="arithmatex">\(D\)</span> by describing both the bottom edge and the circular arc in terms of <span class="arithmatex">\(x\)</span> alone (so that each piece is a single-variable calculus problem). Combine with the interior analysis to find the extrema of <span class="arithmatex">\(f\)</span> on all of <span class="arithmatex">\(D\)</span>—both the extreme values and the points where they are attained.</p>
+<p><strong>Solution:</strong> The boundary of <span class="arithmatex">\(D\)</span> has two parts:</p>
+<ol>
+<li><strong>Bottom edge:</strong> <span class="arithmatex">\(y = 1\)</span> with <span class="arithmatex">\(x^2 + y^2 \leq 10\)</span>, i.e. <span class="arithmatex">\(x^2 \leq 9\)</span>, so <span class="arithmatex">\(x \in [-3, 3]\)</span>.</li>
+<li><strong>Circular arc:</strong> <span class="arithmatex">\(x^2 + y^2 = 10\)</span> with <span class="arithmatex">\(y \geq 1\)</span>. Then <span class="arithmatex">\(y = \sqrt{10 - x^2}\)</span> (positive root), and <span class="arithmatex">\(y \geq 1\)</span> forces <span class="arithmatex">\(10 - x^2 \geq 1\)</span>, i.e. <span class="arithmatex">\(x^2 \leq 9\)</span>, so again <span class="arithmatex">\(x \in [-3, 3]\)</span>. The endpoints <span class="arithmatex">\((\pm 3, 1)\)</span> are where the edge and the arc meet.</li>
+</ol>
+<p><strong>Bottom edge (parameter <span class="arithmatex">\(x\)</span>):</strong> Substitute <span class="arithmatex">\(y = 1\)</span>:</p>
+<div class="arithmatex">\[g(x) := f(x, 1) = x^2 + 3x + 1, \qquad x \in [-3, 3].\]</div>
+<p>Then <span class="arithmatex">\(g'(x) = 2x + 3\)</span>, so <span class="arithmatex">\(g'(x) = 0\)</span> at <span class="arithmatex">\(x = -\tfrac{3}{2}\)</span> (which lies in <span class="arithmatex">\((-3, 3)\)</span>). Values:</p>
+<div class="arithmatex">\[g\!\left(-\tfrac{3}{2}\right) = \tfrac{9}{4} - \tfrac{9}{2} + 1 = -\tfrac{5}{4}, \qquad g(-3) = 1, \qquad g(3) = 19.\]</div>
+<p><strong>Circular arc (parameter <span class="arithmatex">\(x\)</span>):</strong> Substitute <span class="arithmatex">\(y = \sqrt{10 - x^2}\)</span>:</p>
+<div class="arithmatex">\[f(x, y) = x^2 + 3x\sqrt{10 - x^2} + (10 - x^2) = 10 + 3x\sqrt{10 - x^2}.\]</div>
+<p>Define</p>
+<div class="arithmatex">\[h(x) := 10 + 3x\sqrt{10 - x^2}, \qquad x \in [-3, 3].\]</div>
+<p>Then (for <span class="arithmatex">\(x \in (-3, 3)\)</span> where <span class="arithmatex">\(\sqrt{10 - x^2} &gt; 0\)</span>)</p>
+<div class="arithmatex">\[h'(x) = 3\sqrt{10 - x^2} + 3x \cdot \frac{-x}{\sqrt{10 - x^2}} = \frac{3(10 - x^2) - 3x^2}{\sqrt{10 - x^2}} = \frac{3(10 - 2x^2)}{\sqrt{10 - x^2}}.\]</div>
+<p>Thus <span class="arithmatex">\(h'(x) = 0\)</span> when <span class="arithmatex">\(x^2 = 5\)</span>, i.e. <span class="arithmatex">\(x = \pm \sqrt{5}\)</span>. Both lie in <span class="arithmatex">\((-3, 3)\)</span>. Here <span class="arithmatex">\(y = \sqrt{10 - 5} = \sqrt{5}\)</span>. Compute</p>
+<div class="arithmatex">\[f(\sqrt{5}, \sqrt{5}) = 5 + 3 \cdot 5 + 5 = 25, \qquad f(-\sqrt{5}, \sqrt{5}) = 5 - 15 + 5 = -5.\]</div>
+<p>At the arc endpoints (same as the bottom corners), <span class="arithmatex">\(h(\pm 3) = f(\pm 3, 1)\)</span>: <span class="arithmatex">\(h(3) = 19\)</span>, <span class="arithmatex">\(h(-3) = 1\)</span>.</p>
+<p><strong>Boundary extrema:</strong> On the bottom edge, the minimum is <span class="arithmatex">\(-\tfrac{5}{4}\)</span> at <span class="arithmatex">\(\left(-\tfrac{3}{2}, 1\right)\)</span> and the maximum along that segment is <span class="arithmatex">\(19\)</span> at <span class="arithmatex">\((3, 1)\)</span>. On the arc, the maximum is <span class="arithmatex">\(25\)</span> at <span class="arithmatex">\((\sqrt{5}, \sqrt{5})\)</span> and the minimum is <span class="arithmatex">\(-5\)</span> at <span class="arithmatex">\((-\sqrt{5}, \sqrt{5})\)</span>, with endpoint values <span class="arithmatex">\(1\)</span> and <span class="arithmatex">\(19\)</span> as above.</p>
+<p><strong>Global extrema on <span class="arithmatex">\(D\)</span>:</strong> There are no interior critical points in <span class="arithmatex">\(D\)</span>, so the global maximum and minimum of <span class="arithmatex">\(f\)</span> on <span class="arithmatex">\(D\)</span> occur on the boundary. Comparing all candidate values:</p>
+<div class="arithmatex">\[-5 &lt; -\tfrac{5}{4} &lt; 1 &lt; 19 &lt; 25.\]</div>
+<p>Hence <span class="arithmatex">\(f\)</span> attains its <strong>maximum</strong> <span class="arithmatex">\(\mathbf{25}\)</span> at <span class="arithmatex">\(\mathbf{(\sqrt{5}, \sqrt{5})}\)</span> and its <strong>minimum</strong> <span class="arithmatex">\(\mathbf{-5}\)</span> at <span class="arithmatex">\(\mathbf{(-\sqrt{5}, \sqrt{5})}\)</span> on <span class="arithmatex">\(D\)</span>.</p>
 
 
 
