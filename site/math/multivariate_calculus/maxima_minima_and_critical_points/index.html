@@ -4047,6 +4047,90 @@ points.</p>
 <p><strong>Global extrema on <span class="arithmatex">\(D\)</span>:</strong> There are no interior critical points in <span class="arithmatex">\(D\)</span>, so the global maximum and minimum of <span class="arithmatex">\(f\)</span> on <span class="arithmatex">\(D\)</span> occur on the boundary. Comparing all candidate values:</p>
 <div class="arithmatex">\[-5 &lt; -\tfrac{5}{4} &lt; 1 &lt; 19 &lt; 25.\]</div>
 <p>Hence <span class="arithmatex">\(f\)</span> attains its <strong>maximum</strong> <span class="arithmatex">\(\mathbf{25}\)</span> at <span class="arithmatex">\(\mathbf{(\sqrt{5}, \sqrt{5})}\)</span> and its <strong>minimum</strong> <span class="arithmatex">\(\mathbf{-5}\)</span> at <span class="arithmatex">\(\mathbf{(-\sqrt{5}, \sqrt{5})}\)</span> on <span class="arithmatex">\(D\)</span>.</p>
+<p><strong>4.</strong> Let</p>
+<div class="arithmatex">\[D = \{(x,y)\in \mathbb{R}^2 : 0 \le x \le 4,\ 0 \le y \le x^2\}, \qquad f(x,y)=x^3+y^3-3xy.\]</div>
+<p>It is a fact that <span class="arithmatex">\(f\)</span> has extrema on <span class="arithmatex">\(D\)</span>.</p>
+<p><strong>(a)</strong> Draw a picture of <span class="arithmatex">\(D\)</span> and show that there are no critical points of <span class="arithmatex">\(f\)</span> in the interior of <span class="arithmatex">\(D\)</span> (that is, <span class="arithmatex">\(0&lt;x&lt;4\)</span>, <span class="arithmatex">\(0&lt;y&lt;x^2\)</span>). Conclude that <span class="arithmatex">\(f\)</span> has no extrema in the interior.</p>
+<p><strong>Solution:</strong> The region <span class="arithmatex">\(D\)</span> is the set of points between the <span class="arithmatex">\(x\)</span>-axis and the parabola <span class="arithmatex">\(y=x^2\)</span>, from <span class="arithmatex">\(x=0\)</span> to <span class="arithmatex">\(x=4\)</span>. So its boundary has four pieces:</p>
+<ol>
+<li>Bottom segment: <span class="arithmatex">\(y=0\)</span>, <span class="arithmatex">\(0\le x\le 4\)</span>.</li>
+<li>Left segment: <span class="arithmatex">\(x=0\)</span>, <span class="arithmatex">\(0\le y\le 0\)</span> (degenerate, just the point <span class="arithmatex">\((0,0)\)</span>).</li>
+<li>Parabolic arc: <span class="arithmatex">\(y=x^2\)</span>, <span class="arithmatex">\(0\le x\le 4\)</span>.</li>
+<li>Right segment: <span class="arithmatex">\(x=4\)</span>, <span class="arithmatex">\(0\le y\le 16\)</span>.</li>
+</ol>
+<p>Now compute</p>
+<div class="arithmatex">\[f_x=3x^2-3y=3(x^2-y), \qquad f_y=3y^2-3x=3(y^2-x).\]</div>
+<p>Critical points in the interior must satisfy</p>
+<div class="arithmatex">\[x^2-y=0,\qquad y^2-x=0.\]</div>
+<p>From <span class="arithmatex">\(y=x^2\)</span>, substitute into <span class="arithmatex">\(y^2=x\)</span>:</p>
+<div class="arithmatex">\[x^4=x \;\Longrightarrow\; x(x^3-1)=0 \;\Longrightarrow\; x=0 \text{ or } x=1.\]</div>
+<p>Then <span class="arithmatex">\((x,y)=(0,0)\)</span> or <span class="arithmatex">\((1,1)\)</span>. The interior requires <span class="arithmatex">\(0&lt;y&lt;x^2\)</span>; neither point satisfies this:</p>
+<ul>
+<li><span class="arithmatex">\((0,0)\)</span> is on the boundary.</li>
+<li><span class="arithmatex">\((1,1)\)</span> is also on the boundary since <span class="arithmatex">\(y=x^2\)</span>.</li>
+</ul>
+<p>Hence there are <strong>no interior critical points</strong>, so <span class="arithmatex">\(f\)</span> has no extrema in the interior of <span class="arithmatex">\(D\)</span>.</p>
+<p><strong>(b)</strong> Analyze <span class="arithmatex">\(f\)</span> on the boundary pieces using single-variable calculus.</p>
+<p><strong>Solution:</strong> We analyze each boundary piece.</p>
+<ul>
+<li>
+<p><strong>Bottom segment</strong> <span class="arithmatex">\(y=0\)</span>, <span class="arithmatex">\(0\le x\le 4\)</span>:
+  $$
+  f(x,0)=x^3.
+  $$
+  This is increasing on <span class="arithmatex">\([0,4]\)</span>. So min is <span class="arithmatex">\(0\)</span> at <span class="arithmatex">\(x=0\)</span>, max is <span class="arithmatex">\(64\)</span> at <span class="arithmatex">\(x=4\)</span>.</p>
+</li>
+<li>
+<p><strong>Left segment</strong> <span class="arithmatex">\(x=0\)</span>: this is only the point <span class="arithmatex">\((0,0)\)</span>, and
+  $$
+  f(0,0)=0.
+  $$</p>
+</li>
+<li>
+<p><strong>Parabolic arc</strong> <span class="arithmatex">\(y=x^2\)</span>, <span class="arithmatex">\(0\le x\le 4\)</span>:
+  $$
+  g(x):=f(x,x^2)=x^3+x^6-3x^3=x^6-2x^3.
+  $$
+  Differentiate:
+  $$
+  g'(x)=6x^5-6x^2=6x^2(x^3-1).
+  $$</p>
+</li>
+</ul>
+<p>Evaluate candidates on <span class="arithmatex">\([0,4]\)</span>:
+  $$
+  g(0)=0,\qquad g(1)=1-2=-1,\qquad g(4)=4^6-2\cdot 4^3=4096-128=3968.
+  $$
+  So on the parabolic boundary, min is <span class="arithmatex">\(-1\)</span> at <span class="arithmatex">\(x=1\)</span> (point <span class="arithmatex">\((1,1)\)</span>), max is <span class="arithmatex">\(3968\)</span> at <span class="arithmatex">\(x=4\)</span> (point <span class="arithmatex">\((4,16)\)</span>).</p>
+<ul>
+<li><strong>Right segment</strong> <span class="arithmatex">\(x=4\)</span>, <span class="arithmatex">\(0\le y\le 16\)</span>:
+  $$
+  h(y):=f(4,y)=64+y^3-12y.
+  $$
+  Then
+  $$
+  h'(y)=3y^2-12=3(y-2)(y+2).
+  $$
+  On <span class="arithmatex">\([0,16]\)</span>, the only critical point is <span class="arithmatex">\(y=2\)</span>. Evaluate:
+  $$
+  h(0)=64,\qquad h(2)=64+8-24=48,\qquad h(16)=64+4096-192=3968.
+  $$
+  So on this segment, the minimum is <span class="arithmatex">\(48\)</span> at <span class="arithmatex">\((4,2)\)</span> and the maximum is <span class="arithmatex">\(3968\)</span> at <span class="arithmatex">\((4,16)\)</span>.</li>
+</ul>
+<p><strong>(c)</strong> Find the maximal and minimal values of <span class="arithmatex">\(f\)</span> on all of <span class="arithmatex">\(D\)</span>, and where they occur.</p>
+<p><strong>Solution:</strong> Since there are no interior critical points, global extrema on <span class="arithmatex">\(D\)</span> must occur on the boundary. Compare all boundary candidate values:</p>
+<ul>
+<li><span class="arithmatex">\((0,0)\)</span> gives <span class="arithmatex">\(0\)</span>,</li>
+<li><span class="arithmatex">\((4,0)\)</span> gives <span class="arithmatex">\(64\)</span>,</li>
+<li><span class="arithmatex">\((4,2)\)</span> gives <span class="arithmatex">\(48\)</span>,</li>
+<li><span class="arithmatex">\((1,1)\)</span> gives <span class="arithmatex">\(-1\)</span>,</li>
+<li><span class="arithmatex">\((4,16)\)</span> gives <span class="arithmatex">\(3968\)</span>.</li>
+</ul>
+<p>Therefore:</p>
+<ul>
+<li>Global <strong>minimum</strong> on <span class="arithmatex">\(D\)</span> is <span class="arithmatex">\(\boxed{-1}\)</span> at <span class="arithmatex">\(\boxed{(1,1)}\)</span>.</li>
+<li>Global <strong>maximum</strong> on <span class="arithmatex">\(D\)</span> is <span class="arithmatex">\(\boxed{3968}\)</span> at <span class="arithmatex">\(\boxed{(4,16)}\)</span>.</li>
+</ul>
 
 
 

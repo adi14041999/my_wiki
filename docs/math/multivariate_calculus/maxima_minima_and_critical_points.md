@@ -357,3 +357,96 @@ At the arc endpoints (same as the bottom corners), $h(\pm 3) = f(\pm 3, 1)$: $h(
 $$-5 < -\tfrac{5}{4} < 1 < 19 < 25.$$
 
 Hence $f$ attains its **maximum** $\mathbf{25}$ at $\mathbf{(\sqrt{5}, \sqrt{5})}$ and its **minimum** $\mathbf{-5}$ at $\mathbf{(-\sqrt{5}, \sqrt{5})}$ on $D$.
+
+**4.** Let
+
+$$D = \{(x,y)\in \mathbb{R}^2 : 0 \le x \le 4,\ 0 \le y \le x^2\}, \qquad f(x,y)=x^3+y^3-3xy.$$
+
+It is a fact that $f$ has extrema on $D$.
+
+**(a)** Draw a picture of $D$ and show that there are no critical points of $f$ in the interior of $D$ (that is, $0<x<4$, $0<y<x^2$). Conclude that $f$ has no extrema in the interior.
+
+**Solution:** The region $D$ is the set of points between the $x$-axis and the parabola $y=x^2$, from $x=0$ to $x=4$. So its boundary has four pieces:
+
+1. Bottom segment: $y=0$, $0\le x\le 4$.
+2. Left segment: $x=0$, $0\le y\le 0$ (degenerate, just the point $(0,0)$).
+3. Parabolic arc: $y=x^2$, $0\le x\le 4$.
+4. Right segment: $x=4$, $0\le y\le 16$.
+
+Now compute
+
+$$f_x=3x^2-3y=3(x^2-y), \qquad f_y=3y^2-3x=3(y^2-x).$$
+
+Critical points in the interior must satisfy
+
+$$x^2-y=0,\qquad y^2-x=0.$$
+
+From $y=x^2$, substitute into $y^2=x$:
+
+$$x^4=x \;\Longrightarrow\; x(x^3-1)=0 \;\Longrightarrow\; x=0 \text{ or } x=1.$$
+
+Then $(x,y)=(0,0)$ or $(1,1)$. The interior requires $0<y<x^2$; neither point satisfies this:
+
+- $(0,0)$ is on the boundary.
+- $(1,1)$ is also on the boundary since $y=x^2$.
+
+Hence there are **no interior critical points**, so $f$ has no extrema in the interior of $D$.
+
+**(b)** Analyze $f$ on the boundary pieces using single-variable calculus.
+
+**Solution:** We analyze each boundary piece.
+
+- **Bottom segment** $y=0$, $0\le x\le 4$:
+  $$
+  f(x,0)=x^3.
+  $$
+  This is increasing on $[0,4]$. So min is $0$ at $x=0$, max is $64$ at $x=4$.
+
+- **Left segment** $x=0$: this is only the point $(0,0)$, and
+  $$
+  f(0,0)=0.
+  $$
+
+- **Parabolic arc** $y=x^2$, $0\le x\le 4$:
+  $$
+  g(x):=f(x,x^2)=x^3+x^6-3x^3=x^6-2x^3.
+  $$
+  Differentiate:
+  $$
+  g'(x)=6x^5-6x^2=6x^2(x^3-1).
+  $$
+
+  Evaluate candidates on $[0,4]$:
+  $$
+  g(0)=0,\qquad g(1)=1-2=-1,\qquad g(4)=4^6-2\cdot 4^3=4096-128=3968.
+  $$
+  So on the parabolic boundary, min is $-1$ at $x=1$ (point $(1,1)$), max is $3968$ at $x=4$ (point $(4,16)$).
+
+- **Right segment** $x=4$, $0\le y\le 16$:
+  $$
+  h(y):=f(4,y)=64+y^3-12y.
+  $$
+  Then
+  $$
+  h'(y)=3y^2-12=3(y-2)(y+2).
+  $$
+  On $[0,16]$, the only critical point is $y=2$. Evaluate:
+  $$
+  h(0)=64,\qquad h(2)=64+8-24=48,\qquad h(16)=64+4096-192=3968.
+  $$
+  So on this segment, the minimum is $48$ at $(4,2)$ and the maximum is $3968$ at $(4,16)$.
+
+**(c)** Find the maximal and minimal values of $f$ on all of $D$, and where they occur.
+
+**Solution:** Since there are no interior critical points, global extrema on $D$ must occur on the boundary. Compare all boundary candidate values:
+
+- $(0,0)$ gives $0$,
+- $(4,0)$ gives $64$,
+- $(4,2)$ gives $48$,
+- $(1,1)$ gives $-1$,
+- $(4,16)$ gives $3968$.
+
+Therefore:
+
+- Global **minimum** on $D$ is $\boxed{-1}$ at $\boxed{(1,1)}$.
+- Global **maximum** on $D$ is $\boxed{3968}$ at $\boxed{(4,16)}$.
