@@ -365,6 +365,8 @@ But in practice, most admissible heuristics tend to be consistent.
 
 ## Iterative Algorithms
 
+Many AI problems admit **no closed-form answer**. There is no single formula from input to solution. So we **repeat** a rule: update state, check progress, stop when done or good enough. The **search or configuration space** is often **huge or infinite**, so we cannot enumerate everything. Iteration explores it in **steps**, keeping only what we need in memory. **Local improvement** (e.g. move to a better neighbor) is inherently sequential: each step uses local information, not a global oracle. An **iterative algorithm** is any procedure that starts from an initial state (or set of candidates) and **repeatedly** applies a fixed update rule; each iteration producing the next state from the current one, until a goal or stopping condition is satisfied.
+
 So far we have considered **state space search** with a clearly defined goal state (e.g. reach Bucharest, measure $z$ liters). Next we consider problems where:
 
 - The **goal is not a single state** but any state satisfying given **properties** (e.g. “no queen attacks another”).

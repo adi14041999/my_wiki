@@ -4278,6 +4278,7 @@ heuristic.</p>
 </li>
 </ol>
 <h2 id="iterative-algorithms">Iterative Algorithms</h2>
+<p>Many AI problems admit <strong>no closed-form answer</strong>. There is no single formula from input to solution. So we <strong>repeat</strong> a rule: update state, check progress, stop when done or good enough. The <strong>search or configuration space</strong> is often <strong>huge or infinite</strong>, so we cannot enumerate everything. Iteration explores it in <strong>steps</strong>, keeping only what we need in memory. <strong>Local improvement</strong> (e.g. move to a better neighbor) is inherently sequential: each step uses local information, not a global oracle. An <strong>iterative algorithm</strong> is any procedure that starts from an initial state (or set of candidates) and <strong>repeatedly</strong> applies a fixed update rule; each iteration producing the next state from the current one, until a goal or stopping condition is satisfied.</p>
 <p>So far we have considered <strong>state space search</strong> with a clearly defined goal state (e.g. reach Bucharest, measure <span class="arithmatex">\(z\)</span> liters). Next we consider problems where:</p>
 <ul>
 <li>The <strong>goal is not a single state</strong> but any state satisfying given <strong>properties</strong> (e.g. “no queen attacks another”).</li>
