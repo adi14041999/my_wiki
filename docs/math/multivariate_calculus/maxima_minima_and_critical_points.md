@@ -450,3 +450,27 @@ Therefore:
 
 - Global **minimum** on $D$ is $\boxed{-1}$ at $\boxed{(1,1)}$.
 - Global **maximum** on $D$ is $\boxed{3968}$ at $\boxed{(4,16)}$.
+
+**5.** Briefly justify whether each of the following statements is either **true** (always true) or **false** (sometimes not true).
+
+**(a)** If $x = c_1$ is a critical point for the function $f(x)$, and $y = c_2$ is a critical point for the function $g(y)$, then $(c_1, c_2)$ is a critical point for the function $f(x)\,g(y)$.
+
+**Solution:** **Always True** (assuming $f$ and $g$ are differentiable at $c_1$ and $c_2$). Let $h(x,y)=f(x)g(y)$. By the product rule for partial derivatives,
+
+$$h_x(x,y)=f'(x)\,g(y), \qquad h_y(x,y)=f(x)\,g'(y).$$
+
+At $(c_1,c_2)$ we have $f'(c_1)=0$ and $g'(c_2)=0$, so $h_x(c_1,c_2)=0$ and $h_y(c_1,c_2)=0$. Hence $(c_1,c_2)$ is a critical point of $h$.
+
+**(b)** Suppose $P = (0, 0)$ is a critical point of $f(x, y) = ax^2 + bxy + cy^2$, and both $f_{xx}(P)$ and $f_{yy}(P)$ are positive. The point $P$ must be a local minimum for $f$.
+
+**Solution:** **False.** For $f(x,y)=ax^2+bxy+cy^2$,
+
+$$f_x=2ax+by, \qquad f_y=bx+2cy,$$
+
+so $f_x(0,0)=f_y(0,0)=0$ for every $a,b,c$. Also $f_{xx}(\mathbf{0})=2a$ and $f_{yy}(\mathbf{0})=2c$, so $f_{xx}(P)$ and $f_{yy}(P)$ are positive exactly when $a>0$ and $c>0$.
+
+Take a concrete example: $f(x,y)=x^2+10xy+y^2$. Then $a=c=1>0$, so $f_{xx}(P)=f_{yy}(P)=2>0$, yet $(0,0)$ is **not** a local minimum. Restrict to the line $y=-x$: set
+
+$$\varphi(t)=f(t,-t)=t^2-10t^2+t^2=-8t^2.$$
+
+For every $t\neq 0$ near $0$, $\varphi(t)<0=f(0,0)$, so along that line through $P$ the function **decreases** as we leave the origin. A point cannot be a local minimum of $f$ on the plane if there is a direction in which $f$ is strictly smaller arbitrarily close to $P$. Hence $P$ need not be a local minimum.
