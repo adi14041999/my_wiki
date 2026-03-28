@@ -474,3 +474,53 @@ Take a concrete example: $f(x,y)=x^2+10xy+y^2$. Then $a=c=1>0$, so $f_{xx}(P)=f_
 $$\varphi(t)=f(t,-t)=t^2-10t^2+t^2=-8t^2.$$
 
 For every $t\neq 0$ near $0$, $\varphi(t)<0=f(0,0)$, so along that line through $P$ the function **decreases** as we leave the origin. A point cannot be a local minimum of $f$ on the plane if there is a direction in which $f$ is strictly smaller arbitrarily close to $P$. Hence $P$ need not be a local minimum.
+
+**6.** Let $V$ be the span of vectors $v_1,\ldots,v_k$ in $\mathbb{R}^n$, and let $x\in\mathbb{R}^n$.
+
+By the Orthogonal Projection Theorem there is a unique $v\in V$ for which $\lVert x-v\rVert$ is minimized, and then $x-v$ is orthogonal to everything in $V$. This exercise explains (via partial derivatives) part of this result: for any $v$ minimizing the distance, $x-v$ is orthogonal to everything in $V$. We carry this out for $k=2$ only to avoid heavier notation; then $V=\operatorname{span}\{v_1,v_2\}$, and the method works in general.
+
+**(a)** Define $f:\mathbb{R}^2\to\mathbb{R}$ by $f(t_1,t_2)=\lVert x-(t_1 v_1+t_2 v_2)\rVert^2$; this is the squared distance from $x$ to $t_1 v_1+t_2 v_2$ (which can be anything in $V$, since $v_1$ and $v_2$ span $V$). Note that minimizing $f$ is the same as minimizing the squared distance from $x$ to $V$. Using properties of dot products, show that
+
+$$f(t_1,t_2)=\lVert x\rVert^2-2t_1(v_1\cdot x)-2t_2(v_2\cdot x)+t_1^2\lVert v_1\rVert^2+2t_1 t_2(v_1\cdot v_2)+t_2^2\lVert v_2\rVert^2.$$
+
+**Solution:** Put $u=t_1 v_1+t_2 v_2$. Then
+
+$$f(t_1,t_2)=\lVert x-u\rVert^2=(x-u)\cdot(x-u)=x\cdot x-2x\cdot u+u\cdot u.$$
+
+Since $x\cdot x=\lVert x\rVert^2$, we may write
+
+$$f(t_1,t_2)=\lVert x\rVert^2-2x\cdot u+u\cdot u.$$
+
+Here $x\cdot u=t_1(v_1\cdot x)+t_2(v_2\cdot x)$ and
+
+$$u\cdot u=(t_1 v_1+t_2 v_2)\cdot(t_1 v_1+t_2 v_2)=t_1^2(v_1\cdot v_1)+2t_1 t_2(v_1\cdot v_2)+t_2^2(v_2\cdot v_2).$$
+
+Since $v_i\cdot v_i=\lVert v_i\rVert^2$, substituting gives the desired expression for $f$.
+
+**(b)** Show that each partial derivative $f_{t_i}$ is given by
+
+$$f_{t_i}=2\,v_i\cdot(-x+t_1 v_1+t_2 v_2)\qquad (i=1,2).$$
+
+**Solution:** Differentiate the expanded form from (a). For instance,
+
+$$f_{t_1}=-2(v_1\cdot x)+2t_1\lVert v_1\rVert^2+2t_2(v_1\cdot v_2).$$
+
+Factor out $2$ and use bilinearity of the dot product:
+
+$$f_{t_1}=2\,v_1\cdot(-x+t_1 v_1+t_2 v_2).$$
+
+The same steps for $t_2$ give $f_{t_2}=2\,v_2\cdot(-x+t_1 v_1+t_2 v_2)$.
+
+**(c)** Deduce from (b) that if $a_1 v_1+a_2 v_2$ is a point in $V$ closest to $x$, then $x-(a_1 v_1+a_2 v_2)$ is orthogonal to everything in $V$. Here $v_1$ and $v_2$ span $V$.
+
+**Solution:** If $a_1 v_1+a_2 v_2$ is closest to $x$ in $V$, then $(a_1,a_2)$ minimizes $f(t_1,t_2)$ over $\mathbb{R}^2$. At a minimizer, $f_{t_1}=f_{t_2}=0$, so by (b),
+
+$$v_i\cdot\bigl(x-(a_1 v_1+a_2 v_2)\bigr)=0 \qquad (i=1,2).$$
+
+Let $w=x-(a_1 v_1+a_2 v_2)$. Then $v_1\cdot w=0$ and $v_2\cdot w=0$. Any $u\in V$ has the form $u=c_1 v_1+c_2 v_2$, so,
+
+$$u\cdot w=c_1(v_1\cdot w)+c_2(v_2\cdot w)=0.$$
+
+Hence $w$ is orthogonal to every vector in $V$.
+
+**Summary (Exercise 6):** Fix a subspace $V=\operatorname{span}\{v_1,v_2\}\subseteq\mathbb{R}^n$ and a point $x$. Writing $u=t_1 v_1+t_2 v_2\in V$, the **squared distance** $\lVert x-u\rVert^2$ becomes a quadratic function $f(t_1,t_2)$ in the coordinates $(t_1,t_2)$. Its partial derivatives have the clean form $f_{t_i}=2\,v_i\cdot(u-x)$. At any minimizer $(a_1,a_2)$, both partials vanish, so the residual $w=x-(a_1 v_1+a_2 v_2)$ is orthogonal to $v_1$ and $v_2$. Because every vector in $V$ is a linear combination of $v_1$ and $v_2$, **orthogonality to the basis implies orthogonality to all of $V$**. In other words: the closest point in $V$ to $x$ is characterized by the same **normal equations** $w\perp V$ that the Orthogonal Projection Theorem asserts; here we see that fact emerge from setting $\nabla f=\mathbf{0}$. The same idea works for $V=\operatorname{span}\{v_1,\ldots,v_k\}$ with $k$ coordinates and $k$ partial derivatives.
