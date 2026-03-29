@@ -198,3 +198,116 @@ The figure below compares the graph of $z = x^2 + y^2$ and the tangent plane $z 
 ![img](paraboloid_tangent_plane.png)
 
 ## Gradient descent
+
+One of the main reasons to study calculus of $n$ variables is to optimize multivariable functions; i.e., to find their local maxima and minima (with the eventual aim of finding global maxima and minima). Realistic problems of this type cannot be solved exactly; rather one needs ways to numerically approximate the answer. A powerful method for doing this is gradient descent.
+
+**Example:** Imagine that a raindrop falls on a hill. It will head to the bottom– water always finds the lowest elevation. Or at the very least it will find a local minimum: it might not find the bottom of the hill, but it will find a lake half-way down the hill, perhaps. The raindrop certainly doesn’t know anything about the geography of the hill. However, at every moment, it simply “chooses” to roll in the steepest possible direction.
+
+The preceding examples suggest the following strategy, called **gradient descent**: to find the **minimum** of a function $f(x, y)$, move away from $(x, y)$ in the **direction in which $f$ decreases the fastest**. Similarly, to find the **maximum** of $f(x, y)$, move away from $(x, y)$ in the **direction in which $f$ increases the fastest**.
+
+We need to make this mathematically precise. We can quantify **direction** (without regard to speed) by giving a **unit vector** $\mathbf{v} \in \mathbb{R}^2$, i.e., a vector with $\lVert \mathbf{v} \rVert = 1$. To test how fast $f$ is increasing or decreasing in the direction of $\mathbf{v}$, we use the **linear approximation** with $t \in \mathbb{R}$ near $0$:
+
+$$f(\mathbf{a} + t\mathbf{v}) \approx f(\mathbf{a}) + (\nabla f)(\mathbf{a}) \cdot (t\mathbf{v}) = f(\mathbf{a}) + t\,(\nabla f)(\mathbf{a}) \cdot \mathbf{v}.$$
+
+If we move a small distance $|t|$ in the direction $\mathbf{v}$ for $t > 0$ and in the direction $-\mathbf{v}$ for $t < 0$, then the change in $f$ is approximately $t\bigl((\nabla f)(\mathbf{a}) \cdot \mathbf{v}\bigr)$, whose **rate of change with respect to $t$** (the $t$-derivative of this linear approximation) is $(\nabla f)(\mathbf{a}) \cdot \mathbf{v}$. Thus our question becomes: **how do we choose a unit vector $\mathbf{v}$ so that $(\nabla f)(\mathbf{a}) \cdot \mathbf{v}$ is largest?** Then use $t > 0$ when seeking to **maximize** $f$ and $t < 0$ when seeking to **minimize** $f$.
+
+We can solve this by geometry. The dot product $(\nabla f)(\mathbf{a}) \cdot \mathbf{v}$ equals $\lVert (\nabla f)(\mathbf{a}) \rVert \,\lVert \mathbf{v} \rVert \cos(\theta) = \lVert (\nabla f)(\mathbf{a}) \rVert \cos(\theta)$, where $\theta$ is the angle between $\mathbf{v}$ and $(\nabla f)(\mathbf{a})$. This is **largest** when $\cos(\theta) = 1$, i.e.\ $\theta = 0$. It is **most negative** when $\cos(\theta) = -1$, i.e.\ $\theta = \pi$ (a $180^\circ$ angle).
+
+**Theorem:** Let $f : \mathbb{R}^n \to \mathbb{R}$ be differentiable at $\mathbf{a} \in \mathbb{R}^n$, and suppose $(\nabla f)(\mathbf{a}) \neq \mathbf{0}$. Then the **direction of steepest increase** of $f$ at $\mathbf{a}$ is that of the gradient: the associated **unit vector**
+
+$$\frac{(\nabla f)(\mathbf{a})}{\lVert (\nabla f)(\mathbf{a}) \rVert}$$
+
+points in the direction in which $f$ increases most rapidly at $\mathbf{a}$. Likewise, the **opposite** unit vector
+
+$$-\,\frac{(\nabla f)(\mathbf{a})}{\lVert (\nabla f)(\mathbf{a}) \rVert}$$
+
+is the direction in which $f$ **decreases** most rapidly at $\mathbf{a}$.
+
+**Example:** Many physical systems can be modeled using the gradient of a function. The idea is that an object experiences a **force** derived from a **potential energy** $V(x, y, z)$ by
+
+$$\mathbf{F}(x, y, z) = -\nabla V(x, y, z).$$
+
+For example, the potential energy associated with the gravitational field of the sun can be taken to have the form
+
+$$V(x, y, z) = \frac{c}{\sqrt{x^2 + y^2 + z^2}}$$
+
+for a suitable constant $c > 0$, where coordinates are chosen so the sun is at $(0, 0, 0)$.
+
+Equation $\mathbf{F} = -\nabla V$ says that the object experiences a force in the direction in which $V$ is **most rapidly decreasing**. In other words, the object “wants” to move toward where $V$ is smallest.
+
+### Domain steps
+
+Gradient descent updates the **input** $\mathbf{a} \in \mathbb{R}^n$: each step has the form $\mathbf{a}_{\text{new}} = \mathbf{a} + (\text{displacement})$, where the displacement is a **vector** in $\mathbb{R}^n$.
+
+For $\mathbf{v}$ a **unit** vector and $t$ small, the linear approximation says
+
+$$f(\mathbf{a} + t\mathbf{v}) \approx f(\mathbf{a}) + t\,(\nabla f)(\mathbf{a}) \cdot \mathbf{v}.$$
+
+The **next point** is specified separately: you choose a direction $v$ and step length $t$ to get $\mathbf{a}_{\text{new}} = \mathbf{a} + t\mathbf{v}$.
+
+It is often convenient to write the displacement as a **multiple of the full gradient** instead of a unit direction. The update
+
+$$\mathbf{a}_{\text{new}} = \mathbf{a} + t\,(\nabla f)(\mathbf{a})$$
+
+is the same idea: the step vector is $t(\nabla f)(\mathbf{a})$. This is equivalent to $\mathbf{a} + t\mathbf{v}$ where $\mathbf{v} = (\nabla f)(\mathbf{a})/\lVert (\nabla f)(\mathbf{a}) \rVert$ and $t$ is chosen accordingly.
+
+To **minimize** $f$, take **$t < 0$**, so $\mathbf{a}_{\text{new}} = \mathbf{a} - |t|\,(\nabla f)(\mathbf{a})$, which is a step opposite to the gradient.
+
+**Example:**
+
+Let $f : \mathbb{R}^2 \to \mathbb{R}$ be
+
+$$f(x, y) = x^2 - 3xy + 3y^2 + 5y + 2x.$$
+
+Then
+
+$$(\nabla f)(x, y) =
+\begin{pmatrix}
+2x - 3y + 2 \\[0.25em]
+-3x + 6y + 5
+\end{pmatrix}.$$
+
+We **start** at some point $\mathbf{a}$ (hopefully near a minimizer) and repeatedly move in the direction of the **negative** gradient. One step has the form
+
+$$\mathbf{a} \mapsto \mathbf{a} + t\,(\nabla f)(\mathbf{a})$$
+
+with **$t < 0$** when we are **minimizing** $f$ (so we move opposite to the direction of steepest **ascent**). Equivalently, $\mathbf{a} \mapsto \mathbf{a} - |t|\,(\nabla f)(\mathbf{a})$. The size $|t|$ (together with $\lVert (\nabla f)(\mathbf{a}) \rVert$) controls how far we move at each step.
+
+We must choose:
+
+1. **Where to start** $\mathbf{a}$. Here we take $\mathbf{a} = (0, 0)$ with no prior knowledge.
+2. **Step size** $t$. In practice one tries several values (in machine learning, $|t|$ is often called the **learning rate**). Here we use the fixed value $t = -0.1$, so each update is
+
+$$\mathbf{a} \mapsto \mathbf{a} - 0.1\,(\nabla f)(\mathbf{a}).$$
+
+Starting at $(0, 0)$, the first few iterates are
+
+$$\begin{pmatrix} 0 \\ 0 \end{pmatrix}
+\;\rightsquigarrow\;
+\begin{pmatrix} -0.2 \\ -0.5 \end{pmatrix}
+\;\rightsquigarrow\;
+\begin{pmatrix} -0.51 \\ -0.76 \end{pmatrix}
+\;\rightsquigarrow\;
+\begin{pmatrix} -0.836 \\ -0.957 \end{pmatrix}
+\;\rightsquigarrow\; \cdots$$
+
+If we write $\mathbf{a}_0 = (0,0)$ and $\mathbf{a}_n = \mathbf{a}_{n-1} - 0.1\,(\nabla f)(\mathbf{a}_{n-1})$, this is the beginning of that sequence. Not much seems to happen at first— the path merely wanders, as in the figure below.
+
+![img](gradient_descent_0.png)
+
+*The first few steps of gradient descent for $f$. The update is $\mathbf{a}_n = \mathbf{a}_{n-1} - 0.1\,(\nabla f)(\mathbf{a}_{n-1})$.*
+
+After $10$ steps one reaches approximately $\begin{pmatrix} -7.768 \\ -4.674 \end{pmatrix}$; after $100$ steps, approximately $\begin{pmatrix} -8.835 \\ -5.245 \end{pmatrix}$; after $1000$ steps, approximately $\begin{pmatrix} -8.999\ldots \\ -5.333\ldots \end{pmatrix}$. The iterates appear to converge toward
+
+$$\mathbf{b} = \begin{pmatrix} -9 \\ -16/3 \end{pmatrix}.$$
+
+To justify this, find **critical points** by solving $(\nabla f)(x,y) = \mathbf{0}$:
+
+$$\begin{pmatrix} 2x - 3y + 2 \\ -3x + 6y + 5 \end{pmatrix} =
+\begin{pmatrix} 0 \\ 0 \end{pmatrix}.$$
+
+The first equation gives $x = \frac{3}{2}y - 1$. Substituting into the second yields $\frac{3}{2}y + 8 = 0$, so $y = -\frac{16}{3}$ and then $x = -9$.
+
+Thus $(-9, -16/3)$ is the only critical point. One can check numerically that $f$ is smaller nearby than at points slightly away to see that it is a **local minimum**.
+
+![img](gradient_descent_1.png)

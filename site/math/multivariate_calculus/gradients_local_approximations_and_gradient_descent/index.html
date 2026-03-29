@@ -3558,6 +3558,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Gradient descent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#domain-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Domain steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -3981,6 +3998,71 @@ f(1.3, 0.9) \approx f(1, 1) + (\nabla f)(1, 1) \cdot \begin{pmatrix} 0.3 \\ -0.1
 <p>The figure below compares the graph of <span class="arithmatex">\(z = x^2 + y^2\)</span> and the tangent plane <span class="arithmatex">\(z = 2x + 4y - 5\)</span> at <span class="arithmatex">\((1, 2, 5)\)</span>.</p>
 <p><img alt="img" src="../paraboloid_tangent_plane.png" /></p>
 <h2 id="gradient-descent">Gradient descent</h2>
+<p>One of the main reasons to study calculus of <span class="arithmatex">\(n\)</span> variables is to optimize multivariable functions; i.e., to find their local maxima and minima (with the eventual aim of finding global maxima and minima). Realistic problems of this type cannot be solved exactly; rather one needs ways to numerically approximate the answer. A powerful method for doing this is gradient descent.</p>
+<p><strong>Example:</strong> Imagine that a raindrop falls on a hill. It will head to the bottom– water always finds the lowest elevation. Or at the very least it will find a local minimum: it might not find the bottom of the hill, but it will find a lake half-way down the hill, perhaps. The raindrop certainly doesn’t know anything about the geography of the hill. However, at every moment, it simply “chooses” to roll in the steepest possible direction.</p>
+<p>The preceding examples suggest the following strategy, called <strong>gradient descent</strong>: to find the <strong>minimum</strong> of a function <span class="arithmatex">\(f(x, y)\)</span>, move away from <span class="arithmatex">\((x, y)\)</span> in the <strong>direction in which <span class="arithmatex">\(f\)</span> decreases the fastest</strong>. Similarly, to find the <strong>maximum</strong> of <span class="arithmatex">\(f(x, y)\)</span>, move away from <span class="arithmatex">\((x, y)\)</span> in the <strong>direction in which <span class="arithmatex">\(f\)</span> increases the fastest</strong>.</p>
+<p>We need to make this mathematically precise. We can quantify <strong>direction</strong> (without regard to speed) by giving a <strong>unit vector</strong> <span class="arithmatex">\(\mathbf{v} \in \mathbb{R}^2\)</span>, i.e., a vector with <span class="arithmatex">\(\lVert \mathbf{v} \rVert = 1\)</span>. To test how fast <span class="arithmatex">\(f\)</span> is increasing or decreasing in the direction of <span class="arithmatex">\(\mathbf{v}\)</span>, we use the <strong>linear approximation</strong> with <span class="arithmatex">\(t \in \mathbb{R}\)</span> near <span class="arithmatex">\(0\)</span>:</p>
+<div class="arithmatex">\[f(\mathbf{a} + t\mathbf{v}) \approx f(\mathbf{a}) + (\nabla f)(\mathbf{a}) \cdot (t\mathbf{v}) = f(\mathbf{a}) + t\,(\nabla f)(\mathbf{a}) \cdot \mathbf{v}.\]</div>
+<p>If we move a small distance <span class="arithmatex">\(|t|\)</span> in the direction <span class="arithmatex">\(\mathbf{v}\)</span> for <span class="arithmatex">\(t &gt; 0\)</span> and in the direction <span class="arithmatex">\(-\mathbf{v}\)</span> for <span class="arithmatex">\(t &lt; 0\)</span>, then the change in <span class="arithmatex">\(f\)</span> is approximately <span class="arithmatex">\(t\bigl((\nabla f)(\mathbf{a}) \cdot \mathbf{v}\bigr)\)</span>, whose <strong>rate of change with respect to <span class="arithmatex">\(t\)</span></strong> (the <span class="arithmatex">\(t\)</span>-derivative of this linear approximation) is <span class="arithmatex">\((\nabla f)(\mathbf{a}) \cdot \mathbf{v}\)</span>. Thus our question becomes: <strong>how do we choose a unit vector <span class="arithmatex">\(\mathbf{v}\)</span> so that <span class="arithmatex">\((\nabla f)(\mathbf{a}) \cdot \mathbf{v}\)</span> is largest?</strong> Then use <span class="arithmatex">\(t &gt; 0\)</span> when seeking to <strong>maximize</strong> <span class="arithmatex">\(f\)</span> and <span class="arithmatex">\(t &lt; 0\)</span> when seeking to <strong>minimize</strong> <span class="arithmatex">\(f\)</span>.</p>
+<p>We can solve this by geometry. The dot product <span class="arithmatex">\((\nabla f)(\mathbf{a}) \cdot \mathbf{v}\)</span> equals <span class="arithmatex">\(\lVert (\nabla f)(\mathbf{a}) \rVert \,\lVert \mathbf{v} \rVert \cos(\theta) = \lVert (\nabla f)(\mathbf{a}) \rVert \cos(\theta)\)</span>, where <span class="arithmatex">\(\theta\)</span> is the angle between <span class="arithmatex">\(\mathbf{v}\)</span> and <span class="arithmatex">\((\nabla f)(\mathbf{a})\)</span>. This is <strong>largest</strong> when <span class="arithmatex">\(\cos(\theta) = 1\)</span>, i.e.\ <span class="arithmatex">\(\theta = 0\)</span>. It is <strong>most negative</strong> when <span class="arithmatex">\(\cos(\theta) = -1\)</span>, i.e.\ <span class="arithmatex">\(\theta = \pi\)</span> (a <span class="arithmatex">\(180^\circ\)</span> angle).</p>
+<p><strong>Theorem:</strong> Let <span class="arithmatex">\(f : \mathbb{R}^n \to \mathbb{R}\)</span> be differentiable at <span class="arithmatex">\(\mathbf{a} \in \mathbb{R}^n\)</span>, and suppose <span class="arithmatex">\((\nabla f)(\mathbf{a}) \neq \mathbf{0}\)</span>. Then the <strong>direction of steepest increase</strong> of <span class="arithmatex">\(f\)</span> at <span class="arithmatex">\(\mathbf{a}\)</span> is that of the gradient: the associated <strong>unit vector</strong></p>
+<div class="arithmatex">\[\frac{(\nabla f)(\mathbf{a})}{\lVert (\nabla f)(\mathbf{a}) \rVert}\]</div>
+<p>points in the direction in which <span class="arithmatex">\(f\)</span> increases most rapidly at <span class="arithmatex">\(\mathbf{a}\)</span>. Likewise, the <strong>opposite</strong> unit vector</p>
+<div class="arithmatex">\[-\,\frac{(\nabla f)(\mathbf{a})}{\lVert (\nabla f)(\mathbf{a}) \rVert}\]</div>
+<p>is the direction in which <span class="arithmatex">\(f\)</span> <strong>decreases</strong> most rapidly at <span class="arithmatex">\(\mathbf{a}\)</span>.</p>
+<p><strong>Example:</strong> Many physical systems can be modeled using the gradient of a function. The idea is that an object experiences a <strong>force</strong> derived from a <strong>potential energy</strong> <span class="arithmatex">\(V(x, y, z)\)</span> by</p>
+<div class="arithmatex">\[\mathbf{F}(x, y, z) = -\nabla V(x, y, z).\]</div>
+<p>For example, the potential energy associated with the gravitational field of the sun can be taken to have the form</p>
+<div class="arithmatex">\[V(x, y, z) = \frac{c}{\sqrt{x^2 + y^2 + z^2}}\]</div>
+<p>for a suitable constant <span class="arithmatex">\(c &gt; 0\)</span>, where coordinates are chosen so the sun is at <span class="arithmatex">\((0, 0, 0)\)</span>.</p>
+<p>Equation <span class="arithmatex">\(\mathbf{F} = -\nabla V\)</span> says that the object experiences a force in the direction in which <span class="arithmatex">\(V\)</span> is <strong>most rapidly decreasing</strong>. In other words, the object “wants” to move toward where <span class="arithmatex">\(V\)</span> is smallest.</p>
+<h3 id="domain-steps">Domain steps</h3>
+<p>Gradient descent updates the <strong>input</strong> <span class="arithmatex">\(\mathbf{a} \in \mathbb{R}^n\)</span>: each step has the form <span class="arithmatex">\(\mathbf{a}_{\text{new}} = \mathbf{a} + (\text{displacement})\)</span>, where the displacement is a <strong>vector</strong> in <span class="arithmatex">\(\mathbb{R}^n\)</span>.</p>
+<p>For <span class="arithmatex">\(\mathbf{v}\)</span> a <strong>unit</strong> vector and <span class="arithmatex">\(t\)</span> small, the linear approximation says</p>
+<div class="arithmatex">\[f(\mathbf{a} + t\mathbf{v}) \approx f(\mathbf{a}) + t\,(\nabla f)(\mathbf{a}) \cdot \mathbf{v}.\]</div>
+<p>The <strong>next point</strong> is specified separately: you choose a direction <span class="arithmatex">\(v\)</span> and step length <span class="arithmatex">\(t\)</span> to get <span class="arithmatex">\(\mathbf{a}_{\text{new}} = \mathbf{a} + t\mathbf{v}\)</span>.</p>
+<p>It is often convenient to write the displacement as a <strong>multiple of the full gradient</strong> instead of a unit direction. The update</p>
+<div class="arithmatex">\[\mathbf{a}_{\text{new}} = \mathbf{a} + t\,(\nabla f)(\mathbf{a})\]</div>
+<p>is the same idea: the step vector is <span class="arithmatex">\(t(\nabla f)(\mathbf{a})\)</span>. This is equivalent to <span class="arithmatex">\(\mathbf{a} + t\mathbf{v}\)</span> where <span class="arithmatex">\(\mathbf{v} = (\nabla f)(\mathbf{a})/\lVert (\nabla f)(\mathbf{a}) \rVert\)</span> and <span class="arithmatex">\(t\)</span> is chosen accordingly.</p>
+<p>To <strong>minimize</strong> <span class="arithmatex">\(f\)</span>, take <strong><span class="arithmatex">\(t &lt; 0\)</span></strong>, so <span class="arithmatex">\(\mathbf{a}_{\text{new}} = \mathbf{a} - |t|\,(\nabla f)(\mathbf{a})\)</span>, which is a step opposite to the gradient.</p>
+<p><strong>Example:</strong></p>
+<p>Let <span class="arithmatex">\(f : \mathbb{R}^2 \to \mathbb{R}\)</span> be</p>
+<div class="arithmatex">\[f(x, y) = x^2 - 3xy + 3y^2 + 5y + 2x.\]</div>
+<p>Then</p>
+<div class="arithmatex">\[(\nabla f)(x, y) =
+\begin{pmatrix}
+2x - 3y + 2 \\[0.25em]
+-3x + 6y + 5
+\end{pmatrix}.\]</div>
+<p>We <strong>start</strong> at some point <span class="arithmatex">\(\mathbf{a}\)</span> (hopefully near a minimizer) and repeatedly move in the direction of the <strong>negative</strong> gradient. One step has the form</p>
+<div class="arithmatex">\[\mathbf{a} \mapsto \mathbf{a} + t\,(\nabla f)(\mathbf{a})\]</div>
+<p>with <strong><span class="arithmatex">\(t &lt; 0\)</span></strong> when we are <strong>minimizing</strong> <span class="arithmatex">\(f\)</span> (so we move opposite to the direction of steepest <strong>ascent</strong>). Equivalently, <span class="arithmatex">\(\mathbf{a} \mapsto \mathbf{a} - |t|\,(\nabla f)(\mathbf{a})\)</span>. The size <span class="arithmatex">\(|t|\)</span> (together with <span class="arithmatex">\(\lVert (\nabla f)(\mathbf{a}) \rVert\)</span>) controls how far we move at each step.</p>
+<p>We must choose:</p>
+<ol>
+<li><strong>Where to start</strong> <span class="arithmatex">\(\mathbf{a}\)</span>. Here we take <span class="arithmatex">\(\mathbf{a} = (0, 0)\)</span> with no prior knowledge.</li>
+<li><strong>Step size</strong> <span class="arithmatex">\(t\)</span>. In practice one tries several values (in machine learning, <span class="arithmatex">\(|t|\)</span> is often called the <strong>learning rate</strong>). Here we use the fixed value <span class="arithmatex">\(t = -0.1\)</span>, so each update is</li>
+</ol>
+<div class="arithmatex">\[\mathbf{a} \mapsto \mathbf{a} - 0.1\,(\nabla f)(\mathbf{a}).\]</div>
+<p>Starting at <span class="arithmatex">\((0, 0)\)</span>, the first few iterates are</p>
+<div class="arithmatex">\[\begin{pmatrix} 0 \\ 0 \end{pmatrix}
+\;\rightsquigarrow\;
+\begin{pmatrix} -0.2 \\ -0.5 \end{pmatrix}
+\;\rightsquigarrow\;
+\begin{pmatrix} -0.51 \\ -0.76 \end{pmatrix}
+\;\rightsquigarrow\;
+\begin{pmatrix} -0.836 \\ -0.957 \end{pmatrix}
+\;\rightsquigarrow\; \cdots\]</div>
+<p>If we write <span class="arithmatex">\(\mathbf{a}_0 = (0,0)\)</span> and <span class="arithmatex">\(\mathbf{a}_n = \mathbf{a}_{n-1} - 0.1\,(\nabla f)(\mathbf{a}_{n-1})\)</span>, this is the beginning of that sequence. Not much seems to happen at first— the path merely wanders, as in the figure below.</p>
+<p><img alt="img" src="../gradient_descent_0.png" /></p>
+<p><em>The first few steps of gradient descent for <span class="arithmatex">\(f\)</span>. The update is <span class="arithmatex">\(\mathbf{a}_n = \mathbf{a}_{n-1} - 0.1\,(\nabla f)(\mathbf{a}_{n-1})\)</span>.</em></p>
+<p>After <span class="arithmatex">\(10\)</span> steps one reaches approximately <span class="arithmatex">\(\begin{pmatrix} -7.768 \\ -4.674 \end{pmatrix}\)</span>; after <span class="arithmatex">\(100\)</span> steps, approximately <span class="arithmatex">\(\begin{pmatrix} -8.835 \\ -5.245 \end{pmatrix}\)</span>; after <span class="arithmatex">\(1000\)</span> steps, approximately <span class="arithmatex">\(\begin{pmatrix} -8.999\ldots \\ -5.333\ldots \end{pmatrix}\)</span>. The iterates appear to converge toward</p>
+<div class="arithmatex">\[\mathbf{b} = \begin{pmatrix} -9 \\ -16/3 \end{pmatrix}.\]</div>
+<p>To justify this, find <strong>critical points</strong> by solving <span class="arithmatex">\((\nabla f)(x,y) = \mathbf{0}\)</span>:</p>
+<div class="arithmatex">\[\begin{pmatrix} 2x - 3y + 2 \\ -3x + 6y + 5 \end{pmatrix} =
+\begin{pmatrix} 0 \\ 0 \end{pmatrix}.\]</div>
+<p>The first equation gives <span class="arithmatex">\(x = \frac{3}{2}y - 1\)</span>. Substituting into the second yields <span class="arithmatex">\(\frac{3}{2}y + 8 = 0\)</span>, so <span class="arithmatex">\(y = -\frac{16}{3}\)</span> and then <span class="arithmatex">\(x = -9\)</span>.</p>
+<p>Thus <span class="arithmatex">\((-9, -16/3)\)</span> is the only critical point. One can check numerically that <span class="arithmatex">\(f\)</span> is smaller nearby than at points slightly away to see that it is a <strong>local minimum</strong>.</p>
+<p><img alt="img" src="../gradient_descent_1.png" /></p>
 
 
 
