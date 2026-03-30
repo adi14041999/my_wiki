@@ -271,7 +271,7 @@ We **start** at some point $\mathbf{a}$ (hopefully near a minimizer) and repeate
 
 $$\mathbf{a} \mapsto \mathbf{a} + t\,(\nabla f)(\mathbf{a})$$
 
-with **$t < 0$** when we are **minimizing** $f$ (so we move opposite to the direction of steepest **ascent**). Equivalently, $\mathbf{a} \mapsto \mathbf{a} - |t|\,(\nabla f)(\mathbf{a})$. The size $|t|$ (together with $\lVert (\nabla f)(\mathbf{a}) \rVert$) controls how far we move at each step.
+with **$t < 0$** when we are **minimizing** $f$ (so we move opposite to the direction of steepest **ascent**). Equivalently, $\mathbf{a} \mapsto \mathbf{a} - |t|\,(\nabla f)(\mathbf{a})$. The size $|t|$ controls how far we move at each step.
 
 We must choose:
 
@@ -311,3 +311,27 @@ The first equation gives $x = \frac{3}{2}y - 1$. Substituting into the second yi
 Thus $(-9, -16/3)$ is the only critical point. One can check numerically that $f$ is smaller nearby than at points slightly away to see that it is a **local minimum**.
 
 ![img](gradient_descent_1.png)
+
+## Informal proof: the gradient is normal to the contour
+
+$\nabla f(a, b)$ is **perpendicular** to the level curve of $f$ through $(a, b)$. Below is a short argument (not a formal proof).
+
+Fix $(a, b)$ and let $c = f(a, b)$. If $(x, y)$ lies on the **same** level curve, then by definition $f(x, y) = c = f(a, b)$ i.e., the value of $f$ does not change as you move along the contour.
+
+Now recall the **linear approximation** from earlier (for $\mathbf{x}$ near $\mathbf{a} = (a, b)$):
+
+$$f(x, y) \approx f(a, b) + (\nabla f)(a, b) \cdot \begin{pmatrix} x - a \\ y - b \end{pmatrix}.$$
+
+Apply this to a point $(x, y)$ that lies **on the contour** through $(a, b)$ and is **close** to $(a, b)$. Then $f(x, y) = f(a, b)$ exactly. Equating the two sides in the approximation forces
+
+$$(\nabla f)(a, b) \cdot \begin{pmatrix} x - a \\ y - b \end{pmatrix} \approx 0.$$
+
+So, **near** $(a, b)$, the contour is **well approximated** by the set of $(x, y)$ satisfying the **linear** equation
+
+$$(\nabla f)(a, b) \cdot \begin{pmatrix} x - a \\ y - b \end{pmatrix} = 0.$$
+
+So **near** $(a, b)$ the contour curve looks just like the line with equation above. In other words, the above equation must be the equation of the tangent line!
+
+In other words, it is the equation of a **line through $(a, b)$** whose direction vectors $\begin{pmatrix} x - a \\ y - b \end{pmatrix}$ are all orthogonal to $(\nabla f)(a, b)$. In other words, it is the **tangent line** to the level curve, and $(\nabla f)(a, b)$ is a **normal vector** to that line. Hence $(\nabla f)(a, b)$ is perpendicular to the level curve of $f$ through $(a, b)$.
+
+## Exercises

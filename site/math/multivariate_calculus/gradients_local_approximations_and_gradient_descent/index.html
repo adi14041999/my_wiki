@@ -3577,6 +3577,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#informal-proof-the-gradient-is-normal-to-the-contour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Informal proof: the gradient is normal to the contour
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercises
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4036,7 +4058,7 @@ f(1.3, 0.9) \approx f(1, 1) + (\nabla f)(1, 1) \cdot \begin{pmatrix} 0.3 \\ -0.1
 \end{pmatrix}.\]</div>
 <p>We <strong>start</strong> at some point <span class="arithmatex">\(\mathbf{a}\)</span> (hopefully near a minimizer) and repeatedly move in the direction of the <strong>negative</strong> gradient. One step has the form</p>
 <div class="arithmatex">\[\mathbf{a} \mapsto \mathbf{a} + t\,(\nabla f)(\mathbf{a})\]</div>
-<p>with <strong><span class="arithmatex">\(t &lt; 0\)</span></strong> when we are <strong>minimizing</strong> <span class="arithmatex">\(f\)</span> (so we move opposite to the direction of steepest <strong>ascent</strong>). Equivalently, <span class="arithmatex">\(\mathbf{a} \mapsto \mathbf{a} - |t|\,(\nabla f)(\mathbf{a})\)</span>. The size <span class="arithmatex">\(|t|\)</span> (together with <span class="arithmatex">\(\lVert (\nabla f)(\mathbf{a}) \rVert\)</span>) controls how far we move at each step.</p>
+<p>with <strong><span class="arithmatex">\(t &lt; 0\)</span></strong> when we are <strong>minimizing</strong> <span class="arithmatex">\(f\)</span> (so we move opposite to the direction of steepest <strong>ascent</strong>). Equivalently, <span class="arithmatex">\(\mathbf{a} \mapsto \mathbf{a} - |t|\,(\nabla f)(\mathbf{a})\)</span>. The size <span class="arithmatex">\(|t|\)</span> controls how far we move at each step.</p>
 <p>We must choose:</p>
 <ol>
 <li><strong>Where to start</strong> <span class="arithmatex">\(\mathbf{a}\)</span>. Here we take <span class="arithmatex">\(\mathbf{a} = (0, 0)\)</span> with no prior knowledge.</li>
@@ -4063,6 +4085,18 @@ f(1.3, 0.9) \approx f(1, 1) + (\nabla f)(1, 1) \cdot \begin{pmatrix} 0.3 \\ -0.1
 <p>The first equation gives <span class="arithmatex">\(x = \frac{3}{2}y - 1\)</span>. Substituting into the second yields <span class="arithmatex">\(\frac{3}{2}y + 8 = 0\)</span>, so <span class="arithmatex">\(y = -\frac{16}{3}\)</span> and then <span class="arithmatex">\(x = -9\)</span>.</p>
 <p>Thus <span class="arithmatex">\((-9, -16/3)\)</span> is the only critical point. One can check numerically that <span class="arithmatex">\(f\)</span> is smaller nearby than at points slightly away to see that it is a <strong>local minimum</strong>.</p>
 <p><img alt="img" src="../gradient_descent_1.png" /></p>
+<h2 id="informal-proof-the-gradient-is-normal-to-the-contour">Informal proof: the gradient is normal to the contour</h2>
+<p><span class="arithmatex">\(\nabla f(a, b)\)</span> is <strong>perpendicular</strong> to the level curve of <span class="arithmatex">\(f\)</span> through <span class="arithmatex">\((a, b)\)</span>. Below is a short argument (not a formal proof).</p>
+<p>Fix <span class="arithmatex">\((a, b)\)</span> and let <span class="arithmatex">\(c = f(a, b)\)</span>. If <span class="arithmatex">\((x, y)\)</span> lies on the <strong>same</strong> level curve, then by definition <span class="arithmatex">\(f(x, y) = c = f(a, b)\)</span> i.e., the value of <span class="arithmatex">\(f\)</span> does not change as you move along the contour.</p>
+<p>Now recall the <strong>linear approximation</strong> from earlier (for <span class="arithmatex">\(\mathbf{x}\)</span> near <span class="arithmatex">\(\mathbf{a} = (a, b)\)</span>):</p>
+<div class="arithmatex">\[f(x, y) \approx f(a, b) + (\nabla f)(a, b) \cdot \begin{pmatrix} x - a \\ y - b \end{pmatrix}.\]</div>
+<p>Apply this to a point <span class="arithmatex">\((x, y)\)</span> that lies <strong>on the contour</strong> through <span class="arithmatex">\((a, b)\)</span> and is <strong>close</strong> to <span class="arithmatex">\((a, b)\)</span>. Then <span class="arithmatex">\(f(x, y) = f(a, b)\)</span> exactly. Equating the two sides in the approximation forces</p>
+<div class="arithmatex">\[(\nabla f)(a, b) \cdot \begin{pmatrix} x - a \\ y - b \end{pmatrix} \approx 0.\]</div>
+<p>So, <strong>near</strong> <span class="arithmatex">\((a, b)\)</span>, the contour is <strong>well approximated</strong> by the set of <span class="arithmatex">\((x, y)\)</span> satisfying the <strong>linear</strong> equation</p>
+<div class="arithmatex">\[(\nabla f)(a, b) \cdot \begin{pmatrix} x - a \\ y - b \end{pmatrix} = 0.\]</div>
+<p>So <strong>near</strong> <span class="arithmatex">\((a, b)\)</span> the contour curve looks just like the line with equation above. In other words, the above equation must be the equation of the tangent line!</p>
+<p>In other words, it is the equation of a <strong>line through <span class="arithmatex">\((a, b)\)</span></strong> whose direction vectors <span class="arithmatex">\(\begin{pmatrix} x - a \\ y - b \end{pmatrix}\)</span> are all orthogonal to <span class="arithmatex">\((\nabla f)(a, b)\)</span>. In other words, it is the <strong>tangent line</strong> to the level curve, and <span class="arithmatex">\((\nabla f)(a, b)\)</span> is a <strong>normal vector</strong> to that line. Hence <span class="arithmatex">\((\nabla f)(a, b)\)</span> is perpendicular to the level curve of <span class="arithmatex">\(f\)</span> through <span class="arithmatex">\((a, b)\)</span>.</p>
+<h2 id="exercises">Exercises</h2>
 
 
 
