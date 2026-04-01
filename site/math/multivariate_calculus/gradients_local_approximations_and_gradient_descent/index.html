@@ -4097,6 +4097,26 @@ f(1.3, 0.9) \approx f(1, 1) + (\nabla f)(1, 1) \cdot \begin{pmatrix} 0.3 \\ -0.1
 <p>So <strong>near</strong> <span class="arithmatex">\((a, b)\)</span> the contour curve looks just like the line with equation above. In other words, the above equation must be the equation of the tangent line!</p>
 <p>In other words, it is the equation of a <strong>line through <span class="arithmatex">\((a, b)\)</span></strong> whose direction vectors <span class="arithmatex">\(\begin{pmatrix} x - a \\ y - b \end{pmatrix}\)</span> are all orthogonal to <span class="arithmatex">\((\nabla f)(a, b)\)</span>. In other words, it is the <strong>tangent line</strong> to the level curve, and <span class="arithmatex">\((\nabla f)(a, b)\)</span> is a <strong>normal vector</strong> to that line. Hence <span class="arithmatex">\((\nabla f)(a, b)\)</span> is perpendicular to the level curve of <span class="arithmatex">\(f\)</span> through <span class="arithmatex">\((a, b)\)</span>.</p>
 <h2 id="exercises">Exercises</h2>
+<p><strong>1.</strong> You ordered a large block of wood with length <span class="arithmatex">\(5\)</span>, width <span class="arithmatex">\(2\)</span>, and height <span class="arithmatex">\(1\)</span> (each in feet). The manufacturer can only guarantee these measurements up to an <strong>excess</strong> of at most <span class="arithmatex">\(0.1\)</span> feet in each dimension (so each actual dimension lies in an interval of length <span class="arithmatex">\(0.1\)</span> <strong>above</strong> the nominal value). Use a suitable gradient to approximate the <strong>largest possible total excess volume</strong>. Then compute the <strong>exact</strong> maximal excess volume.</p>
+<p><strong>Solution:</strong> Let <span class="arithmatex">\(L\)</span>, <span class="arithmatex">\(W\)</span>, and <span class="arithmatex">\(H\)</span> denote length, width, and height in feet. The volume is</p>
+<div class="arithmatex">\[V(L, W, H) = LWH.\]</div>
+<p>Nominal dimensions are <span class="arithmatex">\((L, W, H) = (5, 2, 1)\)</span>, so <span class="arithmatex">\(V(5,2,1) = 10\)</span> ft³. The manufacturer may deliver dimensions in the ranges <span class="arithmatex">\(L \in [5, 5.1]\)</span>, <span class="arithmatex">\(W \in [2, 2.1]\)</span>, <span class="arithmatex">\(H \in [1, 1.1]\)</span>. The <strong>excess volume</strong> over the nominal <span class="arithmatex">\(10\)</span> ft³ is</p>
+<div class="arithmatex">\[V(L,W,H) - 10,\]</div>
+<p>which we want to <strong>maximize</strong> over that box.</p>
+<p><strong>Gradient approximation:</strong> The gradient of <span class="arithmatex">\(V\)</span> is</p>
+<div class="arithmatex">\[\nabla V(L, W, H) = \begin{pmatrix} WH \\ LH \\ LW \end{pmatrix}.\]</div>
+<p>At <span class="arithmatex">\((5, 2, 1)\)</span>,</p>
+<div class="arithmatex">\[\nabla V(5, 2, 1) = \begin{pmatrix} 2 \\ 5 \\ 10 \end{pmatrix}.\]</div>
+<p>Write small increases as <span class="arithmatex">\(\Delta L\)</span>, <span class="arithmatex">\(\Delta W\)</span>, <span class="arithmatex">\(\Delta H\)</span> (each between <span class="arithmatex">\(0\)</span> and <span class="arithmatex">\(0.1\)</span>). Set <span class="arithmatex">\(\mathbf{a} = (5,2,1)\)</span> and <span class="arithmatex">\(\mathbf{x} = (5+\Delta L,\, 2+\Delta W,\, 1+\Delta H)\)</span>, so the displacement from the nominal dimensions is <span class="arithmatex">\(\mathbf{x} - \mathbf{a} = (\Delta L,\, \Delta W,\, \Delta H)^{\mathsf T}\)</span>. For any differentiable <span class="arithmatex">\(V\)</span>, the <strong>linear approximation</strong> at <span class="arithmatex">\(\mathbf{a}\)</span> is</p>
+<div class="arithmatex">\[V(\mathbf{x}) \approx V(\mathbf{a}) + (\nabla V)(\mathbf{a}) \cdot (\mathbf{x} - \mathbf{a}).\]</div>
+<p>Subtracting <span class="arithmatex">\(V(\mathbf{a}) = 10\)</span> from both sides gives the <strong>approximate excess volume</strong></p>
+<div class="arithmatex">\[V(5+\Delta L,\, 2+\Delta W,\, 1+\Delta H) - 10 \approx \nabla V(5,2,1) \cdot \begin{pmatrix} \Delta L \\ \Delta W \\ \Delta H \end{pmatrix} = 2\,\Delta L + 5\,\Delta W + 10\,\Delta H.\]</div>
+<p>All partial derivatives are <strong>positive</strong> at <span class="arithmatex">\((5,2,1)\)</span>, so this linear expression is largest when each increment is as large as allowed: <span class="arithmatex">\(\Delta L = \Delta W = \Delta H = 0.1\)</span>. Thus the <strong>approximate</strong> maximal excess volume is</p>
+<div class="arithmatex">\[2(0.1) + 5(0.1) + 10(0.1) = 1.7 \text{ ft}^3.\]</div>
+<p><strong>Exact maximum:</strong> The function <span class="arithmatex">\(V = LWH\)</span> has positive partial derivatives on the box (since <span class="arithmatex">\(L,W,H &gt; 0\)</span>), so <span class="arithmatex">\(V\)</span> is <strong>increasing</strong> in each variable separately. Hence the maximum of <span class="arithmatex">\(V\)</span> on <span class="arithmatex">\([5,5.1]\times[2,2.1]\times[1,1.1]\)</span> occurs at: <span class="arithmatex">\((L,W,H) = (5.1,\, 2.1,\, 1.1)\)</span>. Therefore</p>
+<div class="arithmatex">\[V_{\max} = 5.1 \times 2.1 \times 1.1 = 11.781 \text{ ft}^3,\]</div>
+<p>and the <strong>exact</strong> maximal excess volume is</p>
+<div class="arithmatex">\[11.781 - 10 = 1.781 \text{ ft}^3.\]</div>
 
 
 

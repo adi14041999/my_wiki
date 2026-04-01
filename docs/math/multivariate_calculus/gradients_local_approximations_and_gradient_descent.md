@@ -335,3 +335,43 @@ So **near** $(a, b)$ the contour curve looks just like the line with equation ab
 In other words, it is the equation of a **line through $(a, b)$** whose direction vectors $\begin{pmatrix} x - a \\ y - b \end{pmatrix}$ are all orthogonal to $(\nabla f)(a, b)$. In other words, it is the **tangent line** to the level curve, and $(\nabla f)(a, b)$ is a **normal vector** to that line. Hence $(\nabla f)(a, b)$ is perpendicular to the level curve of $f$ through $(a, b)$.
 
 ## Exercises
+
+**1.** You ordered a large block of wood with length $5$, width $2$, and height $1$ (each in feet). The manufacturer can only guarantee these measurements up to an **excess** of at most $0.1$ feet in each dimension (so each actual dimension lies in an interval of length $0.1$ **above** the nominal value). Use a suitable gradient to approximate the **largest possible total excess volume**. Then compute the **exact** maximal excess volume.
+
+**Solution:** Let $L$, $W$, and $H$ denote length, width, and height in feet. The volume is
+
+$$V(L, W, H) = LWH.$$
+
+Nominal dimensions are $(L, W, H) = (5, 2, 1)$, so $V(5,2,1) = 10$ ft³. The manufacturer may deliver dimensions in the ranges $L \in [5, 5.1]$, $W \in [2, 2.1]$, $H \in [1, 1.1]$. The **excess volume** over the nominal $10$ ft³ is
+
+$$V(L,W,H) - 10,$$
+
+which we want to **maximize** over that box.
+
+**Gradient approximation:** The gradient of $V$ is
+
+$$\nabla V(L, W, H) = \begin{pmatrix} WH \\ LH \\ LW \end{pmatrix}.$$
+
+At $(5, 2, 1)$,
+
+$$\nabla V(5, 2, 1) = \begin{pmatrix} 2 \\ 5 \\ 10 \end{pmatrix}.$$
+
+Write small increases as $\Delta L$, $\Delta W$, $\Delta H$ (each between $0$ and $0.1$). Set $\mathbf{a} = (5,2,1)$ and $\mathbf{x} = (5+\Delta L,\, 2+\Delta W,\, 1+\Delta H)$, so the displacement from the nominal dimensions is $\mathbf{x} - \mathbf{a} = (\Delta L,\, \Delta W,\, \Delta H)^{\mathsf T}$. For any differentiable $V$, the **linear approximation** at $\mathbf{a}$ is
+
+$$V(\mathbf{x}) \approx V(\mathbf{a}) + (\nabla V)(\mathbf{a}) \cdot (\mathbf{x} - \mathbf{a}).$$
+
+Subtracting $V(\mathbf{a}) = 10$ from both sides gives the **approximate excess volume**
+
+$$V(5+\Delta L,\, 2+\Delta W,\, 1+\Delta H) - 10 \approx \nabla V(5,2,1) \cdot \begin{pmatrix} \Delta L \\ \Delta W \\ \Delta H \end{pmatrix} = 2\,\Delta L + 5\,\Delta W + 10\,\Delta H.$$
+
+All partial derivatives are **positive** at $(5,2,1)$, so this linear expression is largest when each increment is as large as allowed: $\Delta L = \Delta W = \Delta H = 0.1$. Thus the **approximate** maximal excess volume is
+
+$$2(0.1) + 5(0.1) + 10(0.1) = 1.7 \text{ ft}^3.$$
+
+**Exact maximum:** The function $V = LWH$ has positive partial derivatives on the box (since $L,W,H > 0$), so $V$ is **increasing** in each variable separately. Hence the maximum of $V$ on $[5,5.1]\times[2,2.1]\times[1,1.1]$ occurs at: $(L,W,H) = (5.1,\, 2.1,\, 1.1)$. Therefore
+
+$$V_{\max} = 5.1 \times 2.1 \times 1.1 = 11.781 \text{ ft}^3,$$
+
+and the **exact** maximal excess volume is
+
+$$11.781 - 10 = 1.781 \text{ ft}^3.$$
