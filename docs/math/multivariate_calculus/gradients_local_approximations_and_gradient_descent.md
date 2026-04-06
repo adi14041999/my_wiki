@@ -375,3 +375,41 @@ $$V_{\max} = 5.1 \times 2.1 \times 1.1 = 11.781 \text{ ft}^3,$$
 and the **exact** maximal excess volume is
 
 $$11.781 - 10 = 1.781 \text{ ft}^3.$$
+
+**2.** Consider $f : \mathbb{R}^2 \to \mathbb{R}$ given by $f(x, y) = x^2 - y^2$.
+
+**(a)** Calculate the first two steps of gradient descent using $t = -0.1$ and starting at $\begin{pmatrix} 1 \\ 0 \end{pmatrix}$, as well as starting at $\begin{pmatrix} 1 \\ 0.3 \end{pmatrix}$. Do you notice any difference?
+
+**Solution:** Here $f_x = 2x$ and $f_y = -2y$, so
+
+$$(\nabla f)(x, y) = \begin{pmatrix} 2x \\ -2y \end{pmatrix}.$$
+
+With $t = -0.1$, one step is $\mathbf{x} \mapsto \mathbf{x} + t(\nabla f)(\mathbf{x}) = \mathbf{x} - 0.1(\nabla f)(\mathbf{x})$:
+
+$$\begin{pmatrix} x \\ y \end{pmatrix} \mapsto \begin{pmatrix} x - 0.2x \\ y + 0.2y \end{pmatrix} = \begin{pmatrix} 0.8x \\ 1.2y \end{pmatrix}.$$
+
+**Start $\begin{pmatrix} 1 \\ 0 \end{pmatrix}$:** Step 1 gives $\begin{pmatrix} 0.8 \\ 0 \end{pmatrix}$; step 2 gives $\begin{pmatrix} 0.64 \\ 0 \end{pmatrix}$.
+
+**Start $\begin{pmatrix} 1 \\ 0.3 \end{pmatrix}$:** Step 1 gives $\begin{pmatrix} 0.8 \\ 0.36 \end{pmatrix}$; step 2 gives $\begin{pmatrix} 0.64 \\ 0.432 \end{pmatrix}$.
+
+**Difference:** From $(1,0)$ the iterate stays on the $x$-axis and moves toward $0$. From $(1,0.3)$ the $y$-coordinate **grows** by a factor of $1.2$ each step, so the path bends away from the $x$-axis and $|y|$ increases.
+
+**(b)** For general $\mathbf{a} = \begin{pmatrix} a \\ b \end{pmatrix}$, where do we land after **one** step of gradient descent with $t = -0.1$ starting at $\mathbf{a}$? Express the result as a vector whose entries depend on $a$ and $b$.
+
+**Solution:** Applying the map once to $\begin{pmatrix} a \\ b \end{pmatrix}$:
+
+$$\begin{pmatrix} a \\ b \end{pmatrix} \mapsto \begin{pmatrix} 0.8a \\ 1.2b \end{pmatrix}.$$
+
+**(c)** Using your formula in (b), iterate the procedure: where are we after $2$ steps, after $3$ steps, and after $n$ steps (in terms of $a$ and $b$)?
+
+**Solution:** Each step multiplies the first coordinate by $0.8$ and the second by $1.2$. After $n$ steps:
+
+$$\begin{pmatrix} a \\ b \end{pmatrix} \mapsto \begin{pmatrix} (0.8)^n a \\ (1.2)^n b \end{pmatrix}.$$
+
+In particular, after $2$ steps: $\begin{pmatrix} 0.64a \\ 1.44b \end{pmatrix}$; after $3$ steps: $\begin{pmatrix} 0.512a \\ 1.728b \end{pmatrix}$.
+
+**(d)** Explain why repeated gradient descent converges to $\mathbf{0}$ (a **saddle** point of $f$, not a local minimum) when we start at any $\mathbf{a}$ with $b = 0$, but **diverges** when $b \neq 0$.
+
+**Solution:** If $b = 0$, the iterates are $\bigl((0.8)^n a,\, 0\bigr)$. Since $0 < 0.8 < 1$, we have $(0.8)^n \to 0$ as $n \to \infty$, so the sequence converges to $\mathbf{0}$. The point $\mathbf{0}$ is **not** a local minimum of $f(x,y)=x^2-y^2$ (along $y=0$, $f=x^2$ has a minimum at $0$, but along $x=0$, $f=-y^2$ has a **maximum** at $0$); it is a **saddle** point.
+
+If $b \neq 0$, the second component is $(1.2)^n b$. Since $1.2 > 1$, we have $(1.2)^n \to +\infty$, so $|y_n| \to \infty$; the sequence of iterates **diverges** (the $x$-component still tends to $0$, but the $y$-component blows up).
