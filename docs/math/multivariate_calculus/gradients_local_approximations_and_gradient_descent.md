@@ -413,3 +413,65 @@ In particular, after $2$ steps: $\begin{pmatrix} 0.64a \\ 1.44b \end{pmatrix}$; 
 **Solution:** If $b = 0$, the iterates are $\bigl((0.8)^n a,\, 0\bigr)$. Since $0 < 0.8 < 1$, we have $(0.8)^n \to 0$ as $n \to \infty$, so the sequence converges to $\mathbf{0}$. The point $\mathbf{0}$ is **not** a local minimum of $f(x,y)=x^2-y^2$ (along $y=0$, $f=x^2$ has a minimum at $0$, but along $x=0$, $f=-y^2$ has a **maximum** at $0$); it is a **saddle** point.
 
 If $b \neq 0$, the second component is $(1.2)^n b$. Since $1.2 > 1$, we have $(1.2)^n \to +\infty$, so $|y_n| \to \infty$; the sequence of iterates **diverges** (the $x$-component still tends to $0$, but the $y$-component blows up).
+
+**3.** One might modify gradient descent to move by a fixed multiple of the **unitized** gradient $\dfrac{(\nabla f)(\mathbf{a})}{\lVert(\nabla f)(\mathbf{a})\rVert}$ rather than by a fixed multiple of $(\nabla f)(\mathbf{a})$. Call this **unitized gradient descent**. This exercise shows a pitfall.
+
+Let $f:\mathbb{R}^2 \to \mathbb{R}$ be $f(x,y) = x^2 + y^2$, so $\mathbf{0}$ is the unique global minimum. Take $t = -0.1$. Let $\mathbf{a} \neq \mathbf{0}$ in $\mathbb{R}^2$, with $\ell = \lVert\mathbf{a}\rVert$ and unit vector $\mathbf{u} = \mathbf{a}/\ell = \mathbf{a}/\lVert\mathbf{a}\rVert$ (so $\mathbf{a} = \ell\mathbf{u}$).
+
+**(a)** Show that one step of unitized gradient descent beginning at $\mathbf{a}$ yields $(\ell + t)\mathbf{u} = (\ell - 0.1)\mathbf{u}$.
+
+**Solution:** We have $\dfrac{\partial f}{\partial x} = 2x$ and $\dfrac{\partial f}{\partial y} = 2y$, so $(\nabla f)(\mathbf{a}) = 2\mathbf{a}$. Also $\lVert(\nabla f)(\mathbf{a})\rVert = \lVert 2\mathbf{a}\rVert = 2\ell$. Unitized gradient descent with step $t$ is
+
+$$\mathbf{a} + t\,\frac{(\nabla f)(\mathbf{a})}{\lVert(\nabla f)(\mathbf{a})\rVert} = \ell\mathbf{u} + t\,\frac{2\mathbf{a}}{2\ell} = \ell\mathbf{u} + t\,\frac{\mathbf{a}}{\ell} = \ell\mathbf{u} + t\mathbf{u} = (\ell + t)\mathbf{u}.$$
+
+With $t = -0.1$, this is $(\ell - 0.1)\mathbf{u}$. Its norm is $|\ell - 0.1|$.
+
+Write $\mathbf{a}_0 := \mathbf{a} = \ell\mathbf{u}$, and for $n \ge 0$ let $\mathbf{a}_{n+1}$ be the point reached by **one** unitized step from $\mathbf{a}_n$ (always with $t = -0.1$).
+
+**(b)** Suppose $0 < \lVert\mathbf{a}\rVert < 0.1$. Then by (a) one step yields $(\ell - 0.1)\mathbf{u} = (0.1 - \ell)(-\mathbf{u})$, pointing opposite to $\mathbf{a}$ (since $0.1 - \ell > 0$). Check that after a **second** unitized step we return to the original $\mathbf{a}$ (so the iterates bounce forever between these two points and never converge).
+
+**Solution:** Here $\ell \in (0, 0.1)$. The first few iterates are
+
+$$\begin{aligned}
+\mathbf{a}_0 &= \ell\mathbf{u}, \\
+\mathbf{a}_1 &= (\ell - 0.1)\mathbf{u}, \\
+\mathbf{a}_2 &= \ell\mathbf{u}, \\
+\mathbf{a}_3 &= (\ell - 0.1)\mathbf{u}, \\
+\mathbf{a}_4 &= \ell\mathbf{u}.
+\end{aligned}$$
+
+For the second step: $\mathbf{a}_1 = (\ell - 0.1)\mathbf{u}$ with $\ell - 0.1 < 0$, so $\mathbf{a}_1 = -(0.1 - \ell)\mathbf{u}$ and the unit vector in the direction of $\mathbf{a}_1$ is $-\mathbf{u}$. As in (a), one step adds $t$ times that unit vector to the current point:
+
+$$\mathbf{a}_2 = \mathbf{a}_1 + t(-\mathbf{u}) = (\ell - 0.1)\mathbf{u} + 0.1\mathbf{u} = \ell\mathbf{u} = \mathbf{a}_0.$$
+
+The same reasoning gives $\mathbf{a}_3 = \mathbf{a}_1$, $\mathbf{a}_4 = \mathbf{a}_0$, and so on: a **period-$2$** orbit, not convergence to $\mathbf{0}$.
+
+**(c)** Suppose $0.1 < \lVert\mathbf{a}\rVert < 0.2$. Explain why after one step of unitized gradient descent we wind up at a point as at the start in (b), so unitized gradient descent again gets caught in an endless bounce  (between what we reach after 2 steps and 3 steps).
+
+**Solution:** Here $\ell \in (0.1, 0.2)$. After one step, $\mathbf{a}_1 = (\ell - 0.1)\mathbf{u}$ with $\ell_1 := \ell - 0.1 \in (0, 0.1)$. That is exactly the setup of (b) with $\ell$ replaced by $\ell_1$. So from $\mathbf{a}_1$ the next step goes to $\mathbf{a}_2 = (\ell_1 - 0.1)\mathbf{u} = (\ell - 0.2)\mathbf{u}$ (now $\ell - 0.2 < 0$), and the **third** step returns to $\mathbf{a}_1$ by the same calculation as in (b). Hence $\mathbf{a}_3 = \mathbf{a}_1$, $\mathbf{a}_4 = \mathbf{a}_2$, etc.: the sequence alternates between the **2-step** iterate $(\ell - 0.2)\mathbf{u}$ and the **3-step** iterate $(\ell - 0.1)\mathbf{u}$.
+
+Writing $\mathbf{a}_0 = \ell\mathbf{u}$ for the start, the first five iterates are
+
+$$\begin{aligned}
+\mathbf{a}_0 &= \ell\mathbf{u}, \\
+\mathbf{a}_1 &= (\ell - 0.1)\mathbf{u}, \\
+\mathbf{a}_2 &= (\ell - 0.2)\mathbf{u}, \\
+\mathbf{a}_3 &= (\ell - 0.1)\mathbf{u} = \mathbf{a}_1, \\
+\mathbf{a}_4 &= (\ell - 0.2)\mathbf{u} = \mathbf{a}_2.
+\end{aligned}$$
+
+**(d)** Suppose $0.2 < \lVert\mathbf{a}\rVert < 0.3$. Explain why after one unitized step we are in the situation of (c), so unitized descent again bounces forever— now between the point reached after **three** steps and the point reached after **four** steps.
+
+**Solution:** If $\ell \in (0.2, 0.3)$, the first few iterates are
+
+$$\begin{aligned}
+\mathbf{a}_0 &= \ell\mathbf{u}, \\
+\mathbf{a}_1 &= (\ell - 0.1)\mathbf{u}, \\
+\mathbf{a}_2 &= (\ell - 0.2)\mathbf{u}, \\
+\mathbf{a}_3 &= (\ell - 0.3)\mathbf{u}, \\
+\mathbf{a}_4 &= (\ell - 0.2)\mathbf{u} = \mathbf{a}_2.
+\end{aligned}$$
+
+After one step, $\mathbf{a}_1 = (\ell - 0.1)\mathbf{u}$ with $\ell - 0.1 \in (0.1, 0.2)$. That matches the **starting** hypothesis of (c) (length strictly between $0.1$ and $0.2$). Therefore the subsequent behavior is as in (c): from $\mathbf{a}_1$ the orbit bounces between the 2-step and 3-step iterates **relative to $\mathbf{a}_1$**, i.e. between $\mathbf{a}_3 = (\ell - 0.3)\mathbf{u}$ and $\mathbf{a}_4 = (\ell - 0.2)\mathbf{u}$. Then $\mathbf{a}_5 = \mathbf{a}_3$, $\mathbf{a}_6 = \mathbf{a}_4$, and so on. Again there is no convergence to $\mathbf{0}$ for these $\ell$.
+
+**Lesson:** One can continue this pattern of argument to show (you might enjoy to think about it visually) that as long as $\lVert\mathbf{a}\rVert$ is not an integer multiple of $0.1$ then unitized gradient descent beginning at $\mathbf{a}$ gets caught in an endless bounce between two steps.
