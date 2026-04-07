@@ -52,6 +52,10 @@ Computing distances to every vector does not scale. Vector databases therefore u
 
 No single ANN method is best for every workload. You typically need to experiment on your own data and latency requirements.
 
+### Model-agnostic storage
+
+Vector stores only hold numeric vectors (and metadata); they are not tied to a single embedding vendor or architecture. You can store vectors produced by shallow methods, open-weight transformers, or proprietary APIs— often in separate collections or indexes per model. For a given search experience, queries and documents should still be embedded in a **compatible** way (usually the same model and preprocessing) so distances are meaningful.
+
 ## Vector vs traditional search
 
 **Advantages of vector search:** It matches by meaning, so a query like "dogs" can surface content about "puppies." It supports loose, semantic matching rather than exact keywords. With the right embeddings, you can mix text, images, and other modalities in one space and search across them.

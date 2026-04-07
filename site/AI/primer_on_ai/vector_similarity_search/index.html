@@ -701,6 +701,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Vector database optimization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#model-agnostic-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model-agnostic storage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3942,6 +3959,8 @@
 <li><strong>Hash-based:</strong> Use hashes so that similar items tend to land in the same buckets, then search within buckets.</li>
 </ul>
 <p>No single ANN method is best for every workload. You typically need to experiment on your own data and latency requirements.</p>
+<h3 id="model-agnostic-storage">Model-agnostic storage</h3>
+<p>Vector stores only hold numeric vectors (and metadata); they are not tied to a single embedding vendor or architecture. You can store vectors produced by shallow methods, open-weight transformers, or proprietary APIs— often in separate collections or indexes per model. For a given search experience, queries and documents should still be embedded in a <strong>compatible</strong> way (usually the same model and preprocessing) so distances are meaningful.</p>
 <h2 id="vector-vs-traditional-search">Vector vs traditional search</h2>
 <p><strong>Advantages of vector search:</strong> It matches by meaning, so a query like "dogs" can surface content about "puppies." It supports loose, semantic matching rather than exact keywords. With the right embeddings, you can mix text, images, and other modalities in one space and search across them.</p>
 <p><strong>Disadvantages:</strong> Query time and memory grow with dimensionality and index size. You must store embeddings and index structures as well as the original data. It is harder to explain why a particular document was returned. Changing the embedding model or data usually means re-embedding and rebuilding the index.</p>
