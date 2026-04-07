@@ -475,3 +475,25 @@ $$\begin{aligned}
 After one step, $\mathbf{a}_1 = (\ell - 0.1)\mathbf{u}$ with $\ell - 0.1 \in (0.1, 0.2)$. That matches the **starting** hypothesis of (c) (length strictly between $0.1$ and $0.2$). Therefore the subsequent behavior is as in (c): from $\mathbf{a}_1$ the orbit bounces between the 2-step and 3-step iterates **relative to $\mathbf{a}_1$**, i.e. between $\mathbf{a}_3 = (\ell - 0.3)\mathbf{u}$ and $\mathbf{a}_4 = (\ell - 0.2)\mathbf{u}$. Then $\mathbf{a}_5 = \mathbf{a}_3$, $\mathbf{a}_6 = \mathbf{a}_4$, and so on. Again there is no convergence to $\mathbf{0}$ for these $\ell$.
 
 **Lesson:** One can continue this pattern of argument to show (you might enjoy to think about it visually) that as long as $\lVert\mathbf{a}\rVert$ is not an integer multiple of $0.1$ then unitized gradient descent beginning at $\mathbf{a}$ gets caught in an endless bounce between two steps.
+
+**4.** Find all points $P$ on the curve
+
+$$C = \bigl\{ (x,y) \in \mathbb{R}^2 : 3yx^2 + 3xy^2 + y^3 + 2x^3 = 27 \bigr\}$$
+
+for which the tangent line to $C$ at $P$ is parallel to the $y$-axis.
+
+**Solution:** Write $F(x,y) = 3yx^2 + 3xy^2 + y^3 + 2x^3 - 27$, so $C$ is the level set $F(x,y) = 0$. The gradient $\nabla F$ is normal to $C$ at smooth points. A tangent parallel to the $y$-axis has direction $(0,1)$ (or its negative), so the normal is horizontal, i.e. $\nabla F$ is parallel to $(1,0)$. Thus we need
+
+$$\frac{\partial F}{\partial y}(P) = 0, \qquad \frac{\partial F}{\partial x}(P) \neq 0$$
+
+Compute partial derivatives:
+
+$$\frac{\partial F}{\partial x} = 6xy + 3y^2 + 6x^2, \qquad \frac{\partial F}{\partial y} = 3x^2 + 6xy + 3y^2 = 3(x+y)^2.$$
+
+So $\dfrac{\partial F}{\partial y} = 0$ exactly when $x + y = 0$, i.e. $y = -x$. Substitute $y = -x$ into $F(x,y) = 0$:
+
+$$3(-x)x^2 + 3x(-x)^2 + (-x)^3 + 2x^3 = -3x^3 + 3x^3 - x^3 + 2x^3 = x^3 = 27,$$
+
+hence $x = 3$ and $y = -3$. Check $\dfrac{\partial F}{\partial x}(3,-3) = 6(3)(-3) + 3(9) + 6(9) = 27 \neq 0$.
+
+Therefore the only such point is $P = (3, -3)$.
