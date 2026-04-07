@@ -1,5 +1,7 @@
 # Model Taxonomy
 
+Machine Learning (ML) is a field of study in Artificial Intelligence concerned with the development and study of systems comprising of statistical algorithms that can learn from data and generalize to unseen data, and thus perform tasks without explicit programming language instructions. These systems are generally called as Machine Learning Models, or ML models.
+
 ## Models as functions
 
 In many ways, ML models behave like software functions: they have **parameters**, take **inputs**, and produce **outputs**. You can **compose** them (pipe the output of one into another) and **decompose** them (treat submodules as smaller functions). That analogy helps when reading code or designing systems— you can reason about models as black boxes with a clear signature.
@@ -12,11 +14,11 @@ You can organize models and methods along three axes: how they learn, how big th
 
 ### 1. Learning paradigms
 
-**Supervised:** The model learns from **labeled data**— each input is paired with a correct answer. Examples: image classification (image → class label), spam detection (email → spam/not spam), house price prediction (features → price). The model’s job is to approximate the input–output mapping implied by the labels.
+**Supervised:** In supervised learning the model observes input-output pairs and learns a function that maps from input to output. For example, the inputs could be camera images, each one accompanied by an output saying “bus” or “pedestrian,” etc. An output like this is called a **label**. The labels are already explicitly provided as part of the input-output pairs. The model learns a function that, when given a new image, predicts the appropriate label.
 
 **Self-supervised:** No human-provided labels; the **labels are derived from the data itself**. The model is trained to predict missing or corrupted parts of the input. Examples: language models that predict the next token or a masked word (e.g. BERT’s “fill in the blank”), vision models that predict rotated orientation or missing image patches. Self-supervised learning is widely used for pretraining before fine-tuning on a downstream task.
 
-**Unsupervised:** No labels at all. The goal is to find **patterns, clusters, or structure** in raw data. Examples: k-means clustering (group points by similarity), topic modeling (discover themes in documents), anomaly detection (flag points that don’t fit the learned distribution). You don’t have a “correct” target; you explore the data’s structure.
+**Unsupervised:** In unsupervised learning the model learns patterns in the input without any explicit labels. The most common unsupervised learning task is clustering: detecting potentially useful clusters of input examples. No labels at all. The goal is to find **patterns, clusters, or structure** in raw data. Examples: k-means clustering (group points by similarity), topic modeling (discover themes in documents), anomaly detection (flag points that don’t fit the learned distribution). You don’t have a “correct” target; you explore the data’s structure.
 
 **Reinforcement:** The model learns **actions** from **states** and **rewards** provided by an environment. It isn’t given correct input–output pairs; it discovers good behavior by trial and error. Examples: game-playing agents (AlphaGo, DQN), robotics control, recommendation systems that optimize long-term engagement. The “label” is implicit in the reward signal.
 
@@ -40,7 +42,7 @@ Common ways to frame what a model is asked to do (only listed a few here).
 
 #### Caveat: task types are limiting
 
-The same problem can often be solved with different tasks in mind— e.g. anomaly detection can be framed as **classification** (normal vs anomalous) or as **clustering** (flag points far from any cluster). Large models further blur the boundaries: LLMs do classification in the process of doing next-token prediction rather than as separate task-specific heads. Use task types as an **initial filtering heuristic** (e.g. “do I need a continuous output or discrete classes?”), not as a rigid categorization.
+The same problem can often be solved with different tasks in mind— e.g. anomaly detection can be framed as **classification** (normal vs anomalous) or as **clustering** (flag points far from any cluster). Large models further blur the boundaries: LLMs do classification in the process of doing next-token prediction. Use task types as an **initial filtering heuristic** (e.g. “do I need a continuous output or discrete classes?”), not as a rigid categorization.
 
 ## Practical framework
 
