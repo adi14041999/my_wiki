@@ -497,3 +497,47 @@ $$3(-x)x^2 + 3x(-x)^2 + (-x)^3 + 2x^3 = -3x^3 + 3x^3 - x^3 + 2x^3 = x^3 = 27,$$
 hence $x = 3$ and $y = -3$. Check $\dfrac{\partial F}{\partial x}(3,-3) = 6(3)(-3) + 3(9) + 6(9) = 27 \neq 0$.
 
 Therefore the only such point is $P = (3, -3)$.
+
+**5.** A yellow ellipsoid $2x^2 + 3y^2 + z^2 = 9$ and a blue two-sheeted hyperboloid $-3x^2 + 6y^2 + z^2 = 7$ meet along a curve $C$ with two branches (one per sheet). The point $P = (1, -1, 2)$ lies on both surfaces, hence on $C$.
+
+![img](elpd.png)
+
+**(a)** Compute a normal vector to the tangent plane at $P$ for each surface.
+
+**Solution:** Write each surface as a level set of a function of three variables. For the ellipsoid, let $F_1(x,y,z) = 2x^2 + 3y^2 + z^2 - 9$. Then
+
+$$\nabla F_1 = (4x,\, 6y,\, 2z), \qquad \nabla F_1(1,-1,2) = (4,\, -6,\, 4).$$
+
+Any nonzero scalar multiple is also normal; for instance $(2,\, -3,\, 2)$.
+
+For the hyperboloid, let $F_2(x,y,z) = -3x^2 + 6y^2 + z^2 - 7$. Then
+
+$$\nabla F_2 = (-6x,\, 12y,\, 2z), \qquad \nabla F_2(1,-1,2) = (-6,\, -12,\, 4).$$
+
+For instance $(-3,\, -6,\, 2)$ (divide by $2$).
+
+**(b)** Find a nonzero vector orthogonal to both normals from (a), and use it to give a parametric form for the tangent line $L$ to $C$ at $P$.
+
+**Solution:** The tangent plane to each surface at $P$ has the given gradient as a normal. A vector tangent to the intersection curve $C$ at $P$ lies in both tangent planes, hence is orthogonal to both normals. Using the simplified normals $\mathbf{n}_1 = (2,\, -3,\, 2)$ and $\mathbf{n}_2 = (-3,\, -6,\, 2)$ from (a), we seek a nonzero vector $\mathbf{v} = (a,\, b,\, c)$ such that
+
+$$\mathbf{v} \cdot \mathbf{n}_1 = 0, \qquad \mathbf{v} \cdot \mathbf{n}_2 = 0,$$
+
+i.e.
+
+$$2a - 3b + 2c = 0, \qquad -3a - 6b + 2c = 0.$$
+
+Subtracting the second equation from the first eliminates $c$:
+
+$$(2a - 3b + 2c) - (-3a - 6b + 2c) = 5a + 3b = 0,$$
+
+so $b = -\dfrac{5}{3}a$. Substitute into $2a - 3b + 2c = 0$:
+
+$$2a - 3\Bigl(-\frac{5}{3}a\Bigr) + 2c = 2a + 5a + 2c = 7a + 2c = 0,$$
+
+hence $c = -\dfrac{7}{2}a$. Taking $a = 6$ clears denominators and gives $\mathbf{v} = (6,\, -10,\, -21)$.
+
+Thus a parametric form of the tangent line $L$ to $C$ at $P$ is
+
+$$L(s) = (1,\, -1,\, 2) + s(6,\, -10,\, -21), \qquad s \in \mathbb{R}$$
+
+(any nonzero scalar multiple of $(6,\, -10,\, -21)$ gives the same line).
