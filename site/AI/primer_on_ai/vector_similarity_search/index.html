@@ -3950,7 +3950,7 @@
 <p>Which metric to use is usually specified by the embedding model. Many language-model embeddings are tuned for cosine similarity.</p>
 <h2 id="embedding-model-types">Embedding model types</h2>
 <p><strong>Shallow algorithms:</strong> Methods like TF-IDF (term frequency–inverse document frequency) build vectors from word counts and simple heuristics. They are fast, cheap, and interpretable. They work well for keyword-style search and smaller corpora but do not capture deep semantics.</p>
-<p><strong>Deep neural networks:</strong> Models such as BERT and other transformers produce embeddings that capture context and meaning. They handle nuance and paraphrasing better but cost more compute and are harder to interpret. Choice depends on data size, latency, and how much semantic matching you need.</p>
+<p><strong>Deep neural networks:</strong> Models such as BERT and other transformers produce embeddings that capture context and meaning. They handle nuance and paraphrasing better but cost more compute and are harder to interpret. Choice depends on data size, latency, and how much semantic matching you need. As an example, the <a href="https://www.sbert.net/index.html">SentenceTransformers</a> project provides pretrained models and training tools (on top of PyTorch) to turn sentences and short passages into fixed-size vectors for semantic search, clustering, and related tasks.</p>
 <h2 id="vector-database-optimization">Vector database optimization</h2>
 <p>Computing distances to every vector does not scale. Vector databases therefore use <strong>Approximate Nearest Neighbor (ANN)</strong> methods to trade some accuracy for speed. The <strong>index</strong> (or index structure) is the auxiliary data structure the database builds over the vectors— for example the graph, tree, or hash tables used by the ANN algorithm, so that nearest-neighbor queries can be answered without comparing the query to every stored vector.</p>
 <ul>
@@ -3973,7 +3973,7 @@
 <li><strong>Query routing:</strong> Use a small classifier or rules to decide, per query, whether to use keyword, vector, or both.</li>
 </ul>
 <h2 id="implementation-considerations">Implementation considerations</h2>
-<p><strong>Vector databases and extensions:</strong> Options include dedicated stores (Pinecone, Qdrant, Milvus, ChromaDB) and extensions to general-purpose DBs (e.g. pgvector for Postgres, vector support in MongoDB).</p>
+<p><strong>Vector databases and extensions:</strong> Options include dedicated stores (Pinecone, Qdrant, Milvus, ChromaDB) and extensions to general-purpose DBs (e.g. pgvector for Postgres, vector support in MongoDB). <strong><a href="https://github.com/facebookresearch/faiss">FAISS</a></strong> (Facebook AI Similarity Search) is a widely used library (not a database) for building and querying ANN indexes over dense vectors in memory. Faiss is a library for efficient similarity search and clustering of dense vectors. It contains algorithms that search in sets of vectors of any size, up to ones that possibly do not fit in RAM.</p>
 <p><strong>Experimentation:</strong> Unlike many traditional search setups, there is no single best configuration. Embedding model, metric, ANN algorithm, and hybrid strategy all depend on your data and requirements. Plan to iterate.</p>
 <p><strong>Resource planning:</strong> Vector search uses more compute and memory than simple keyword search. Budget for embedding storage, index build time, and query latency when sizing infrastructure.</p>
 

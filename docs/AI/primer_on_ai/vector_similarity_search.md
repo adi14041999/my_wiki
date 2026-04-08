@@ -40,7 +40,7 @@ Which metric to use is usually specified by the embedding model. Many language-m
 
 **Shallow algorithms:** Methods like TF-IDF (term frequency–inverse document frequency) build vectors from word counts and simple heuristics. They are fast, cheap, and interpretable. They work well for keyword-style search and smaller corpora but do not capture deep semantics.
 
-**Deep neural networks:** Models such as BERT and other transformers produce embeddings that capture context and meaning. They handle nuance and paraphrasing better but cost more compute and are harder to interpret. Choice depends on data size, latency, and how much semantic matching you need.
+**Deep neural networks:** Models such as BERT and other transformers produce embeddings that capture context and meaning. They handle nuance and paraphrasing better but cost more compute and are harder to interpret. Choice depends on data size, latency, and how much semantic matching you need. As an example, the [SentenceTransformers](https://www.sbert.net/index.html) project provides pretrained models and training tools (on top of PyTorch) to turn sentences and short passages into fixed-size vectors for semantic search, clustering, and related tasks.
 
 ## Vector database optimization
 
@@ -73,7 +73,7 @@ Combining vector search with traditional search often works best.
 
 ## Implementation considerations
 
-**Vector databases and extensions:** Options include dedicated stores (Pinecone, Qdrant, Milvus, ChromaDB) and extensions to general-purpose DBs (e.g. pgvector for Postgres, vector support in MongoDB).
+**Vector databases and extensions:** Options include dedicated stores (Pinecone, Qdrant, Milvus, ChromaDB) and extensions to general-purpose DBs (e.g. pgvector for Postgres, vector support in MongoDB). **[FAISS](https://github.com/facebookresearch/faiss)** (Facebook AI Similarity Search) is a widely used library (not a database) for building and querying ANN indexes over dense vectors in memory. Faiss is a library for efficient similarity search and clustering of dense vectors. It contains algorithms that search in sets of vectors of any size, up to ones that possibly do not fit in RAM.
 
 **Experimentation:** Unlike many traditional search setups, there is no single best configuration. Embedding model, metric, ANN algorithm, and hybrid strategy all depend on your data and requirements. Plan to iterate.
 
