@@ -541,3 +541,83 @@ Thus a parametric form of the tangent line $L$ to $C$ at $P$ is
 $$L(s) = (1,\, -1,\, 2) + s(6,\, -10,\, -21), \qquad s \in \mathbb{R}$$
 
 (any nonzero scalar multiple of $(6,\, -10,\, -21)$ gives the same line).
+
+**6.** Consider the circles
+
+$$C = \{(x,y) \in \mathbb{R}^2 : x^2 + y^2 = 1\}, \qquad C' = \{(x,y) \in \mathbb{R}^2 : (x-1)^2 + y^2 = 1\},$$
+
+each of radius $1$, with centers $(0,0)$ and $(1,0)$.
+
+**(a)** Use algebra to find the two points where $C$ and $C'$ meet.
+
+**Solution:** A point on both circles satisfies $x^2 + y^2 = 1$ and $(x-1)^2 + y^2 = 1$. Expanding the second equation gives $x^2 - 2x + 1 + y^2 = 1$. Substituting $x^2 + y^2 = 1$ yields $1 - 2x + 1 = 1$, hence $x = \tfrac{1}{2}$. Then $y^2 = 1 - x^2 = \tfrac{3}{4}$, so $y = \pm \dfrac{\sqrt{3}}{2}$. The intersection points are
+
+$$P_+ = \Bigl(\tfrac{1}{2},\, \tfrac{\sqrt{3}}{2}\Bigr), \qquad P_- = \Bigl(\tfrac{1}{2},\, -\tfrac{\sqrt{3}}{2}\Bigr).$$
+
+Geometrically, the centers are $1$ unit apart and each circle has radius $1$, so the intersection lies on the perpendicular bisector of the segment joining the centers, namely the line $x = \tfrac{1}{2}$. The two points are symmetric about the $x$-axis; together with the two centers they form two equilateral triangles of side length $1$, which is consistent with the computed height $\tfrac{\sqrt{3}}{2}$ at $x = \tfrac{1}{2}$.
+
+**(b)** Use gradient vectors to compute the **acute** angle at which the tangent lines to $C$ and $C'$ meet at both of these points.
+
+**Solution:** Write $F(x,y) = x^2 + y^2 - 1$ and $G(x,y) = (x-1)^2 + y^2 - 1$, so $C$ and $C'$ are the level curves $F = 0$ and $G = 0$. Then
+
+$$\nabla F = (2x,\, 2y), \qquad \nabla G = (2(x-1),\, 2y).$$
+
+At a point of intersection, $\nabla F$ and $\nabla G$ are normal to $C$ and $C'$ respectively, hence each is perpendicular to the corresponding tangent line. The **acute** angle between the two gradients equals the **acute** angle between their normals (corresponding tangents).
+
+At $P_+$:
+
+$$\nabla F(P_+) = (1,\, \sqrt{3}), \qquad \nabla G(P_+) = (-1,\, \sqrt{3}).$$
+
+Thus
+
+$$\cos \theta = \frac{\nabla F \cdot \nabla G}{\lVert \nabla F\rVert\,\lVert \nabla G\rVert} = \frac{-1 + 3}{(2)(2)} = \frac{1}{2},$$
+
+so the angle between the normals is $\theta = 60^\circ = \dfrac{\pi}{3}$ radians. That is the acute angle between the tangent lines at $P_+$.
+
+At $P_-$:
+
+$$\nabla F(P_-) = (1,\, -\sqrt{3}), \qquad \nabla G(P_-) = (-1,\, -\sqrt{3}),$$
+
+so the angle between the normals is $\theta = 60^\circ = \dfrac{\pi}{3}$ radians. That is the acute angle between the tangent lines at $P_-$.
+
+**7.** Let $f(x,y,z) = x^2 + y^2 + z^2$ and $g(x,y,z) = x^2 + y^2 + z$. Consider points $P \neq (0,0,1)$ that lie on the surface $S = \{g(x,y,z) = 1\}$ and such that the tangent plane to $S$ at $P$ equals the tangent plane at $P$ to the level set of $f$ through $P$. Show that every such $P$ satisfies $f(P) = \tfrac{3}{4}$, and that the set of all such $P$ is a circle in the plane $z = \tfrac{1}{2}$.
+
+**Solution:** Write $P = (x,y,z)$. The surface $S$ is the level set $g = 1$. The level set of $f$ through $P$ is $f = f(P)$. At a smooth point, the tangent plane to a level set of a function is orthogonal to the gradient of that function. Two planes through $P$ coincide if and only if their normal lines coincide, i.e. $\nabla f(P)$ and $\nabla g(P)$ are **parallel** (nonzero scalar multiples).
+
+Here
+
+$$\nabla f = (2x,\, 2y,\, 2z), \qquad \nabla g = (2x,\, 2y,\, 1).$$
+
+So we require $(2x,\, 2y,\, 2z) = \lambda (2x,\, 2y,\, 1)$ for some $\lambda \in \mathbb{R}$.
+
+**Case 1:** $x \neq 0$ or $y \neq 0$. Then at least one of the first two equations $2x = \lambda \cdot 2x$, $2y = \lambda \cdot 2y$ forces $\lambda = 1$ (divide by a nonzero $2x$ or $2y$). The third equation gives $2z = \lambda \cdot 1 = 1$, hence $z = \tfrac{1}{2}$.
+
+**Case 2:** $x = y = 0$. Then $P$ lies on $S$ means $g(0,0,z) = z = 1$, so $P = (0,0,1)$. This point is excluded by hypothesis.
+
+Thus every admissible $P$ has $z = \tfrac{1}{2}$. The constraint $g(P) = 1$ gives
+
+$$x^2 + y^2 + \tfrac{1}{2} = 1 \quad\Longrightarrow\quad x^2 + y^2 = \tfrac{1}{2}.$$
+
+So $P$ lies in the plane $z = \tfrac{1}{2}$ and satisfies $x^2 + y^2 = \tfrac{1}{2}$: a **circle** of radius $\tfrac{1}{\sqrt{2}}$ in that plane (center $(0,\,0,\,\tfrac{1}{2})$).
+
+Finally,
+
+$$f(P) = x^2 + y^2 + z^2 = \tfrac{1}{2} + \Bigl(\tfrac{1}{2}\Bigr)^2 = \tfrac{1}{2} + \tfrac{1}{4} = \tfrac{3}{4}.$$
+
+Hence all such $P$ lie on the level set $f = \tfrac{3}{4}$, and the locus of $P$ is exactly that circle in $z = \tfrac{1}{2}$.
+
+**8.** Briefly justify whether each statement is **true** (always true) or **false** (sometimes false).
+
+**(a)** For $f(x,y) = x^3 + xy - y^2$, an equation of the line tangent to the $1$-level curve of $f$ at $(1,1)$ is $4x - y = 3$.
+
+**Solution:** **True.** First, $(1,1)$ lies on the level curve $f = 1$ since $f(1,1) = 1 + 1 - 1 = 1$. The gradient is
+
+$$\nabla f = (3x^2 + y,\; x - 2y), \qquad \nabla f(1,1) = (4,\, -1).$$
+
+The tangent line to the level curve at $(1,1)$ consists of points $(x,y)$ with $(\nabla f(1,1)) \cdot (x-1,\, y-1) = 0$, i.e.
+
+$$4(x-1) - (y-1) = 0 \quad\Longrightarrow\quad 4x - y = 3.$$
+
+**(b)** For the same $f$, the direction of steepest descent at $(1,1)$ is $\begin{pmatrix} 4 \\ -1 \end{pmatrix}$.
+
+**Solution:** **False.** Steepest **ascent** at a point is in the direction of $\nabla f$; steepest **descent** is in the direction of $-\nabla f$. Here $\nabla f(1,1) = (4,\, -1)$, so steepest descent is parallel to $\begin{pmatrix} -4 \\ 1 \end{pmatrix}$ (or any negative scalar multiple of the gradient), not $\begin{pmatrix} 4 \\ -1 \end{pmatrix}$.
