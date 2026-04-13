@@ -819,6 +819,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#constraint-satisfaction-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constraint Satisfaction Problems
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Constraint Satisfaction Problems">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sudoku-and-hill-climbing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sudoku and hill climbing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4413,6 +4441,24 @@ heuristic.</p>
 </table>
 <p>Both are <strong>iterative</strong> algorithms that take steps to improve the objective and can get stuck in local optima (hill climbing at a local maximum, gradient ascent at a local maximum).</p>
 <p><img alt="img" src="../gd.png" /></p>
+<h2 id="constraint-satisfaction-problems">Constraint Satisfaction Problems</h2>
+<p>A <strong>constraint satisfaction problem (CSP)</strong> is specified by <strong>variables</strong>, each with a <strong>domain</strong> of possible values, and <strong>constraints</strong> about the values the variables can take. A <strong>solution</strong> is an assignment of a value to every variable such that all constraints are satisfied. Sudoku is a standard example. Each empty cell is a variable, the domain is <span class="arithmatex">\(\{1,\ldots,9\}\)</span>, and the constraints are “all digits in each row, column, and <span class="arithmatex">\(3\times 3\)</span> box are distinct.”</p>
+<h3 id="sudoku-and-hill-climbing">Sudoku and hill climbing</h3>
+<p>One might try <strong>hill climbing</strong> (or iterative improvement) on Sudoku as follows. Work only with <strong>complete</strong> grids. Every cell contains a digit in <span class="arithmatex">\(\{1,\ldots,9\}\)</span>. Define an <strong>objective</strong> to maximize the <strong>number of non-conflicting numbers</strong> (filled cells), where a placement is <strong>conflicting</strong> if <strong>another copy of the same digit</strong> appears elsewhere in its <strong>row</strong>, <strong>column</strong>, or <strong><span class="arithmatex">\(3\times 3\)</span> box</strong>; otherwise it counts as non-conflicting. A <strong>valid completed Sudoku</strong> is a grid where <strong>all</strong> <span class="arithmatex">\(81\)</span> placements are non-conflicting.</p>
+<p>This is <strong>not</strong> a good idea in practice, for a reason beyond local maxima and plateaus. <strong>Solutions are astronomically rare</strong> in the natural search space for such a formulation.</p>
+<p>Impose only that <strong>each row</strong> is a <strong>permutation</strong> of <span class="arithmatex">\(\{1,\ldots,9\}\)</span> (nine distinct digits per row, but no column or box constraint yet). There are <strong>9!</strong> ways to order one row, and rows are chosen independently, so there are</p>
+<div class="arithmatex">\[
+(9!)^9
+\]</div>
+<p>such grids. Felgenhauer and Jarvis (2005) showed that the number of <strong>full</strong> <span class="arithmatex">\(9\times 9\)</span> Sudoku solution grids (satisfying row, column, and box constraints) is</p>
+<div class="arithmatex">\[
+N_{\text{sudoku}} = 6{,}671{,}903{,}752{,}021{,}072{,}936{,}960 \approx 6.67 \times 10^{21}.
+\]</div>
+<p>The <strong>density</strong> of true solutions inside this row-permutation ensemble is therefore</p>
+<div class="arithmatex">\[
+\frac{N_{\text{sudoku}}}{(9!)^9} \approx \frac{6.67 \times 10^{21}}{1.091 \times 10^{50}} \approx 6.1 \times 10^{-29},
+\]</div>
+<p>If hill climbing is initialized at a random complete assignment (or a random grid in a similar huge family), the starting point is overwhelmingly likely to lie in a region of the search space <strong>nowhere near</strong> any valid solution. Hill climbing is a poor match to a landscape where admissible solutions occupy such a vanishingly small fraction of the states one is willing to visit.</p>
 
 
 

@@ -455,3 +455,33 @@ Why would we use hill climbing then? A few reasons.
 Both are **iterative** algorithms that take steps to improve the objective and can get stuck in local optima (hill climbing at a local maximum, gradient ascent at a local maximum).
 
 ![img](gd.png)
+
+## Constraint Satisfaction Problems
+
+A **constraint satisfaction problem (CSP)** is specified by **variables**, each with a **domain** of possible values, and **constraints** about the values the variables can take. A **solution** is an assignment of a value to every variable such that all constraints are satisfied. Sudoku is a standard example. Each empty cell is a variable, the domain is $\{1,\ldots,9\}$, and the constraints are “all digits in each row, column, and $3\times 3$ box are distinct.”
+
+### Sudoku and hill climbing
+
+One might try **hill climbing** (or iterative improvement) on Sudoku as follows. Work only with **complete** grids. Every cell contains a digit in $\{1,\ldots,9\}$. Define an **objective** to maximize the **number of non-conflicting numbers** (filled cells), where a placement is **conflicting** if **another copy of the same digit** appears elsewhere in its **row**, **column**, or **$3\times 3$ box**; otherwise it counts as non-conflicting. A **valid completed Sudoku** is a grid where **all** $81$ placements are non-conflicting.
+
+This is **not** a good idea in practice, for a reason beyond local maxima and plateaus. **Solutions are astronomically rare** in the natural search space for such a formulation.
+
+Impose only that **each row** is a **permutation** of $\{1,\ldots,9\}$ (nine distinct digits per row, but no column or box constraint yet). There are **9!** ways to order one row, and rows are chosen independently, so there are
+
+$$
+(9!)^9
+$$
+
+such grids. Felgenhauer and Jarvis (2005) showed that the number of **full** $9\times 9$ Sudoku solution grids (satisfying row, column, and box constraints) is
+
+$$
+N_{\text{sudoku}} = 6{,}671{,}903{,}752{,}021{,}072{,}936{,}960 \approx 6.67 \times 10^{21}.
+$$
+
+The **density** of true solutions inside this row-permutation ensemble is therefore
+
+$$
+\frac{N_{\text{sudoku}}}{(9!)^9} \approx \frac{6.67 \times 10^{21}}{1.091 \times 10^{50}} \approx 6.1 \times 10^{-29},
+$$
+
+If hill climbing is initialized at a random complete assignment (or a random grid in a similar huge family), the starting point is overwhelmingly likely to lie in a region of the search space **nowhere near** any valid solution. Hill climbing is a poor match to a landscape where admissible solutions occupy such a vanishingly small fraction of the states one is willing to visit.
