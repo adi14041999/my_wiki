@@ -181,16 +181,6 @@ distance heuristic $h_{SLD}$. Nodes are labeled with their h-values.
 
 The solution it found does not have optimal cost. The path via Sibiu and Fagaras to Bucharest is 32 miles longer than the path through Rimnicu Vilcea and Pitesti. This is why the algorithm is called “greedy”— on each iteration it tries to get as close to a goal as it can, but greediness can lead to worse results than being careful. Greedy best-first graph search is complete in finite state spaces, but not in infinite ones.
 
-### Beam search
-
-**Beam search** is a compromise between greedy search (which keeps a single candidate) and breadth-first search (which keeps all candidates). We fix a **beam width** $k$. At each step we expand the current set of nodes and obtain all their successors, then we **keep only the best $k$** of these successors (by some score, e.g. $h(n)$ or $f(n) = g(n) + h(n)$) and discard the rest. So we maintain at most $k$ nodes at any time—a "beam" of the most promising candidates.
-
-- **$k = 1$:** Beam search reduces to **greedy best-first search** (one candidate at a time).
-- **$k$ large enough:** If $k$ is at least as large as the maximum branching factor at any level, we never prune, so beam search behaves like **breadth-first search** (or best-first with a large frontier).
-- **Typical use:** Small $k$ (e.g. 5–20) keeps memory low while allowing several promising paths to be explored in parallel. This is especially common in **sequence generation**: e.g. in machine translation or text generation, we build the output token by token; at each step we have many possible next tokens, and beam search keeps the top-$k$ partial sequences (by log-probability or score) and extends only those. So we avoid the combinatorial explosion of keeping all possibilities while still exploring more than a single greedy path.
-
-Beam search is **not complete** in general (we may prune a branch that leads to the only solution) and **not optimal** (we may prune the branch that leads to the best solution). It is a heuristic that trades optimality and completeness for efficiency and is widely used when full search is too expensive.
-
 ### $A^*$ search
 
 The flaw with Greedy best-first search is that it does not consider the cost to get to the next node.
@@ -458,7 +448,53 @@ Both are **iterative** algorithms that take steps to improve the objective and c
 
 ## Constraint Satisfaction Problems
 
-A **constraint satisfaction problem (CSP)** is specified by **variables**, each with a **domain** of possible values, and **constraints** about the values the variables can take. A **solution** is an assignment of a value to every variable such that all constraints are satisfied. Sudoku is a standard example. Each empty cell is a variable, the domain is $\{1,\ldots,9\}$, and the constraints are “all digits in each row, column, and $3\times 3$ box are distinct.”
+Consider a factored representation for each state: a set of variables, each of which has a value. A problem is solved when each variable has a value that satisfies all the constraints on the variable. A problem described this way is called a **constraint satisfaction problem**, or **CSP**. A **solution** is an assignment of a value to every variable such that all constraints are satisfied. Sudoku is a standard example. Each empty cell is a variable, the domain is $\{1,\ldots,9\}$, and the constraints are “all digits in each row, column, and $3\times 3$ box are distinct.”
+
+### Defining Constraint Satisfaction Problems
+
+A CSP is a triple $\langle X, D, C \rangle$:
+
+$X = \{X_1, \ldots, X_n\}$ is the set of variables.
+
+$D = \{D_1, \ldots, D_n\}$ is the set of domains, where each $D_i$ is the domain of $X_i$.
+
+$C = \{C_1, \ldots, C_m\}$ is the set of constraints.
+
+For example, a Boolean variable has domain $D_i = \{\text{true}, \text{false}\}$. In general, $|D_i|$ may vary across variables.
+
+Each constraint has the form
+
+$$
+C_j = \langle \mathrm{scope}_j, \mathrm{rel}_j \rangle,
+$$
+
+where $\mathrm{scope}_j = (X_{j_1}, \ldots, X_{j_t})$ is a tuple of variables and $\mathrm{rel}_j$ can be represented as an explicit set of all tuples of values that satisfy the constraint. In Set Theory, a relation is a set of ordered pairs that defines a specific association between elements from one or more sets. Here, $\mathrm{rel}_j \subseteq D_{j_1} \times \cdots \times D_{j_t}$ is a relation. 
+
+Equivalently, $\mathrm{rel}_j$ can be represented by a predicate $\mathrm{rel}_j(\cdot)$ that returns whether a tuple is allowed (a function that can compute whether a tuple is a member of the relation).
+
+Example: if $D_1 = D_2 = \{1,2,3\}$ and the constraint is $X_1 > X_2$, then
+
+$$
+\left\langle (X_1, X_2), \{(3,1), (3,2), (2,1)\} \right\rangle
+$$
+
+or equivalently
+
+$$
+\left\langle (X_1, X_2),\, X_1 > X_2 \right\rangle.
+$$
+
+In a CSP, we reason over assignments such as $\{X_i = v_i, X_j = v_j, \ldots\}$.
+
+An assignment is **consistent** (or **legal**) if it violates no constraint.
+
+A **complete assignment** assigns a value to every variable in $X$.
+
+A **solution** to a CSP is a consistent, complete assignment.
+
+A **partial assignment** leaves at least one variable unassigned.
+
+A **partial solution** is a partial assignment that is consistent.
 
 ### Sudoku and hill climbing
 
@@ -485,3 +521,29 @@ $$
 $$
 
 If hill climbing is initialized at a random complete assignment (or a random grid in a similar huge family), the starting point is overwhelmingly likely to lie in a region of the search space **nowhere near** any valid solution. Hill climbing is a poor match to a landscape where admissible solutions occupy such a vanishingly small fraction of the states one is willing to visit.
+
+### Solving Sudoku with DFS and backtracking
+
+For a standard Sudoku puzzle, the **start state** is the given board configuration, where some cells are already filled. These given values are fixed and cannot be changed.
+
+A **state** is any partially filled board that agrees with all fixed givens. A **goal state** is a completely filled board that satisfies all Sudoku constraints (no repeated digit in any row, column, or $3 \times 3$ box).
+
+If we model this as search, BFS and DFS are both possible in principle. But BFS stores an entire frontier of partial boards, which can explode in size. If $b$ is the branching factor and $d$ is the search depth, BFS space is on the order of $O(b^d)$, while DFS needs only the current path (plus small bookkeeping), about $O(d)$. So for Sudoku, DFS is typically preferred over BFS on memory grounds.
+
+However, plain DFS is still extremely slow in the worst case. If there are $m$ empty cells and each cell may try up to $9$ values, the naive search tree can have up to $9^m$ leaves (worst case $m=81$, so up to $9^{81} \approx 1.97 \times 10^{77}$ possibilities). That is astronomically large.
+
+To speed up DFS, we prune aggressively: as soon as a partial assignment violates a Sudoku constraint, we stop exploring that state and do **not** explore its subtree.
+
+This is exactly **backtracking**. Backtracking means:
+
+1. Choose an unassigned variable (cell).
+2. Try one candidate value.
+3. If the partial assignment is inconsistent, undo that choice and try the next candidate.
+4. If all candidates fail, return ("backtrack") to the previous decision point.
+5. If a candidate is consistent, recurse on the next unassigned variable.
+
+So backtracking is DFS plus early rejection of inconsistent partial assignments. The key gain is that entire invalid subtrees are cut off before full assignments are constructed.
+
+This is a direct example of a **CSP** formulation. Variables are the Sudoku cells ($X=\{X_1,\ldots,X_{81}\}$). Domains are possible digits for each cell ($D_i \subseteq \{1,\ldots,9\}$). Constraints enforce Sudoku rules: all variables in each row, each column, and each $3 \times 3$ box must take distinct values. A solution is therefore a consistent, complete assignment to all 81 variables. DFS with backtracking is the search procedure over partial assignments for this CSP.
+
+Note: the N-Queens problem can also be formulated as a CSP. But as we saw earlier, it also has other effective solution methods, especially iterative-improvement approaches such as hill climbing (including random restarts and related variants).
