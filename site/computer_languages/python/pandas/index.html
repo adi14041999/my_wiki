@@ -3662,6 +3662,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pandas
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3678,6 +3696,36 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resources
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -4004,6 +4052,30 @@
 
 
 <h1 id="pandas">Pandas</h1>
+<p>Pandas is a Python package providing fast, flexible, and expressive data structures designed to make working with relational or labeled data easy and intuitive. It aims to be the fundamental high-level building block for practical, real-world data analysis in Python.</p>
+<p><a href="https://pandas.pydata.org">Pandas</a> is built on top of <a href="https://numpy.org/">NumPy</a> and integrates well with the broader scientific Python ecosystem. </p>
+<p>TODO: Understand this. [BEGIN]
+It is fast, and many low-level algorithmic components are heavily optimized in <a href="https://cython.org/">Cython</a> code.
+[END]</p>
+<p>The two primary pandas data structures are:</p>
+<ul>
+<li><a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series"><code>Series</code></a> (1-dimensional)</li>
+<li><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame"><code>DataFrame</code></a> (2-dimensional)</li>
+</ul>
+<p>These handle most common use cases in finance, statistics, social science, and engineering.</p>
+<p>All pandas data structures are value-mutable (contained values can change) but not always size-mutable. For example, a <code>Series</code> length cannot be changed, while columns can be inserted into a <code>DataFrame</code>. Most methods return new objects and leave input data unchanged.</p>
+<p>NumPy arrays have one dtype for the entire array, while pandas <code>DataFrame</code> objects can have one dtype per column.</p>
+<p>For production code, prefer optimized pandas accessors over ad hoc indexing patterns:</p>
+<ul>
+<li><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.at.html#pandas.DataFrame.at"><code>DataFrame.at()</code></a></li>
+<li><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.iat.html#pandas.DataFrame.iat"><code>DataFrame.iat()</code></a></li>
+<li><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html#pandas.DataFrame.loc"><code>DataFrame.loc()</code></a></li>
+<li><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.iloc.html#pandas.DataFrame.iloc"><code>DataFrame.iloc()</code></a></li>
+</ul>
+<h2 id="resources">Resources</h2>
+<p>Useful quick reference: <a href="https://pandas.pydata.org/docs/user_guide/10min.html#minutes-to-pandas">Pandas User Guide (10 minutes to pandas)</a></p>
+<p>Example notebook: <a href="https://github.com/adi14041999/learn_python/blob/main/pandas_basics.ipynb">pandas_basics.ipynb</a></p>
+<p>Source repository: <a href="https://github.com/adi14041999/learn_python">adi14041999/learn_python</a></p>
 
 
 

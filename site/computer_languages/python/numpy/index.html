@@ -3634,6 +3634,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NumPy
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3650,6 +3668,108 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#numpy-arrays-vs-python-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NumPy arrays vs Python lists
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vectorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vectorization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Vectorization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#for-loop-vs-vectorization-which-is-faster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        for loop vs vectorization: which is faster?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#important-caveats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Important caveats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advantages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advantages
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#broadcasting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Broadcasting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resources
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -4004,6 +4124,63 @@
 
 
 <h1 id="numpy">NumPy</h1>
+<p>NumPy is the fundamental package for scientific computing in Python. It provides a multidimensional array object, derived objects (such as masked arrays and matrices), and a wide range of fast operations on arrays, including:</p>
+<ul>
+<li>mathematical operations</li>
+<li>logical operations</li>
+<li>shape manipulation</li>
+<li>sorting and selection</li>
+<li>I/O</li>
+<li>discrete Fourier transforms</li>
+<li>basic linear algebra</li>
+<li>basic statistics</li>
+<li>random simulation</li>
+</ul>
+<p>TODO: Understand this. [BEGIN]
+When using CPython, interpretation overhead is usually small. During computationally intense NumPy operations, Python calls optimized compiled binaries (typically C/C++), which is one reason NumPy is fast.
+[END]</p>
+<p>At the core of NumPy is the <code>ndarray</code> object, which encapsulates homogeneous n-dimensional arrays.</p>
+<h2 id="numpy-arrays-vs-python-lists">NumPy arrays vs Python lists</h2>
+<ul>
+<li><strong>Fixed size:</strong> NumPy arrays are fixed-size at creation (resizing creates a new array), while Python lists can grow dynamically.</li>
+<li><strong>Homogeneous dtype:</strong> NumPy array elements generally share one data type and memory size (object arrays are an exception).</li>
+<li><strong>Efficient numerical ops:</strong> NumPy supports advanced operations over large datasets with less code and better performance than built-in Python sequences.</li>
+</ul>
+<p>Under the hood, a Python list stores pointers to Python objects. For a list of integers, each integer is a full Python object with per-object metadata (type, refcount, etc.). Accessing elements involves pointer dereferencing and type handling overhead.</p>
+<p>By contrast, a NumPy array stores data in a contiguous memory block with shared metadata (like dtype and shape). This improves cache locality and reduces per-element overhead, especially in repeated numerical operations. For example, element type is known in advance from array metadata, so operations avoid repeated per-element type checks, which speeds up computation.</p>
+<h2 id="vectorization">Vectorization</h2>
+<p>TODO: Understand this. [BEGIN]
+Vectorization means writing operations without explicit Python loops/indexing for element-wise work; the loops run behind the scenes in optimized compiled code.</p>
+<h3 id="for-loop-vs-vectorization-which-is-faster"><code>for</code> loop vs vectorization: which is faster?</h3>
+<p>In most numerical workloads, <strong>vectorized NumPy operations are much faster</strong> than Python <code>for</code> loops.</p>
+<p>Why:</p>
+<ul>
+<li>A Python <code>for</code> loop executes in the Python interpreter, with per-iteration overhead (bytecode execution, object handling, type checks).</li>
+<li>Vectorized NumPy operations move that loop into optimized compiled code (C/C++/SIMD-enabled routines), reducing Python-level overhead.</li>
+<li>NumPy arrays use contiguous memory, which improves cache efficiency during bulk operations.</li>
+</ul>
+<p>As a result, vectorization can be many times faster (often one or more orders of magnitude) for large arrays.</p>
+<h3 id="important-caveats">Important caveats</h3>
+<ul>
+<li>For very small arrays, speed differences may be minor.</li>
+<li>Chaining many vectorized expressions can create temporary arrays, increasing memory usage and sometimes reducing speed.
+[END]</li>
+</ul>
+<p>In practice, prefer vectorization for array math, then profile if performance is critical.</p>
+<h3 id="advantages">Advantages</h3>
+<ul>
+<li>more concise and readable code</li>
+<li>fewer lines of code and often fewer bugs</li>
+<li>code that more closely matches mathematical notation</li>
+</ul>
+<h2 id="broadcasting">Broadcasting</h2>
+<p>Broadcasting is NumPy's implicit element-by-element behavior across compatible shapes. It applies not only to arithmetic, but also to logical, bitwise, and many functional operations.</p>
+<p>For formal broadcasting rules, see <a href="https://numpy.org/doc/stable/user/basics.broadcasting.html#basics-broadcasting">NumPy Broadcasting</a>.</p>
+<h2 id="resources">Resources</h2>
+<p><a href="https://www.youtube.com/watch?v=9JUAPgtkKpI">Crash course</a></p>
+<p><a href="https://colab.research.google.com/github/google/eng-edu/blob/main/ml/cc/exercises/numpy_ultraquick_tutorial.ipynb">Google's NumPy UltraQuick Tutorial</a></p>
+<p>Example notebook: <a href="https://github.com/adi14041999/learn_python/blob/main/numpy_basics.ipynb">numpy_basics.ipynb</a></p>
+<p>Source repository: <a href="https://github.com/adi14041999/learn_python">adi14041999/learn_python</a></p>
 
 
 
