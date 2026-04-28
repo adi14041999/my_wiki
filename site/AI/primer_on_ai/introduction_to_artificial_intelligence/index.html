@@ -883,6 +883,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#constraint-propagation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constraint Propagation
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4738,6 +4749,20 @@ N_{\text{sudoku}} = 6{,}671{,}903{,}752{,}021{,}072{,}936{,}960 \approx 6.67 \ti
 <p>So backtracking is DFS plus early rejection of inconsistent partial assignments. The key gain is that entire invalid subtrees are cut off before full assignments are constructed.</p>
 <p>This is a direct example of a <strong>CSP</strong> formulation. Variables are the Sudoku cells (<span class="arithmatex">\(X=\{X_1,\ldots,X_{81}\}\)</span>). Domains are possible digits for each cell (<span class="arithmatex">\(D_i \subseteq \{1,\ldots,9\}\)</span>). Constraints enforce Sudoku rules: all variables in each row, each column, and each <span class="arithmatex">\(3 \times 3\)</span> box must take distinct values. A solution is therefore a consistent, complete assignment to all 81 variables. DFS with backtracking is the search procedure over partial assignments for this CSP.</p>
 <p>Note: the N-Queens problem can also be formulated as a CSP. But as we saw earlier, it also has other effective solution methods, especially iterative-improvement approaches such as hill climbing (including random restarts and related variants).</p>
+<h3 id="constraint-propagation">Constraint Propagation</h3>
+<p>Constraint propagation uses the constraints to shrink the set of legal values in variable domains, thereby reducing the number of choices that search must consider later.</p>
+<p>In Sudoku terms, once some cells are assigned, constraints from rows, columns, and <span class="arithmatex">\(3 \times 3\)</span> boxes can eliminate candidate digits in neighboring unassigned cells.</p>
+<p>This can be applied in two places:</p>
+<ol>
+<li><strong>Before search (preprocessing):</strong> simplify domains before backtracking begins.</li>
+<li><strong>During search (inference):</strong> after each assignment, propagate implications to prune domains further. We call this <strong>forward checking</strong>. Basically we shrink the set of legal values in domains of variables that have been impacted by the new assignment.</li>
+</ol>
+<p>Both uses reduce branching and can dramatically speed up backtracking.</p>
+<p>As an example, in the 4-Queens problem, let's assume the first queen is placed at (1,1) (1-indexed). As soon as this assignment is done, <strong>forward checking</strong> eliminates some of the possible values the variables <span class="arithmatex">\(x_2\)</span>, <span class="arithmatex">\(x_3\)</span> and <span class="arithmatex">\(x_4\)</span> can take right away. Thus, by the time we begin searching over other variables, their domains have already been pruned to smaller sets of legal values.</p>
+<p><img alt="img" src="../forward_checking.png" /></p>
+<p>When we <strong>backtrack</strong>, we discard an assignment and resume search from the previous choice point. Any constraint propagation that ran <strong>after</strong> that assignment depended on it. Now those domain updates are no longer valid. We must <strong>restore each affected variable’s domain</strong> to what it was <strong>before</strong> we tried that value. If we skip this step, later branches would search against stale, wrongly shrunk domains.</p>
+<p><strong>Chained forward checking</strong> goes further than plain forward checking.</p>
+<p>Whenever a variable's domain shrinks, we check its unassigned neighbors, and propogate constraints to those neighbors. We repeat until propagating cannot shrink anymore domains of variables; or until some variable's domain becomes empty, in which case the current partial assignment cannot be completed. Chained forward checking catches more dead ends early than a single pass of neighbor-only pruning right after one assignment.</p>
 
 
 
