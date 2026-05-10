@@ -894,6 +894,100 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#mrv-and-lcv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MRV and LCV
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MRV and LCV">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#does-the-order-of-variable-assignment-matter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does the order of variable assignment matter?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-probabilistic-argument" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A probabilistic argument
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minimum-remaining-values-mrv-heuristic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minimum Remaining Values (MRV) heuristic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#degree-heuristic-tie-breaker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Degree heuristic (tie-breaker)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#case-study-australia-map-coloring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case Study: Australia map coloring
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#least-constraining-value-lcv-heuristic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Least Constraining Value (LCV) heuristic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4763,6 +4857,90 @@ N_{\text{sudoku}} = 6{,}671{,}903{,}752{,}021{,}072{,}936{,}960 \approx 6.67 \ti
 <p>When we <strong>backtrack</strong>, we discard an assignment and resume search from the previous choice point. Any constraint propagation that ran <strong>after</strong> that assignment depended on it. Now those domain updates are no longer valid. We must <strong>restore each affected variable’s domain</strong> to what it was <strong>before</strong> we tried that value. If we skip this step, later branches would search against stale, wrongly shrunk domains.</p>
 <p><strong>Chained forward checking</strong> goes further than plain forward checking.</p>
 <p>Whenever a variable's domain shrinks, we check its unassigned neighbors, and propogate constraints to those neighbors. We repeat until propagating cannot shrink anymore domains of variables; or until some variable's domain becomes empty, in which case the current partial assignment cannot be completed. Chained forward checking catches more dead ends early than a single pass of neighbor-only pruning right after one assignment.</p>
+<h3 id="mrv-and-lcv">MRV and LCV</h3>
+<p>Backtracking search with constraint propagation still leaves us with two choices at every step: <strong>which unassigned variable do we pick next</strong>, and <strong>which value from its domain do we try first</strong>. These choices do not change correctness, but they can change the size of the search tree by orders of magnitude. Two heuristics address them:</p>
+<ul>
+<li><strong>MRV (Minimum Remaining Values)</strong> orders <strong>variables</strong>.</li>
+<li><strong>LCV (Least Constraining Value)</strong> orders <strong>values</strong>.</li>
+</ul>
+<h4 id="does-the-order-of-variable-assignment-matter">Does the order of variable assignment matter?</h4>
+<p>Consider two variables <span class="arithmatex">\(v_1\)</span> and <span class="arithmatex">\(v_2\)</span> with domains <span class="arithmatex">\(\{1, 2\}\)</span> and <span class="arithmatex">\(\{1, 2, 3, 4\}\)</span> respectively, and no constraints. The search tree depends on which variable we assign first.</p>
+<p>If we assign <span class="arithmatex">\(v_1\)</span> first and <span class="arithmatex">\(v_2\)</span> second:</p>
+<ul>
+<li>The root has <span class="arithmatex">\(2\)</span> children (one per value of <span class="arithmatex">\(v_1\)</span>).</li>
+<li>Each of those children has <span class="arithmatex">\(4\)</span> children (one per value of <span class="arithmatex">\(v_2\)</span>).</li>
+<li>Total edges: <span class="arithmatex">\(2 + 2 \cdot 4 = 10\)</span>.</li>
+</ul>
+<p>If we assign <span class="arithmatex">\(v_2\)</span> first and <span class="arithmatex">\(v_1\)</span> second:</p>
+<ul>
+<li>The root has <span class="arithmatex">\(4\)</span> children, each with <span class="arithmatex">\(2\)</span> children of its own.</li>
+<li>Total edges: <span class="arithmatex">\(4 + 4 \cdot 2 = 12\)</span>.</li>
+</ul>
+<p>In general, with two variables of domain sizes <span class="arithmatex">\(d_1\)</span> and <span class="arithmatex">\(d_2\)</span>, putting variable <span class="arithmatex">\(i\)</span> first gives a tree with <span class="arithmatex">\(d_i (1 + d_j)\)</span> edges, which is smaller when <span class="arithmatex">\(d_i\)</span> is smaller. Both trees have the same number of leaves (<span class="arithmatex">\(d_1 \cdot d_2\)</span>), but the smaller-domain-first tree has fewer <strong>internal</strong> branches to explore, so it is cheaper for backtracking search.</p>
+<h4 id="a-probabilistic-argument">A probabilistic argument</h4>
+<p>Let <span class="arithmatex">\(p\)</span> be the probability that a partial assignment to a variable will eventually lead to a backtrack (e.g. because constraints cannot be satisfied further down). When we put <span class="arithmatex">\(v_1\)</span> at the top, each of the <span class="arithmatex">\(d_1\)</span> subtrees rooted at <span class="arithmatex">\(v_1 = c\)</span> may fail with probability <span class="arithmatex">\(p\)</span>, and the cost of the failure is the size of that subtree, roughly <span class="arithmatex">\(1 + d_2\)</span>. The expected work is on the order of</p>
+<div class="arithmatex">\[
+d_1 \cdot p \cdot (1 + d_2) = p \cdot d_1 (1 + d_2).
+\]</div>
+<p>Putting <span class="arithmatex">\(v_2\)</span> on top gives expected work proportional to <span class="arithmatex">\(p \cdot d_2 (1 + d_1)\)</span>. The smaller domain at the top wins for the same reason as in the deterministic count. We want to <strong>fail fast</strong>: discover dead ends as close to the root as possible.</p>
+<h4 id="minimum-remaining-values-mrv-heuristic">Minimum Remaining Values (MRV) heuristic</h4>
+<p>The <strong>MRV heuristic</strong> says: at every level of the search tree, pick the unassigned variable whose <strong>current domain is smallest</strong>.</p>
+<p>It is also called the <strong>fail-fast heuristic</strong> or the <strong>most constrained variable heuristic</strong>, because it preferentially expands the variable that is closest to having no options left. Intuitively, when solving Sudoku by hand, you naturally start with rows, columns, or <span class="arithmatex">\(3 \times 3\)</span> boxes that already have many filled cells, since the few empty cells there have very few candidate digits.</p>
+<p>MRV pairs especially well with constraint propagation. If forward checking (or chained forward checking) shrinks some unassigned variable's domain to the empty set, that partial assignment cannot be extended to a solution, and we should backtrack immediately. With MRV, the next variable picked is exactly that empty-domain variable (size <span class="arithmatex">\(0\)</span> is the smallest possible), so the algorithm detects the dead end on its very next step. We do not need a separate "is anyone wiped out?" check — MRV gets it for free.</p>
+<h4 id="degree-heuristic-tie-breaker">Degree heuristic (tie-breaker)</h4>
+<p>MRV often produces ties — at the start of search, every variable typically has the full domain. The <strong>degree heuristic</strong> breaks ties by picking the variable involved in the most constraints with <strong>other unassigned variables</strong>, i.e. the variable with the highest <strong>degree in the constraint graph restricted to unassigned variables</strong>.</p>
+<p>The intuition is that assigning a high-degree variable triggers the largest amount of forward checking on its neighbors, pruning their domains the most. This in turn shrinks the search tree everywhere below, and may even create new MRV opportunities (variables with small domains) for subsequent steps.</p>
+<p>For example, in the Australia map-coloring case study below, all variables start with domain size <span class="arithmatex">\(3\)</span>, so MRV is fully tied. SA borders five other regions, more than any other variable. Coloring SA first eliminates SA's color from the domains of all five neighbors at once, whereas coloring an edge region like WA only constrains two neighbors. Starting at SA therefore gives the rest of the search the strongest head start.</p>
+<h4 id="case-study-australia-map-coloring">Case Study: Australia map coloring</h4>
+<p>The CSP is:</p>
+<ul>
+<li><strong>Variables</strong> <span class="arithmatex">\(X = \{\text{WA}, \text{NT}, \text{SA}, \text{Q}, \text{NSW}, \text{V}, \text{T}\}\)</span>.</li>
+<li><strong>Domains</strong> <span class="arithmatex">\(D_i = \{R, G, B\}\)</span> for every variable.</li>
+<li><strong>Constraints</strong>: adjacent regions get different colors. From the constraint graph below, the adjacencies are</li>
+</ul>
+<div class="arithmatex">\[\text{WA} - \text{NT},\ \text{WA} - \text{SA},\ \text{NT} - \text{SA},\ \text{NT} - \text{Q},\ \text{SA} - \text{Q},\ \text{SA} - \text{NSW},\ \text{SA} - \text{V},\ \text{Q} - \text{NSW},\ \text{NSW} - \text{V}.\]</div>
+<p>Tasmania (T) is disconnected.</p>
+<p><img alt="img" src="../australia.png" /></p>
+<p>The degrees in the constraint graph are: WA=2, NT=3, SA=5, Q=3, NSW=3, V=2, T=0.</p>
+<p>We solve this with <strong>chained forward checking</strong> (propagate domain shrinks to neighbors until no more change) plus <strong>MRV with degree as tie-breaker</strong>.</p>
+<p><strong>Step 1.</strong> All domains have size <span class="arithmatex">\(3\)</span>, so MRV ties everyone. Degree picks SA (degree <span class="arithmatex">\(5\)</span>). Try <span class="arithmatex">\(\text{SA} = R\)</span>. Forward checking removes <span class="arithmatex">\(R\)</span> from every neighbor of SA:</p>
+<ul>
+<li>WA: <span class="arithmatex">\(\{G, B\}\)</span>, NT: <span class="arithmatex">\(\{G, B\}\)</span>, Q: <span class="arithmatex">\(\{G, B\}\)</span>, NSW: <span class="arithmatex">\(\{G, B\}\)</span>, V: <span class="arithmatex">\(\{G, B\}\)</span>, T: <span class="arithmatex">\(\{R, G, B\}\)</span>.</li>
+</ul>
+<p>Each of these neighbors shrank, but propagating further does not reduce anything: every adjacent unassigned pair (e.g. NT–Q, Q–NSW) has both domains <span class="arithmatex">\(\{G, B\}\)</span>, and any value on one side is compatible with at least one value on the other, so chained forward checking stops here.</p>
+<p><strong>Step 2.</strong> MRV picks any variable with domain size <span class="arithmatex">\(2\)</span> (WA, NT, Q, NSW, V are tied). Among these, NT, Q, NSW each have degree <span class="arithmatex">\(2\)</span> in the <strong>unassigned</strong> subgraph (their neighbor SA is now assigned), and WA, V have degree <span class="arithmatex">\(1\)</span>. Break the three-way tie arbitrarily and pick NT. Try <span class="arithmatex">\(\text{NT} = G\)</span>. Forward checking removes <span class="arithmatex">\(G\)</span> from NT's unassigned neighbors:</p>
+<ul>
+<li>WA: <span class="arithmatex">\(\{B\}\)</span>, Q: <span class="arithmatex">\(\{B\}\)</span>, NSW: <span class="arithmatex">\(\{G, B\}\)</span>, V: <span class="arithmatex">\(\{G, B\}\)</span>, T: <span class="arithmatex">\(\{R, G, B\}\)</span>.</li>
+</ul>
+<p>Chained propagation now revisits WA and Q (both shrank). WA's only unassigned neighbors are NT and SA (both assigned), so nothing propagates from WA. Q has the unassigned neighbor NSW. Q's domain is <span class="arithmatex">\(\{B\}\)</span>, so any NSW value equal to <span class="arithmatex">\(B\)</span> would have no support in Q. Remove <span class="arithmatex">\(B\)</span> from NSW: NSW <span class="arithmatex">\(= \{G\}\)</span>.</p>
+<p>NSW shrank, so we propagate to its unassigned neighbor V. NSW's only value is <span class="arithmatex">\(G\)</span>, so V <span class="arithmatex">\(= G\)</span> has no support and is removed. V <span class="arithmatex">\(= \{B\}\)</span>. V's only remaining unassigned neighbor is NSW, already updated. Propagation stops:</p>
+<ul>
+<li>WA: <span class="arithmatex">\(\{B\}\)</span>, Q: <span class="arithmatex">\(\{B\}\)</span>, NSW: <span class="arithmatex">\(\{G\}\)</span>, V: <span class="arithmatex">\(\{B\}\)</span>, T: <span class="arithmatex">\(\{R, G, B\}\)</span>.</li>
+</ul>
+<p><strong>Step 3.</strong> MRV picks a domain of size <span class="arithmatex">\(1\)</span>. WA, Q, NSW, V are all tied at size <span class="arithmatex">\(1\)</span>. In the unassigned subgraph, WA has degree <span class="arithmatex">\(0\)</span>, Q has degree <span class="arithmatex">\(1\)</span> (NSW), NSW has degree <span class="arithmatex">\(2\)</span> (Q and V), and V has degree <span class="arithmatex">\(1\)</span> (NSW). Degree picks NSW. Force <span class="arithmatex">\(\text{NSW} = G\)</span>. Forward checking has nothing to remove (<span class="arithmatex">\(G\)</span> is not in any other variable's current domain).</p>
+<p><strong>Step 4.</strong> MRV ties WA, Q, V at size <span class="arithmatex">\(1\)</span>. All three now have degree <span class="arithmatex">\(0\)</span> in the unassigned subgraph. Pick any, say Q <span class="arithmatex">\(= B\)</span>. No domain changes.</p>
+<p><strong>Step 5.</strong> Pick WA <span class="arithmatex">\(= B\)</span>. No changes.</p>
+<p><strong>Step 6.</strong> Force V <span class="arithmatex">\(= B\)</span>. No changes.</p>
+<p><strong>Step 7.</strong> Only T remains. Pick T <span class="arithmatex">\(= R\)</span> (or any color).</p>
+<p>The final assignment is <span class="arithmatex">\(\text{WA} = B\)</span>, <span class="arithmatex">\(\text{NT} = G\)</span>, <span class="arithmatex">\(\text{SA} = R\)</span>, <span class="arithmatex">\(\text{Q} = B\)</span>, <span class="arithmatex">\(\text{NSW} = G\)</span>, <span class="arithmatex">\(\text{V} = B\)</span>, <span class="arithmatex">\(\text{T} = R\)</span>. All constraints are satisfied, and the search produced <strong>zero backtracks</strong>. Chained forward checking + MRV + degree pruned the tree so aggressively that each step was forced.</p>
+<h4 id="least-constraining-value-lcv-heuristic">Least Constraining Value (LCV) heuristic</h4>
+<p>Once MRV has chosen a variable, we still have to pick <strong>which value</strong> from its domain to try first. The <strong>LCV heuristic</strong> says: try the value that <strong>rules out the fewest choices for the neighboring variables</strong>.</p>
+<p>Concretely, for each candidate value <span class="arithmatex">\(v\)</span> in the chosen variable's domain, count how many values <span class="arithmatex">\(v\)</span> would eliminate from the domains of unassigned neighbors via forward checking. Try values in increasing order of this count (least constraining first).</p>
+<p>The intuition is opposite to MRV's "fail fast." Once we have committed to a variable, we hope this branch <strong>succeeds</strong>. A value that wipes out many neighbor options is more likely to push us toward a dead end somewhere deeper in the tree.</p>
+<p>For example, suppose we have just chosen variable <span class="arithmatex">\(X\)</span> with current domain <span class="arithmatex">\(\{a, b\}\)</span>.</p>
+<ul>
+<li>Picking <span class="arithmatex">\(X = a\)</span> removes one value from one neighbor's domain.</li>
+<li>Picking <span class="arithmatex">\(X = b\)</span> removes values from three neighbors' domains, taking one of them down to size <span class="arithmatex">\(1\)</span>.</li>
+</ul>
+<p>LCV would try <span class="arithmatex">\(X = a\)</span> first. The reason is that <span class="arithmatex">\(X = a\)</span> leaves the neighbors with larger domains than <span class="arithmatex">\(X = b\)</span> does. There are simply more candidate combinations of neighbor values that are still consistent. That makes the subtree under <span class="arithmatex">\(a\)</span> more likely to contain a solution than the subtree under <span class="arithmatex">\(b\)</span>. </p>
+<p>Put differently: when <strong>no</strong> candidate value at this variable leads to a completed solution, we must eventually explore every failed subtree. Whichever order we use, the total work ends up the same. Order matters only when <strong>some</strong> value still admits a solution; then we want that branch tried <strong>first</strong>, so we stop before paying for the other subtrees. LCV is that principle operationalized: rank values so that the least constraining (most permissive of neighbors) comes first, improving the odds we hit a viable branch early.</p>
+<h4 id="summary_1">Summary</h4>
+<ul>
+<li><strong>MRV</strong> picks the next <em>variable</em> with the smallest current domain. It fails fast and pairs naturally with constraint propagation.</li>
+<li><strong>Degree heuristic</strong> breaks MRV ties by preferring variables connected to many unassigned neighbors, maximizing the impact of forward checking.</li>
+<li><strong>LCV</strong> picks the next <em>value</em> that constrains neighbors the least.</li>
+</ul>
+<p>Together, <strong>chained forward checking + MRV (with degree tie-breaking) + LCV</strong> is the standard recipe for an efficient backtracking CSP solver.</p>
 
 
 

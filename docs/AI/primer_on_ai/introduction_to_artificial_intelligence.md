@@ -571,3 +571,124 @@ When we **backtrack**, we discard an assignment and resume search from the previ
 
 Whenever a variable's domain shrinks, we check its unassigned neighbors, and propogate constraints to those neighbors. We repeat until propagating cannot shrink anymore domains of variables; or until some variable's domain becomes empty, in which case the current partial assignment cannot be completed. Chained forward checking catches more dead ends early than a single pass of neighbor-only pruning right after one assignment.
 
+### MRV and LCV
+
+Backtracking search with constraint propagation still leaves us with two choices at every step: **which unassigned variable do we pick next**, and **which value from its domain do we try first**. These choices do not change correctness, but they can change the size of the search tree by orders of magnitude. Two heuristics address them:
+
+- **MRV (Minimum Remaining Values)** orders **variables**.
+- **LCV (Least Constraining Value)** orders **values**.
+
+#### Does the order of variable assignment matter?
+
+Consider two variables $v_1$ and $v_2$ with domains $\{1, 2\}$ and $\{1, 2, 3, 4\}$ respectively, and no constraints. The search tree depends on which variable we assign first.
+
+If we assign $v_1$ first and $v_2$ second:
+
+- The root has $2$ children (one per value of $v_1$).
+- Each of those children has $4$ children (one per value of $v_2$).
+- Total edges: $2 + 2 \cdot 4 = 10$.
+
+If we assign $v_2$ first and $v_1$ second:
+
+- The root has $4$ children, each with $2$ children of its own.
+- Total edges: $4 + 4 \cdot 2 = 12$.
+
+In general, with two variables of domain sizes $d_1$ and $d_2$, putting variable $i$ first gives a tree with $d_i (1 + d_j)$ edges, which is smaller when $d_i$ is smaller. Both trees have the same number of leaves ($d_1 \cdot d_2$), but the smaller-domain-first tree has fewer **internal** branches to explore, so it is cheaper for backtracking search.
+
+#### A probabilistic argument
+
+Let $p$ be the probability that a partial assignment to a variable will eventually lead to a backtrack (e.g. because constraints cannot be satisfied further down). When we put $v_1$ at the top, each of the $d_1$ subtrees rooted at $v_1 = c$ may fail with probability $p$, and the cost of the failure is the size of that subtree, roughly $1 + d_2$. The expected work is on the order of
+
+$$
+d_1 \cdot p \cdot (1 + d_2) = p \cdot d_1 (1 + d_2).
+$$
+
+Putting $v_2$ on top gives expected work proportional to $p \cdot d_2 (1 + d_1)$. The smaller domain at the top wins for the same reason as in the deterministic count. We want to **fail fast**: discover dead ends as close to the root as possible.
+
+#### Minimum Remaining Values (MRV) heuristic
+
+The **MRV heuristic** says: at every level of the search tree, pick the unassigned variable whose **current domain is smallest**.
+
+It is also called the **fail-fast heuristic** or the **most constrained variable heuristic**, because it preferentially expands the variable that is closest to having no options left. Intuitively, when solving Sudoku by hand, you naturally start with rows, columns, or $3 \times 3$ boxes that already have many filled cells, since the few empty cells there have very few candidate digits.
+
+MRV pairs especially well with constraint propagation. If forward checking (or chained forward checking) shrinks some unassigned variable's domain to the empty set, that partial assignment cannot be extended to a solution, and we should backtrack immediately. With MRV, the next variable picked is exactly that empty-domain variable (size $0$ is the smallest possible), so the algorithm detects the dead end on its very next step. We do not need a separate "is anyone wiped out?" check — MRV gets it for free.
+
+#### Degree heuristic (tie-breaker)
+
+MRV often produces ties — at the start of search, every variable typically has the full domain. The **degree heuristic** breaks ties by picking the variable involved in the most constraints with **other unassigned variables**, i.e. the variable with the highest **degree in the constraint graph restricted to unassigned variables**.
+
+The intuition is that assigning a high-degree variable triggers the largest amount of forward checking on its neighbors, pruning their domains the most. This in turn shrinks the search tree everywhere below, and may even create new MRV opportunities (variables with small domains) for subsequent steps.
+
+For example, in the Australia map-coloring case study below, all variables start with domain size $3$, so MRV is fully tied. SA borders five other regions, more than any other variable. Coloring SA first eliminates SA's color from the domains of all five neighbors at once, whereas coloring an edge region like WA only constrains two neighbors. Starting at SA therefore gives the rest of the search the strongest head start.
+
+#### Case Study: Australia map coloring
+
+The CSP is:
+
+- **Variables** $X = \{\text{WA}, \text{NT}, \text{SA}, \text{Q}, \text{NSW}, \text{V}, \text{T}\}$.
+- **Domains** $D_i = \{R, G, B\}$ for every variable.
+- **Constraints**: adjacent regions get different colors. From the constraint graph below, the adjacencies are
+
+$$\text{WA} - \text{NT},\ \text{WA} - \text{SA},\ \text{NT} - \text{SA},\ \text{NT} - \text{Q},\ \text{SA} - \text{Q},\ \text{SA} - \text{NSW},\ \text{SA} - \text{V},\ \text{Q} - \text{NSW},\ \text{NSW} - \text{V}.$$
+
+Tasmania (T) is disconnected.
+
+![img](australia.png)
+
+The degrees in the constraint graph are: WA=2, NT=3, SA=5, Q=3, NSW=3, V=2, T=0.
+
+We solve this with **chained forward checking** (propagate domain shrinks to neighbors until no more change) plus **MRV with degree as tie-breaker**.
+
+**Step 1.** All domains have size $3$, so MRV ties everyone. Degree picks SA (degree $5$). Try $\text{SA} = R$. Forward checking removes $R$ from every neighbor of SA:
+
+- WA: $\{G, B\}$, NT: $\{G, B\}$, Q: $\{G, B\}$, NSW: $\{G, B\}$, V: $\{G, B\}$, T: $\{R, G, B\}$.
+
+Each of these neighbors shrank, but propagating further does not reduce anything: every adjacent unassigned pair (e.g. NT–Q, Q–NSW) has both domains $\{G, B\}$, and any value on one side is compatible with at least one value on the other, so chained forward checking stops here.
+
+**Step 2.** MRV picks any variable with domain size $2$ (WA, NT, Q, NSW, V are tied). Among these, NT, Q, NSW each have degree $2$ in the **unassigned** subgraph (their neighbor SA is now assigned), and WA, V have degree $1$. Break the three-way tie arbitrarily and pick NT. Try $\text{NT} = G$. Forward checking removes $G$ from NT's unassigned neighbors:
+
+- WA: $\{B\}$, Q: $\{B\}$, NSW: $\{G, B\}$, V: $\{G, B\}$, T: $\{R, G, B\}$.
+
+Chained propagation now revisits WA and Q (both shrank). WA's only unassigned neighbors are NT and SA (both assigned), so nothing propagates from WA. Q has the unassigned neighbor NSW. Q's domain is $\{B\}$, so any NSW value equal to $B$ would have no support in Q. Remove $B$ from NSW: NSW $= \{G\}$.
+
+NSW shrank, so we propagate to its unassigned neighbor V. NSW's only value is $G$, so V $= G$ has no support and is removed. V $= \{B\}$. V's only remaining unassigned neighbor is NSW, already updated. Propagation stops:
+
+- WA: $\{B\}$, Q: $\{B\}$, NSW: $\{G\}$, V: $\{B\}$, T: $\{R, G, B\}$.
+
+**Step 3.** MRV picks a domain of size $1$. WA, Q, NSW, V are all tied at size $1$. In the unassigned subgraph, WA has degree $0$, Q has degree $1$ (NSW), NSW has degree $2$ (Q and V), and V has degree $1$ (NSW). Degree picks NSW. Force $\text{NSW} = G$. Forward checking has nothing to remove ($G$ is not in any other variable's current domain).
+
+**Step 4.** MRV ties WA, Q, V at size $1$. All three now have degree $0$ in the unassigned subgraph. Pick any, say Q $= B$. No domain changes.
+
+**Step 5.** Pick WA $= B$. No changes.
+
+**Step 6.** Force V $= B$. No changes.
+
+**Step 7.** Only T remains. Pick T $= R$ (or any color).
+
+The final assignment is $\text{WA} = B$, $\text{NT} = G$, $\text{SA} = R$, $\text{Q} = B$, $\text{NSW} = G$, $\text{V} = B$, $\text{T} = R$. All constraints are satisfied, and the search produced **zero backtracks**. Chained forward checking + MRV + degree pruned the tree so aggressively that each step was forced.
+
+#### Least Constraining Value (LCV) heuristic
+
+Once MRV has chosen a variable, we still have to pick **which value** from its domain to try first. The **LCV heuristic** says: try the value that **rules out the fewest choices for the neighboring variables**.
+
+Concretely, for each candidate value $v$ in the chosen variable's domain, count how many values $v$ would eliminate from the domains of unassigned neighbors via forward checking. Try values in increasing order of this count (least constraining first).
+
+The intuition is opposite to MRV's "fail fast." Once we have committed to a variable, we hope this branch **succeeds**. A value that wipes out many neighbor options is more likely to push us toward a dead end somewhere deeper in the tree.
+
+For example, suppose we have just chosen variable $X$ with current domain $\{a, b\}$.
+
+- Picking $X = a$ removes one value from one neighbor's domain.
+- Picking $X = b$ removes values from three neighbors' domains, taking one of them down to size $1$.
+
+LCV would try $X = a$ first. The reason is that $X = a$ leaves the neighbors with larger domains than $X = b$ does. There are simply more candidate combinations of neighbor values that are still consistent. That makes the subtree under $a$ more likely to contain a solution than the subtree under $b$. 
+
+Put differently: when **no** candidate value at this variable leads to a completed solution, we must eventually explore every failed subtree. Whichever order we use, the total work ends up the same. Order matters only when **some** value still admits a solution; then we want that branch tried **first**, so we stop before paying for the other subtrees. LCV is that principle operationalized: rank values so that the least constraining (most permissive of neighbors) comes first, improving the odds we hit a viable branch early.
+
+#### Summary
+
+- **MRV** picks the next *variable* with the smallest current domain. It fails fast and pairs naturally with constraint propagation.
+- **Degree heuristic** breaks MRV ties by preferring variables connected to many unassigned neighbors, maximizing the impact of forward checking.
+- **LCV** picks the next *value* that constrains neighbors the least.
+
+Together, **chained forward checking + MRV (with degree tie-breaking) + LCV** is the standard recipe for an efficient backtracking CSP solver.
+
