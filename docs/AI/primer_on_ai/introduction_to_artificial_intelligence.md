@@ -692,3 +692,50 @@ Put differently: when **no** candidate value at this variable leads to a complet
 
 Together, **chained forward checking + MRV (with degree tie-breaking) + LCV** is the standard recipe for an efficient backtracking CSP solver.
 
+### Exploiting the Constraint Graph structure
+
+Some structural properties of the constraint graph let us beat the exponential worst case of generic backtracking. 
+
+If the constraint graph is a tree, it is **bipartite**.
+
+For the **graph coloring CSP** specifically, this means a tree-structured instance always has a valid 2-coloring, and we can find one in **linear time** $O(n)$. Run a single DFS or BFS from any root, color the root arbitrarily (say red), and color every other vertex with the opposite of its parent's color. Each of the $n$ vertices and $n - 1$ edges is touched once.
+
+Even for a **general** tree-structured CSP (not just coloring), the tree shape lets us avoid backtracking entirely, in two passes:
+
+1. **Bottom-up preprocessing:** Pick any vertex as root and order the variables topologically: $X_1, \ldots, X_n$ with parents before children. For $j$ from $n$ down to $2$, make the edge $\mathrm{Parent}(X_j) \to X_j$ **arc-consistent**: remove from $\mathrm{Parent}(X_j)$'s domain every value that has no consistent partner in $X_j$'s current domain. If any domain becomes empty, the CSP has no solution.
+
+2. **Top-down assignment:** For $j$ from $1$ to $n$, assign $X_j$ any value in its (now-pruned) domain that is consistent with the value already assigned to $\mathrm{Parent}(X_j)$. Step 1 guarantees such a value exists, so this pass **never backtracks**.
+
+The total time is $O(n d^2)$, where $d$ is the largest domain size. The bottom-up pass touches each of the $n-1$ tree edges once, and per edge it tests every value in the parent's domain against every value in the child's domain ($d \times d = d^2$ pair checks in the worst case) to decide which parent values to drop. The top-down pass is $O(n d)$. So tree-structured CSPs are solvable in time linear in $n$ (polynomial in $d$), no backtracking required.
+
+Now that we have an efficient algorithm for trees, we can consider whether more general constraint graphs can be reduced to trees somehow.
+
+#### Cutset conditioning
+
+The first way to reduce a constraint graph to a tree involves assigning values to some variables so that the remaining variables form a tree. Consider the constraint graph for Australia, shown again in the figure below. Without South Australia, the graph would become a tree, also shown in the figure below.
+
+Fortunately, we can delete South Australia (in the graph, not the country) by fixing a value for SA and deleting from the domains of the other variables any values that are inconsistent with the value chosen for SA.
+
+![img](delete_sa.png)
+
+Therefore, we can solve the remaining tree with the algorithm given above and thus solve the whole problem. Of course, in the general case (as opposed to map coloring), the value chosen for SA could be the wrong one, so we would need to try each possible value. The general algorithm is as follows:
+
+1. Choose a subset S of the CSP’s variables such that the constraint graph becomes a tree **after** removal of S. S is called a cycle cutset.
+2. For each possible assignment to the variables in S that satisfies all constraints on S,
+
+(a) remove from the domains of the remaining variables any values that are inconsistent
+with the assignment for S, and
+
+(b) if the remaining CSP has a solution, return it together with the assignment for S.
+
+![img](subprobs.png)
+
+If the cycle cutset has size $c$, then the total run time is $O\!\left(d^{c} \cdot (n - c)\, d^{2}\right)$: we have to try each of the $d^{c}$ combinations of values for the variables in $S$, and for each combination we must solve a tree problem of size $n - c$.
+
+For the Australia example, $n = 7$ (the seven regions WA, NT, SA, Q, NSW, V, T), $d = 3$ (the three colors $R, G, B$), and $c = 1$ (the cutset $S = \{\text{SA}\}$). So the cutset method runs in $O(d^{c} \cdot (n - c)\, d^{2}) = O(3 \cdot 6 \cdot 9) = O(162)$ work, versus the naive $d^{n} = 3^{7} = 2187$ assignments a plain backtracking search could explore.
+
+As another examplem, for the constraint graph below, $c = 2$.
+
+![img](c2.png)
+
+If we could find a cutset of size $c = 20$, this would get us down from the lifetime of the Universe to a few minutes. In the worst case, however, $c$ can be as large as $(n−2)$.

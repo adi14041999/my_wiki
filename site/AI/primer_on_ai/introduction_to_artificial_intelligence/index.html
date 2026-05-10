@@ -988,6 +988,34 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#exploiting-the-constraint-graph-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exploiting the Constraint Graph structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exploiting the Constraint Graph structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cutset-conditioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cutset conditioning
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4941,6 +4969,39 @@ d_1 \cdot p \cdot (1 + d_2) = p \cdot d_1 (1 + d_2).
 <li><strong>LCV</strong> picks the next <em>value</em> that constrains neighbors the least.</li>
 </ul>
 <p>Together, <strong>chained forward checking + MRV (with degree tie-breaking) + LCV</strong> is the standard recipe for an efficient backtracking CSP solver.</p>
+<h3 id="exploiting-the-constraint-graph-structure">Exploiting the Constraint Graph structure</h3>
+<p>Some structural properties of the constraint graph let us beat the exponential worst case of generic backtracking. </p>
+<p>If the constraint graph is a tree, it is <strong>bipartite</strong>.</p>
+<p>For the <strong>graph coloring CSP</strong> specifically, this means a tree-structured instance always has a valid 2-coloring, and we can find one in <strong>linear time</strong> <span class="arithmatex">\(O(n)\)</span>. Run a single DFS or BFS from any root, color the root arbitrarily (say red), and color every other vertex with the opposite of its parent's color. Each of the <span class="arithmatex">\(n\)</span> vertices and <span class="arithmatex">\(n - 1\)</span> edges is touched once.</p>
+<p>Even for a <strong>general</strong> tree-structured CSP (not just coloring), the tree shape lets us avoid backtracking entirely, in two passes:</p>
+<ol>
+<li>
+<p><strong>Bottom-up preprocessing:</strong> Pick any vertex as root and order the variables topologically: <span class="arithmatex">\(X_1, \ldots, X_n\)</span> with parents before children. For <span class="arithmatex">\(j\)</span> from <span class="arithmatex">\(n\)</span> down to <span class="arithmatex">\(2\)</span>, make the edge <span class="arithmatex">\(\mathrm{Parent}(X_j) \to X_j\)</span> <strong>arc-consistent</strong>: remove from <span class="arithmatex">\(\mathrm{Parent}(X_j)\)</span>'s domain every value that has no consistent partner in <span class="arithmatex">\(X_j\)</span>'s current domain. If any domain becomes empty, the CSP has no solution.</p>
+</li>
+<li>
+<p><strong>Top-down assignment:</strong> For <span class="arithmatex">\(j\)</span> from <span class="arithmatex">\(1\)</span> to <span class="arithmatex">\(n\)</span>, assign <span class="arithmatex">\(X_j\)</span> any value in its (now-pruned) domain that is consistent with the value already assigned to <span class="arithmatex">\(\mathrm{Parent}(X_j)\)</span>. Step 1 guarantees such a value exists, so this pass <strong>never backtracks</strong>.</p>
+</li>
+</ol>
+<p>The total time is <span class="arithmatex">\(O(n d^2)\)</span>, where <span class="arithmatex">\(d\)</span> is the largest domain size. The bottom-up pass touches each of the <span class="arithmatex">\(n-1\)</span> tree edges once, and per edge it tests every value in the parent's domain against every value in the child's domain (<span class="arithmatex">\(d \times d = d^2\)</span> pair checks in the worst case) to decide which parent values to drop. The top-down pass is <span class="arithmatex">\(O(n d)\)</span>. So tree-structured CSPs are solvable in time linear in <span class="arithmatex">\(n\)</span> (polynomial in <span class="arithmatex">\(d\)</span>), no backtracking required.</p>
+<p>Now that we have an efficient algorithm for trees, we can consider whether more general constraint graphs can be reduced to trees somehow.</p>
+<h4 id="cutset-conditioning">Cutset conditioning</h4>
+<p>The first way to reduce a constraint graph to a tree involves assigning values to some variables so that the remaining variables form a tree. Consider the constraint graph for Australia, shown again in the figure below. Without South Australia, the graph would become a tree, also shown in the figure below.</p>
+<p>Fortunately, we can delete South Australia (in the graph, not the country) by fixing a value for SA and deleting from the domains of the other variables any values that are inconsistent with the value chosen for SA.</p>
+<p><img alt="img" src="../delete_sa.png" /></p>
+<p>Therefore, we can solve the remaining tree with the algorithm given above and thus solve the whole problem. Of course, in the general case (as opposed to map coloring), the value chosen for SA could be the wrong one, so we would need to try each possible value. The general algorithm is as follows:</p>
+<ol>
+<li>Choose a subset S of the CSP’s variables such that the constraint graph becomes a tree <strong>after</strong> removal of S. S is called a cycle cutset.</li>
+<li>For each possible assignment to the variables in S that satisfies all constraints on S,</li>
+</ol>
+<p>(a) remove from the domains of the remaining variables any values that are inconsistent
+with the assignment for S, and</p>
+<p>(b) if the remaining CSP has a solution, return it together with the assignment for S.</p>
+<p><img alt="img" src="../subprobs.png" /></p>
+<p>If the cycle cutset has size <span class="arithmatex">\(c\)</span>, then the total run time is <span class="arithmatex">\(O\!\left(d^{c} \cdot (n - c)\, d^{2}\right)\)</span>: we have to try each of the <span class="arithmatex">\(d^{c}\)</span> combinations of values for the variables in <span class="arithmatex">\(S\)</span>, and for each combination we must solve a tree problem of size <span class="arithmatex">\(n - c\)</span>.</p>
+<p>For the Australia example, <span class="arithmatex">\(n = 7\)</span> (the seven regions WA, NT, SA, Q, NSW, V, T), <span class="arithmatex">\(d = 3\)</span> (the three colors <span class="arithmatex">\(R, G, B\)</span>), and <span class="arithmatex">\(c = 1\)</span> (the cutset <span class="arithmatex">\(S = \{\text{SA}\}\)</span>). So the cutset method runs in <span class="arithmatex">\(O(d^{c} \cdot (n - c)\, d^{2}) = O(3 \cdot 6 \cdot 9) = O(162)\)</span> work, versus the naive <span class="arithmatex">\(d^{n} = 3^{7} = 2187\)</span> assignments a plain backtracking search could explore.</p>
+<p>As another examplem, for the constraint graph below, <span class="arithmatex">\(c = 2\)</span>.</p>
+<p><img alt="img" src="../c2.png" /></p>
+<p>If we could find a cutset of size <span class="arithmatex">\(c = 20\)</span>, this would get us down from the lifetime of the Universe to a few minutes. In the worst case, however, <span class="arithmatex">\(c\)</span> can be as large as <span class="arithmatex">\((n−2)\)</span>.</p>
 
 
 
