@@ -16,7 +16,7 @@
         <link rel="prev" href="../maxima_minima_and_critical_points/">
       
       
-        <link rel="next" href="../../../computer_languages/python/numpy/">
+        <link rel="next" href="../constrained_optimization_via_lagrange_multipliers/">
       
       
         
@@ -3638,6 +3638,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../constrained_optimization_via_lagrange_multipliers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Constrained optimization via Lagrange multipliers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -4278,7 +4306,11 @@ f(1.3, 0.9) \approx f(1, 1) + (\nabla f)(1, 1) \cdot \begin{pmatrix} 0.3 \\ -0.1
 <p>The <strong>next point</strong> is specified separately: you choose a direction <span class="arithmatex">\(v\)</span> and step length <span class="arithmatex">\(t\)</span> to get <span class="arithmatex">\(\mathbf{a}_{\text{new}} = \mathbf{a} + t\mathbf{v}\)</span>.</p>
 <p>It is often convenient to write the displacement as a <strong>multiple of the full gradient</strong> instead of a unit direction. The update</p>
 <div class="arithmatex">\[\mathbf{a}_{\text{new}} = \mathbf{a} + t\,(\nabla f)(\mathbf{a})\]</div>
-<p>is the same idea: the step vector is <span class="arithmatex">\(t(\nabla f)(\mathbf{a})\)</span>. This is equivalent to <span class="arithmatex">\(\mathbf{a} + t\mathbf{v}\)</span> where <span class="arithmatex">\(\mathbf{v} = (\nabla f)(\mathbf{a})/\lVert (\nabla f)(\mathbf{a}) \rVert\)</span> and <span class="arithmatex">\(t\)</span> is chosen accordingly.</p>
+<p>is the same idea, but note that the scalar <span class="arithmatex">\(t\)</span> here is <strong>not</strong> the step length: it is a coefficient on the (generally non-unit) vector <span class="arithmatex">\((\nabla f)(\mathbf{a})\)</span>. The actual step length (distance moved) is</p>
+<div class="arithmatex">\[\bigl\lVert t\,(\nabla f)(\mathbf{a}) \bigr\rVert = |t|\,\lVert (\nabla f)(\mathbf{a}) \rVert.\]</div>
+<p>To rewrite the same step in the unit-direction form <span class="arithmatex">\(\mathbf{a} + s\,\mathbf{v}\)</span> where <span class="arithmatex">\(s\)</span> is the step length, take</p>
+<div class="arithmatex">\[\mathbf{v} = \frac{(\nabla f)(\mathbf{a})}{\lVert (\nabla f)(\mathbf{a}) \rVert}, \qquad s = t\,\lVert (\nabla f)(\mathbf{a}) \rVert.\]</div>
+<p>Since <span class="arithmatex">\(\mathbf{v}\)</span> is the unit vector pointing in the <strong>same direction</strong> as <span class="arithmatex">\((\nabla f)(\mathbf{a})\)</span>, the update <span class="arithmatex">\(\mathbf{a} + t\,(\nabla f)(\mathbf{a})\)</span> (with <span class="arithmatex">\(t &gt; 0\)</span>) is exactly a step along <span class="arithmatex">\(\mathbf{v}\)</span>. In other words, the displacement is a step in the direction of the gradient. The displacement's length is <span class="arithmatex">\(s = t\,\lVert (\nabla f)(\mathbf{a}) \rVert\)</span>.</p>
 <p>To <strong>minimize</strong> <span class="arithmatex">\(f\)</span>, take <strong><span class="arithmatex">\(t &lt; 0\)</span></strong>, so <span class="arithmatex">\(\mathbf{a}_{\text{new}} = \mathbf{a} - |t|\,(\nabla f)(\mathbf{a})\)</span>, which is a step opposite to the gradient.</p>
 <p><strong>Example:</strong></p>
 <p>Let <span class="arithmatex">\(f : \mathbb{R}^2 \to \mathbb{R}\)</span> be</p>

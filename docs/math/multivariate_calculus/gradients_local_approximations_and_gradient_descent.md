@@ -249,7 +249,15 @@ It is often convenient to write the displacement as a **multiple of the full gra
 
 $$\mathbf{a}_{\text{new}} = \mathbf{a} + t\,(\nabla f)(\mathbf{a})$$
 
-is the same idea: the step vector is $t(\nabla f)(\mathbf{a})$. This is equivalent to $\mathbf{a} + t\mathbf{v}$ where $\mathbf{v} = (\nabla f)(\mathbf{a})/\lVert (\nabla f)(\mathbf{a}) \rVert$ and $t$ is chosen accordingly.
+is the same idea, but note that the scalar $t$ here is **not** the step length: it is a coefficient on the (generally non-unit) vector $(\nabla f)(\mathbf{a})$. The actual step length (distance moved) is
+
+$$\bigl\lVert t\,(\nabla f)(\mathbf{a}) \bigr\rVert = |t|\,\lVert (\nabla f)(\mathbf{a}) \rVert.$$
+
+To rewrite the same step in the unit-direction form $\mathbf{a} + s\,\mathbf{v}$ where $s$ is the step length, take
+
+$$\mathbf{v} = \frac{(\nabla f)(\mathbf{a})}{\lVert (\nabla f)(\mathbf{a}) \rVert}, \qquad s = t\,\lVert (\nabla f)(\mathbf{a}) \rVert.$$
+
+Since $\mathbf{v}$ is the unit vector pointing in the **same direction** as $(\nabla f)(\mathbf{a})$, the update $\mathbf{a} + t\,(\nabla f)(\mathbf{a})$ (with $t > 0$) is exactly a step along $\mathbf{v}$. In other words, the displacement is a step in the direction of the gradient. The displacement's length is $s = t\,\lVert (\nabla f)(\mathbf{a}) \rVert$.
 
 To **minimize** $f$, take **$t < 0$**, so $\mathbf{a}_{\text{new}} = \mathbf{a} - |t|\,(\nabla f)(\mathbf{a})$, which is a step opposite to the gradient.
 

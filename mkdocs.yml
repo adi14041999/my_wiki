@@ -104,6 +104,7 @@ nav:
       - Partial derivatives and contour plots: math/multivariate_calculus/partial_derivatives_and_contour_plots.md
       - Maxima, minima, and critical points: math/multivariate_calculus/maxima_minima_and_critical_points.md
       - Gradients, local approximations, and gradient descent: math/multivariate_calculus/gradients_local_approximations_and_gradient_descent.md
+      - Constrained optimization via Lagrange multipliers: math/multivariate_calculus/constrained_optimization_via_lagrange_multipliers.md
   - Computer Languages:
     - Python:
       - NumPy: computer_languages/python/numpy.md
