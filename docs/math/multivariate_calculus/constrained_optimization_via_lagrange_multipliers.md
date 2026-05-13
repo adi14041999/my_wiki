@@ -180,3 +180,20 @@ Since the unit circle is closed and bounded and $f$ is continuous, the constrain
 Note that none of these are critical points of $f$ in the ambient $\mathbb{R}^2$ (the only critical point of $f$ is the saddle $(0, 0)$, which does not even lie on the constraint circle). The Lagrange condition picked out the right points anyway.
 
 **Drive home the point:** Imagine trying to find the highest point on a mountain — described by the elevation $f(x, y)$ — while restricted to walking along a specific trail $g(x, y) = c$. You are at the highest point on the trail exactly when the trail is **perfectly tangent** to the mountain's elevation contour lines at your location. If the trail were not tangent there, it would cut **across** a contour line, meaning a step in one direction along the trail would take you higher — so you could not have been at the highest point. The Lagrange condition $\nabla f = \lambda\, \nabla g$ is just the algebraic statement of this tangency.
+
+## The method of Lagrange multipliers
+
+!!! note "Theorem (Lagrange multipliers, one constraint)"
+    Suppose $f : \mathbb{R}^n \to \mathbb{R}$ and $g : \mathbb{R}^n \to \mathbb{R}$ are functions, and consider the problem of finding a local maximum (or local minimum) of $f$ on the region where $g(\mathbf{x}) = c$. If a local extremum of $f$ on the constraint region (i.e. the set of $\mathbf{x}$ satisfying $g(\mathbf{x}) = c$) occurs at $\mathbf{a}$, then **either**
+
+    $$(\nabla g)(\mathbf{a}) = \mathbf{0} \qquad \text{or} \qquad (\nabla f)(\mathbf{a}) = \lambda \, (\nabla g)(\mathbf{a})$$
+
+    for some scalar $\lambda$ (called the **Lagrange multiplier**) that may depend on $\mathbf{a}$.
+
+!!! warning "We do not know $\lambda$!"
+    We do not know $\lambda$ in advance — we (often) need to solve for it.
+
+    The equations $\nabla f = \lambda \, \nabla g$ in $\mathbb{R}^n$ and $g(\mathbf{x}) = c$ in $\mathbb{R}$ amount to $n + 1$ scalar equations in the $n + 1$ unknowns $x_1, \ldots, x_n, \lambda$, and we typically need to solve for all of them.
+
+To summarize: any solution to an optimization problem must satisfy an **auxiliary equation** — vanishing of the gradient in the **unconstrained** case, or one of the options in the theorem above in the **constrained** setting. Solving this equation gives a list of **candidate** points for solutions of the original optimization problem. We then compare the values of $f$ at those candidates to see which are largest and smallest, much as we do with the first-derivative test in single-variable calculus.
+

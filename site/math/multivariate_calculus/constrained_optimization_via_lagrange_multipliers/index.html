@@ -3585,6 +3585,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#the-method-of-lagrange-multipliers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The method of Lagrange multipliers
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4202,6 +4213,19 @@
 <img alt="img" src="../sad17.png" /></p>
 <p>Note that none of these are critical points of <span class="arithmatex">\(f\)</span> in the ambient <span class="arithmatex">\(\mathbb{R}^2\)</span> (the only critical point of <span class="arithmatex">\(f\)</span> is the saddle <span class="arithmatex">\((0, 0)\)</span>, which does not even lie on the constraint circle). The Lagrange condition picked out the right points anyway.</p>
 <p><strong>Drive home the point:</strong> Imagine trying to find the highest point on a mountain — described by the elevation <span class="arithmatex">\(f(x, y)\)</span> — while restricted to walking along a specific trail <span class="arithmatex">\(g(x, y) = c\)</span>. You are at the highest point on the trail exactly when the trail is <strong>perfectly tangent</strong> to the mountain's elevation contour lines at your location. If the trail were not tangent there, it would cut <strong>across</strong> a contour line, meaning a step in one direction along the trail would take you higher — so you could not have been at the highest point. The Lagrange condition <span class="arithmatex">\(\nabla f = \lambda\, \nabla g\)</span> is just the algebraic statement of this tangency.</p>
+<h2 id="the-method-of-lagrange-multipliers">The method of Lagrange multipliers</h2>
+<div class="admonition note">
+<p class="admonition-title">Theorem (Lagrange multipliers, one constraint)</p>
+<p>Suppose <span class="arithmatex">\(f : \mathbb{R}^n \to \mathbb{R}\)</span> and <span class="arithmatex">\(g : \mathbb{R}^n \to \mathbb{R}\)</span> are functions, and consider the problem of finding a local maximum (or local minimum) of <span class="arithmatex">\(f\)</span> on the region where <span class="arithmatex">\(g(\mathbf{x}) = c\)</span>. If a local extremum of <span class="arithmatex">\(f\)</span> on the constraint region (i.e. the set of <span class="arithmatex">\(\mathbf{x}\)</span> satisfying <span class="arithmatex">\(g(\mathbf{x}) = c\)</span>) occurs at <span class="arithmatex">\(\mathbf{a}\)</span>, then <strong>either</strong></p>
+<div class="arithmatex">\[(\nabla g)(\mathbf{a}) = \mathbf{0} \qquad \text{or} \qquad (\nabla f)(\mathbf{a}) = \lambda \, (\nabla g)(\mathbf{a})\]</div>
+<p>for some scalar <span class="arithmatex">\(\lambda\)</span> (called the <strong>Lagrange multiplier</strong>) that may depend on <span class="arithmatex">\(\mathbf{a}\)</span>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">We do not know <span class="arithmatex">\(\lambda\)</span>!</p>
+<p>We do not know <span class="arithmatex">\(\lambda\)</span> in advance — we (often) need to solve for it.</p>
+<p>The equations <span class="arithmatex">\(\nabla f = \lambda \, \nabla g\)</span> in <span class="arithmatex">\(\mathbb{R}^n\)</span> and <span class="arithmatex">\(g(\mathbf{x}) = c\)</span> in <span class="arithmatex">\(\mathbb{R}\)</span> amount to <span class="arithmatex">\(n + 1\)</span> scalar equations in the <span class="arithmatex">\(n + 1\)</span> unknowns <span class="arithmatex">\(x_1, \ldots, x_n, \lambda\)</span>, and we typically need to solve for all of them.</p>
+</div>
+<p>To summarize: any solution to an optimization problem must satisfy an <strong>auxiliary equation</strong> — vanishing of the gradient in the <strong>unconstrained</strong> case, or one of the options in the theorem above in the <strong>constrained</strong> setting. Solving this equation gives a list of <strong>candidate</strong> points for solutions of the original optimization problem. We then compare the values of <span class="arithmatex">\(f\)</span> at those candidates to see which are largest and smallest, much as we do with the first-derivative test in single-variable calculus.</p>
 
 
 
