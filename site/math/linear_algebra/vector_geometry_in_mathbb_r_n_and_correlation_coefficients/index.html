@@ -4148,16 +4148,22 @@
 <div class="arithmatex">\[v \cdot (c_1w_1 + c_2w_2) = c_1(v \cdot w_1) + c_2(v \cdot w_2)\]</div>
 <h2 id="pythagorean-theorem-in-mathbbrn-and-the-cauchyschwarz-inequality">Pythagorean Theorem in <span class="arithmatex">\(\mathbb{R}^n\)</span> and the Cauchy–Schwarz Inequality</h2>
 <p>As an application of the dot product rules, we can establish a version of the Pythagorean Theorem for <span class="arithmatex">\(n\)</span>-vectors with any <span class="arithmatex">\(n\)</span> (not just <span class="arithmatex">\(n = 2\)</span>) and we can show that the subtlety lurking in the definition of "angle" between <span class="arithmatex">\(n\)</span>-vectors is really not a problem at all.</p>
-<p><strong>Theorem (Pythagoras).</strong> If <span class="arithmatex">\(n\)</span>-vectors v<span class="arithmatex">\(_1\)</span> and v<span class="arithmatex">\(_2\)</span> are nonzero and perpendicular (i.e., at an angle of <span class="arithmatex">\(90°\)</span>) then</p>
+<div class="admonition note">
+<p class="admonition-title">Theorem (Pythagoras)</p>
+<p>If <span class="arithmatex">\(n\)</span>-vectors v<span class="arithmatex">\(_1\)</span> and v<span class="arithmatex">\(_2\)</span> are nonzero and perpendicular (i.e., at an angle of <span class="arithmatex">\(90°\)</span>) then</p>
 <div class="arithmatex">\[\|v_1 + v_2\|^2 = \|v_1\|^2 + \|v_2\|^2 \]</div>
+</div>
 <p><strong>Proof.</strong> Expand the left side as a dot product:</p>
 <div class="arithmatex">\[(v_1 + v_2) \cdot (v_1 + v_2) = v_1 \cdot (v_1 + v_2) + v_2 \cdot (v_1 + v_2) = v_1 \cdot v_1 + v_1 \cdot v_2 + v_2 \cdot v_1 + v_2 \cdot v_2\]</div>
 <p>We've used the rules for dot products at each step to expand. But the common value <span class="arithmatex">\(v_1 \cdot v_2\)</span> and <span class="arithmatex">\(v_2 \cdot v_1\)</span> is 0 because v<span class="arithmatex">\(_1\)</span> and v<span class="arithmatex">\(_2\)</span> are assumed to be perpendicular (which means by definition that their dot product equals 0). Thus, the right side equals <span class="arithmatex">\(v_1 \cdot v_1 + v_2 \cdot v_2 = \|v_1\|^2 + \|v_2\|^2\)</span>, as we wanted. <span class="arithmatex">\(\square\)</span></p>
 <p>The motivation for our definitions of perpendicularity and more generally angle between vectors in <span class="arithmatex">\(\mathbb{R}^n\)</span> and length of vectors in <span class="arithmatex">\(\mathbb{R}^n\)</span> for general <span class="arithmatex">\(n\)</span> (especially <span class="arithmatex">\(n &gt; 3\)</span>) came from our knowledge of how things work in <span class="arithmatex">\(\mathbb{R}^2\)</span> based on knowing the Pythagorean Theorem in plane geometry. Making up definitions of words cannot ever replace the work involved in proving a real theorem.</p>
 <p>Since we now have several good properties of dot products in hand, we can establish a fact that is needed to confirm that our definition of "angle" between nonzero <span class="arithmatex">\(n\)</span>-vectors makes sense for any <span class="arithmatex">\(n\)</span>:</p>
-<p><strong>Theorem (Cauchy–Schwarz Inequality).</strong> For <span class="arithmatex">\(n\)</span>-vectors v, w, we have</p>
+<div class="admonition note">
+<p class="admonition-title">Theorem (Cauchy–Schwarz Inequality)</p>
+<p>For <span class="arithmatex">\(n\)</span>-vectors v, w, we have</p>
 <div class="arithmatex">\[-\|v\| \|w\| \leq v \cdot w \leq \|v\| \|w\|\]</div>
 <p>(or equivalently the absolute value <span class="arithmatex">\(|v \cdot w|\)</span> is at most <span class="arithmatex">\(\|v\| \|w\|\)</span>). Moreover, one of the inequalities is an equality precisely when one of v or w is a scalar multiple of the other.</p>
+</div>
 <p><strong>Proof.</strong> If v = 0 or w = 0 then everything is clear (note that 0 is a scalar multiple of any <span class="arithmatex">\(n\)</span>-vector: multiply it by the scalar 0), so now we assume v, w ≠ 0. The idea of the proof is to explore how the length of v + <span class="arithmatex">\(x\)</span>w depends on <span class="arithmatex">\(x\)</span>. This is most conveniently done by analyzing the squared-length, which is a dot product:</p>
 <div class="arithmatex">\[\|v + xw\|^2 = (v + xw) \cdot (v + xw)\]</div>
 <p>Using the linearity properties of dot products, we have</p>

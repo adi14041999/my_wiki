@@ -3299,10 +3299,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#theorem-jensens-inequality" class="md-nav__link">
+  <a href="#jensens-inequality_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Theorem (Jensen's Inequality)
+        Jensen's Inequality
       
     </span>
   </a>
@@ -4187,12 +4187,15 @@
 <p><span class="arithmatex">\(f(x) = e^x\)</span>: <span class="arithmatex">\(f''(x) = e^x &gt; 0\)</span> → convex</p>
 </li>
 </ul>
-<h2 id="theorem-jensens-inequality">Theorem (Jensen's Inequality)</h2>
+<h2 id="jensens-inequality_1">Jensen's Inequality</h2>
+<div class="admonition note">
+<p class="admonition-title">Theorem (Jensen's Inequality)</p>
 <p>Let <span class="arithmatex">\(X\)</span> be a random variable and let <span class="arithmatex">\(\phi\)</span> be a convex function. Then:</p>
 <div class="arithmatex">\[\phi(E[X]) \leq E[\phi(X)]\]</div>
 <p>If <span class="arithmatex">\(\phi\)</span> is strictly convex, then equality holds if and only if <span class="arithmatex">\(X\)</span> is constant (i.e., <span class="arithmatex">\(X = E[X]\)</span> with probability 1).</p>
 <p><strong>For concave functions</strong>: If <span class="arithmatex">\(\phi\)</span> is concave, then the inequality is reversed:</p>
 <div class="arithmatex">\[\phi(E[X]) \geq E[\phi(X)]\]</div>
+</div>
 <p>Jensen's inequality captures a fundamental geometric insight: <strong>the function of the average is less than or equal to the average of the function</strong> (for convex functions).</p>
 <p>Think of it this way: if you have a convex function (like <span class="arithmatex">\(f(x) = x^2\)</span>), the graph "curves upward." If you take two points on this curve and draw a line between them, the line lies above the curve. This means that the average of the function values at two points is greater than the function value at the average of those points.</p>
 <p><strong>Example 1: Quadratic function</strong> Let <span class="arithmatex">\(X\)</span> be any random variable with finite variance, and let <span class="arithmatex">\(\phi(x) = x^2\)</span>. Since <span class="arithmatex">\(x^2\)</span> is convex:</p>

@@ -4304,8 +4304,11 @@
 <div class="arithmatex">\[\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i = \frac{X_1 + X_2 + \cdots + X_n}{n}\]</div>
 <p>This represents the average of the first <span class="arithmatex">\(n\)</span> observations. For example, if we roll a die 100 times and get outcomes <span class="arithmatex">\(X_1, X_2, \ldots, X_{100}\)</span>, then <span class="arithmatex">\(\bar{X}_{100}\)</span> would be the average of those 100 die rolls.</p>
 <p>The CLT states that for large <span class="arithmatex">\(n\)</span>, the distribution of <span class="arithmatex">\(\bar{X}_n\)</span> after standardization approaches a standard normal distribution. By standardization, we mean that we subtract <span class="arithmatex">\(\mu\)</span> (the mean of any random variable <span class="arithmatex">\(X_i\)</span>) and divide by <span class="arithmatex">\(\sigma/\sqrt{n}\)</span> (the standard deviation of the sample mean <span class="arithmatex">\(\bar{X}_n\)</span>).</p>
-<p><strong>Theorem (Central Limit Theorem):</strong> As <span class="arithmatex">\(n \to \infty\)</span>,</p>
+<div class="admonition note">
+<p class="admonition-title">Theorem (Central Limit Theorem)</p>
+<p>As <span class="arithmatex">\(n \to \infty\)</span>,</p>
 <div class="arithmatex">\[\sqrt{n} \cdot \frac{\bar{X}_n - \mu}{\sigma} \to N(0, 1) \text{ in distribution}\]</div>
+</div>
 <p>This means that the standardized sample mean converges in distribution to a standard normal random variable as the sample size grows large.</p>
 
 
