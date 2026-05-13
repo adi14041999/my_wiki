@@ -197,3 +197,4 @@ Note that none of these are critical points of $f$ in the ambient $\mathbb{R}^2$
 
 To summarize: any solution to an optimization problem must satisfy an **auxiliary equation** — vanishing of the gradient in the **unconstrained** case, or one of the options in the theorem above in the **constrained** setting. Solving this equation gives a list of **candidate** points for solutions of the original optimization problem. We then compare the values of $f$ at those candidates to see which are largest and smallest, much as we do with the first-derivative test in single-variable calculus.
 
+**Remark:** As with the first-derivative test, the theorem identifies **candidates** for constrained local extrema. It can happen that there are **no** constrained global extrema.
