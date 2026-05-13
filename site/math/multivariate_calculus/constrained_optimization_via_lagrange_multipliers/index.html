@@ -3524,6 +3524,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Constrained optimization via Lagrange multipliers
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3540,6 +3558,36 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#intuition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intuition
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -4055,6 +4103,105 @@
 </blockquote>
 <p>There are many real-world reasons to want this. As one example, such inequality constraints show up in machine learning algorithms used to build classifiers — in particular, in <strong>support vector machines</strong>.</p>
 <p>One approach is to try to solve for <span class="arithmatex">\(y\)</span> in terms of <span class="arithmatex">\(x\)</span> under the constraint: starting from <span class="arithmatex">\(g(x, y) = c\)</span>, try to solve for <span class="arithmatex">\(y\)</span> in terms of <span class="arithmatex">\(x\)</span>, substitute it into <span class="arithmatex">\(f(x, y)\)</span>, and apply single-variable calculus to <span class="arithmatex">\(f(x, y(x))\)</span>. This does not work well when <span class="arithmatex">\(g\)</span> is complicated. It is often impossible to explicitly solve for <span class="arithmatex">\(y\)</span> in terms of <span class="arithmatex">\(x\)</span> on the constraint curve <span class="arithmatex">\(g(x, y) = c\)</span>, and even when it is possible, <span class="arithmatex">\(f(x, y(x))\)</span> is typically a mess. A better method is called <strong>Lagrange multipliers</strong>.</p>
+<h2 id="intuition">Intuition</h2>
+<p>Let's start off with a couple of examples.</p>
+<p><strong>Example:</strong> Consider the unit sphere <span class="arithmatex">\(S\)</span> centered at the origin <span class="arithmatex">\(\mathbf{0}\)</span> in <span class="arithmatex">\(\mathbb{R}^3\)</span>, and let <span class="arithmatex">\(f(x, y, z) = z\)</span>. The sphere <span class="arithmatex">\(S\)</span> is defined by <span class="arithmatex">\(x^2 + y^2 + z^2 = 1\)</span>, so for <span class="arithmatex">\(g(x, y, z) = x^2 + y^2 + z^2\)</span>, finding the extrema of <span class="arithmatex">\(z\)</span> on <span class="arithmatex">\(S\)</span> is the same as finding the points in the region <span class="arithmatex">\(g = 1\)</span> at which <span class="arithmatex">\(f\)</span> attains maximal or minimal values.</p>
+<p>By inspection, <span class="arithmatex">\(f\)</span> attains its maximal value on <span class="arithmatex">\(S\)</span> at the north pole <span class="arithmatex">\(\mathbf{p} = (0, 0, 1)\)</span> and its minimal value at the south pole <span class="arithmatex">\(-\mathbf{p} = (0, 0, -1)\)</span>.</p>
+<p>These two points on <span class="arithmatex">\(S\)</span> are <strong>not</strong> local extrema for <span class="arithmatex">\(f\)</span> on all of <span class="arithmatex">\(\mathbb{R}^3\)</span>: for tiny <span class="arithmatex">\(t &gt; 0\)</span>, at <span class="arithmatex">\((0, 0, 1 + t)\)</span> near <span class="arithmatex">\(\mathbf{p}\)</span> the value <span class="arithmatex">\(f = 1 + t\)</span> is larger than the maximal value <span class="arithmatex">\(f(\mathbf{p}) = 1\)</span> of <span class="arithmatex">\(f = z\)</span> <strong>on</strong> <span class="arithmatex">\(S\)</span>, and similarly at <span class="arithmatex">\((0, 0, -1 - t)\)</span> near <span class="arithmatex">\(-\mathbf{p}\)</span> the value <span class="arithmatex">\(f = -1 - t\)</span> is less than the minimal value <span class="arithmatex">\(f(-\mathbf{p}) = -1\)</span> on <span class="arithmatex">\(S\)</span>. The points <span class="arithmatex">\((0, 0, \pm(1 + t))\)</span> lie <strong>outside</strong> <span class="arithmatex">\(S\)</span>, so they are irrelevant when optimizing <span class="arithmatex">\(f\)</span> subject to the constraint <span class="arithmatex">\(g = 1\)</span> that defines <span class="arithmatex">\(S\)</span>.</p>
+<p>We have just observed an important point. A solution to a constrained optimization problem on <span class="arithmatex">\(\mathbb{R}^n\)</span> of the form</p>
+<blockquote>
+<p>optimize <span class="arithmatex">\(F(\mathbf{x})\)</span> subject to the condition <span class="arithmatex">\(G(\mathbf{x}) = c\)</span></p>
+</blockquote>
+<p>is typically <strong>not</strong> a local extremum for <span class="arithmatex">\(F\)</span> on the ambient <span class="arithmatex">\(\mathbb{R}^n\)</span>. Hence there is no reason for it to be a critical point of <span class="arithmatex">\(F\)</span>; i.e. <strong>no reason for <span class="arithmatex">\(\nabla F\)</span> to vanish there</strong>. Indeed, in our sphere example with <span class="arithmatex">\(f(x, y, z) = z\)</span>, we have</p>
+<div class="arithmatex">\[(\nabla f)(\mathbf{x}) = \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix} \ne \mathbf{0} \quad \text{for all } \mathbf{x} \in \mathbb{R}^3,\]</div>
+<p>yet the constrained extrema <span class="arithmatex">\(\pm \mathbf{p}\)</span> on <span class="arithmatex">\(S\)</span> still exist.</p>
+<p>But there <strong>is</strong> nevertheless something special about the behavior of <span class="arithmatex">\(\nabla f\)</span> at the points <span class="arithmatex">\(\pm \mathbf{p}\)</span> where <span class="arithmatex">\(f\)</span> attains its extreme values on the region <span class="arithmatex">\(S\)</span> defined by <span class="arithmatex">\(g = 1\)</span>. To explain it, we will work with the gradient <span class="arithmatex">\(\nabla g\)</span> at points of the constraint region <span class="arithmatex">\(S\)</span>. For any point <span class="arithmatex">\(\mathbf{x} = (x, y, z) \in \mathbb{R}^3\)</span> (which may or may not lie in <span class="arithmatex">\(S\)</span>),</p>
+<div class="arithmatex">\[(\nabla g)(\mathbf{x}) = \begin{pmatrix} 2x \\ 2y \\ 2z \end{pmatrix} = 2\mathbf{x}.\]</div>
+<p>In the figure below we show <span class="arithmatex">\(S = \{\mathbf{x} \in \mathbb{R}^3 : g(\mathbf{x}) = 1\}\)</span> with the corresponding gradient vector <span class="arithmatex">\((\nabla g)(\mathbf{x}) = 2\mathbf{x}\)</span> drawn at every point <span class="arithmatex">\(\mathbf{x} \in S\)</span>. This is a vector <strong>perpendicular to the tangent plane of <span class="arithmatex">\(S\)</span> at <span class="arithmatex">\(\mathbf{x}\)</span></strong>, pointing outward from the sphere with length <span class="arithmatex">\(2\)</span> (the lengths don't all look the same in the figure due to the effect of perspective). The non-negative coordinate axes are also drawn in light blue, but they are irrelevant in what follows.</p>
+<p><img alt="img" src="../sphere_gradients.png" /></p>
+<p>Here is the <strong>key observation</strong>: for each <span class="arithmatex">\(\mathbf{x} \in S\)</span>, compare the "radial" line through <span class="arithmatex">\(\mathbf{x}\)</span> along the direction of <span class="arithmatex">\((\nabla g)(\mathbf{x})\)</span> with the "vertical" line through <span class="arithmatex">\(\mathbf{x}\)</span> along the direction of <span class="arithmatex">\((\nabla f)(\mathbf{x}) = \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}\)</span>. The points <span class="arithmatex">\(\mathbf{a} \in S\)</span> for which these two lines through <span class="arithmatex">\(\mathbf{a}\)</span> coincide are exactly the north pole <span class="arithmatex">\(\mathbf{p}\)</span> and the south pole <span class="arithmatex">\(-\mathbf{p}\)</span> (indicated by the red radial vectors in the figure).</p>
+<p>Equality of these two lines at a point <span class="arithmatex">\(\mathbf{a} \in S\)</span> (equality of the line spanned by <span class="arithmatex">\((\nabla f)(\mathbf{a})\)</span> and the line spanned by <span class="arithmatex">\((\nabla g)(\mathbf{a})\)</span>) says exactly that <span class="arithmatex">\((\nabla f)(\mathbf{a})\)</span> is a <strong>scalar multiple</strong> of the nonzero gradient vector <span class="arithmatex">\((\nabla g)(\mathbf{a})\)</span>:</p>
+<div class="arithmatex">\[(\nabla f)(\mathbf{a}) = \lambda \, (\nabla g)(\mathbf{a})\]</div>
+<p>for some <span class="arithmatex">\(\lambda \in \mathbb{R}\)</span> (here <span class="arithmatex">\(\lambda = 1/2\)</span>, but the specific scalar isn't essential). This special property at the constrained extrema — that <span class="arithmatex">\((\nabla f)(\mathbf{a})\)</span> is a scalar multiple of <span class="arithmatex">\((\nabla g)(\mathbf{a})\)</span> — will turn out to be a general feature of solutions to all constrained extremum problems.</p>
+<p><strong>Example:</strong> For <span class="arithmatex">\(g(x, y) = x^4 + x^3 y + y^2\)</span>, let's find the local extrema of</p>
+<div class="arithmatex">\[f(x, y) = x^3 + xy^2\]</div>
+<p>subject to the constraint <span class="arithmatex">\(g(x, y) = 1\)</span>. This amounts to studying the behavior of <span class="arithmatex">\(f\)</span> on the curve <span class="arithmatex">\(C\)</span> defined by <span class="arithmatex">\(g(x, y) = 1\)</span>, shown in the figure below.</p>
+<p>By "local" extrema of <span class="arithmatex">\(f\)</span> on <span class="arithmatex">\(C\)</span> we mean points <span class="arithmatex">\(P \in C\)</span> such that all <span class="arithmatex">\((x, y) \in C\)</span> near <span class="arithmatex">\(P\)</span> satisfy</p>
+<div class="arithmatex">\[f(P) \ge f(x, y) \quad (\text{constrained local maximum at } P)\]</div>
+<p>or</p>
+<div class="arithmatex">\[f(P) \le f(x, y) \quad (\text{constrained local minimum at } P).\]</div>
+<p><img alt="img" src="../redblue.png" /></p>
+<p>To visualize the task of finding local extrema of <span class="arithmatex">\(f\)</span> on <span class="arithmatex">\(C\)</span>, consider the <strong>level curves</strong> <span class="arithmatex">\(f(x, y) = m\)</span> and let <span class="arithmatex">\(m\)</span> vary. For some values of <span class="arithmatex">\(m\)</span> the curve <span class="arithmatex">\(f = m\)</span> does not touch <span class="arithmatex">\(C\)</span>, so <span class="arithmatex">\(f\)</span> never attains the value <span class="arithmatex">\(m\)</span> on <span class="arithmatex">\(C\)</span>. For other values of <span class="arithmatex">\(m\)</span>, the curve <span class="arithmatex">\(f = m\)</span> does touch <span class="arithmatex">\(C\)</span>; the points where this happens are precisely the points where <span class="arithmatex">\(f\)</span> takes the value <span class="arithmatex">\(m\)</span> on <span class="arithmatex">\(C\)</span>.</p>
+<p>The utility of this is illustrated in the figure below, which shows a blue level curve <span class="arithmatex">\(f(x, y) = m_0\)</span> for a specific <span class="arithmatex">\(m_0 \approx 2.056\)</span> together with black level curves <span class="arithmatex">\(f(x, y) = m\)</span> for <span class="arithmatex">\(m\)</span> near <span class="arithmatex">\(m_0\)</span>. For <span class="arithmatex">\(m\)</span> near <span class="arithmatex">\(m_0\)</span>:</p>
+<ul>
+<li>if <span class="arithmatex">\(m &gt; m_0\)</span>, the curve <span class="arithmatex">\(f = m\)</span> does <strong>not</strong> touch <span class="arithmatex">\(C\)</span>;</li>
+<li>if <span class="arithmatex">\(m &lt; m_0\)</span>, the curve <span class="arithmatex">\(f = m\)</span> touches <span class="arithmatex">\(C\)</span> at a few points;</li>
+<li>the curve <span class="arithmatex">\(f = m_0\)</span> touches <span class="arithmatex">\(C\)</span> at exactly one point <span class="arithmatex">\(P_0\)</span> (black dot), and does so <strong>tangentially</strong> — i.e. the tangent lines at <span class="arithmatex">\(P_0\)</span> to the blue curve <span class="arithmatex">\(f = m_0\)</span> and the red curve <span class="arithmatex">\(C\)</span> coincide.</li>
+</ul>
+<p><img alt="img" src="../zoomedin.png" /></p>
+<p>To summarize:</p>
+<ol>
+<li>for <span class="arithmatex">\(Q \in C\)</span> near <span class="arithmatex">\(P_0\)</span> we have <span class="arithmatex">\(f(Q) \le m_0 = f(P_0)\)</span>, so <span class="arithmatex">\(f\)</span> on <span class="arithmatex">\(C\)</span> has a local maximum at <span class="arithmatex">\(P_0\)</span>;</li>
+<li>the curve <span class="arithmatex">\(f = m_0\)</span> through the constrained local extremum <span class="arithmatex">\(P_0\)</span> is <strong>tangent</strong> to <span class="arithmatex">\(C\)</span> at <span class="arithmatex">\(P_0\)</span>;</li>
+<li>for nearby <span class="arithmatex">\(m &lt; m_0\)</span>, the curve <span class="arithmatex">\(f = m\)</span> is <strong>not</strong> tangent to <span class="arithmatex">\(C\)</span> at the points <span class="arithmatex">\(Q\)</span> near <span class="arithmatex">\(P_0\)</span> where this level curve of <span class="arithmatex">\(f\)</span> meets <span class="arithmatex">\(C\)</span>.</li>
+</ol>
+<p>The key is to reinterpret (2) and (3) in terms of <strong>gradient vectors</strong>. At any point, the perpendicular direction to a level curve is the direction of the gradient at that point. Equality of two lines through a point in <span class="arithmatex">\(\mathbb{R}^2\)</span> (such as the two tangent lines at a common point above) is the same as equality of their perpendicular directions through that point. So we can restate (2) and (3) as:</p>
+<ul>
+<li><strong>(2′)</strong> <span class="arithmatex">\((\nabla f)(P_0)\)</span> and <span class="arithmatex">\((\nabla g)(P_0)\)</span> span the same line;</li>
+<li><strong>(3′)</strong> for <span class="arithmatex">\(Q \in C\)</span> near <span class="arithmatex">\(P_0\)</span> but distinct from <span class="arithmatex">\(P_0\)</span>, the vectors <span class="arithmatex">\((\nabla f)(Q)\)</span> and <span class="arithmatex">\((\nabla g)(Q)\)</span> do <strong>not</strong> point along the same line.</li>
+</ul>
+<p>Hence, for <span class="arithmatex">\((a, b) \in C\)</span> near <span class="arithmatex">\(P_0\)</span>, the condition</p>
+<div class="arithmatex">\[(\nabla f)(a, b) \text{ is a scalar multiple of } (\nabla g)(a, b)\]</div>
+<p>holds <strong>at <span class="arithmatex">\(P_0\)</span> and nowhere else nearby on <span class="arithmatex">\(C\)</span></strong>. We have not yet said what the scalar multiplier is, but the mere fact that such a relationship holds between the two gradients at a point of <span class="arithmatex">\(C\)</span> — regardless of the value of the scalar multiplier — is a very restrictive condition that picks out <span class="arithmatex">\(P_0\)</span> from all other nearby points of <span class="arithmatex">\(C\)</span>.</p>
+<p>Equivalently, we restricted attention to the <strong>level curve</strong> <span class="arithmatex">\(g(x, y) = 1\)</span> and asked where it met the level curves <span class="arithmatex">\(f(x, y) = m\)</span> as <span class="arithmatex">\(m\)</span> varied. Each intersection point lay on <span class="arithmatex">\(C\)</span> and had <span class="arithmatex">\(f = m\)</span> there; a constrained local maximum (minimum) was a point of <span class="arithmatex">\(C\)</span> where no nearby point on <span class="arithmatex">\(C\)</span> had a <strong>larger</strong> (respectively <strong>smaller</strong>) value of <span class="arithmatex">\(m\)</span>, i.e. we were trying to push <span class="arithmatex">\(m\)</span> as high or as low as possible while staying on <span class="arithmatex">\(g = 1\)</span>.</p>
+<p>And it turned out that such constrained maxima were precisely the points <span class="arithmatex">\((a, b) \in C\)</span> at which <span class="arithmatex">\((\nabla f)(a, b)\)</span> was a <strong>scalar multiple</strong> of <span class="arithmatex">\((\nabla g)(a, b)\)</span>.</p>
+<p><strong>Example:</strong> Consider</p>
+<div class="arithmatex">\[f(x, y) = xy + 1,\]</div>
+<p>which has a <strong>saddle point</strong> at <span class="arithmatex">\((0, 0)\)</span>. Let the constraint function be</p>
+<div class="arithmatex">\[g(x, y) = x^2 + y^2.\]</div>
+<p><img alt="img" src="../sad0.png" /></p>
+<p>We seek the <strong>local extrema</strong> of <span class="arithmatex">\(f(x, y)\)</span> subject to the constraint <span class="arithmatex">\(g(x, y) = 1\)</span>, i.e. extrema of <span class="arithmatex">\(f\)</span> on the unit circle <span class="arithmatex">\(x^2 + y^2 = 1\)</span>.</p>
+<p><img alt="img" src="../sad1.png" />
+<img alt="img" src="../sad2.png" /></p>
+<p>Let's try to visualize the constrained maxima and the contours.</p>
+<p><img alt="img" src="../sad3.png" />
+<img alt="img" src="../sad4.png" />
+<img alt="img" src="../sad5.png" />
+<img alt="img" src="../sad6.png" /></p>
+<p>Below is a top-down we're more familiar with where we have the <span class="arithmatex">\(g(x, y) = 1\)</span> level set as well as the level sets of <span class="arithmatex">\(f(x, y)\)</span>.</p>
+<p><img alt="img" src="../sad7.png" /></p>
+<p>Let's isolate just the constrained maxima contour line with <span class="arithmatex">\(g(x, y) = 1\)</span>.</p>
+<p><img alt="img" src="../sad8.png" />
+<img alt="img" src="../sad9.png" /></p>
+<p>The tangent to <span class="arithmatex">\(g(x, y) = 1\)</span> and <span class="arithmatex">\(f(x, y)\)</span> are the same at the constrained maxima.</p>
+<p><img alt="img" src="../sad10.png" /></p>
+<p>In comparison, the tangents drawn to <span class="arithmatex">\(f(x, y)\)</span> at points that are <strong>not</strong> the constrained extrema, are not parallel to the tangents drawn to <span class="arithmatex">\(g(x, y) = 1\)</span>.</p>
+<p><img alt="img" src="../sad11.png" />
+<img alt="img" src="../sad12.png" /></p>
+<p>Following the principle from above, we look for points <span class="arithmatex">\((a, b)\)</span> on the unit circle at which <span class="arithmatex">\((\nabla f)(a, b)\)</span> is a scalar multiple of <span class="arithmatex">\((\nabla g)(a, b)\)</span>.</p>
+<p><img alt="img" src="../sad13.png" /></p>
+<div class="arithmatex">\[(\nabla f)(x, y) = \begin{pmatrix} y \\ x \end{pmatrix}, \qquad (\nabla g)(x, y) = \begin{pmatrix} 2x \\ 2y \end{pmatrix},\]</div>
+<p>so the condition <span class="arithmatex">\((\nabla f)(a, b) = \lambda \, (\nabla g)(a, b)\)</span> becomes the system</p>
+<div class="arithmatex">\[b = 2\lambda a, \qquad a = 2\lambda b, \qquad a^2 + b^2 = 1.\]</div>
+<p>Substituting the first into the second gives <span class="arithmatex">\(a = 2\lambda(2\lambda a) = 4\lambda^2 a\)</span>, i.e. <span class="arithmatex">\(a(1 - 4\lambda^2) = 0\)</span>. So either <span class="arithmatex">\(a = 0\)</span> (which forces <span class="arithmatex">\(b = 0\)</span> from <span class="arithmatex">\(b = 2\lambda a\)</span>, contradicting <span class="arithmatex">\(a^2 + b^2 = 1\)</span>) or</p>
+<div class="arithmatex">\[\lambda^2 = \tfrac{1}{4}, \qquad \lambda = \pm \tfrac{1}{2}.\]</div>
+<p><strong>Case <span class="arithmatex">\(\lambda = \tfrac{1}{2}\)</span>.</strong> Then <span class="arithmatex">\(b = a\)</span>, and <span class="arithmatex">\(a^2 + b^2 = 1\)</span> gives <span class="arithmatex">\(2a^2 = 1\)</span>, so <span class="arithmatex">\(a = b = \pm \tfrac{1}{\sqrt{2}}\)</span>. The candidate points are</p>
+<div class="arithmatex">\[P_{\pm} = \left( \pm \tfrac{1}{\sqrt{2}}, \, \pm \tfrac{1}{\sqrt{2}} \right), \qquad f(P_{\pm}) = ab + 1 = \tfrac{1}{2} + 1 = \tfrac{3}{2}.\]</div>
+<p><strong>Case <span class="arithmatex">\(\lambda = -\tfrac{1}{2}\)</span>.</strong> Then <span class="arithmatex">\(b = -a\)</span>, and <span class="arithmatex">\(2a^2 = 1\)</span> again, so</p>
+<div class="arithmatex">\[Q_{\pm} = \left( \pm \tfrac{1}{\sqrt{2}}, \, \mp \tfrac{1}{\sqrt{2}} \right), \qquad f(Q_{\pm}) = ab + 1 = -\tfrac{1}{2} + 1 = \tfrac{1}{2}.\]</div>
+<p>Since the unit circle is closed and bounded and <span class="arithmatex">\(f\)</span> is continuous, the constrained max and min are attained. Comparing values:</p>
+<ul>
+<li><strong>Constrained maxima</strong> at <span class="arithmatex">\(P_{\pm} = \left( \pm \tfrac{1}{\sqrt{2}}, \, \pm \tfrac{1}{\sqrt{2}} \right)\)</span> with <span class="arithmatex">\(f = \tfrac{3}{2}\)</span>.</li>
+</ul>
+<p><img alt="img" src="../sad14.png" />
+<img alt="img" src="../sad15.png" /></p>
+<ul>
+<li><strong>Constrained minima</strong> at <span class="arithmatex">\(Q_{\pm} = \left( \pm \tfrac{1}{\sqrt{2}}, \, \mp \tfrac{1}{\sqrt{2}} \right)\)</span> with <span class="arithmatex">\(f = \tfrac{1}{2}\)</span>.</li>
+</ul>
+<p><img alt="img" src="../sad16.png" />
+<img alt="img" src="../sad17.png" /></p>
+<p>Note that none of these are critical points of <span class="arithmatex">\(f\)</span> in the ambient <span class="arithmatex">\(\mathbb{R}^2\)</span> (the only critical point of <span class="arithmatex">\(f\)</span> is the saddle <span class="arithmatex">\((0, 0)\)</span>, which does not even lie on the constraint circle). The Lagrange condition picked out the right points anyway.</p>
+<p><strong>Drive home the point:</strong> Imagine trying to find the highest point on a mountain — described by the elevation <span class="arithmatex">\(f(x, y)\)</span> — while restricted to walking along a specific trail <span class="arithmatex">\(g(x, y) = c\)</span>. You are at the highest point on the trail exactly when the trail is <strong>perfectly tangent</strong> to the mountain's elevation contour lines at your location. If the trail were not tangent there, it would cut <strong>across</strong> a contour line, meaning a step in one direction along the trail would take you higher — so you could not have been at the highest point. The Lagrange condition <span class="arithmatex">\(\nabla f = \lambda\, \nabla g\)</span> is just the algebraic statement of this tangency.</p>
 
 
 
