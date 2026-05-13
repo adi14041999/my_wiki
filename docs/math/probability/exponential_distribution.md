@@ -58,7 +58,8 @@ The exponential distribution describes the **inter-arrival times** in a Poisson 
 
 - **Relationship**: If events occur at rate $\lambda$, then inter-arrival times follow $\text{Exp}(\lambda)$
 
-**Theorem**: In a Poisson process with rate $\lambda$, the inter-arrival times (time between consecutive events) are independent and identically distributed exponential random variables with parameter $\lambda$.
+!!! note "Theorem"
+    In a Poisson process with rate $\lambda$, the inter-arrival times (time between consecutive events) are independent and identically distributed exponential random variables with parameter $\lambda$.
 
 **Proof**: Let $T_1, T_2, T_3, \ldots$ be the inter-arrival times. We need to show that each $T_i \sim \text{Exp}(\lambda)$.
 

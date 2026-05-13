@@ -52,9 +52,10 @@ $$v \cdot (c_1w_1 + c_2w_2) = c_1(v \cdot w_1) + c_2(v \cdot w_2)$$
 
 As an application of the dot product rules, we can establish a version of the Pythagorean Theorem for $n$-vectors with any $n$ (not just $n = 2$) and we can show that the subtlety lurking in the definition of "angle" between $n$-vectors is really not a problem at all.
 
-**Theorem (Pythagoras).** If $n$-vectors v$_1$ and v$_2$ are nonzero and perpendicular (i.e., at an angle of $90°$) then
+!!! note "Theorem (Pythagoras)"
+    If $n$-vectors v$_1$ and v$_2$ are nonzero and perpendicular (i.e., at an angle of $90°$) then
 
-$$\|v_1 + v_2\|^2 = \|v_1\|^2 + \|v_2\|^2 $$
+    $$\|v_1 + v_2\|^2 = \|v_1\|^2 + \|v_2\|^2 $$
 
 **Proof.** Expand the left side as a dot product:
 
@@ -66,11 +67,12 @@ The motivation for our definitions of perpendicularity and more generally angle 
 
 Since we now have several good properties of dot products in hand, we can establish a fact that is needed to confirm that our definition of "angle" between nonzero $n$-vectors makes sense for any $n$:
 
-**Theorem (Cauchy–Schwarz Inequality).** For $n$-vectors v, w, we have
+!!! note "Theorem (Cauchy–Schwarz Inequality)"
+    For $n$-vectors v, w, we have
 
-$$-\|v\| \|w\| \leq v \cdot w \leq \|v\| \|w\|$$
+    $$-\|v\| \|w\| \leq v \cdot w \leq \|v\| \|w\|$$
 
-(or equivalently the absolute value $|v \cdot w|$ is at most $\|v\| \|w\|$). Moreover, one of the inequalities is an equality precisely when one of v or w is a scalar multiple of the other.
+    (or equivalently the absolute value $|v \cdot w|$ is at most $\|v\| \|w\|$). Moreover, one of the inequalities is an equality precisely when one of v or w is a scalar multiple of the other.
 
 **Proof.** If v = 0 or w = 0 then everything is clear (note that 0 is a scalar multiple of any $n$-vector: multiply it by the scalar 0), so now we assume v, w ≠ 0. The idea of the proof is to explore how the length of v + $x$w depends on $x$. This is most conveniently done by analyzing the squared-length, which is a dot product:
 

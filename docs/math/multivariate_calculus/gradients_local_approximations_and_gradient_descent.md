@@ -109,29 +109,27 @@ The exact value is $f(1.3, 0.9) = 4.48$.
 
 ## The gradient as normal to contours
 
-**Theorem:**
+!!! note "Theorem"
+    Let $f : \mathbb{R}^2 \to \mathbb{R}$ be a scalar-valued function, and suppose $(\nabla f)(a, b) \neq 0$.
 
-Let $f : \mathbb{R}^2 \to \mathbb{R}$ be a scalar-valued function, and suppose $(\nabla f)(a, b) \neq 0$.
+    **(i)** The gradient $(\nabla f)(a, b)$ is **perpendicular** to the level set of $f$ that goes through $(a, b)$ (equivalently: it is perpendicular to the **tangent line** to that level set at $(a, b)$). It points in the **direction of maximal increase** of $f(x, y)$ as $(x, y)$ moves away from $(a, b)$. The figure below illustrates this for $f(x, y) = xy - x$.
 
-**(i)** The gradient $(\nabla f)(a, b)$ is **perpendicular** to the level set of $f$ that goes through $(a, b)$ (equivalently: it is perpendicular to the **tangent line** to that level set at $(a, b)$). It points in the **direction of maximal increase** of $f(x, y)$ as $(x, y)$ moves away from $(a, b)$. The figure below illustrates this for $f(x, y) = xy - x$.
+    ![img](gradient_contour.png)
 
-![img](gradient_contour.png)
+    *A contour plot of $f(x, y) = xy - x$. The gradient $\nabla f$ is drawn at three points: $\mathbf{a} = (1, 3)$, $\mathbf{b} = (2, 2)$, $\mathbf{c} = (4, 3/2)$. Observe that $\nabla f$ is perpendicular to the level curve at each point.*
 
-*A contour plot of $f(x, y) = xy - x$. The gradient $\nabla f$ is drawn at three points: $\mathbf{a} = (1, 3)$, $\mathbf{b} = (2, 2)$, $\mathbf{c} = (4, 3/2)$. Observe that $\nabla f$ is perpendicular to the level curve at each point.*
+    **(ii)** The equation
 
-**(ii)** The equation
+    $$(\nabla f)(a, b) \cdot \begin{pmatrix} x - a \\ y - b \end{pmatrix} = 0$$
 
-$$(\nabla f)(a, b) \cdot \begin{pmatrix} x - a \\ y - b \end{pmatrix} = 0$$
+    in the $(x, y)$-plane is the line **tangent** to the level curve of $f$ through $(x, y) = (a, b)$. Equivalently, writing the dot product out,
 
-in the $(x, y)$-plane is the line **tangent** to the level curve of $f$ through $(x, y) = (a, b)$. Equivalently, writing the dot product out,
+    $$f_x(a, b)(x - a) + f_y(a, b)(y - b) = 0.$$
 
-$$f_x(a, b)(x - a) + f_y(a, b)(y - b) = 0.$$
+!!! note "Theorem"
+    For a scalar-valued function $f : \mathbb{R}^3 \to \mathbb{R}$ and a point $\mathbf{a} = (a_1, a_2, a_3)$ for which $(\nabla f)(\mathbf{a}) \neq 0$, the **gradient vector** $(\nabla f)(\mathbf{a})$ is perpendicular to the **plane tangent** to the level set of $f$ through $\mathbf{a}$. In particular, that tangent plane is given by
 
-**Theorem:**
-
-For a scalar-valued function $f : \mathbb{R}^3 \to \mathbb{R}$ and a point $\mathbf{a} = (a_1, a_2, a_3)$ for which $(\nabla f)(\mathbf{a}) \neq 0$, the **gradient vector** $(\nabla f)(\mathbf{a})$ is perpendicular to the **plane tangent** to the level set of $f$ through $\mathbf{a}$. In particular, that tangent plane is given by
-
-$$(\nabla f)(a_1, a_2, a_3) \cdot \begin{pmatrix} x - a_1 \\ y - a_2 \\ z - a_3 \end{pmatrix} = 0.$$
+    $$(\nabla f)(a_1, a_2, a_3) \cdot \begin{pmatrix} x - a_1 \\ y - a_2 \\ z - a_3 \end{pmatrix} = 0.$$
 
 The same picture carries over to functions $f : \mathbb{R}^n \to \mathbb{R}$ for $n > 3$, except that the tangent **plane** to a level set in $\mathbb{R}^3$ is replaced by the appropriate **tangent hyperplane** to a level set $\{f = c\}$ in $\mathbb{R}^n$.
 
@@ -213,15 +211,16 @@ If we move a small distance $|t|$ in the direction $\mathbf{v}$ for $t > 0$ and 
 
 We can solve this by geometry. The dot product $(\nabla f)(\mathbf{a}) \cdot \mathbf{v}$ equals $\lVert (\nabla f)(\mathbf{a}) \rVert \,\lVert \mathbf{v} \rVert \cos(\theta) = \lVert (\nabla f)(\mathbf{a}) \rVert \cos(\theta)$, where $\theta$ is the angle between $\mathbf{v}$ and $(\nabla f)(\mathbf{a})$. This is **largest** when $\cos(\theta) = 1$, i.e.\ $\theta = 0$. It is **most negative** when $\cos(\theta) = -1$, i.e.\ $\theta = \pi$ (a $180^\circ$ angle).
 
-**Theorem:** Let $f : \mathbb{R}^n \to \mathbb{R}$ be differentiable at $\mathbf{a} \in \mathbb{R}^n$, and suppose $(\nabla f)(\mathbf{a}) \neq \mathbf{0}$. Then the **direction of steepest increase** of $f$ at $\mathbf{a}$ is that of the gradient: the associated **unit vector**
+!!! note "Theorem"
+    Let $f : \mathbb{R}^n \to \mathbb{R}$ be differentiable at $\mathbf{a} \in \mathbb{R}^n$, and suppose $(\nabla f)(\mathbf{a}) \neq \mathbf{0}$. Then the **direction of steepest increase** of $f$ at $\mathbf{a}$ is that of the gradient: the associated **unit vector**
 
-$$\frac{(\nabla f)(\mathbf{a})}{\lVert (\nabla f)(\mathbf{a}) \rVert}$$
+    $$\frac{(\nabla f)(\mathbf{a})}{\lVert (\nabla f)(\mathbf{a}) \rVert}$$
 
-points in the direction in which $f$ increases most rapidly at $\mathbf{a}$. Likewise, the **opposite** unit vector
+    points in the direction in which $f$ increases most rapidly at $\mathbf{a}$. Likewise, the **opposite** unit vector
 
-$$-\,\frac{(\nabla f)(\mathbf{a})}{\lVert (\nabla f)(\mathbf{a}) \rVert}$$
+    $$-\,\frac{(\nabla f)(\mathbf{a})}{\lVert (\nabla f)(\mathbf{a}) \rVert}$$
 
-is the direction in which $f$ **decreases** most rapidly at $\mathbf{a}$.
+    is the direction in which $f$ **decreases** most rapidly at $\mathbf{a}$.
 
 **Example:** Many physical systems can be modeled using the gradient of a function. The idea is that an object experiences a **force** derived from a **potential energy** $V(x, y, z)$ by
 

@@ -234,9 +234,10 @@ We need to show that $0 \leq p_X(k) \leq 1$ for each $k$.
 
 One of the most important properties of the binomial distribution is the **addition property**, which states that the sum of two independent binomial random variables is also binomial under certain conditions.
 
-**Theorem**: If $X \sim \text{Binomial}(n_1, p)$ and $Y \sim \text{Binomial}(n_2, p)$ are **independent** random variables with the **same success probability** $p$, then:
+!!! note "Theorem"
+    If $X \sim \text{Binomial}(n_1, p)$ and $Y \sim \text{Binomial}(n_2, p)$ are **independent** random variables with the **same success probability** $p$, then:
 
-$$X + Y \sim \text{Binomial}(n_1 + n_2, p)$$
+    $$X + Y \sim \text{Binomial}(n_1 + n_2, p)$$
 
 This property makes intuitive sense:
 

@@ -255,11 +255,12 @@ Given a $\text{Uniform}(0, 1)$ random variable, we can construct a random variab
 
 We call this the **universality of the Uniform**, because it tells us the Uniform is a universal starting point for building random variables with other distributions.
 
-**Theorem (Universality of the Uniform)**. Let $F$ be a CDF which is a continuous function and strictly increasing on the support of the distribution. This ensures that the inverse function $F^{-1}$ exists, as a function from $(0, 1)$ to $\mathbb{R}$. We then have the following results:
+!!! note "Theorem (Universality of the Uniform)"
+    Let $F$ be a CDF which is a continuous function and strictly increasing on the support of the distribution. This ensures that the inverse function $F^{-1}$ exists, as a function from $(0, 1)$ to $\mathbb{R}$. We then have the following results:
 
-1. **Let $U \sim \text{Unif}(0, 1)$ and $X = F^{-1}(U)$. Then $X$ is a random variable with CDF $F$.**
+    1. **Let $U \sim \text{Unif}(0, 1)$ and $X = F^{-1}(U)$. Then $X$ is a random variable with CDF $F$.**
 
-2. **Let $X$ be a random variable with CDF $F$. Then $F(X) \sim \text{Unif}(0, 1)$.**
+    2. **Let $X$ be a random variable with CDF $F$. Then $F(X) \sim \text{Unif}(0, 1)$.**
 
 **Part 1** is the inverse CDF method we discussed earlier - it shows how to generate any distribution from uniform.
 

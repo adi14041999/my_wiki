@@ -251,8 +251,9 @@ This represents the average of the first $n$ observations. For example, if we ro
 
 The CLT states that for large $n$, the distribution of $\bar{X}_n$ after standardization approaches a standard normal distribution. By standardization, we mean that we subtract $\mu$ (the mean of any random variable $X_i$) and divide by $\sigma/\sqrt{n}$ (the standard deviation of the sample mean $\bar{X}_n$).
 
-**Theorem (Central Limit Theorem):** As $n \to \infty$,
+!!! note "Theorem (Central Limit Theorem)"
+    As $n \to \infty$,
 
-$$\sqrt{n} \cdot \frac{\bar{X}_n - \mu}{\sigma} \to N(0, 1) \text{ in distribution}$$
+    $$\sqrt{n} \cdot \frac{\bar{X}_n - \mu}{\sigma} \to N(0, 1) \text{ in distribution}$$
 
 This means that the standardized sample mean converges in distribution to a standard normal random variable as the sample size grows large.

@@ -143,11 +143,10 @@ $$\frac{\partial^2 f}{\partial x \, \partial y} = \frac{\partial}{\partial x}\le
 
 $$\frac{\partial^2 f}{\partial y^2} = \frac{\partial}{\partial y}\left(\frac{\partial f}{\partial y}\right) \quad \text{denotes the $y$-partial derivative of $f_y$}.$$
 
-### Theorem (Clairaut–Schwarz) 
+!!! note "Theorem (Clairaut–Schwarz)"
+    Consider a function $f(x_1, \ldots, x_n)$ that is continuous, and for $1 \leq i, j \leq n$ suppose that the partial derivatives $\frac{\partial f}{\partial x_i}$ and $\frac{\partial f}{\partial x_j}$ as well as the second partial derivatives $\frac{\partial^2 f}{\partial x_i \, \partial x_j}$ and $\frac{\partial^2 f}{\partial x_j \, \partial x_i}$ exist and are continuous. Then the order of applying $\frac{\partial}{\partial x_i}$ and $\frac{\partial}{\partial x_j}$ to $f$ does not matter:
 
-Consider a function $f(x_1, \ldots, x_n)$ that is continuous, and for $1 \leq i, j \leq n$ suppose that the partial derivatives $\frac{\partial f}{\partial x_i}$ and $\frac{\partial f}{\partial x_j}$ as well as the second partial derivatives $\frac{\partial^2 f}{\partial x_i \, \partial x_j}$ and $\frac{\partial^2 f}{\partial x_j \, \partial x_i}$ exist and are continuous. Then the order of applying $\frac{\partial}{\partial x_i}$ and $\frac{\partial}{\partial x_j}$ to $f$ does not matter:
-
-$$\frac{\partial^2 f}{\partial x_i \, \partial x_j} = \frac{\partial^2 f}{\partial x_j \, \partial x_i}.$$
+    $$\frac{\partial^2 f}{\partial x_i \, \partial x_j} = \frac{\partial^2 f}{\partial x_j \, \partial x_i}.$$
 
 Due to the equality, we often denote this second partial derivative by the notation $f_{x_i x_j}$ or $f_{x_j x_i}$.
 

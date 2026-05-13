@@ -62,11 +62,12 @@ $$c_i = \frac{\mathbf{v} \cdot \mathbf{v}_i}{\mathbf{v}_i \cdot \mathbf{v}_i}$$
 
 for each $i$. Substituting back into the right side of the equation for $\mathbf{v}$, we obtain the following result.
 
-**Theorem (Fourier formula).** For any orthogonal collection of nonzero vectors $\mathbf{v}_1, \ldots, \mathbf{v}_k$ in $\mathbb{R}^n$ and vector $\mathbf{v}$ in their span,
+!!! note "Theorem (Fourier formula)"
+    For any orthogonal collection of nonzero vectors $\mathbf{v}_1, \ldots, \mathbf{v}_k$ in $\mathbb{R}^n$ and vector $\mathbf{v}$ in their span,
 
-$$\mathbf{v} = \sum_{i=1}^k \frac{\mathbf{v} \cdot \mathbf{v}_i}{\mathbf{v}_i \cdot \mathbf{v}_i} \mathbf{v}_i.$$
+    $$\mathbf{v} = \sum_{i=1}^k \frac{\mathbf{v} \cdot \mathbf{v}_i}{\mathbf{v}_i \cdot \mathbf{v}_i} \mathbf{v}_i.$$
 
-In particular, if the $\mathbf{v}_i$'s are all unit vectors (so $\mathbf{v}_i \cdot \mathbf{v}_i = 1$ for all $i$) then $\mathbf{v} = \sum_{i=1}^k (\mathbf{v} \cdot \mathbf{v}_i)\mathbf{v}_i$.
+    In particular, if the $\mathbf{v}_i$'s are all unit vectors (so $\mathbf{v}_i \cdot \mathbf{v}_i = 1$ for all $i$) then $\mathbf{v} = \sum_{i=1}^k (\mathbf{v} \cdot \mathbf{v}_i)\mathbf{v}_i$.
 
 **Example:** For the orthonormal basis $\mathbf{e}_1, \mathbf{e}_2, \mathbf{e}_3, \mathbf{e}_4$ of $\mathbb{R}^4$ and any $\mathbf{v} = \begin{bmatrix} a_1 \\ a_2 \\ a_3 \\ a_4 \end{bmatrix} \in \mathbb{R}^4$, the coefficients $\mathbf{v} \cdot \mathbf{e}_i$ work out as follows:
 

@@ -52,9 +52,10 @@ We can reason the same way for local minima, and also for functions of more than
 
 Let $f \colon \mathbb{R}^n \to \mathbb{R}$ be a function.
 
-**Theorem:** Suppose that a point $\mathbf{a} \in \mathbb{R}^n$ is either a local maximum or a local minimum of $f$. Then all partial derivatives of $f$ vanish at $\mathbf{x} = \mathbf{a}$; i.e.,
+!!! note "Theorem"
+    Suppose that a point $\mathbf{a} \in \mathbb{R}^n$ is either a local maximum or a local minimum of $f$. Then all partial derivatives of $f$ vanish at $\mathbf{x} = \mathbf{a}$; i.e.,
 
-$$\frac{\partial f}{\partial x_i}(\mathbf{a}) = 0 \quad \text{for } 1 \leq i \leq n$$
+    $$\frac{\partial f}{\partial x_i}(\mathbf{a}) = 0 \quad \text{for } 1 \leq i \leq n$$
 
 If $\frac{\partial f}{\partial x_i}(\mathbf{a}) = 0$ for all $1 \leq i \leq n$, then we say $\mathbf{a}$ is a **critical point** for $f$. In particular, every local maximum and every local minimum of $f \colon \mathbb{R}^n \to \mathbb{R}$ is a critical point.
 
@@ -175,7 +176,8 @@ $$\{ (x, y, z) \in \mathbb{R}^3 : (x - 3)^2 + (y + 2)^2 + (z - 5)^2 = 9 \}$$
 
 are called the **boundary points** of $D$, and the other points of $D$ are called its **interior points**. Explicitly, the interior points are those $(x, y, z) \in \mathbb{R}^3$ whose distance to the center of the ball is strictly less than $3$: $(x - 3)^2 + (y + 2)^2 + (z - 5)^2 < 9$.
 
-**Theorem:** Let $f \colon \mathbb{R}^n \to \mathbb{R}$ be a function and $D$ a region inside $\mathbb{R}^n$. Suppose that $f \colon D \to \mathbb{R}$ (i.e. $f$ restricted to $D$) has a local extremum at a point $\mathbf{a} \in D$— that is, $f(\mathbf{x}) \geq f(\mathbf{a})$ for all $\mathbf{x} \in D$ sufficiently close to $\mathbf{a}$ (local minimum), or $f(\mathbf{x}) \leq f(\mathbf{a})$ for all $\mathbf{x} \in D$ sufficiently close to $\mathbf{a}$ (local maximum). Then $\mathbf{a}$ must be a **critical point** of $f$ when $\mathbf{a}$ is in the **interior** of $D$. In particular, any local extremum of $f \colon D \to \mathbb{R}$ either is a critical point in the interior of $D$ or is a boundary point of $D$.
+!!! note "Theorem"
+    Let $f \colon \mathbb{R}^n \to \mathbb{R}$ be a function and $D$ a region inside $\mathbb{R}^n$. Suppose that $f \colon D \to \mathbb{R}$ (i.e. $f$ restricted to $D$) has a local extremum at a point $\mathbf{a} \in D$— that is, $f(\mathbf{x}) \geq f(\mathbf{a})$ for all $\mathbf{x} \in D$ sufficiently close to $\mathbf{a}$ (local minimum), or $f(\mathbf{x}) \leq f(\mathbf{a})$ for all $\mathbf{x} \in D$ sufficiently close to $\mathbf{a}$ (local maximum). Then $\mathbf{a}$ must be a **critical point** of $f$ when $\mathbf{a}$ is in the **interior** of $D$. In particular, any local extremum of $f \colon D \to \mathbb{R}$ either is a critical point in the interior of $D$ or is a boundary point of $D$.
 
 This is a "constrained" sense of optimization— a constrained local maximum or minimum (the constraint being that we only consider points in $D$). Strictly speaking, in the theorem above we need to assume that $f$ is "differentiable" in an appropriate $n$-variable sense (so that the conclusion about critical points in the interior is valid).
 

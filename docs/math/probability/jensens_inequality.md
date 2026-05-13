@@ -56,17 +56,18 @@ For twice-differentiable functions, we have a convenient test:
 
 - $f(x) = e^x$: $f''(x) = e^x > 0$ → convex
 
-## Theorem (Jensen's Inequality) 
+## Jensen's Inequality
 
-Let $X$ be a random variable and let $\phi$ be a convex function. Then:
+!!! note "Theorem (Jensen's Inequality)"
+    Let $X$ be a random variable and let $\phi$ be a convex function. Then:
 
-$$\phi(E[X]) \leq E[\phi(X)]$$
+    $$\phi(E[X]) \leq E[\phi(X)]$$
 
-If $\phi$ is strictly convex, then equality holds if and only if $X$ is constant (i.e., $X = E[X]$ with probability 1).
+    If $\phi$ is strictly convex, then equality holds if and only if $X$ is constant (i.e., $X = E[X]$ with probability 1).
 
-**For concave functions**: If $\phi$ is concave, then the inequality is reversed:
+    **For concave functions**: If $\phi$ is concave, then the inequality is reversed:
 
-$$\phi(E[X]) \geq E[\phi(X)]$$
+    $$\phi(E[X]) \geq E[\phi(X)]$$
 
 Jensen's inequality captures a fundamental geometric insight: **the function of the average is less than or equal to the average of the function** (for convex functions).
 
