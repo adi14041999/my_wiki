@@ -3596,6 +3596,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#why-does-the-method-of-lagrange-multipliers-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why does the method of Lagrange multipliers work?
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4287,6 +4298,10 @@
 <p>so there is <strong>no</strong> scalar <span class="arithmatex">\(\lambda\)</span> making <span class="arithmatex">\((\nabla f)(0, 0) = \lambda \, (\nabla g)(0, 0)\)</span>.</p>
 <p>This illustrates that the first case really <strong>can</strong> occur at a solution to a constrained optimization problem (such as a point at maximal distance): in the Lagrange multiplier theorem, the solution might be completely missed by the multiplier condition “<span class="arithmatex">\(\nabla f = \lambda \, \nabla g\)</span>” and only captured by the other possibility <span class="arithmatex">\((\nabla g) = \mathbf{0}\)</span> in the Theorem. Hence, the first option in the Theorem really must <strong>never</strong> be disregarded; it could be the only part of the method that actually finds the solution!</p>
 </div>
+<p>The multiplier <span class="arithmatex">\(\lambda\)</span> often has an <strong>interpretation</strong> in specific applications. In an economics application it can mean <strong>marginal cost</strong>; in a chemistry problem with <strong>three</strong> constraints and hence three multipliers, two of the multipliers might encode <strong>temperature</strong> and <strong>pressure</strong> (depending on how the model is set up).</p>
+<p>When seeking local extrema for <span class="arithmatex">\(f : \mathbb{R}^n \to \mathbb{R}\)</span>, we have introduced the concept of a <strong>critical point</strong>. We will later talk about a multivariable <strong>second derivative test</strong> that gives a way to check whether a critical point is a local maximum or a local minimum. Since the Lagrange multiplier equation is the substitute for the notion of critical point in the context of constrained optimization, it is natural to wonder whether there is a version of the multivariable second derivative test that can be used to check whether a solution to the Lagrange multiplier equation is a local maximum or a local minimum on the constraint region. There is indeed such a result.</p>
+<h2 id="why-does-the-method-of-lagrange-multipliers-work">Why does the method of Lagrange multipliers work?</h2>
+<p>To explain the key idea behind the Theorem, we first note that if <span class="arithmatex">\((\nabla g)(\mathbf{a}) = \mathbf{0}\)</span> then there is nothing to do. Hence, we may and do now focus on the case <span class="arithmatex">\((\nabla g)(\mathbf{a}) \ne \mathbf{0}\)</span>. We also focus on the case of local maxima; the case of local minima goes the same way (or apply the case of local maxima to <span class="arithmatex">\(-f\)</span> in place of <span class="arithmatex">\(f\)</span>).</p>
 
 
 

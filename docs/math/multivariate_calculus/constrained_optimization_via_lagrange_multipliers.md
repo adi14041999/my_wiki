@@ -305,3 +305,11 @@ The figure above shows what the constraint curve $g = 0$ looks like, and this ma
     so there is **no** scalar $\lambda$ making $(\nabla f)(0, 0) = \lambda \, (\nabla g)(0, 0)$.
 
     This illustrates that the first case really **can** occur at a solution to a constrained optimization problem (such as a point at maximal distance): in the Lagrange multiplier theorem, the solution might be completely missed by the multiplier condition “$\nabla f = \lambda \, \nabla g$” and only captured by the other possibility $(\nabla g) = \mathbf{0}$ in the Theorem. Hence, the first option in the Theorem really must **never** be disregarded; it could be the only part of the method that actually finds the solution!
+
+The multiplier $\lambda$ often has an **interpretation** in specific applications. In an economics application it can mean **marginal cost**; in a chemistry problem with **three** constraints and hence three multipliers, two of the multipliers might encode **temperature** and **pressure** (depending on how the model is set up).
+
+When seeking local extrema for $f : \mathbb{R}^n \to \mathbb{R}$, we have introduced the concept of a **critical point**. We will later talk about a multivariable **second derivative test** that gives a way to check whether a critical point is a local maximum or a local minimum. Since the Lagrange multiplier equation is the substitute for the notion of critical point in the context of constrained optimization, it is natural to wonder whether there is a version of the multivariable second derivative test that can be used to check whether a solution to the Lagrange multiplier equation is a local maximum or a local minimum on the constraint region. There is indeed such a result.
+
+## Why does the method of Lagrange multipliers work?
+
+To explain the key idea behind the Theorem, we first note that if $(\nabla g)(\mathbf{a}) = \mathbf{0}$ then there is nothing to do. Hence, we may and do now focus on the case $(\nabla g)(\mathbf{a}) \ne \mathbf{0}$. We also focus on the case of local maxima; the case of local minima goes the same way (or apply the case of local maxima to $-f$ in place of $f$).
