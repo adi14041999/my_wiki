@@ -4186,7 +4186,7 @@
 <img alt="img" src="../sad9.png" /></p>
 <p>The tangent to <span class="arithmatex">\(g(x, y) = 1\)</span> and <span class="arithmatex">\(f(x, y)\)</span> are the same at the constrained maxima.</p>
 <p><img alt="img" src="../sad10.png" /></p>
-<p>In comparison, the tangents drawn to <span class="arithmatex">\(f(x, y)\)</span> at points that are <strong>not</strong> the constrained extrema, are not parallel to the tangents drawn to <span class="arithmatex">\(g(x, y) = 1\)</span>.</p>
+<p>In comparison, the tangents drawn to <span class="arithmatex">\(f(x, y)\)</span> at points that are <strong>not</strong> the constrained extrema, are not coinciding to the tangents drawn to <span class="arithmatex">\(g(x, y) = 1\)</span>.</p>
 <p><img alt="img" src="../sad11.png" />
 <img alt="img" src="../sad12.png" /></p>
 <p>Following the principle from above, we look for points <span class="arithmatex">\((a, b)\)</span> on the unit circle at which <span class="arithmatex">\((\nabla f)(a, b)\)</span> is a scalar multiple of <span class="arithmatex">\((\nabla g)(a, b)\)</span>.</p>
@@ -4227,6 +4227,66 @@
 </div>
 <p>To summarize: any solution to an optimization problem must satisfy an <strong>auxiliary equation</strong> — vanishing of the gradient in the <strong>unconstrained</strong> case, or one of the options in the theorem above in the <strong>constrained</strong> setting. Solving this equation gives a list of <strong>candidate</strong> points for solutions of the original optimization problem. We then compare the values of <span class="arithmatex">\(f\)</span> at those candidates to see which are largest and smallest, much as we do with the first-derivative test in single-variable calculus.</p>
 <p><strong>Remark:</strong> As with the first-derivative test, the theorem identifies <strong>candidates</strong> for constrained local extrema. It can happen that there are <strong>no</strong> constrained global extrema.</p>
+<p><strong>Example:</strong> Find the point(s) on the curve</p>
+<div class="arithmatex">\[\{(x, y) \in \mathbb{R}^2 : 8y^2 - 4x^3 + x^4 = 0\}\]</div>
+<p>closest to <span class="arithmatex">\(P = (3, 0)\)</span>, and compute that minimal distance.</p>
+<p>The quantity to minimize is the distance from <span class="arithmatex">\((x, y)\)</span> to <span class="arithmatex">\(P\)</span>:</p>
+<div class="arithmatex">\[\sqrt{(x - 3)^2 + y^2}.\]</div>
+<p>It is the same as minimizing the quantity <strong>inside</strong> the square root, so we focus on minimizing</p>
+<div class="arithmatex">\[f(x, y) = (x - 3)^2 + y^2\]</div>
+<p>subject to the constraint <span class="arithmatex">\(g(x, y) = 0\)</span>, where</p>
+<div class="arithmatex">\[g(x, y) = 8y^2 - 4x^3 + x^4.\]</div>
+<p>By the Lagrange multiplier method, any point <span class="arithmatex">\((x, y)\)</span> at which <span class="arithmatex">\(f\)</span> attains a local extremum on <span class="arithmatex">\(g = 0\)</span> (either a local maximum or a local minimum — though we are seeking the <strong>global</strong> minimum) either makes <span class="arithmatex">\(\nabla g\)</span> vanish or makes <span class="arithmatex">\(\nabla f\)</span> a scalar multiple of <span class="arithmatex">\(\nabla g\)</span>.</p>
+<p>Let's first figure out where (if anywhere) <span class="arithmatex">\(\nabla g\)</span> vanishes on the constraint curve <span class="arithmatex">\(g = 0\)</span>, so such <strong>bad</strong> points (corresponding to the first option in the Theorem) can be treated separately. We calculate</p>
+<div class="arithmatex">\[(\nabla g)(x, y) = \begin{pmatrix} -12x^2 + 4x^3 \\ 16y \end{pmatrix}.\]</div>
+<p>For this to equal <span class="arithmatex">\(\mathbf{0}\)</span> we need <span class="arithmatex">\(-12x^2 + 4x^3 = 0\)</span> and <span class="arithmatex">\(16y = 0\)</span>, so <span class="arithmatex">\(y = 0\)</span> and</p>
+<div class="arithmatex">\[0 = -12x^2 + 4x^3 = 4x^2(-3 + x).\]</div>
+<p>This happens at the points <span class="arithmatex">\((0, 0)\)</span> and <span class="arithmatex">\((3, 0) = P\)</span>. But <span class="arithmatex">\(P\)</span> is <strong>not</strong> on the constraint curve <span class="arithmatex">\(g = 0\)</span>:</p>
+<div class="arithmatex">\[g(P) = g(3, 0) = -4 \cdot 27 + 81 = -108 + 81 = -27 \ne 0,\]</div>
+<p>so in this case really only <span class="arithmatex">\((0, 0)\)</span> occurs (and <span class="arithmatex">\(g(0, 0) = 0\)</span>).</p>
+<p>At any other point on the constraint curve we must be in the second option of the Theorem:</p>
+<div class="arithmatex">\[(\nabla f)(x, y) = \lambda \, (\nabla g)(x, y)\]</div>
+<p>for some unknown scalar <span class="arithmatex">\(\lambda\)</span>. We have computed <span class="arithmatex">\((\nabla g)(x, y)\)</span> above, and</p>
+<div class="arithmatex">\[(\nabla f)(x, y) = \begin{pmatrix} 2(x - 3) \\ 2y \end{pmatrix},\]</div>
+<p>so the Lagrange multiplier condition becomes</p>
+<div class="arithmatex">\[\begin{pmatrix} 2(x - 3) \\ 2y \end{pmatrix} = \lambda \begin{pmatrix} -12x^2 + 4x^3 \\ 16y \end{pmatrix} = \lambda \begin{pmatrix} 4x^2(-3 + x) \\ 16y \end{pmatrix}.\]</div>
+<p>Equating corresponding vector entries and remembering the constraint equation, we want to find solutions to the combined system</p>
+<div class="arithmatex">\[
+\begin{aligned}
+2x - 6 &amp;= \lambda \cdot 4x^2(-3 + x), \\
+2y &amp;= \lambda \cdot 16y, \\
+8y^2 - 4x^3 + x^4 &amp;= 0.
+\end{aligned}
+\]</div>
+<p>At this point we carry out a very useful general technique: use each of the conditions <strong>other than</strong> the constraint equation to obtain different expressions for <span class="arithmatex">\(\lambda\)</span>, which we then equate to get new conditions on the variables <strong>without</strong> involving <span class="arithmatex">\(\lambda\)</span>. An extremely important point that one must always keep in mind to be systematic about this step is that one must always be careful about <strong>division by zero</strong> (i.e. avoid it!). To be more specific, the first and second equations in our combined system give expressions</p>
+<div class="arithmatex">\[
+\frac{2x - 6}{4x^2(x - 3)} = \lambda = \frac{2y}{16y} = \frac{1}{8}
+\]</div>
+<p>assuming the denominators <span class="arithmatex">\(4x^2(x - 3)\)</span> and <span class="arithmatex">\(16y\)</span> are both nonzero. The left side is <span class="arithmatex">\(1/(2x^2)\)</span> upon cancelling <span class="arithmatex">\(x - 3\)</span>, provided that <span class="arithmatex">\(x \ne 3\)</span>, as is necessary for the original fraction to make sense.</p>
+<p>It is always good to first determine when one of those denominators vanishes. In some such cases there might not be a <span class="arithmatex">\(\lambda\)</span> satisfying all conditions, but don't worry about it. We handle that now:</p>
+<p><strong>Case 1.</strong> The equation <span class="arithmatex">\(4x^2(x - 3) = 0\)</span> holds when <span class="arithmatex">\(x = 0\)</span> or <span class="arithmatex">\(x = 3\)</span>. If <span class="arithmatex">\(x = 3\)</span>, the first equation becomes <span class="arithmatex">\(2x - 6 = 0\)</span>, which is consistent. The constraint <span class="arithmatex">\(g(x, y) = 0\)</span> becomes <span class="arithmatex">\(g(3, y) = 0\)</span>, which says <span class="arithmatex">\(8y^2 - 27 = 0\)</span>. Hence we obtain the problematic points <span class="arithmatex">\((3, \pm \sqrt{27/8})\)</span>.</p>
+<p>If instead <span class="arithmatex">\(x = 0\)</span>, the first equation reads <span class="arithmatex">\(2x - 6 = -6 = \lambda \cdot 4x^2(x - 3) = \lambda \cdot 0\)</span>, which is impossible for any finite <span class="arithmatex">\(\lambda\)</span>. So no new Lagrange candidates arise from the <span class="arithmatex">\(x = 0\)</span> branch of <span class="arithmatex">\(4x^2(x - 3) = 0\)</span>. The point <span class="arithmatex">\((0, 0)\)</span> on <span class="arithmatex">\(g = 0\)</span> already appeared where <span class="arithmatex">\((\nabla g)(0, 0) = \mathbf{0}\)</span>, not from forcing the first equation in this way.</p>
+<p><strong>Case 2.</strong> The case <span class="arithmatex">\(16y = 0\)</span>, or equivalently <span class="arithmatex">\(y = 0\)</span>, makes the second equation tell us nothing, but the constraint <span class="arithmatex">\(g(x, y) = 0\)</span> says <span class="arithmatex">\(g(x, 0) = 0\)</span>, or in other words <span class="arithmatex">\(-4x^3 + x^4 = 0\)</span>. Since <span class="arithmatex">\(-4x^3 + x^4 = x^3(x - 4)\)</span>, this makes <span class="arithmatex">\(x = 0\)</span> or <span class="arithmatex">\(x = 4\)</span>, yielding <span class="arithmatex">\((0, 0)\)</span> and <span class="arithmatex">\((4, 0)\)</span>.</p>
+<p>To summarize, so far we have obtained the points <span class="arithmatex">\((0, 0)\)</span>, <span class="arithmatex">\((4, 0)\)</span>, and <span class="arithmatex">\((3, \pm \sqrt{27/8})\)</span> that merit separate treatment, and otherwise we have the two expressions <span class="arithmatex">\(1/(2x^2)\)</span> and <span class="arithmatex">\(1/8\)</span> for <span class="arithmatex">\(\lambda\)</span> (assuming the non-vanishing of the denominators). Equating these two fractional expressions for <span class="arithmatex">\(\lambda\)</span> gives</p>
+<div class="arithmatex">\[\frac{1}{2x^2} = \frac{1}{8},\]</div>
+<p>which is to say <span class="arithmatex">\(x^2 = 4\)</span>, i.e. <span class="arithmatex">\(x = \pm 2\)</span>. The constraint curve <span class="arithmatex">\(g(x, y) = 0\)</span> says <span class="arithmatex">\(g(2, y) = 0\)</span> when <span class="arithmatex">\(x = 2\)</span> and <span class="arithmatex">\(g(-2, y) = 0\)</span> when <span class="arithmatex">\(x = -2\)</span>. Since</p>
+<div class="arithmatex">\[g(2, y) = 8y^2 - 4(2)^3 + 2^4 = 8y^2 - 16\]</div>
+<p>and</p>
+<div class="arithmatex">\[g(-2, y) = 8y^2 - 4(-2)^3 + (-2)^4 = 8y^2 + 48,\]</div>
+<p>the latter never vanishes (so the case <span class="arithmatex">\(x = -2\)</span> does not occur!) and the former vanishes when <span class="arithmatex">\(y^2 = 2\)</span>, which is to say <span class="arithmatex">\(y = \pm \sqrt{2}\)</span>. Hence, we obtain the additional candidate points <span class="arithmatex">\((2, \pm \sqrt{2})\)</span> for local extrema of <span class="arithmatex">\(f\)</span> on the constraint curve.</p>
+<p>Putting it all together, we have six points to examine: <span class="arithmatex">\((2, \pm \sqrt{2})\)</span>, <span class="arithmatex">\((3, \pm \sqrt{27/8})\)</span>, <span class="arithmatex">\((0, 0)\)</span>, <span class="arithmatex">\((4, 0)\)</span>. Evaluating <span class="arithmatex">\(f\)</span> at these points, we get</p>
+<div class="arithmatex">\[f(2, \pm \sqrt{2}) = (2 - 3)^2 + (\pm \sqrt{2})^2 = 1 + 2 = 3,\]</div>
+<div class="arithmatex">\[f(3, \pm \sqrt{27/8}) = 0^2 + \left(\pm \sqrt{27/8}\right)^2 = \frac{27}{8}, \qquad f(0, 0) = 9, \qquad f(4, 0) = 1.\]</div>
+<p>The smallest of these values is <span class="arithmatex">\(1\)</span>, attained at <span class="arithmatex">\((4, 0)\)</span>, and the largest is <span class="arithmatex">\(9\)</span>, attained at <span class="arithmatex">\((0, 0)\)</span>. So the closest point to <span class="arithmatex">\(P = (3, 0)\)</span> on the constraint curve <span class="arithmatex">\(g = 0\)</span> is <span class="arithmatex">\((4, 0)\)</span> with distance <span class="arithmatex">\(\sqrt{1} = 1\)</span>, and the farthest point to <span class="arithmatex">\(P\)</span> on the constraint curve is <span class="arithmatex">\((0, 0)\)</span> with distance <span class="arithmatex">\(\sqrt{9} = 3\)</span>.</p>
+<p><img alt="img" src="../pinch.png" /></p>
+<p>The figure above shows what the constraint curve <span class="arithmatex">\(g = 0\)</span> looks like, and this makes rather visible that <span class="arithmatex">\((4, 0)\)</span> is the point on this curve nearest to <span class="arithmatex">\((3, 0)\)</span>, and that <span class="arithmatex">\((0, 0)\)</span> is the point on this curve farthest from <span class="arithmatex">\((3, 0)\)</span> (the pinching of the curve <span class="arithmatex">\(g = 0\)</span> at <span class="arithmatex">\((0, 0)\)</span> is related to the fact that <span class="arithmatex">\(\nabla g\)</span> vanishes there).</p>
+<div class="admonition warning">
+<p class="admonition-title">Remark</p>
+<p>In the preceding example, although we were seeking point(s) on a curve <span class="arithmatex">\(g(x, y) = 0\)</span> closest to a given point <span class="arithmatex">\(P\)</span> not on the curve, the method also yielded a unique point on the curve at the <strong>largest</strong> distance from <span class="arithmatex">\(P\)</span>. The notable feature is that this point at maximal distance was the point <span class="arithmatex">\((0, 0)\)</span>, which emerged in our analysis in the situation <span class="arithmatex">\((\nabla g)(0, 0) = \mathbf{0}\)</span>, and at this point <span class="arithmatex">\((\nabla f)(0, 0)\)</span> is equal to</p>
+<div class="arithmatex">\[\begin{pmatrix} -6 \\ 0 \end{pmatrix} \ne \mathbf{0},\]</div>
+<p>so there is <strong>no</strong> scalar <span class="arithmatex">\(\lambda\)</span> making <span class="arithmatex">\((\nabla f)(0, 0) = \lambda \, (\nabla g)(0, 0)\)</span>.</p>
+<p>This illustrates that the first case really <strong>can</strong> occur at a solution to a constrained optimization problem (such as a point at maximal distance): in the Lagrange multiplier theorem, the solution might be completely missed by the multiplier condition “<span class="arithmatex">\(\nabla f = \lambda \, \nabla g\)</span>” and only captured by the other possibility <span class="arithmatex">\((\nabla g) = \mathbf{0}\)</span> in the Theorem. Hence, the first option in the Theorem really must <strong>never</strong> be disregarded; it could be the only part of the method that actually finds the solution!</p>
+</div>
 
 
 

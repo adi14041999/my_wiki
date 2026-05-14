@@ -138,7 +138,7 @@ The tangent to $g(x, y) = 1$ and $f(x, y)$ are the same at the constrained maxim
 
 ![img](sad10.png)
 
-In comparison, the tangents drawn to $f(x, y)$ at points that are **not** the constrained extrema, are not parallel to the tangents drawn to $g(x, y) = 1$.
+In comparison, the tangents drawn to $f(x, y)$ at points that are **not** the constrained extrema, are not coinciding to the tangents drawn to $g(x, y) = 1$.
 
 ![img](sad11.png)
 ![img](sad12.png)
@@ -198,3 +198,110 @@ Note that none of these are critical points of $f$ in the ambient $\mathbb{R}^2$
 To summarize: any solution to an optimization problem must satisfy an **auxiliary equation** — vanishing of the gradient in the **unconstrained** case, or one of the options in the theorem above in the **constrained** setting. Solving this equation gives a list of **candidate** points for solutions of the original optimization problem. We then compare the values of $f$ at those candidates to see which are largest and smallest, much as we do with the first-derivative test in single-variable calculus.
 
 **Remark:** As with the first-derivative test, the theorem identifies **candidates** for constrained local extrema. It can happen that there are **no** constrained global extrema.
+
+**Example:** Find the point(s) on the curve
+
+$$\{(x, y) \in \mathbb{R}^2 : 8y^2 - 4x^3 + x^4 = 0\}$$
+
+closest to $P = (3, 0)$, and compute that minimal distance.
+
+The quantity to minimize is the distance from $(x, y)$ to $P$:
+
+$$\sqrt{(x - 3)^2 + y^2}.$$
+
+It is the same as minimizing the quantity **inside** the square root, so we focus on minimizing
+
+$$f(x, y) = (x - 3)^2 + y^2$$
+
+subject to the constraint $g(x, y) = 0$, where
+
+$$g(x, y) = 8y^2 - 4x^3 + x^4.$$
+
+By the Lagrange multiplier method, any point $(x, y)$ at which $f$ attains a local extremum on $g = 0$ (either a local maximum or a local minimum — though we are seeking the **global** minimum) either makes $\nabla g$ vanish or makes $\nabla f$ a scalar multiple of $\nabla g$.
+
+Let's first figure out where (if anywhere) $\nabla g$ vanishes on the constraint curve $g = 0$, so such **bad** points (corresponding to the first option in the Theorem) can be treated separately. We calculate
+
+$$(\nabla g)(x, y) = \begin{pmatrix} -12x^2 + 4x^3 \\ 16y \end{pmatrix}.$$
+
+For this to equal $\mathbf{0}$ we need $-12x^2 + 4x^3 = 0$ and $16y = 0$, so $y = 0$ and
+
+$$0 = -12x^2 + 4x^3 = 4x^2(-3 + x).$$
+
+This happens at the points $(0, 0)$ and $(3, 0) = P$. But $P$ is **not** on the constraint curve $g = 0$:
+
+$$g(P) = g(3, 0) = -4 \cdot 27 + 81 = -108 + 81 = -27 \ne 0,$$
+
+so in this case really only $(0, 0)$ occurs (and $g(0, 0) = 0$).
+
+At any other point on the constraint curve we must be in the second option of the Theorem:
+
+$$(\nabla f)(x, y) = \lambda \, (\nabla g)(x, y)$$
+
+for some unknown scalar $\lambda$. We have computed $(\nabla g)(x, y)$ above, and
+
+$$(\nabla f)(x, y) = \begin{pmatrix} 2(x - 3) \\ 2y \end{pmatrix},$$
+
+so the Lagrange multiplier condition becomes
+
+$$\begin{pmatrix} 2(x - 3) \\ 2y \end{pmatrix} = \lambda \begin{pmatrix} -12x^2 + 4x^3 \\ 16y \end{pmatrix} = \lambda \begin{pmatrix} 4x^2(-3 + x) \\ 16y \end{pmatrix}.$$
+
+Equating corresponding vector entries and remembering the constraint equation, we want to find solutions to the combined system
+
+$$
+\begin{aligned}
+2x - 6 &= \lambda \cdot 4x^2(-3 + x), \\
+2y &= \lambda \cdot 16y, \\
+8y^2 - 4x^3 + x^4 &= 0.
+\end{aligned}
+$$
+
+At this point we carry out a very useful general technique: use each of the conditions **other than** the constraint equation to obtain different expressions for $\lambda$, which we then equate to get new conditions on the variables **without** involving $\lambda$. An extremely important point that one must always keep in mind to be systematic about this step is that one must always be careful about **division by zero** (i.e. avoid it!). To be more specific, the first and second equations in our combined system give expressions
+
+$$
+\frac{2x - 6}{4x^2(x - 3)} = \lambda = \frac{2y}{16y} = \frac{1}{8}
+$$
+
+assuming the denominators $4x^2(x - 3)$ and $16y$ are both nonzero. The left side is $1/(2x^2)$ upon cancelling $x - 3$, provided that $x \ne 3$, as is necessary for the original fraction to make sense.
+
+It is always good to first determine when one of those denominators vanishes. In some such cases there might not be a $\lambda$ satisfying all conditions, but don't worry about it. We handle that now:
+
+**Case 1.** The equation $4x^2(x - 3) = 0$ holds when $x = 0$ or $x = 3$. If $x = 3$, the first equation becomes $2x - 6 = 0$, which is consistent. The constraint $g(x, y) = 0$ becomes $g(3, y) = 0$, which says $8y^2 - 27 = 0$. Hence we obtain the problematic points $(3, \pm \sqrt{27/8})$.
+
+If instead $x = 0$, the first equation reads $2x - 6 = -6 = \lambda \cdot 4x^2(x - 3) = \lambda \cdot 0$, which is impossible for any finite $\lambda$. So no new Lagrange candidates arise from the $x = 0$ branch of $4x^2(x - 3) = 0$. The point $(0, 0)$ on $g = 0$ already appeared where $(\nabla g)(0, 0) = \mathbf{0}$, not from forcing the first equation in this way.
+
+**Case 2.** The case $16y = 0$, or equivalently $y = 0$, makes the second equation tell us nothing, but the constraint $g(x, y) = 0$ says $g(x, 0) = 0$, or in other words $-4x^3 + x^4 = 0$. Since $-4x^3 + x^4 = x^3(x - 4)$, this makes $x = 0$ or $x = 4$, yielding $(0, 0)$ and $(4, 0)$.
+
+To summarize, so far we have obtained the points $(0, 0)$, $(4, 0)$, and $(3, \pm \sqrt{27/8})$ that merit separate treatment, and otherwise we have the two expressions $1/(2x^2)$ and $1/8$ for $\lambda$ (assuming the non-vanishing of the denominators). Equating these two fractional expressions for $\lambda$ gives
+
+$$\frac{1}{2x^2} = \frac{1}{8},$$
+
+which is to say $x^2 = 4$, i.e. $x = \pm 2$. The constraint curve $g(x, y) = 0$ says $g(2, y) = 0$ when $x = 2$ and $g(-2, y) = 0$ when $x = -2$. Since
+
+$$g(2, y) = 8y^2 - 4(2)^3 + 2^4 = 8y^2 - 16$$
+
+and
+
+$$g(-2, y) = 8y^2 - 4(-2)^3 + (-2)^4 = 8y^2 + 48,$$
+
+the latter never vanishes (so the case $x = -2$ does not occur!) and the former vanishes when $y^2 = 2$, which is to say $y = \pm \sqrt{2}$. Hence, we obtain the additional candidate points $(2, \pm \sqrt{2})$ for local extrema of $f$ on the constraint curve.
+
+Putting it all together, we have six points to examine: $(2, \pm \sqrt{2})$, $(3, \pm \sqrt{27/8})$, $(0, 0)$, $(4, 0)$. Evaluating $f$ at these points, we get
+
+$$f(2, \pm \sqrt{2}) = (2 - 3)^2 + (\pm \sqrt{2})^2 = 1 + 2 = 3,$$
+
+$$f(3, \pm \sqrt{27/8}) = 0^2 + \left(\pm \sqrt{27/8}\right)^2 = \frac{27}{8}, \qquad f(0, 0) = 9, \qquad f(4, 0) = 1.$$
+
+The smallest of these values is $1$, attained at $(4, 0)$, and the largest is $9$, attained at $(0, 0)$. So the closest point to $P = (3, 0)$ on the constraint curve $g = 0$ is $(4, 0)$ with distance $\sqrt{1} = 1$, and the farthest point to $P$ on the constraint curve is $(0, 0)$ with distance $\sqrt{9} = 3$.
+
+![img](pinch.png)
+
+The figure above shows what the constraint curve $g = 0$ looks like, and this makes rather visible that $(4, 0)$ is the point on this curve nearest to $(3, 0)$, and that $(0, 0)$ is the point on this curve farthest from $(3, 0)$ (the pinching of the curve $g = 0$ at $(0, 0)$ is related to the fact that $\nabla g$ vanishes there).
+
+!!! warning "Remark"
+    In the preceding example, although we were seeking point(s) on a curve $g(x, y) = 0$ closest to a given point $P$ not on the curve, the method also yielded a unique point on the curve at the **largest** distance from $P$. The notable feature is that this point at maximal distance was the point $(0, 0)$, which emerged in our analysis in the situation $(\nabla g)(0, 0) = \mathbf{0}$, and at this point $(\nabla f)(0, 0)$ is equal to
+
+    $$\begin{pmatrix} -6 \\ 0 \end{pmatrix} \ne \mathbf{0},$$
+
+    so there is **no** scalar $\lambda$ making $(\nabla f)(0, 0) = \lambda \, (\nabla g)(0, 0)$.
+
+    This illustrates that the first case really **can** occur at a solution to a constrained optimization problem (such as a point at maximal distance): in the Lagrange multiplier theorem, the solution might be completely missed by the multiplier condition “$\nabla f = \lambda \, \nabla g$” and only captured by the other possibility $(\nabla g) = \mathbf{0}$ in the Theorem. Hence, the first option in the Theorem really must **never** be disregarded; it could be the only part of the method that actually finds the solution!
