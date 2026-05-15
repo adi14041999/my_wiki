@@ -313,3 +313,41 @@ When seeking local extrema for $f : \mathbb{R}^n \to \mathbb{R}$, we have introd
 ## Why does the method of Lagrange multipliers work?
 
 To explain the key idea behind the Theorem, we first note that if $(\nabla g)(\mathbf{a}) = \mathbf{0}$ then there is nothing to do. Hence, we may and do now focus on the case $(\nabla g)(\mathbf{a}) \ne \mathbf{0}$. We also focus on the case of local maxima; the case of local minima goes the same way (or apply the case of local maxima to $-f$ in place of $f$).
+
+To convey the main idea with a minimum of fuss, we shall consider the special case $n = 2$: functions $f$ and $g$ on $\mathbb{R}^2$, so we may visualize the level set $g(\mathbf{x}) = c$ near $\mathbf{a}$ as a curve in $\mathbb{R}^2$. The reasoning for functions on $\mathbb{R}^n$ goes similarly when $n > 2$, but the geometry then becomes a bit more involved, since the level set $g(\mathbf{x}) = c$ in $\mathbb{R}^n$ near $\mathbf{a}$ is not a curve but rather an $(n - 1)$-dimensional **hypersurface**; e.g. for $n = 3$ it is a surface in $\mathbb{R}^3$.
+
+By assumption, the point $\mathbf{a}$ on the level set $g(\mathbf{x}) = c$ is one at which $f$ attains a **local maximum**. For instance, if we think of $f(\mathbf{x})$ as the temperature at the point $\mathbf{x}$, then $\mathbf{a}$ is a point on the curve $g(\mathbf{x}) = c$ where the temperature is at least as hot as at all nearby points on the curve.
+
+Imagine an insect crawling along the curve $g(\mathbf{x}) = c$ with **nonzero** velocity, and suppose that at time $t = 0$ it is at the point $\mathbf{a}$. If we let
+
+$$\mathbf{p}(t) = \begin{pmatrix} x(t) \\ y(t) \end{pmatrix} \in \mathbb{R}^2$$
+
+be the position of the insect at time $t$, then $\mathbf{p}(0) = \mathbf{a}$. Now $f(\mathbf{p}(t))$ is the temperature of the insect's location at time $t$, so at time $0$ the insect is at a point at least as hot as all nearby points (because that is when it is at $\mathbf{a}$). Since the function $f(\mathbf{p}(t))$ therefore has a local maximum at $t = 0$, by single-variable calculus we know that
+
+$$\left.\frac{d}{dt}\, f(\mathbf{p}(t))\right|_{t = 0} = 0.$$
+
+The composite $f(\mathbf{p}(t))$ is a composition of functions $\mathbf{p} : \mathbb{R} \to \mathbb{R}^2$ and $f : \mathbb{R}^2 \to \mathbb{R}$, where the intermediate step lies in $\mathbb{R}^2$ rather than $\mathbb{R}$, so it does not fit the usual scalar-composition paradigm: the inner function $\mathbf{p}$ is **vector-valued**, not scalar-valued. This is a new situation that we have never encountered before!
+
+In the special case of composing functions $\mathbf{p} : \mathbb{R} \to \mathbb{R}^n$ and $f : \mathbb{R}^n \to \mathbb{R}$, this yields a formula for the calculus derivative in terms of a **dot product** of the **gradient** of $f$ against the **velocity** of $\mathbf{p}$ (we'll see the concepts and derivations of these later):
+
+$$\frac{d}{dt}\, f(\mathbf{p}(t)) = (\nabla f)(\mathbf{p}(t)) \cdot \mathbf{p}'(t),$$
+
+where $\mathbf{p}'(t)$ denotes the velocity
+
+$$\mathbf{p}'(t) = \begin{pmatrix} x'(t) \\ y'(t) \end{pmatrix}$$
+
+of the insect at time $t$ (in the plane, $n = 2$; the same pattern holds in $\mathbb{R}^n$ with $n$ components). Setting $t = 0$ in the chain-rule identity gives the reformulation
+
+$$(\nabla f)(\mathbf{a}) \cdot \mathbf{p}'(0) = 0.$$
+
+The nonzero velocity $\mathbf{p}'(0)$ at time $t = 0$ is **tangent** to the level curve $g(\mathbf{x}) = c$ at $\mathbf{p}(0) = \mathbf{a}$, since the insect is crawling along this level curve (and the velocity of a moving particle or insect is always tangent to the path of motion).
+
+Consequently, the equation $(\nabla f)(\mathbf{a}) \cdot \mathbf{p}'(0) = 0$ means that $(\nabla f)(\mathbf{a})$ is **perpendicular** to the tangent line to the curve $g(\mathbf{x}) = c$ at the point $\mathbf{a}$.
+
+The gradient vector $(\nabla g)(\mathbf{a})$ is also **normal** (perpendicular) to the level curve $g(\mathbf{x}) = c$ at $\mathbf{a}$. In the plane, the tangent line to that curve at $\mathbf{a}$ is one-dimensional, so the vectors in $\mathbb{R}^2$ perpendicular to the tangent line form a **one-dimensional** subspace: the **normal directions** at $\mathbf{a}$. Both $(\nabla f)(\mathbf{a})$ and $(\nabla g)(\mathbf{a})$ lie in that subspace. Since $(\nabla g)(\mathbf{a}) \ne \mathbf{0}$, it **spans** that entire subspace. Hence $(\nabla f)(\mathbf{a})$ must be a scalar multiple of $(\nabla g)(\mathbf{a})$:
+
+$$(\nabla f)(\mathbf{a}) = \lambda \, (\nabla g)(\mathbf{a})$$
+
+for some scalar $\lambda$.
+
+**Intuition (in one breath):** At a constrained local maximum of $f$ on $g(\mathbf{x}) = c$, you cannot improve $f$ by **sliding** along the constraint (any small admissible motion is tangent to the constraint), so the **directional derivative** of $f$ the tangent direction must be **zero** at the maximum. If it were positive (or negative) in some feasible direction, a tiny move along the constraint would **increase** (or decrease) $f$. So $\nabla f$ has **no component along the tangent**; it points purely **normal** to the constraint. But $\nabla g$ already points normal to the level set $g = c$ (it is the direction of steepest change in $g$, perpendicular to the level set $c$). In the plane there is only **one** normal direction, so $\nabla f$ and $\nabla g$ must line up: $\nabla f = \lambda\, \nabla g$. The proof above makes this precise by following an insect along the curve and applying single-variable calculus plus the chain rule.
