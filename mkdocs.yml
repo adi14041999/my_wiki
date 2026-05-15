@@ -77,6 +77,7 @@ nav:
       - Probability and Counting: math/probability/probability_and_counting.md
       - Story Proofs and Axioms of Probability: math/probability/story_proofs_and_axioms_of_probability.md
       - Conditional Probability: math/probability/conditional_probability.md
+      - Bayes' Rule: math/probability/bayes_rule.md
       - Some famous problems: math/probability/some_famous_problems.md
       - Random Variables: math/probability/random_variables.md
       - Expectation: math/probability/expectation.md
