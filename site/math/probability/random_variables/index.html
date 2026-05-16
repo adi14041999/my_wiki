@@ -16,7 +16,7 @@
         <link rel="prev" href="../some_famous_problems/">
       
       
-        <link rel="next" href="../expectation/">
+        <link rel="next" href="../probabilities_of_probabilities/">
       
       
         
@@ -2943,6 +2943,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../probabilities_of_probabilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probabilities of Probabilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../expectation/" class="md-nav__link">
         
   
@@ -4265,6 +4293,31 @@
 <p><strong>Limits</strong>: <span class="arithmatex">\(\lim_{x \to -\infty} F_X(x) = 0\)</span> and <span class="arithmatex">\(\lim_{x \to \infty} F_X(x) = 1\)</span></p>
 </li>
 </ol>
+<p><strong>Example (fair die):</strong> Let <span class="arithmatex">\(X\)</span> be the face value on one roll of a fair die. Each outcome <span class="arithmatex">\(k \in \{1, 2, \ldots, 6\}\)</span> has probability <span class="arithmatex">\(P(X = k) = \frac{1}{6}\)</span> (about <span class="arithmatex">\(0.167\)</span>). This CDF <span class="arithmatex">\(F_X(x) = P(X \leq x)\)</span> accumulates probability in <strong>flat steps</strong>:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(F_X(0) = P(X \leq 0) = 0\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(F_X(1) = P(X \leq 1) = \frac{1}{6}\)</span> (approx. <span class="arithmatex">\(0.17\)</span>)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(F_X(2) = P(X \leq 1) + P(X = 2) = \frac{1}{6} + \frac{1}{6} = \frac{2}{6}\)</span> (approx. <span class="arithmatex">\(0.33\)</span>)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(F_X(3) = P(X \leq 2) + P(X = 3) = \frac{2}{6} + \frac{1}{6} = \frac{3}{6}\)</span> (<span class="arithmatex">\(0.50\)</span>)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(F_X(4) = P(X \leq 3) + P(X = 4) = \frac{3}{6} + \frac{1}{6} = \frac{4}{6}\)</span> (approx. <span class="arithmatex">\(0.67\)</span>)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(F_X(5) = P(X \leq 4) + P(X = 5) = \frac{4}{6} + \frac{1}{6} = \frac{5}{6}\)</span> (approx. <span class="arithmatex">\(0.83\)</span>)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(F_X(6) = P(X \leq 5) + P(X = 6) = \frac{5}{6} + \frac{1}{6} = 1\)</span></p>
+</li>
+</ul>
+<p>Between jumps the CDF is constant on intervals where no mass sits; at each possible value of <span class="arithmatex">\(X\)</span> it steps upward. The graph never decreases, which matches <strong>non-decreasing</strong> (monotonic) behavior.</p>
 <h2 id="distribution-of-a-random-variable">Distribution of a Random Variable</h2>
 <p>The <strong>distribution</strong> of a random variable <span class="arithmatex">\(X\)</span> describes how the probability mass (or density) is distributed across all possible values that <span class="arithmatex">\(X\)</span> can take. <strong>It tells us the complete probabilistic behavior of <span class="arithmatex">\(X\)</span>.</strong> It can be represented in various ways, including a PMF, a cumulative distribution function (CDF), or other methods.</p>
 <p>The distribution answers the question: "What is the probability that <span class="arithmatex">\(X\)</span> takes on a particular value or falls within a particular range?"</p>
@@ -4318,7 +4371,7 @@
 <p><span class="arithmatex">\(P(X = 0) = p^0(1-p)^1 = 1-p\)</span></p>
 </li>
 </ul>
-<p><strong>Example: coin toss</strong></p>
+<p><strong>Example (fair coin toss):</strong></p>
 <ul>
 <li>
 <p><strong>Success</strong>: Heads (with probability <span class="arithmatex">\(p = \frac{1}{2}\)</span>)</p>
@@ -4330,6 +4383,19 @@
 <p><strong>Random variable</strong>: <span class="arithmatex">\(X(\text{Heads}) = 1\)</span>, <span class="arithmatex">\(X(\text{Tails}) = 0\)</span></p>
 </li>
 </ul>
+<p><strong>Example (quality inspection):</strong></p>
+<ul>
+<li>
+<p><strong>Success</strong>: the item passes inspection (with probability <span class="arithmatex">\(p = 0.97\)</span>)</p>
+</li>
+<li>
+<p><strong>Failure</strong>: the item fails inspection (with probability <span class="arithmatex">\(1 - p = 0.03\)</span>)</p>
+</li>
+<li>
+<p><strong>Random variable</strong>: <span class="arithmatex">\(X = 1\)</span> if pass, <span class="arithmatex">\(X = 0\)</span> if fail</p>
+</li>
+</ul>
+<p>Then <span class="arithmatex">\(X \sim \text{Bernoulli}(0.97)\)</span>. The experiment is still a single trial with two outcomes.</p>
 <h2 id="binomial-distribution">Binomial Distribution</h2>
 <p>The <strong>binomial distribution</strong> models the number of successes in a fixed number of independent Bernoulli trials, each with the same probability of success.</p>
 <p>A random variable <span class="arithmatex">\(X\)</span> follows a <strong>binomial distribution</strong> with parameters <span class="arithmatex">\(n\)</span> and <span class="arithmatex">\(p\)</span> (denoted <span class="arithmatex">\(X \sim \text{Binomial}(n, p)\)</span>) if:</p>
@@ -4354,7 +4420,7 @@
 <p>The PMF formula <span class="arithmatex">\(P(X = k) = \binom{n}{k} p^k(1-p)^{n-k}\)</span> has three components:</p>
 <ol>
 <li>
-<p><strong><span class="arithmatex">\(\binom{n}{k}\)</span></strong>: Number of ways to choose <span class="arithmatex">\(k\)</span> successes from <span class="arithmatex">\(n\)</span> trials</p>
+<p><strong><span class="arithmatex">\(\binom{n}{k}\)</span></strong>: is the binomial coefficient, which counts the number of ways to arrange the <span class="arithmatex">\(k\)</span> successes and <span class="arithmatex">\({n-k}\)</span> failures.</p>
 </li>
 <li>
 <p><strong><span class="arithmatex">\(p^k\)</span></strong>: Probability of <span class="arithmatex">\(k\)</span> successes</p>
@@ -4381,7 +4447,7 @@
 <p>Let's derive the binomial PMF formula <span class="arithmatex">\(P(X = k) = \binom{n}{k} p^k(1-p)^{n-k}\)</span> using combinatorial reasoning.</p>
 <p>We want to find the probability of getting exactly <span class="arithmatex">\(k\)</span> successes in <span class="arithmatex">\(n\)</span> independent Bernoulli trials, where each trial has success probability <span class="arithmatex">\(p\)</span>.</p>
 <p>Since the trials are <strong>independent</strong>, the probability of any specific sequence of outcomes is the product of individual probabilities.</p>
-<p><strong>Example</strong>: For <span class="arithmatex">\(n = 3\)</span> trials with <span class="arithmatex">\(k = 2\)</span> successes, one possible sequence is:</p>
+<p>For <span class="arithmatex">\(n = 3\)</span> trials with <span class="arithmatex">\(k = 2\)</span> successes, one possible sequence is:</p>
 <ul>
 <li>
 <p>Trial 1: Success (probability <span class="arithmatex">\(p\)</span>)</p>

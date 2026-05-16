@@ -62,6 +62,24 @@ Key Properties of CDF:
 
 3. **Limits**: $\lim_{x \to -\infty} F_X(x) = 0$ and $\lim_{x \to \infty} F_X(x) = 1$
 
+**Example (fair die):** Let $X$ be the face value on one roll of a fair die. Each outcome $k \in \{1, 2, \ldots, 6\}$ has probability $P(X = k) = \frac{1}{6}$ (about $0.167$). This CDF $F_X(x) = P(X \leq x)$ accumulates probability in **flat steps**:
+
+- $F_X(0) = P(X \leq 0) = 0$
+
+- $F_X(1) = P(X \leq 1) = \frac{1}{6}$ (approx. $0.17$)
+
+- $F_X(2) = P(X \leq 1) + P(X = 2) = \frac{1}{6} + \frac{1}{6} = \frac{2}{6}$ (approx. $0.33$)
+
+- $F_X(3) = P(X \leq 2) + P(X = 3) = \frac{2}{6} + \frac{1}{6} = \frac{3}{6}$ ($0.50$)
+
+- $F_X(4) = P(X \leq 3) + P(X = 4) = \frac{3}{6} + \frac{1}{6} = \frac{4}{6}$ (approx. $0.67$)
+
+- $F_X(5) = P(X \leq 4) + P(X = 5) = \frac{4}{6} + \frac{1}{6} = \frac{5}{6}$ (approx. $0.83$)
+
+- $F_X(6) = P(X \leq 5) + P(X = 6) = \frac{5}{6} + \frac{1}{6} = 1$
+
+Between jumps the CDF is constant on intervals where no mass sits; at each possible value of $X$ it steps upward. The graph never decreases, which matches **non-decreasing** (monotonic) behavior.
+
 ## Distribution of a Random Variable
 
 The **distribution** of a random variable $X$ describes how the probability mass (or density) is distributed across all possible values that $X$ can take. **It tells us the complete probabilistic behavior of $X$.** It can be represented in various ways, including a PMF, a cumulative distribution function (CDF), or other methods.
@@ -108,13 +126,23 @@ This compact formula gives:
 
 - $P(X = 0) = p^0(1-p)^1 = 1-p$
 
-**Example: coin toss**
+**Example (fair coin toss):**
 
 - **Success**: Heads (with probability $p = \frac{1}{2}$)
 
 - **Failure**: Tails (with probability $1-p = \frac{1}{2}$)
 
 - **Random variable**: $X(\text{Heads}) = 1$, $X(\text{Tails}) = 0$
+
+**Example (quality inspection):**
+
+- **Success**: the item passes inspection (with probability $p = 0.97$)
+
+- **Failure**: the item fails inspection (with probability $1 - p = 0.03$)
+
+- **Random variable**: $X = 1$ if pass, $X = 0$ if fail
+
+Then $X \sim \text{Bernoulli}(0.97)$. The experiment is still a single trial with two outcomes.
 
 ## Binomial Distribution
 
@@ -136,7 +164,7 @@ $$P(X = k) = \binom{n}{k} p^k(1-p)^{n-k} \quad \text{for } k = 0, 1, 2, \ldots, 
 
 The PMF formula $P(X = k) = \binom{n}{k} p^k(1-p)^{n-k}$ has three components:
 
-1. **$\binom{n}{k}$**: Number of ways to choose $k$ successes from $n$ trials
+1. **$\binom{n}{k}$**: is the binomial coefficient, which counts the number of ways to arrange the $k$ successes and ${n-k}$ failures.
 
 2. **$p^k$**: Probability of $k$ successes
 
@@ -158,7 +186,7 @@ We want to find the probability of getting exactly $k$ successes in $n$ independ
 
 Since the trials are **independent**, the probability of any specific sequence of outcomes is the product of individual probabilities.
 
-**Example**: For $n = 3$ trials with $k = 2$ successes, one possible sequence is:
+For $n = 3$ trials with $k = 2$ successes, one possible sequence is:
 
 - Trial 1: Success (probability $p$)
 

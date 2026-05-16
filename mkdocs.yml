@@ -80,6 +80,7 @@ nav:
       - Bayes' Rule: math/probability/bayes_rule.md
       - Some famous problems: math/probability/some_famous_problems.md
       - Random Variables: math/probability/random_variables.md
+      - Probabilities of Probabilities: math/probability/probabilities_of_probabilities.md
       - Expectation: math/probability/expectation.md
       - Indicator Random Variables: math/probability/indicator_random_variables.md
       - Poisson Distribution: math/probability/poisson_distribution.md
