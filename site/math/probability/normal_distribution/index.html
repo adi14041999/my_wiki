@@ -3029,6 +3029,78 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#herschel-maxwell-derivation-of-the-normal-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Herschel-Maxwell derivation of the normal distribution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Herschel-Maxwell derivation of the normal distribution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#herschels-experiment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Herschel's experiment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-postulates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two postulates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reducing-to-one-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reducing to one function
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-h-must-be-a-gaussian-shaped-exponential" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why \(h\) must be a Gaussian-shaped exponential
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#normalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Normalization
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4156,7 +4228,7 @@
 
 
 <h1 id="normal-distribution">Normal Distribution</h1>
-<p>The <strong>Normal distribution</strong> (also called the <strong>Gaussian distribution</strong>) is one of the most important continuous distributions in probability and statistics. It appears naturally in many contexts due to the Central Limit Theorem and provides a foundation for many statistical methods.</p>
+<p>The <strong>Normal distribution</strong> (also called the <strong>Gaussian distribution</strong>) is one of the most important continuous distributions in probability and statistics. It appears naturally in many contexts due to the <a href="../central_limit_theorem/">Central Limit Theorem</a> and provides a foundation for many statistical methods.</p>
 <h2 id="standard-normal-distribution">Standard Normal Distribution</h2>
 <p>A continuous random variable <span class="arithmatex">\(Z\)</span> is said to have the <strong>standard Normal distribution</strong> if its PDF <span class="arithmatex">\(f_Z\)</span> is given by:</p>
 <div class="arithmatex">\[f_Z(z) = \frac{1}{\sqrt{2\pi}} e^{-z^2/2}, \quad -\infty &lt; z &lt; \infty\]</div>
@@ -4254,6 +4326,97 @@
 <p><strong>Standardization</strong>: Any normal random variable <span class="arithmatex">\(X \sim N(\mu, \sigma^2)\)</span> can be standardized to a standard normal by:</p>
 <div class="arithmatex">\[Z = \frac{X - \mu}{\sigma} \sim N(0, 1)\]</div>
 <p>This is the inverse of the transformation <span class="arithmatex">\(X = \mu + \sigma Z\)</span>.</p>
+<h2 id="herschel-maxwell-derivation-of-the-normal-distribution">Herschel-Maxwell derivation of the normal distribution</h2>
+<p>The <a href="../central_limit_theorem/">Central Limit Theorem</a> explains why <strong>sums</strong> of many small independent effects tend toward normality.
+The <strong>Herschel–Maxwell derivation</strong> is a different classical route: it <strong>characterizes</strong> the bell curve from <strong>independence</strong> and <strong>rotational symmetry</strong> alone.</p>
+<h3 id="herschels-experiment">Herschel's experiment</h3>
+<p>Herschel imagined a ball dropped many times toward a fixed mark in the plane.
+Each landing point has coordinates <span class="arithmatex">\((X, Y)\)</span> measuring the error in the horizontal and vertical directions relative to the mark (origin).</p>
+<p><img alt="img" src="../ball_xy.png" /></p>
+<p>After many trials, we model <span class="arithmatex">\((X, Y)\)</span> by a <strong>joint PDF</strong> <span class="arithmatex">\(p(x, y)\)</span>.</p>
+<h3 id="two-postulates">Two postulates</h3>
+<ol>
+<li><strong>Independence</strong> of the coordinate errors:</li>
+</ol>
+<div class="arithmatex">\[p(x, y) = f(x)\, f(y).\]</div>
+<ol>
+<li><strong>Isotropy</strong> (rotational symmetry): the joint density depends only on the distance from the origin, not on the angle. With <span class="arithmatex">\(r = \sqrt{x^2 + y^2}\)</span>,</li>
+</ol>
+<div class="arithmatex">\[p(x, y) = g(r) = g\!\left(\sqrt{x^2 + y^2}\right).\]</div>
+<p>Combining the postulates,</p>
+<div class="arithmatex">\[f(x)\, f(y) = g\!\left(\sqrt{x^2 + y^2}\right).\]</div>
+<h3 id="reducing-to-one-function">Reducing to one function</h3>
+<p>Set <span class="arithmatex">\(y = 0\)</span>. Then <span class="arithmatex">\(g(x) = f(x)\, f(0)\)</span>, so <span class="arithmatex">\(g\)</span> can be expressed using <span class="arithmatex">\(f\)</span> alone.
+Substitute <span class="arithmatex">\(g\!\left(\sqrt{x^2 + y^2}\right) = f\!\left(\sqrt{x^2 + y^2}\right)\, f(0)\)</span> into the combined equation and divide by <span class="arithmatex">\(f(0)^2\)</span>:</p>
+<div class="arithmatex">\[\frac{f(x)}{f(0)} \cdot \frac{f(y)}{f(0)} = \frac{f\!\left(\sqrt{x^2 + y^2}\right)}{f(0)}.\]</div>
+<p>Define <span class="arithmatex">\(h(x) = f(x)/f(0)\)</span>. Then</p>
+<div class="arithmatex">\[h(x)\, h(y) = h\!\left(\sqrt{x^2 + y^2}\right). \tag{*}\]</div>
+<h3 id="why-h-must-be-a-gaussian-shaped-exponential">Why <span class="arithmatex">\(h\)</span> must be a Gaussian-shaped exponential</h3>
+<p>Clearly <span class="arithmatex">\(h(x)\)</span> is a composition of the square and an exponential function.
+The base of the exponential does not matter; the important point is the relationship</p>
+<div class="arithmatex">\[b^x \cdot b^y = b^{x+y}.\]</div>
+<p>Since <span class="arithmatex">\(b^x = (c^{\log_c b})^x = c^{(\log_c b)\, x}\)</span>, we can pick a base and introduce a constant <span class="arithmatex">\(a\)</span> that allows us to switch to any base:</p>
+<div class="arithmatex">\[h(x) = e^{a x^2}.\]</div>
+<p>After expanding <span class="arithmatex">\(h(x)\)</span> again, we solve for <span class="arithmatex">\(f(x)\)</span>:</p>
+<div class="arithmatex">\[f(x) = f(0)\, e^{a x^2}.\]</div>
+<p>We know that <span class="arithmatex">\(x^2\)</span> is always non-negative and that the exponential function grows indefinitely for positive values when the exponent is positive.</p>
+<p>However, we want to derive a probability distribution, so <span class="arithmatex">\(a\)</span> must be less than zero.
+Write <span class="arithmatex">\(a = -b^2\)</span> and let <span class="arithmatex">\(c = f(0)\)</span>:</p>
+<div class="arithmatex">\[f(x) = c\, e^{-b^2 x^2}.\]</div>
+<p>Now the maximum of each <span class="arithmatex">\(f(x)\)</span> is at <span class="arithmatex">\(x = 0\)</span>, and the functions are symmetric around their maximum.
+Our formula describes a family of bell-shaped functions.</p>
+<p><img alt="img" src="../function-plots.png" /></p>
+<h3 id="normalization">Normalization</h3>
+<p>For <span class="arithmatex">\(f\)</span> to be a PDF,</p>
+<div class="arithmatex">\[\int_{-\infty}^{\infty} f(x)\, dx = c \int_{-\infty}^{\infty} e^{-b^2 x^2}\, dx = 1.\]</div>
+<p>Substitute <span class="arithmatex">\(u = b x\)</span>, <span class="arithmatex">\(du = b\, dx\)</span>:</p>
+<div class="arithmatex">\[c \int_{-\infty}^{\infty} e^{-b^2 x^2}\, dx = \frac{c}{b} \int_{-\infty}^{\infty} e^{-u^2}\, du = \frac{c}{b}\,\sqrt{\pi} = 1.\]</div>
+<p>So <span class="arithmatex">\(c = b/\sqrt{\pi}\)</span>, and</p>
+<div class="arithmatex">\[f(x) = \frac{b}{\sqrt{\pi}}\, e^{-b^2 x^2}.\]</div>
+<p>One may instead eliminate <span class="arithmatex">\(b\)</span> in favor of <span class="arithmatex">\(c\)</span>; any equivalent parameterization leads to the same final normal family.</p>
+<p><img alt="img" src="../normalized-function.png" /></p>
+<div class="admonition note">
+<p class="admonition-title">Gaussian integral (used above, not derived here)</p>
+<p>The normalization step uses the standard Gaussian integral</p>
+<div class="arithmatex">\[\int_{-\infty}^{\infty} e^{-u^2}\, du = \sqrt{\pi}.\]</div>
+<p>We take this as a known fact; a full proof is omitted here.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">What the joint density <span class="arithmatex">\(p(x, y)\)</span> looks like</p>
+<p>The Herschel–Maxwell steps above derive the <strong>marginal</strong> (one-dimensional) density <span class="arithmatex">\(f\)</span> for a single coordinate error—horizontal <span class="arithmatex">\(x\)</span> or, by the same argument, vertical <span class="arithmatex">\(y\)</span>.
+We never wrote a separate 2D functional equation for <span class="arithmatex">\(p(x,y)\)</span> and solved it in one shot.</p>
+<p>After normalization, that marginal is a one-dimensional normal, e.g.</p>
+<div class="arithmatex">\[f(x) = \frac{1}{\sigma\sqrt{2\pi}}\, e^{-\frac{x^2}{2\sigma^2}}.\]</div>
+<p>The <strong>first postulate</strong> (independence) then assembles the <strong>joint</strong> PDF on the plane from these marginals:</p>
+<div class="arithmatex">\[p(x, y) = f(x)\, f(y)
+= \frac{1}{2\pi\sigma^2}\,
+\exp\!\left(-\frac{x^2 + y^2}{2\sigma^2}\right).\]</div>
+<p>So <span class="arithmatex">\(p(x, y)\)</span> is a <strong>bivariate normal</strong> with mean <span class="arithmatex">\((0, 0)\)</span>, variances <span class="arithmatex">\(\sigma^2\)</span> on both axes.</p>
+<p><strong>Geometry:</strong></p>
+<ul>
+<li><strong>Contour lines</strong> (level sets where <span class="arithmatex">\(p(x,y)\)</span> is constant) are <strong>circles</strong> centered at the origin, because <span class="arithmatex">\(x^2 + y^2\)</span> is constant on each circle.</li>
+<li>The plot over <span class="arithmatex">\((x,y)\)</span> is a <strong>round bell</strong> above the plane: highest at the mark <span class="arithmatex">\((0,0)\)</span>, falling off equally in all directions— matching rotational symmetry.</li>
+<li>Slicing at fixed <span class="arithmatex">\(y = y_0\)</span> gives the marginal shape in <span class="arithmatex">\(x\)</span>, namely <span class="arithmatex">\(f(x)\)</span> up to a constant factor; a slice at <span class="arithmatex">\(y = 0\)</span> is one cross-section of that 2D bell.</li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Why setting <span class="arithmatex">\(y = 0\)</span> does not restrict us to one line</p>
+<p>No, we are not restricting ourselves to just the line <span class="arithmatex">\(y = 0\)</span>.
+The solution we find using this trick applies to the entire 2D plane.</p>
+<p>In mathematics, this is a standard technique for solving <strong>functional equations</strong>.
+Because the rule</p>
+<div class="arithmatex">\[f(x)\, f(y) = g\!\left(\sqrt{x^2 + y^2}\right)\]</div>
+<p>is a universal law that must hold for <strong>every</strong> coordinate <span class="arithmatex">\((x, y)\)</span> on the plane, it must also hold for coordinates where <span class="arithmatex">\(y = 0\)</span>.</p>
+<p>By examining what happens along that single line, we uncover a structural link between the two unknown functions: along the <span class="arithmatex">\(x\)</span>-axis we learn</p>
+<div class="arithmatex">\[g\!\left(\sqrt{\text{something}}\right) = f(0)\, f\!\left(\sqrt{\text{something}}\right)\]</div>
+<p>in the radial form used above.
+Once we know that rule, we can apply it at any generic point <span class="arithmatex">\((x, y)\)</span> in the plane.</p>
+<p>The step <strong>“Why <span class="arithmatex">\(h\)</span> must be a Gaussian-shaped exponential”</strong> then solves the full two-variable identity <span class="arithmatex">\(h(x)\, h(y) = h(\sqrt{x^2 + y^2})\)</span> for <strong>all</strong> <span class="arithmatex">\(x, y\)</span>.</p>
+<p><strong>A simple analogy:</strong> Imagine finding a universal rule for sales tax from price and location, and the rule is consistent everywhere.
+To discover the basic formula, we temporarily look at the case “price = $1.00” only to simplify the arithmetic.
+Once that shortcut reveals the underlying tax rate, we do not discard it. We use that rate for $50, $100, or any other price.
+Setting <span class="arithmatex">\(y = 0\)</span> plays the same role: a convenient line in the plane that exposes the structure, not a permanent restriction to that line.</p>
+</div>
 
 
 

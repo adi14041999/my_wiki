@@ -1,6 +1,6 @@
 # Normal Distribution
 
-The **Normal distribution** (also called the **Gaussian distribution**) is one of the most important continuous distributions in probability and statistics. It appears naturally in many contexts due to the Central Limit Theorem and provides a foundation for many statistical methods.
+The **Normal distribution** (also called the **Gaussian distribution**) is one of the most important continuous distributions in probability and statistics. It appears naturally in many contexts due to the [Central Limit Theorem](central_limit_theorem.md) and provides a foundation for many statistical methods.
 
 ## Standard Normal Distribution
 
@@ -143,3 +143,142 @@ $$f_X(x) = \frac{1}{\sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}} \cdot \frac{1}
 $$Z = \frac{X - \mu}{\sigma} \sim N(0, 1)$$
 
 This is the inverse of the transformation $X = \mu + \sigma Z$.
+
+## Herschel-Maxwell derivation of the normal distribution
+
+The [Central Limit Theorem](central_limit_theorem.md) explains why **sums** of many small independent effects tend toward normality.
+The **Herschel–Maxwell derivation** is a different classical route: it **characterizes** the bell curve from **independence** and **rotational symmetry** alone.
+
+### Herschel's experiment
+
+Herschel imagined a ball dropped many times toward a fixed mark in the plane.
+Each landing point has coordinates $(X, Y)$ measuring the error in the horizontal and vertical directions relative to the mark (origin).
+
+![img](ball_xy.png)
+
+After many trials, we model $(X, Y)$ by a **joint PDF** $p(x, y)$.
+
+### Two postulates
+
+1. **Independence** of the coordinate errors:
+   
+$$p(x, y) = f(x)\, f(y).$$
+
+2. **Isotropy** (rotational symmetry): the joint density depends only on the distance from the origin, not on the angle. With $r = \sqrt{x^2 + y^2}$,
+
+$$p(x, y) = g(r) = g\!\left(\sqrt{x^2 + y^2}\right).$$
+
+Combining the postulates,
+
+$$f(x)\, f(y) = g\!\left(\sqrt{x^2 + y^2}\right).$$
+
+### Reducing to one function
+
+Set $y = 0$. Then $g(x) = f(x)\, f(0)$, so $g$ can be expressed using $f$ alone.
+Substitute $g\!\left(\sqrt{x^2 + y^2}\right) = f\!\left(\sqrt{x^2 + y^2}\right)\, f(0)$ into the combined equation and divide by $f(0)^2$:
+
+$$\frac{f(x)}{f(0)} \cdot \frac{f(y)}{f(0)} = \frac{f\!\left(\sqrt{x^2 + y^2}\right)}{f(0)}.$$
+
+Define $h(x) = f(x)/f(0)$. Then
+
+$$h(x)\, h(y) = h\!\left(\sqrt{x^2 + y^2}\right). \tag{*}$$
+
+### Why $h$ must be a Gaussian-shaped exponential
+
+Clearly $h(x)$ is a composition of the square and an exponential function.
+The base of the exponential does not matter; the important point is the relationship
+
+$$b^x \cdot b^y = b^{x+y}.$$
+
+Since $b^x = (c^{\log_c b})^x = c^{(\log_c b)\, x}$, we can pick a base and introduce a constant $a$ that allows us to switch to any base:
+
+$$h(x) = e^{a x^2}.$$
+
+After expanding $h(x)$ again, we solve for $f(x)$:
+
+$$f(x) = f(0)\, e^{a x^2}.$$
+
+We know that $x^2$ is always non-negative and that the exponential function grows indefinitely for positive values when the exponent is positive.
+
+However, we want to derive a probability distribution, so $a$ must be less than zero.
+Write $a = -b^2$ and let $c = f(0)$:
+
+$$f(x) = c\, e^{-b^2 x^2}.$$
+
+Now the maximum of each $f(x)$ is at $x = 0$, and the functions are symmetric around their maximum.
+Our formula describes a family of bell-shaped functions.
+
+![img](function-plots.png)
+
+### Normalization
+
+For $f$ to be a PDF,
+
+$$\int_{-\infty}^{\infty} f(x)\, dx = c \int_{-\infty}^{\infty} e^{-b^2 x^2}\, dx = 1.$$
+
+Substitute $u = b x$, $du = b\, dx$:
+
+$$c \int_{-\infty}^{\infty} e^{-b^2 x^2}\, dx = \frac{c}{b} \int_{-\infty}^{\infty} e^{-u^2}\, du = \frac{c}{b}\,\sqrt{\pi} = 1.$$
+
+So $c = b/\sqrt{\pi}$, and
+
+$$f(x) = \frac{b}{\sqrt{\pi}}\, e^{-b^2 x^2}.$$
+
+One may instead eliminate $b$ in favor of $c$; any equivalent parameterization leads to the same final normal family.
+
+![img](normalized-function.png)
+
+!!! note "Gaussian integral (used above, not derived here)"
+    The normalization step uses the standard Gaussian integral
+
+    $$\int_{-\infty}^{\infty} e^{-u^2}\, du = \sqrt{\pi}.$$
+
+    We take this as a known fact; a full proof is omitted here.
+
+!!! note "What the joint density $p(x, y)$ looks like"
+    The Herschel–Maxwell steps above derive the **marginal** (one-dimensional) density $f$ for a single coordinate error—horizontal $x$ or, by the same argument, vertical $y$.
+    We never wrote a separate 2D functional equation for $p(x,y)$ and solved it in one shot.
+
+    After normalization, that marginal is a one-dimensional normal, e.g.
+
+    $$f(x) = \frac{1}{\sigma\sqrt{2\pi}}\, e^{-\frac{x^2}{2\sigma^2}}.$$
+
+    The **first postulate** (independence) then assembles the **joint** PDF on the plane from these marginals:
+
+    $$p(x, y) = f(x)\, f(y)
+    = \frac{1}{2\pi\sigma^2}\,
+    \exp\!\left(-\frac{x^2 + y^2}{2\sigma^2}\right).$$
+
+    So $p(x, y)$ is a **bivariate normal** with mean $(0, 0)$, variances $\sigma^2$ on both axes.
+
+    **Geometry:**
+
+    - **Contour lines** (level sets where $p(x,y)$ is constant) are **circles** centered at the origin, because $x^2 + y^2$ is constant on each circle.
+    - The plot over $(x,y)$ is a **round bell** above the plane: highest at the mark $(0,0)$, falling off equally in all directions— matching rotational symmetry.
+    - Slicing at fixed $y = y_0$ gives the marginal shape in $x$, namely $f(x)$ up to a constant factor; a slice at $y = 0$ is one cross-section of that 2D bell.
+
+!!! note "Why setting $y = 0$ does not restrict us to one line"
+    No, we are not restricting ourselves to just the line $y = 0$.
+    The solution we find using this trick applies to the entire 2D plane.
+
+    In mathematics, this is a standard technique for solving **functional equations**.
+    Because the rule
+
+    $$f(x)\, f(y) = g\!\left(\sqrt{x^2 + y^2}\right)$$
+
+    is a universal law that must hold for **every** coordinate $(x, y)$ on the plane, it must also hold for coordinates where $y = 0$.
+
+    By examining what happens along that single line, we uncover a structural link between the two unknown functions: along the $x$-axis we learn
+
+    $$g\!\left(\sqrt{\text{something}}\right) = f(0)\, f\!\left(\sqrt{\text{something}}\right)$$
+
+    in the radial form used above.
+    Once we know that rule, we can apply it at any generic point $(x, y)$ in the plane.
+
+    The step **“Why $h$ must be a Gaussian-shaped exponential”** then solves the full two-variable identity $h(x)\, h(y) = h(\sqrt{x^2 + y^2})$ for **all** $x, y$.
+
+    **A simple analogy:** Imagine finding a universal rule for sales tax from price and location, and the rule is consistent everywhere.
+    To discover the basic formula, we temporarily look at the case “price = \$1.00” only to simplify the arithmetic.
+    Once that shortcut reveals the underlying tax rate, we do not discard it. We use that rate for \$50, \$100, or any other price.
+    Setting $y = 0$ plays the same role: a convenient line in the plane that exposes the structure, not a permanent restriction to that line.
+
