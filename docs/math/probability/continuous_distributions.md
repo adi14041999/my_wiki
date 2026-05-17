@@ -4,6 +4,8 @@
 
 Suppose we have a biased coin and denote the unknown probability of heads by $h$.
 
+![img](pdf1.png)
+
 What we observe is a sequence of flips; the question is how to learn $h$ from that data.
 
 ![img](pdf0.png)
@@ -11,8 +13,6 @@ What we observe is a sequence of flips; the question is how to learn $h$ from th
 This page continues the thread in [Probabilities of Probabilities](probabilities_of_probabilities.md), where an unknown success rate $S \in [0,1]$ (such as a seller’s review rate) is modeled with a $L(S)$.
 
 The parameter $h$ can be any number in the closed interval $[0,1]$— from always tails ($h=0$) through fair coins to always heads ($h=1$).
-
-![img](pdf1.png)
 
 If we try to assign a probability to one **exact** value, such as $h = 0.7$ (as opposed to $h = 0.7000001$ or any nearby value), we run into trouble.
 
@@ -100,11 +100,74 @@ For a **continuum**, the rules change: $P(X \in [a,b])$ is defined first (via an
 
 ![img](pdf20.png)
 
-It's a pretty common rule of thumb that if you find yourself using a sum in a discrete context, then use an integral in the continuous context, which is the tool from calculus that we use to find areas under curves.
+It's a pretty common rule of thumb that if you find yourself using a sum in a discrete context, then use an 
+integral in the continuous context, which is the tool from calculus that we use to find areas under curves.
 
-But anyway, looking back to our original question about the coin with an unknown weight. What we've learned here is that the right question to ask is, what's the Probability Density Function that describes this value $h$ after seeing the outcomes of a few tosses? If you can find that PDF, you can use it to answer questions like, what's the probability that the true probability of flipping heads falls between $0.6$ and $0.8$?
+### Finding $f(h \mid \text{data})$ with Bayes' rule
 
-![img](pdf21.png)
+Returning to the biased coin: we observe $n$ flips with $k$ heads and want beliefs about $h$ **after** seeing the data.
+The same structure appears in [Probabilities of Probabilities](probabilities_of_probabilities.md) with a success rate $S$; here we write $h$, but the mathematics is identical.
+
+We need two ingredients.
+
+**1. $P(\text{data} \mid h)$ (from the binomial model).**
+Treat the flips as $n$ independent Bernoulli trials with success probability $h$.
+If the data are exactly $k$ heads and $n-k$ tails.
+
+$$L(h) = P(\text{data} \mid h) = \binom{n}{k} h^{k}(1-h)^{n-k}, \qquad h \in [0,1].$$
+
+This is the same function we plotted as $L(S)$ in the earlier page: probability of the **observed** outcomes as a function of the unknown rate.
+
+**2. Prior PDF $f_H(h)$ **on** $[0,1]$.**
+Before seeing flips, we describe uncertainty about $h$ by a **prior density** $f_H(h) \geq 0$ with
+
+$$\int_0^1 f_H(h)\, dh = 1.$$
+
+For example, with no preference across $[0,1]$, we might take the **uniform** prior $f_H(h) = 1$ on $[0,1]$.
+A different prior PDF encodes different initial beliefs.
+
+**Bayes' rule in continuous form** (see also [Bayes' Rule](bayes_rule.md)): the **posterior density** $f_{H \mid \text{data}}(h)$ satisfies
+
+$$f_{H \mid \text{data}}(h) = \frac{L(h)\, f_H(h)}{P(\text{data})}, \qquad h \in [0,1],$$
+
+where the **normalizing constant** is an integral instead of a sum:
+
+$$P(\text{data}) = \int_0^1 L(h)\, f_H(h)\, dh.$$
+
+The posterior is the prior times $L(h)$, then scaled so the total area is $1$.
+In symbols, $f_{H \mid \text{data}}(h) \propto L(h)\, f_H(h)$.
+
+Once $f_{H \mid \text{data}}$ is known, we answer questions about **ranges** of $h$, for example
+
+$$P(0.6 \leq H \leq 0.8 \mid \text{data}) = \int_{0.6}^{0.8} f_{H \mid \text{data}}(h)\, dh.$$
+
+**Key insight**: $P(h = 0.7 \mid \text{data}) = 0$ for a single point, but $P(0.65 \leq H \leq 0.75 \mid \text{data})$ can be positive and informative.
+The PDF $f_{H \mid \text{data}}$ is the continuous replacement for a posterior table over $h$.
+
+### Is $L(h)$ a probability distribution?
+
+**No.** $L(h) = P(\text{data} \mid h)$ is a **likelihood function** (as a function of $h$ with the data fixed), not a probability distribution over $h$.
+
+A PDF $f_H(h)$ on $[0,1]$ must satisfy $f_H(h) \geq 0$ and
+
+$$\int_0^1 f_H(h)\, dh = 1.$$
+
+The likelihood $L(h)$ is non-negative, but it does **not** integrate to $1$ over $h$ in general.
+For $k$ heads in $n$ flips,
+
+$$\int_0^1 L(h)\, dh
+= \int_0^1 \binom{n}{k} h^{k}(1-h)^{n-k}\, dh \neq 1.$$
+
+Because the integration is now happening over the parameter space instead of the data space, it generally does not integrate to $1$.
+
+| Object | Varies over | Role |
+|--------|-------------|------|
+| $L(h) = P(\text{data} \mid h)$ | $h$ (data fixed) | **Likelihood**—ranks which $h$ best explain the data |
+| $f_H(h)$ | $h$ | **Prior PDF**—integrates to $1$ |
+| $f_{H \mid \text{data}}(h)$ | $h$ | **Posterior PDF**—integrates to $1$ |
+
+So $L(h)$ tells us where the peak is (e.g. $h = k/n$) but is not normalized beliefs about $h$.
+The **posterior** $f_{H \mid \text{data}}(h) \propto L(h)\, f_H(h)$ becomes a true distribution only after dividing by $P(\text{data}) = \int_0^1 L(h)\, f_H(h)\, dh$.
 
 ## Formal defintion
 

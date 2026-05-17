@@ -2988,6 +2988,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="A friendly introduction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#finding-fh-mid-textdata-with-bayes-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding \(f(h \mid \text{data})\) with Bayes' rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-lh-a-probability-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Is \(L(h)\) a probability distribution?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -4235,11 +4263,11 @@
 <h1 id="continuous-distributions">Continuous Distributions</h1>
 <h2 id="a-friendly-introduction">A friendly introduction</h2>
 <p>Suppose we have a biased coin and denote the unknown probability of heads by <span class="arithmatex">\(h\)</span>.</p>
+<p><img alt="img" src="../pdf1.png" /></p>
 <p>What we observe is a sequence of flips; the question is how to learn <span class="arithmatex">\(h\)</span> from that data.</p>
 <p><img alt="img" src="../pdf0.png" /></p>
 <p>This page continues the thread in <a href="../probabilities_of_probabilities/">Probabilities of Probabilities</a>, where an unknown success rate <span class="arithmatex">\(S \in [0,1]\)</span> (such as a seller’s review rate) is modeled with a <span class="arithmatex">\(L(S)\)</span>.</p>
 <p>The parameter <span class="arithmatex">\(h\)</span> can be any number in the closed interval <span class="arithmatex">\([0,1]\)</span>— from always tails (<span class="arithmatex">\(h=0\)</span>) through fair coins to always heads (<span class="arithmatex">\(h=1\)</span>).</p>
-<p><img alt="img" src="../pdf1.png" /></p>
 <p>If we try to assign a probability to one <strong>exact</strong> value, such as <span class="arithmatex">\(h = 0.7\)</span> (as opposed to <span class="arithmatex">\(h = 0.7000001\)</span> or any nearby value), we run into trouble.</p>
 <p><img alt="img" src="../pdf2.png" /></p>
 <p>There are <strong>uncountably many</strong> possible values of <span class="arithmatex">\(h\)</span> in <span class="arithmatex">\([0,1]\)</span>. </p>
@@ -4288,9 +4316,69 @@ In particular,</p>
 That intuition extends to <strong>countably</strong> infinite sample spaces.
 For a <strong>continuum</strong>, the rules change: <span class="arithmatex">\(P(X \in [a,b])\)</span> is defined first (via an integral against a density), and a single value <span class="arithmatex">\(x\)</span> is meaningful only as the degenerate interval <span class="arithmatex">\([x,x]\)</span> of width <span class="arithmatex">\(0\)</span>.</p>
 <p><img alt="img" src="../pdf20.png" /></p>
-<p>It's a pretty common rule of thumb that if you find yourself using a sum in a discrete context, then use an integral in the continuous context, which is the tool from calculus that we use to find areas under curves.</p>
-<p>But anyway, looking back to our original question about the coin with an unknown weight. What we've learned here is that the right question to ask is, what's the Probability Density Function that describes this value <span class="arithmatex">\(h\)</span> after seeing the outcomes of a few tosses? If you can find that PDF, you can use it to answer questions like, what's the probability that the true probability of flipping heads falls between <span class="arithmatex">\(0.6\)</span> and <span class="arithmatex">\(0.8\)</span>?</p>
-<p><img alt="img" src="../pdf21.png" /></p>
+<p>It's a pretty common rule of thumb that if you find yourself using a sum in a discrete context, then use an 
+integral in the continuous context, which is the tool from calculus that we use to find areas under curves.</p>
+<h3 id="finding-fh-mid-textdata-with-bayes-rule">Finding <span class="arithmatex">\(f(h \mid \text{data})\)</span> with Bayes' rule</h3>
+<p>Returning to the biased coin: we observe <span class="arithmatex">\(n\)</span> flips with <span class="arithmatex">\(k\)</span> heads and want beliefs about <span class="arithmatex">\(h\)</span> <strong>after</strong> seeing the data.
+The same structure appears in <a href="../probabilities_of_probabilities/">Probabilities of Probabilities</a> with a success rate <span class="arithmatex">\(S\)</span>; here we write <span class="arithmatex">\(h\)</span>, but the mathematics is identical.</p>
+<p>We need two ingredients.</p>
+<p><strong>1. <span class="arithmatex">\(P(\text{data} \mid h)\)</span> (from the binomial model).</strong>
+Treat the flips as <span class="arithmatex">\(n\)</span> independent Bernoulli trials with success probability <span class="arithmatex">\(h\)</span>.
+If the data are exactly <span class="arithmatex">\(k\)</span> heads and <span class="arithmatex">\(n-k\)</span> tails.</p>
+<div class="arithmatex">\[L(h) = P(\text{data} \mid h) = \binom{n}{k} h^{k}(1-h)^{n-k}, \qquad h \in [0,1].\]</div>
+<p>This is the same function we plotted as <span class="arithmatex">\(L(S)\)</span> in the earlier page: probability of the <strong>observed</strong> outcomes as a function of the unknown rate.</p>
+<p><strong>2. Prior PDF <span class="arithmatex">\(f_H(h)\)</span> </strong>on<strong> <span class="arithmatex">\([0,1]\)</span>.</strong>
+Before seeing flips, we describe uncertainty about <span class="arithmatex">\(h\)</span> by a <strong>prior density</strong> <span class="arithmatex">\(f_H(h) \geq 0\)</span> with</p>
+<div class="arithmatex">\[\int_0^1 f_H(h)\, dh = 1.\]</div>
+<p>For example, with no preference across <span class="arithmatex">\([0,1]\)</span>, we might take the <strong>uniform</strong> prior <span class="arithmatex">\(f_H(h) = 1\)</span> on <span class="arithmatex">\([0,1]\)</span>.
+A different prior PDF encodes different initial beliefs.</p>
+<p><strong>Bayes' rule in continuous form</strong> (see also <a href="../bayes_rule/">Bayes' Rule</a>): the <strong>posterior density</strong> <span class="arithmatex">\(f_{H \mid \text{data}}(h)\)</span> satisfies</p>
+<div class="arithmatex">\[f_{H \mid \text{data}}(h) = \frac{L(h)\, f_H(h)}{P(\text{data})}, \qquad h \in [0,1],\]</div>
+<p>where the <strong>normalizing constant</strong> is an integral instead of a sum:</p>
+<div class="arithmatex">\[P(\text{data}) = \int_0^1 L(h)\, f_H(h)\, dh.\]</div>
+<p>The posterior is the prior times <span class="arithmatex">\(L(h)\)</span>, then scaled so the total area is <span class="arithmatex">\(1\)</span>.
+In symbols, <span class="arithmatex">\(f_{H \mid \text{data}}(h) \propto L(h)\, f_H(h)\)</span>.</p>
+<p>Once <span class="arithmatex">\(f_{H \mid \text{data}}\)</span> is known, we answer questions about <strong>ranges</strong> of <span class="arithmatex">\(h\)</span>, for example</p>
+<div class="arithmatex">\[P(0.6 \leq H \leq 0.8 \mid \text{data}) = \int_{0.6}^{0.8} f_{H \mid \text{data}}(h)\, dh.\]</div>
+<p><strong>Key insight</strong>: <span class="arithmatex">\(P(h = 0.7 \mid \text{data}) = 0\)</span> for a single point, but <span class="arithmatex">\(P(0.65 \leq H \leq 0.75 \mid \text{data})\)</span> can be positive and informative.
+The PDF <span class="arithmatex">\(f_{H \mid \text{data}}\)</span> is the continuous replacement for a posterior table over <span class="arithmatex">\(h\)</span>.</p>
+<h3 id="is-lh-a-probability-distribution">Is <span class="arithmatex">\(L(h)\)</span> a probability distribution?</h3>
+<p><strong>No.</strong> <span class="arithmatex">\(L(h) = P(\text{data} \mid h)\)</span> is a <strong>likelihood function</strong> (as a function of <span class="arithmatex">\(h\)</span> with the data fixed), not a probability distribution over <span class="arithmatex">\(h\)</span>.</p>
+<p>A PDF <span class="arithmatex">\(f_H(h)\)</span> on <span class="arithmatex">\([0,1]\)</span> must satisfy <span class="arithmatex">\(f_H(h) \geq 0\)</span> and</p>
+<div class="arithmatex">\[\int_0^1 f_H(h)\, dh = 1.\]</div>
+<p>The likelihood <span class="arithmatex">\(L(h)\)</span> is non-negative, but it does <strong>not</strong> integrate to <span class="arithmatex">\(1\)</span> over <span class="arithmatex">\(h\)</span> in general.
+For <span class="arithmatex">\(k\)</span> heads in <span class="arithmatex">\(n\)</span> flips,</p>
+<div class="arithmatex">\[\int_0^1 L(h)\, dh
+= \int_0^1 \binom{n}{k} h^{k}(1-h)^{n-k}\, dh \neq 1.\]</div>
+<p>Because the integration is now happening over the parameter space instead of the data space, it generally does not integrate to <span class="arithmatex">\(1\)</span>.</p>
+<table>
+<thead>
+<tr>
+<th>Object</th>
+<th>Varies over</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(L(h) = P(\text{data} \mid h)\)</span></td>
+<td><span class="arithmatex">\(h\)</span> (data fixed)</td>
+<td><strong>Likelihood</strong>—ranks which <span class="arithmatex">\(h\)</span> best explain the data</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(f_H(h)\)</span></td>
+<td><span class="arithmatex">\(h\)</span></td>
+<td><strong>Prior PDF</strong>—integrates to <span class="arithmatex">\(1\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(f_{H \mid \text{data}}(h)\)</span></td>
+<td><span class="arithmatex">\(h\)</span></td>
+<td><strong>Posterior PDF</strong>—integrates to <span class="arithmatex">\(1\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>So <span class="arithmatex">\(L(h)\)</span> tells us where the peak is (e.g. <span class="arithmatex">\(h = k/n\)</span>) but is not normalized beliefs about <span class="arithmatex">\(h\)</span>.
+The <strong>posterior</strong> <span class="arithmatex">\(f_{H \mid \text{data}}(h) \propto L(h)\, f_H(h)\)</span> becomes a true distribution only after dividing by <span class="arithmatex">\(P(\text{data}) = \int_0^1 L(h)\, f_H(h)\, dh\)</span>.</p>
 <h2 id="formal-defintion">Formal defintion</h2>
 <p>Continuous distributions are probability distributions for random variables that can take on any value in a continuous range (typically an interval of real numbers). Unlike discrete distributions, continuous random variables have probability density functions (PDFs) rather than probability mass functions (PMFs).</p>
 <p>For a continuous random variable <span class="arithmatex">\(X\)</span>, the probability of <span class="arithmatex">\(X\)</span> taking any specific value is exactly 0:</p>
