@@ -1,5 +1,113 @@
 # Continuous Distributions
 
+## A friendly introduction
+
+Suppose we have a biased coin and denote the unknown probability of heads by $h$.
+
+What we observe is a sequence of flips; the question is how to learn $h$ from that data.
+
+![img](pdf0.png)
+
+This page continues the thread in [Probabilities of Probabilities](probabilities_of_probabilities.md), where an unknown success rate $S \in [0,1]$ (such as a seller’s review rate) is modeled with a $L(S)$.
+
+The parameter $h$ can be any number in the closed interval $[0,1]$— from always tails ($h=0$) through fair coins to always heads ($h=1$).
+
+![img](pdf1.png)
+
+If we try to assign a probability to one **exact** value, such as $h = 0.7$ (as opposed to $h = 0.7000001$ or any nearby value), we run into trouble.
+
+![img](pdf2.png)
+
+There are **uncountably many** possible values of $h$ in $[0,1]$. 
+
+If every point carried the same positive probability $\varepsilon > 0$, then summing over all of them would give infinite total mass, which cannot be a valid probability distribution.
+
+![img](pdf3.png)
+![img](pdf4.png)
+
+On the other hand, if $P(h = x) = 0$ for **every** $x$, then we learn nothing about the coin, and any countable-style “sum” of point masses would be $0$, not $1$. Yet $h$ must be **somewhere** in $[0,1]$, so something must account for the full unit of probability.
+
+![img](pdf5.png)
+
+The resolution is to stop asking for probabilities of **individual** values and instead assign probabilities to **ranges** of $h$.
+
+For example, we might ask for
+
+$$P(0.8 \leq h \leq 0.85),$$
+
+or partition $[0,1]$ into coarse bins and record the probability that $h$ falls in each bin.
+
+**Crucial convention**: represent probability by the **area** of each bin, not by the height of the bar alone.
+
+![img](pdf7.png)
+
+If we refine the partition into thinner bins, the probability of landing in any **single** bin shrinks because the bin width shrinks.
+
+![img](pdf8.png)
+![img](pdf9.png)
+![img](pdf10.png)
+
+In a sensible construction, the **heights** stay roughly stable while the widths decrease, so the outline of the distribution approaches a **smooth curve** in the limit.
+
+![img](pdf11.png)
+
+Individual bin probabilities go to $0$, but the **shape** of the distribution is preserved and sharpened.
+
+![img](pdf12.png)
+
+If instead we had let **height** equal probability, every bar would shrink to zero height as bins narrow, and the limit would be a flat, uninformative line. Letting **area** carry probability fixes that failure mode.
+
+![img](pdf13.png)
+![img](pdf14.png)
+
+Since probability lives in area, and $\text{area} = \text{width} \times \text{height}$, the vertical axis measures **probability per unit** along the $h$-axis.
+That quantity is the **probability density** $f(h)$: informally, “probability per unit length” in the continuous case.
+
+![img](pdf15.png)
+![img](pdf16.png)
+
+At every stage of refinement, the **total area** under the histogram must be $1$, as for any valid probability distribution.
+
+![img](pdf17.png)
+
+As the partition becomes infinitely fine, we may attach a **probability density** to each point even though $P(h = x) = 0$ for every single $x$.
+The resulting object is a **probability density function (PDF)** $f_H(h)$ on $[0,1]$.
+
+![img](pdf18.png)
+
+**How to read a PDF**: for any interval $[a,b]$,
+
+$$P(a \leq H \leq b) = \int_a^b f_H(h)\, dh,$$
+
+the area under the density curve between $a$ and $b$.
+In particular,
+
+$$P(H = 0.7) = \int_{0.7}^{0.7} f_H(h)\, dh = 0$$
+
+(an interval of length $0$ has zero area), 
+
+![img](pdf19.png)
+
+while
+
+$$\int_0^1 f_H(h)\, dh = 1.$$
+
+The “paradox” is sidestepped: point probabilities are not the primitive objects; **range probabilities** are.
+
+In a finite discrete setting (a die, a deck of cards), $P(X \in A) = \sum_{x \in A} P(X = x)$—a sum of point masses.
+That intuition extends to **countably** infinite sample spaces.
+For a **continuum**, the rules change: $P(X \in [a,b])$ is defined first (via an integral against a density), and a single value $x$ is meaningful only as the degenerate interval $[x,x]$ of width $0$.
+
+![img](pdf20.png)
+
+It's a pretty common rule of thumb that if you find yourself using a sum in a discrete context, then use an integral in the continuous context, which is the tool from calculus that we use to find areas under curves.
+
+But anyway, looking back to our original question about the coin with an unknown weight. What we've learned here is that the right question to ask is, what's the Probability Density Function that describes this value $h$ after seeing the outcomes of a few tosses? If you can find that PDF, you can use it to answer questions like, what's the probability that the true probability of flipping heads falls between $0.6$ and $0.8$?
+
+![img](pdf21.png)
+
+## Formal defintion
+
 Continuous distributions are probability distributions for random variables that can take on any value in a continuous range (typically an interval of real numbers). Unlike discrete distributions, continuous random variables have probability density functions (PDFs) rather than probability mass functions (PMFs).
 
 For a continuous random variable $X$, the probability of $X$ taking any specific value is exactly 0:

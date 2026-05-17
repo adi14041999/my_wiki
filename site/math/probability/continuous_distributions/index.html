@@ -2980,6 +2980,28 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#a-friendly-introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A friendly introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formal-defintion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formal defintion
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#probability-density-function-pdf" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4211,6 +4233,65 @@
 
 
 <h1 id="continuous-distributions">Continuous Distributions</h1>
+<h2 id="a-friendly-introduction">A friendly introduction</h2>
+<p>Suppose we have a biased coin and denote the unknown probability of heads by <span class="arithmatex">\(h\)</span>.</p>
+<p>What we observe is a sequence of flips; the question is how to learn <span class="arithmatex">\(h\)</span> from that data.</p>
+<p><img alt="img" src="../pdf0.png" /></p>
+<p>This page continues the thread in <a href="../probabilities_of_probabilities/">Probabilities of Probabilities</a>, where an unknown success rate <span class="arithmatex">\(S \in [0,1]\)</span> (such as a seller’s review rate) is modeled with a <span class="arithmatex">\(L(S)\)</span>.</p>
+<p>The parameter <span class="arithmatex">\(h\)</span> can be any number in the closed interval <span class="arithmatex">\([0,1]\)</span>— from always tails (<span class="arithmatex">\(h=0\)</span>) through fair coins to always heads (<span class="arithmatex">\(h=1\)</span>).</p>
+<p><img alt="img" src="../pdf1.png" /></p>
+<p>If we try to assign a probability to one <strong>exact</strong> value, such as <span class="arithmatex">\(h = 0.7\)</span> (as opposed to <span class="arithmatex">\(h = 0.7000001\)</span> or any nearby value), we run into trouble.</p>
+<p><img alt="img" src="../pdf2.png" /></p>
+<p>There are <strong>uncountably many</strong> possible values of <span class="arithmatex">\(h\)</span> in <span class="arithmatex">\([0,1]\)</span>. </p>
+<p>If every point carried the same positive probability <span class="arithmatex">\(\varepsilon &gt; 0\)</span>, then summing over all of them would give infinite total mass, which cannot be a valid probability distribution.</p>
+<p><img alt="img" src="../pdf3.png" />
+<img alt="img" src="../pdf4.png" /></p>
+<p>On the other hand, if <span class="arithmatex">\(P(h = x) = 0\)</span> for <strong>every</strong> <span class="arithmatex">\(x\)</span>, then we learn nothing about the coin, and any countable-style “sum” of point masses would be <span class="arithmatex">\(0\)</span>, not <span class="arithmatex">\(1\)</span>. Yet <span class="arithmatex">\(h\)</span> must be <strong>somewhere</strong> in <span class="arithmatex">\([0,1]\)</span>, so something must account for the full unit of probability.</p>
+<p><img alt="img" src="../pdf5.png" /></p>
+<p>The resolution is to stop asking for probabilities of <strong>individual</strong> values and instead assign probabilities to <strong>ranges</strong> of <span class="arithmatex">\(h\)</span>.</p>
+<p>For example, we might ask for</p>
+<div class="arithmatex">\[P(0.8 \leq h \leq 0.85),\]</div>
+<p>or partition <span class="arithmatex">\([0,1]\)</span> into coarse bins and record the probability that <span class="arithmatex">\(h\)</span> falls in each bin.</p>
+<p><strong>Crucial convention</strong>: represent probability by the <strong>area</strong> of each bin, not by the height of the bar alone.</p>
+<p><img alt="img" src="../pdf7.png" /></p>
+<p>If we refine the partition into thinner bins, the probability of landing in any <strong>single</strong> bin shrinks because the bin width shrinks.</p>
+<p><img alt="img" src="../pdf8.png" />
+<img alt="img" src="../pdf9.png" />
+<img alt="img" src="../pdf10.png" /></p>
+<p>In a sensible construction, the <strong>heights</strong> stay roughly stable while the widths decrease, so the outline of the distribution approaches a <strong>smooth curve</strong> in the limit.</p>
+<p><img alt="img" src="../pdf11.png" /></p>
+<p>Individual bin probabilities go to <span class="arithmatex">\(0\)</span>, but the <strong>shape</strong> of the distribution is preserved and sharpened.</p>
+<p><img alt="img" src="../pdf12.png" /></p>
+<p>If instead we had let <strong>height</strong> equal probability, every bar would shrink to zero height as bins narrow, and the limit would be a flat, uninformative line. Letting <strong>area</strong> carry probability fixes that failure mode.</p>
+<p><img alt="img" src="../pdf13.png" />
+<img alt="img" src="../pdf14.png" /></p>
+<p>Since probability lives in area, and <span class="arithmatex">\(\text{area} = \text{width} \times \text{height}\)</span>, the vertical axis measures <strong>probability per unit</strong> along the <span class="arithmatex">\(h\)</span>-axis.
+That quantity is the <strong>probability density</strong> <span class="arithmatex">\(f(h)\)</span>: informally, “probability per unit length” in the continuous case.</p>
+<p><img alt="img" src="../pdf15.png" />
+<img alt="img" src="../pdf16.png" /></p>
+<p>At every stage of refinement, the <strong>total area</strong> under the histogram must be <span class="arithmatex">\(1\)</span>, as for any valid probability distribution.</p>
+<p><img alt="img" src="../pdf17.png" /></p>
+<p>As the partition becomes infinitely fine, we may attach a <strong>probability density</strong> to each point even though <span class="arithmatex">\(P(h = x) = 0\)</span> for every single <span class="arithmatex">\(x\)</span>.
+The resulting object is a <strong>probability density function (PDF)</strong> <span class="arithmatex">\(f_H(h)\)</span> on <span class="arithmatex">\([0,1]\)</span>.</p>
+<p><img alt="img" src="../pdf18.png" /></p>
+<p><strong>How to read a PDF</strong>: for any interval <span class="arithmatex">\([a,b]\)</span>,</p>
+<div class="arithmatex">\[P(a \leq H \leq b) = \int_a^b f_H(h)\, dh,\]</div>
+<p>the area under the density curve between <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span>.
+In particular,</p>
+<div class="arithmatex">\[P(H = 0.7) = \int_{0.7}^{0.7} f_H(h)\, dh = 0\]</div>
+<p>(an interval of length <span class="arithmatex">\(0\)</span> has zero area), </p>
+<p><img alt="img" src="../pdf19.png" /></p>
+<p>while</p>
+<div class="arithmatex">\[\int_0^1 f_H(h)\, dh = 1.\]</div>
+<p>The “paradox” is sidestepped: point probabilities are not the primitive objects; <strong>range probabilities</strong> are.</p>
+<p>In a finite discrete setting (a die, a deck of cards), <span class="arithmatex">\(P(X \in A) = \sum_{x \in A} P(X = x)\)</span>—a sum of point masses.
+That intuition extends to <strong>countably</strong> infinite sample spaces.
+For a <strong>continuum</strong>, the rules change: <span class="arithmatex">\(P(X \in [a,b])\)</span> is defined first (via an integral against a density), and a single value <span class="arithmatex">\(x\)</span> is meaningful only as the degenerate interval <span class="arithmatex">\([x,x]\)</span> of width <span class="arithmatex">\(0\)</span>.</p>
+<p><img alt="img" src="../pdf20.png" /></p>
+<p>It's a pretty common rule of thumb that if you find yourself using a sum in a discrete context, then use an integral in the continuous context, which is the tool from calculus that we use to find areas under curves.</p>
+<p>But anyway, looking back to our original question about the coin with an unknown weight. What we've learned here is that the right question to ask is, what's the Probability Density Function that describes this value <span class="arithmatex">\(h\)</span> after seeing the outcomes of a few tosses? If you can find that PDF, you can use it to answer questions like, what's the probability that the true probability of flipping heads falls between <span class="arithmatex">\(0.6\)</span> and <span class="arithmatex">\(0.8\)</span>?</p>
+<p><img alt="img" src="../pdf21.png" /></p>
+<h2 id="formal-defintion">Formal defintion</h2>
 <p>Continuous distributions are probability distributions for random variables that can take on any value in a continuous range (typically an interval of real numbers). Unlike discrete distributions, continuous random variables have probability density functions (PDFs) rather than probability mass functions (PMFs).</p>
 <p>For a continuous random variable <span class="arithmatex">\(X\)</span>, the probability of <span class="arithmatex">\(X\)</span> taking any specific value is exactly 0:</p>
 <div class="arithmatex">\[P(X = x) = 0 \quad \text{for any specific value } x\]</div>

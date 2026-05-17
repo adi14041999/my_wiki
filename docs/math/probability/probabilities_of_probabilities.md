@@ -161,3 +161,9 @@ More data sharpen our beliefs about which $S$ is plausible, even though no singl
 What do we do with the curves? We are still looking for the formulation below.
 
 ![img](srgdata.png)
+
+We have $L(S)$ curves for a **fixed** dataset, but a full answer also requires a **distribution on $S$**— not just which value maximizes $L(S)$.
+
+That step needs continuous probability, and the formal PDF machinery.
+
+We continue that pursuit in [Continuous Distributions](continuous_distributions.md), starting with why point probabilities fail for parameters such as $h$ or $S$ and how probability density resolves the paradox.
