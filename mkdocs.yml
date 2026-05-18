@@ -93,7 +93,8 @@ nav:
       - Multinomial Distribution: math/probability/multinomial_distribution.md
       - Covariance and Correlation: math/probability/covariance_and_correlation.md
       - Transformations of Random Variables: math/probability/transformations_of_random_variables.md
-      - Convolution: math/probability/convolution.md
+      - Convolution (Discrete): math/probability/convolution_discrete.md
+      - Convolution (Continuous): math/probability/convolution_continuous.md
       - Beta Distributions: math/probability/beta_distributions.md
       - Conditional Expectation: math/probability/conditional_expectation.md
       - Jensen's inequality: math/probability/jensens_inequality.md

@@ -1,4 +1,4 @@
-# Convolution
+# Convolution (Discrete)
 
 ## Introduction
 
@@ -101,10 +101,6 @@ Let $X$ and $Y$ be independent random variables and $Z = X + Y$ be their sum.
 **Discrete Case:** If $X$ and $Y$ are discrete, then the PMF of $Z$ is:
 
 $$P(Z = z) = \sum_x P(Y = z - x)P(X = x) = \sum_y P(X = z - y)P(Y = y)$$
-
-**Continuous Case:** If $X$ and $Y$ are continuous, then the PDF of $Z$ is:
-
-$$f_Z(z) = \int_{-\infty}^{\infty} f_Y(z - x)f_X(x)dx = \int_{-\infty}^{\infty} f_X(z - y)f_Y(y)dy$$
 
 **Proof:** For the discrete case, we use the Law of Total Probability (LOTP), conditioning on $X$:
 

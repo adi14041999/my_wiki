@@ -90,7 +90,7 @@ Now what's more challenging, but a lot more interesting, is to ask what happens 
 
 ![img](tds3.png)
 
-So just to be crystal clear on what's being represented here: if you imagine sampling two different values from that top distribution, the one describing a single die, and adding them together, then the second distribution being drawn represents how likely you are to see various different sums (this is equivalent to the [convolution](convolution.md) of the die's probability mass function with itself). Likewise, if you imagine sampling three distinct values from that top distribution, and adding them together, the next plot represents the probabilities for various different sums in that case. 
+So just to be crystal clear on what's being represented here: if you imagine sampling two different values from that top distribution, the one describing a single die, and adding them together, then the second distribution being drawn represents how likely you are to see various different sums (this is equivalent to the [convolution](convolution_discrete.md) of the die's probability mass function with itself). Likewise, if you imagine sampling three distinct values from that top distribution, and adding them together, the next plot represents the probabilities for various different sums in that case. 
 
 ![img](tds5.png)
 
