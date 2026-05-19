@@ -16,7 +16,7 @@
         <link rel="prev" href="../convolution_discrete/">
       
       
-        <link rel="next" href="../beta_distributions/">
+        <link rel="next" href="../proving_the_central_limit_theorem/">
       
       
         
@@ -3172,6 +3172,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../central_limit_theorem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Central Limit Theorem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../convolution_discrete/" class="md-nav__link">
         
   
@@ -3279,12 +3307,85 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Visualizing convolution of continuous random variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#case-study-uniform-distributions-on-tfrac12-tfrac12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case study: uniform distributions on \([-\tfrac{1}{2}, \tfrac{1}{2}]\)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Case study: uniform distributions on \([-\tfrac{1}{2}, \tfrac{1}{2}]\)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sum-of-three-independent-uniforms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sum of three independent uniforms
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-connection-to-the-central-limit-theorem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The connection to the Central Limit Theorem
+      
+    </span>
+  </a>
+  
 </li>
       
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proving_the_central_limit_theorem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proving the Central Limit Theorem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -3361,34 +3462,6 @@
     
   
     Jensen's inequality
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../central_limit_theorem/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Central Limit Theorem
   
 
     
@@ -4201,9 +4274,56 @@
 <p>The video below visualizes the convolution of two independent continuous random variables <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> with PDFs <span class="arithmatex">\(f(x)\)</span> and <span class="arithmatex">\(g(y)\)</span>, and their sum <span class="arithmatex">\(Z = X + Y\)</span>.</p>
 <p>For a fixed target sum <span class="arithmatex">\(s\)</span>, the illustration plots <span class="arithmatex">\(f(x)\)</span> and <span class="arithmatex">\(g(s - x)\)</span> (the flipped-and-shifted view of the second density)</p>
 <div class="arithmatex">\[\int_{-\infty}^{\infty} f(x)\, g(s - x)\, dx.\]</div>
-<p>It also plots the product <span class="arithmatex">\(f(x)\, g(s - x)\)</span>. The convolution value at <span class="arithmatex">\(s\)</span> is the area under that product curve (the integral of the product over <span class="arithmatex">\(x\)</span>).</p>
+<p>It also plots the product <span class="arithmatex">\(f(x)\, g(s - x)\)</span>. <strong>The convolution value at <span class="arithmatex">\(s\)</span> is the area under that product curve (the integral of the product over <span class="arithmatex">\(x\)</span>).</strong></p>
 <video controls playsinline width="100%">
   <source src="../test_no_audio.mp4" type="video/mp4">
+</video>
+
+<h3 id="case-study-uniform-distributions-on-tfrac12-tfrac12">Case study: uniform distributions on <span class="arithmatex">\([-\tfrac{1}{2}, \tfrac{1}{2}]\)</span></h3>
+<p>Suppose <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are independent and each is uniform on <span class="arithmatex">\(\bigl[-\tfrac{1}{2}, \tfrac{1}{2}\bigr]\)</span>. Each PDF has a <strong>top-hat</strong> shape:</p>
+<div class="arithmatex">\[f_X(x) = f_Y(x) = \mathbf{1}_{[-\tfrac{1}{2},\, \tfrac{1}{2}]}(x) =
+\begin{cases}
+1 &amp; \text{if } -\tfrac{1}{2} \le x \le \tfrac{1}{2}, \\
+0 &amp; \text{otherwise}.
+\end{cases}\]</div>
+<p>We want the PDF of <span class="arithmatex">\(Z = X + Y\)</span>, namely <span class="arithmatex">\((f_X * f_Y)(s)\)</span>.</p>
+<p>Because both factors are <span class="arithmatex">\(0\)</span> or <span class="arithmatex">\(1\)</span>, the product is <span class="arithmatex">\(1\)</span> on the overlap of their supports and <span class="arithmatex">\(0\)</span> elsewhere. Since <span class="arithmatex">\(X, Y \ge -\tfrac{1}{2}\)</span>, we must have <span class="arithmatex">\(Z \ge -1\)</span>, so <span class="arithmatex">\((f_X * f_Y)(s) = 0\)</span> for <span class="arithmatex">\(s &lt; -1\)</span>.</p>
+<p>As we increase <span class="arithmatex">\(s\)</span>, the overlap grows; the area under the product increases <strong>linearly</strong> until the supports align fully, then decreases <strong>linearly</strong> as <span class="arithmatex">\(s\)</span> increases further. The PDF of <span class="arithmatex">\(Z\)</span> is therefore <strong>triangular (wedge-shaped)</strong> on <span class="arithmatex">\([-1, 1]\)</span>.</p>
+<video controls playsinline width="100%">
+  <source src="../uniformvid.mp4" type="video/mp4">
+</video>
+
+<p>This matches the familiar discrete case: the sum of two fair dice is unimodal, with PMF rising to a peak at <span class="arithmatex">\(7\)</span> and falling again (<a href="../convolution_discrete/">Convolution (Discrete)</a>).</p>
+<p><img alt="img" src="../wedge.png" /></p>
+<h4 id="sum-of-three-independent-uniforms">Sum of three independent uniforms</h4>
+<p><img alt="img" src="../3uniform.png" /></p>
+<p>For <span class="arithmatex">\(Z = X_1 + X_2 + X_3\)</span> with <span class="arithmatex">\(X_1, X_2, X_3\)</span> i.i.d. on <span class="arithmatex">\(\bigl[-\tfrac{1}{2}, \tfrac{1}{2}\bigr]\)</span>, we do not need a new three-way picture. Let <span class="arithmatex">\(U = X_1 + X_2\)</span>; we already know <span class="arithmatex">\(U\)</span> has the wedge PDF <span class="arithmatex">\(f_U\)</span>, and</p>
+<div class="arithmatex">\[f_Z = f_U * f_{X_3},\]</div>
+<p>another convolution with the same top-hat PDF <span class="arithmatex">\(f_{X_3}\)</span>.</p>
+<p>Multiplying by <span class="arithmatex">\(f_{X_3}(s - x)\)</span> <strong>windows</strong> the integrand: the product graph is a slice of <span class="arithmatex">\(f_U\)</span> on an interval of length <span class="arithmatex">\(1\)</span>. As <span class="arithmatex">\(s\)</span> varies, <span class="arithmatex">\((f_U * f_{X_3})(s)\)</span> peaks in the middle and tapers on both sides, but <strong>more smoothly</strong> than <span class="arithmatex">\(f_U\)</span> alone. Convolving <span class="arithmatex">\(f_U\)</span> with <span class="arithmatex">\(f_{X_3}\)</span> is a <strong>moving average</strong> of the wedge density (see the moving-average discussion in <a href="../convolution_discrete/">Convolution (Discrete)</a>).</p>
+<video controls playsinline width="100%">
+  <source src="../3uniformvid.mp4" type="video/mp4">
+</video>
+
+<h2 id="the-connection-to-the-central-limit-theorem">The connection to the Central Limit Theorem</h2>
+<p>We can repeat the same construction. Convolving two top-hat PDFs gave the wedge <span class="arithmatex">\(f_{S_2}\)</span> for <span class="arithmatex">\(S_2 = X_1 + X_2\)</span>. Convolving <span class="arithmatex">\(f_{S_2}\)</span> with another top hat gave a smoother <span class="arithmatex">\(f_{S_3}\)</span> for <span class="arithmatex">\(S_3 = X_1 + X_2 + X_3\)</span>. In general, if <span class="arithmatex">\(X_1, X_2, \ldots\)</span> are i.i.d. with PDF <span class="arithmatex">\(f_X\)</span> and <span class="arithmatex">\(S_n = X_1 + \cdots + X_n\)</span>, then</p>
+<div class="arithmatex">\[f_{S_n} = f_{S_{n-1}} * f_X, \qquad f_{S_1} = f_X.\]</div>
+<p>Each step convolves the current sum density with the same <span class="arithmatex">\(f_X\)</span> (another <a href="../convolution_discrete/">moving average</a>).</p>
+<p>As in <a href="../central_limit_theorem/">Central Limit Theorem</a>, if we keep going, the unscaled curves look more and more bell-shaped. </p>
+<p><img alt="img" src="../rep0.png" />
+<img alt="img" src="../rep1.png" />
+<img alt="img" src="../rep2.png" />
+<img alt="img" src="../rep3.png" />
+<img alt="img" src="../rep4.png" /></p>
+<p>Raw repeated convolution also <strong>spreads</strong> the distribution: <span class="arithmatex">\(\mathrm{Var}(S_n) = n\,\mathrm{Var}(X_1)\)</span>, so the peak height shrinks and the graph looks flatter on a fixed <span class="arithmatex">\(x\)</span>-axis. To see the <strong>shape</strong> rather than the scale, we <strong>standardize</strong> at each <span class="arithmatex">\(n\)</span>, for example by plotting</p>
+<div class="arithmatex">\[\frac{S_n - n\mu}{\sigma\sqrt{n}} \quad \text{where } \mu = E[X_1],\; \sigma^2 = \mathrm{Var}(X_1).\]</div>
+<p>After this rescaling, the limit is a standard normal curve rather than a flat spike at zero.</p>
+<p><img alt="img" src="../rep5.png" /></p>
+<p>The <a href="../central_limit_theorem/">Central Limit Theorem</a> says that this is not special to uniforms. For i.i.d. <span class="arithmatex">\(X_i\)</span> with finite mean <span class="arithmatex">\(\mu\)</span> and variance <span class="arithmatex">\(\sigma^2\)</span>, the standardized sum</p>
+<div class="arithmatex">\[\frac{X_1 + \cdots + X_n - n\mu}{\sigma\sqrt{n}}\]</div>
+<p>converges in distribution to <span class="arithmatex">\(\mathcal{N}(0, 1)\)</span> as <span class="arithmatex">\(n \to \infty\)</span>, <strong>no matter what shape</strong> <span class="arithmatex">\(f_X\)</span> had initially. Equivalently, repeated convolution (bigger and bigger sums) <strong>smooths</strong> the PDF until it is arbitrarily close to a normal density.</p>
+<video controls playsinline width="100%">
+  <source src="../centrallimittheorem.mp4" type="video/mp4">
 </video>
 
 
