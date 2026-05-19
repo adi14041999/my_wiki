@@ -3265,6 +3265,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proving the Central Limit Theorem
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3281,6 +3299,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#joint-density-on-the-plane" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Joint density on the plane
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagonal-slices-and-convolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagonal slices and convolution
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rotational-symmetry-for-gaussians" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rotational symmetry for Gaussians
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proving-gaussian-gaussian-gaussian" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Proving Gaussian + Gaussian = Gaussian
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-high-level-proof-of-the-clt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A high-level proof of the CLT
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -4153,6 +4245,82 @@
 
 
 <h1 id="proving-the-central-limit-theorem">Proving the Central Limit Theorem</h1>
+<p>The core of a <a href="../normal_distribution/">normal (Gaussian) distribution</a> is the function <span class="arithmatex">\(e^{-x^2}\)</span>. Among all symmetric, smooth densities concentrated near the center, probability theory singles out this shape. Why? And we have not yet explained why the <a href="../central_limit_theorem/">Central Limit Theorem</a> (CLT) holds.</p>
+<p>To start, we visualize the <strong>convolution of two Gaussians</strong>.</p>
+<h2 id="joint-density-on-the-plane">Joint density on the plane</h2>
+<p>Let <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> be independent with PDFs <span class="arithmatex">\(f\)</span> and <span class="arithmatex">\(g\)</span>. Each outcome <span class="arithmatex">\((x, y)\)</span> is a point in the plane. </p>
+<p>By independence, the joint density is</p>
+<div class="arithmatex">\[p(x, y) = f(x)\, g(y).\]</div>
+<p><img alt="img" src="../jointdens.png" /></p>
+<p>Plotting <span class="arithmatex">\(p(x, y)\)</span> as a surface shows the distribution of all pairs when we sample from both variables.</p>
+<p><img alt="img" src="../jointdens1.png" /></p>
+<h2 id="diagonal-slices-and-convolution">Diagonal slices and convolution</h2>
+<p>The convolution <span class="arithmatex">\((f * g)(s)\)</span> asks how likely a pair is to <strong>sum</strong> to <span class="arithmatex">\(s\)</span>. In the <a href="../convolution_continuous/">diagonal-slices picture</a>, we take the slice of <span class="arithmatex">\(p(x, y)\)</span> over the line</p>
+<div class="arithmatex">\[x + y = s\]</div>
+<p>and consider the <strong>area</strong> under that slice (the cross-section of the surface above the line).</p>
+<p><img alt="img" src="../slice0.png" /></p>
+<p>That area is almost <span class="arithmatex">\((f * g)(s)\)</span>; for a technical reason we divide by <span class="arithmatex">\(\sqrt{2}\)</span>:</p>
+<div class="arithmatex">\[(f * g)(s) = \frac{1}{\sqrt{2}} \times (\text{area under the slice}).\]</div>
+<p><img alt="img" src="../slice1.png" />
+<img alt="img" src="../slice2.png" />
+<img alt="img" src="../slice3.png" />
+<img alt="img" src="../slice4.png" /></p>
+<p>Apart from the factor <span class="arithmatex">\(\frac{1}{\sqrt{2}}\)</span>, the same picture remains: <span class="arithmatex">\((f * g)(s)\)</span> aggregates the joint density <span class="arithmatex">\(f(x)\,g(y)\)</span> over all pairs with <span class="arithmatex">\(x + y = s\)</span>.</p>
+<h2 id="rotational-symmetry-for-gaussians">Rotational symmetry for Gaussians</h2>
+<p>Take <span class="arithmatex">\(f(x) = e^{-x^2}\)</span> and <span class="arithmatex">\(g(y) = e^{-y^2}\)</span>. Then</p>
+<div class="arithmatex">\[p(x, y) = e^{-x^2} e^{-y^2} = e^{-(x^2 + y^2)},\]</div>
+<p>which depends only on <span class="arithmatex">\(r^2 = x^2 + y^2\)</span>, the squared distance from the origin. </p>
+<p><img alt="img" src="../circ0.png" />
+<img alt="img" src="../circ1.png" />
+<img alt="img" src="../circ2.png" /></p>
+<p>The surface is <strong>rotationally symmetric</strong>. </p>
+<p><img alt="img" src="../sim1.png" />
+<img alt="img" src="../sim2.png" /></p>
+<p>That property characterizes Gaussians among the distributions we might convolve. The <a href="../normal_distribution/#herschel-maxwell-derivation-of-the-normal-distribution">Herschel–Maxwell derivation</a> makes this precise: if coordinate errors are <strong>independent</strong> with the same marginal <span class="arithmatex">\(f\)</span>, so <span class="arithmatex">\(p(x, y) = f(x)\, f(y)\)</span>, and the joint density is <strong>isotropic</strong> (depends only on <span class="arithmatex">\(r = \sqrt{x^2 + y^2}\)</span>), then <span class="arithmatex">\(f\)</span> must be Gaussian-shaped, <span class="arithmatex">\(f(x) \propto e^{-b^2 x^2}\)</span>. No other marginal satisfies both postulates. </p>
+<p><img alt="img" src="../hmd.png" /></p>
+<p>For any non-Gaussian <span class="arithmatex">\(f\)</span>, the product <span class="arithmatex">\(f(x)\, f(y)\)</span> is not rotationally symmetric in the plane. Diagonal slices are awkward shapes, and their areas are no easier to compute than the convolution integral itself.</p>
+<p><img alt="img" src="../awk.png" /></p>
+<p>For bell curves, symmetry is the lever.</p>
+<h2 id="proving-gaussian-gaussian-gaussian">Proving Gaussian + Gaussian = Gaussian</h2>
+<p>Fix <span class="arithmatex">\(s\)</span> and consider the slice over <span class="arithmatex">\(x + y = s\)</span>. The convolution <span class="arithmatex">\((f * g)(s)\)</span> is a function of <span class="arithmatex">\(s\)</span>; we want the slice area in terms of <span class="arithmatex">\(s\)</span>.</p>
+<p><img alt="img" src="../obliq.png" /></p>
+<p>The line <span class="arithmatex">\(x + y = s\)</span> meets the axes at <span class="arithmatex">\((s, 0)\)</span> and <span class="arithmatex">\((0, s)\)</span>. Its perpendicular distance from the origin is</p>
+<div class="arithmatex">\[d = \frac{|s|}{\sqrt{2}}.\]</div>
+<p><img alt="img" src="../obliq1.png" /></p>
+<p>By rotational symmetry, that oblique slice matches a slice <strong>parallel to the <span class="arithmatex">\(y\)</span>-axis</strong> at the same distance <span class="arithmatex">\(d\)</span> from the origin (a <span class="arithmatex">\(45^\circ\)</span> rotation).</p>
+<p><img alt="img" src="../para0.png" />
+<img alt="img" src="../para1.png" /></p>
+<p>Integrating along a vertical slice is simpler: <span class="arithmatex">\(x\)</span> is constant on that line. On the vertical slice at distance <span class="arithmatex">\(d\)</span>, we have <span class="arithmatex">\(x = s/\sqrt{2}\)</span> (for the standard orientation), so every factor involving <span class="arithmatex">\(x\)</span> is constant and factors out of the integral over <span class="arithmatex">\(y\)</span>.</p>
+<p>All dependence on <span class="arithmatex">\(s\)</span> is then explicit in the prefactor; the remaining integral</p>
+<div class="arithmatex">\[\int_{-\infty}^{\infty} e^{-y^2}\, dy = \sqrt{\pi}\]</div>
+<p>is a fixed constant with <strong>no</strong> <span class="arithmatex">\(s\)</span>.</p>
+<p><img alt="img" src="../f0.png" />
+<img alt="img" src="../f1.png" /></p>
+<p>The convolution value <span class="arithmatex">\((f * g)(s)\)</span> differs from that area only by the factor <span class="arithmatex">\(1/\sqrt{2}\)</span>, which is absorbed into the overall normalization. What matters for the CLT story is the structural fact:</p>
+<p><strong>The convolution of two Gaussians is again a Gaussian.</strong></p>
+<p><img alt="img" src="../gg0.png" />
+<img alt="img" src="../gg1.png" />
+<img alt="img" src="../gg2.png" />
+<img alt="img" src="../gg3.png" /></p>
+<p>If we restore the full constants for a mean-zero normal with arbitrary standard deviation <span class="arithmatex">\(\sigma\)</span>,</p>
+<div class="arithmatex">\[f(x) = \frac{1}{\sigma\sqrt{2\pi}}\, e^{-x^2/(2\sigma^2)},\]</div>
+<p>the same reasoning goes through unchanged. The factors of <span class="arithmatex">\(\sqrt{2}\)</span> still appear in the exponent and in front when we compare slice areas to <span class="arithmatex">\((f * g)(s)\)</span>.</p>
+<p>The conclusion is that the convolution of two independent <span class="arithmatex">\(\mathcal{N}(0, \sigma^2)\)</span> variables is again normal, with standard deviation <span class="arithmatex">\(\sqrt{2}\,\sigma\)</span>:</p>
+<div class="arithmatex">\[X \sim \mathcal{N}(0, \sigma^2),\quad Y \sim \mathcal{N}(0, \sigma^2)\ \text{independent} \quad \Longrightarrow \quad X + Y \sim \mathcal{N}(0, 2\sigma^2).\]</div>
+<p>Equivalently, <span class="arithmatex">\(\operatorname{SD}(X + Y) = \sqrt{2}\,\sigma\)</span>.</p>
+<p>It would be circular to cite the <a href="../central_limit_theorem/">Central Limit Theorem</a> as the justification for the fact that the convolution of two independent <span class="arithmatex">\(\mathcal{N}(0, \sigma^2)\)</span> variables is <span class="arithmatex">\(\mathcal{N}(0, 2\sigma^2)\)</span> (equivalently, that <span class="arithmatex">\(\operatorname{SD}(X + Y) = \sqrt{2}\,\sigma\)</span>). The computation above is rather why a <strong>Gaussian</strong> sits at the center of the CLT in the first place and not some other limiting shape. Sums of independent normals stay normal. That stability under convolution is what makes the bell curve the shape that persists each time we add another independent summand. Convolve again and we still obtain a Gaussian.</p>
+<h2 id="a-high-level-proof-of-the-clt">A high-level proof of the CLT</h2>
+<p>A standard proof of the <a href="../central_limit_theorem/">Central Limit Theorem</a> proceeds in two steps.</p>
+<p><strong>Step 1 (universality):</strong> Let <span class="arithmatex">\(X_1, X_2, \ldots\)</span> be i.i.d. with finite variance, and write <span class="arithmatex">\(S_n = X_1 + \cdots + X_n\)</span>. The law of <span class="arithmatex">\(S_n\)</span> is the <span class="arithmatex">\(n\)</span>-fold convolution of the common marginal PDF (or PMF). After centering and scaling,</p>
+<div class="arithmatex">\[\frac{S_n - n\mu}{\sigma\sqrt{n}} \qquad (\mu = \mathbb{E}[X_1],\ \sigma^2 = \operatorname{Var}(X_1)),\]</div>
+<p>these distributions converge to a single <strong>universal</strong> limit. This step is technical; we do not prove it here. <strong>Moment-generating functions</strong> are a standard tool: they show that a limit exists in the space of distributions, without yet identifying its shape.</p>
+<p><strong>Step 2 (the limit is Gaussian):</strong> Above we showed that convolving two Gaussians yields another Gaussian (equivalently, <span class="arithmatex">\(X + Y \sim \mathcal{N}(0, 2\sigma^2)\)</span> when <span class="arithmatex">\(X, Y \sim \mathcal{N}(0, \sigma^2)\)</span> are independent). The normal law is therefore a <strong>fixed point</strong> of convolution: further convolutions do not leave the Gaussian family. Step 1 says every finite-variance law tends to the same limit. <strong>Gaussians lie in that class and are fixed, so the universal limit must be Gaussian.</strong></p>
+<p><img alt="img" src="../cltproof.png" /></p>
+<div class="admonition note">
+<p class="admonition-title">Slice geometry and Herschel–Maxwell</p>
+<p>The <a href="../normal_distribution/#herschel-maxwell-derivation-of-the-normal-distribution">Herschel–Maxwell derivation</a> shows that independence <span class="arithmatex">\(p(x,y) = f(x)f(y)\)</span> plus rotational symmetry force <span class="arithmatex">\(f(x) \propto e^{-b^2 x^2}\)</span>—that is, <strong>why</strong> the limiting shape must be Gaussian. The derivation also says why <span class="arithmatex">\(\pi\)</span> is in the Gaussian formula.</p>
+<p>The <strong>slice-integral</strong> visualization proof of Gaussian + Gaussian = Gaussian is the second step of the proof of the CLT. Moreover, like the Herschel–Maxwell derivation, it leverages rotational symmetry.</p>
+</div>
 
 
 
