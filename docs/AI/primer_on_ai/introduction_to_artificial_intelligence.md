@@ -766,8 +766,77 @@ We define the complete **game tree** as a search tree that follows every sequenc
 
 For tic-tac-toe the game tree is relatively small— fewer than $9!=362,880$ terminal nodes (with only 5,478 distinct states). But for chess there are over $1040$ nodes, so the game tree is best thought of as a theoretical construct that we cannot realize in the physical world.
 
-A **utility function** (also called an objective function or payoff function), defines the final numeric value to player p when the game ends in terminal state s.
+A **utility function** (also called an objective function or payoff function), defines the final numeric value to player $p$ when the game ends in terminal state $s$.
 
 Below is a figure of a (partial) game tree for the game of tic-tac-toe. The top node is the initial state, and MAX moves first, placing an X in an empty square. We show part of the tree, giving alternating moves by MIN (O) and MAX (X), until we eventually reach terminal states, which can be assigned utilities according to the rules of the game.
 
 ![img](ttt.png)
+
+## Optimal Decisions in Games
+
+### The minimax search algorithm
+
+Consider the trivial game in the figure below. The possible moves for MAX at the root node are labeled $a1$, $a2$, and $a3$. The possible replies to $a1$ for MIN are $b1$, $b2$, $b3$, and so on. This particular game ends after one move each by MAX and MIN. 
+
+**Note:** In some games, the word “move” means that both players have taken an action; therefore the word ply is used to unambiguously mean one move by one player, bringing us one level deeper in the game tree.
+
+The utilities of the terminal states in this game range from $2$ to $14$.
+
+![img](mm.png)
+
+Given a game tree, the optimal strategy can be determined by working out the **minimax value** of each state $s$, written $\text{MINIMAX}(s)$.
+
+For a terminal state, the minimax value is just its utility. In a nonterminal state, MAX prefers to move to a successor of maximum value, while MIN prefers a successor of minimum value:
+
+$$\text{MINIMAX}(s) = \begin{cases} \text{UTILITY}(s) & \text{if IS-TERMINAL}(s) \\ \displaystyle\max_{a \in \text{Actions}(s)} \text{MINIMAX}(\text{RESULT}(s, a)) & \text{if TO-MOVE}(s) = \text{MAX} \\ \displaystyle\min_{a \in \text{Actions}(s)} \text{MINIMAX}(\text{RESULT}(s, a)) & \text{if TO-MOVE}(s) = \text{MIN} \end{cases}$$
+
+For the game tree above, label the nonterminal states $A$ (root), $B$, $C$, $D$ (the three MIN nodes), with actions
+
+$$\text{Actions}(A) = \{a_1, a_2, a_3\}, \quad \text{Actions}(B) = \{b_1, b_2, b_3\}, \quad \text{Actions}(C) = \{c_1, c_2, c_3\}, \quad \text{Actions}(D) = \{d_1, d_2, d_3\}.$$
+
+So $\text{RESULT}(A, a_1) = B$, $\text{RESULT}(A, a_2) = C$, $\text{RESULT}(A, a_3) = D$, and $B, C, D$ each have three terminal successors via $b_i$, $c_i$, $d_i$.
+
+Apply $\text{MINIMAX}$ bottom-up. The terminals get their values from $\text{UTILITY}$. For MIN node $B$, the children have values $3, 12, 8$, so
+
+$$\text{MINIMAX}(B) = \min(3, 12, 8) = 3.$$
+
+Similarly, $\text{MINIMAX}(C) = \text{MINIMAX}(D) = 2$. At the MAX root,
+
+$$\text{MINIMAX}(A) = \max\bigl(\text{MINIMAX}(B),\, \text{MINIMAX}(C),\, \text{MINIMAX}(D)\bigr) = \max(3, 2, 2) = 3.$$
+
+This is a therefore a **recursive definition**. $\text{MINIMAX}(s)$ for a nonterminal state is defined in terms of $\text{MINIMAX}$ on its children $\text{RESULT}(s, a)$. The recursion bottoms out at terminal states, where $\text{IS-TERMINAL}(s)$ is true and the value is given directly by $\text{UTILITY}(s)$. Computing $\text{MINIMAX}$ at the root therefore unfolds into a bottom-up pass over the game tree.
+
+This also identifies the **minimax decision** at the root: action $a_1$ is the optimal choice for MAX, because it leads to the successor with the highest minimax value.
+
+The minimax algorithm performs a **complete depth-first exploration** of the game tree. Let $b$ be the branching factor (legal moves at each node) and $m$ be the maximum depth of the tree. Then:
+
+- **Time complexity:** $O(b^m)$.
+- **Space complexity:** $O(b\,m)$ if all actions are generated at once, or $O(m)$ if actions are generated one at a time.
+
+The exponential time makes $\text{MINIMAX}$ impractical for complex games. Chess, for example, has $b \approx 35$ and average game depth around $80$ ply, giving roughly $35^{80} \approx 10^{123}$ states— far beyond what we can search. $\text{MINIMAX}$ is still useful as the mathematical basis for game analysis; practical algorithms come from **approximating** it in various ways.
+
+!!! note "Dynamic programming on the state DAG"
+    Different move sequences often reach the **same** state—i n chess this is called a *transposition*: two move orders leading to the identical board. So the underlying state graph is generally a **DAG**, and a tree-style search of size $O(b^m)$ revisits the same state many times.
+
+    Let $|S|$ be the number of **distinct reachable states** in the DAG. Treating $\text{MINIMAX}$ as a recursion over states, there are exactly $|S|$ unique sub-problems, and each requires $O(b)$ work to take a $\max$ or $\min$ over its $b$ children's already-computed values. If we **memoize** $\text{MINIMAX}(s)$ the first time we compute it and look it up thereafter, computing the value for any state is constant-time once its children are known, and the total work is
+
+    $$O(b \cdot |S|)$$
+
+    instead of $O(b^m)$. This is **dynamic programming** applied to the game-tree DAG: each unique sub-problem is solved exactly once, and subsequent calls are $O(1)$ lookups.
+
+    The savings depend on how much the DAG repeats states. In the worst case $|S| = \Theta(b^m)$ (every node in the search tree is a new state) and DP does not help. But many games have $|S| \ll b^m$. For tic-tac-toe, $|S| = 5{,}478$ distinct states versus a search tree with up to $9! = 362{,}880$ leaves, where DP turns an exponential into something tractable.
+
+### Solved games and chess engines
+
+Once $\text{MINIMAX}(s_0)$ is computed at the root $s_0$, the game's outcome under optimal play is no longer uncertain. We then say the game is **solved**: every state has a known minimax value, and the optimal action from any reachable position is determined.
+
+**Tic-tac-toe** is solved. With both players playing optimally, every game ends in a **draw**. **Checkers** has also been [solved](https://www.science.org/doi/10.1126/science.1144079) (Schaeffer et al., 2007): perfect play by both sides ends in a draw.
+
+**Chess** is **not** solved. The state space is far too large to compute $\text{MINIMAX}$ at the root. Chess has $b \approx 35$ and games run $\sim 80$ ply, so a full search would touch roughly $10^{123}$ states.
+
+State-of-the-art engines such as **Stockfish** therefore approximate $\text{MINIMAX}$ rather than compute it exactly. Stockfish is a hybrid of two ideas:
+
+- **Search:** A heavily optimized minimax search over the game tree, assuming both players play their best moves. Pruning techniques like **alpha-beta** (covered later) reduce the effective branching factor without changing the result.
+- **Evaluation:** When the search stops at a non-terminal position, the engine still needs a value for it. Historically this was a hand-coded function (material count, pawn structure, king safety, mobility, etc.). Modern Stockfish uses **NNUE** (Efficiently Updatable Neural Network)— a small neural network that can be re-evaluated incrementally as positions change (to score the leaves of the truncated search tree).
+
+So Stockfish replaces the missing $\text{UTILITY}$ at non-terminal leaves with a learned evaluation, and replaces the full minimax recursion with a pruned, depth-limited search. The shape of the algorithm ($\max$ for the side to move, $\min$ for the opponent) is exactly $\text{MINIMAX}$ from the previous section.

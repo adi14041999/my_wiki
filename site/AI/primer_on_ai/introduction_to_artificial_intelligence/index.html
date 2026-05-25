@@ -1066,6 +1066,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#optimal-decisions-in-games" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optimal Decisions in Games
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Optimal Decisions in Games">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-minimax-search-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The minimax search algorithm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solved-games-and-chess-engines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solved games and chess engines
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5200,9 +5239,51 @@ with the assignment for S, and</p>
 <p>We will call our two players MAX and MIN.</p>
 <p>We define the complete <strong>game tree</strong> as a search tree that follows every sequence of moves all the way to a terminal state. The game tree may be infinite if the state space itself is unbounded or if the rules of the game allow for infinitely repeating positions.</p>
 <p>For tic-tac-toe the game tree is relatively small— fewer than <span class="arithmatex">\(9!=362,880\)</span> terminal nodes (with only 5,478 distinct states). But for chess there are over <span class="arithmatex">\(1040\)</span> nodes, so the game tree is best thought of as a theoretical construct that we cannot realize in the physical world.</p>
-<p>A <strong>utility function</strong> (also called an objective function or payoff function), defines the final numeric value to player p when the game ends in terminal state s.</p>
+<p>A <strong>utility function</strong> (also called an objective function or payoff function), defines the final numeric value to player <span class="arithmatex">\(p\)</span> when the game ends in terminal state <span class="arithmatex">\(s\)</span>.</p>
 <p>Below is a figure of a (partial) game tree for the game of tic-tac-toe. The top node is the initial state, and MAX moves first, placing an X in an empty square. We show part of the tree, giving alternating moves by MIN (O) and MAX (X), until we eventually reach terminal states, which can be assigned utilities according to the rules of the game.</p>
 <p><img alt="img" src="../ttt.png" /></p>
+<h2 id="optimal-decisions-in-games">Optimal Decisions in Games</h2>
+<h3 id="the-minimax-search-algorithm">The minimax search algorithm</h3>
+<p>Consider the trivial game in the figure below. The possible moves for MAX at the root node are labeled <span class="arithmatex">\(a1\)</span>, <span class="arithmatex">\(a2\)</span>, and <span class="arithmatex">\(a3\)</span>. The possible replies to <span class="arithmatex">\(a1\)</span> for MIN are <span class="arithmatex">\(b1\)</span>, <span class="arithmatex">\(b2\)</span>, <span class="arithmatex">\(b3\)</span>, and so on. This particular game ends after one move each by MAX and MIN. </p>
+<p><strong>Note:</strong> In some games, the word “move” means that both players have taken an action; therefore the word ply is used to unambiguously mean one move by one player, bringing us one level deeper in the game tree.</p>
+<p>The utilities of the terminal states in this game range from <span class="arithmatex">\(2\)</span> to <span class="arithmatex">\(14\)</span>.</p>
+<p><img alt="img" src="../mm.png" /></p>
+<p>Given a game tree, the optimal strategy can be determined by working out the <strong>minimax value</strong> of each state <span class="arithmatex">\(s\)</span>, written <span class="arithmatex">\(\text{MINIMAX}(s)\)</span>.</p>
+<p>For a terminal state, the minimax value is just its utility. In a nonterminal state, MAX prefers to move to a successor of maximum value, while MIN prefers a successor of minimum value:</p>
+<div class="arithmatex">\[\text{MINIMAX}(s) = \begin{cases} \text{UTILITY}(s) &amp; \text{if IS-TERMINAL}(s) \\ \displaystyle\max_{a \in \text{Actions}(s)} \text{MINIMAX}(\text{RESULT}(s, a)) &amp; \text{if TO-MOVE}(s) = \text{MAX} \\ \displaystyle\min_{a \in \text{Actions}(s)} \text{MINIMAX}(\text{RESULT}(s, a)) &amp; \text{if TO-MOVE}(s) = \text{MIN} \end{cases}\]</div>
+<p>For the game tree above, label the nonterminal states <span class="arithmatex">\(A\)</span> (root), <span class="arithmatex">\(B\)</span>, <span class="arithmatex">\(C\)</span>, <span class="arithmatex">\(D\)</span> (the three MIN nodes), with actions</p>
+<div class="arithmatex">\[\text{Actions}(A) = \{a_1, a_2, a_3\}, \quad \text{Actions}(B) = \{b_1, b_2, b_3\}, \quad \text{Actions}(C) = \{c_1, c_2, c_3\}, \quad \text{Actions}(D) = \{d_1, d_2, d_3\}.\]</div>
+<p>So <span class="arithmatex">\(\text{RESULT}(A, a_1) = B\)</span>, <span class="arithmatex">\(\text{RESULT}(A, a_2) = C\)</span>, <span class="arithmatex">\(\text{RESULT}(A, a_3) = D\)</span>, and <span class="arithmatex">\(B, C, D\)</span> each have three terminal successors via <span class="arithmatex">\(b_i\)</span>, <span class="arithmatex">\(c_i\)</span>, <span class="arithmatex">\(d_i\)</span>.</p>
+<p>Apply <span class="arithmatex">\(\text{MINIMAX}\)</span> bottom-up. The terminals get their values from <span class="arithmatex">\(\text{UTILITY}\)</span>. For MIN node <span class="arithmatex">\(B\)</span>, the children have values <span class="arithmatex">\(3, 12, 8\)</span>, so</p>
+<div class="arithmatex">\[\text{MINIMAX}(B) = \min(3, 12, 8) = 3.\]</div>
+<p>Similarly, <span class="arithmatex">\(\text{MINIMAX}(C) = \text{MINIMAX}(D) = 2\)</span>. At the MAX root,</p>
+<div class="arithmatex">\[\text{MINIMAX}(A) = \max\bigl(\text{MINIMAX}(B),\, \text{MINIMAX}(C),\, \text{MINIMAX}(D)\bigr) = \max(3, 2, 2) = 3.\]</div>
+<p>This is a therefore a <strong>recursive definition</strong>. <span class="arithmatex">\(\text{MINIMAX}(s)\)</span> for a nonterminal state is defined in terms of <span class="arithmatex">\(\text{MINIMAX}\)</span> on its children <span class="arithmatex">\(\text{RESULT}(s, a)\)</span>. The recursion bottoms out at terminal states, where <span class="arithmatex">\(\text{IS-TERMINAL}(s)\)</span> is true and the value is given directly by <span class="arithmatex">\(\text{UTILITY}(s)\)</span>. Computing <span class="arithmatex">\(\text{MINIMAX}\)</span> at the root therefore unfolds into a bottom-up pass over the game tree.</p>
+<p>This also identifies the <strong>minimax decision</strong> at the root: action <span class="arithmatex">\(a_1\)</span> is the optimal choice for MAX, because it leads to the successor with the highest minimax value.</p>
+<p>The minimax algorithm performs a <strong>complete depth-first exploration</strong> of the game tree. Let <span class="arithmatex">\(b\)</span> be the branching factor (legal moves at each node) and <span class="arithmatex">\(m\)</span> be the maximum depth of the tree. Then:</p>
+<ul>
+<li><strong>Time complexity:</strong> <span class="arithmatex">\(O(b^m)\)</span>.</li>
+<li><strong>Space complexity:</strong> <span class="arithmatex">\(O(b\,m)\)</span> if all actions are generated at once, or <span class="arithmatex">\(O(m)\)</span> if actions are generated one at a time.</li>
+</ul>
+<p>The exponential time makes <span class="arithmatex">\(\text{MINIMAX}\)</span> impractical for complex games. Chess, for example, has <span class="arithmatex">\(b \approx 35\)</span> and average game depth around <span class="arithmatex">\(80\)</span> ply, giving roughly <span class="arithmatex">\(35^{80} \approx 10^{123}\)</span> states— far beyond what we can search. <span class="arithmatex">\(\text{MINIMAX}\)</span> is still useful as the mathematical basis for game analysis; practical algorithms come from <strong>approximating</strong> it in various ways.</p>
+<div class="admonition note">
+<p class="admonition-title">Dynamic programming on the state DAG</p>
+<p>Different move sequences often reach the <strong>same</strong> state—i n chess this is called a <em>transposition</em>: two move orders leading to the identical board. So the underlying state graph is generally a <strong>DAG</strong>, and a tree-style search of size <span class="arithmatex">\(O(b^m)\)</span> revisits the same state many times.</p>
+<p>Let <span class="arithmatex">\(|S|\)</span> be the number of <strong>distinct reachable states</strong> in the DAG. Treating <span class="arithmatex">\(\text{MINIMAX}\)</span> as a recursion over states, there are exactly <span class="arithmatex">\(|S|\)</span> unique sub-problems, and each requires <span class="arithmatex">\(O(b)\)</span> work to take a <span class="arithmatex">\(\max\)</span> or <span class="arithmatex">\(\min\)</span> over its <span class="arithmatex">\(b\)</span> children's already-computed values. If we <strong>memoize</strong> <span class="arithmatex">\(\text{MINIMAX}(s)\)</span> the first time we compute it and look it up thereafter, computing the value for any state is constant-time once its children are known, and the total work is</p>
+<div class="arithmatex">\[O(b \cdot |S|)\]</div>
+<p>instead of <span class="arithmatex">\(O(b^m)\)</span>. This is <strong>dynamic programming</strong> applied to the game-tree DAG: each unique sub-problem is solved exactly once, and subsequent calls are <span class="arithmatex">\(O(1)\)</span> lookups.</p>
+<p>The savings depend on how much the DAG repeats states. In the worst case <span class="arithmatex">\(|S| = \Theta(b^m)\)</span> (every node in the search tree is a new state) and DP does not help. But many games have <span class="arithmatex">\(|S| \ll b^m\)</span>. For tic-tac-toe, <span class="arithmatex">\(|S| = 5{,}478\)</span> distinct states versus a search tree with up to <span class="arithmatex">\(9! = 362{,}880\)</span> leaves, where DP turns an exponential into something tractable.</p>
+</div>
+<h3 id="solved-games-and-chess-engines">Solved games and chess engines</h3>
+<p>Once <span class="arithmatex">\(\text{MINIMAX}(s_0)\)</span> is computed at the root <span class="arithmatex">\(s_0\)</span>, the game's outcome under optimal play is no longer uncertain. We then say the game is <strong>solved</strong>: every state has a known minimax value, and the optimal action from any reachable position is determined.</p>
+<p><strong>Tic-tac-toe</strong> is solved. With both players playing optimally, every game ends in a <strong>draw</strong>. <strong>Checkers</strong> has also been <a href="https://www.science.org/doi/10.1126/science.1144079">solved</a> (Schaeffer et al., 2007): perfect play by both sides ends in a draw.</p>
+<p><strong>Chess</strong> is <strong>not</strong> solved. The state space is far too large to compute <span class="arithmatex">\(\text{MINIMAX}\)</span> at the root. Chess has <span class="arithmatex">\(b \approx 35\)</span> and games run <span class="arithmatex">\(\sim 80\)</span> ply, so a full search would touch roughly <span class="arithmatex">\(10^{123}\)</span> states.</p>
+<p>State-of-the-art engines such as <strong>Stockfish</strong> therefore approximate <span class="arithmatex">\(\text{MINIMAX}\)</span> rather than compute it exactly. Stockfish is a hybrid of two ideas:</p>
+<ul>
+<li><strong>Search:</strong> A heavily optimized minimax search over the game tree, assuming both players play their best moves. Pruning techniques like <strong>alpha-beta</strong> (covered later) reduce the effective branching factor without changing the result.</li>
+<li><strong>Evaluation:</strong> When the search stops at a non-terminal position, the engine still needs a value for it. Historically this was a hand-coded function (material count, pawn structure, king safety, mobility, etc.). Modern Stockfish uses <strong>NNUE</strong> (Efficiently Updatable Neural Network)— a small neural network that can be re-evaluated incrementally as positions change (to score the leaves of the truncated search tree).</li>
+</ul>
+<p>So Stockfish replaces the missing <span class="arithmatex">\(\text{UTILITY}\)</span> at non-terminal leaves with a learned evaluation, and replaces the full minimax recursion with a pruned, depth-limited search. The shape of the algorithm (<span class="arithmatex">\(\max\)</span> for the side to move, <span class="arithmatex">\(\min\)</span> for the opponent) is exactly <span class="arithmatex">\(\text{MINIMAX}\)</span> from the previous section.</p>
 
 
 
