@@ -1021,6 +1021,51 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#adversarial-search-and-games" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adversarial search and games
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Adversarial search and games">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#game-theory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Game Theory
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Game Theory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#two-player-zero-sum-games" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two-player zero-sum games
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5142,6 +5187,22 @@ with the assignment for S, and</p>
 <p>As another examplem, for the constraint graph below, <span class="arithmatex">\(c = 2\)</span>.</p>
 <p><img alt="img" src="../c2.png" /></p>
 <p>If we could find a cutset of size <span class="arithmatex">\(c = 20\)</span>, this would get us down from the lifetime of the Universe to a few minutes. In the worst case, however, <span class="arithmatex">\(c\)</span> can be as large as <span class="arithmatex">\((n−2)\)</span>.</p>
+<h2 id="adversarial-search-and-games">Adversarial search and games</h2>
+<p>So far, our problem formulations and search algorithms have assumed a <strong>single</strong> agent: one rational agent with a goal, percepts, and actions, cast as state-space search (see <a href="#rational-agents-and-problem-formulation">Rational agents and problem formulation</a>).</p>
+<p>Let's talk about competitive environments, in which two or more agents have conflicting goals, giving rise to adversarial search problems.</p>
+<h3 id="game-theory">Game Theory</h3>
+<p>There are at least three stances we can take towards multi-agent environments. </p>
+<p>The first stance, appropriate when there are a very large number of agents, is to consider them in the aggregate as an <strong>economy</strong>, allowing us to do things like predict that increasing demand will cause prices to rise, without having to predict the action of any individual agent.</p>
+<p>Second, we could consider adversarial agents as just a part of the environment— a part that makes the environment nondeterministic. But if we model the adversaries in the same way that, say, rain sometimes falls and sometimes doesn’t, we miss the idea that our adversaries are actively trying to defeat us, whereas the rain supposedly has no such intention.</p>
+<p>The third stance is to explicitly model the adversarial agents with the techniques of adversarial game-tree search.</p>
+<h4 id="two-player-zero-sum-games">Two-player zero-sum games</h4>
+<p>The games most commonly studied within AI (such as chess and Go) are what game theorists call <strong>deterministic, two-player, turn-taking, perfect information, zero-sum games</strong>. “Perfect information” is a synonym for “fully observable,” and “zero-sum” means that what is good for one player is just as bad for the other: there is no “win-win” outcome. For games we often use the term move as a synonym for “action” and position as a synonym for “state.”</p>
+<p>We will call our two players MAX and MIN.</p>
+<p>We define the complete <strong>game tree</strong> as a search tree that follows every sequence of moves all the way to a terminal state. The game tree may be infinite if the state space itself is unbounded or if the rules of the game allow for infinitely repeating positions.</p>
+<p>For tic-tac-toe the game tree is relatively small— fewer than <span class="arithmatex">\(9!=362,880\)</span> terminal nodes (with only 5,478 distinct states). But for chess there are over <span class="arithmatex">\(1040\)</span> nodes, so the game tree is best thought of as a theoretical construct that we cannot realize in the physical world.</p>
+<p>A <strong>utility function</strong> (also called an objective function or payoff function), defines the final numeric value to player p when the game ends in terminal state s.</p>
+<p>Below is a figure of a (partial) game tree for the game of tic-tac-toe. The top node is the initial state, and MAX moves first, placing an X in an empty square. We show part of the tree, giving alternating moves by MIN (O) and MAX (X), until we eventually reach terminal states, which can be assigned utilities according to the rules of the game.</p>
+<p><img alt="img" src="../ttt.png" /></p>
 
 
 

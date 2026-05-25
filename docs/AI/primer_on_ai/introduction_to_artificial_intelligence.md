@@ -739,3 +739,35 @@ As another examplem, for the constraint graph below, $c = 2$.
 ![img](c2.png)
 
 If we could find a cutset of size $c = 20$, this would get us down from the lifetime of the Universe to a few minutes. In the worst case, however, $c$ can be as large as $(n−2)$.
+
+## Adversarial search and games
+
+So far, our problem formulations and search algorithms have assumed a **single** agent: one rational agent with a goal, percepts, and actions, cast as state-space search (see [Rational agents and problem formulation](#rational-agents-and-problem-formulation)).
+
+Let's talk about competitive environments, in which two or more agents have conflicting goals, giving rise to adversarial search problems.
+
+### Game Theory
+
+There are at least three stances we can take towards multi-agent environments. 
+
+The first stance, appropriate when there are a very large number of agents, is to consider them in the aggregate as an **economy**, allowing us to do things like predict that increasing demand will cause prices to rise, without having to predict the action of any individual agent.
+
+Second, we could consider adversarial agents as just a part of the environment— a part that makes the environment nondeterministic. But if we model the adversaries in the same way that, say, rain sometimes falls and sometimes doesn’t, we miss the idea that our adversaries are actively trying to defeat us, whereas the rain supposedly has no such intention.
+
+The third stance is to explicitly model the adversarial agents with the techniques of adversarial game-tree search.
+
+#### Two-player zero-sum games
+
+The games most commonly studied within AI (such as chess and Go) are what game theorists call **deterministic, two-player, turn-taking, perfect information, zero-sum games**. “Perfect information” is a synonym for “fully observable,” and “zero-sum” means that what is good for one player is just as bad for the other: there is no “win-win” outcome. For games we often use the term move as a synonym for “action” and position as a synonym for “state.”
+
+We will call our two players MAX and MIN.
+
+We define the complete **game tree** as a search tree that follows every sequence of moves all the way to a terminal state. The game tree may be infinite if the state space itself is unbounded or if the rules of the game allow for infinitely repeating positions.
+
+For tic-tac-toe the game tree is relatively small— fewer than $9!=362,880$ terminal nodes (with only 5,478 distinct states). But for chess there are over $1040$ nodes, so the game tree is best thought of as a theoretical construct that we cannot realize in the physical world.
+
+A **utility function** (also called an objective function or payoff function), defines the final numeric value to player p when the game ends in terminal state s.
+
+Below is a figure of a (partial) game tree for the game of tic-tac-toe. The top node is the initial state, and MAX moves first, placing an X in an empty square. We show part of the tree, giving alternating moves by MIN (O) and MAX (X), until we eventually reach terminal states, which can be assigned utilities according to the rules of the game.
+
+![img](ttt.png)
