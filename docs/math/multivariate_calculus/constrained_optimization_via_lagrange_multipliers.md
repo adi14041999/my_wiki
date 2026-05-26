@@ -351,3 +351,368 @@ $$(\nabla f)(\mathbf{a}) = \lambda \, (\nabla g)(\mathbf{a})$$
 for some scalar $\lambda$.
 
 **Intuition:** At a constrained local maximum of $f$ on $g(\mathbf{x}) = c$, you cannot improve $f$ by **sliding** along the constraint. Along a smooth **curve** (the usual plane picture $g(x,y)=c$), there is only **one tangent line** at a point. The way $f$ changes as you start to move along the curve must be **zero** at a maximum. If it were nonzero, a short step one way or the other along the trail would increase $f$. So $\nabla f$ has **no component along the tangent**. Hence $\nabla f$ is **orthogonal to that tangent line**, i.e. it lies in the normal line. The gradient $\nabla g$ is also normal to the level set $g = c$. In the plane the normal line is one-dimensional, so $\nabla f$ and $\nabla g$ are **parallel**: $\nabla f = \lambda\, \nabla g$. The proof above makes this precise by following an insect along the curve and applying single-variable calculus plus the chain rule.
+
+## Exercises
+
+**1.** Let $c \in \mathbb{R}$ be a constant, and let
+
+$$h(x, y, z) = \sqrt{\dfrac{x^2 + y^2 + z^2}{3}}.$$
+
+**(a)** Use Lagrange multipliers to generate a list of candidate extrema of $h$ on the plane
+
+$$x + y + z = 3c.$$
+
+**Solution:** Since $h(x, y, z) \geq 0$ on all of $\mathbb{R}^3$ and $u \mapsto u^2$ is strictly increasing on $[0, \infty)$, the inequalities $h(\mathbf{p}) \leq h(\mathbf{q})$ and $h(\mathbf{p})^2 \leq h(\mathbf{q})^2$ are equivalent. So the maxima and minima of $h$ on the plane occur at the same points as the maxima and minima of
+
+$$\phi(x, y, z) := h(x, y, z)^2 = \dfrac{x^2 + y^2 + z^2}{3},$$
+
+and $\phi$ is smooth everywhere (no square root to worry about at the origin).
+
+Set up the Lagrange equation for $\phi$ with constraint $g(x, y, z) := x + y + z - 3c = 0$. We have
+
+$$\nabla \phi = \begin{pmatrix} 2x/3 \\ 2y/3 \\ 2z/3 \end{pmatrix}, \qquad \nabla g = \begin{pmatrix} 1 \\ 1 \\ 1 \end{pmatrix} \ne \mathbf{0}.$$
+
+Since $\nabla g \ne \mathbf{0}$ everywhere, the only case to consider is $\nabla \phi = \lambda \, \nabla g$ for some scalar $\lambda$:
+
+$$\dfrac{2x}{3} = \lambda, \qquad \dfrac{2y}{3} = \lambda, \qquad \dfrac{2z}{3} = \lambda.$$
+
+These force $x = y = z$. Combined with $x + y + z = 3c$, we get $3x = 3c$, so
+
+$$x = y = z = c.$$
+
+The list of candidates therefore consists of the **single point** $(c, c, c)$.
+
+**(b)** Use the fact that $h$ is non-negative (bounded below) and $h \to \infty$ as $\|(x, y, z)\| \to \infty$, plus your result from (a), to find the minimum value of $h$ on the plane $x + y + z = 3c$ when $c \geq 0$.
+
+**Solution:** The hypotheses $h \geq 0$ and $h \to \infty$ at infinity guarantee that $h$ attains a global minimum on the closed plane $x + y + z = 3c$. By Lagrange's Theorem, that global minimum must occur at a candidate point from (a). The only candidate is $(c, c, c)$, so the minimum is achieved there. Compute:
+
+$$h(c, c, c) = \sqrt{\dfrac{c^2 + c^2 + c^2}{3}} = \sqrt{c^2} = |c| = c \quad (\text{since } c \geq 0).$$
+
+So the **minimum value** of $h$ on the plane $x + y + z = 3c$ is $c$, attained at $(c, c, c)$.
+
+**(c)** Explain why your result from (b) implies the inequality
+
+$$\sqrt{\dfrac{x^2 + y^2 + z^2}{3}} \;\geq\; \dfrac{x + y + z}{3}$$
+
+for all $x, y, z \in \mathbb{R}$.
+
+**Solution:** Fix any $\mathbf{v} = (x, y, z) \in \mathbb{R}^3$, and define
+
+$$c := \dfrac{x + y + z}{3}.$$
+
+By construction, $\mathbf{v}$ lies on the plane $x + y + z = 3c$.
+
+- **Case $c \geq 0$.** By (b), the minimum of $h$ on this plane is $c$, so
+
+    $$h(\mathbf{v}) \geq c = \dfrac{x + y + z}{3},$$
+
+    which is exactly the desired inequality.
+
+- **Case $c < 0$.** Then $\dfrac{x + y + z}{3} = c < 0$, while $h(\mathbf{v}) \geq 0$, so
+
+    $$h(\mathbf{v}) \geq 0 > c = \dfrac{x + y + z}{3}.$$
+
+Either way,
+
+$$\sqrt{\dfrac{x^2 + y^2 + z^2}{3}} \;\geq\; \dfrac{x + y + z}{3}.$$
+
+The left side is the **root mean square** (or **quadratic mean**) of $x, y, z$; the right side is the **arithmetic mean**. This is the QM–AM inequality for three real numbers.
+
+**2.** Let $f(x, y, z) = xz + yz$.
+
+**(a)** Using Lagrange multipliers, show that any global extrema of $f$ on the surface
+
+$$x^2 + y^2 - 4z^2 = 1$$
+
+(a **hyperboloid**, since cutting it by any plane $y = c$ gives a hyperbola) must be among **two** specific points. Be careful about division by $0$, and account for the possibility that $\nabla g = \mathbf{0}$.
+
+**Solution:** Write the constraint as $g(x, y, z) := x^2 + y^2 - 4z^2 - 1 = 0$. Compute
+
+$$\nabla f = \begin{pmatrix} z \\ z \\ x + y \end{pmatrix}, \qquad \nabla g = \begin{pmatrix} 2x \\ 2y \\ -8z \end{pmatrix}.$$
+
+**Check $\nabla g = \mathbf{0}$ first.** $\nabla g = \mathbf{0}$ requires $x = y = z = 0$, but then $g(0, 0, 0) = -1 \ne 0$. So $\nabla g \ne \mathbf{0}$ at every point of the surface, and Lagrange's Theorem requires $\nabla f = \lambda \, \nabla g$:
+
+$$z = 2\lambda x, \qquad z = 2\lambda y, \qquad x + y = -8\lambda z. \qquad (\ast)$$
+
+Subtracting the first two equations gives $2\lambda (x - y) = 0$, so either $\lambda = 0$ or $x = y$.
+
+**Case 1: $\lambda = 0$.** The first two equations of $(\ast)$ give $z = 0$, and the third gives $x + y = 0$, so $y = -x$. The constraint becomes
+
+$$x^2 + (-x)^2 - 0 = 2x^2 = 1 \quad \Longrightarrow \quad x = \pm \tfrac{1}{\sqrt{2}}.$$
+
+This yields two candidate points
+
+$$P_1 = \left(\tfrac{1}{\sqrt{2}},\, -\tfrac{1}{\sqrt{2}},\, 0\right), \qquad P_2 = \left(-\tfrac{1}{\sqrt{2}},\, \tfrac{1}{\sqrt{2}},\, 0\right),$$
+
+both with $f = z(x + y) = 0$.
+
+**Case 2: $\lambda \ne 0$ and $x = y$.** The third equation in $(\ast)$ becomes $2x = -8\lambda z$, i.e. $x = -4\lambda z$. Substituting into the first equation,
+
+$$z = 2\lambda x = 2\lambda \cdot (-4\lambda z) = -8\lambda^2 z \quad \Longrightarrow \quad z\,(1 + 8\lambda^2) = 0.$$
+
+Since $1 + 8\lambda^2 > 0$, we must have $z = 0$. Then the first equation gives $0 = 2\lambda x$, and since $\lambda \ne 0$, we get $x = 0$, hence $y = 0$. But $(0, 0, 0)$ is not on the constraint surface ($g(0,0,0) = -1$), so this case yields **no** candidates.
+
+So the only candidates from Lagrange's method are the two points $P_1$ and $P_2$, and any global extremum of $f$ on the hyperboloid must be one of them.
+
+**(b)** Evaluate $f$ at both points from (a) and exhibit a point on the hyperboloid where $f$ is **larger** than those values, and another where $f$ is **smaller**. Why does this imply $f$ has no global extrema on the hyperboloid?
+
+**Solution:** From (a), $f(P_1) = f(P_2) = 0$.
+
+Try $x = y = 1$. The constraint becomes $1 + 1 - 4z^2 = 1$, so $z^2 = \tfrac{1}{4}$, giving $z = \pm \tfrac{1}{2}$. Both $(1, 1, \tfrac{1}{2})$ and $(1, 1, -\tfrac{1}{2})$ lie on the hyperboloid, and
+
+$$f\!\left(1, 1, \tfrac{1}{2}\right) = \tfrac{1}{2} \cdot (1 + 1) = 1 > 0, \qquad f\!\left(1, 1, -\tfrac{1}{2}\right) = -\tfrac{1}{2} \cdot 2 = -1 < 0.$$
+
+So we have a point on the surface where $f = 1$ and another where $f = -1$, both **outside** the candidate set $\{P_1, P_2\}$ (where $f = 0$).
+
+If $f$ had a global maximum on the hyperboloid, Lagrange's Theorem (combined with $\nabla g \ne \mathbf{0}$) would force the maximizer to be among $\{P_1, P_2\}$, with maximum value $0$. But $f(1, 1, \tfrac{1}{2}) = 1 > 0$ contradicts that. So $f$ has **no global maximum**. By the same reasoning with $f(1, 1, -\tfrac{1}{2}) = -1 < 0$, $f$ has **no global minimum** either.
+
+!!! note "Are $P_1$ and $P_2$ local extrema?"
+    **No**. They are **saddle points** of $f$ on the surface. Lagrange's Theorem only says that any global (or local) extremum must satisfy the multiplier equation; it does **not** say every solution of that equation is even a local extremum.
+
+**3.** It is a fact that the function
+
+$$f(x, y) = e^{-x - 2y}$$
+
+restricted to the level set
+
+$$x^2 - y^2 = -3$$
+
+in the region $y < 0$ attains a minimal value. Moreover, the value is attained at exactly one point. Find that unique point and the value of $f$ there by using Lagrange multipliers in two ways:
+
+**(a)** Work with $f(x, y) = e^{-x - 2y}$.
+
+**Solution:** Write the constraint as
+
+$$g(x, y) := x^2 - y^2 + 3 = 0,$$
+
+together with the branch condition $y < 0$. We have
+
+$$\nabla f = e^{-x - 2y}\begin{pmatrix} -1 \\ -2 \end{pmatrix}, \qquad \nabla g = \begin{pmatrix} 2x \\ -2y \end{pmatrix}.$$
+
+First check whether $\nabla g = \mathbf{0}$ on the constraint. This would require $x = 0$ and $y = 0$, but
+
+$$g(0, 0) = 3 \ne 0.$$
+
+So $\nabla g \ne \mathbf{0}$ everywhere on the constraint, and Lagrange's Theorem requires
+
+$$\nabla f = \lambda \, \nabla g.$$
+
+Thus
+
+$$
+\begin{aligned}
+-e^{-x - 2y} &= 2\lambda x, \\
+-2e^{-x - 2y} &= -2\lambda y, \\
+x^2 - y^2 &= -3.
+\end{aligned}
+$$
+
+Since $e^{-x - 2y} > 0$, the first equation implies $x \ne 0$ and $\lambda \ne 0$. Therefore we may divide the second equation by the first equation:
+
+$$\dfrac{-2e^{-x - 2y}}{-e^{-x - 2y}} = \dfrac{-2\lambda y}{2\lambda x}.$$
+
+This gives
+
+$$2 = -\dfrac{y}{x},$$
+
+so
+
+$$y = -2x.$$
+
+Substitute this into the constraint:
+
+$$x^2 - (-2x)^2 = -3 \quad \Longrightarrow \quad x^2 - 4x^2 = -3.$$
+
+Hence
+
+$$-3x^2 = -3, \qquad x^2 = 1.$$
+
+So $x = \pm 1$. Since $y = -2x$ and we are restricted to the branch $y < 0$, we must choose $x = 1$, giving
+
+$$y = -2.$$
+
+Thus, the only Lagrange candidate on the branch $y < 0$ is
+
+$$P = (1, -2).$$
+
+By the hypothesis in the problem, the minimum is attained at exactly one point. Therefore this candidate is the unique minimizer. The minimum value is
+
+$$f(1, -2) = e^{-1 - 2(-2)} = e^3.$$
+
+So the unique point is $(1, -2)$, and the minimum value is $e^3$.
+
+**(b)** Work with $h(x, y) = -x - 2y$ and use the fact that an inequality $e^a \leq e^b$ holds for numbers $a$ and $b$ precisely when $a \leq b$.
+
+**Solution:** Since the exponential function is increasing, minimizing
+
+$$f(x, y) = e^{-x - 2y}$$
+
+on the constraint is equivalent to minimizing
+
+$$h(x, y) = -x - 2y$$
+
+on the same constraint. Again use
+
+$$g(x, y) := x^2 - y^2 + 3 = 0.$$
+
+We have
+
+$$\nabla h = \begin{pmatrix} -1 \\ -2 \end{pmatrix}, \qquad \nabla g = \begin{pmatrix} 2x \\ -2y \end{pmatrix}.$$
+
+As in part (a), $\nabla g = \mathbf{0}$ does not occur on the constraint. Hence any constrained extremum must satisfy
+
+$$\nabla h = \lambda \, \nabla g,$$
+
+so
+
+$$
+\begin{aligned}
+-1 &= 2\lambda x, \\
+-2 &= -2\lambda y, \\
+x^2 - y^2 &= -3.
+\end{aligned}
+$$
+
+The first equation implies $x \ne 0$ and $\lambda \ne 0$. Dividing the second equation by the first equation gives
+
+$$\dfrac{-2}{-1} = \dfrac{-2\lambda y}{2\lambda x},$$
+
+so
+
+$$2 = -\dfrac{y}{x}, \qquad \text{hence} \qquad y = -2x.$$
+
+The constraint then gives
+
+$$x^2 - (-2x)^2 = -3,$$
+
+so again
+
+$$x^2 = 1.$$
+
+The branch condition $y < 0$ rules out $x = -1$ (which would give $y = 2$), so the unique candidate on the desired branch is
+
+$$P = (1, -2).$$
+
+At this point,
+
+$$h(1, -2) = -1 - 2(-2) = 3.$$
+
+Since $f = e^h$, the corresponding value of the original function is
+
+$$f(1, -2) = e^{h(1, -2)} = e^3.$$
+
+So this second method gives the same answer: the unique minimizing point is $(1, -2)$, and the minimum value of $f$ is $e^3$.
+
+**4.** Consider the equation
+
+$$126z + 9yz^3 - y^2 + xy - 7x^2 = 0.$$
+
+Solving for $z$ is tantamount to expressing $z$ as a function of $x$ and $y$, but it is not clear how one would go about doing this (since terms with $z^3$ and $z$ both appear). Thus, one says that the equation gives $z$ as an implicit (as opposed to explicit) function of $x, y$. Use Lagrange multipliers to find all local extrema of $z$ within the set of points satisfying the equation.
+
+!!! hint
+    It is a fact, which you may accept, that the candidate extrema produced by the Lagrange multiplier method are indeed local extrema in this case. Apply this with $f(x, y, z) = z$.
+
+**Solution:** Let
+
+$$G(x, y, z) := 126z + 9yz^3 - y^2 + xy - 7x^2.$$
+
+We want to optimize
+
+$$f(x, y, z) = z$$
+
+subject to the constraint $G(x, y, z) = 0$. Compute
+
+$$\nabla f = \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix},$$
+
+and
+
+$$\nabla G = \begin{pmatrix} y - 14x \\ 9z^3 - 2y + x \\ 126 + 27yz^2 \end{pmatrix}.$$
+
+First check the possible exceptional case $\nabla G = \mathbf{0}$ on the constraint. The equations
+
+$$y - 14x = 0, \qquad 9z^3 - 2y + x = 0, \qquad 126 + 27yz^2 = 0$$
+
+give
+
+$$y = 14x, \qquad x = \dfrac{z^3}{3}, \qquad y = \dfrac{14z^3}{3}.$$
+
+Substituting $y = \dfrac{14z^3}{3}$ into the third equation gives
+
+$$126 + 27 \cdot \dfrac{14z^3}{3} \cdot z^2 = 126 + 126z^5 = 126(1 + z^5) = 0,$$
+
+so $z = -1$. This would give
+
+$$x = -\dfrac{1}{3}, \qquad y = -\dfrac{14}{3}.$$
+
+But this point does **not** satisfy the constraint:
+
+$$G\!\left(-\dfrac{1}{3}, -\dfrac{14}{3}, -1\right) = -105 \ne 0.$$
+
+So there is no point on the constraint where $\nabla G = \mathbf{0}$, and the extrema must satisfy the Lagrange multiplier equation
+
+$$\nabla f = \lambda \, \nabla G.$$
+
+This gives the system
+
+$$
+\begin{aligned}
+0 &= \lambda(y - 14x), \\
+0 &= \lambda(9z^3 - 2y + x), \\
+1 &= \lambda(126 + 27yz^2), \\
+126z + 9yz^3 - y^2 + xy - 7x^2 &= 0.
+\end{aligned}
+$$
+
+The third equation implies $\lambda \ne 0$. Hence the first two equations force
+
+$$y - 14x = 0, \qquad 9z^3 - 2y + x = 0.$$
+
+From the first equation,
+
+$$y = 14x.$$
+
+Substitute this into the second equation:
+
+$$9z^3 - 2(14x) + x = 0,$$
+
+so
+
+$$9z^3 - 27x = 0, \qquad x = \dfrac{z^3}{3}.$$
+
+Therefore
+
+$$y = 14x = \dfrac{14z^3}{3}.$$
+
+Now substitute
+
+$$x = \dfrac{z^3}{3}, \qquad y = \dfrac{14z^3}{3}$$
+
+into the constraint:
+
+$$
+\begin{aligned}
+0
+&= 126z + 9\left(\dfrac{14z^3}{3}\right)z^3 - \left(\dfrac{14z^3}{3}\right)^2
+    + \left(\dfrac{z^3}{3}\right)\left(\dfrac{14z^3}{3}\right)
+    - 7\left(\dfrac{z^3}{3}\right)^2 \\
+&= 126z + 42z^6 - \dfrac{196z^6}{9} + \dfrac{14z^6}{9} - \dfrac{7z^6}{9} \\
+&= 126z + 21z^6 \\
+&= 21z(z^5 + 6).
+\end{aligned}
+$$
+
+Thus
+
+$$z = 0 \qquad \text{or} \qquad z^5 = -6.$$
+
+So
+
+$$z = 0 \qquad \text{or} \qquad z = -\sqrt[5]{6}.$$
+
+Using $x = z^3/3$ and $y = 14z^3/3$, we get the two candidate points
+
+$$P_0 = (0, 0, 0)$$
+
+and
+
+$$P_1 = \left(-\dfrac{6^{3/5}}{3},\, -\dfrac{14 \cdot 6^{3/5}}{3},\, -6^{1/5}\right).$$
