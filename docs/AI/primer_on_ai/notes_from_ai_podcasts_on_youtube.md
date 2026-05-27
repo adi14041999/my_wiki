@@ -2,7 +2,167 @@
 
 ## Mindscape 336 | Anil Ananthaswamy on the Mathematics of Neural Nets and aI
 
-### Perceptron Convergence Proof
+### The Perceptron Learning Algorithm and its Convergence
+
+#### Perceptron
+
+The **Perceptron**, introduced by Rosenblatt, can be viewed as a parameterized function that takes a real-valued vector as input and produces a Boolean output. In this section, we are discussing the classical **single-layer perceptron**: one linear scoring layer followed by a threshold. The output is obtained by thresholding a linear score; the model parameters are exactly the coefficients of that linear function.
+
+For dimension $d \geq 1$, a $d$-dimensional perceptron has parameter vector $\mathbf{w} \in \mathbb{R}^d$. Given input $\mathbf{x} \in \mathbb{R}^d$, it computes
+
+$$y = \operatorname{sign}(\mathbf{w}^\top \mathbf{x}),$$
+
+where for $\alpha \in \mathbb{R}$,
+
+$$\operatorname{sign}(\alpha) = \begin{cases}
++1, & \alpha \ge 0, \\
+-1, & \alpha < 0.
+\end{cases}$$
+
+![img](per.png)
+
+!!! note "Coordinate notation in the figure"
+    In the Perceptron figure, labels such as $w_1, w_2, w_3, \ldots$ refer to the coordinates of the single weight vector $\mathbf{w}$ in $d$-dimensional space. For example, $\mathbf{w} = (w_1, w_2, \ldots, w_d)$. This is different from the later notation $\mathbf{w}_1, \mathbf{w}_2, \ldots$, where the subscript indexes successive weight vectors produced by the algorithm.
+
+It is common to include an additive bias term $b \in \mathbb{R}$ in the linear score, so the perceptron output becomes
+
+$$y = \operatorname{sign}(\mathbf{w}^{\top}\mathbf{x} + b).$$
+
+We proceed without an explicit bias term, since we can absorb it into an augmented input. Define
+
+$$\tilde{\mathbf{x}} = \begin{pmatrix}\mathbf{x} \\ 1\end{pmatrix} \in \mathbb{R}^{d+1}, \qquad
+\tilde{\mathbf{w}} = \begin{pmatrix}\mathbf{w} \\ b\end{pmatrix} \in \mathbb{R}^{d+1}.$$
+
+Then
+
+$$\tilde{\mathbf{w}}^\top \tilde{\mathbf{x}} = \mathbf{w}^\top \mathbf{x} + b.$$
+
+The significance of the Perceptron lies in its use as a device for learning.
+
+Consider the figure below.
+
+![img](learning.png)
+
+It is apparent that in the figure on the left, we may draw a line such that all the points labeled $+$ lie to one side of the line, and all the points labeled $-$ lie to the other side. It is also apparent that no line with the same property may be drawn for the set of labeled points shown on the right. The property in question is linear separability. More generally, in $d$-dimensional space, a set of points with labels in $\{+, -\}$ is linearly separable if there exists a hyperplane in the same space such that all the points labeled $+$ lie to one side of the hyperplane, and all the points labeled $-$ lie to the other side of the hyperplane.
+
+Given a set of points labeled in $\{+, -\}$, the Perceptron Learning Algorithm is an iterative procedure to update the weights of a Perceptron such that eventually the corresponding hyperplane contains all the points labeled $+$ on one side, and all the points labeled $-$ on the other. We adopt the convention that the points labeled $+$ must lie on the side of the hyperplane to which its normal points.
+
+#### Perceptron Learning Algorithm
+
+The input to the Perceptron Learning Algorithm is a data set of $n \geq 1$ points, each $d$-dimensional, and their associated labels in $\{+, -\}$. For mathematical convenience, we associate the $+$ label with the number $1$, and the $-$ label with the number $-1$. Hence, we may take our input to be
+
+$$(\mathbf{x}^{(1)}, y^{(1)}), (\mathbf{x}^{(2)}, y^{(2)}), \ldots, (\mathbf{x}^{(n)}, y^{(n)}),$$
+
+where for $i \in \{1, 2, \ldots, n\}$, $\mathbf{x}^{(i)} \in \mathbb{R}^d$ and $y^{(i)} \in \{-1, 1\}$.
+
+To entertain any hope of our algorithm succeeding, we must assume that our input data points are linearly separable. Consistent with our choice of ignoring the bias term in the Perceptron, we shall assume that not only are the input data points linearly separable, they can indeed be separated by a hyperplane that passes through the origin.
+
+**Assumption 1 (Linear Separability):** There exists some $\mathbf{w}^* \in \mathbb{R}^d$ such that $\|\mathbf{w}^*\| = 1$ and, for some $\gamma > 0$, for all $i \in \{1, 2, \ldots, n\}$,
+
+$$y^{(i)}\bigl(\mathbf{w}^* \cdot \mathbf{x}^{(i)}\bigr) > \gamma.$$
+
+Taking $\mathbf{w}^*$ to be unit-length is not strictly necessary; it merely simplifies our subsequent analysis. Geometrically, $\mathbf{w}^*$ is the normal vector to a separating hyperplane through the origin. The direction of $\mathbf{w}^*$ determines which side of the hyperplane is considered positive. Points for which $\mathbf{w}^* \cdot \mathbf{x} > 0$ lie on the side toward which $\mathbf{w}^*$ points, so they are predicted to have label $+1$, while points for which $\mathbf{w}^* \cdot \mathbf{x} < 0$ lie on the opposite side and are predicted to have label $-1$.
+
+Requiring $y^{(i)}(\mathbf{w}^* \cdot \mathbf{x}^{(i)})$ to be strictly positive, and in fact greater than $\gamma$, means there is a positive margin between the data set and the separating hyperplane; none of the data points lie on the hyperplane itself.
+
+**Assumption 2 (Bounded Coordinates):** There exists $R \in \mathbb{R}$ such that for all $i \in \{1, 2, \ldots, n\}$,
+
+$$\|\mathbf{x}^{(i)}\| \leq R.$$
+
+Naturally, the Perceptron Learning Algorithm itself does not explicitly know $\mathbf{w}^*$, $\gamma$, or $R$, although $R$ can be inferred from the data. These quantities are merely useful artifacts we have defined in order to aid our subsequent analysis of the algorithm.
+
+**Perceptron Learning Algorithm pseudocode:**
+
+!!! note "Iteration notation"
+    The vectors $\mathbf{w}_1, \mathbf{w}_2, \mathbf{w}_3, \ldots, \mathbf{w}_k$ are the successive weight vectors produced by the algorithm. The subscript $k$ indexes the iteration number; it does **not** refer to the $k$th coordinate of a single vector $\mathbf{w}$.
+
+1. Set $k \leftarrow 1$ and $\mathbf{w}_k \leftarrow \mathbf{0}$.
+2. While there exists some $i \in \{1, 2, \ldots, n\}$ such that
+
+    $$y^{(i)}\bigl(\mathbf{w}_k \cdot \mathbf{x}^{(i)}\bigr) \leq 0,$$
+
+    pick an arbitrary $j \in \{1, 2, \ldots, n\}$ such that
+
+    $$y^{(j)}\bigl(\mathbf{w}_k \cdot \mathbf{x}^{(j)}\bigr) \leq 0,$$
+
+    and update
+
+    $$\mathbf{w}_{k+1} \leftarrow \mathbf{w}_k + y^{(j)}\mathbf{x}^{(j)}.$$
+
+3. Set $k \leftarrow k + 1$ and repeat the while loop.
+4. Return $\mathbf{w}_k$.
+
+Here is the step-by-step explanation. We start with the zero vector, so initially the Perceptron has no preferred separating direction. At each iteration, we look for a data point that is currently misclassified, or exactly on the decision boundary. Once we find such a point $\mathbf{x}^{(j)}$, we adjust the weight vector in the direction that would classify it more correctly. If $y^{(j)} = 1$, we add $\mathbf{x}^{(j)}$, nudging $\mathbf{w}_k$ toward the positive example. If $y^{(j)} = -1$, we subtract $\mathbf{x}^{(j)}$, nudging $\mathbf{w}_k$ away from the negative example.
+
+The while loop continues as long as there exists some point such that,
+
+$$y^{(i)}(\mathbf{w}_k \cdot \mathbf{x}^{(i)}) \leq 0.$$
+
+If $y^{(i)} = 1$, then we want (in order to break the while loop) $\mathbf{w}_k \cdot \mathbf{x}^{(i)} > 0$; if $y^{(i)} = -1$, then we want (in order to break the while loop) $\mathbf{w}_k \cdot \mathbf{x}^{(i)} < 0$. The while loop breaks when for every $i \in \{1, 2, \ldots, n\}$,
+
+$$y^{(i)}(\mathbf{w}_k \cdot \mathbf{x}^{(i)}) > 0.$$
+
+That is the final condition we want: the hyperplane normal to $\mathbf{w}_k$ separates the data according to their labels, with every positive example on the side toward which $\mathbf{w}_k$ points and every negative example on the opposite side.
+
+#### Analysis
+
+**Theorem (Perceptron Convergence):** The Perceptron Learning Algorithm makes at most $\dfrac{R^2}{\gamma^2}$ updates, after which it returns a separating hyperplane.
+
+**Proof.** It is immediate from the code that if the algorithm terminates and returns a weight vector, then that weight vector separates the positive points from the negative points. Thus, it suffices to show that the algorithm terminates after at most $\dfrac{R^2}{\gamma^2}$ updates. In other words, we need to show that the number of updates is upper-bounded by $\dfrac{R^2}{\gamma^2}$. Our strategy is to derive both a lower bound and an upper bound on the magnitude of $\mathbf{w}_{k+1}$ in terms of $k$, where $k$ is the number of updates made so far, and then compare the two bounds.
+
+First note that $\mathbf{w}_1 = \mathbf{0}$. For $k \geq 1$, suppose $\mathbf{x}^{(j)}$ is the misclassified point chosen during iteration $k$. Then
+
+$$
+\begin{aligned}
+\mathbf{w}_{k+1} \cdot \mathbf{w}^*
+&= \bigl(\mathbf{w}_k + y^{(j)}\mathbf{x}^{(j)}\bigr) \cdot \mathbf{w}^* \\
+&= \mathbf{w}_k \cdot \mathbf{w}^* + y^{(j)}\bigl(\mathbf{x}^{(j)} \cdot \mathbf{w}^*\bigr) \\
+&> \mathbf{w}_k \cdot \mathbf{w}^* + \gamma.
+\end{aligned}
+$$
+
+The final inequality uses Assumption 1, since $y^{(j)}(\mathbf{w}^* \cdot \mathbf{x}^{(j)}) > \gamma$. 
+
+Starting from $\mathbf{w}_1 \cdot \mathbf{w}^* = 0$, each update increases this dot product by more than $\gamma$. After $k$ updates, the accumulated increase is therefore more than $k\gamma$, so by induction,
+
+$$\mathbf{w}_{k+1} \cdot \mathbf{w}^* > k\gamma.$$
+
+Since $\|\mathbf{w}^*\| = 1$, the [Cauchy-Schwarz inequality](../../math/linear_algebra/vector_geometry_in_mathbb_r_n_and_correlation_coefficients.md#pythagorean-theorem-in-mathbbrn-and-the-cauchyschwarz-inequality) gives
+
+$$\mathbf{w}_{k+1} \cdot \mathbf{w}^* \leq \|\mathbf{w}_{k+1}\|\,\|\mathbf{w}^*\| = \|\mathbf{w}_{k+1}\|.$$
+
+Therefore,
+
+$$\|\mathbf{w}_{k+1}\| > k\gamma. \tag{1}$$
+
+Now we derive an upper bound. Again, let $\mathbf{x}^{(j)}$ be the point chosen during iteration $k$. Then
+
+$$
+\begin{aligned}
+\|\mathbf{w}_{k+1}\|^2
+&= \|\mathbf{w}_k + y^{(j)}\mathbf{x}^{(j)}\|^2 \\
+&= \|\mathbf{w}_k\|^2 + \|y^{(j)}\mathbf{x}^{(j)}\|^2 + 2y^{(j)}(\mathbf{w}_k \cdot \mathbf{x}^{(j)}) \\
+&= \|\mathbf{w}_k\|^2 + \|\mathbf{x}^{(j)}\|^2 + 2y^{(j)}(\mathbf{w}_k \cdot \mathbf{x}^{(j)}) \\
+&\leq \|\mathbf{w}_k\|^2 + \|\mathbf{x}^{(j)}\|^2 \\
+&\leq \|\mathbf{w}_k\|^2 + R^2.
+\end{aligned}
+$$
+
+The first inequality uses the fact that $\mathbf{x}^{(j)}$ was chosen because it continued the while loop, so $y^{(j)}(\mathbf{w}_k \cdot \mathbf{x}^{(j)}) \leq 0$. The second inequality uses Assumption 2. 
+
+Starting from $\|\mathbf{w}_1\|^2 = 0$, each update increases the squared norm by at most $R^2$. After $k$ updates, the squared norm is therefore at most $kR^2$, so by induction,
+
+$$\|\mathbf{w}_{k+1}\|^2 \leq kR^2. \tag{2}$$
+
+Combining (1) and (2), we get
+
+$$k^2\gamma^2 < \|\mathbf{w}_{k+1}\|^2 \leq kR^2.$$
+
+For $k > 0$, this implies
+
+$$k < \frac{R^2}{\gamma^2}.$$
+
+So the algorithm can make at most $\dfrac{R^2}{\gamma^2}$ updates before terminating. Once it terminates, the returned weight vector defines a separating hyperplane. This completes the proof.
 
 ### The legendary weekend: how Ted Hoff and Bernie Widrow built the first hardware neuron
 
@@ -37,7 +197,6 @@ recovering the LMS rule above. Applying this update one sample at a time, rather
 The same evening, Hoff programmed the rule on an analog computer that Lockheed had donated to Stanford, and it worked. With the supply rooms closed for the weekend, the two walked over to a local electronics store, bought components, and built the first hardware artificial neuron in Hoff's apartment. By Monday morning they had a working device, an early ancestor of every artificial neuron in use today.
 
 Hoff later left academia for a startup he was unsure about; Widrow encouraged him to take the offer. The startup turned out to be **Intel**, where Hoff went on to architect the [Intel 4004](https://en.wikipedia.org/wiki/Intel_4004), the first commercial microprocessor.
-
 
 ### Why sigmoids mattered
 
