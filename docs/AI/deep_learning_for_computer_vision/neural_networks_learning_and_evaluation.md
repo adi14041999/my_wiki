@@ -100,7 +100,19 @@ Sometimes loss functions can look funny [lossfunctions.tumblr.com](http://lossfu
 
 #### Train/Val accuracy
 
-The second important quantity to track while training a classifier is the validation/training accuracy. This plot can give you valuable insights into the amount of overfitting in your model:
+The second important quantity to track while training a classifier is the validation/training accuracy.
+
+Proper model training and evaluation requires three distinct datasets:
+
+1. Training set: For optimizing parameters
+2. Validation set: For monitoring generalization during training
+3. Test set: For final unbiased evaluation
+
+When training and validation errors diverge, the model has moved beyond proper fitting into overfitting territory. The optimal stopping point is typically where this divergence begins, preventing the model from becoming too specialized to training data.
+
+![img](vover.png)
+
+This plot can give you valuable insights into the amount of overfitting in your model:
 
 ![Accuracies](accuracies.jpeg)
 

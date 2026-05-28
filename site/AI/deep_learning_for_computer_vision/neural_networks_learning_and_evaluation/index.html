@@ -4512,7 +4512,16 @@
 <p>The amount of "wiggle" in the loss is related to the batch size. When the batch size is 1, the wiggle will be relatively high. When the batch size is the full dataset, the wiggle will be minimal because every gradient update should be improving the loss function monotonically (unless the learning rate is set too high).</p>
 <p>Sometimes loss functions can look funny <a href="http://lossfunctions.tumblr.com/">lossfunctions.tumblr.com</a>.</p>
 <h4 id="trainval-accuracy">Train/Val accuracy</h4>
-<p>The second important quantity to track while training a classifier is the validation/training accuracy. This plot can give you valuable insights into the amount of overfitting in your model:</p>
+<p>The second important quantity to track while training a classifier is the validation/training accuracy.</p>
+<p>Proper model training and evaluation requires three distinct datasets:</p>
+<ol>
+<li>Training set: For optimizing parameters</li>
+<li>Validation set: For monitoring generalization during training</li>
+<li>Test set: For final unbiased evaluation</li>
+</ol>
+<p>When training and validation errors diverge, the model has moved beyond proper fitting into overfitting territory. The optimal stopping point is typically where this divergence begins, preventing the model from becoming too specialized to training data.</p>
+<p><img alt="img" src="../vover.png" /></p>
+<p>This plot can give you valuable insights into the amount of overfitting in your model:</p>
 <p><img alt="Accuracies" src="../accuracies.jpeg" /></p>
 <p><em>The gap between the training and validation accuracy indicates the amount of overfitting. Two possible cases are shown in the diagram on the left. The blue validation error curve shows very small validation accuracy compared to the training accuracy, indicating strong overfitting (note, it's possible for the validation accuracy to even start to go down after some point). When you see this in practice you probably want to increase regularization (stronger L2 weight penalty, more dropout, etc.) or collect more data. The other possible case is when the validation accuracy tracks the training accuracy fairly well.</em></p>
 <h4 id="ratio-of-weightsupdates">Ratio of weights:updates</h4>
