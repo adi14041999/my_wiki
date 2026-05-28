@@ -6,12 +6,6 @@ A useful result in single-variable calculus is the **first derivative test**. If
 
 It is worth emphasizing that the **differentiability** of $f$ is necessary here. For example, the function $f(x) = |x|$ attains its minimum value of $0$ at $x = 0$, but since $f$ is not differentiable at that point we cannot say that $x = 0$ is a critical point for $f$. The first derivative test does not apply when the function fails to be differentiable at the point in question.
 
-Knowing that $f'(c) = 0$ does **not** by itself tell us whether $c$ is a local maximum, a local minimum, or neither (e.g. a flat point or inflection). Two standard ways to classify a critical point are:
-
-**First derivative test (sign change):** Suppose $f$ is continuous at $c$ and differentiable on a punctured neighborhood of $c$ (i.e. on $(c - \delta, c)$ and $(c, c + \delta)$ for some $\delta > 0$). If $f'$ is **positive to the left** of $c$ and **negative to the right**, then $f$ increases toward $c$ and decreases after $c$, so $f$ has a **local maximum** at $c$. If $f'$ is **negative to the left** and **positive to the right**, then $f$ has a **local minimum** at $c$. If the sign of $f'$ is the same on both sides (or $f'$ vanishes in whole intervals), this test may be inconclusive.
-
-**Second derivative test:** Suppose $f$ is twice differentiable at $c$ and $f'(c) = 0$. If $f''(c) > 0$, then the graph is **concave up** at $c$, so $f$ has a **local minimum** at $c$. If $f''(c) < 0$, the graph is **concave down** at $c$, so $f$ has a **local maximum** at $c$. If $f''(c) = 0$, the test gives **no conclusion** (e.g. $x^4$ and $x^3$ at $0$ behave differently).
-
 ## Motivation
 
 Optimization for functions of $n$ variables is one of the important applications of multivariable calculus.

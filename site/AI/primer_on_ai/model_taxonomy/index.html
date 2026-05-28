@@ -4340,6 +4340,13 @@
 <h4 id="caveat-task-types-are-limiting">Caveat: task types are limiting</h4>
 <p>The same problem can often be solved with different tasks in mind— e.g. anomaly detection can be framed as <strong>classification</strong> (normal vs anomalous) or as <strong>clustering</strong> (flag points far from any cluster). Large models further blur the boundaries: LLMs do classification in the process of doing next-token prediction. Use task types as an <strong>initial filtering heuristic</strong> (e.g. “do I need a continuous output or discrete classes?”), not as a rigid categorization.</p>
 <h2 id="practical-framework">Practical framework</h2>
+<p>In the most fundamental terms, the model development lifecycle involves:</p>
+<ol>
+<li><strong>Sourcing data</strong> for training, and applying analysis / cleaning / engineering steps to prepare it.</li>
+<li><strong>Selecting the appropriate model</strong> for the task (through research or experimentation).</li>
+<li><strong>Training the model</strong> to the data (a.k.a fitting), through algorithmic or iterative optimization.</li>
+<li><strong>Performing inference</strong> (create predictions) with the trained model and assessing the quality of the predictions.</li>
+</ol>
 <p>When selecting models, ask:</p>
 <ol>
 <li><strong>What task needs accomplishing?</strong> (e.g. regression, classification, clustering, generation)</li>

@@ -46,6 +46,13 @@ The same problem can often be solved with different tasks in mind— e.g. anomal
 
 ## Practical framework
 
+In the most fundamental terms, the model development lifecycle involves:
+
+1. **Sourcing data** for training, and applying analysis / cleaning / engineering steps to prepare it.
+2. **Selecting the appropriate model** for the task (through research or experimentation).
+3. **Training the model** to the data (a.k.a fitting), through algorithmic or iterative optimization.
+4. **Performing inference** (create predictions) with the trained model and assessing the quality of the predictions.
+
 When selecting models, ask:
 
 1. **What task needs accomplishing?** (e.g. regression, classification, clustering, generation)
