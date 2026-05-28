@@ -1,6 +1,6 @@
 # Notes from AI podcasts on YouTube
 
-## Mindscape 336 | Anil Ananthaswamy on the Mathematics of Neural Nets and aI
+## [Mindscape 336 | Anil Ananthaswamy on the Mathematics of Neural Nets and aI](https://www.youtube.com/watch?v=S31zEgHVkoA)
 
 ### The Perceptron Learning Algorithm and its Convergence
 
