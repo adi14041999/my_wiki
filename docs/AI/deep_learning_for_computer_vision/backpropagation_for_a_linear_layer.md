@@ -2,7 +2,7 @@
 
 We will explicitly derive the equations to use when backpropagating through a linear layer, using minibatches.
 
-**Prerequisites:** This document assumes familiarity with derivatives. For a comprehensive review of derivatives, see [The TL;DR version of Derivatives](../../math/multivariate_calculus/the_tl_dr_version_of_derivatives.md).
+**Prerequisites:** This document assumes familiarity with derivatives and backpropagation intuition from [Backpropagation](backpropagation.md). For rigorous treatment, see [The TL;DR version of Derivatives](../../math/multivariate_calculus/the_tl_dr_version_of_derivatives.md) ([chain rule](../../math/multivariate_calculus/the_tl_dr_version_of_derivatives.md#chain-rule), [Jacobians](../../math/multivariate_calculus/the_tl_dr_version_of_derivatives.md#jacobian-vector-in-vector-out)) and [Gradients, local approximations, and gradient descent](../../math/multivariate_calculus/gradients_local_approximations_and_gradient_descent.md). Training uses these gradients via [Optimization](optimization.md).
 
 ## Forward Pass
 
@@ -28,13 +28,13 @@ During the backward pass our goal is to use $\frac{\partial L}{\partial Y}$ in o
 
 ## Computing Gradients Using the Chain Rule
 
-By the chain rule, we know that:
+By the [chain rule](../../math/multivariate_calculus/the_tl_dr_version_of_derivatives.md#chain-rule), we know that:
 
 $$\frac{\partial L}{\partial X} = \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial X}$$
 
 $$\frac{\partial L}{\partial W} = \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial W}$$
 
-The terms $\frac{\partial Y}{\partial X}$ and $\frac{\partial Y}{\partial W}$ are Jacobian matrices containing the partial derivative of each element of $Y$ with respect to each element of the inputs $X$ and $W$.
+The terms $\frac{\partial Y}{\partial X}$ and $\frac{\partial Y}{\partial W}$ are [Jacobian](../../math/multivariate_calculus/the_tl_dr_version_of_derivatives.md#jacobian-vector-in-vector-out) matrices containing the partial derivative of each element of $Y$ with respect to each element of the inputs $X$ and $W$.
 
 However we do not want to form the Jacobian matrices $\frac{\partial Y}{\partial X}$ and $\frac{\partial Y}{\partial W}$ explicitly, because they will be very large. In a typical neural network we might have $N = 64$ and $M = D = 4096$; then $\frac{\partial Y}{\partial X}$ consists of $64 \times 4096 \times 64 \times 4096$ scalar values; this is more than 68 billion numbers; using 32-bit floating point, this Jacobian matrix will take 256 GB of memory to store. Therefore it is completely hopeless to try and explicitly store and manipulate the Jacobian matrix.
 

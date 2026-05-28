@@ -4336,6 +4336,7 @@
 <h1 id="backpropagation">Backpropagation</h1>
 <h2 id="introduction">Introduction</h2>
 <p>We are given some function <span class="arithmatex">\(f(x)\)</span> where <span class="arithmatex">\(x\)</span> is a vector of inputs and we are interested in computing the gradient of <span class="arithmatex">\(f\)</span> at <span class="arithmatex">\(x\)</span> (i.e. <span class="arithmatex">\(\nabla f(x)\)</span>).</p>
+<p>Rigorous definitions and derivations live in the math notes: <a href="../../../math/multivariate_calculus/gradients_local_approximations_and_gradient_descent/">Gradients, local approximations, and gradient descent</a>, <a href="../../../math/multivariate_calculus/the_tl_dr_version_of_derivatives/">The TL;DR version of Derivatives</a>, and <a href="../../../math/multivariate_calculus/the_tl_dr_version_of_derivatives/#jacobian-vector-in-vector-out">Jacobians</a> for vectorized layers.</p>
 <p>The primary reason we are interested in this problem is that in the specific case of neural networks, <span class="arithmatex">\(f\)</span> will correspond to the loss function (<span class="arithmatex">\(L\)</span>) and the inputs <span class="arithmatex">\(x\)</span> will consist of the training data and the neural network weights. For example, the loss could be the SVM loss function and the inputs are both the training data <span class="arithmatex">\((x_i, y_i), i=1\ldots N\)</span> and the weights and biases <span class="arithmatex">\(W, b\)</span>. Note that (as is usually the case in Machine Learning) we think of the training data as given and fixed, and of the weights as variables we have control over.</p>
 <h2 id="simple-expressions-and-interpretation-of-the-gradient">Simple expressions and interpretation of the gradient</h2>
 <p>Consider a simple multiplication function of two numbers <span class="arithmatex">\(f(x,y) = xy\)</span>. It is a matter of simple calculus to derive the partial derivative for either input:</p>
@@ -4500,6 +4501,13 @@
 </code></pre></div>
 <p><strong>Tip: use dimension analysis!</strong> Note that you do not need to remember the expressions for <code>dW</code> and <code>dX</code> because they are easy to re-derive based on dimensions. For instance, we know that the gradient on the weights <code>dW</code> must be of the same size as <code>W</code> after it is computed, and that it must depend on matrix multiplication of <code>X</code> and <code>dD</code> (as is the case when both <code>X,W</code> are single numbers and not matrices). There is always exactly one way of achieving this so that the dimensions work out. For example, <code>X</code> is of size [10 x 3] and <code>dD</code> of size [5 x 3], so if we want <code>dW</code> and <code>W</code> has shape [5 x 10], then the only way of achieving this is with <code>dD.dot(X.T)</code>, as shown above.</p>
 <h2 id="additional-references">Additional References</h2>
+<p><strong>Math (this wiki):</strong></p>
+<ul>
+<li><a href="../../../math/multivariate_calculus/gradients_local_approximations_and_gradient_descent/">Gradients, local approximations, and gradient descent</a> — definition of <span class="arithmatex">\(\nabla f\)</span>, linear approximation, gradient descent</li>
+<li><a href="../../../math/multivariate_calculus/the_tl_dr_version_of_derivatives/">The TL;DR version of Derivatives</a> — chain rule, gradients, Jacobians</li>
+<li><a href="../optimization/">Optimization</a> — computing gradients numerically and analytically, SGD and minibatch updates</li>
+</ul>
+<p><strong>External:</strong></p>
 <ul>
 <li><a href="http://arxiv.org/abs/1502.05767">Automatic differentiation in machine learning: a survey</a></li>
 </ul>

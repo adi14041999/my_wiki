@@ -4,6 +4,8 @@
 
 We are given some function $f(x)$ where $x$ is a vector of inputs and we are interested in computing the gradient of $f$ at $x$ (i.e. $\nabla f(x)$).
 
+Rigorous definitions and derivations live in the math notes: [Gradients, local approximations, and gradient descent](../../math/multivariate_calculus/gradients_local_approximations_and_gradient_descent.md), [The TL;DR version of Derivatives](../../math/multivariate_calculus/the_tl_dr_version_of_derivatives.md), and [Jacobians](../../math/multivariate_calculus/the_tl_dr_version_of_derivatives.md#jacobian-vector-in-vector-out) for vectorized layers.
+
 The primary reason we are interested in this problem is that in the specific case of neural networks, $f$ will correspond to the loss function ($L$) and the inputs $x$ will consist of the training data and the neural network weights. For example, the loss could be the SVM loss function and the inputs are both the training data $(x_i, y_i), i=1\ldots N$ and the weights and biases $W, b$. Note that (as is usually the case in Machine Learning) we think of the training data as given and fixed, and of the weights as variables we have control over.
 
 ## Simple expressions and interpretation of the gradient
@@ -234,5 +236,13 @@ dX = W.T.dot(dD)
 **Tip: use dimension analysis!** Note that you do not need to remember the expressions for `dW` and `dX` because they are easy to re-derive based on dimensions. For instance, we know that the gradient on the weights `dW` must be of the same size as `W` after it is computed, and that it must depend on matrix multiplication of `X` and `dD` (as is the case when both `X,W` are single numbers and not matrices). There is always exactly one way of achieving this so that the dimensions work out. For example, `X` is of size [10 x 3] and `dD` of size [5 x 3], so if we want `dW` and `W` has shape [5 x 10], then the only way of achieving this is with `dD.dot(X.T)`, as shown above.
 
 ## Additional References
+
+**Math (this wiki):**
+
+- [Gradients, local approximations, and gradient descent](../../math/multivariate_calculus/gradients_local_approximations_and_gradient_descent.md) — definition of $\nabla f$, linear approximation, gradient descent
+- [The TL;DR version of Derivatives](../../math/multivariate_calculus/the_tl_dr_version_of_derivatives.md) — chain rule, gradients, Jacobians
+- [Optimization](optimization.md) — computing gradients numerically and analytically, SGD and minibatch updates
+
+**External:**
 
 - [Automatic differentiation in machine learning: a survey](http://arxiv.org/abs/1502.05767)

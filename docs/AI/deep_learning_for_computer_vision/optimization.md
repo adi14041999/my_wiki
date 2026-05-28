@@ -8,6 +8,8 @@ We can generate a random weight matrix $W$, then march along a ray and record th
 
 To reiterate, the loss function lets us quantify the quality of any particular set of weights W. The goal of optimization is to find W that minimizes the loss function.
 
+For the underlying calculus (gradients as vectors of partial derivatives, why $-\nabla f$ is the direction of steepest descent, and the multivariable gradient-descent update), see [Gradients, local approximations, and gradient descent](../../math/multivariate_calculus/gradients_local_approximations_and_gradient_descent.md). For derivatives, Jacobians, and the chain rule in vector form (as used in backpropagation), see [The TL;DR version of Derivatives](../../math/multivariate_calculus/the_tl_dr_version_of_derivatives.md).
+
 ## Strategies
 
 ### Strategy #1: A first very bad idea solution: Random search
@@ -66,7 +68,7 @@ for i in range(1000):
 
 ### Strategy #3: Following the Gradient
 
-In the previous strategy we tried to find a direction in the weight-space that would improve our weight vector (and give us a lower loss). It turns out that there is no need to randomly search for a good direction: we can compute the best direction along which we should change our weight vector that is mathematically guaranteed to be the direction of the steepest descent of the loss function. This direction will be related to the gradient of the loss function. In a hiking analogy, this approach roughly corresponds to feeling the slope of the hill below our feet and stepping down the direction that feels steepest.
+In the previous strategy we tried to find a direction in the weight-space that would improve our weight vector (and give us a lower loss). It turns out that there is no need to randomly search for a good direction: we can compute the best direction along which we should change our weight vector that is mathematically guaranteed to be the direction of the steepest descent of the loss function. This direction is $-\nabla L(\mathbf{w})$, the negative of the [gradient](../../math/multivariate_calculus/gradients_local_approximations_and_gradient_descent.md#the-gradient) of the loss. In a hiking analogy, this approach roughly corresponds to feeling the slope of the hill below our feet and stepping down the direction that feels steepest.
 
 In one-dimensional functions, the slope is the instantaneous rate of change of the function at any point you might be interested in. The gradient is just a vector of slopes (more commonly referred to as derivatives) for each dimension in the input space. The mathematical expression for the derivative of a 1-D function with respect its input is:
 
@@ -131,6 +133,8 @@ $$\nabla_{w_j} L_i = \mathbb{1}(w_j^T x_i - w_{y_i}^T x_i + \Delta > 0) x_i$$
 Once you derive the expression for the gradient it is straight-forward to implement the expressions and use them to perform the gradient update.
 
 ## Gradient Descent
+
+For the underlying calculus (gradients as vectors of partial derivatives, why $-\nabla f$ is the direction of steepest descent, and the multivariable gradient-descent update), see [Gradients, local approximations, and gradient descent](../../math/multivariate_calculus/gradients_local_approximations_and_gradient_descent.md).
 
 Now that we can compute the gradient of the loss function, the procedure of repeatedly evaluating the gradient and then performing a parameter update is called Gradient Descent. Its vanilla version looks as follows.
 
