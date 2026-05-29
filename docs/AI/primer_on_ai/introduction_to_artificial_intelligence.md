@@ -772,9 +772,9 @@ Below is a figure of a (partial) game tree for the game of tic-tac-toe. The top 
 
 ![img](ttt.png)
 
-## Optimal Decisions in Games
+### Optimal Decisions in Games
 
-### The minimax search algorithm
+#### The minimax search algorithm
 
 Consider the trivial game in the figure below. The possible moves for MAX at the root node are labeled $a1$, $a2$, and $a3$. The possible replies to $a1$ for MIN are $b1$, $b2$, $b3$, and so on. This particular game ends after one move each by MAX and MIN. 
 
@@ -824,9 +824,9 @@ The exponential time makes $\text{MINIMAX}$ impractical for complex games. Chess
 
     instead of $O(b^m)$. This is **dynamic programming** applied to the game-tree DAG: each unique sub-problem is solved exactly once, and subsequent calls are $O(1)$ lookups.
 
-    The savings depend on how much the DAG repeats states. In the worst case $|S| = \Theta(b^m)$ (every node in the search tree is a new state) and DP does not help. But many games have $|S| \ll b^m$. For tic-tac-toe, $|S| = 5{,}478$ distinct states versus a search tree with up to $9! = 362{,}880$ leaves, where DP turns an exponential into something tractable.
+    Many games have $|S| \ll b^m$. For tic-tac-toe, $|S| = 5{,}478$ distinct states versus a search tree with up to $9! = 362{,}880$ leaves, where DP turns an exponential into something tractable.
 
-### Solved games and chess engines
+#### Solved games and chess engines
 
 Once $\text{MINIMAX}(s_0)$ is computed at the root $s_0$, the game's outcome under optimal play is no longer uncertain. We then say the game is **solved**: every state has a known minimax value, and the optimal action from any reachable position is determined.
 
@@ -834,9 +834,95 @@ Once $\text{MINIMAX}(s_0)$ is computed at the root $s_0$, the game's outcome und
 
 **Chess** is **not** solved. The state space is far too large to compute $\text{MINIMAX}$ at the root. Chess has $b \approx 35$ and games run $\sim 80$ ply, so a full search would touch roughly $10^{123}$ states.
 
+![img](chess.png)
+
 State-of-the-art engines such as **Stockfish** therefore approximate $\text{MINIMAX}$ rather than compute it exactly. Stockfish is a hybrid of two ideas:
 
 - **Search:** A heavily optimized minimax search over the game tree, assuming both players play their best moves. Pruning techniques like **alpha-beta** (covered later) reduce the effective branching factor without changing the result.
 - **Evaluation:** When the search stops at a non-terminal position, the engine still needs a value for it. Historically this was a hand-coded function (material count, pawn structure, king safety, mobility, etc.). Modern Stockfish uses **NNUE** (Efficiently Updatable Neural Network)— a small neural network that can be re-evaluated incrementally as positions change (to score the leaves of the truncated search tree).
 
 So Stockfish replaces the missing $\text{UTILITY}$ at non-terminal leaves with a learned evaluation, and replaces the full minimax recursion with a pruned, depth-limited search. The shape of the algorithm ($\max$ for the side to move, $\min$ for the opponent) is exactly $\text{MINIMAX}$ from the previous section.
+
+!!! note "Chess as the *Drosophila* of AI"
+    The biologist's fruit fly, *Drosophila melanogaster*, became a standard **model organism**: simple enough to experiment on cheaply, yet rich enough that what we learn transfers to harder problems. The Russian mathematician Alexander Kronrod famously called **chess the *Drosophila* of artificial intelligence**: a single, well-defined testbed on which to develop and measure search, evaluation, and learning, with results that generalize to other domains.
+
+    John McCarthy cautioned that over-optimizing for chess can yield engine-specific tricks rather than general intelligence (much as over-studying the fruit fly need not explain all of biology). Even so, chess and its successors (Go for AlphaGo, Atari and StarCraft for deep RL) remain the classic illustration of using a constrained game as a laboratory for general AI techniques.
+
+#### Alpha–Beta Pruning
+
+Alpha–beta pruning applies to trees of any depth, and it can often prune **entire subtrees** rather than just individual leaves. The general principle: consider a node $n$ somewhere in the tree that the current player can choose to move to. If that player has a **better choice**— either at the same level (some sibling $m'$, as shown in the figure below) or anywhere higher up in the tree ($m$ shown in the figure below), then the player will never actually move to $n$. So once we have examined enough of $n$'s descendants to establish that such a better alternative exists, we can stop exploring $n$ and **prune** it entirely.
+
+![img](ab.png)
+
+Let us trace the calculation on the same game tree from [Optimal Decisions in Games](#optimal-decisions-in-games), with root $A$ (MAX) and children $B, C, D$ (MIN). At each stage we track a **range** of possible values for each node, narrowing it as we see more leaves.
+
+**(a)** The first leaf below $B$ has value $3$. Since $B$ is a MIN node, its value is **at most** $3$: $\text{MINIMAX}(B) \le 3$.
+
+**(b)** The second leaf below $B$ has value $12$. MIN would avoid this move, so $B$ is still at most $3$.
+
+**(c)** The third leaf below $B$ has value $8$. We have now seen all of $B$'s successors, so its value is **exactly** $\text{MINIMAX}(B) = \min(3, 12, 8) = 3$. Because MAX has a choice worth $3$ at the root, we can already infer $\text{MINIMAX}(A) \ge 3$.
+
+**(d)** The first leaf below $C$ has value $2$. Since $C$ is a MIN node, $\text{MINIMAX}(C) \le 2$. But we already know $B$ is worth $3$, so MAX would never choose $C$. There is no point examining $C$'s remaining successors. We **prune** them. This is alpha–beta pruning in action.
+
+**(e)** The first leaf below $D$ has value $14$, so $\text{MINIMAX}(D) \le 14$. This is still above MAX's current best alternative ($3$), so we must keep exploring $D$. Note we now have bounds on every successor of the root, so $\text{MINIMAX}(A) \le 14$ as well.
+
+**(f)** The second successor of $D$ is worth $5$ (still above $3$, keep going); the third is worth $2$, so $\text{MINIMAX}(D) = \min(14, 5, 2) = 2$. MAX's decision at the root is therefore to move to $B$, for a value of $\text{MINIMAX}(A) = \max(3, 2, 2) = 3$.
+
+![img](ab1.png)
+
+The two bounds we carried around in the trace (MAX's best choice so far and MIN's best choice so far) are exactly the parameters $\alpha$ and $\beta$ that give the algorithm its name:
+
+- $\alpha$ = the value of the best (highest) choice found so far for **MAX** along the path to the root. It only ever increases.
+- $\beta$ = the value of the best (lowest) choice found so far for **MIN** along the path to the root. It only ever decreases.
+
+Here is a recursive, top-down implementation that threads $\alpha$ and $\beta$ down the tree.
+
+```python
+import math
+
+def alpha_beta(node, is_max, alpha=-math.inf, beta=math.inf):
+    """Return the minimax value of `node`, pruning with alpha-beta bounds.
+
+    - node: either a terminal value (int/float) or a list of child nodes.
+    - is_max: True if it is MAX's turn to move at this node, else MIN's.
+    - alpha: best value MAX can guarantee so far (along the path to the root).
+    - beta:  best value MIN can guarantee so far (along the path to the root).
+    """
+    # Terminal node: its value is given directly by UTILITY.
+    if not isinstance(node, list):
+        return node
+
+    if is_max:
+        # MAX builds a rising lowerbound on this node's value.
+        lowerbound = -math.inf
+        for child in node:
+            child_value = alpha_beta(child, False, alpha, beta)
+            if child_value > lowerbound:
+                lowerbound = child_value
+            # alpha tracks MAX's best guaranteed value along the path.
+            if lowerbound > alpha:
+                alpha = lowerbound
+            # Prune: compare the lowerbound against beta. 
+            # A MIN ancestor would avoid this node, so we prune.
+            if lowerbound >= beta:
+                break
+        return lowerbound
+    else:
+        # MIN builds a falling upperbound on this node's value.
+        upperbound = math.inf
+        for child in node:
+            child_value = alpha_beta(child, True, alpha, beta)
+            if child_value < upperbound:
+                upperbound = child_value
+            # beta tracks MIN's best guaranteed value along the path.
+            if upperbound < beta:
+                beta = upperbound
+            # Prune: compare the upperbound against alpha.
+            # A MAX ancestor would avoid this node, so we prune.
+            if upperbound <= alpha:
+                break
+        return upperbound
+```
+
+!!! note "Pruned nodes do not get exact minimax values"
+    Once the algorithm completes, the value returned for the **root** is exactly its true $\text{MINIMAX}$ value, but the values computed for the **other** nodes are no longer guaranteed to be accurate. When a node is pruned, we stop after seeing just enough children to know it cannot affect the decision, so we return a **bound** (the partial `lowerbound` or `upperbound`) rather than its finalized minimax value. Pruning thus leaves many nodes in the game tree with provisional scores, not exact ones.
