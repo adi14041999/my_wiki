@@ -716,3 +716,70 @@ $$P_0 = (0, 0, 0)$$
 and
 
 $$P_1 = \left(-\dfrac{6^{3/5}}{3},\, -\dfrac{14 \cdot 6^{3/5}}{3},\, -6^{1/5}\right).$$
+
+**5.** Maximize
+
+$$f(x, y, z) = 2x^2 + 6xy + y^2 + 2z$$
+
+on the solid region $R$ defined by
+
+$$x, y, z \ge 0, \qquad x + y + z \le 1.$$
+
+$R$ is a pyramid with four triangular sides. One side is the triangle $T$ in the plane $x + y + z = 1$ with $x, y, z \ge 0$; the other three lie in the coordinate planes. It is a fact that $f$ attains a maximum on $R$.
+
+![img](pyramid.png)
+
+**(a)** Show $f$ has no critical points on the interior of $R$ (where $x, y, z > 0$ and $x + y + z < 1$).
+
+**Solution:** The gradient is
+
+$$\nabla f = \begin{pmatrix} \partial f/\partial x \\ \partial f/\partial y \\ \partial f/\partial z \end{pmatrix} = \begin{pmatrix} 4x + 6y \\ 6x + 2y \\ 2 \end{pmatrix}.$$
+
+The third component is $2 \ne 0$, so $\nabla f \ne \mathbf{0}$ at **every** point of $\mathbb{R}^3$. Hence $f$ has no critical points anywhere, in particular none on the interior of $R$. **Since the maximum exists and cannot occur at an interior critical point, it must be attained on one of the four sides of $R$.**
+
+**(b)** Use Lagrange multipliers to find all candidate extrema on the interior of $T$ (where $x + y + z = 1$ and $x, y, z > 0$).
+
+**Solution:** With constraint $g(x, y, z) := x + y + z - 1 = 0$ we have $\nabla g = (1, 1, 1) \ne \mathbf{0}$, so the only case is $\nabla f = \lambda \, \nabla g$:
+
+$$4x + 6y = \lambda, \qquad 6x + 2y = \lambda, \qquad 2 = \lambda.$$
+
+The third equation gives $\lambda = 2$, so
+
+$$4x + 6y = 2 \;\Rightarrow\; 2x + 3y = 1, \qquad 6x + 2y = 2 \;\Rightarrow\; 3x + y = 1.$$
+
+From the second, $y = 1 - 3x$; substituting into the first,
+
+$$2x + 3(1 - 3x) = 1 \;\Rightarrow\; -7x = -2 \;\Rightarrow\; x = \tfrac{2}{7}, \quad y = \tfrac{1}{7}, \quad z = 1 - x - y = \tfrac{4}{7}.$$
+
+All coordinates are positive, so the single candidate on the interior of $T$ is
+
+$$P = \left(\tfrac{2}{7}, \tfrac{1}{7}, \tfrac{4}{7}\right), \qquad f(P) = \dfrac{8 + 12 + 1 + 56}{49} = \dfrac{77}{49} = \dfrac{11}{7}.$$
+
+**(c)** Express the restriction of $f$ to the edge $L = \{(t, 1 - t, 0) : 0 \le t \le 1\}$ as a function of $t$ and find its maximum.
+
+**Solution:** Substituting $x = t$, $y = 1 - t$, $z = 0$,
+
+$$
+\begin{aligned}
+f(t) &= 2t^2 + 6t(1 - t) + (1 - t)^2 + 0 \\
+&= 2t^2 + 6t - 6t^2 + 1 - 2t + t^2 \\
+&= -3t^2 + 4t + 1.
+\end{aligned}
+$$
+
+Then $f'(t) = -6t + 4 = 0$ gives $t = \tfrac{2}{3}$, an interior critical point of the segment. Comparing with the endpoints,
+
+$$f(0) = 1, \qquad f(1) = 2, \qquad f\!\left(\tfrac{2}{3}\right) = -3 \cdot \tfrac{4}{9} + \tfrac{8}{3} + 1 = \dfrac{7}{3}.$$
+
+So the maximum of $f$ on $L$ is $\dfrac{7}{3}$, attained at $\left(\tfrac{2}{3}, \tfrac{1}{3}, 0\right)$.
+
+**(d)** Assuming the maximum of $f$ on $R$ is attained either at the interior candidate of $T$ from (b) or on the edge $L$ from (c), find the maximum value.
+
+**Solution:** Comparing the two candidate values,
+
+$$f(P) = \dfrac{11}{7} \approx 1.571, \qquad \max_L f = \dfrac{7}{3} \approx 2.333,$$
+
+the larger is $\dfrac{7}{3}$. Hence
+
+$$\max_R f = \dfrac{7}{3}, \quad \text{attained at } \left(\tfrac{2}{3}, \tfrac{1}{3}, 0\right).$$
+

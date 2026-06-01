@@ -4796,6 +4796,42 @@ x^2 - y^2 &amp;= -3.
 <div class="arithmatex">\[P_0 = (0, 0, 0)\]</div>
 <p>and</p>
 <div class="arithmatex">\[P_1 = \left(-\dfrac{6^{3/5}}{3},\, -\dfrac{14 \cdot 6^{3/5}}{3},\, -6^{1/5}\right).\]</div>
+<p><strong>5.</strong> Maximize</p>
+<div class="arithmatex">\[f(x, y, z) = 2x^2 + 6xy + y^2 + 2z\]</div>
+<p>on the solid region <span class="arithmatex">\(R\)</span> defined by</p>
+<div class="arithmatex">\[x, y, z \ge 0, \qquad x + y + z \le 1.\]</div>
+<p><span class="arithmatex">\(R\)</span> is a pyramid with four triangular sides. One side is the triangle <span class="arithmatex">\(T\)</span> in the plane <span class="arithmatex">\(x + y + z = 1\)</span> with <span class="arithmatex">\(x, y, z \ge 0\)</span>; the other three lie in the coordinate planes. It is a fact that <span class="arithmatex">\(f\)</span> attains a maximum on <span class="arithmatex">\(R\)</span>.</p>
+<p><img alt="img" src="../pyramid.png" /></p>
+<p><strong>(a)</strong> Show <span class="arithmatex">\(f\)</span> has no critical points on the interior of <span class="arithmatex">\(R\)</span> (where <span class="arithmatex">\(x, y, z &gt; 0\)</span> and <span class="arithmatex">\(x + y + z &lt; 1\)</span>).</p>
+<p><strong>Solution:</strong> The gradient is</p>
+<div class="arithmatex">\[\nabla f = \begin{pmatrix} \partial f/\partial x \\ \partial f/\partial y \\ \partial f/\partial z \end{pmatrix} = \begin{pmatrix} 4x + 6y \\ 6x + 2y \\ 2 \end{pmatrix}.\]</div>
+<p>The third component is <span class="arithmatex">\(2 \ne 0\)</span>, so <span class="arithmatex">\(\nabla f \ne \mathbf{0}\)</span> at <strong>every</strong> point of <span class="arithmatex">\(\mathbb{R}^3\)</span>. Hence <span class="arithmatex">\(f\)</span> has no critical points anywhere, in particular none on the interior of <span class="arithmatex">\(R\)</span>. <strong>Since the maximum exists and cannot occur at an interior critical point, it must be attained on one of the four sides of <span class="arithmatex">\(R\)</span>.</strong></p>
+<p><strong>(b)</strong> Use Lagrange multipliers to find all candidate extrema on the interior of <span class="arithmatex">\(T\)</span> (where <span class="arithmatex">\(x + y + z = 1\)</span> and <span class="arithmatex">\(x, y, z &gt; 0\)</span>).</p>
+<p><strong>Solution:</strong> With constraint <span class="arithmatex">\(g(x, y, z) := x + y + z - 1 = 0\)</span> we have <span class="arithmatex">\(\nabla g = (1, 1, 1) \ne \mathbf{0}\)</span>, so the only case is <span class="arithmatex">\(\nabla f = \lambda \, \nabla g\)</span>:</p>
+<div class="arithmatex">\[4x + 6y = \lambda, \qquad 6x + 2y = \lambda, \qquad 2 = \lambda.\]</div>
+<p>The third equation gives <span class="arithmatex">\(\lambda = 2\)</span>, so</p>
+<div class="arithmatex">\[4x + 6y = 2 \;\Rightarrow\; 2x + 3y = 1, \qquad 6x + 2y = 2 \;\Rightarrow\; 3x + y = 1.\]</div>
+<p>From the second, <span class="arithmatex">\(y = 1 - 3x\)</span>; substituting into the first,</p>
+<div class="arithmatex">\[2x + 3(1 - 3x) = 1 \;\Rightarrow\; -7x = -2 \;\Rightarrow\; x = \tfrac{2}{7}, \quad y = \tfrac{1}{7}, \quad z = 1 - x - y = \tfrac{4}{7}.\]</div>
+<p>All coordinates are positive, so the single candidate on the interior of <span class="arithmatex">\(T\)</span> is</p>
+<div class="arithmatex">\[P = \left(\tfrac{2}{7}, \tfrac{1}{7}, \tfrac{4}{7}\right), \qquad f(P) = \dfrac{8 + 12 + 1 + 56}{49} = \dfrac{77}{49} = \dfrac{11}{7}.\]</div>
+<p><strong>(c)</strong> Express the restriction of <span class="arithmatex">\(f\)</span> to the edge <span class="arithmatex">\(L = \{(t, 1 - t, 0) : 0 \le t \le 1\}\)</span> as a function of <span class="arithmatex">\(t\)</span> and find its maximum.</p>
+<p><strong>Solution:</strong> Substituting <span class="arithmatex">\(x = t\)</span>, <span class="arithmatex">\(y = 1 - t\)</span>, <span class="arithmatex">\(z = 0\)</span>,</p>
+<div class="arithmatex">\[
+\begin{aligned}
+f(t) &amp;= 2t^2 + 6t(1 - t) + (1 - t)^2 + 0 \\
+&amp;= 2t^2 + 6t - 6t^2 + 1 - 2t + t^2 \\
+&amp;= -3t^2 + 4t + 1.
+\end{aligned}
+\]</div>
+<p>Then <span class="arithmatex">\(f'(t) = -6t + 4 = 0\)</span> gives <span class="arithmatex">\(t = \tfrac{2}{3}\)</span>, an interior critical point of the segment. Comparing with the endpoints,</p>
+<div class="arithmatex">\[f(0) = 1, \qquad f(1) = 2, \qquad f\!\left(\tfrac{2}{3}\right) = -3 \cdot \tfrac{4}{9} + \tfrac{8}{3} + 1 = \dfrac{7}{3}.\]</div>
+<p>So the maximum of <span class="arithmatex">\(f\)</span> on <span class="arithmatex">\(L\)</span> is <span class="arithmatex">\(\dfrac{7}{3}\)</span>, attained at <span class="arithmatex">\(\left(\tfrac{2}{3}, \tfrac{1}{3}, 0\right)\)</span>.</p>
+<p><strong>(d)</strong> Assuming the maximum of <span class="arithmatex">\(f\)</span> on <span class="arithmatex">\(R\)</span> is attained either at the interior candidate of <span class="arithmatex">\(T\)</span> from (b) or on the edge <span class="arithmatex">\(L\)</span> from (c), find the maximum value.</p>
+<p><strong>Solution:</strong> Comparing the two candidate values,</p>
+<div class="arithmatex">\[f(P) = \dfrac{11}{7} \approx 1.571, \qquad \max_L f = \dfrac{7}{3} \approx 2.333,\]</div>
+<p>the larger is <span class="arithmatex">\(\dfrac{7}{3}\)</span>. Hence</p>
+<div class="arithmatex">\[\max_R f = \dfrac{7}{3}, \quad \text{attained at } \left(\tfrac{2}{3}, \tfrac{1}{3}, 0\right).\]</div>
 
 
 
