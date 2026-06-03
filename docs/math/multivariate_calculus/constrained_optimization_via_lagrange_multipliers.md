@@ -783,3 +783,131 @@ the larger is $\dfrac{7}{3}$. Hence
 
 $$\max_R f = \dfrac{7}{3}, \quad \text{attained at } \left(\tfrac{2}{3}, \tfrac{1}{3}, 0\right).$$
 
+**6.** Use Lagrange multipliers to find the point on the line
+
+$$3x + 2y = 6$$
+
+that is nearest to $(0,0)$. This amounts to minimizing
+
+$$f(x, y) = x^2 + y^2$$
+
+on the line $3x + 2y = 6$, since minimizing distance is the same as minimizing squared distance.
+
+**Solution:** Write the constraint as
+
+$$g(x, y) := 3x + 2y - 6 = 0.$$
+
+Then
+
+$$\nabla f = \begin{pmatrix} 2x \\ 2y \end{pmatrix}, \qquad \nabla g = \begin{pmatrix} 3 \\ 2 \end{pmatrix}.$$
+
+Since $\nabla g \ne \mathbf{0}$ everywhere, Lagrange's Theorem says that any constrained extremum must satisfy
+
+$$\nabla f = \lambda \, \nabla g.$$
+
+Thus
+
+$$
+\begin{aligned}
+2x &= 3\lambda, \\
+2y &= 2\lambda, \\
+3x + 2y &= 6.
+\end{aligned}
+$$
+
+The first two equations give
+
+$$x = \dfrac{3\lambda}{2}, \qquad y = \lambda.$$
+
+Substitute these into the constraint:
+
+$$3\left(\dfrac{3\lambda}{2}\right) + 2\lambda = 6.$$
+
+Hence
+
+$$\dfrac{9\lambda}{2} + 2\lambda = 6, \qquad \dfrac{13\lambda}{2} = 6,$$
+
+so
+
+$$\lambda = \dfrac{12}{13}.$$
+
+Therefore
+
+$$x = \dfrac{3}{2} \cdot \dfrac{12}{13} = \dfrac{18}{13}, \qquad y = \dfrac{12}{13}.$$
+
+So the Lagrange candidate is
+
+$$P = \left(\dfrac{18}{13}, \dfrac{12}{13}\right).$$
+
+Since the squared distance $f(x,y) = x^2 + y^2$ tends to infinity as one moves infinitely far along the line, this candidate is the point on the line nearest to the origin. The minimal squared distance is
+
+$$f(P) = \left(\dfrac{18}{13}\right)^2 + \left(\dfrac{12}{13}\right)^2 = \dfrac{324 + 144}{169} = \dfrac{468}{169} = \dfrac{36}{13}.$$
+
+Thus the distance itself is
+
+$$\sqrt{\dfrac{36}{13}} = \dfrac{6}{\sqrt{13}}.$$
+
+So the point on the line $3x + 2y = 6$ nearest to $(0,0)$ is
+
+$$\boxed{\left(\dfrac{18}{13}, \dfrac{12}{13}\right)}.$$
+
+**Projection viewpoint:** We can also arrive at the same answer using the idea from the [Projections](../linear_algebra/projections.md) doc. The nearest point on a line is the point where the displacement back to the original point is perpendicular to the line.
+
+The line
+
+$$3x + 2y = 6$$
+
+has normal vector
+
+$$\mathbf{n} = \begin{pmatrix} 3 \\ 2 \end{pmatrix}.$$
+
+At the point on the line nearest to the origin, the segment from the origin to the line must be perpendicular to the line. Therefore the nearest point must lie along the normal direction $\mathbf{n}$. So write it as
+
+$$P = 0 + t\mathbf{n} = (3t, 2t).$$
+
+Since $P$ must also lie on the line,
+
+$$3(3t) + 2(2t) = 6.$$
+
+Thus
+
+$$9t + 4t = 6, \qquad 13t = 6, \qquad t = \dfrac{6}{13}.$$
+
+Hence
+
+$$P = \dfrac{6}{13}(3,2) = \left(\dfrac{18}{13}, \dfrac{12}{13}\right),$$
+
+which agrees with the Lagrange multiplier calculation.
+
+Here is the same projection idea using the projection formula more directly. First choose a convenient point on the line, say
+
+$$P_0 = (2,0).$$
+
+A direction vector for the line is
+
+$$\mathbf{w} = \begin{pmatrix} 2 \\ -3 \end{pmatrix}.$$
+
+Thus the line can be written as the translated line
+
+$$P_0 + \operatorname{span}(\mathbf{w}).$$
+
+From $P_0$ to the actual origin $(0,0)$, the displacement vector is
+
+$$
+(0,0) - P_0 = (-2,0).
+$$
+
+Now project this displacement vector onto the line direction $\mathbf{w}$:
+
+$$
+\operatorname{Proj}_{\mathbf{w}}((-2,0))
+= \dfrac{(-2,0)\cdot (2,-3)}{(2,-3)\cdot(2,-3)}(2,-3)
+= -\dfrac{4}{13}(2,-3)
+= \left(-\dfrac{8}{13}, \dfrac{12}{13}\right).
+$$
+
+This projected vector tells us how far to move from $P_0$ **along the line** to reach the closest point to the origin. Therefore the closest point is
+
+$$P_0 + \operatorname{Proj}_{\mathbf{w}}((-2,0))
+= (2,0) + \left(-\dfrac{8}{13}, \dfrac{12}{13}\right)
+= \left(\dfrac{18}{13}, \dfrac{12}{13}\right).$$

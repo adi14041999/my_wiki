@@ -4197,6 +4197,78 @@ f(t) &amp;= 2t^2 + 6t(1 - t) + (1 - t)^2 + 0 \\
 <div class="arithmatex">\[f(P) = \dfrac{11}{7} \approx 1.571, \qquad \max_L f = \dfrac{7}{3} \approx 2.333,\]</div>
 <p>the larger is <span class="arithmatex">\(\dfrac{7}{3}\)</span>. Hence</p>
 <div class="arithmatex">\[\max_R f = \dfrac{7}{3}, \quad \text{attained at } \left(\tfrac{2}{3}, \tfrac{1}{3}, 0\right).\]</div>
+<p><strong>6.</strong> Use Lagrange multipliers to find the point on the line</p>
+<div class="arithmatex">\[3x + 2y = 6\]</div>
+<p>that is nearest to <span class="arithmatex">\((0,0)\)</span>. This amounts to minimizing</p>
+<div class="arithmatex">\[f(x, y) = x^2 + y^2\]</div>
+<p>on the line <span class="arithmatex">\(3x + 2y = 6\)</span>, since minimizing distance is the same as minimizing squared distance.</p>
+<p><strong>Solution:</strong> Write the constraint as</p>
+<div class="arithmatex">\[g(x, y) := 3x + 2y - 6 = 0.\]</div>
+<p>Then</p>
+<div class="arithmatex">\[\nabla f = \begin{pmatrix} 2x \\ 2y \end{pmatrix}, \qquad \nabla g = \begin{pmatrix} 3 \\ 2 \end{pmatrix}.\]</div>
+<p>Since <span class="arithmatex">\(\nabla g \ne \mathbf{0}\)</span> everywhere, Lagrange's Theorem says that any constrained extremum must satisfy</p>
+<div class="arithmatex">\[\nabla f = \lambda \, \nabla g.\]</div>
+<p>Thus</p>
+<div class="arithmatex">\[
+\begin{aligned}
+2x &amp;= 3\lambda, \\
+2y &amp;= 2\lambda, \\
+3x + 2y &amp;= 6.
+\end{aligned}
+\]</div>
+<p>The first two equations give</p>
+<div class="arithmatex">\[x = \dfrac{3\lambda}{2}, \qquad y = \lambda.\]</div>
+<p>Substitute these into the constraint:</p>
+<div class="arithmatex">\[3\left(\dfrac{3\lambda}{2}\right) + 2\lambda = 6.\]</div>
+<p>Hence</p>
+<div class="arithmatex">\[\dfrac{9\lambda}{2} + 2\lambda = 6, \qquad \dfrac{13\lambda}{2} = 6,\]</div>
+<p>so</p>
+<div class="arithmatex">\[\lambda = \dfrac{12}{13}.\]</div>
+<p>Therefore</p>
+<div class="arithmatex">\[x = \dfrac{3}{2} \cdot \dfrac{12}{13} = \dfrac{18}{13}, \qquad y = \dfrac{12}{13}.\]</div>
+<p>So the Lagrange candidate is</p>
+<div class="arithmatex">\[P = \left(\dfrac{18}{13}, \dfrac{12}{13}\right).\]</div>
+<p>Since the squared distance <span class="arithmatex">\(f(x,y) = x^2 + y^2\)</span> tends to infinity as one moves infinitely far along the line, this candidate is the point on the line nearest to the origin. The minimal squared distance is</p>
+<div class="arithmatex">\[f(P) = \left(\dfrac{18}{13}\right)^2 + \left(\dfrac{12}{13}\right)^2 = \dfrac{324 + 144}{169} = \dfrac{468}{169} = \dfrac{36}{13}.\]</div>
+<p>Thus the distance itself is</p>
+<div class="arithmatex">\[\sqrt{\dfrac{36}{13}} = \dfrac{6}{\sqrt{13}}.\]</div>
+<p>So the point on the line <span class="arithmatex">\(3x + 2y = 6\)</span> nearest to <span class="arithmatex">\((0,0)\)</span> is</p>
+<div class="arithmatex">\[\boxed{\left(\dfrac{18}{13}, \dfrac{12}{13}\right)}.\]</div>
+<p><strong>Projection viewpoint:</strong> We can also arrive at the same answer using the idea from the <a href="../../linear_algebra/projections/">Projections</a> doc. The nearest point on a line is the point where the displacement back to the original point is perpendicular to the line.</p>
+<p>The line</p>
+<div class="arithmatex">\[3x + 2y = 6\]</div>
+<p>has normal vector</p>
+<div class="arithmatex">\[\mathbf{n} = \begin{pmatrix} 3 \\ 2 \end{pmatrix}.\]</div>
+<p>At the point on the line nearest to the origin, the segment from the origin to the line must be perpendicular to the line. Therefore the nearest point must lie along the normal direction <span class="arithmatex">\(\mathbf{n}\)</span>. So write it as</p>
+<div class="arithmatex">\[P = 0 + t\mathbf{n} = (3t, 2t).\]</div>
+<p>Since <span class="arithmatex">\(P\)</span> must also lie on the line,</p>
+<div class="arithmatex">\[3(3t) + 2(2t) = 6.\]</div>
+<p>Thus</p>
+<div class="arithmatex">\[9t + 4t = 6, \qquad 13t = 6, \qquad t = \dfrac{6}{13}.\]</div>
+<p>Hence</p>
+<div class="arithmatex">\[P = \dfrac{6}{13}(3,2) = \left(\dfrac{18}{13}, \dfrac{12}{13}\right),\]</div>
+<p>which agrees with the Lagrange multiplier calculation.</p>
+<p>Here is the same projection idea using the projection formula more directly. First choose a convenient point on the line, say</p>
+<div class="arithmatex">\[P_0 = (2,0).\]</div>
+<p>A direction vector for the line is</p>
+<div class="arithmatex">\[\mathbf{w} = \begin{pmatrix} 2 \\ -3 \end{pmatrix}.\]</div>
+<p>Thus the line can be written as the translated line</p>
+<div class="arithmatex">\[P_0 + \operatorname{span}(\mathbf{w}).\]</div>
+<p>From <span class="arithmatex">\(P_0\)</span> to the actual origin <span class="arithmatex">\((0,0)\)</span>, the displacement vector is</p>
+<div class="arithmatex">\[
+(0,0) - P_0 = (-2,0).
+\]</div>
+<p>Now project this displacement vector onto the line direction <span class="arithmatex">\(\mathbf{w}\)</span>:</p>
+<div class="arithmatex">\[
+\operatorname{Proj}_{\mathbf{w}}((-2,0))
+= \dfrac{(-2,0)\cdot (2,-3)}{(2,-3)\cdot(2,-3)}(2,-3)
+= -\dfrac{4}{13}(2,-3)
+= \left(-\dfrac{8}{13}, \dfrac{12}{13}\right).
+\]</div>
+<p>This projected vector tells us how far to move from <span class="arithmatex">\(P_0\)</span> <strong>along the line</strong> to reach the closest point to the origin. Therefore the closest point is</p>
+<div class="arithmatex">\[P_0 + \operatorname{Proj}_{\mathbf{w}}((-2,0))
+= (2,0) + \left(-\dfrac{8}{13}, \dfrac{12}{13}\right)
+= \left(\dfrac{18}{13}, \dfrac{12}{13}\right).\]</div>
 
 
 
