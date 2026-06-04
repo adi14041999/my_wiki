@@ -1,4 +1,5 @@
 # Dec 2018. [Pieter Abbeel- Deep Reinforcement Learning | Lex Fridman Podcast no. 10](https://www.youtube.com/watch?v=l-mYLq6eZPY&list=PLypW8HeibkIJMB_Yl3S5KAr69VBF3OPIa)
+16 Dec 2018.
 
 ## A very short introduction to Reinforcement Learning (RL)
 

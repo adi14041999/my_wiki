@@ -1,10 +1,11 @@
 # Feb 2019. [Kyle Vogt- Cruise Automation | Lex Fridman Podcast no. 14](https://www.youtube.com/watch?v=YUYagvESisE&list=PLypW8HeibkIJMB_Yl3S5KAr69VBF3OPIa)
+7 Feb 2019.
 
 ## Heuristics in early self-driving cars
 
 Early **autonomous driving** stacks were mostly **heuristic** **computer vision**. Examples include threshold **yellow** lane paint, fit lines with a **Hough Transform** (the Hough Transform is a feature extraction technique used in computer vision and image processing to detect shapes like lines, circles, and ellipses), then add traffic-light color thresholds, stop signs, and related detectors, and many more. A highway **lane-keeping** demo is feasible that way. Cruise’s first days used simple **hand-written heuristics** as **scaffolding** (including crude traffic-light detection) before migrating to **deep learning**.
 
-## Why Cruise: three filters and the “light bulb”
+## Why Cruise: the three filters
 
 Vogt looked for startups where:
 
