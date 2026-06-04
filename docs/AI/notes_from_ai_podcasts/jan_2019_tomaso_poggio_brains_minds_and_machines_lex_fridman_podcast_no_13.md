@@ -1,4 +1,4 @@
-# Jan 2019. [Tomaso Poggio: Brains, Minds, and Machines | Lex Fridman Podcast no. 13](https://www.youtube.com/watch?v=aSyZvBrPAyk&list=PLypW8HeibkIJMB_Yl3S5KAr69VBF3OPIa)
+# Jan 2019. [Tomaso Poggio- Brains, Minds, and Machines | Lex Fridman Podcast no. 13](https://www.youtube.com/watch?v=aSyZvBrPAyk&list=PLypW8HeibkIJMB_Yl3S5KAr69VBF3OPIa)
 19 Jan 2019.
 
 ## Intelligence without understanding the brain
