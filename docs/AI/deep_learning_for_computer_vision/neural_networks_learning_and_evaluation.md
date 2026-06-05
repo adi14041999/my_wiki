@@ -108,6 +108,20 @@ Proper model training and evaluation requires three distinct datasets:
 2. Validation set: For monitoring generalization during training
 3. Test set: For final unbiased evaluation
 
+!!! note "Stratified splits"
+    When carving out validation and test sets, **stratify** by class label: each split should keep roughly the same 
+    **class proportions** as the full dataset (e.g. if 10% of images are “cat,” about 10% of train, val, and test 
+    should be cat). Random splits without stratification can leave rare classes under-represented in val/test, so 
+    **accuracy curves mislead** (validation looks worse or better than true generalization, and early-stopping 
+    picks the wrong checkpoint). Libraries such as scikit-learn’s `train_test_split(..., stratify=y)` apply this 
+    automatically; use group-aware splits when samples must not leak across sets (e.g. multiple frames from one 
+    video).
+
+    **Scale matters.** With **50,000** samples and **equal business impact** across classes, even a random split usually leaves every class, including a **5%** minority, with enough examples to evaluate reliably (roughly **2,500** minority points in the pool, and hundreds in a typical 20% val set). **Stratification** is still good practice, but large $n$ lowers the chance of a badly skewed split that would be common on smaller datasets. For severe imbalance, also see [data augmentation](neural_networks_setting_up_the_data.md#data-augmentation).
+
+!!! note "Keep the test set untouched"
+    The **test set** is the final, unbiased check on how the model behaves on **truly unseen** data. If you peek at test performance throughout development and tune **hyperparameters** from those numbers, you are effectively **training on the test set**. The split stops being unbiased. Use the **validation set** for hyperparameter tuning, monitoring, and early stopping.
+
 When training and validation errors diverge, the model has moved beyond proper fitting into overfitting territory. The optimal stopping point is typically where this divergence begins, preventing the model from becoming too specialized to training data.
 
 ![img](vover.png)
@@ -117,6 +131,13 @@ This plot can give you valuable insights into the amount of overfitting in your 
 ![Accuracies](accuracies.jpeg)
 
 *The gap between the training and validation accuracy indicates the amount of overfitting. Two possible cases are shown in the diagram on the left. The blue validation error curve shows very small validation accuracy compared to the training accuracy, indicating strong overfitting (note, it's possible for the validation accuracy to even start to go down after some point). When you see this in practice you probably want to increase regularization (stronger L2 weight penalty, more dropout, etc.) or collect more data. The other possible case is when the validation accuracy tracks the training accuracy fairly well.*
+
+!!! note "How many epochs?"
+    Choosing how long to train is a three-way tradeoff:
+
+    1. **Cost of training** — Each **epoch** passes over the full dataset (in expectation); fewer epochs mean less compute and wall-clock time.
+    2. **Model performance** — More epochs give more gradient steps to **reduce training loss** and fit the training set better.
+    3. **Generalizability** — Stop when **validation loss** flattens, becomes **volatile**, or **rises**— signals that the model is **overfitting** and further training specializes to the training set rather than improving on unseen data. This is what **early stopping** on the validation set is for.
 
 #### Ratio of weights:updates
 

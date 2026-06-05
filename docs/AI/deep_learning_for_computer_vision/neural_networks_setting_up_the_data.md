@@ -6,6 +6,14 @@ A Neural Network performs a sequence of linear mappings with interwoven non-line
 
 There are three common forms of data preprocessing a data matrix `X`, where we will assume that `X` is of size `[N x D]` (`N` is the number of data, `D` is their dimensionality).
 
+### Missing values and imputation
+
+When features contain missing entries, the imputation rule should match the feature type. For **numeric** columns, **median imputation** is usually more robust than the mean: medians resist **outliers** and **skewed** distributions that would pull a mean toward a tail. For **categorical** columns, the standard choice is **mode** imputation—the **most frequent** category.
+
+### Feature engineering
+
+Beyond cleaning individual columns, **derived features** can surface structure the raw table hides. **Ratio features** (e.g. daily steps divided by exercise minutes) and **interaction features** (products or combinations of two inputs) encode relationships that a **linear model** may not discover on its own. Deep networks can in principle learn such patterns from raw inputs, but **explicit** ratios and interactions often improve performance by making important structure easier to optimize and by injecting **domain knowledge**.
+
 ### Mean subtraction
 
 This is the most common form of preprocessing. It involves subtracting the mean across every individual *feature* in the data, and has the geometric interpretation of centering the cloud of data around the origin along every dimension. In numpy, this operation would be implemented as: `X -= np.mean(X, axis = 0)`. With images specifically, for convenience it can be common to subtract a single value from all pixels (e.g. `X -= np.mean(X)`), or to do so separately across the three color channels.
@@ -14,6 +22,11 @@ This is the most common form of preprocessing. It involves subtracting the mean 
 
 This refers to normalizing the data dimensions so that they are of approximately the same scale. There are two common ways of achieving this normalization. One is to divide each dimension by its standard deviation, once it has been zero-centered: (`X /= np.std(X, axis = 0)`). Another form of this preprocessing normalizes each dimension so that the min and max along the dimension is -1 and 1 respectively. It only makes sense to apply this preprocessing if you have a reason to believe that different input features have different scales (or units), but they should be of approximately equal importance to the learning algorithm. In case of images, the relative scales of pixels are already approximately equal (and in range from 0 to 255), so it is not strictly necessary to perform this additional preprocessing step.
 
+!!! note "Fit preprocessing on the training set only"
+    Compute scaling statistics (**mean**, **standard deviation**, min/max, etc.) on the **training set**, then apply those same parameters to validation and test data. If you **scale the full dataset before splitting**, the statistics leak information from the **test set** into training (indirect access to held-out examples). Reported metrics become **overly optimistic**. The correct pipeline is: **split first**, fit the scaler on **train**, transform **train / val / test** with that fitted scaler.
+
+    **Why not scale each split with its own statistics?** The model learns weights in the coordinate system defined by **training** preprocessing. At inference (and on val/test), new points must enter the network in that **same** coordinate system (subtract the **training** mean, divide by the **training** std). Recomputing mean/std on val or test would (a) **peek** at held-out distributions (leakage on test), and (b) put inputs on a **different scale** than the weights expect, so validation metrics would not reflect real deployment behavior. The fixed scaler is part of the trained pipeline, like saved model weights.
+
 ![Common data preprocessing pipeline](prepro1.jpeg)
 
 *Common data preprocessing pipeline. **Left**: Original toy, 2-dimensional input data. **Middle**: The data is zero-centered by subtracting the mean in each dimension. The data cloud is now centered around the origin. **Right**: Each dimension is additionally scaled by its standard deviation. The red lines indicate the extent of the data - they are of unequal length in the middle, but of equal length on the right.*
@@ -21,6 +34,34 @@ This refers to normalizing the data dimensions so that they are of approximately
 ### PCA and Whitening 
 
 This is another form of preprocessing. Out of scope for this document.
+
+## Data Augmentation
+
+**Imbalanced datasets** are common in practice: some classes far outnumber others. Models then optimize mostly for the majority class and often do poorly on the **minority class**— frequently the class that matters most (fraud, disease, rare defect).
+
+**Data augmentation** increases effective dataset diversity by generating **variations** of existing examples. Done well, it can improve **generalization** and **robustness**; done poorly, it teaches the wrong invariances.
+
+- **Undersampling** — reduce majority-class examples (risk: throw away useful data).
+- **Oversampling** — duplicate or synthesize minority-class examples.
+
+Apply balancing to the **training set** only; keep validation and test distributions **realistic** so metrics reflect deployment. Pair with **stratified splits** when carving out held-out sets (see [Train/Val accuracy](neural_networks_learning_and_evaluation.md#trainval-accuracy)).
+
+Whether to augment depends on **problem context**:
+
+**Image data** — augment when:
+
+- The dataset is **small** or **imbalanced**.
+- **Overfitting** shows up during training.
+- Transforms (rotation, flip, crop, brightness, etc.) match **real-world** variation.
+
+Avoid augmentation when precise geometry or appearance must be preserved (e.g. some **medical imaging** where orientation or anatomy alignment is diagnostic). 
+
+!!! note "Medical imaging requires careful consideration of augmentation and sampling strategies"
+    Medical imaging requires careful consideration of augmentation and sampling strategies. Undersampling removes potentially valuable normal case variations that help the model distinguish between normal and abnormal patterns. In medical contexts, you typically want to preserve as much normal variation as possible while being cautious about augmentations that might alter diagnostically important features.
+
+**Text data** — use **sparingly**. Synonym swap or paraphrase can change **meaning** or **sentiment**. Favor augmentation only when light rephrasing is label-preserving (e.g. some intent or topic classifiers).
+
+**Tabular data** — augmentation is **uncommon**.
 
 ## Weight Initialization
 

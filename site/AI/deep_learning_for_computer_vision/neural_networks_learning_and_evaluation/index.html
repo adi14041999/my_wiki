@@ -4722,11 +4722,35 @@
 <li>Validation set: For monitoring generalization during training</li>
 <li>Test set: For final unbiased evaluation</li>
 </ol>
+<div class="admonition note">
+<p class="admonition-title">Stratified splits</p>
+<p>When carving out validation and test sets, <strong>stratify</strong> by class label: each split should keep roughly the same 
+<strong>class proportions</strong> as the full dataset (e.g. if 10% of images are “cat,” about 10% of train, val, and test 
+should be cat). Random splits without stratification can leave rare classes under-represented in val/test, so 
+<strong>accuracy curves mislead</strong> (validation looks worse or better than true generalization, and early-stopping 
+picks the wrong checkpoint). Libraries such as scikit-learn’s <code>train_test_split(..., stratify=y)</code> apply this 
+automatically; use group-aware splits when samples must not leak across sets (e.g. multiple frames from one 
+video).</p>
+<p><strong>Scale matters.</strong> With <strong>50,000</strong> samples and <strong>equal business impact</strong> across classes, even a random split usually leaves every class, including a <strong>5%</strong> minority, with enough examples to evaluate reliably (roughly <strong>2,500</strong> minority points in the pool, and hundreds in a typical 20% val set). <strong>Stratification</strong> is still good practice, but large <span class="arithmatex">\(n\)</span> lowers the chance of a badly skewed split that would be common on smaller datasets. For severe imbalance, also see <a href="../neural_networks_setting_up_the_data/#data-augmentation">data augmentation</a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Keep the test set untouched</p>
+<p>The <strong>test set</strong> is the final, unbiased check on how the model behaves on <strong>truly unseen</strong> data. If you peek at test performance throughout development and tune <strong>hyperparameters</strong> from those numbers, you are effectively <strong>training on the test set</strong>. The split stops being unbiased. Use the <strong>validation set</strong> for hyperparameter tuning, monitoring, and early stopping.</p>
+</div>
 <p>When training and validation errors diverge, the model has moved beyond proper fitting into overfitting territory. The optimal stopping point is typically where this divergence begins, preventing the model from becoming too specialized to training data.</p>
 <p><img alt="img" src="../vover.png" /></p>
 <p>This plot can give you valuable insights into the amount of overfitting in your model:</p>
 <p><img alt="Accuracies" src="../accuracies.jpeg" /></p>
 <p><em>The gap between the training and validation accuracy indicates the amount of overfitting. Two possible cases are shown in the diagram on the left. The blue validation error curve shows very small validation accuracy compared to the training accuracy, indicating strong overfitting (note, it's possible for the validation accuracy to even start to go down after some point). When you see this in practice you probably want to increase regularization (stronger L2 weight penalty, more dropout, etc.) or collect more data. The other possible case is when the validation accuracy tracks the training accuracy fairly well.</em></p>
+<div class="admonition note">
+<p class="admonition-title">How many epochs?</p>
+<p>Choosing how long to train is a three-way tradeoff:</p>
+<ol>
+<li><strong>Cost of training</strong> — Each <strong>epoch</strong> passes over the full dataset (in expectation); fewer epochs mean less compute and wall-clock time.</li>
+<li><strong>Model performance</strong> — More epochs give more gradient steps to <strong>reduce training loss</strong> and fit the training set better.</li>
+<li><strong>Generalizability</strong> — Stop when <strong>validation loss</strong> flattens, becomes <strong>volatile</strong>, or <strong>rises</strong>— signals that the model is <strong>overfitting</strong> and further training specializes to the training set rather than improving on unseen data. This is what <strong>early stopping</strong> on the validation set is for.</li>
+</ol>
+</div>
 <h4 id="ratio-of-weightsupdates">Ratio of weights:updates</h4>
 <p>The last quantity you might want to track is the ratio of the update magnitudes to the value magnitudes. Note: updates, not the raw gradients (e.g. in vanilla sgd this would be the gradient multiplied by the learning rate). You might want to evaluate and log the norm of the weights (or some subset of the weights), and the norm of the updates (or again, some subset). Looking at the ratio of these two quantities can be helpful. For a single weight this ratio should be somewhere around <span class="arithmatex">\(1e-3\)</span>. If it is much smaller than this then the learning rate might be too low. If it is much higher then the learning rate might be too high.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># assume parameter vector W and its gradient vector dW</span>
