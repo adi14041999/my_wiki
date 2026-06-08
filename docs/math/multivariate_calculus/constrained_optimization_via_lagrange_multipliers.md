@@ -911,3 +911,172 @@ This projected vector tells us how far to move from $P_0$ **along the line** to 
 $$P_0 + \operatorname{Proj}_{\mathbf{w}}((-2,0))
 = (2,0) + \left(-\dfrac{8}{13}, \dfrac{12}{13}\right)
 = \left(\dfrac{18}{13}, \dfrac{12}{13}\right).$$
+
+**7.** Let $P$ be a plane
+
+$$ax + by + cz = d$$
+
+containing the point $(1,2,3)$, so
+
+$$d = a + 2b + 3c.$$
+
+Assume $a,b,c \ne 0$.
+
+**(a)** The plane $P$ crosses the coordinate axes at $(x_0,0,0)$, $(0,y_0,0)$, $(0,0,z_0)$. Express $x_0,y_0,z_0$ in terms of $a,b,c,d$.
+
+**Solution:** To find the $x$-intercept, set $y = 0$ and $z = 0$ in the plane equation:
+
+$$ax = d.$$
+
+Since $a \ne 0$,
+
+$$x_0 = \dfrac{d}{a}.$$
+
+Similarly, setting the other two variables equal to $0$ gives
+
+$$y_0 = \dfrac{d}{b}, \qquad z_0 = \dfrac{d}{c}.$$
+
+So
+
+$$\boxed{x_0 = \dfrac{d}{a}, \qquad y_0 = \dfrac{d}{b}, \qquad z_0 = \dfrac{d}{c}.}$$
+
+**(b)** Suppose $x_0,y_0,z_0$ are all positive. It is a fact that the volume of the tetrahedron formed by the four vertices $(0,0,0),(x_0,0,0),(0,y_0,0),(0,0,z_0)$ is
+
+$$\dfrac{x_0y_0z_0}{6}.$$
+
+For which such plane $P$ is the volume minimized, and what is that minimal volume?
+
+**Solution:** Since $x_0,y_0,z_0 > 0$, write the plane in intercept form:
+
+$$\dfrac{x}{x_0} + \dfrac{y}{y_0} + \dfrac{z}{z_0} = 1.$$
+
+The condition that $(1,2,3)$ lies on the plane becomes
+
+$$\dfrac{1}{x_0} + \dfrac{2}{y_0} + \dfrac{3}{z_0} = 1.$$
+
+The volume is
+
+$$V = \dfrac{x_0y_0z_0}{6},$$
+
+so it is enough to minimize
+
+$$x_0y_0z_0$$
+
+subject to
+
+$$\dfrac{1}{x_0} + \dfrac{2}{y_0} + \dfrac{3}{z_0} = 1.$$
+
+Because $x_0,y_0,z_0$ are positive, minimizing $x_0y_0z_0$ is equivalent to minimizing
+
+$$H(x_0,y_0,z_0) := \log(x_0y_0z_0) = \log x_0 + \log y_0 + \log z_0.$$
+
+Let
+
+$$G(x_0,y_0,z_0) := \dfrac{1}{x_0} + \dfrac{2}{y_0} + \dfrac{3}{z_0} - 1.$$
+
+We use Lagrange multipliers on the constraint $G = 0$. Compute
+
+$$
+\nabla H =
+\begin{pmatrix}
+1/x_0 \\
+1/y_0 \\
+1/z_0
+\end{pmatrix},
+\qquad
+\nabla G =
+\begin{pmatrix}
+-1/x_0^2 \\
+-2/y_0^2 \\
+-3/z_0^2
+\end{pmatrix}.
+$$
+
+Since $\nabla G \ne \mathbf{0}$ on the positive region, Lagrange's Theorem gives
+
+$$\nabla H = \lambda \, \nabla G.$$
+
+Thus
+
+$$
+\begin{aligned}
+\dfrac{1}{x_0} &= -\dfrac{\lambda}{x_0^2}, \\
+\dfrac{1}{y_0} &= -\dfrac{2\lambda}{y_0^2}, \\
+\dfrac{1}{z_0} &= -\dfrac{3\lambda}{z_0^2}.
+\end{aligned}
+$$
+
+Since $x_0,y_0,z_0 > 0$, these equations become
+
+$$x_0 = -\lambda, \qquad y_0 = -2\lambda, \qquad z_0 = -3\lambda.$$
+
+So the intercepts must have the ratio
+
+$$x_0 : y_0 : z_0 = 1 : 2 : 3.$$
+
+Write
+
+$$x_0 = t, \qquad y_0 = 2t, \qquad z_0 = 3t.$$
+
+Substitute into the constraint:
+
+$$\dfrac{1}{t} + \dfrac{2}{2t} + \dfrac{3}{3t} = 1.$$
+
+Hence
+
+$$\dfrac{1}{t} + \dfrac{1}{t} + \dfrac{1}{t} = 1,$$
+
+so
+
+$$\dfrac{3}{t} = 1, \qquad t = 3.$$
+
+Therefore
+
+$$x_0 = 3, \qquad y_0 = 6, \qquad z_0 = 9.$$
+
+The minimizing plane is
+
+$$\dfrac{x}{3} + \dfrac{y}{6} + \dfrac{z}{9} = 1.$$
+
+Multiplying by $18$, an equivalent equation is
+
+$$6x + 3y + 2z = 18.$$
+
+This plane contains $(1,2,3)$ because
+
+$$6(1) + 3(2) + 2(3) = 6 + 6 + 6 = 18.$$
+
+The minimal volume is
+
+$$V_{\min} = \dfrac{x_0y_0z_0}{6} = \dfrac{3 \cdot 6 \cdot 9}{6} = 27.$$
+
+So the volume is minimized by the plane
+
+$$\boxed{6x + 3y + 2z = 18},$$
+
+and the minimal volume is
+
+$$\boxed{27}.$$
+
+!!! note "Important ideas"
+    There are three important ideas in this problem:
+
+    1. A plane with positive coordinate intercepts $x_0,y_0,z_0$ can be written in **intercept form**:
+
+        $$\dfrac{x}{x_0} + \dfrac{y}{y_0} + \dfrac{z}{z_0} = 1.$$
+
+    2. Since $x_0,y_0,z_0 > 0$, minimizing $x_0y_0z_0$ is equivalent to minimizing $\log(x_0y_0z_0)$. This is useful because
+
+        $$\log(x_0y_0z_0) = \log x_0 + \log y_0 + \log z_0,$$
+
+        whose derivatives are simpler than the derivatives of $x_0y_0z_0$.
+
+    3. The Lagrange multiplier equations reveal the ratio
+
+        $$x_0 : y_0 : z_0 = 1 : 2 : 3.$$
+
+        Once we know this ratio, we can write
+
+        $$x_0 = t, \qquad y_0 = 2t, \qquad z_0 = 3t,$$
+
+        and use the constraint to solve for the single unknown $t$.
