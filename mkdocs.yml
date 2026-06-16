@@ -8,6 +8,7 @@ nav:
   - AI:
     - Primer on AI:
       - Introduction to Artificial Intelligence: ai/primer_on_ai/introduction_to_artificial_intelligence.md
+      - Introduction to Machine Learning: ai/primer_on_ai/introduction_to_machine_learning.md
       - Model Taxonomy: ai/primer_on_ai/model_taxonomy.md
       - Spatializing Data: ai/primer_on_ai/spatializing_data.md
       - Vector Similarity Search: ai/primer_on_ai/vector_similarity_search.md
