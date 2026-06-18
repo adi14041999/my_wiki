@@ -746,10 +746,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#the-sum-of-the-squared-residuals" class="md-nav__link">
+  <a href="#ssr-mse-and-r2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Sum of the Squared Residuals
+        SSR, MSE and \({R^2}\)
       
     </span>
   </a>
@@ -758,6 +758,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linear-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linear Regression
+      
+    </span>
+  </a>
   
 </li>
       
@@ -4693,7 +4704,46 @@ blueberry pie. Based on our extensive experience judging pie contests, we know t
 <li>The factor <span class="arithmatex">\(\frac{1}{\sigma\sqrt{2\pi}}\)</span> is a normalizing constant that ensures the total area under the curve equals 1</li>
 </ul>
 <p>The special case <span class="arithmatex">\(\mu = 0\)</span>, <span class="arithmatex">\(\sigma^2 = 1\)</span> is called the <strong>standard normal distribution</strong>, written <span class="arithmatex">\(Z \sim \mathcal{N}(0, 1)\)</span>.</p>
-<h3 id="the-sum-of-the-squared-residuals">The Sum of the Squared Residuals</h3>
+<h3 id="ssr-mse-and-r2">SSR, MSE and <span class="arithmatex">\({R^2}\)</span></h3>
+<p>We need to quantify the quality of a model's predictions. One way quantify the quality of a model's predictions is to calculate the
+<strong>Sum of the Squared Residuals</strong>.</p>
+<p>The Sum of Squared Residuals (SSR) is the sum of all squared differences between the observed and predicted values.</p>
+<div class="arithmatex">\[\text{SSR} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2,\]</div>
+<p>were <span class="arithmatex">\(y_i\)</span> is the observed value, <span class="arithmatex">\(\hat{y}_i\)</span> is the predicted value, and <span class="arithmatex">\(n\)</span> is the number of data points.</p>
+<p>Sum of the Squared Residuals (SSR), although great, is not super easy to interpret because it depends, in part, on how much data you have. One way to compare the two models that may be fit to different-sized datasets is to calculate the <strong>Mean Squared Error (MSE)</strong>, which is simply the average of the SSR.</p>
+<div class="arithmatex">\[\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\]</div>
+<p>So, unlike the SSR, which increases when we add more data to the model, the MSE can increase or decrease depending on the average residual, which gives us a better sense of how the model is performing overall.</p>
+<p>Unfortunately, MSEs are still difficult to interpret on their own because <strong>the maximum values depend on the scale of the data</strong>. For example, residuals (the differences <span class="arithmatex">\(y_i - \hat{y}_i\)</span>) of <span class="arithmatex">\(1, -3, 2\)</span> mm give an <span class="arithmatex">\(\text{MSE} = 4.7\)</span>; but express the same data in meters (<span class="arithmatex">\(0.001, -0.003, 0.002\)</span>) and the <span class="arithmatex">\(\text{MSE}\)</span> drops to <span class="arithmatex">\(4.7 \times 10^{-6}\)</span>. Same data, wildly different numbers. Both <span class="arithmatex">\(\text{SSR}\)</span> and <span class="arithmatex">\(\text{MSE}\)</span> can be used to calculate <span class="arithmatex">\(R^2\)</span>, which is independent of both dataset size and scale.</p>
+<p><strong><span class="arithmatex">\(R^2\)</span></strong> measures how much better the fitted model is at predicting <span class="arithmatex">\(y\)</span> compared to simply predicting the mean <span class="arithmatex">\(\bar{y}\)</span> for every data point. It is defined as:</p>
+<div class="arithmatex">\[R^2 = \frac{\text{SSR}(\text{mean}) - \text{SSR}(\text{fit})}{\text{SSR}(\text{mean})}\]</div>
+<p>Where:</p>
+<ul>
+<li><span class="arithmatex">\(\text{SSR}(\text{mean}) = \sum_{i=1}^{n}(y_i - \bar{y})^2\)</span> is the sum of squared residuals around the mean line</li>
+<li><span class="arithmatex">\(\text{SSR}(\text{fit}) = \sum_{i=1}^{n}(y_i - \hat{y}_i)^2\)</span> is the sum of squared residuals around the fitted model</li>
+<li><span class="arithmatex">\(\bar{y} = \frac{1}{n}\sum_{i=1}^{n} y_i\)</span> is the mean of the observed values</li>
+</ul>
+<p>The numerator is the improvement in fit over the mean baseline. Dividing by <span class="arithmatex">\(\text{SSR}(\text{mean})\)</span> normalises it to a <span class="arithmatex">\([0, 1]\)</span> scale: <span class="arithmatex">\(R^2 = 1\)</span> means a perfect fit, <span class="arithmatex">\(R^2 = 0\)</span> means the model is no better than the mean.</p>
+<p><strong>Example</strong>: Suppose we have three observations <span class="arithmatex">\(y = \{2, 4, 6\}\)</span> with <span class="arithmatex">\(\bar{y} = 4\)</span>, and our model predicts <span class="arithmatex">\(\hat{y} = \{2.5, 4, 5.5\}\)</span>.</p>
+<div class="arithmatex">\[\text{SSR}(\text{mean}) = (2-4)^2 + (4-4)^2 + (6-4)^2 = 4 + 0 + 4 = 8\]</div>
+<div class="arithmatex">\[\text{SSR}(\text{fit}) = (2-2.5)^2 + (4-4)^2 + (6-5.5)^2 = 0.25 + 0 + 0.25 = 0.5\]</div>
+<div class="arithmatex">\[R^2 = \frac{8 - 0.5}{8} = \frac{7.5}{8} = 0.9375\]</div>
+<p>The model explains <span class="arithmatex">\(93.75\%\)</span> of the variance in <span class="arithmatex">\(y\)</span>.</p>
+<p><strong>When <span class="arithmatex">\(\text{SSR}(\text{mean}) = \text{SSR}(\text{fit})\)</span></strong>: the numerator is <span class="arithmatex">\(0\)</span>, so <span class="arithmatex">\(R^2 = 0\)</span>. The fitted model does no better than just predicting <span class="arithmatex">\(\bar{y}\)</span> for every point — it has learned nothing useful from the data.</p>
+<p><strong>When <span class="arithmatex">\(\text{SSR}(\text{fit}) = 0\)</span></strong>: every predicted value equals the observed value (<span class="arithmatex">\(\hat{y}_i = y_i\)</span> for all <span class="arithmatex">\(i\)</span>), so <span class="arithmatex">\(R^2 = \frac{\text{SSR}(\text{mean})}{\text{SSR}(\text{mean})} = 1\)</span>. The model fits the data perfectly.</p>
+<p><strong>Any two data points always give <span class="arithmatex">\(R^2 = 1\)</span></strong>: two points uniquely determine a line, so the fitted line passes exactly through both points, giving <span class="arithmatex">\(\text{SSR}(\text{fit}) = 0\)</span> and therefore <span class="arithmatex">\(R^2 = 1\)</span>. For example, take <span class="arithmatex">\((x_1, y_1) = (1, 2)\)</span> and <span class="arithmatex">\((x_2, y_2) = (3, 6)\)</span>:</p>
+<div class="arithmatex">\[\bar{y} = \frac{2 + 6}{2} = 4\]</div>
+<div class="arithmatex">\[\text{SSR}(\text{mean}) = (2 - 4)^2 + (6 - 4)^2 = 4 + 4 = 8\]</div>
+<p>The fitted line through both points predicts <span class="arithmatex">\(\hat{y}_1 = 2\)</span> and <span class="arithmatex">\(\hat{y}_2 = 6\)</span> exactly, so:</p>
+<div class="arithmatex">\[\text{SSR}(\text{fit}) = (2 - 2)^2 + (6 - 6)^2 = 0\]</div>
+<div class="arithmatex">\[R^2 = \frac{8 - 0}{8} = 1\]</div>
+<p>This is why <span class="arithmatex">\(R^2\)</span> alone is not a reliable measure of model quality— a model can achieve <span class="arithmatex">\(R^2 = 1\)</span> just by having as many parameters as data points, without learning anything meaningful. And because a small amount of random data can have a high <span class="arithmatex">\(R^2\)</span>, any time we see a trend in a small dataset it is difficult to have confidence that a high <span class="arithmatex">\(R^2\)</span> value is not due to random chance. In contrast, when we see a trend in a large amount of data we can, intuitively, have more confidence that a large <span class="arithmatex">\(R^2\)</span> is not due to random chance because the data are not scattered around randomly like we might expect.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><span class="arithmatex">\(R^2\)</span> can equivalently be calculated using the Mean Squared Residuals instead of the SSR:</p>
+<div class="arithmatex">\[R^2 = \frac{\text{MSR}(\text{mean}) - \text{MSR}(\text{fit})}{\text{MSR}(\text{mean})}\]</div>
+<p>This works because both the numerator and denominator of the SSR formula are divided by the same <span class="arithmatex">\(n\)</span>, which cancels out and leaves the value of <span class="arithmatex">\(R^2\)</span> unchanged.</p>
+</div>
+<h2 id="linear-regression">Linear Regression</h2>
 
 
 

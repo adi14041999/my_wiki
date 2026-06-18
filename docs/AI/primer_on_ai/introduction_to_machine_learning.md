@@ -155,5 +155,70 @@ Where:
 
 The special case $\mu = 0$, $\sigma^2 = 1$ is called the **standard normal distribution**, written $Z \sim \mathcal{N}(0, 1)$.
 
-### The Sum of the Squared Residuals
+### SSR, MSE and ${R^2}$
 
+We need to quantify the quality of a model's predictions. One way quantify the quality of a model's predictions is to calculate the
+**Sum of the Squared Residuals**.
+
+The Sum of Squared Residuals (SSR) is the sum of all squared differences between the observed and predicted values.
+
+$$\text{SSR} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2,$$
+
+were $y_i$ is the observed value, $\hat{y}_i$ is the predicted value, and $n$ is the number of data points.
+
+Sum of the Squared Residuals (SSR), although great, is not super easy to interpret because it depends, in part, on how much data you have. One way to compare the two models that may be fit to different-sized datasets is to calculate the **Mean Squared Error (MSE)**, which is simply the average of the SSR.
+
+$$\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$$
+
+So, unlike the SSR, which increases when we add more data to the model, the MSE can increase or decrease depending on the average residual, which gives us a better sense of how the model is performing overall.
+
+Unfortunately, MSEs are still difficult to interpret on their own because **the maximum values depend on the scale of the data**. For example, residuals (the differences $y_i - \hat{y}_i$) of $1, -3, 2$ mm give an $\text{MSE} = 4.7$; but express the same data in meters ($0.001, -0.003, 0.002$) and the $\text{MSE}$ drops to $4.7 \times 10^{-6}$. Same data, wildly different numbers. Both $\text{SSR}$ and $\text{MSE}$ can be used to calculate $R^2$, which is independent of both dataset size and scale.
+
+**$R^2$** measures how much better the fitted model is at predicting $y$ compared to simply predicting the mean $\bar{y}$ for every data point. It is defined as:
+
+$$R^2 = \frac{\text{SSR}(\text{mean}) - \text{SSR}(\text{fit})}{\text{SSR}(\text{mean})}$$
+
+Where:
+
+- $\text{SSR}(\text{mean}) = \sum_{i=1}^{n}(y_i - \bar{y})^2$ is the sum of squared residuals around the mean line
+- $\text{SSR}(\text{fit}) = \sum_{i=1}^{n}(y_i - \hat{y}_i)^2$ is the sum of squared residuals around the fitted model
+- $\bar{y} = \frac{1}{n}\sum_{i=1}^{n} y_i$ is the mean of the observed values
+
+The numerator is the improvement in fit over the mean baseline. Dividing by $\text{SSR}(\text{mean})$ normalises it to a $[0, 1]$ scale: $R^2 = 1$ means a perfect fit, $R^2 = 0$ means the model is no better than the mean.
+
+**Example**: Suppose we have three observations $y = \{2, 4, 6\}$ with $\bar{y} = 4$, and our model predicts $\hat{y} = \{2.5, 4, 5.5\}$.
+
+$$\text{SSR}(\text{mean}) = (2-4)^2 + (4-4)^2 + (6-4)^2 = 4 + 0 + 4 = 8$$
+
+$$\text{SSR}(\text{fit}) = (2-2.5)^2 + (4-4)^2 + (6-5.5)^2 = 0.25 + 0 + 0.25 = 0.5$$
+
+$$R^2 = \frac{8 - 0.5}{8} = \frac{7.5}{8} = 0.9375$$
+
+The model explains $93.75\%$ of the variance in $y$.
+
+**When $\text{SSR}(\text{mean}) = \text{SSR}(\text{fit})$**: the numerator is $0$, so $R^2 = 0$. The fitted model does no better than just predicting $\bar{y}$ for every point — it has learned nothing useful from the data.
+
+**When $\text{SSR}(\text{fit}) = 0$**: every predicted value equals the observed value ($\hat{y}_i = y_i$ for all $i$), so $R^2 = \frac{\text{SSR}(\text{mean})}{\text{SSR}(\text{mean})} = 1$. The model fits the data perfectly.
+
+**Any two data points always give $R^2 = 1$**: two points uniquely determine a line, so the fitted line passes exactly through both points, giving $\text{SSR}(\text{fit}) = 0$ and therefore $R^2 = 1$. For example, take $(x_1, y_1) = (1, 2)$ and $(x_2, y_2) = (3, 6)$:
+
+$$\bar{y} = \frac{2 + 6}{2} = 4$$
+
+$$\text{SSR}(\text{mean}) = (2 - 4)^2 + (6 - 4)^2 = 4 + 4 = 8$$
+
+The fitted line through both points predicts $\hat{y}_1 = 2$ and $\hat{y}_2 = 6$ exactly, so:
+
+$$\text{SSR}(\text{fit}) = (2 - 2)^2 + (6 - 6)^2 = 0$$
+
+$$R^2 = \frac{8 - 0}{8} = 1$$
+
+This is why $R^2$ alone is not a reliable measure of model quality— a model can achieve $R^2 = 1$ just by having as many parameters as data points, without learning anything meaningful. And because a small amount of random data can have a high $R^2$, any time we see a trend in a small dataset it is difficult to have confidence that a high $R^2$ value is not due to random chance. In contrast, when we see a trend in a large amount of data we can, intuitively, have more confidence that a large $R^2$ is not due to random chance because the data are not scattered around randomly like we might expect.
+
+!!! note
+    $R^2$ can equivalently be calculated using the Mean Squared Residuals instead of the SSR:
+
+    $$R^2 = \frac{\text{MSR}(\text{mean}) - \text{MSR}(\text{fit})}{\text{MSR}(\text{mean})}$$
+
+    This works because both the numerator and denominator of the SSR formula are divided by the same $n$, which cancels out and leaves the value of $R^2$ unchanged.
+
+## Linear Regression
