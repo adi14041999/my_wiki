@@ -39,7 +39,7 @@ Data leakage can also happen during cross validation if preprocessing is done be
 
 ## Fundamental concepts in Statistics
 
-Statistics provides us with a set of tools to quantify the variation that we find in everything and, for the purposes of Machine Learning, helps us make predictions and quantify how confident we should be in those predictions.
+Models approximate reality to let us make predictions. In ML, we build models by using algorithms on Training Data. Statistics can be used to determine if a model is useful or believable. Statistics provides us with a set of tools to quantify the variation that we find in everything and, for the purposes of ML, helps us quantify how confident we should be in those predictions.
 
 ### Histograms
 
@@ -97,3 +97,63 @@ $$= 0.3087$$
 There is a **30.87% chance** that exactly 3 out of 5 people prefer pumpkin pie.
 
 ### The Poisson Distribution
+
+For a deeper technical treatment, see:
+
+- [Poisson Distribution](../../math/probability/poisson_distribution.md) — covers the PMF, parameter $\lambda$, and key properties
+
+If you can read, on average, $10$ pages of a book in an hour, then you can use the Poisson Distribution to calculate the probability that in the next hour, you’ll read exactly $8$ pages.
+
+The probability of observing exactly $k$ events in a fixed interval, given an average rate of $\lambda$ events per interval, is:
+
+$$P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}$$
+
+Where:
+
+- $k$ = the number of events we want the probability for
+- $\lambda$ = the average rate of events per interval (the mean)
+- $e \approx 2.71828$ = Euler’s number
+- $k!$ = $k$ factorial, the number of ways to order $k$ events
+
+**Example:** Probability of reading exactly 8 pages in the next hour.
+
+With $\lambda = 10$ (average pages per hour) and $k = 8$:
+
+$$P(X = 8) = \frac{10^8 \cdot e^{-10}}{8!}$$
+
+$$= \frac{100{,}000{,}000 \times 0.0000454}{40{,}320}$$
+
+$$= \frac{4{,}540}{40{,}320}$$
+
+$$\approx 0.1126$$
+
+There is an **11.26% chance** of reading exactly 8 pages in the next hour.
+
+### The Normal (Gaussian) Distribution
+
+For a deeper technical treatment, see:
+
+- [Normal Distribution](../../math/probability/normal_distribution.md) — covers the PDF, parameters $\mu$ and $\sigma^2$, and key properties
+- [Multivariate Normal Distribution](../../math/probability/multivariate_normal_distribution.md) — generalizes to multiple dimensions with mean vectors and covariance matrices
+- [Central Limit Theorem](../../math/probability/central_limit_theorem.md) — explains why the normal distribution appears so often: the sum of $n$ i.i.d. (independent and identically distributed) random variables converge to it as $n \to \infty$
+
+!!! note "A note on i.i.d."
+    A set of random variables is i.i.d. (independent and identically distributed) if two conditions hold. First, each variable is **independent**— knowing the value of one tells you nothing about the others. Second, each variable is **identically distributed**— they all follow the same probability distribution with the same parameters. In machine learning, we almost always assume our training examples are i.i.d.— each data point is an independent draw from the same underlying distribution.
+
+The Normal distribution (also called the Gaussian distribution) is the most important distribution in statistics and machine learning. It describes a symmetric, bell-shaped curve centered at a mean $\mu$, with spread controlled by the standard deviation $\sigma$.
+
+A random variable $X$ follows a Normal distribution, written $X \sim \mathcal{N}(\mu, \sigma^2)$, with probability density function:
+
+$$f(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(x - \mu)^2}{2\sigma^2}}$$
+
+Where:
+
+- $\mu$ = the mean, controlling where the curve is centered
+- $\sigma^2$ = the variance, controlling how wide or narrow the curve is ($\sigma$ is the standard deviation)
+- $e \approx 2.71828$ = Euler's number
+- The factor $\frac{1}{\sigma\sqrt{2\pi}}$ is a normalizing constant that ensures the total area under the curve equals 1
+
+The special case $\mu = 0$, $\sigma^2 = 1$ is called the **standard normal distribution**, written $Z \sim \mathcal{N}(0, 1)$.
+
+### The Sum of the Squared Residuals
+

@@ -14,25 +14,19 @@ $$P(X = k) = \frac{e^{-\lambda} \lambda^k}{k!} \quad \text{for } k = 0, 1, 2, 3,
 
 - **Support**: $X$ takes values in $\{0, 1, 2, 3, \ldots\}$ (non-negative integers)
 
-**What does the Poisson distribution model?**
+The Poisson distribution arises from a **Poisson process**— a process for events that occur randomly over time (or space). A Poisson process has three defining properties:
 
-- **Rare events**: Events that occur infrequently but consistently
+1. **Events occur independently**— whether an event just happened has no effect on when the next one occurs
+2. **The rate is constant**— events happen at the same average rate $\lambda$ throughout the interval
+3. **No simultaneous events**— two events cannot happen at exactly the same instant
 
-- **Independent occurrences**: Each event is independent of others
+If a process satisfies these three conditions, then the number of events in any fixed interval follows a $\text{Poisson}(\lambda)$ distribution.
 
-- **Constant rate**: Events happen at a steady average rate
+**Examples of Poisson processes:**
 
-- **Fixed interval**: We count events in a specific time period or region
-
-**Examples**:
-
-- Number of phone calls received in an hour
-
-- Number of defects in a square meter of fabric
-
-- Number of accidents at an intersection per day
-
-- Number of customers arriving at a store in 10 minutes
+- Customers arriving at a shop (each customer arrives independently, at a roughly constant rate)
+- Radioactive decay events (each nucleus decays independently)
+- Emails arriving in an inbox
 
 The Poisson distribution can be derived as a limiting case of the binomial distribution.
 

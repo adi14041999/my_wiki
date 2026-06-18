@@ -34,7 +34,7 @@ $$X: S \rightarrow \mathbb{R}$$
 
 Before discussing distributions, let's understand what a **Probability Mass Function (PMF)** is.
 
-A **Probability Mass Function** is a function that gives the probability that a discrete random variable takes on a specific value. For a discrete random variable $X$, the PMF is defined as:
+A **Probability Mass Function** is a function that gives the probability that a discrete random variable takes on a specific value. Remember that a random variable is a function. So, we're essentially describing a PMF as a function of another function (the random variable) as the input and probability as the output. For a discrete random variable $X$, the PMF is defined as:
 
 $$p_X(x) = P(X = x)$$
 
@@ -169,6 +169,8 @@ The PMF formula $P(X = k) = \binom{n}{k} p^k(1-p)^{n-k}$ has three components:
 2. **$p^k$**: Probability of $k$ successes
 
 3. **$(1-p)^{n-k}$**: Probability of $n-k$ failures
+
+Remember that a random variable is a function. So, we're essentially describing the Binomial PMF as a function of another function (the random variable $X$, which outputs the number of successes) as the input and probability as the output.
 
 **Example: Quality Control**
 

@@ -13,10 +13,10 @@
         <link rel="canonical" href="https://adi14041999.github.io/my_wiki/ai/primer_on_ai/introduction_to_machine_learning/">
       
       
-        <link rel="prev" href="../introduction_to_artificial_intelligence/">
+        <link rel="prev" href="../model_taxonomy/">
       
       
-        <link rel="next" href="../model_taxonomy/">
+        <link rel="next" href="../spatializing_data/">
       
       
         
@@ -560,6 +560,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../model_taxonomy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Taxonomy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -706,6 +734,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#the-normal-gaussian-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Normal (Gaussian) Distribution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-sum-of-the-squared-residuals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Sum of the Squared Residuals
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -715,34 +765,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../model_taxonomy/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Model Taxonomy
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -4591,7 +4613,7 @@
 <p><strong>Why not scale each split with its own statistics?</strong> The model learns weights in the coordinate system defined by <strong>training</strong> preprocessing. At inference (and on val/test), new points must enter the network in that <strong>same</strong> coordinate system (subtract the <strong>training</strong> mean, divide by the <strong>training</strong> std). Recomputing mean/std on val or test would (a) <strong>peek</strong> at held-out distributions (leakage on test), and (b) put inputs on a <strong>different scale</strong> than the weights expect, so validation metrics would not reflect real deployment behavior. The fixed scaler is part of the trained pipeline, like saved model weights.</p>
 </div>
 <h2 id="fundamental-concepts-in-statistics">Fundamental concepts in Statistics</h2>
-<p>Statistics provides us with a set of tools to quantify the variation that we find in everything and, for the purposes of Machine Learning, helps us make predictions and quantify how confident we should be in those predictions.</p>
+<p>Models approximate reality to let us make predictions. In ML, we build models by using algorithms on Training Data. Statistics can be used to determine if a model is useful or believable. Statistics provides us with a set of tools to quantify the variation that we find in everything and, for the purposes of ML, helps us quantify how confident we should be in those predictions.</p>
 <h3 id="histograms">Histograms</h3>
 <p>Histograms are one of the most basic, but surprisingly useful, statistical tools that we can use to gain insights into data. Instead of stacking measurements that are exactly the same, we divide the range of values into bins and stack the measurements that fall in the same bin. </p>
 <p>If we want to estimate the probability that the next measurement will be in a particular bin, we count the number of measurements in that bin, and divide by the total number of measurements. However, the confidence we have in this estimate depends on the number of measurements. Generally speaking, the more measurements you have, the more confidence you can have in the estimate. However, sometimes getting more measurements can be expensive, or take a lot of time, or both. The good news is that we can solve this
@@ -4628,6 +4650,50 @@ blueberry pie. Based on our extensive experience judging pie contests, we know t
 <div class="arithmatex">\[= 0.3087\]</div>
 <p>There is a <strong>30.87% chance</strong> that exactly 3 out of 5 people prefer pumpkin pie.</p>
 <h3 id="the-poisson-distribution">The Poisson Distribution</h3>
+<p>For a deeper technical treatment, see:</p>
+<ul>
+<li><a href="../../../math/probability/poisson_distribution/">Poisson Distribution</a> — covers the PMF, parameter <span class="arithmatex">\(\lambda\)</span>, and key properties</li>
+</ul>
+<p>If you can read, on average, <span class="arithmatex">\(10\)</span> pages of a book in an hour, then you can use the Poisson Distribution to calculate the probability that in the next hour, you’ll read exactly <span class="arithmatex">\(8\)</span> pages.</p>
+<p>The probability of observing exactly <span class="arithmatex">\(k\)</span> events in a fixed interval, given an average rate of <span class="arithmatex">\(\lambda\)</span> events per interval, is:</p>
+<div class="arithmatex">\[P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}\]</div>
+<p>Where:</p>
+<ul>
+<li><span class="arithmatex">\(k\)</span> = the number of events we want the probability for</li>
+<li><span class="arithmatex">\(\lambda\)</span> = the average rate of events per interval (the mean)</li>
+<li><span class="arithmatex">\(e \approx 2.71828\)</span> = Euler’s number</li>
+<li><span class="arithmatex">\(k!\)</span> = <span class="arithmatex">\(k\)</span> factorial, the number of ways to order <span class="arithmatex">\(k\)</span> events</li>
+</ul>
+<p><strong>Example:</strong> Probability of reading exactly 8 pages in the next hour.</p>
+<p>With <span class="arithmatex">\(\lambda = 10\)</span> (average pages per hour) and <span class="arithmatex">\(k = 8\)</span>:</p>
+<div class="arithmatex">\[P(X = 8) = \frac{10^8 \cdot e^{-10}}{8!}\]</div>
+<div class="arithmatex">\[= \frac{100{,}000{,}000 \times 0.0000454}{40{,}320}\]</div>
+<div class="arithmatex">\[= \frac{4{,}540}{40{,}320}\]</div>
+<div class="arithmatex">\[\approx 0.1126\]</div>
+<p>There is an <strong>11.26% chance</strong> of reading exactly 8 pages in the next hour.</p>
+<h3 id="the-normal-gaussian-distribution">The Normal (Gaussian) Distribution</h3>
+<p>For a deeper technical treatment, see:</p>
+<ul>
+<li><a href="../../../math/probability/normal_distribution/">Normal Distribution</a> — covers the PDF, parameters <span class="arithmatex">\(\mu\)</span> and <span class="arithmatex">\(\sigma^2\)</span>, and key properties</li>
+<li><a href="../../../math/probability/multivariate_normal_distribution/">Multivariate Normal Distribution</a> — generalizes to multiple dimensions with mean vectors and covariance matrices</li>
+<li><a href="../../../math/probability/central_limit_theorem/">Central Limit Theorem</a> — explains why the normal distribution appears so often: the sum of <span class="arithmatex">\(n\)</span> i.i.d. (independent and identically distributed) random variables converge to it as <span class="arithmatex">\(n \to \infty\)</span></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">A note on i.i.d.</p>
+<p>A set of random variables is i.i.d. (independent and identically distributed) if two conditions hold. First, each variable is <strong>independent</strong>— knowing the value of one tells you nothing about the others. Second, each variable is <strong>identically distributed</strong>— they all follow the same probability distribution with the same parameters. In machine learning, we almost always assume our training examples are i.i.d.— each data point is an independent draw from the same underlying distribution.</p>
+</div>
+<p>The Normal distribution (also called the Gaussian distribution) is the most important distribution in statistics and machine learning. It describes a symmetric, bell-shaped curve centered at a mean <span class="arithmatex">\(\mu\)</span>, with spread controlled by the standard deviation <span class="arithmatex">\(\sigma\)</span>.</p>
+<p>A random variable <span class="arithmatex">\(X\)</span> follows a Normal distribution, written <span class="arithmatex">\(X \sim \mathcal{N}(\mu, \sigma^2)\)</span>, with probability density function:</p>
+<div class="arithmatex">\[f(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(x - \mu)^2}{2\sigma^2}}\]</div>
+<p>Where:</p>
+<ul>
+<li><span class="arithmatex">\(\mu\)</span> = the mean, controlling where the curve is centered</li>
+<li><span class="arithmatex">\(\sigma^2\)</span> = the variance, controlling how wide or narrow the curve is (<span class="arithmatex">\(\sigma\)</span> is the standard deviation)</li>
+<li><span class="arithmatex">\(e \approx 2.71828\)</span> = Euler's number</li>
+<li>The factor <span class="arithmatex">\(\frac{1}{\sigma\sqrt{2\pi}}\)</span> is a normalizing constant that ensures the total area under the curve equals 1</li>
+</ul>
+<p>The special case <span class="arithmatex">\(\mu = 0\)</span>, <span class="arithmatex">\(\sigma^2 = 1\)</span> is called the <strong>standard normal distribution</strong>, written <span class="arithmatex">\(Z \sim \mathcal{N}(0, 1)\)</span>.</p>
+<h3 id="the-sum-of-the-squared-residuals">The Sum of the Squared Residuals</h3>
 
 
 

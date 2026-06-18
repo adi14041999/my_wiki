@@ -553,14 +553,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../ai/primer_on_ai/introduction_to_machine_learning/" class="md-nav__link">
+      <a href="../../../ai/primer_on_ai/model_taxonomy/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Introduction to Machine Learning
+    Model Taxonomy
   
 
     
@@ -581,14 +581,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../ai/primer_on_ai/model_taxonomy/" class="md-nav__link">
+      <a href="../../../ai/primer_on_ai/introduction_to_machine_learning/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Model Taxonomy
+    Introduction to Machine Learning
   
 
     
@@ -4450,35 +4450,18 @@
 <p><strong>Support</strong>: <span class="arithmatex">\(X\)</span> takes values in <span class="arithmatex">\(\{0, 1, 2, 3, \ldots\}\)</span> (non-negative integers)</p>
 </li>
 </ul>
-<p><strong>What does the Poisson distribution model?</strong></p>
+<p>The Poisson distribution arises from a <strong>Poisson process</strong>— a process for events that occur randomly over time (or space). A Poisson process has three defining properties:</p>
+<ol>
+<li><strong>Events occur independently</strong>— whether an event just happened has no effect on when the next one occurs</li>
+<li><strong>The rate is constant</strong>— events happen at the same average rate <span class="arithmatex">\(\lambda\)</span> throughout the interval</li>
+<li><strong>No simultaneous events</strong>— two events cannot happen at exactly the same instant</li>
+</ol>
+<p>If a process satisfies these three conditions, then the number of events in any fixed interval follows a <span class="arithmatex">\(\text{Poisson}(\lambda)\)</span> distribution.</p>
+<p><strong>Examples of Poisson processes:</strong></p>
 <ul>
-<li>
-<p><strong>Rare events</strong>: Events that occur infrequently but consistently</p>
-</li>
-<li>
-<p><strong>Independent occurrences</strong>: Each event is independent of others</p>
-</li>
-<li>
-<p><strong>Constant rate</strong>: Events happen at a steady average rate</p>
-</li>
-<li>
-<p><strong>Fixed interval</strong>: We count events in a specific time period or region</p>
-</li>
-</ul>
-<p><strong>Examples</strong>:</p>
-<ul>
-<li>
-<p>Number of phone calls received in an hour</p>
-</li>
-<li>
-<p>Number of defects in a square meter of fabric</p>
-</li>
-<li>
-<p>Number of accidents at an intersection per day</p>
-</li>
-<li>
-<p>Number of customers arriving at a store in 10 minutes</p>
-</li>
+<li>Customers arriving at a shop (each customer arrives independently, at a roughly constant rate)</li>
+<li>Radioactive decay events (each nucleus decays independently)</li>
+<li>Emails arriving in an inbox</li>
 </ul>
 <p>The Poisson distribution can be derived as a limiting case of the binomial distribution.</p>
 <p><strong>Setup</strong>: Consider <span class="arithmatex">\(n\)</span> independent Bernoulli trials, each with success probability <span class="arithmatex">\(p = \frac{\lambda}{n}\)</span></p>
