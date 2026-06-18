@@ -37,7 +37,7 @@ Data leakage can also happen during cross validation if preprocessing is done be
 
     **Why not scale each split with its own statistics?** The model learns weights in the coordinate system defined by **training** preprocessing. At inference (and on val/test), new points must enter the network in that **same** coordinate system (subtract the **training** mean, divide by the **training** std). Recomputing mean/std on val or test would (a) **peek** at held-out distributions (leakage on test), and (b) put inputs on a **different scale** than the weights expect, so validation metrics would not reflect real deployment behavior. The fixed scaler is part of the trained pipeline, like saved model weights.
 
-## Fundamental concepts in Statistics
+## c
 
 Models approximate reality to let us make predictions. In ML, we build models by using algorithms on Training Data. Statistics can be used to determine if a model is useful or believable. Statistics provides us with a set of tools to quantify the variation that we find in everything and, for the purposes of ML, helps us quantify how confident we should be in those predictions.
 
