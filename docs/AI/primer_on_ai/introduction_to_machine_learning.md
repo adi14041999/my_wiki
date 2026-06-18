@@ -194,9 +194,7 @@ $$\text{SSR}(\text{fit}) = (2-2.5)^2 + (4-4)^2 + (6-5.5)^2 = 0.25 + 0 + 0.25 = 0
 
 $$R^2 = \frac{8 - 0.5}{8} = \frac{7.5}{8} = 0.9375$$
 
-The model explains $93.75\%$ of the variance in $y$.
-
-**When $\text{SSR}(\text{mean}) = \text{SSR}(\text{fit})$**: the numerator is $0$, so $R^2 = 0$. The fitted model does no better than just predicting $\bar{y}$ for every point — it has learned nothing useful from the data.
+**When $\text{SSR}(\text{mean}) = \text{SSR}(\text{fit})$**: the numerator is $0$, so $R^2 = 0$. The fitted model does no better than just predicting $\bar{y}$ for every point— it has learned nothing useful from the data.
 
 **When $\text{SSR}(\text{fit}) = 0$**: every predicted value equals the observed value ($\hat{y}_i = y_i$ for all $i$), so $R^2 = \frac{\text{SSR}(\text{mean})}{\text{SSR}(\text{mean})} = 1$. The model fits the data perfectly.
 
