@@ -690,15 +690,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#c" class="md-nav__link">
+  <a href="#fundamental-concepts-in-statistics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        c
+        Fundamental concepts in Statistics
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="c">
+    <nav class="md-nav" aria-label="Fundamental concepts in Statistics">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -4623,7 +4623,7 @@
 <p>Compute scaling statistics (<strong>mean</strong>, <strong>standard deviation</strong>, min/max, etc.) on the <strong>training set</strong>, then apply those same parameters to validation and test data. If you <strong>scale the full dataset before splitting</strong>, the statistics leak information from the <strong>test set</strong> into training (indirect access to held-out examples). Reported metrics become <strong>overly optimistic</strong>. The correct pipeline is: <strong>split first</strong>, fit the scaler on <strong>train</strong>, transform <strong>train / val / test</strong> with that fitted scaler.</p>
 <p><strong>Why not scale each split with its own statistics?</strong> The model learns weights in the coordinate system defined by <strong>training</strong> preprocessing. At inference (and on val/test), new points must enter the network in that <strong>same</strong> coordinate system (subtract the <strong>training</strong> mean, divide by the <strong>training</strong> std). Recomputing mean/std on val or test would (a) <strong>peek</strong> at held-out distributions (leakage on test), and (b) put inputs on a <strong>different scale</strong> than the weights expect, so validation metrics would not reflect real deployment behavior. The fixed scaler is part of the trained pipeline, like saved model weights.</p>
 </div>
-<h2 id="c">c</h2>
+<h2 id="fundamental-concepts-in-statistics">Fundamental concepts in Statistics</h2>
 <p>Models approximate reality to let us make predictions. In ML, we build models by using algorithms on Training Data. Statistics can be used to determine if a model is useful or believable. Statistics provides us with a set of tools to quantify the variation that we find in everything and, for the purposes of ML, helps us quantify how confident we should be in those predictions.</p>
 <h3 id="histograms">Histograms</h3>
 <p>Histograms are one of the most basic, but surprisingly useful, statistical tools that we can use to gain insights into data. Instead of stacking measurements that are exactly the same, we divide the range of values into bins and stack the measurements that fall in the same bin. </p>
