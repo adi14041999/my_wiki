@@ -220,3 +220,18 @@ This is why $R^2$ alone is not a reliable measure of model quality— a model ca
     This works because both the numerator and denominator of the SSR formula are divided by the same $n$, which cancels out and leaves the value of $R^2$ unchanged.
 
 ## Gradient Descent
+
+For a deeper technical treatment, see:
+
+- [Gradients, Local Approximations, and Gradient Descent](../../math/multivariate_calculus/gradients_local_approximations_and_gradient_descent.md) — covers the gradient, linear approximation, and gradient descent from a mathematical perspective including the proof that the gradient is normal to contours
+- [Optimization](../../ai/deep_learning_for_computer_vision/optimization.md) — covers gradient descent in the context of neural networks, including numerical vs. analytic gradient computation, mini-batch gradient descent, and practical strategies
+- [Backpropagation](../../ai/deep_learning_for_computer_vision/backpropagation.md) — covers how gradients are computed efficiently through a network using the chain rule, including staged computation and vectorized operations
+- [Backpropagation for a Linear Layer](../../ai/deep_learning_for_computer_vision/backpropagation_for_a_linear_layer.md) — derives the backward pass and gradient computation for a linear layer explicitly using the chain rule
+
+A major part of ML is optimizing a model’s fit to the data. Sometimes this can be done with an analytical solution, but it’s not always possible.
+
+Gradient Descent is an iterative algorithm that incrementally steps toward an optimal solution and is used in a very wide variety of situations.
+
+Gradient Descent starts with an initial guess of the model parameters. GD then iteratively minimizes the Loss (or Cost) Function by taking steps toward the optimal model parameters, one at a time. It does so until it finds an optimal solution or reaches a maximum number of steps.
+
+## Logistic Regression

@@ -772,6 +772,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#logistic-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logistic Regression
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4743,6 +4754,17 @@ blueberry pie. Based on our extensive experience judging pie contests, we know t
 <p>This works because both the numerator and denominator of the SSR formula are divided by the same <span class="arithmatex">\(n\)</span>, which cancels out and leaves the value of <span class="arithmatex">\(R^2\)</span> unchanged.</p>
 </div>
 <h2 id="gradient-descent">Gradient Descent</h2>
+<p>For a deeper technical treatment, see:</p>
+<ul>
+<li><a href="../../../math/multivariate_calculus/gradients_local_approximations_and_gradient_descent/">Gradients, Local Approximations, and Gradient Descent</a> — covers the gradient, linear approximation, and gradient descent from a mathematical perspective including the proof that the gradient is normal to contours</li>
+<li><a href="../../deep_learning_for_computer_vision/optimization/">Optimization</a> — covers gradient descent in the context of neural networks, including numerical vs. analytic gradient computation, mini-batch gradient descent, and practical strategies</li>
+<li><a href="../../deep_learning_for_computer_vision/backpropagation/">Backpropagation</a> — covers how gradients are computed efficiently through a network using the chain rule, including staged computation and vectorized operations</li>
+<li><a href="../../deep_learning_for_computer_vision/backpropagation_for_a_linear_layer/">Backpropagation for a Linear Layer</a> — derives the backward pass and gradient computation for a linear layer explicitly using the chain rule</li>
+</ul>
+<p>A major part of ML is optimizing a model’s fit to the data. Sometimes this can be done with an analytical solution, but it’s not always possible.</p>
+<p>Gradient Descent is an iterative algorithm that incrementally steps toward an optimal solution and is used in a very wide variety of situations.</p>
+<p>Gradient Descent starts with an initial guess of the model parameters. GD then iteratively minimizes the Loss (or Cost) Function by taking steps toward the optimal model parameters, one at a time. It does so until it finds an optimal solution or reaches a maximum number of steps.</p>
+<h2 id="logistic-regression">Logistic Regression</h2>
 
 
 
