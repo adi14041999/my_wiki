@@ -219,4 +219,4 @@ This is why $R^2$ alone is not a reliable measure of model quality— a model ca
 
     This works because both the numerator and denominator of the SSR formula are divided by the same $n$, which cancels out and leaves the value of $R^2$ unchanged.
 
-## Linear Regression
+## Gradient Descent

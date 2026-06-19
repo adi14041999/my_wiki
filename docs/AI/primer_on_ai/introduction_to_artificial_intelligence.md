@@ -926,3 +926,33 @@ def alpha_beta(node, is_max, alpha=-math.inf, beta=math.inf):
 
 !!! note "Pruned nodes do not get exact minimax values"
     Once the algorithm completes, the value returned for the **root** is exactly its true $\text{MINIMAX}$ value, but the values computed for the **other** nodes are no longer guaranteed to be accurate. When a node is pruned, we stop after seeing just enough children to know it cannot affect the decision, so we return a **bound** (the partial `lowerbound` or `upperbound`) rather than its finalized minimax value. Pruning thus leaves many nodes in the game tree with provisional scores, not exact ones.
+
+### Stochastic Games
+
+Stochastic games bring us a little closer to the unpredictability of real life by including a random element, such as the throwing of dice.
+
+#### Chance nodes in minimax game trees
+
+In a deterministic two-player game, every node in the game tree belongs to either MAX or MIN. In a stochastic game, there is a third type: a **chance node**, representing a random event (e.g. a dice roll, a card draw, or a coin flip) whose outcome is not controlled by either player.
+
+**How chance nodes fit into the tree:** At a chance node, the branches correspond to the possible outcomes of the random event. Each branch is labeled with the probability $p_i$ of that outcome (with $\sum_i p_i = 1$). The child reached by branch $i$ is an ordinary MAX or MIN node, and play continues from there as usual.
+
+A typical turn in backgammon, a game which has two dice, for example, proceeds as:
+
+$$\text{MAX node} \;\to\; \text{chance node (dice roll)} \;\to\; \text{MIN node} \;\to\; \text{chance node} \;\to\; \cdots$$
+
+#### Expectiminimax
+
+To handle chance nodes, the minimax recursion is extended to **expectiminimax**. The idea is simple: MAX and MIN nodes are evaluated exactly as before, but a chance node is assigned the **expected value** of its children— a probability-weighted average over all possible outcomes. The algorithm backs these values up the tree in the usual bottom-up fashion, so MAX ultimately picks the action that leads to the chance node with the highest expected value.
+
+**Example:** Consider a small game tree. The root is a MAX node. Its two children are chance nodes. The left chance node has two outcomes— "high" (probability $0.5$, leading to a leaf worth $10$) and "low" (probability $0.5$, leading to a leaf worth $2$). The right chance node has outcomes "high" ($0.9$, leaf $4$) and "low" ($0.1$, leaf $-5$).
+
+Computing bottom-up:
+
+$$\text{EXPECTIMINIMAX}(\text{chance\_left}) = 0.5 \times 10 + 0.5 \times 2 = 6$$
+
+$$\text{EXPECTIMINIMAX}(\text{chance\_right}) = 0.9 \times 4 + 0.1 \times (-5) = 3.6 - 0.5 = 3.1$$
+
+$$\text{EXPECTIMINIMAX}(\text{root}) = \max(6,\ 3.1) = 6$$
+
+MAX should therefore take the left action. The key insight is that MAX cannot control what the dice show— it can only choose which chance node to enter, and it prefers the one with the higher expected value.

@@ -1111,6 +1111,45 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#stochastic-games" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stochastic Games
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stochastic Games">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#chance-nodes-in-minimax-game-trees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chance nodes in minimax game trees
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expectiminimax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expectiminimax
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5654,6 +5693,21 @@ with the assignment for S, and</p>
 <p class="admonition-title">Pruned nodes do not get exact minimax values</p>
 <p>Once the algorithm completes, the value returned for the <strong>root</strong> is exactly its true <span class="arithmatex">\(\text{MINIMAX}\)</span> value, but the values computed for the <strong>other</strong> nodes are no longer guaranteed to be accurate. When a node is pruned, we stop after seeing just enough children to know it cannot affect the decision, so we return a <strong>bound</strong> (the partial <code>lowerbound</code> or <code>upperbound</code>) rather than its finalized minimax value. Pruning thus leaves many nodes in the game tree with provisional scores, not exact ones.</p>
 </div>
+<h3 id="stochastic-games">Stochastic Games</h3>
+<p>Stochastic games bring us a little closer to the unpredictability of real life by including a random element, such as the throwing of dice.</p>
+<h4 id="chance-nodes-in-minimax-game-trees">Chance nodes in minimax game trees</h4>
+<p>In a deterministic two-player game, every node in the game tree belongs to either MAX or MIN. In a stochastic game, there is a third type: a <strong>chance node</strong>, representing a random event (e.g. a dice roll, a card draw, or a coin flip) whose outcome is not controlled by either player.</p>
+<p><strong>How chance nodes fit into the tree:</strong> At a chance node, the branches correspond to the possible outcomes of the random event. Each branch is labeled with the probability <span class="arithmatex">\(p_i\)</span> of that outcome (with <span class="arithmatex">\(\sum_i p_i = 1\)</span>). The child reached by branch <span class="arithmatex">\(i\)</span> is an ordinary MAX or MIN node, and play continues from there as usual.</p>
+<p>A typical turn in backgammon, a game which has two dice, for example, proceeds as:</p>
+<div class="arithmatex">\[\text{MAX node} \;\to\; \text{chance node (dice roll)} \;\to\; \text{MIN node} \;\to\; \text{chance node} \;\to\; \cdots\]</div>
+<h4 id="expectiminimax">Expectiminimax</h4>
+<p>To handle chance nodes, the minimax recursion is extended to <strong>expectiminimax</strong>. The idea is simple: MAX and MIN nodes are evaluated exactly as before, but a chance node is assigned the <strong>expected value</strong> of its children— a probability-weighted average over all possible outcomes. The algorithm backs these values up the tree in the usual bottom-up fashion, so MAX ultimately picks the action that leads to the chance node with the highest expected value.</p>
+<p><strong>Example:</strong> Consider a small game tree. The root is a MAX node. Its two children are chance nodes. The left chance node has two outcomes— "high" (probability <span class="arithmatex">\(0.5\)</span>, leading to a leaf worth <span class="arithmatex">\(10\)</span>) and "low" (probability <span class="arithmatex">\(0.5\)</span>, leading to a leaf worth <span class="arithmatex">\(2\)</span>). The right chance node has outcomes "high" (<span class="arithmatex">\(0.9\)</span>, leaf <span class="arithmatex">\(4\)</span>) and "low" (<span class="arithmatex">\(0.1\)</span>, leaf <span class="arithmatex">\(-5\)</span>).</p>
+<p>Computing bottom-up:</p>
+<div class="arithmatex">\[\text{EXPECTIMINIMAX}(\text{chance\_left}) = 0.5 \times 10 + 0.5 \times 2 = 6\]</div>
+<div class="arithmatex">\[\text{EXPECTIMINIMAX}(\text{chance\_right}) = 0.9 \times 4 + 0.1 \times (-5) = 3.6 - 0.5 = 3.1\]</div>
+<div class="arithmatex">\[\text{EXPECTIMINIMAX}(\text{root}) = \max(6,\ 3.1) = 6\]</div>
+<p>MAX should therefore take the left action. The key insight is that MAX cannot control what the dice show— it can only choose which chance node to enter, and it prefers the one with the higher expected value.</p>
 
 
 
