@@ -282,3 +282,47 @@ $$\mathcal{L}(\theta) = \sum_{i \in \text{batch}} \log P(y_i \mid x_i, \theta)$$
 We then compute the gradient of this batch log-likelihood and take one parameter update step. In the next iteration, a new batch is sampled and the process repeats. Each batch gives a noisy but unbiased estimate of the true full-dataset gradient. This is why mini-batch GD is faster per step than full-batch GD and often generalizes better, as the noise in the gradient acts as a form of regularization.
 
 ## Naive Bayes
+
+For the foundational theory, see [Bayes' Rule](../../math/probability/bayes_rule.md), which covers how prior beliefs are updated with evidence, and [Continuous Distributions](../../math/probability/continuous_distributions.md) for the treatment of likelihood.
+
+**Where does the name come from?**
+
+- **Bayes**— the classifier is built on Bayes' theorem, which gives us a way to compute $P(\text{class} \mid \text{features})$— the probability of a class given the observed features. Bayes' theorem states:
+
+$$P(C \mid x_1, x_2, \ldots, x_m) = \frac{P(x_1, x_2, \ldots, x_m \mid C) \cdot P(C)}{P(x_1, x_2, \ldots, x_m)}$$
+
+where $P(C)$ is the **prior** (how common is the class?), $P(x_1, \ldots, x_m \mid C)$ is the **likelihood** (how probable are these features given the class?), and the left side is the **posterior** (what we want).
+
+- **Naive**— computing $P(x_1, x_2, \ldots, x_m \mid C)$ exactly requires knowing the joint distribution of all features, which is intractable for high-dimensional data. The "naive" assumption is that all features are **conditionally independent** given the class:
+
+$$P(x_1, x_2, \ldots, x_m \mid C) = \prod_{j=1}^{m} P(x_j \mid C)$$
+
+This is almost never strictly true in practice (e.g. the words "New" and "York" in a document are not independent), but the classifier works surprisingly well despite this assumption. The denominator $P(x_1, \ldots, x_m)$ is constant across classes and can be ignored when comparing classes, so we classify by:
+
+$$\hat{C} = \arg\max_{C} \; P(C) \prod_{j=1}^{m} P(x_j \mid C)$$
+
+What differs between variants of Naive Bayes is the assumed form of $P(x_j \mid C)$.
+
+### Multinomial Naive Bayes
+
+Used when features are **counts**— most commonly word counts in text classification. The likelihood of feature $x_j$ given class $C$ follows a Multinomial distribution:
+
+$$P(x_j \mid C) = \frac{N_{C,j} + \alpha}{N_C + \alpha m}$$
+
+where $N_{C,j}$ is the count of feature $j$ in class $C$, $N_C$ is the total count of all features in class $C$, $m$ is the number of features, and $\alpha$ is a smoothing parameter (typically $\alpha = 1$, called Laplace smoothing) to avoid zero probabilities for unseen words.
+
+### Gaussian Naive Bayes
+
+Used when features are **continuous**. The likelihood of feature $x_j$ given class $C$ is assumed to follow a Normal distribution:
+
+$$P(x_j \mid C) = \frac{1}{\sqrt{2\pi\sigma_{C,j}^2}} \exp\!\left(-\frac{(x_j - \mu_{C,j})^2}{2\sigma_{C,j}^2}\right)$$
+
+where $\mu_{C,j}$ and $\sigma_{C,j}^2$ are the mean and variance of feature $j$ within class $C$, estimated directly from the training data. This is a natural choice when features like height, temperature, or sensor readings are roughly bell-shaped within each class.
+
+### Exponential Naive Bayes
+
+Used when features are **non-negative and right-skewed**— for example, time between events or document lengths. The likelihood is modelled with an Exponential distribution:
+
+$$P(x_j \mid C) = \lambda_{C,j} \, e^{-\lambda_{C,j} x_j}, \quad x_j \geq 0$$
+
+where $\lambda_{C,j} = 1 / \mu_{C,j}$ is the rate parameter estimated as the inverse of the mean of feature $j$ in class $C$. This is the right choice when features represent durations or inter-arrival times, which are better described by the Exponential than the Normal distribution.

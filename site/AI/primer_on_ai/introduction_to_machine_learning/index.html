@@ -803,6 +803,45 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Naive Bayes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multinomial-naive-bayes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multinomial Naive Bayes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gaussian-naive-bayes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gaussian Naive Bayes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exponential-naive-bayes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exponential Naive Bayes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -4814,6 +4853,32 @@ blueberry pie. Based on our extensive experience judging pie contests, we know t
 <div class="arithmatex">\[\mathcal{L}(\theta) = \sum_{i \in \text{batch}} \log P(y_i \mid x_i, \theta)\]</div>
 <p>We then compute the gradient of this batch log-likelihood and take one parameter update step. In the next iteration, a new batch is sampled and the process repeats. Each batch gives a noisy but unbiased estimate of the true full-dataset gradient. This is why mini-batch GD is faster per step than full-batch GD and often generalizes better, as the noise in the gradient acts as a form of regularization.</p>
 <h2 id="naive-bayes">Naive Bayes</h2>
+<p>For the foundational theory, see <a href="../../../math/probability/bayes_rule/">Bayes' Rule</a>, which covers how prior beliefs are updated with evidence, and <a href="../../../math/probability/continuous_distributions/">Continuous Distributions</a> for the treatment of likelihood.</p>
+<p><strong>Where does the name come from?</strong></p>
+<ul>
+<li><strong>Bayes</strong>— the classifier is built on Bayes' theorem, which gives us a way to compute <span class="arithmatex">\(P(\text{class} \mid \text{features})\)</span>— the probability of a class given the observed features. Bayes' theorem states:</li>
+</ul>
+<div class="arithmatex">\[P(C \mid x_1, x_2, \ldots, x_m) = \frac{P(x_1, x_2, \ldots, x_m \mid C) \cdot P(C)}{P(x_1, x_2, \ldots, x_m)}\]</div>
+<p>where <span class="arithmatex">\(P(C)\)</span> is the <strong>prior</strong> (how common is the class?), <span class="arithmatex">\(P(x_1, \ldots, x_m \mid C)\)</span> is the <strong>likelihood</strong> (how probable are these features given the class?), and the left side is the <strong>posterior</strong> (what we want).</p>
+<ul>
+<li><strong>Naive</strong>— computing <span class="arithmatex">\(P(x_1, x_2, \ldots, x_m \mid C)\)</span> exactly requires knowing the joint distribution of all features, which is intractable for high-dimensional data. The "naive" assumption is that all features are <strong>conditionally independent</strong> given the class:</li>
+</ul>
+<div class="arithmatex">\[P(x_1, x_2, \ldots, x_m \mid C) = \prod_{j=1}^{m} P(x_j \mid C)\]</div>
+<p>This is almost never strictly true in practice (e.g. the words "New" and "York" in a document are not independent), but the classifier works surprisingly well despite this assumption. The denominator <span class="arithmatex">\(P(x_1, \ldots, x_m)\)</span> is constant across classes and can be ignored when comparing classes, so we classify by:</p>
+<div class="arithmatex">\[\hat{C} = \arg\max_{C} \; P(C) \prod_{j=1}^{m} P(x_j \mid C)\]</div>
+<p>What differs between variants of Naive Bayes is the assumed form of <span class="arithmatex">\(P(x_j \mid C)\)</span>.</p>
+<h3 id="multinomial-naive-bayes">Multinomial Naive Bayes</h3>
+<p>Used when features are <strong>counts</strong>— most commonly word counts in text classification. The likelihood of feature <span class="arithmatex">\(x_j\)</span> given class <span class="arithmatex">\(C\)</span> follows a Multinomial distribution:</p>
+<div class="arithmatex">\[P(x_j \mid C) = \frac{N_{C,j} + \alpha}{N_C + \alpha m}\]</div>
+<p>where <span class="arithmatex">\(N_{C,j}\)</span> is the count of feature <span class="arithmatex">\(j\)</span> in class <span class="arithmatex">\(C\)</span>, <span class="arithmatex">\(N_C\)</span> is the total count of all features in class <span class="arithmatex">\(C\)</span>, <span class="arithmatex">\(m\)</span> is the number of features, and <span class="arithmatex">\(\alpha\)</span> is a smoothing parameter (typically <span class="arithmatex">\(\alpha = 1\)</span>, called Laplace smoothing) to avoid zero probabilities for unseen words.</p>
+<h3 id="gaussian-naive-bayes">Gaussian Naive Bayes</h3>
+<p>Used when features are <strong>continuous</strong>. The likelihood of feature <span class="arithmatex">\(x_j\)</span> given class <span class="arithmatex">\(C\)</span> is assumed to follow a Normal distribution:</p>
+<div class="arithmatex">\[P(x_j \mid C) = \frac{1}{\sqrt{2\pi\sigma_{C,j}^2}} \exp\!\left(-\frac{(x_j - \mu_{C,j})^2}{2\sigma_{C,j}^2}\right)\]</div>
+<p>where <span class="arithmatex">\(\mu_{C,j}\)</span> and <span class="arithmatex">\(\sigma_{C,j}^2\)</span> are the mean and variance of feature <span class="arithmatex">\(j\)</span> within class <span class="arithmatex">\(C\)</span>, estimated directly from the training data. This is a natural choice when features like height, temperature, or sensor readings are roughly bell-shaped within each class.</p>
+<h3 id="exponential-naive-bayes">Exponential Naive Bayes</h3>
+<p>Used when features are <strong>non-negative and right-skewed</strong>— for example, time between events or document lengths. The likelihood is modelled with an Exponential distribution:</p>
+<div class="arithmatex">\[P(x_j \mid C) = \lambda_{C,j} \, e^{-\lambda_{C,j} x_j}, \quad x_j \geq 0\]</div>
+<p>where <span class="arithmatex">\(\lambda_{C,j} = 1 / \mu_{C,j}\)</span> is the rate parameter estimated as the inverse of the mean of feature <span class="arithmatex">\(j\)</span> in class <span class="arithmatex">\(C\)</span>. This is the right choice when features represent durations or inter-arrival times, which are better described by the Exponential than the Normal distribution.</p>
 
 
 
