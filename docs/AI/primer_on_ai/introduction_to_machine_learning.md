@@ -234,4 +234,51 @@ Gradient Descent is an iterative algorithm that incrementally steps toward an op
 
 Gradient Descent starts with an initial guess of the model parameters. GD then iteratively minimizes the Loss (or Cost) Function by taking steps toward the optimal model parameters, one at a time. It does so until it finds an optimal solution or reaches a maximum number of steps.
 
+## Likelihood vs. Probability
+
+Before introducing Logistic Regression, it helps to understand the distinction between **probability** and **likelihood**— two concepts that are related but mean different things.
+
+**Probability** asks: given fixed parameters, what is the chance of observing this data? For example, if we know a coin has a 70% chance of heads ($p = 0.7$), we can ask: what is the probability of seeing 8 heads in 10 flips?
+
+**Likelihood** flips this around: given fixed observed data, how plausible are different parameter values? We observe 8 heads in 10 flips and ask: which value of $p$ makes this data most probable? The likelihood $L(p)$ treats the data as fixed and $p$ as the variable.
+
+The key distinction: probability sums (or integrates) to 1 over all possible outcomes; likelihood does **not** sum to 1 over all parameter values— it is not a probability distribution over parameters. For a deeper treatment of this, see [Continuous Distributions – Is $L(h)$ a probability distribution?](../../math/probability/continuous_distributions.md#is-lh-a-probability-distribution) and [Bayes' Rule – Likelihood](../../math/probability/bayes_rule.md).
+
+**Maximum Likelihood Estimation (MLE)** is the principle of choosing the parameters that maximise the likelihood of the observed data— i.e., find the $\theta$ that makes the data we saw as probable as possible.
+
 ## Logistic Regression
+
+Logistic Regression is a fundamental supervised machine learning algorithm used for classification. Instead of predicting continuous numbers (like linear regression), it calculates the probability that a given data point belongs to a specific category.
+
+Rather than minimizing SSR like linear regression, logistic regression uses **Maximum Likelihood Estimation**— we choose the model parameters $\theta$ that maximize the likelihood of the observed labels given the data. In practice, it is more convenient to maximize the **log-likelihood** (since the log turns a product of probabilities into a sum, which is easier to optimize):
+
+$$\hat{\theta} = \arg\max_{\theta} \sum_{i=1}^{n} \log P(y_i \mid x_i, \theta)$$
+
+Where:
+
+- $\hat{\theta}$ = the estimated parameters we are solving for (e.g. the weights of the model)
+- $\arg\max_{\theta}$ = "find the value of $\theta$ that maximizes the expression" — not the maximum value itself, but the $\theta$ that achieves it
+- $\sum_{i=1}^{n}$ = sum over all $n$ training examples
+- $\log P(y_i \mid x_i, \theta)$ = the log-probability that the model assigns to the true label $y_i$ of example $i$, given its features $x_i$ and the current parameters $\theta$
+
+Intuitively, for each training example we ask: how confident is the model in the correct answer? We want that confidence to be as high as possible across all examples. Summing the log-probabilities (rather than multiplying the raw probabilities) avoids numerical underflow when dealing with many small numbers, and turns the product of independent probabilities into a more tractable sum.
+
+**How does the model assign probabilities?** Logistic regression first computes a raw score (called the **logit**) as a linear combination of the input features:
+
+$$z = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + \cdots + \theta_m x_m = \theta^T x$$
+
+This score $z$ can be any real number. To convert it into a probability between 0 and 1, it is passed through the **sigmoid function**:
+
+$$P(y = 1 \mid x, \theta) = \sigma(z) = \frac{1}{1 + e^{-z}}$$
+
+The sigmoid squashes any value of $z$ into the range $(0, 1)$: large positive $z$ gives a probability close to 1, large negative $z$ gives a probability close to 0, and $z = 0$ gives exactly 0.5. The probability of the negative class is then simply $P(y = 0 \mid x, \theta) = 1 - \sigma(z)$.
+
+Because there is no closed-form solution for $\hat{\theta}$, we use **Gradient Descent** — iteratively stepping in the direction that increases the log-likelihood until convergence. This makes logistic regression a direct application of the GD framework described above, just with a different objective function.
+
+In the case of **stochastic mini-batch GD**, rather than summing over all $n$ training examples at each step, we sum the log-probabilities over only the samples in the current batch of size $B$:
+
+$$\mathcal{L}(\theta) = \sum_{i \in \text{batch}} \log P(y_i \mid x_i, \theta)$$
+
+We then compute the gradient of this batch log-likelihood and take one parameter update step. In the next iteration, a new batch is sampled and the process repeats. Each batch gives a noisy but unbiased estimate of the true full-dataset gradient. This is why mini-batch GD is faster per step than full-batch GD and often generalizes better, as the noise in the gradient acts as a form of regularization.
+
+## Naive Bayes

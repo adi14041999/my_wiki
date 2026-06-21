@@ -773,10 +773,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#likelihood-vs-probability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Likelihood vs. Probability
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#logistic-regression" class="md-nav__link">
     <span class="md-ellipsis">
       
         Logistic Regression
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#naive-bayes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Naive Bayes
       
     </span>
   </a>
@@ -4764,7 +4786,34 @@ blueberry pie. Based on our extensive experience judging pie contests, we know t
 <p>A major part of ML is optimizing a model’s fit to the data. Sometimes this can be done with an analytical solution, but it’s not always possible.</p>
 <p>Gradient Descent is an iterative algorithm that incrementally steps toward an optimal solution and is used in a very wide variety of situations.</p>
 <p>Gradient Descent starts with an initial guess of the model parameters. GD then iteratively minimizes the Loss (or Cost) Function by taking steps toward the optimal model parameters, one at a time. It does so until it finds an optimal solution or reaches a maximum number of steps.</p>
+<h2 id="likelihood-vs-probability">Likelihood vs. Probability</h2>
+<p>Before introducing Logistic Regression, it helps to understand the distinction between <strong>probability</strong> and <strong>likelihood</strong>— two concepts that are related but mean different things.</p>
+<p><strong>Probability</strong> asks: given fixed parameters, what is the chance of observing this data? For example, if we know a coin has a 70% chance of heads (<span class="arithmatex">\(p = 0.7\)</span>), we can ask: what is the probability of seeing 8 heads in 10 flips?</p>
+<p><strong>Likelihood</strong> flips this around: given fixed observed data, how plausible are different parameter values? We observe 8 heads in 10 flips and ask: which value of <span class="arithmatex">\(p\)</span> makes this data most probable? The likelihood <span class="arithmatex">\(L(p)\)</span> treats the data as fixed and <span class="arithmatex">\(p\)</span> as the variable.</p>
+<p>The key distinction: probability sums (or integrates) to 1 over all possible outcomes; likelihood does <strong>not</strong> sum to 1 over all parameter values— it is not a probability distribution over parameters. For a deeper treatment of this, see <a href="../../../math/probability/continuous_distributions/#is-lh-a-probability-distribution">Continuous Distributions – Is <span class="arithmatex">\(L(h)\)</span> a probability distribution?</a> and <a href="../../../math/probability/bayes_rule/">Bayes' Rule – Likelihood</a>.</p>
+<p><strong>Maximum Likelihood Estimation (MLE)</strong> is the principle of choosing the parameters that maximise the likelihood of the observed data— i.e., find the <span class="arithmatex">\(\theta\)</span> that makes the data we saw as probable as possible.</p>
 <h2 id="logistic-regression">Logistic Regression</h2>
+<p>Logistic Regression is a fundamental supervised machine learning algorithm used for classification. Instead of predicting continuous numbers (like linear regression), it calculates the probability that a given data point belongs to a specific category.</p>
+<p>Rather than minimizing SSR like linear regression, logistic regression uses <strong>Maximum Likelihood Estimation</strong>— we choose the model parameters <span class="arithmatex">\(\theta\)</span> that maximize the likelihood of the observed labels given the data. In practice, it is more convenient to maximize the <strong>log-likelihood</strong> (since the log turns a product of probabilities into a sum, which is easier to optimize):</p>
+<div class="arithmatex">\[\hat{\theta} = \arg\max_{\theta} \sum_{i=1}^{n} \log P(y_i \mid x_i, \theta)\]</div>
+<p>Where:</p>
+<ul>
+<li><span class="arithmatex">\(\hat{\theta}\)</span> = the estimated parameters we are solving for (e.g. the weights of the model)</li>
+<li><span class="arithmatex">\(\arg\max_{\theta}\)</span> = "find the value of <span class="arithmatex">\(\theta\)</span> that maximizes the expression" — not the maximum value itself, but the <span class="arithmatex">\(\theta\)</span> that achieves it</li>
+<li><span class="arithmatex">\(\sum_{i=1}^{n}\)</span> = sum over all <span class="arithmatex">\(n\)</span> training examples</li>
+<li><span class="arithmatex">\(\log P(y_i \mid x_i, \theta)\)</span> = the log-probability that the model assigns to the true label <span class="arithmatex">\(y_i\)</span> of example <span class="arithmatex">\(i\)</span>, given its features <span class="arithmatex">\(x_i\)</span> and the current parameters <span class="arithmatex">\(\theta\)</span></li>
+</ul>
+<p>Intuitively, for each training example we ask: how confident is the model in the correct answer? We want that confidence to be as high as possible across all examples. Summing the log-probabilities (rather than multiplying the raw probabilities) avoids numerical underflow when dealing with many small numbers, and turns the product of independent probabilities into a more tractable sum.</p>
+<p><strong>How does the model assign probabilities?</strong> Logistic regression first computes a raw score (called the <strong>logit</strong>) as a linear combination of the input features:</p>
+<div class="arithmatex">\[z = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + \cdots + \theta_m x_m = \theta^T x\]</div>
+<p>This score <span class="arithmatex">\(z\)</span> can be any real number. To convert it into a probability between 0 and 1, it is passed through the <strong>sigmoid function</strong>:</p>
+<div class="arithmatex">\[P(y = 1 \mid x, \theta) = \sigma(z) = \frac{1}{1 + e^{-z}}\]</div>
+<p>The sigmoid squashes any value of <span class="arithmatex">\(z\)</span> into the range <span class="arithmatex">\((0, 1)\)</span>: large positive <span class="arithmatex">\(z\)</span> gives a probability close to 1, large negative <span class="arithmatex">\(z\)</span> gives a probability close to 0, and <span class="arithmatex">\(z = 0\)</span> gives exactly 0.5. The probability of the negative class is then simply <span class="arithmatex">\(P(y = 0 \mid x, \theta) = 1 - \sigma(z)\)</span>.</p>
+<p>Because there is no closed-form solution for <span class="arithmatex">\(\hat{\theta}\)</span>, we use <strong>Gradient Descent</strong> — iteratively stepping in the direction that increases the log-likelihood until convergence. This makes logistic regression a direct application of the GD framework described above, just with a different objective function.</p>
+<p>In the case of <strong>stochastic mini-batch GD</strong>, rather than summing over all <span class="arithmatex">\(n\)</span> training examples at each step, we sum the log-probabilities over only the samples in the current batch of size <span class="arithmatex">\(B\)</span>:</p>
+<div class="arithmatex">\[\mathcal{L}(\theta) = \sum_{i \in \text{batch}} \log P(y_i \mid x_i, \theta)\]</div>
+<p>We then compute the gradient of this batch log-likelihood and take one parameter update step. In the next iteration, a new batch is sampled and the process repeats. Each batch gives a noisy but unbiased estimate of the true full-dataset gradient. This is why mini-batch GD is faster per step than full-batch GD and often generalizes better, as the noise in the gradient acts as a form of regularization.</p>
+<h2 id="naive-bayes">Naive Bayes</h2>
 
 
 
