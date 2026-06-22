@@ -326,3 +326,80 @@ Used when features are **non-negative and right-skewed**— for example, time be
 $$P(x_j \mid C) = \lambda_{C,j} \, e^{-\lambda_{C,j} x_j}, \quad x_j \geq 0$$
 
 where $\lambda_{C,j} = 1 / \mu_{C,j}$ is the rate parameter estimated as the inverse of the mean of feature $j$ in class $C$. This is the right choice when features represent durations or inter-arrival times, which are better described by the Exponential than the Normal distribution.
+
+## Assessing Model Performance
+
+For a binary classification model (one that predicts either positive or negative), every prediction falls into one of four categories:
+
+| | Predicted Positive | Predicted Negative |
+|---|---|---|
+| **Actually Positive** | True Positive (TP) | False Negative (FN) |
+| **Actually Negative** | False Positive (FP) | True Negative (TN) |
+
+- **True Positive (TP)** — the model predicted positive and the true label is positive (correct)
+- **True Negative (TN)** — the model predicted negative and the true label is negative (correct)
+- **False Positive (FP)** — the model predicted positive but the true label is negative (wrong) — also called a **Type I error**
+- **False Negative (FN)** — the model predicted negative but the true label is positive (wrong) — also called a **Type II error**
+
+This table of counts is called a **confusion matrix**. It gives a complete picture of where the model is going wrong. For example, a spam filter with many FPs is flagging legitimate emails as spam, while one with many FNs is letting spam through.
+
+From the confusion matrix we can derive several performance metrics:
+
+$$\text{Sensitivity} = \frac{TP}{TP + FN} \quad \text{(of all actual positives, how many did we correctly identify?)}$$
+
+$$\text{Specificity} = \frac{TN}{TN + FP} \quad \text{(of all actual negatives, how many did we correctly identify?)}$$
+
+**Sensitivity (also called Recall) is important if we don't want to fail detecting a disease. Specificity is important when we don't want to do unnecessary surgery.**
+
+$$\text{Precision} = \frac{TP}{TP + FP} \quad \text{(of all predicted positives, how many were correct?)}$$
+
+In other words, Precision gives us a sense of the quality of the positive results. When we have high Precision, we have high-quality positive results.
+
+### ROC Curve
+
+Most classifiers don't just output a hard positive/negative label— they output a probability score, and we apply a **threshold** (e.g. $\geq 0.5$ = positive) to make the final call. Different thresholds give different trade-offs between Sensitivity and Specificity.
+
+The **ROC curve** (Receiver Operating Characteristic) visualises this trade-off by plotting:
+
+- **Y-axis**: Sensitivity $= \dfrac{TP}{TP + FN}$
+- **X-axis**: $1 - \text{Specificity}$ (False Positive Rate) $= \dfrac{FP}{FP + TN}$
+
+at every possible threshold from 0 to 1.
+
+The higher the point (in the graph) is along the y-axis, the higher the percentage of actual Positives were correctly classified. The further to the left along the x-axis, the lower the percentage of actual Negatives that were incorrectly classified.
+
+A perfect classifier would hit the top-left corner (Sensitivity $= 1$, FPR $= 0$). A random classifier that ignores the data would produce a diagonal line from $(0, 0)$ to $(1, 1)$.
+
+After we finish plotting the points from each possible Confusion Matrix (derived from each classification threshold), we usually connect the dots and add a diagonal line that tells us when the $True Positive Rate = False Positive Rate$. Now, without having to sort through a huge pile of Confusion Matrices, we can use the ROC graph to pick a classification threshold.
+
+![img](roc_curve.png)
+
+ROC graphs are great for selecting an optimal classification threshold for a model. But what if we want to compare how one model performs vs. another? This is where the AUC, which stands for Area Under the Curve, comes in handy.
+
+The **AUC** (Area Under the ROC Curve) summarises the entire curve in a single number between 0 and 1:
+
+- $\text{AUC} = 1.0$ — perfect classifier
+- $\text{AUC} = 0.5$ — no better than random
+- $\text{AUC} < 0.5$ — worse than random (predicting the opposite label would do better)
+
+Check an example below.
+
+![img](auc.png)
+
+Because Logistic Regression has a larger AUC, we can tell that, overall, Logistic Regression performs better than Naive Bayes with this example data.
+
+### Precision-Recall Curve
+
+The ROC curve works well when the dataset is balanced, but on highly imbalanced datasets (e.g. 1% positive, 99% negative) the false positive rate can look deceptively small even when the model is producing many false positives. This is because the large number of true negatives keeps $\dfrac{FP}{FP + TN}$ low regardless.
+
+The **Precision-Recall (PR) curve** is better suited for these cases. It plots:
+
+- **Y-axis**: Precision $= \dfrac{TP}{TP + FP}$ (of predicted positives, how many are correct?)
+- **X-axis**: Recall $= \dfrac{TP}{TP + FN}$ (of actual positives, how many did we find?)
+
+again at every threshold from 0 to 1. A perfect classifier hits the top-right corner (Precision $= 1$, Recall $= 1$).
+
+**ROC vs. PR (when to use which):**
+
+- Use the **ROC curve** when both classes matter roughly equally and the dataset is balanced
+- Use the **PR curve** when the positive class is rare and you care more about how well the model finds those rare positives (e.g. fraud detection, cancer screening)
