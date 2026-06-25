@@ -942,6 +942,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Decision Trees">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#classification-trees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classification Trees
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -5122,6 +5139,25 @@ blueberry pie. Based on our extensive experience judging pie contests, we know t
 <div class="arithmatex">\[\text{Height} = \beta_0 + \beta_w \cdot \text{Weight} + \beta_s \cdot \text{Shoe Size}\]</div>
 <p>This is why Lasso is preferred when you suspect only a subset of features are truly relevant.</p>
 <h2 id="decision-trees">Decision Trees</h2>
+<p>There are two types of Trees in ML: trees for Classification and trees for Regression. Classification Trees classify the input into two or more discrete categories. In contrast, Regression Trees try to predict a continuous value.</p>
+<h3 id="classification-trees">Classification Trees</h3>
+<p>Logistic regression is a powerful and interpretable classifier, but it makes a fundamental assumption: the decision boundary between classes is <strong>linear</strong> (or can be made linear through feature engineering). When this assumption holds, logistic regression works well. But real-world data often has non-linear, irregular boundaries that a straight line simply cannot capture.</p>
+<p>Consider predicting whether a patient has a disease based on age and blood pressure. Logistic regression would draw a single straight line separating sick from healthy patients. But the true pattern might be something like: "patients are at risk if they are either very young with very high blood pressure, or very old with moderate blood pressure." This kind of <strong>threshold-based, region-splitting logic</strong> is hard to express as a linear combination of features.</p>
+<p>A classification tree handles this naturally by learning a sequence of if-then rules:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>If Age &gt; 60:
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    If Blood Pressure &gt; 140 → High Risk
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    Else → Low Risk
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Else:
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    If Blood Pressure &gt; 180 → High Risk
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    Else → Low Risk
+</code></pre></div>
+<p>Each split partitions the feature space into rectangular regions, allowing the model to capture complex, non-linear boundaries without any feature engineering.</p>
+<p><strong>Classification trees are often preferable to logistic regression when:</strong></p>
+<ul>
+<li>The relationship between features and the outcome is <strong>non-linear</strong> or involves interactions between features</li>
+<li><strong>Interpretability</strong> matters to non-technical stakeholders. A tree can be visualised and read as a flowchart, making decisions easy to explain</li>
+<li>The decision boundary involves <strong>threshold effects</strong> (e.g. "above age 60 and blood pressure over 140") rather than smooth gradients</li>
+</ul>
 
 
 

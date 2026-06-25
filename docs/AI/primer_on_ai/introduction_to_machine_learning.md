@@ -472,3 +472,30 @@ $$\text{Height} = \beta_0 + \beta_w \cdot \text{Weight} + \beta_s \cdot \text{Sh
 This is why Lasso is preferred when you suspect only a subset of features are truly relevant.
 
 ## Decision Trees
+
+There are two types of Trees in ML: trees for Classification and trees for Regression. Classification Trees classify the input into two or more discrete categories. In contrast, Regression Trees try to predict a continuous value.
+
+### Classification Trees
+
+Logistic regression is a powerful and interpretable classifier, but it makes a fundamental assumption: the decision boundary between classes is **linear** (or can be made linear through feature engineering). When this assumption holds, logistic regression works well. But real-world data often has non-linear, irregular boundaries that a straight line simply cannot capture.
+
+Consider predicting whether a patient has a disease based on age and blood pressure. Logistic regression would draw a single straight line separating sick from healthy patients. But the true pattern might be something like: "patients are at risk if they are either very young with very high blood pressure, or very old with moderate blood pressure." This kind of **threshold-based, region-splitting logic** is hard to express as a linear combination of features.
+
+A classification tree handles this naturally by learning a sequence of if-then rules:
+
+```
+If Age > 60:
+    If Blood Pressure > 140 → High Risk
+    Else → Low Risk
+Else:
+    If Blood Pressure > 180 → High Risk
+    Else → Low Risk
+```
+
+Each split partitions the feature space into rectangular regions, allowing the model to capture complex, non-linear boundaries without any feature engineering.
+
+**Classification trees are often preferable to logistic regression when:**
+
+- The relationship between features and the outcome is **non-linear** or involves interactions between features
+- **Interpretability** matters to non-technical stakeholders. A tree can be visualised and read as a flowchart, making decisions easy to explain
+- The decision boundary involves **threshold effects** (e.g. "above age 60 and blood pressure over 140") rather than smooth gradients
