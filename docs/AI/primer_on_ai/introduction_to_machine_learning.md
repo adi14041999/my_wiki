@@ -470,3 +470,5 @@ If Airspeed of a Swallow is completely useless for predicting Height, the two re
 $$\text{Height} = \beta_0 + \beta_w \cdot \text{Weight} + \beta_s \cdot \text{Shoe Size}$$
 
 This is why Lasso is preferred when you suspect only a subset of features are truly relevant.
+
+## Decision Trees
