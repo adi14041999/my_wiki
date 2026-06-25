@@ -883,6 +883,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#regularization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regularization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Regularization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#l2-regularization-ridge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L2 Regularization (Ridge)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#l1-regularization-lasso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1 Regularization (Lasso)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#l1-vs-l2-when-to-use-which" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1 vs. L2: when to use which
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4989,6 +5039,77 @@ blueberry pie. Based on our extensive experience judging pie contests, we know t
 <li>Use the <strong>ROC curve</strong> when both classes matter roughly equally and the dataset is balanced</li>
 <li>Use the <strong>PR curve</strong> when the positive class is rare and you care more about how well the model finds those rare positives (e.g. fraud detection, cancer screening)</li>
 </ul>
+<h2 id="regularization">Regularization</h2>
+<p>For deeper technical treatment, see:</p>
+<ul>
+<li><a href="../../deep_learning_for_computer_vision/regularization/">Regularization</a> — covers regularization in neural networks including L2 regularization with cross-entropy loss</li>
+<li><a href="../../deep_learning_for_computer_vision/image_classification_with_linear_classifiers/#loss-function">Image Classification with Linear Classifiers– Loss Function</a> — covers the regularization term <span class="arithmatex">\(R(W)\)</span> added to SVM and Softmax loss functions</li>
+<li><a href="../../deep_learning_for_computer_vision/neural_networks_learning_and_evaluation/#hyperparameter-optimization">Neural Networks: Learning and Evaluation– Hyperparameter Optimization</a> — covers regularization strength (L2 penalty, dropout) as a key hyperparameter and how to search over it</li>
+</ul>
+<p>Regularization addresses overfitting by adding a penalty term to the loss function that discourages the model from learning overly large or complex weights. For a linear model with parameters <span class="arithmatex">\(\theta\)</span>, the regularized loss takes the general form:</p>
+<div class="arithmatex">\[\mathcal{L}_{\text{reg}}(\theta) = \mathcal{L}(\theta) + \lambda \cdot R(\theta)\]</div>
+<p>where <span class="arithmatex">\(\mathcal{L}(\theta)\)</span> is the original loss (e.g. SSR or negative log-likelihood), <span class="arithmatex">\(R(\theta)\)</span> is the regularization penalty, and <span class="arithmatex">\(\lambda \geq 0\)</span> is the <strong>regularization strength</strong>— a hyperparameter controlling how much we penalize complexity. Higher <span class="arithmatex">\(\lambda\)</span> means stronger regularization and simpler models.</p>
+<h3 id="l2-regularization-ridge">L2 Regularization (Ridge)</h3>
+<p>L2 regularization penalizes the <strong>sum of squared weights</strong>:</p>
+<div class="arithmatex">\[R(\theta) = \|\theta\|_2^2 = \sum_{j=1}^{m} \theta_j^2\]</div>
+<p>The full objective becomes:</p>
+<div class="arithmatex">\[\mathcal{L}_{\text{ridge}}(\theta) = \mathcal{L}(\theta) + \lambda \sum_{j=1}^{m} \theta_j^2\]</div>
+<p>The gradient of the penalty with respect to <span class="arithmatex">\(\theta_j\)</span> is <span class="arithmatex">\(2\lambda\theta_j\)</span>, which means each gradient descent update shrinks the weights toward zero proportionally to their magnitude:</p>
+<div class="arithmatex">\[\theta_j \leftarrow \theta_j - \alpha \frac{\partial \mathcal{L}}{\partial \theta_j} - 2\alpha\lambda\theta_j\]</div>
+<p>This <strong>weight decay</strong> effect pushes all weights toward zero but rarely to exactly zero. L2 tends to produce models with many small weights rather than sparse ones. It is differentiable everywhere, which makes it well-suited for gradient-based optimization.</p>
+<h3 id="l1-regularization-lasso">L1 Regularization (Lasso)</h3>
+<p>L1 regularization penalizes the <strong>sum of absolute weights</strong>:</p>
+<div class="arithmatex">\[R(\theta) = \|\theta\|_1 = \sum_{j=1}^{m} |\theta_j|\]</div>
+<p>The full objective becomes:</p>
+<div class="arithmatex">\[\mathcal{L}_{\text{lasso}}(\theta) = \mathcal{L}(\theta) + \lambda \sum_{j=1}^{m} |\theta_j|\]</div>
+<p>The gradient of <span class="arithmatex">\(|\theta_j|\)</span> is <span class="arithmatex">\(\text{sign}(\theta_j)\)</span>— a constant <span class="arithmatex">\(+1\)</span> or <span class="arithmatex">\(-1\)</span> regardless of how large <span class="arithmatex">\(\theta_j\)</span> is. This means small weights get pushed toward zero just as aggressively as large ones, which tends to drive some weights to <strong>exactly zero</strong>. L1 therefore produces <strong>sparse models</strong>, effectively performing automatic feature selection by zeroing out irrelevant features.</p>
+<h3 id="l1-vs-l2-when-to-use-which">L1 vs. L2: when to use which</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>L2 (Ridge)</th>
+<th>L1 (Lasso)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Penalty</strong></td>
+<td><span class="arithmatex">\(\sum \theta_j^2\)</span></td>
+<td><span class="arithmatex">\(\sum \|\theta_j\|\)</span></td>
+</tr>
+<tr>
+<td><strong>Effect on weights</strong></td>
+<td>Shrinks all weights toward zero</td>
+<td>Drives some weights to exactly zero</td>
+</tr>
+<tr>
+<td><strong>Sparsity</strong></td>
+<td>No</td>
+<td>Yes— built-in feature selection</td>
+</tr>
+<tr>
+<td><strong>Differentiable</strong></td>
+<td>Yes</td>
+<td>No (at <span class="arithmatex">\(\theta_j = 0\)</span>)</td>
+</tr>
+<tr>
+<td><strong>Use when</strong></td>
+<td>All features likely relevant</td>
+<td>Many irrelevant features present</td>
+</tr>
+</tbody>
+</table>
+<p>In practice, <strong>Elastic Net</strong> combines both penalties: <span class="arithmatex">\(\lambda_1 \|\theta\|_1 + \lambda_2 \|\theta\|_2^2\)</span>, giving both the sparsity of L1 and the stability of L2.</p>
+<p><strong>Example:</strong> Suppose we fit a model predicting Height from three features:</p>
+<div class="arithmatex">\[\text{Height} = \beta_0 + \beta_w \cdot \text{Weight} + \beta_s \cdot \text{Shoe Size} + \beta_a \cdot \text{Airspeed of a Swallow}\]</div>
+<p>If Airspeed of a Swallow is completely useless for predicting Height, the two regularizers behave differently:</p>
+<ul>
+<li><strong>Ridge</strong> will shrink <span class="arithmatex">\(\beta_a\)</span> toward zero but never reach it exactly— the feature stays in the model with a very small coefficient.</li>
+<li><strong>Lasso</strong> can drive <span class="arithmatex">\(\beta_a\)</span> to exactly zero, removing the feature entirely and producing the simpler model:</li>
+</ul>
+<div class="arithmatex">\[\text{Height} = \beta_0 + \beta_w \cdot \text{Weight} + \beta_s \cdot \text{Shoe Size}\]</div>
+<p>This is why Lasso is preferred when you suspect only a subset of features are truly relevant.</p>
 
 
 

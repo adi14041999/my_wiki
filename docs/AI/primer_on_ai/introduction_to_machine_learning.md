@@ -403,3 +403,70 @@ again at every threshold from 0 to 1. A perfect classifier hits the top-right co
 
 - Use the **ROC curve** when both classes matter roughly equally and the dataset is balanced
 - Use the **PR curve** when the positive class is rare and you care more about how well the model finds those rare positives (e.g. fraud detection, cancer screening)
+
+## Regularization
+
+For deeper technical treatment, see:
+
+- [Regularization](../../ai/deep_learning_for_computer_vision/regularization.md) — covers regularization in neural networks including L2 regularization with cross-entropy loss
+- [Image Classification with Linear Classifiers– Loss Function](../../ai/deep_learning_for_computer_vision/image_classification_with_linear_classifiers.md#loss-function) — covers the regularization term $R(W)$ added to SVM and Softmax loss functions
+- [Neural Networks: Learning and Evaluation– Hyperparameter Optimization](../../ai/deep_learning_for_computer_vision/neural_networks_learning_and_evaluation.md#hyperparameter-optimization) — covers regularization strength (L2 penalty, dropout) as a key hyperparameter and how to search over it
+
+Regularization addresses overfitting by adding a penalty term to the loss function that discourages the model from learning overly large or complex weights. For a linear model with parameters $\theta$, the regularized loss takes the general form:
+
+$$\mathcal{L}_{\text{reg}}(\theta) = \mathcal{L}(\theta) + \lambda \cdot R(\theta)$$
+
+where $\mathcal{L}(\theta)$ is the original loss (e.g. SSR or negative log-likelihood), $R(\theta)$ is the regularization penalty, and $\lambda \geq 0$ is the **regularization strength**— a hyperparameter controlling how much we penalize complexity. Higher $\lambda$ means stronger regularization and simpler models.
+
+### L2 Regularization (Ridge)
+
+L2 regularization penalizes the **sum of squared weights**:
+
+$$R(\theta) = \|\theta\|_2^2 = \sum_{j=1}^{m} \theta_j^2$$
+
+The full objective becomes:
+
+$$\mathcal{L}_{\text{ridge}}(\theta) = \mathcal{L}(\theta) + \lambda \sum_{j=1}^{m} \theta_j^2$$
+
+The gradient of the penalty with respect to $\theta_j$ is $2\lambda\theta_j$, which means each gradient descent update shrinks the weights toward zero proportionally to their magnitude:
+
+$$\theta_j \leftarrow \theta_j - \alpha \frac{\partial \mathcal{L}}{\partial \theta_j} - 2\alpha\lambda\theta_j$$
+
+This **weight decay** effect pushes all weights toward zero but rarely to exactly zero. L2 tends to produce models with many small weights rather than sparse ones. It is differentiable everywhere, which makes it well-suited for gradient-based optimization.
+
+### L1 Regularization (Lasso)
+
+L1 regularization penalizes the **sum of absolute weights**:
+
+$$R(\theta) = \|\theta\|_1 = \sum_{j=1}^{m} |\theta_j|$$
+
+The full objective becomes:
+
+$$\mathcal{L}_{\text{lasso}}(\theta) = \mathcal{L}(\theta) + \lambda \sum_{j=1}^{m} |\theta_j|$$
+
+The gradient of $|\theta_j|$ is $\text{sign}(\theta_j)$— a constant $+1$ or $-1$ regardless of how large $\theta_j$ is. This means small weights get pushed toward zero just as aggressively as large ones, which tends to drive some weights to **exactly zero**. L1 therefore produces **sparse models**, effectively performing automatic feature selection by zeroing out irrelevant features.
+
+### L1 vs. L2: when to use which
+
+| | L2 (Ridge) | L1 (Lasso) |
+|---|---|---|
+| **Penalty** | $\sum \theta_j^2$ | $\sum \|\theta_j\|$ |
+| **Effect on weights** | Shrinks all weights toward zero | Drives some weights to exactly zero |
+| **Sparsity** | No | Yes— built-in feature selection |
+| **Differentiable** | Yes | No (at $\theta_j = 0$) |
+| **Use when** | All features likely relevant | Many irrelevant features present |
+
+In practice, **Elastic Net** combines both penalties: $\lambda_1 \|\theta\|_1 + \lambda_2 \|\theta\|_2^2$, giving both the sparsity of L1 and the stability of L2.
+
+**Example:** Suppose we fit a model predicting Height from three features:
+
+$$\text{Height} = \beta_0 + \beta_w \cdot \text{Weight} + \beta_s \cdot \text{Shoe Size} + \beta_a \cdot \text{Airspeed of a Swallow}$$
+
+If Airspeed of a Swallow is completely useless for predicting Height, the two regularizers behave differently:
+
+- **Ridge** will shrink $\beta_a$ toward zero but never reach it exactly— the feature stays in the model with a very small coefficient.
+- **Lasso** can drive $\beta_a$ to exactly zero, removing the feature entirely and producing the simpler model:
+
+$$\text{Height} = \beta_0 + \beta_w \cdot \text{Weight} + \beta_s \cdot \text{Shoe Size}$$
+
+This is why Lasso is preferred when you suspect only a subset of features are truly relevant.
