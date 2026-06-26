@@ -499,3 +499,23 @@ Each split partitions the feature space into rectangular regions, allowing the m
 - The relationship between features and the outcome is **non-linear** or involves interactions between features
 - **Interpretability** matters to non-technical stakeholders. A tree can be visualised and read as a flowchart, making decisions easy to explain
 - The decision boundary involves **threshold effects** (e.g. "above age 60 and blood pressure over 140") rather than smooth gradients
+- The data contains a mix of **numerical and categorical** features — trees handle both natively
+- **Missing data** is present — many tree implementations handle missing values directly
+
+#### Gini Impurity
+
+When building a classification tree, at each node we need to decide which feature to split on and where. The goal is to find splits that create **purer** child nodes. Ideally, each node should contain mostly one class. **Gini impurity** is the most common way to measure this purity.
+
+For a node containing samples from $K$ classes, Gini impurity is defined as:
+
+$$G = 1 - \sum_{k=1}^{K} p_k^2$$
+
+where $p_k$ is the proportion of samples in the node that belong to class $k$. Gini impurity ranges from $0$ (perfectly pure— all samples are the same class) to $0.5$ for binary classification (maximally impure— classes are evenly split).
+
+At each step, the tree tries every possible split on every feature and picks the one that results in the greatest **reduction in Gini impurity** (called the **Gini gain**) across the two child nodes:
+
+$$\text{Gini Gain} = G_{\text{parent}} - \left(\frac{n_L}{n} G_L + \frac{n_R}{n} G_R\right)$$
+
+where $n_L$ and $n_R$ are the number of samples going to the left and right child nodes, and $n = n_L + n_R$. The weighted average accounts for the fact that a split creating one large pure node and one tiny impure node is better than it looks if judged only on the impure node.
+
+This greedy process (pick the best split, recurse on each child) repeats until the tree reaches a stopping condition (e.g. maximum depth, or a minimum number of samples per node).

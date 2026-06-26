@@ -954,6 +954,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Classification Trees">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gini-impurity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gini Impurity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -5157,7 +5174,18 @@ blueberry pie. Based on our extensive experience judging pie contests, we know t
 <li>The relationship between features and the outcome is <strong>non-linear</strong> or involves interactions between features</li>
 <li><strong>Interpretability</strong> matters to non-technical stakeholders. A tree can be visualised and read as a flowchart, making decisions easy to explain</li>
 <li>The decision boundary involves <strong>threshold effects</strong> (e.g. "above age 60 and blood pressure over 140") rather than smooth gradients</li>
+<li>The data contains a mix of <strong>numerical and categorical</strong> features — trees handle both natively</li>
+<li><strong>Missing data</strong> is present — many tree implementations handle missing values directly</li>
 </ul>
+<h4 id="gini-impurity">Gini Impurity</h4>
+<p>When building a classification tree, at each node we need to decide which feature to split on and where. The goal is to find splits that create <strong>purer</strong> child nodes. Ideally, each node should contain mostly one class. <strong>Gini impurity</strong> is the most common way to measure this purity.</p>
+<p>For a node containing samples from <span class="arithmatex">\(K\)</span> classes, Gini impurity is defined as:</p>
+<div class="arithmatex">\[G = 1 - \sum_{k=1}^{K} p_k^2\]</div>
+<p>where <span class="arithmatex">\(p_k\)</span> is the proportion of samples in the node that belong to class <span class="arithmatex">\(k\)</span>. Gini impurity ranges from <span class="arithmatex">\(0\)</span> (perfectly pure— all samples are the same class) to <span class="arithmatex">\(0.5\)</span> for binary classification (maximally impure— classes are evenly split).</p>
+<p>At each step, the tree tries every possible split on every feature and picks the one that results in the greatest <strong>reduction in Gini impurity</strong> (called the <strong>Gini gain</strong>) across the two child nodes:</p>
+<div class="arithmatex">\[\text{Gini Gain} = G_{\text{parent}} - \left(\frac{n_L}{n} G_L + \frac{n_R}{n} G_R\right)\]</div>
+<p>where <span class="arithmatex">\(n_L\)</span> and <span class="arithmatex">\(n_R\)</span> are the number of samples going to the left and right child nodes, and <span class="arithmatex">\(n = n_L + n_R\)</span>. The weighted average accounts for the fact that a split creating one large pure node and one tiny impure node is better than it looks if judged only on the impure node.</p>
+<p>This greedy process (pick the best split, recurse on each child) repeats until the tree reaches a stopping condition (e.g. maximum depth, or a minimum number of samples per node).</p>
 
 
 
