@@ -690,3 +690,41 @@ Once the data is mapped to this new space, the SVM finds the maximum-margin hype
 The practical challenge is that explicitly computing this mapping can be extremely expensive (or even impossible if the higher-dimensional space is infinite). This is where the **kernel trick** comes in. A kernel function computes the dot product in the high-dimensional space directly from the original features, without ever constructing the mapping explicitly. The computation cost stays manageable regardless of how high-dimensional the target space is. See [Kernel methods](../notes_from_ai_podcasts/nov_2025_mindscape_336_anil_ananthaswamy_on_the_mathematics_of_neural_nets_and_ai.md#kernel-methods) for a rough idea.
 
 Common kernel choices include the **polynomial kernel** (which corresponds to mapping into a space of polynomial combinations of features) and the **radial basis function (RBF) kernel** (which corresponds to an infinite-dimensional space). The choice of kernel is a modelling decision. Different kernels encode different assumptions about the shape of the decision boundary.
+
+## Neural Networks
+
+A few useful links.
+
+**Deep Learning for Computer Vision**
+
+- [Introduction](../deep_learning_for_computer_vision/introduction.md)
+- [Neural Networks — Setting up the Architecture](../deep_learning_for_computer_vision/neural_networks_setting_up_the_architecture.md)
+- [Neural Networks — Setting up the Data](../deep_learning_for_computer_vision/neural_networks_setting_up_the_data.md)
+- [Neural Networks — Learning and Evaluation](../deep_learning_for_computer_vision/neural_networks_learning_and_evaluation.md)
+- [Putting it together: Minimal Neural Network Case Study](../deep_learning_for_computer_vision/putting_it_together_minimal_neural_network_case_study.md)
+- [Backpropagation](../deep_learning_for_computer_vision/backpropagation.md)
+- [Backpropagation for a Linear Layer](../deep_learning_for_computer_vision/backpropagation_for_a_linear_layer.md)
+- [Optimization](../deep_learning_for_computer_vision/optimization.md)
+- [Convolutional Neural Networks — Architectures, Convolution / Pooling Layers](../deep_learning_for_computer_vision/convolutional_neural_networks_architectures_convolution_pooling_layers.md)
+- [A Review of RNNs and Transformers](../deep_learning_for_computer_vision/a_review_of_rnns_and_transformers.md)
+- [Self-Supervised Learning](../deep_learning_for_computer_vision/self_supervised_learning.md)
+
+**Recurrent Networks and Transformers (NLP)**
+
+- [Recurrent Neural Networks](../natural_language_processing/recurrent_neural_networks.md)
+- [Gated Recurrent Units (GRUs)](../natural_language_processing/gated_recurrent_units.md)
+- [Long Short-Term Memory (LSTM) Networks](../natural_language_processing/long_short_term_memory_networks.md)
+- [Seq2Seq Models](../natural_language_processing/seq2seq_models.md)
+- [Attention Mechanism](../natural_language_processing/attention_mechanism.md)
+- [The Basic Transformer](../natural_language_processing/the_basic_transformer.md)
+- [Decoder-Only Transformers](../natural_language_processing/decoder_only_transformers.md)
+- [Self-Attention and Transformers — a Mathematical Approach](../natural_language_processing/self_attention_and_transformers_a_mathematical_approach.md)
+
+**Generative Models**
+
+- [Introduction to Deep Generative Models](../deep_generative_models/introduction.md)
+- [Autoregressive Models](../deep_generative_models/autoregressive_models.md)
+- [Variational Autoencoders](../deep_generative_models/variational_autoencoders.md)
+- [Generative Adversarial Networks](../deep_generative_models/generative_adversarial_networks.md)
+- [Diffusion Models from an Image Generation Perspective](../deep_generative_models/diffusion_models_from_an_image_generation_perspective.md)
+- [Score Based Diffusion Models](../deep_generative_models/score_based_diffusion_models.md)
