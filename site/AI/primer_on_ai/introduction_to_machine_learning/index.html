@@ -973,8 +973,30 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#regression-trees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regression Trees
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#support-vector-machines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Support Vector Machines
+      
+    </span>
+  </a>
   
 </li>
       
@@ -5182,10 +5204,53 @@ blueberry pie. Based on our extensive experience judging pie contests, we know t
 <p>For a node containing samples from <span class="arithmatex">\(K\)</span> classes, Gini impurity is defined as:</p>
 <div class="arithmatex">\[G = 1 - \sum_{k=1}^{K} p_k^2\]</div>
 <p>where <span class="arithmatex">\(p_k\)</span> is the proportion of samples in the node that belong to class <span class="arithmatex">\(k\)</span>. Gini impurity ranges from <span class="arithmatex">\(0\)</span> (perfectly pure— all samples are the same class) to <span class="arithmatex">\(0.5\)</span> for binary classification (maximally impure— classes are evenly split).</p>
-<p>At each step, the tree tries every possible split on every feature and picks the one that results in the greatest <strong>reduction in Gini impurity</strong> (called the <strong>Gini gain</strong>) across the two child nodes:</p>
+<p>At each step, the tree tries every possible split on every feature and picks the one that results in the greatest <strong>change in Gini impurity</strong> (called the <strong>Gini gain</strong>) across the two child nodes:</p>
 <div class="arithmatex">\[\text{Gini Gain} = G_{\text{parent}} - \left(\frac{n_L}{n} G_L + \frac{n_R}{n} G_R\right)\]</div>
-<p>where <span class="arithmatex">\(n_L\)</span> and <span class="arithmatex">\(n_R\)</span> are the number of samples going to the left and right child nodes, and <span class="arithmatex">\(n = n_L + n_R\)</span>. The weighted average accounts for the fact that a split creating one large pure node and one tiny impure node is better than it looks if judged only on the impure node.</p>
-<p>This greedy process (pick the best split, recurse on each child) repeats until the tree reaches a stopping condition (e.g. maximum depth, or a minimum number of samples per node).</p>
+<p>where <span class="arithmatex">\(G_{\text{parent}}\)</span> is the Gini impurity of the <strong>current node</strong>. It is computed from the class proportions of all samples sitting at that node before any split is applied. It is the baseline purity we are trying to improve on. <span class="arithmatex">\(n_L\)</span> and <span class="arithmatex">\(n_R\)</span> are the number of samples going to the left and right child nodes, <span class="arithmatex">\(n = n_L + n_R\)</span>, and <span class="arithmatex">\(G_L\)</span>, <span class="arithmatex">\(G_R\)</span> are not known in advance. They are computed by trying every candidate split and seeing what class proportions result in each child group.</p>
+<p>In the pseudocode below, <strong><code>gini(samples)</code> does not look at features.</strong> It only looks at the class labels of the samples at that node. Given a set of samples, it counts how many belong to each class, divides by the total to get <span class="arithmatex">\(p_k\)</span>, and computes <span class="arithmatex">\(1 - \sum p_k^2\)</span>. It answers "how mixed are the classes here?"— independent of any feature.</p>
+<p><strong>Candidate thresholds</strong> for a feature are the midpoints between consecutive sorted unique values of that feature in the training data. For example, if feature <span class="arithmatex">\(f\)</span> takes values <span class="arithmatex">\(\{1, 3, 7, 10\}\)</span> across training samples, the candidate thresholds are:</p>
+<div class="arithmatex">\[t \in \left\{\frac{1+3}{2},\ \frac{3+7}{2},\ \frac{7+10}{2}\right\} = \{2,\ 5,\ 8.5\}\]</div>
+<p>So for <span class="arithmatex">\(n\)</span> unique values of a feature, there are <span class="arithmatex">\(n-1\)</span> candidate thresholds. The number of candidate splits per feature therefore depends on the data, not a fixed hyperparameter.</p>
+<p><strong>Example: Pseudocode at a single node</strong> (5 features with 2, 5, 6, 8, and 8 possible thresholds respectively; 29 candidate splits in total):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a># At the root, compute G_parent once from all training samples
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>G_parent = gini(all samples)
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>def split_node(samples, G_parent):
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    best_gain = -inf
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    best_split = None
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    best_G_L, best_G_R = None, None
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    for each feature f in [f1, f2, f3, f4, f5]:          # 5 features
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        for each threshold t in candidate_thresholds[f]:  # 2, 5, 6, 8, 8 iterations
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>            split samples into left (feature f &lt;= t) and right (feature f &gt; t)
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>            G_L = gini(left group)
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>            G_R = gini(right group)
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>            gain = G_parent - (n_L/n * G_L + n_R/n * G_R)
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>            if gain &gt; best_gain:
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>                best_gain = gain
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>                best_split = (f, t)
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>                best_G_L, best_G_R = G_L, G_R  # store for reuse
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    apply best_split to create left and right child nodes
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>    # Pass G_L and G_R directly as G_parent for the child nodes — no recomputation needed
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>    split_node(left samples,  G_parent=best_G_L)
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>    split_node(right samples, G_parent=best_G_R)
+</code></pre></div>
+<p>Total iterations at this node: <span class="arithmatex">\(2 + 5 + 6 + 8 + 8 = 29\)</span>. This greedy process repeats at every node until a stopping condition is met (e.g. maximum depth, or a minimum number of samples per node).</p>
+<p><strong>Feature iteration is separate from Gini computation.</strong> The feature loop inside <code>split_node</code> searches for the best <em>way to split</em>. It asks "which feature and threshold reduces impurity the most?" The <code>gini()</code> calls inside the loop evaluate the result of each candidate split, but <code>gini()</code> itself only sees class labels, not features. The two concerns are cleanly separated: features determine <em>how</em> you partition; class labels determine <em>how pure</em> the partition is.</p>
+<h3 id="regression-trees">Regression Trees</h3>
+<p>A regression tree works exactly like a classification tree, except the target variable is <strong>continuous</strong> (e.g. predicting house price, temperature, or salary) rather than a class label.</p>
+<p>The structure is identical (a sequence of if-then splits across all features) but two things change:</p>
+<p><strong>Split criterion:</strong> Instead of Gini impurity, we measure node purity using <strong>mean squared error (MSE)</strong>. At each node, the algorithm iterates over every feature <span class="arithmatex">\(f\)</span> and every candidate threshold <span class="arithmatex">\(t\)</span> for that feature. For each candidate split <span class="arithmatex">\((f, t)\)</span>, samples with <span class="arithmatex">\(x_f \leq t\)</span> go left and the rest go right. The best split is the one with the highest MSE reduction:</p>
+<div class="arithmatex">\[\text{MSE Reduction} = \text{MSE}(\text{parent}) - \left(\frac{n_L}{n} \text{MSE}(L) + \frac{n_R}{n} \text{MSE}(R)\right)\]</div>
+<p>where <span class="arithmatex">\(\text{MSE}(\text{node}) = \frac{1}{n_{\text{node}}}\sum_{i \in \text{node}}(y_i - \bar{y}_{\text{node}})^2\)</span>, with <span class="arithmatex">\(\bar{y}_{\text{node}}\)</span> being the mean of the target values at that node.</p>
+<p><strong>Candidate thresholds</strong> for a feature are the midpoints between consecutive sorted unique values of that feature in the training data. For example, if feature <span class="arithmatex">\(f\)</span> takes values <span class="arithmatex">\(\{1, 3, 7, 10\}\)</span> across training samples, the candidate thresholds are:</p>
+<div class="arithmatex">\[t \in \left\{\frac{1+3}{2},\ \frac{3+7}{2},\ \frac{7+10}{2}\right\} = \{2,\ 5,\ 8.5\}\]</div>
+<p>So for <span class="arithmatex">\(n\)</span> unique values of a feature, there are <span class="arithmatex">\(n-1\)</span> candidate thresholds. The number of candidate splits per feature therefore depends on the data, not a fixed hyperparameter.</p>
+<p><strong>Leaf prediction:</strong> Instead of predicting the majority class, each leaf predicts the <strong>mean target value</strong> of all training samples that fell into that leaf.</p>
+<p>For example, if a leaf contains three houses with prices $400k, $450k, and $500k, any new house routed to that leaf is predicted to cost $450k.</p>
+<p>The intuition is the same as a classification tree: partition the feature space into different regions by greedily splitting across all features, then make a constant prediction within each region. The difference is that the prediction is a mean rather than a class vote.</p>
+<h2 id="support-vector-machines">Support Vector Machines</h2>
 
 
 

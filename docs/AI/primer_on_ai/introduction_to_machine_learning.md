@@ -512,10 +512,74 @@ $$G = 1 - \sum_{k=1}^{K} p_k^2$$
 
 where $p_k$ is the proportion of samples in the node that belong to class $k$. Gini impurity ranges from $0$ (perfectly pure— all samples are the same class) to $0.5$ for binary classification (maximally impure— classes are evenly split).
 
-At each step, the tree tries every possible split on every feature and picks the one that results in the greatest **reduction in Gini impurity** (called the **Gini gain**) across the two child nodes:
+At each step, the tree tries every possible split on every feature and picks the one that results in the greatest **change in Gini impurity** (called the **Gini gain**) across the two child nodes:
 
 $$\text{Gini Gain} = G_{\text{parent}} - \left(\frac{n_L}{n} G_L + \frac{n_R}{n} G_R\right)$$
 
-where $n_L$ and $n_R$ are the number of samples going to the left and right child nodes, and $n = n_L + n_R$. The weighted average accounts for the fact that a split creating one large pure node and one tiny impure node is better than it looks if judged only on the impure node.
+where $G_{\text{parent}}$ is the Gini impurity of the **current node**. It is computed from the class proportions of all samples sitting at that node before any split is applied. It is the baseline purity we are trying to improve on. $n_L$ and $n_R$ are the number of samples going to the left and right child nodes, $n = n_L + n_R$, and $G_L$, $G_R$ are not known in advance. They are computed by trying every candidate split and seeing what class proportions result in each child group.
 
-This greedy process (pick the best split, recurse on each child) repeats until the tree reaches a stopping condition (e.g. maximum depth, or a minimum number of samples per node).
+In the pseudocode below, **`gini(samples)` does not look at features.** It only looks at the class labels of the samples at that node. Given a set of samples, it counts how many belong to each class, divides by the total to get $p_k$, and computes $1 - \sum p_k^2$. It answers "how mixed are the classes here?"— independent of any feature.
+
+**Candidate thresholds** for a feature are the midpoints between consecutive sorted unique values of that feature in the training data. For example, if feature $f$ takes values $\{1, 3, 7, 10\}$ across training samples, the candidate thresholds are:
+
+$$t \in \left\{\frac{1+3}{2},\ \frac{3+7}{2},\ \frac{7+10}{2}\right\} = \{2,\ 5,\ 8.5\}$$
+
+So for $n$ unique values of a feature, there are $n-1$ candidate thresholds. The number of candidate splits per feature therefore depends on the data, not a fixed hyperparameter.
+
+**Example: Pseudocode at a single node** (5 features with 2, 5, 6, 8, and 8 possible thresholds respectively; 29 candidate splits in total):
+
+```
+# At the root, compute G_parent once from all training samples
+G_parent = gini(all samples)
+
+def split_node(samples, G_parent):
+    best_gain = -inf
+    best_split = None
+    best_G_L, best_G_R = None, None
+
+    for each feature f in [f1, f2, f3, f4, f5]:          # 5 features
+        for each threshold t in candidate_thresholds[f]:  # 2, 5, 6, 8, 8 iterations
+            split samples into left (feature f <= t) and right (feature f > t)
+            G_L = gini(left group)
+            G_R = gini(right group)
+            gain = G_parent - (n_L/n * G_L + n_R/n * G_R)
+            if gain > best_gain:
+                best_gain = gain
+                best_split = (f, t)
+                best_G_L, best_G_R = G_L, G_R  # store for reuse
+
+    apply best_split to create left and right child nodes
+    # Pass G_L and G_R directly as G_parent for the child nodes — no recomputation needed
+    split_node(left samples,  G_parent=best_G_L)
+    split_node(right samples, G_parent=best_G_R)
+```
+
+Total iterations at this node: $2 + 5 + 6 + 8 + 8 = 29$. This greedy process repeats at every node until a stopping condition is met (e.g. maximum depth, or a minimum number of samples per node).
+
+**Feature iteration is separate from Gini computation.** The feature loop inside `split_node` searches for the best *way to split*. It asks "which feature and threshold reduces impurity the most?" The `gini()` calls inside the loop evaluate the result of each candidate split, but `gini()` itself only sees class labels, not features. The two concerns are cleanly separated: features determine *how* you partition; class labels determine *how pure* the partition is.
+
+### Regression Trees
+
+A regression tree works exactly like a classification tree, except the target variable is **continuous** (e.g. predicting house price, temperature, or salary) rather than a class label.
+
+The structure is identical (a sequence of if-then splits across all features) but two things change:
+
+**Split criterion:** Instead of Gini impurity, we measure node purity using **mean squared error (MSE)**. At each node, the algorithm iterates over every feature $f$ and every candidate threshold $t$ for that feature. For each candidate split $(f, t)$, samples with $x_f \leq t$ go left and the rest go right. The best split is the one with the highest MSE reduction:
+
+$$\text{MSE Reduction} = \text{MSE}(\text{parent}) - \left(\frac{n_L}{n} \text{MSE}(L) + \frac{n_R}{n} \text{MSE}(R)\right)$$
+
+where $\text{MSE}(\text{node}) = \frac{1}{n_{\text{node}}}\sum_{i \in \text{node}}(y_i - \bar{y}_{\text{node}})^2$, with $\bar{y}_{\text{node}}$ being the mean of the target values at that node.
+
+**Candidate thresholds** for a feature are the midpoints between consecutive sorted unique values of that feature in the training data. For example, if feature $f$ takes values $\{1, 3, 7, 10\}$ across training samples, the candidate thresholds are:
+
+$$t \in \left\{\frac{1+3}{2},\ \frac{3+7}{2},\ \frac{7+10}{2}\right\} = \{2,\ 5,\ 8.5\}$$
+
+So for $n$ unique values of a feature, there are $n-1$ candidate thresholds. The number of candidate splits per feature therefore depends on the data, not a fixed hyperparameter.
+
+**Leaf prediction:** Instead of predicting the majority class, each leaf predicts the **mean target value** of all training samples that fell into that leaf.
+
+For example, if a leaf contains three houses with prices \$400k, \$450k, and \$500k, any new house routed to that leaf is predicted to cost \$450k.
+
+The intuition is the same as a classification tree: partition the feature space into different regions by greedily splitting across all features, then make a constant prediction within each region. The difference is that the prediction is a mean rather than a class vote.
+
+## Support Vector Machines
