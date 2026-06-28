@@ -584,10 +584,109 @@ The intuition is the same as a classification tree: partition the feature space 
 
 ## Support Vector Machines
 
-A **Support Vector Machine (SVM)** finds the decision boundary that separates classes with the **maximum margin**— the largest possible gap between the boundary and the nearest training points from each class (the *support vectors*). The intuition is that a wider margin generalises better to unseen data.
+In a **feature space**, A **Support Vector Machine (SVM)** finds the decision boundary that separates classes with the **maximum margin**— the largest possible gap between the boundary and the nearest training points from each class (the *support vectors*). The intuition is that a wider margin generalises better to unseen data.
 
 SVMs shine in situations the other methods we have discussed struggle with:
 
 - **High-dimensional, small-sample data:** In settings like genomics or text classification (thousands of features, hundreds of samples) logistic regression can overfit and trees fragment the data too finely. SVMs regularise naturally through the margin objective and remain well-behaved even when features outnumber samples.
 - **Clear but complex boundaries:** Where logistic regression requires a linear boundary and trees approximate curves with axis-aligned rectangular cuts (every split is of the form "feature $f \leq t$", which draws a vertical or horizontal line in feature space; never a diagonal. Complex curved boundaries therefore require many splits to approximate), SVMs use the **kernel trick** to implicitly map data into a higher-dimensional space and find a linear boundary there. This lets them capture smooth, curved decision boundaries that neither logistic regression nor trees handle cleanly.
 - **Robustness near the boundary.** Only the support vectors (the points closest to the boundary) determine where the boundary sits. So a noisy point has to cross the entire margin before it can shift the boundary. Hence, because of the margin, the SVM is less sensitive to noisy samples.
+
+### Basic idea
+
+1. **Optimal hyperplane for linearly separable patterns:** In a feature space, when two classes can be separated by a straight line (or hyperplane in higher dimensions), there are infinitely many such boundaries. The SVM picks the unique one that maximises the margin (the perpendicular distance from the boundary to the nearest point in each class). This is an optimization problem with a unique solution, and the wider margin is what gives the SVM its generalization advantage over, say, logistic regression which can settle for any boundary that separates the classes.
+
+2. **Extend to patterns that are not linearly separable via the Kernel function:** When no hyperplane can cleanly separate the classes in the original feature space, the kernel trick implicitly maps the data into a much higher-dimensional space where a linear separator does exist. Crucially, this mapping **never** has to be computed explicitly. The kernel function does everything directly from the original features, keeping the computation tractable. See [Kernel methods](../notes_from_ai_podcasts/nov_2025_mindscape_336_anil_ananthaswamy_on_the_mathematics_of_neural_nets_and_ai.md#kernel-methods) for a rough idea. Common kernels include the polynomial kernel and the radial basis function (RBF) kernel, each corresponding to a different notion of similarity between points.
+
+### Support Vectors
+
+In a feature space, **Support Vectors** are the data points that lie closest to the decision surface (or hyperplane). They have direct bearing on the optimum location of the decision surface.
+
+![img](svm.png)
+
+Support vectors are the elements of the training set that would change the position of the dividing hyperplane if removed.
+
+### Algorithm
+
+In two dimensions (two features), we can separate two classes by a line. In higher dimensions (more than two features), we need hyperplanes.
+
+In two dimensions (two features $x_1$ and $x_2$), the decision boundary is a straight line $ax_1 + bx_2 = c$. The goal is to find coefficients $a$, $b$, and threshold $c$ such that:
+
+$$ax_1 + bx_2 \geq c \quad \text{for red points (class A)}$$
+
+$$ax_1 + bx_2 \leq c \quad \text{for green points (class B)}$$
+
+![img](2d.png)
+
+The SVM doesn't just find any $a$, $b$, $c$ that satisfies these inequalities. It finds the ones that maximize the margin.
+
+The problem of finding the optimal hyper plane is an optimization problem and can be solved by optimization techniques (see [Constrained optimization via Lagrange multipliers](../../math/multivariate_calculus/constrained_optimization_via_lagrange_multipliers.md)).
+
+**Example:** Suppose we have 10 training samples in a 2-D feature space ($x_1$, $x_2$). The two margin lines turn out to be $x_2 = 3$ (upper) and $x_2 = 1$ (lower), with the decision boundary at $x_2 = 2$. Since only $x_2$ appears, we have:
+
+$$a = 0, \quad b = 1, \quad c = 2$$
+
+- Upper margin: $0 \cdot x_1 + 1 \cdot x_2 = c + 1 \Rightarrow x_2 = 3$ ✓  
+- Lower margin: $0 \cdot x_1 + 1 \cdot x_2 = c - 1 \Rightarrow x_2 = 1$ ✓  
+- Margin $= \dfrac{2}{\sqrt{a^2 + b^2}} = \dfrac{2}{\sqrt{0 + 1}} = 2$ ✓
+
+Two support vectors in this case could be $(5,\ 3)$ (a red point sitting exactly on the upper margin line) and $(7,\ 1)$ (a green point sitting exactly on the lower margin line).
+
+**Example:** Now suppose the two margin lines are $3x_1 - 2x_2 = 4$ and $3x_1 - 2x_2 = -4$. These are symmetric around zero, so the decision boundary is $3x_1 - 2x_2 = 0$, giving:
+
+$$a = 3, \quad b = -2, \quad c = 0$$
+
+The margin is the perpendicular distance between the two lines:
+
+$$\text{margin} = \frac{2 \times 4}{\sqrt{a^2 + b^2}} = \frac{8}{\sqrt{9 + 4}} = \frac{8}{\sqrt{13}} \approx 2.22$$
+
+Two possible support vectors:
+
+- $(2,\ 1)$ on the red margin line: $3(2) - 2(1) = 4$ ✓
+- $(0,\ 2)$ on the green margin line: $3(0) - 2(2) = -4$ ✓
+
+$x_1$ and $x_2$ both influence which side of the boundary a point falls on. The boundary is a diagonal line in the feature space.
+
+In both examples, $ax_1 + bx_2$ is just the dot product of a weight vector $\mathbf{w} = (a,\ b)$ and a feature vector $\mathbf{x} = (x_1,\ x_2)$:
+
+$$ax_1 + bx_2 = \mathbf{w} \cdot \mathbf{x}$$
+
+The SVM conditions become:
+
+$$\mathbf{w} \cdot \mathbf{x} \geq c \quad \text{for red points}, \qquad \mathbf{w} \cdot \mathbf{x} \leq c \quad \text{for green points}$$
+
+This dot-product form generalises directly to any number of features. $\mathbf{w}$ and $\mathbf{x}$ simply become longer vectors.
+
+#### Linear Classifier
+
+We want to find $\mathbf{w}$ and $c$ such that:
+
+$$\mathbf{w} \cdot \mathbf{x}_i \geq c + 1 \quad \text{for all red points, i.e., class A } (y_i = +1)$$
+
+$$\mathbf{w} \cdot \mathbf{x}_i \leq c - 1 \quad \text{for all green points, i.e., class B } (y_i = -1)$$
+
+The $\pm 1$ on the right-hand side is a conventional rescaling. We fix the margin lines to sit at exactly $c+1$ and $c-1$, which uniquely pins down the scale of $\mathbf{w}$. These two conditions can be written compactly as a single constraint:
+
+$$y_i (\mathbf{w} \cdot \mathbf{x}_i - c) \geq 1 \quad \text{for all } i$$
+
+This works because when $y_i = +1$ the constraint becomes $\mathbf{w} \cdot \mathbf{x}_i - c \geq 1$, and when $y_i = -1$ it becomes $\mathbf{w} \cdot \mathbf{x}_i - c \leq -1$.
+
+The margin is $\dfrac{2}{\|\mathbf{w}\|}$, so **maximizing the margin is equivalent to minimizing $\|\mathbf{w}\|$**, or equivalently $\frac{1}{2}\|\mathbf{w}\|^2$ (the squared form is easier to differentiate). This gives the optimization problem:
+
+$$\min_{\mathbf{w},\, c} \quad \frac{1}{2} \|\mathbf{w}\|^2$$
+
+$$\text{subject to} \quad y_i(\mathbf{w} \cdot \mathbf{x}_i - c) \geq 1 \quad \text{for all } i = 1, \ldots, n$$
+
+This is a **quadratic objective with linear inequality constraints**- exactly the setting where Lagrange multipliers apply. See [Constrained optimization via Lagrange multipliers](../../math/multivariate_calculus/constrained_optimization_via_lagrange_multipliers.md) for a deep technical treatment.
+
+#### Non-Linear Classifier
+
+The linear SVM works well when the two classes can be separated by a straight line (or hyperplane). But many real problems are not linearly separable. No straight line can cleanly divide the classes in the original feature space.
+
+The solution is to **map the data into a higher-dimensional space** where a linear separator does exist. The intuition is that adding more dimensions gives you more room to find a flat surface that separates the classes. For example, two classes that are tangled together in 2D might become cleanly separable once you lift them into 3D.
+
+Once the data is mapped to this new space, the SVM finds the maximum-margin hyperplane there exactly as before. The resulting boundary, when projected back down into the original feature space, can look curved or complex even though it was a flat surface in the higher-dimensional space.
+
+The practical challenge is that explicitly computing this mapping can be extremely expensive (or even impossible if the higher-dimensional space is infinite). This is where the **kernel trick** comes in. A kernel function computes the dot product in the high-dimensional space directly from the original features, without ever constructing the mapping explicitly. The computation cost stays manageable regardless of how high-dimensional the target space is. See [Kernel methods](../notes_from_ai_podcasts/nov_2025_mindscape_336_anil_ananthaswamy_on_the_mathematics_of_neural_nets_and_ai.md#kernel-methods) for a rough idea.
+
+Common kernel choices include the **polynomial kernel** (which corresponds to mapping into a space of polynomial combinations of features) and the **radial basis function (RBF) kernel** (which corresponds to an infinite-dimensional space). The choice of kernel is a modelling decision. Different kernels encode different assumptions about the shape of the decision boundary.

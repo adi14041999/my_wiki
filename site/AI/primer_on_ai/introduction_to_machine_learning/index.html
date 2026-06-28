@@ -998,6 +998,73 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Support Vector Machines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-idea" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic idea
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#support-vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Support Vectors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Algorithm
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#linear-classifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linear Classifier
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#non-linear-classifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Non-Linear Classifier
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -5251,13 +5318,74 @@ blueberry pie. Based on our extensive experience judging pie contests, we know t
 <p>For example, if a leaf contains three houses with prices $400k, $450k, and $500k, any new house routed to that leaf is predicted to cost $450k.</p>
 <p>The intuition is the same as a classification tree: partition the feature space into different regions by greedily splitting across all features, then make a constant prediction within each region. The difference is that the prediction is a mean rather than a class vote.</p>
 <h2 id="support-vector-machines">Support Vector Machines</h2>
-<p>A <strong>Support Vector Machine (SVM)</strong> finds the decision boundary that separates classes with the <strong>maximum margin</strong>— the largest possible gap between the boundary and the nearest training points from each class (the <em>support vectors</em>). The intuition is that a wider margin generalises better to unseen data.</p>
+<p>In a <strong>feature space</strong>, A <strong>Support Vector Machine (SVM)</strong> finds the decision boundary that separates classes with the <strong>maximum margin</strong>— the largest possible gap between the boundary and the nearest training points from each class (the <em>support vectors</em>). The intuition is that a wider margin generalises better to unseen data.</p>
 <p>SVMs shine in situations the other methods we have discussed struggle with:</p>
 <ul>
 <li><strong>High-dimensional, small-sample data:</strong> In settings like genomics or text classification (thousands of features, hundreds of samples) logistic regression can overfit and trees fragment the data too finely. SVMs regularise naturally through the margin objective and remain well-behaved even when features outnumber samples.</li>
 <li><strong>Clear but complex boundaries:</strong> Where logistic regression requires a linear boundary and trees approximate curves with axis-aligned rectangular cuts (every split is of the form "feature <span class="arithmatex">\(f \leq t\)</span>", which draws a vertical or horizontal line in feature space; never a diagonal. Complex curved boundaries therefore require many splits to approximate), SVMs use the <strong>kernel trick</strong> to implicitly map data into a higher-dimensional space and find a linear boundary there. This lets them capture smooth, curved decision boundaries that neither logistic regression nor trees handle cleanly.</li>
 <li><strong>Robustness near the boundary.</strong> Only the support vectors (the points closest to the boundary) determine where the boundary sits. So a noisy point has to cross the entire margin before it can shift the boundary. Hence, because of the margin, the SVM is less sensitive to noisy samples.</li>
 </ul>
+<h3 id="basic-idea">Basic idea</h3>
+<ol>
+<li>
+<p><strong>Optimal hyperplane for linearly separable patterns:</strong> In a feature space, when two classes can be separated by a straight line (or hyperplane in higher dimensions), there are infinitely many such boundaries. The SVM picks the unique one that maximises the margin (the perpendicular distance from the boundary to the nearest point in each class). This is an optimization problem with a unique solution, and the wider margin is what gives the SVM its generalization advantage over, say, logistic regression which can settle for any boundary that separates the classes.</p>
+</li>
+<li>
+<p><strong>Extend to patterns that are not linearly separable via the Kernel function:</strong> When no hyperplane can cleanly separate the classes in the original feature space, the kernel trick implicitly maps the data into a much higher-dimensional space where a linear separator does exist. Crucially, this mapping <strong>never</strong> has to be computed explicitly. The kernel function does everything directly from the original features, keeping the computation tractable. See <a href="../../notes_from_ai_podcasts/nov_2025_mindscape_336_anil_ananthaswamy_on_the_mathematics_of_neural_nets_and_ai/#kernel-methods">Kernel methods</a> for a rough idea. Common kernels include the polynomial kernel and the radial basis function (RBF) kernel, each corresponding to a different notion of similarity between points.</p>
+</li>
+</ol>
+<h3 id="support-vectors">Support Vectors</h3>
+<p>In a feature space, <strong>Support Vectors</strong> are the data points that lie closest to the decision surface (or hyperplane). They have direct bearing on the optimum location of the decision surface.</p>
+<p><img alt="img" src="../svm.png" /></p>
+<p>Support vectors are the elements of the training set that would change the position of the dividing hyperplane if removed.</p>
+<h3 id="algorithm">Algorithm</h3>
+<p>In two dimensions (two features), we can separate two classes by a line. In higher dimensions (more than two features), we need hyperplanes.</p>
+<p>In two dimensions (two features <span class="arithmatex">\(x_1\)</span> and <span class="arithmatex">\(x_2\)</span>), the decision boundary is a straight line <span class="arithmatex">\(ax_1 + bx_2 = c\)</span>. The goal is to find coefficients <span class="arithmatex">\(a\)</span>, <span class="arithmatex">\(b\)</span>, and threshold <span class="arithmatex">\(c\)</span> such that:</p>
+<div class="arithmatex">\[ax_1 + bx_2 \geq c \quad \text{for red points (class A)}\]</div>
+<div class="arithmatex">\[ax_1 + bx_2 \leq c \quad \text{for green points (class B)}\]</div>
+<p><img alt="img" src="../2d.png" /></p>
+<p>The SVM doesn't just find any <span class="arithmatex">\(a\)</span>, <span class="arithmatex">\(b\)</span>, <span class="arithmatex">\(c\)</span> that satisfies these inequalities. It finds the ones that maximize the margin.</p>
+<p>The problem of finding the optimal hyper plane is an optimization problem and can be solved by optimization techniques (see <a href="../../../math/multivariate_calculus/constrained_optimization_via_lagrange_multipliers/">Constrained optimization via Lagrange multipliers</a>).</p>
+<p><strong>Example:</strong> Suppose we have 10 training samples in a 2-D feature space (<span class="arithmatex">\(x_1\)</span>, <span class="arithmatex">\(x_2\)</span>). The two margin lines turn out to be <span class="arithmatex">\(x_2 = 3\)</span> (upper) and <span class="arithmatex">\(x_2 = 1\)</span> (lower), with the decision boundary at <span class="arithmatex">\(x_2 = 2\)</span>. Since only <span class="arithmatex">\(x_2\)</span> appears, we have:</p>
+<div class="arithmatex">\[a = 0, \quad b = 1, \quad c = 2\]</div>
+<ul>
+<li>Upper margin: <span class="arithmatex">\(0 \cdot x_1 + 1 \cdot x_2 = c + 1 \Rightarrow x_2 = 3\)</span> ✓  </li>
+<li>Lower margin: <span class="arithmatex">\(0 \cdot x_1 + 1 \cdot x_2 = c - 1 \Rightarrow x_2 = 1\)</span> ✓  </li>
+<li>Margin <span class="arithmatex">\(= \dfrac{2}{\sqrt{a^2 + b^2}} = \dfrac{2}{\sqrt{0 + 1}} = 2\)</span> ✓</li>
+</ul>
+<p>Two support vectors in this case could be <span class="arithmatex">\((5,\ 3)\)</span> (a red point sitting exactly on the upper margin line) and <span class="arithmatex">\((7,\ 1)\)</span> (a green point sitting exactly on the lower margin line).</p>
+<p><strong>Example:</strong> Now suppose the two margin lines are <span class="arithmatex">\(3x_1 - 2x_2 = 4\)</span> and <span class="arithmatex">\(3x_1 - 2x_2 = -4\)</span>. These are symmetric around zero, so the decision boundary is <span class="arithmatex">\(3x_1 - 2x_2 = 0\)</span>, giving:</p>
+<div class="arithmatex">\[a = 3, \quad b = -2, \quad c = 0\]</div>
+<p>The margin is the perpendicular distance between the two lines:</p>
+<div class="arithmatex">\[\text{margin} = \frac{2 \times 4}{\sqrt{a^2 + b^2}} = \frac{8}{\sqrt{9 + 4}} = \frac{8}{\sqrt{13}} \approx 2.22\]</div>
+<p>Two possible support vectors:</p>
+<ul>
+<li><span class="arithmatex">\((2,\ 1)\)</span> on the red margin line: <span class="arithmatex">\(3(2) - 2(1) = 4\)</span> ✓</li>
+<li><span class="arithmatex">\((0,\ 2)\)</span> on the green margin line: <span class="arithmatex">\(3(0) - 2(2) = -4\)</span> ✓</li>
+</ul>
+<p><span class="arithmatex">\(x_1\)</span> and <span class="arithmatex">\(x_2\)</span> both influence which side of the boundary a point falls on. The boundary is a diagonal line in the feature space.</p>
+<p>In both examples, <span class="arithmatex">\(ax_1 + bx_2\)</span> is just the dot product of a weight vector <span class="arithmatex">\(\mathbf{w} = (a,\ b)\)</span> and a feature vector <span class="arithmatex">\(\mathbf{x} = (x_1,\ x_2)\)</span>:</p>
+<div class="arithmatex">\[ax_1 + bx_2 = \mathbf{w} \cdot \mathbf{x}\]</div>
+<p>The SVM conditions become:</p>
+<div class="arithmatex">\[\mathbf{w} \cdot \mathbf{x} \geq c \quad \text{for red points}, \qquad \mathbf{w} \cdot \mathbf{x} \leq c \quad \text{for green points}\]</div>
+<p>This dot-product form generalises directly to any number of features. <span class="arithmatex">\(\mathbf{w}\)</span> and <span class="arithmatex">\(\mathbf{x}\)</span> simply become longer vectors.</p>
+<h4 id="linear-classifier">Linear Classifier</h4>
+<p>We want to find <span class="arithmatex">\(\mathbf{w}\)</span> and <span class="arithmatex">\(c\)</span> such that:</p>
+<div class="arithmatex">\[\mathbf{w} \cdot \mathbf{x}_i \geq c + 1 \quad \text{for all red points, i.e., class A } (y_i = +1)\]</div>
+<div class="arithmatex">\[\mathbf{w} \cdot \mathbf{x}_i \leq c - 1 \quad \text{for all green points, i.e., class B } (y_i = -1)\]</div>
+<p>The <span class="arithmatex">\(\pm 1\)</span> on the right-hand side is a conventional rescaling. We fix the margin lines to sit at exactly <span class="arithmatex">\(c+1\)</span> and <span class="arithmatex">\(c-1\)</span>, which uniquely pins down the scale of <span class="arithmatex">\(\mathbf{w}\)</span>. These two conditions can be written compactly as a single constraint:</p>
+<div class="arithmatex">\[y_i (\mathbf{w} \cdot \mathbf{x}_i - c) \geq 1 \quad \text{for all } i\]</div>
+<p>This works because when <span class="arithmatex">\(y_i = +1\)</span> the constraint becomes <span class="arithmatex">\(\mathbf{w} \cdot \mathbf{x}_i - c \geq 1\)</span>, and when <span class="arithmatex">\(y_i = -1\)</span> it becomes <span class="arithmatex">\(\mathbf{w} \cdot \mathbf{x}_i - c \leq -1\)</span>.</p>
+<p>The margin is <span class="arithmatex">\(\dfrac{2}{\|\mathbf{w}\|}\)</span>, so <strong>maximizing the margin is equivalent to minimizing <span class="arithmatex">\(\|\mathbf{w}\|\)</span></strong>, or equivalently <span class="arithmatex">\(\frac{1}{2}\|\mathbf{w}\|^2\)</span> (the squared form is easier to differentiate). This gives the optimization problem:</p>
+<div class="arithmatex">\[\min_{\mathbf{w},\, c} \quad \frac{1}{2} \|\mathbf{w}\|^2\]</div>
+<div class="arithmatex">\[\text{subject to} \quad y_i(\mathbf{w} \cdot \mathbf{x}_i - c) \geq 1 \quad \text{for all } i = 1, \ldots, n\]</div>
+<p>This is a <strong>quadratic objective with linear inequality constraints</strong>- exactly the setting where Lagrange multipliers apply. See <a href="../../../math/multivariate_calculus/constrained_optimization_via_lagrange_multipliers/">Constrained optimization via Lagrange multipliers</a> for a deep technical treatment.</p>
+<h4 id="non-linear-classifier">Non-Linear Classifier</h4>
+<p>The linear SVM works well when the two classes can be separated by a straight line (or hyperplane). But many real problems are not linearly separable. No straight line can cleanly divide the classes in the original feature space.</p>
+<p>The solution is to <strong>map the data into a higher-dimensional space</strong> where a linear separator does exist. The intuition is that adding more dimensions gives you more room to find a flat surface that separates the classes. For example, two classes that are tangled together in 2D might become cleanly separable once you lift them into 3D.</p>
+<p>Once the data is mapped to this new space, the SVM finds the maximum-margin hyperplane there exactly as before. The resulting boundary, when projected back down into the original feature space, can look curved or complex even though it was a flat surface in the higher-dimensional space.</p>
+<p>The practical challenge is that explicitly computing this mapping can be extremely expensive (or even impossible if the higher-dimensional space is infinite). This is where the <strong>kernel trick</strong> comes in. A kernel function computes the dot product in the high-dimensional space directly from the original features, without ever constructing the mapping explicitly. The computation cost stays manageable regardless of how high-dimensional the target space is. See <a href="../../notes_from_ai_podcasts/nov_2025_mindscape_336_anil_ananthaswamy_on_the_mathematics_of_neural_nets_and_ai/#kernel-methods">Kernel methods</a> for a rough idea.</p>
+<p>Common kernel choices include the <strong>polynomial kernel</strong> (which corresponds to mapping into a space of polynomial combinations of features) and the <strong>radial basis function (RBF) kernel</strong> (which corresponds to an infinite-dimensional space). The choice of kernel is a modelling decision. Different kernels encode different assumptions about the shape of the decision boundary.</p>
 
 
 
