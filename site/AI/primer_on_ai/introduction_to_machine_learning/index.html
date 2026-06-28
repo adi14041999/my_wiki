@@ -5251,6 +5251,13 @@ blueberry pie. Based on our extensive experience judging pie contests, we know t
 <p>For example, if a leaf contains three houses with prices $400k, $450k, and $500k, any new house routed to that leaf is predicted to cost $450k.</p>
 <p>The intuition is the same as a classification tree: partition the feature space into different regions by greedily splitting across all features, then make a constant prediction within each region. The difference is that the prediction is a mean rather than a class vote.</p>
 <h2 id="support-vector-machines">Support Vector Machines</h2>
+<p>A <strong>Support Vector Machine (SVM)</strong> finds the decision boundary that separates classes with the <strong>maximum margin</strong>— the largest possible gap between the boundary and the nearest training points from each class (the <em>support vectors</em>). The intuition is that a wider margin generalises better to unseen data.</p>
+<p>SVMs shine in situations the other methods we have discussed struggle with:</p>
+<ul>
+<li><strong>High-dimensional, small-sample data:</strong> In settings like genomics or text classification (thousands of features, hundreds of samples) logistic regression can overfit and trees fragment the data too finely. SVMs regularise naturally through the margin objective and remain well-behaved even when features outnumber samples.</li>
+<li><strong>Clear but complex boundaries:</strong> Where logistic regression requires a linear boundary and trees approximate curves with axis-aligned rectangular cuts (every split is of the form "feature <span class="arithmatex">\(f \leq t\)</span>", which draws a vertical or horizontal line in feature space; never a diagonal. Complex curved boundaries therefore require many splits to approximate), SVMs use the <strong>kernel trick</strong> to implicitly map data into a higher-dimensional space and find a linear boundary there. This lets them capture smooth, curved decision boundaries that neither logistic regression nor trees handle cleanly.</li>
+<li><strong>Robustness near the boundary.</strong> Only the support vectors (the points closest to the boundary) determine where the boundary sits. So a noisy point has to cross the entire margin before it can shift the boundary. Hence, because of the margin, the SVM is less sensitive to noisy samples.</li>
+</ul>
 
 
 

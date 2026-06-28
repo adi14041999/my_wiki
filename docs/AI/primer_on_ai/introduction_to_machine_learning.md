@@ -583,3 +583,11 @@ For example, if a leaf contains three houses with prices \$400k, \$450k, and \$5
 The intuition is the same as a classification tree: partition the feature space into different regions by greedily splitting across all features, then make a constant prediction within each region. The difference is that the prediction is a mean rather than a class vote.
 
 ## Support Vector Machines
+
+A **Support Vector Machine (SVM)** finds the decision boundary that separates classes with the **maximum margin**— the largest possible gap between the boundary and the nearest training points from each class (the *support vectors*). The intuition is that a wider margin generalises better to unseen data.
+
+SVMs shine in situations the other methods we have discussed struggle with:
+
+- **High-dimensional, small-sample data:** In settings like genomics or text classification (thousands of features, hundreds of samples) logistic regression can overfit and trees fragment the data too finely. SVMs regularise naturally through the margin objective and remain well-behaved even when features outnumber samples.
+- **Clear but complex boundaries:** Where logistic regression requires a linear boundary and trees approximate curves with axis-aligned rectangular cuts (every split is of the form "feature $f \leq t$", which draws a vertical or horizontal line in feature space; never a diagonal. Complex curved boundaries therefore require many splits to approximate), SVMs use the **kernel trick** to implicitly map data into a higher-dimensional space and find a linear boundary there. This lets them capture smooth, curved decision boundaries that neither logistic regression nor trees handle cleanly.
+- **Robustness near the boundary.** Only the support vectors (the points closest to the boundary) determine where the boundary sits. So a noisy point has to cross the entire margin before it can shift the boundary. Hence, because of the margin, the SVM is less sensitive to noisy samples.
