@@ -119,6 +119,8 @@ nav:
       - Gradients, local approximations, and gradient descent: math/multivariate_calculus/gradients_local_approximations_and_gradient_descent.md
       - Constrained optimization via Lagrange multipliers: math/multivariate_calculus/constrained_optimization_via_lagrange_multipliers.md
   - Computer Languages:
+    - Compilers:
+      - Introduction to Compilers: computer_languages/compilers/introduction_to_compilers.md
     - Python:
       - NumPy: computer_languages/python/numpy.md
       - Pandas: computer_languages/python/pandas.md
