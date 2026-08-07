@@ -4765,7 +4765,10 @@
 <div class="arithmatex">\[y^{(i)}(\mathbf{w}_k \cdot \mathbf{x}^{(i)}) &gt; 0.\]</div>
 <p>That is the final condition we want: the hyperplane normal to <span class="arithmatex">\(\mathbf{w}_k\)</span> separates the data according to their labels, with every positive example on the side toward which <span class="arithmatex">\(\mathbf{w}_k\)</span> points and every negative example on the opposite side.</p>
 <h3 id="analysis">Analysis</h3>
-<p><strong>Theorem (Perceptron Convergence):</strong> The Perceptron Learning Algorithm makes at most <span class="arithmatex">\(\dfrac{R^2}{\gamma^2}\)</span> updates, after which it returns a separating hyperplane.</p>
+<div class="admonition note">
+<p class="admonition-title">Theorem (Perceptron Convergence)</p>
+<p>The Perceptron Learning Algorithm makes at most <span class="arithmatex">\(\dfrac{R^2}{\gamma^2}\)</span> updates, after which it returns a separating hyperplane.</p>
+</div>
 <p><strong>Proof.</strong> It is immediate from the code that if the algorithm terminates and returns a weight vector, then that weight vector separates the positive points from the negative points. Thus, it suffices to show that the algorithm terminates after at most <span class="arithmatex">\(\dfrac{R^2}{\gamma^2}\)</span> updates. In other words, we need to show that the number of updates is upper-bounded by <span class="arithmatex">\(\dfrac{R^2}{\gamma^2}\)</span>. Our strategy is to derive both a lower bound and an upper bound on the magnitude of <span class="arithmatex">\(\mathbf{w}_{k+1}\)</span> in terms of <span class="arithmatex">\(k\)</span>, where <span class="arithmatex">\(k\)</span> is the number of updates made so far, and then compare the two bounds.</p>
 <p>First note that <span class="arithmatex">\(\mathbf{w}_1 = \mathbf{0}\)</span>. For <span class="arithmatex">\(k \geq 1\)</span>, suppose <span class="arithmatex">\(\mathbf{x}^{(j)}\)</span> is the misclassified point chosen during iteration <span class="arithmatex">\(k\)</span>. Then</p>
 <div class="arithmatex">\[

@@ -306,3 +306,63 @@ $$
 as desired. Note that $a_{22} = 0$ because $y$ is absent from the second component function, and $a_{33} = 0$ because $z$ is absent from the third.
 
 **Definition:** A function $\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m$ is **linear** precisely when $\mathbf{f}(\mathbf{x}) = A\mathbf{x}$ for an $m \times n$ matrix $A$. This just rephrases the definition of "linear function". In this way, an $m \times n$ matrix $A$ is a shorthand way of encoding a linear function from $\mathbb{R}^n$ to $\mathbb{R}^m$.
+
+We can also use matrices to give a shorthand for affine functions.
+
+**Example:** The affine function
+
+$$
+f(x, y, z) =
+\begin{pmatrix}
+x - y + z + 3 \\[0.25em]
+z - x \\[0.25em]
+y + x + 1
+\end{pmatrix}
+$$
+
+from the earlier example can be expressed as
+
+$$
+f\begin{pmatrix} x \\[0.25em] y \\[0.25em] z \end{pmatrix}
+=
+\begin{pmatrix}
+1 & -1 & 1 \\[0.25em]
+-1 & 0 & 1 \\[0.25em]
+1 & 1 & 0
+\end{pmatrix}
+\begin{pmatrix} x \\[0.25em] y \\[0.25em] z \end{pmatrix}
++
+\begin{pmatrix} 3 \\[0.25em] 0 \\[0.25em] 1 \end{pmatrix} .
+$$
+
+!!! note
+    Much as inspection of definitions showed that linear functions $\mathbb{R}^n \to \mathbb{R}^m$ are exactly those of the form $\mathbf{f}(\mathbf{x}) = A\mathbf{x}$ for an $m \times n$ matrix $A$, affine functions $\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m$ are exactly those of the form $\mathbf{f}(\mathbf{x}) = A\mathbf{x} + \mathbf{b}$, where $A$ is an $m \times n$ matrix and $\mathbf{b} \in \mathbb{R}^m$ is a vector.
+
+## Further viewpoints on matrix-vector products
+
+!!! note "Theorem"
+    If $\mathbf{c}_1, \mathbf{c}_2, \ldots, \mathbf{c}_n$ are the columns of $A$ (so viewed as vectors in $\mathbb{R}^m$), which is to say
+
+    $$
+    A =
+    \begin{pmatrix}
+    | & | & & | \\
+    \mathbf{c}_1 & \mathbf{c}_2 & \cdots & \mathbf{c}_n \\
+    | & | & & |
+    \end{pmatrix},
+    $$
+
+    then
+
+    $$
+    A
+    \begin{pmatrix}
+    x_1 \\[0.25em]
+    x_2 \\[0.25em]
+    \vdots \\[0.25em]
+    x_n
+    \end{pmatrix}
+    = x_1\mathbf{c}_1 + x_2\mathbf{c}_2 + \cdots + x_n\mathbf{c}_n \in \mathbb{R}^m .
+    $$
+
+    In particular, the matrix-vector product is a specific linear combination of the columns of the matrix.

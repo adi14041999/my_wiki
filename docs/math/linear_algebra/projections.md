@@ -40,11 +40,12 @@ $$(\|\mathbf{x}\| \cos(\theta)) \frac{\mathbf{w}}{\|\mathbf{w}\|}.$$
 
 But $\cos(\theta) = (\mathbf{x} \cdot \mathbf{w})/(\|\mathbf{x}\|\|\mathbf{w}\|)$, so plugging this into the equation above yields the desired formula since $\|\mathbf{w}\|^2 = \mathbf{w} \cdot \mathbf{w}$. The case when $90° < \theta < 180°$ goes very similarly, except now $\cos(\theta) < 0$ (so the endpoint on $L$ of the dotted segment is in the direction of the opposite unit vector $-\mathbf{w}/\|\mathbf{w}\|$) and we have to work with the length $\|\mathbf{x}\| |\cos(\theta)| = -\|\mathbf{x}\| \cos(\theta)$. Putting these together, the two signs cancel and we get the desired formula again.
 
-**Proposition.** Let $L = \text{span}(\mathbf{w}) = \{c\mathbf{w} : c \in \mathbb{R}\}$ be a $1$-dimensional linear subspace of $\mathbb{R}^n$ (so $\mathbf{w} \neq 0$), a "line". Choose any point $\mathbf{x} \in \mathbb{R}^n$. There is exactly one point in $L$ closest to $\mathbf{x}$, and it is given by the scalar multiple
+!!! note "Proposition"
+    Let $L = \text{span}(\mathbf{w}) = \{c\mathbf{w} : c \in \mathbb{R}\}$ be a $1$-dimensional linear subspace of $\mathbb{R}^n$ (so $\mathbf{w} \neq 0$), a "line". Choose any point $\mathbf{x} \in \mathbb{R}^n$. There is exactly one point in $L$ closest to $\mathbf{x}$, and it is given by the scalar multiple
 
-$$\frac{\mathbf{x} \cdot \mathbf{w}}{\mathbf{w} \cdot \mathbf{w}} \mathbf{w}$$
+    $$\frac{\mathbf{x} \cdot \mathbf{w}}{\mathbf{w} \cdot \mathbf{w}} \mathbf{w}$$
 
-of $\mathbf{w}$. This is called "the projection of $\mathbf{x}$ into $\text{span}(\mathbf{w})$"; we denote it by the symbol $\text{Proj}_{\mathbf{w}} \mathbf{x}$.
+    of $\mathbf{w}$. This is called "the projection of $\mathbf{x}$ into $\text{span}(\mathbf{w})$"; we denote it by the symbol $\text{Proj}_{\mathbf{w}} \mathbf{x}$.
 
 **Note:** This can be seen as (dot product of $\mathbf{x}$ and $\mathbf{w}$), which is a scalar, times the unit vector in direction of $\mathbf{w}$.
 

@@ -105,7 +105,8 @@ That is the final condition we want: the hyperplane normal to $\mathbf{w}_k$ sep
 
 ### Analysis
 
-**Theorem (Perceptron Convergence):** The Perceptron Learning Algorithm makes at most $\dfrac{R^2}{\gamma^2}$ updates, after which it returns a separating hyperplane.
+!!! note "Theorem (Perceptron Convergence)"
+    The Perceptron Learning Algorithm makes at most $\dfrac{R^2}{\gamma^2}$ updates, after which it returns a separating hyperplane.
 
 **Proof.** It is immediate from the code that if the algorithm terminates and returns a weight vector, then that weight vector separates the positive points from the negative points. Thus, it suffices to show that the algorithm terminates after at most $\dfrac{R^2}{\gamma^2}$ updates. In other words, we need to show that the number of updates is upper-bounded by $\dfrac{R^2}{\gamma^2}$. Our strategy is to derive both a lower bound and an upper bound on the magnitude of $\mathbf{w}_{k+1}$ in terms of $k$, where $k$ is the number of updates made so far, and then compare the two bounds.
 

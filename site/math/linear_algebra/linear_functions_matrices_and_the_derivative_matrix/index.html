@@ -2953,6 +2953,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#further-viewpoints-on-matrix-vector-products" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Further viewpoints on matrix-vector products
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4868,6 +4879,58 @@ g(x, y, z) = A \begin{pmatrix} x \\[0.25em] y \\[0.25em] z \end{pmatrix} .
 \]</div>
 <p>as desired. Note that <span class="arithmatex">\(a_{22} = 0\)</span> because <span class="arithmatex">\(y\)</span> is absent from the second component function, and <span class="arithmatex">\(a_{33} = 0\)</span> because <span class="arithmatex">\(z\)</span> is absent from the third.</p>
 <p><strong>Definition:</strong> A function <span class="arithmatex">\(\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m\)</span> is <strong>linear</strong> precisely when <span class="arithmatex">\(\mathbf{f}(\mathbf{x}) = A\mathbf{x}\)</span> for an <span class="arithmatex">\(m \times n\)</span> matrix <span class="arithmatex">\(A\)</span>. This just rephrases the definition of "linear function". In this way, an <span class="arithmatex">\(m \times n\)</span> matrix <span class="arithmatex">\(A\)</span> is a shorthand way of encoding a linear function from <span class="arithmatex">\(\mathbb{R}^n\)</span> to <span class="arithmatex">\(\mathbb{R}^m\)</span>.</p>
+<p>We can also use matrices to give a shorthand for affine functions.</p>
+<p><strong>Example:</strong> The affine function</p>
+<div class="arithmatex">\[
+f(x, y, z) =
+\begin{pmatrix}
+x - y + z + 3 \\[0.25em]
+z - x \\[0.25em]
+y + x + 1
+\end{pmatrix}
+\]</div>
+<p>from the earlier example can be expressed as</p>
+<div class="arithmatex">\[
+f\begin{pmatrix} x \\[0.25em] y \\[0.25em] z \end{pmatrix}
+=
+\begin{pmatrix}
+1 &amp; -1 &amp; 1 \\[0.25em]
+-1 &amp; 0 &amp; 1 \\[0.25em]
+1 &amp; 1 &amp; 0
+\end{pmatrix}
+\begin{pmatrix} x \\[0.25em] y \\[0.25em] z \end{pmatrix}
++
+\begin{pmatrix} 3 \\[0.25em] 0 \\[0.25em] 1 \end{pmatrix} .
+\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Much as inspection of definitions showed that linear functions <span class="arithmatex">\(\mathbb{R}^n \to \mathbb{R}^m\)</span> are exactly those of the form <span class="arithmatex">\(\mathbf{f}(\mathbf{x}) = A\mathbf{x}\)</span> for an <span class="arithmatex">\(m \times n\)</span> matrix <span class="arithmatex">\(A\)</span>, affine functions <span class="arithmatex">\(\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m\)</span> are exactly those of the form <span class="arithmatex">\(\mathbf{f}(\mathbf{x}) = A\mathbf{x} + \mathbf{b}\)</span>, where <span class="arithmatex">\(A\)</span> is an <span class="arithmatex">\(m \times n\)</span> matrix and <span class="arithmatex">\(\mathbf{b} \in \mathbb{R}^m\)</span> is a vector.</p>
+</div>
+<h2 id="further-viewpoints-on-matrix-vector-products">Further viewpoints on matrix-vector products</h2>
+<div class="admonition note">
+<p class="admonition-title">Theorem</p>
+<p>If <span class="arithmatex">\(\mathbf{c}_1, \mathbf{c}_2, \ldots, \mathbf{c}_n\)</span> are the columns of <span class="arithmatex">\(A\)</span> (so viewed as vectors in <span class="arithmatex">\(\mathbb{R}^m\)</span>), which is to say</p>
+<div class="arithmatex">\[
+A =
+\begin{pmatrix}
+| &amp; | &amp; &amp; | \\
+\mathbf{c}_1 &amp; \mathbf{c}_2 &amp; \cdots &amp; \mathbf{c}_n \\
+| &amp; | &amp; &amp; |
+\end{pmatrix},
+\]</div>
+<p>then</p>
+<div class="arithmatex">\[
+A
+\begin{pmatrix}
+x_1 \\[0.25em]
+x_2 \\[0.25em]
+\vdots \\[0.25em]
+x_n
+\end{pmatrix}
+= x_1\mathbf{c}_1 + x_2\mathbf{c}_2 + \cdots + x_n\mathbf{c}_n \in \mathbb{R}^m .
+\]</div>
+<p>In particular, the matrix-vector product is a specific linear combination of the columns of the matrix.</p>
+</div>
 
 
 

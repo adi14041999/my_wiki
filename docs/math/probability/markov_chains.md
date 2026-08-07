@@ -182,7 +182,8 @@ To get the marginal distributions of $X_0, X_1, \ldots$, we need to specify not 
 
 **Important note:** The initial distribution vector $t$ is completely independent of the transition matrix $Q$. The vector $t$ specifies how the chain starts (the probabilities of being in each state at time 0), while $Q$ specifies how the chain evolves from one time step to the next. We can choose any initial distribution $t$ we want - it doesn't need to be related to $Q$ in any way. For example, we could start deterministically in state 1 with $t = (1, 0, 0, 0)$, or with any other probability distribution over the four states.
 
-**Proposition (Marginal distribution of $X_n$):** Define $t = (t_1, t_2, \ldots, t_M)$ by $t_i = P(X_0 = i)$, and view $t$ as a row vector. Then the marginal distribution of $X_n$ is given by the vector $tQ^n$. That is, the $j$th component of $tQ^n$ is $P(X_n = j)$.
+!!! note "Proposition (Marginal distribution of $X_n$)"
+    Define $t = (t_1, t_2, \ldots, t_M)$ by $t_i = P(X_0 = i)$, and view $t$ as a row vector. Then the marginal distribution of $X_n$ is given by the vector $tQ^n$. That is, the $j$th component of $tQ^n$ is $P(X_n = j)$.
 
 **Proof:** By the law of total probability, conditioning on $X_0$, the probability that the chain is in state $j$ after $n$ steps is
 

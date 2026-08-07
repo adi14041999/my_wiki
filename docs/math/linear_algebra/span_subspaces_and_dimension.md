@@ -47,7 +47,8 @@ A **linear subspace** of $\mathbb{R}^n$ is a subset of $\mathbb{R}^n$ that is th
 
 Planes and lines in $\mathbb{R}^3$ passing through 0 are the visual examples to keep in mind when you hear the phrase "linear subspace". You may wonder: what is the difference between a linear subspace and a span? There is no difference, but saying "span" emphasizes the input – a specific finite list v$_1$, . . . , v$_k$ and the dynamic process of forming their linear combinations – whereas saying "linear subspace" emphasizes the output collection $V$ of $n$-vectors without choosing a specific v$_1$, . . . , v$_k$ whose span is $V$. It is far more important to know that $V$ can be obtained as a span of some list v$_1$, . . . , v$_k$ rather than to pick a specific such list.
 
-**Proposition.** If $V$ is a linear subspace in $\mathbb{R}^n$ then for any vectors $\mathbf{x}_1$, . . . , $\mathbf{x}_m \in V$ and scalars $a_1$, . . . , $a_m$ the linear combination $a_1\mathbf{x}_1 + \cdots + a_m\mathbf{x}_m$ also lies in $V$. In words: all linear combinations of $n$-vectors chosen from a linear subspace of $\mathbb{R}^n$ belong to that same subspace.
+!!! note "Proposition"
+    If $V$ is a linear subspace in $\mathbb{R}^n$ then for any vectors $\mathbf{x}_1$, . . . , $\mathbf{x}_m \in V$ and scalars $a_1$, . . . , $a_m$ the linear combination $a_1\mathbf{x}_1 + \cdots + a_m\mathbf{x}_m$ also lies in $V$. In words: all linear combinations of $n$-vectors chosen from a linear subspace of $\mathbb{R}^n$ belong to that same subspace.
 
 Some illustrations below of which are linear subspaces and which are not. Only the blue and green planes are linear subspaces by definition as well as the proposition above.
 
