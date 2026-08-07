@@ -2,8 +2,6 @@
 
 ## The Gradient
 
-For a scalar-valued function $f : \mathbb{R}^n \to \mathbb{R}$, we now package all of its partial derivatives into a single vector-valued function denoted $\nabla f : \mathbb{R}^n \to \mathbb{R}^n$ called the **gradient** of $f$.
-
 Consider $f : \mathbb{R}^n \to \mathbb{R}$. We will sometimes write the inputs to $f$ as vectors. For example, when $n = 2$ we may think of $f$ as a function of a column vector $\begin{pmatrix} x \\ y \end{pmatrix}$ (often written $f(x,y)$ with the same meaning once we identify $(x,y)$ with that vector).
 
 The **gradient** of $f$ is defined to be the column vector of partial derivatives:
