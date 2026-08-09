@@ -366,3 +366,54 @@ $$
     $$
 
     In particular, the matrix-vector product is a specific linear combination of the columns of the matrix.
+
+**Example:** For $g : \mathbb{R}^3 \to \mathbb{R}^3$, if we separate the contributions of $x$, $y$, and $z$ in its definition we get
+
+$$
+g\begin{pmatrix} x \\[0.25em] y \\[0.25em] z \end{pmatrix}
+=
+\begin{pmatrix} x \\[0.25em] -x \\[0.25em] x \end{pmatrix}
++
+\begin{pmatrix} -y \\[0.25em] 0 \\[0.25em] y \end{pmatrix}
++
+\begin{pmatrix} z \\[0.25em] z \\[0.25em] 0 \end{pmatrix}
+=
+x\begin{pmatrix} 1 \\[0.25em] -1 \\[0.25em] 1 \end{pmatrix}
++
+y\begin{pmatrix} -1 \\[0.25em] 0 \\[0.25em] 1 \end{pmatrix}
++
+z\begin{pmatrix} 1 \\[0.25em] 1 \\[0.25em] 0 \end{pmatrix} .
+$$
+
+On the right side, we are forming linear combinations of vectors using $x$, $y$, $z$ as the coefficients, and the vectors in this linear combination are exactly the columns of the $3 \times 3$ matrix
+
+$$
+A =
+\begin{pmatrix}
+1 & -1 & 1 \\[0.25em]
+-1 & 0 & 1 \\[0.25em]
+1 & 1 & 0
+\end{pmatrix} .
+$$
+
+We introduce the following useful shorthand:
+
+$$
+\mathbf{e}_1 =
+\begin{pmatrix} 1 \\[0.25em] 0 \\[0.25em] \vdots \\[0.25em] 0 \end{pmatrix} \in \mathbb{R}^n,
+\qquad
+\mathbf{e}_2 =
+\begin{pmatrix} 0 \\[0.25em] 1 \\[0.25em] \vdots \\[0.25em] 0 \end{pmatrix} \in \mathbb{R}^n,
+\qquad \ldots, \qquad
+\mathbf{e}_n =
+\begin{pmatrix} 0 \\[0.25em] 0 \\[0.25em] \vdots \\[0.25em] 1 \end{pmatrix} \in \mathbb{R}^n .
+$$
+
+!!! note "Theorem"
+    For a linear function $\mathbf{f}(\mathbf{x}) = A\mathbf{x}$, the matrix $A$ has as its respective columns $\mathbf{f}(\mathbf{e}_1), \mathbf{f}(\mathbf{e}_2), \ldots, \mathbf{f}(\mathbf{e}_n)$, where $\mathbf{e}_1, \mathbf{e}_2, \ldots, \mathbf{e}_n$ are the **coordinate vectors**.
+
+**Example:** The figure below shows the effect of $f$ acting on the usual 2-dimensional unit square grid centered at the origin.
+
+![img](transf.png)
+
+## The derivative matrix
