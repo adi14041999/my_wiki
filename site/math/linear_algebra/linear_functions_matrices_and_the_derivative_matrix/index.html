@@ -4985,6 +4985,80 @@ A =
 <p><strong>Example:</strong> The figure below shows the effect of <span class="arithmatex">\(f\)</span> acting on the usual 2-dimensional unit square grid centered at the origin.</p>
 <p><img alt="img" src="../transf.png" /></p>
 <h2 id="the-derivative-matrix">The derivative matrix</h2>
+<p>Let us return to where the earlier discussion left off, at this approximation:</p>
+<div class="arithmatex">\[
+\begin{pmatrix}
+f_1(x, y, z) \\[0.25em]
+f_2(x, y, z) \\[0.25em]
+f_3(x, y, z)
+\end{pmatrix}
+\approx
+\mathbf{f}(a, b, c)
++
+\begin{pmatrix}
+\dfrac{\partial f_1}{\partial x}(a, b, c)(x - a) + \dfrac{\partial f_1}{\partial y}(a, b, c)(y - b) + \dfrac{\partial f_1}{\partial z}(a, b, c)(z - c) \\[0.9em]
+\dfrac{\partial f_2}{\partial x}(a, b, c)(x - a) + \dfrac{\partial f_2}{\partial y}(a, b, c)(y - b) + \dfrac{\partial f_2}{\partial z}(a, b, c)(z - c) \\[0.9em]
+\dfrac{\partial f_3}{\partial x}(a, b, c)(x - a) + \dfrac{\partial f_3}{\partial y}(a, b, c)(y - b) + \dfrac{\partial f_3}{\partial z}(a, b, c)(z - c)
+\end{pmatrix} .
+\]</div>
+<p>Now let us rewrite this approximation using matrix shorthand:</p>
+<div class="arithmatex">\[
+\mathbf{f}(x, y, z) \approx \mathbf{f}(a, b, c)
++
+\begin{pmatrix}
+\dfrac{\partial f_1}{\partial x}(a, b, c) &amp; \dfrac{\partial f_1}{\partial y}(a, b, c) &amp; \dfrac{\partial f_1}{\partial z}(a, b, c) \\[0.9em]
+\dfrac{\partial f_2}{\partial x}(a, b, c) &amp; \dfrac{\partial f_2}{\partial y}(a, b, c) &amp; \dfrac{\partial f_2}{\partial z}(a, b, c) \\[0.9em]
+\dfrac{\partial f_3}{\partial x}(a, b, c) &amp; \dfrac{\partial f_3}{\partial y}(a, b, c) &amp; \dfrac{\partial f_3}{\partial z}(a, b, c)
+\end{pmatrix}
+\begin{pmatrix}
+x - a \\[0.25em]
+y - b \\[0.25em]
+z - c
+\end{pmatrix} .
+\]</div>
+<p>If we use the more efficient vector notation</p>
+<div class="arithmatex">\[
+\mathbf{x} = \begin{pmatrix} x \\[0.25em] y \\[0.25em] z \end{pmatrix}
+\qquad \text{and} \qquad
+\mathbf{a} = \begin{pmatrix} a \\[0.25em] b \\[0.25em] c \end{pmatrix}
+\]</div>
+<p>then this can be written as</p>
+<div class="arithmatex">\[
+\mathbf{f}(\mathbf{x}) \approx \mathbf{f}(\mathbf{a})
++
+\begin{pmatrix}
+\dfrac{\partial f_1}{\partial x}(\mathbf{a}) &amp; \dfrac{\partial f_1}{\partial y}(\mathbf{a}) &amp; \dfrac{\partial f_1}{\partial z}(\mathbf{a}) \\[0.9em]
+\dfrac{\partial f_2}{\partial x}(\mathbf{a}) &amp; \dfrac{\partial f_2}{\partial y}(\mathbf{a}) &amp; \dfrac{\partial f_2}{\partial z}(\mathbf{a}) \\[0.9em]
+\dfrac{\partial f_3}{\partial x}(\mathbf{a}) &amp; \dfrac{\partial f_3}{\partial y}(\mathbf{a}) &amp; \dfrac{\partial f_3}{\partial z}(\mathbf{a})
+\end{pmatrix}
+(\mathbf{x} - \mathbf{a}) .
+\]</div>
+<p>This is exactly the shape of the approximation we started this page with. For a function of one variable we had</p>
+<div class="arithmatex">\[f(x) \approx f(a) + f'(a)\,(x - a),\]</div>
+<p>and for a scalar-valued function of <span class="arithmatex">\(n\)</span> variables we had</p>
+<div class="arithmatex">\[f(\mathbf{x}) \approx f(\mathbf{a}) + (\nabla f)(\mathbf{a}) \cdot (\mathbf{x} - \mathbf{a}).\]</div>
+<p>The vector-valued case reads the same way. The number <span class="arithmatex">\(f'(a)\)</span> and the gradient <span class="arithmatex">\((\nabla f)(\mathbf{a})\)</span> have both been replaced by a matrix of partial derivatives, and ordinary multiplication and the dot product have both been replaced by the matrix-vector product. What was a horrifying column of three separate sums has collapsed into a single matrix acting on the displacement <span class="arithmatex">\(\mathbf{x} - \mathbf{a}\)</span>.</p>
+<p>The pattern holds for any <span class="arithmatex">\(\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m\)</span>: the matrix has one row for each component function <span class="arithmatex">\(f_i\)</span> and one column for each input variable <span class="arithmatex">\(x_j\)</span>, so it is <span class="arithmatex">\(m \times n\)</span>, and its <span class="arithmatex">\((i,j)\)</span>-entry is <span class="arithmatex">\(\dfrac{\partial f_i}{\partial x_j}(\mathbf{a})\)</span>. Multiplying it against the <span class="arithmatex">\(n\)</span>-vector <span class="arithmatex">\(\mathbf{x} - \mathbf{a}\)</span> produces an <span class="arithmatex">\(m\)</span>-vector, exactly what must be added to <span class="arithmatex">\(\mathbf{f}(\mathbf{a}) \in \mathbb{R}^m\)</span>. In the case <span class="arithmatex">\(m = 1\)</span> the matrix is a single row, which is the gradient <span class="arithmatex">\((\nabla f)(\mathbf{a})\)</span> written sideways, and the matrix-vector product is the dot product.</p>
+<p><strong>Definition:</strong> Let <span class="arithmatex">\(\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m\)</span> be a vector-valued function</p>
+<div class="arithmatex">\[
+\mathbf{f}(\mathbf{x}) =
+\begin{pmatrix}
+f_1(\mathbf{x}) \\[0.25em]
+\vdots \\[0.25em]
+f_m(\mathbf{x})
+\end{pmatrix}
+\]</div>
+<p>with scalar-valued components <span class="arithmatex">\(f_1, \ldots, f_m : \mathbb{R}^n \to \mathbb{R}\)</span>. The <strong>derivative matrix</strong> of <span class="arithmatex">\(\mathbf{f}\)</span> at a point <span class="arithmatex">\(\mathbf{a} \in \mathbb{R}^n\)</span> is the <span class="arithmatex">\(m \times n\)</span> matrix</p>
+<div class="arithmatex">\[
+(D\mathbf{f})(\mathbf{a}) =
+\begin{pmatrix}
+\dfrac{\partial f_1}{\partial x_1}(\mathbf{a}) &amp; \dfrac{\partial f_1}{\partial x_2}(\mathbf{a}) &amp; \cdots &amp; \dfrac{\partial f_1}{\partial x_n}(\mathbf{a}) \\[0.9em]
+\dfrac{\partial f_2}{\partial x_1}(\mathbf{a}) &amp; \dfrac{\partial f_2}{\partial x_2}(\mathbf{a}) &amp; \cdots &amp; \dfrac{\partial f_2}{\partial x_n}(\mathbf{a}) \\[0.9em]
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\[0.9em]
+\dfrac{\partial f_m}{\partial x_1}(\mathbf{a}) &amp; \dfrac{\partial f_m}{\partial x_2}(\mathbf{a}) &amp; \cdots &amp; \dfrac{\partial f_m}{\partial x_n}(\mathbf{a})
+\end{pmatrix}
+\]</div>
+<p>with all partial derivatives <span class="arithmatex">\(\partial f_i / \partial x_j\)</span> evaluated at the point <span class="arithmatex">\(\mathbf{a}\)</span>.</p>
 
 
 

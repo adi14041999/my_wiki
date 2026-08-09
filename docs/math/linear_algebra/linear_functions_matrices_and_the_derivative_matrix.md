@@ -417,3 +417,96 @@ $$
 ![img](transf.png)
 
 ## The derivative matrix
+
+Let us return to where the earlier discussion left off, at this approximation:
+
+$$
+\begin{pmatrix}
+f_1(x, y, z) \\[0.25em]
+f_2(x, y, z) \\[0.25em]
+f_3(x, y, z)
+\end{pmatrix}
+\approx
+\mathbf{f}(a, b, c)
++
+\begin{pmatrix}
+\dfrac{\partial f_1}{\partial x}(a, b, c)(x - a) + \dfrac{\partial f_1}{\partial y}(a, b, c)(y - b) + \dfrac{\partial f_1}{\partial z}(a, b, c)(z - c) \\[0.9em]
+\dfrac{\partial f_2}{\partial x}(a, b, c)(x - a) + \dfrac{\partial f_2}{\partial y}(a, b, c)(y - b) + \dfrac{\partial f_2}{\partial z}(a, b, c)(z - c) \\[0.9em]
+\dfrac{\partial f_3}{\partial x}(a, b, c)(x - a) + \dfrac{\partial f_3}{\partial y}(a, b, c)(y - b) + \dfrac{\partial f_3}{\partial z}(a, b, c)(z - c)
+\end{pmatrix} .
+$$
+
+Now let us rewrite this approximation using matrix shorthand:
+
+$$
+\mathbf{f}(x, y, z) \approx \mathbf{f}(a, b, c)
++
+\begin{pmatrix}
+\dfrac{\partial f_1}{\partial x}(a, b, c) & \dfrac{\partial f_1}{\partial y}(a, b, c) & \dfrac{\partial f_1}{\partial z}(a, b, c) \\[0.9em]
+\dfrac{\partial f_2}{\partial x}(a, b, c) & \dfrac{\partial f_2}{\partial y}(a, b, c) & \dfrac{\partial f_2}{\partial z}(a, b, c) \\[0.9em]
+\dfrac{\partial f_3}{\partial x}(a, b, c) & \dfrac{\partial f_3}{\partial y}(a, b, c) & \dfrac{\partial f_3}{\partial z}(a, b, c)
+\end{pmatrix}
+\begin{pmatrix}
+x - a \\[0.25em]
+y - b \\[0.25em]
+z - c
+\end{pmatrix} .
+$$
+
+If we use the more efficient vector notation
+
+$$
+\mathbf{x} = \begin{pmatrix} x \\[0.25em] y \\[0.25em] z \end{pmatrix}
+\qquad \text{and} \qquad
+\mathbf{a} = \begin{pmatrix} a \\[0.25em] b \\[0.25em] c \end{pmatrix}
+$$
+
+then this can be written as
+
+$$
+\mathbf{f}(\mathbf{x}) \approx \mathbf{f}(\mathbf{a})
++
+\begin{pmatrix}
+\dfrac{\partial f_1}{\partial x}(\mathbf{a}) & \dfrac{\partial f_1}{\partial y}(\mathbf{a}) & \dfrac{\partial f_1}{\partial z}(\mathbf{a}) \\[0.9em]
+\dfrac{\partial f_2}{\partial x}(\mathbf{a}) & \dfrac{\partial f_2}{\partial y}(\mathbf{a}) & \dfrac{\partial f_2}{\partial z}(\mathbf{a}) \\[0.9em]
+\dfrac{\partial f_3}{\partial x}(\mathbf{a}) & \dfrac{\partial f_3}{\partial y}(\mathbf{a}) & \dfrac{\partial f_3}{\partial z}(\mathbf{a})
+\end{pmatrix}
+(\mathbf{x} - \mathbf{a}) .
+$$
+
+This is exactly the shape of the approximation we started this page with. For a function of one variable we had
+
+$$f(x) \approx f(a) + f'(a)\,(x - a),$$
+
+and for a scalar-valued function of $n$ variables we had
+
+$$f(\mathbf{x}) \approx f(\mathbf{a}) + (\nabla f)(\mathbf{a}) \cdot (\mathbf{x} - \mathbf{a}).$$
+
+The vector-valued case reads the same way. The number $f'(a)$ and the gradient $(\nabla f)(\mathbf{a})$ have both been replaced by a matrix of partial derivatives, and ordinary multiplication and the dot product have both been replaced by the matrix-vector product. What was a horrifying column of three separate sums has collapsed into a single matrix acting on the displacement $\mathbf{x} - \mathbf{a}$.
+
+The pattern holds for any $\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m$: the matrix has one row for each component function $f_i$ and one column for each input variable $x_j$, so it is $m \times n$, and its $(i,j)$-entry is $\dfrac{\partial f_i}{\partial x_j}(\mathbf{a})$. Multiplying it against the $n$-vector $\mathbf{x} - \mathbf{a}$ produces an $m$-vector, exactly what must be added to $\mathbf{f}(\mathbf{a}) \in \mathbb{R}^m$. In the case $m = 1$ the matrix is a single row, which is the gradient $(\nabla f)(\mathbf{a})$ written sideways, and the matrix-vector product is the dot product.
+
+**Definition:** Let $\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m$ be a vector-valued function
+
+$$
+\mathbf{f}(\mathbf{x}) =
+\begin{pmatrix}
+f_1(\mathbf{x}) \\[0.25em]
+\vdots \\[0.25em]
+f_m(\mathbf{x})
+\end{pmatrix}
+$$
+
+with scalar-valued components $f_1, \ldots, f_m : \mathbb{R}^n \to \mathbb{R}$. The **derivative matrix** of $\mathbf{f}$ at a point $\mathbf{a} \in \mathbb{R}^n$ is the $m \times n$ matrix
+
+$$
+(D\mathbf{f})(\mathbf{a}) =
+\begin{pmatrix}
+\dfrac{\partial f_1}{\partial x_1}(\mathbf{a}) & \dfrac{\partial f_1}{\partial x_2}(\mathbf{a}) & \cdots & \dfrac{\partial f_1}{\partial x_n}(\mathbf{a}) \\[0.9em]
+\dfrac{\partial f_2}{\partial x_1}(\mathbf{a}) & \dfrac{\partial f_2}{\partial x_2}(\mathbf{a}) & \cdots & \dfrac{\partial f_2}{\partial x_n}(\mathbf{a}) \\[0.9em]
+\vdots & \vdots & \ddots & \vdots \\[0.9em]
+\dfrac{\partial f_m}{\partial x_1}(\mathbf{a}) & \dfrac{\partial f_m}{\partial x_2}(\mathbf{a}) & \cdots & \dfrac{\partial f_m}{\partial x_n}(\mathbf{a})
+\end{pmatrix}
+$$
+
+with all partial derivatives $\partial f_i / \partial x_j$ evaluated at the point $\mathbf{a}$.
