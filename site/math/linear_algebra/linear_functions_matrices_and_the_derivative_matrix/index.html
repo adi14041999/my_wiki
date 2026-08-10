@@ -5059,6 +5059,94 @@ f_m(\mathbf{x})
 \end{pmatrix}
 \]</div>
 <p>with all partial derivatives <span class="arithmatex">\(\partial f_i / \partial x_j\)</span> evaluated at the point <span class="arithmatex">\(\mathbf{a}\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Theorem</p>
+<p>The best linear approximation to <span class="arithmatex">\(\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m\)</span> at <span class="arithmatex">\(\mathbf{a} \in \mathbb{R}^n\)</span> is given by the <span class="arithmatex">\(m \times n\)</span> derivative matrix <span class="arithmatex">\((D\mathbf{f})(\mathbf{a})\)</span>: we have the optimal approximation of <span class="arithmatex">\(m\)</span>-vectors</p>
+<div class="arithmatex">\[
+\mathbf{f}(\mathbf{x}) \approx \mathbf{f}(\mathbf{a}) + \underbrace{\bigl((D\mathbf{f})(\mathbf{a})\bigr)(\mathbf{x} - \mathbf{a})}_{\text{matrix-vector multiplication}}
+\]</div>
+<p>for <span class="arithmatex">\(n\)</span>-vectors <span class="arithmatex">\(\mathbf{x}\)</span> near <span class="arithmatex">\(\mathbf{a}\)</span>, or equivalently</p>
+<div class="arithmatex">\[
+\mathbf{f}(\mathbf{a} + \mathbf{h}) \approx \mathbf{f}(\mathbf{a}) + \underbrace{\bigl((D\mathbf{f})(\mathbf{a})\bigr)\mathbf{h}}_{\text{matrix-vector multiplication}}
+\]</div>
+<p>for <span class="arithmatex">\(n\)</span>-vectors <span class="arithmatex">\(\mathbf{h}\)</span> near <span class="arithmatex">\(\mathbf{0}\)</span>.</p>
+</div>
+<p><strong>Example:</strong> For <span class="arithmatex">\(\mathbf{f} : \mathbb{R}^3 \to \mathbb{R}^2\)</span> defined by <span class="arithmatex">\(\mathbf{f}(x, y, z) = (x^2 - y,\ z^3 + xy)\)</span>, let's work out its best linear approximations in the senses of the two forms above at the point <span class="arithmatex">\((1, 1, 1)\)</span>. Computing the <span class="arithmatex">\(2 \times 3\)</span> derivative matrix symbolically gives</p>
+<div class="arithmatex">\[
+(D\mathbf{f})(x, y, z) =
+\begin{pmatrix}
+2x &amp; -1 &amp; 0 \\[0.25em]
+y &amp; x &amp; 3z^2
+\end{pmatrix},
+\]</div>
+<p>from which we obtain</p>
+<div class="arithmatex">\[
+(D\mathbf{f})(1, 1, 1) =
+\begin{pmatrix}
+2 &amp; -1 &amp; 0 \\[0.25em]
+1 &amp; 1 &amp; 3
+\end{pmatrix} .
+\]</div>
+<p>Hence, for <span class="arithmatex">\((x, y, z)\)</span> near <span class="arithmatex">\((1, 1, 1)\)</span> we have</p>
+<div class="arithmatex">\[
+\mathbf{f}(x, y, z) \approx \mathbf{f}(1, 1, 1)
++
+\begin{pmatrix}
+2 &amp; -1 &amp; 0 \\[0.25em]
+1 &amp; 1 &amp; 3
+\end{pmatrix}
+\begin{pmatrix}
+x - 1 \\[0.25em]
+y - 1 \\[0.25em]
+z - 1
+\end{pmatrix}
+=
+\begin{pmatrix} 0 \\[0.25em] 2 \end{pmatrix}
++
+\begin{pmatrix}
+2(x - 1) - (y - 1) \\[0.25em]
+(x - 1) + (y - 1) + 3(z - 1)
+\end{pmatrix}
+=
+\begin{pmatrix}
+-1 + 2x - y \\[0.25em]
+-3 + x + y + 3z
+\end{pmatrix}
+\]</div>
+<p>and for <span class="arithmatex">\((h_1, h_2, h_3)\)</span> near <span class="arithmatex">\(\mathbf{0}\)</span> we have</p>
+<div class="arithmatex">\[
+\mathbf{f}(1 + h_1,\, 1 + h_2,\, 1 + h_3) \approx \mathbf{f}(1, 1, 1)
++
+\begin{pmatrix}
+2 &amp; -1 &amp; 0 \\[0.25em]
+1 &amp; 1 &amp; 3
+\end{pmatrix}
+\begin{pmatrix}
+h_1 \\[0.25em]
+h_2 \\[0.25em]
+h_3
+\end{pmatrix}
+=
+\begin{pmatrix} 0 \\[0.25em] 2 \end{pmatrix}
++
+\begin{pmatrix}
+2h_1 - h_2 \\[0.25em]
+h_1 + h_2 + 3h_3
+\end{pmatrix}
+=
+\begin{pmatrix}
+2h_1 - h_2 \\[0.25em]
+2 + h_1 + h_2 + 3h_3
+\end{pmatrix} .
+\]</div>
+<p>In other words, for <span class="arithmatex">\((x, y, z)\)</span> near <span class="arithmatex">\((1, 1, 1)\)</span> we have</p>
+<div class="arithmatex">\[(x^2 - y,\ z^3 + xy) \approx (-1 + 2x - y,\ -3 + x + y + 3z)\]</div>
+<p>and for <span class="arithmatex">\((h_1, h_2, h_3)\)</span> near <span class="arithmatex">\(\mathbf{0}\)</span> we have</p>
+<div class="arithmatex">\[\mathbf{f}(1 + h_1,\, 1 + h_2,\, 1 + h_3) \approx (2h_1 - h_2,\ 2 + h_1 + h_2 + 3h_3).\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The approximations on the right sides of the two forms in the theorem above are affine functions of <span class="arithmatex">\(\mathbf{x} - \mathbf{a}\)</span> and <span class="arithmatex">\(\mathbf{h}\)</span> respectively, due to the addition of the vector <span class="arithmatex">\(\mathbf{f}(\mathbf{a})\)</span> that is usually nonzero. Nonetheless, everyone refers to them as the "best linear approximation" (even though as functions of <span class="arithmatex">\(\mathbf{x} - \mathbf{a}\)</span> and <span class="arithmatex">\(\mathbf{h}\)</span> they are typically just affine rather than linear). This informal terminology matches what we say in single-variable calculus, calling the tangent-line expression <span class="arithmatex">\(f(a) + f'(a)(x - a)\)</span> for the graph of <span class="arithmatex">\(f : \mathbb{R} \to \mathbb{R}\)</span> at the point <span class="arithmatex">\((a, f(a))\)</span> the "best linear approximation" to <span class="arithmatex">\(f\)</span> at <span class="arithmatex">\(x = a\)</span>.</p>
+</div>
 
 
 

@@ -510,3 +510,105 @@ $$
 $$
 
 with all partial derivatives $\partial f_i / \partial x_j$ evaluated at the point $\mathbf{a}$.
+
+!!! note "Theorem"
+    The best linear approximation to $\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m$ at $\mathbf{a} \in \mathbb{R}^n$ is given by the $m \times n$ derivative matrix $(D\mathbf{f})(\mathbf{a})$: we have the optimal approximation of $m$-vectors
+
+    $$
+    \mathbf{f}(\mathbf{x}) \approx \mathbf{f}(\mathbf{a}) + \underbrace{\bigl((D\mathbf{f})(\mathbf{a})\bigr)(\mathbf{x} - \mathbf{a})}_{\text{matrix-vector multiplication}}
+    $$
+
+    for $n$-vectors $\mathbf{x}$ near $\mathbf{a}$, or equivalently
+
+    $$
+    \mathbf{f}(\mathbf{a} + \mathbf{h}) \approx \mathbf{f}(\mathbf{a}) + \underbrace{\bigl((D\mathbf{f})(\mathbf{a})\bigr)\mathbf{h}}_{\text{matrix-vector multiplication}}
+    $$
+
+    for $n$-vectors $\mathbf{h}$ near $\mathbf{0}$.
+
+**Example:** For $\mathbf{f} : \mathbb{R}^3 \to \mathbb{R}^2$ defined by $\mathbf{f}(x, y, z) = (x^2 - y,\ z^3 + xy)$, let's work out its best linear approximations in the senses of the two forms above at the point $(1, 1, 1)$. Computing the $2 \times 3$ derivative matrix symbolically gives
+
+$$
+(D\mathbf{f})(x, y, z) =
+\begin{pmatrix}
+2x & -1 & 0 \\[0.25em]
+y & x & 3z^2
+\end{pmatrix},
+$$
+
+from which we obtain
+
+$$
+(D\mathbf{f})(1, 1, 1) =
+\begin{pmatrix}
+2 & -1 & 0 \\[0.25em]
+1 & 1 & 3
+\end{pmatrix} .
+$$
+
+Hence, for $(x, y, z)$ near $(1, 1, 1)$ we have
+
+$$
+\mathbf{f}(x, y, z) \approx \mathbf{f}(1, 1, 1)
++
+\begin{pmatrix}
+2 & -1 & 0 \\[0.25em]
+1 & 1 & 3
+\end{pmatrix}
+\begin{pmatrix}
+x - 1 \\[0.25em]
+y - 1 \\[0.25em]
+z - 1
+\end{pmatrix}
+=
+\begin{pmatrix} 0 \\[0.25em] 2 \end{pmatrix}
++
+\begin{pmatrix}
+2(x - 1) - (y - 1) \\[0.25em]
+(x - 1) + (y - 1) + 3(z - 1)
+\end{pmatrix}
+=
+\begin{pmatrix}
+-1 + 2x - y \\[0.25em]
+-3 + x + y + 3z
+\end{pmatrix}
+$$
+
+and for $(h_1, h_2, h_3)$ near $\mathbf{0}$ we have
+
+$$
+\mathbf{f}(1 + h_1,\, 1 + h_2,\, 1 + h_3) \approx \mathbf{f}(1, 1, 1)
++
+\begin{pmatrix}
+2 & -1 & 0 \\[0.25em]
+1 & 1 & 3
+\end{pmatrix}
+\begin{pmatrix}
+h_1 \\[0.25em]
+h_2 \\[0.25em]
+h_3
+\end{pmatrix}
+=
+\begin{pmatrix} 0 \\[0.25em] 2 \end{pmatrix}
++
+\begin{pmatrix}
+2h_1 - h_2 \\[0.25em]
+h_1 + h_2 + 3h_3
+\end{pmatrix}
+=
+\begin{pmatrix}
+2h_1 - h_2 \\[0.25em]
+2 + h_1 + h_2 + 3h_3
+\end{pmatrix} .
+$$
+
+In other words, for $(x, y, z)$ near $(1, 1, 1)$ we have
+
+$$(x^2 - y,\ z^3 + xy) \approx (-1 + 2x - y,\ -3 + x + y + 3z)$$
+
+and for $(h_1, h_2, h_3)$ near $\mathbf{0}$ we have
+
+$$\mathbf{f}(1 + h_1,\, 1 + h_2,\, 1 + h_3) \approx (2h_1 - h_2,\ 2 + h_1 + h_2 + 3h_3).$$
+
+!!! note
+    The approximations on the right sides of the two forms in the theorem above are affine functions of $\mathbf{x} - \mathbf{a}$ and $\mathbf{h}$ respectively, due to the addition of the vector $\mathbf{f}(\mathbf{a})$ that is usually nonzero. Nonetheless, everyone refers to them as the "best linear approximation" (even though as functions of $\mathbf{x} - \mathbf{a}$ and $\mathbf{h}$ they are typically just affine rather than linear). This informal terminology matches what we say in single-variable calculus, calling the tangent-line expression $f(a) + f'(a)(x - a)$ for the graph of $f : \mathbb{R} \to \mathbb{R}$ at the point $(a, f(a))$ the "best linear approximation" to $f$ at $x = a$.
