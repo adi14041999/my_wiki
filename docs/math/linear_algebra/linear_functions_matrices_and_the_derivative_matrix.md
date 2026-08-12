@@ -681,7 +681,7 @@ Given two upward parabolas $y = ax^2$ and $y = bx^2$ with vertex at the origin, 
 
 $$c = \frac{b}{a} > 0 .$$
 
-Then $y = ax^2$ measured in the new unit is precisely $y = bx^2$. Since $a$ and $b$ were arbitrary positive numbers, every such parabola becomes every other one under a suitable change of unit: as curves in the plane they are indistinguishable, and only our choice of ruler makes one look "narrow" and another "wide". Equivalently, zooming in on $y = ax^2$ near the origin with the right magnification produces a picture identical to $y = bx^2$.
+Since $a$ and $b$ were arbitrary positive numbers, every such parabola becomes every other one under a suitable change of unit: as curves in the plane they are indistinguishable, and only our choice of ruler makes one look "narrow" and another "wide".
 
 Here are two parabolas $y = ax^2$ and $y = bx^2$ with $a = 1$ and $b = 2$. They look exactly the same but are at different zoom levels.
 
