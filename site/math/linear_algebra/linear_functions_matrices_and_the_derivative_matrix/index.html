@@ -2975,6 +2975,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercises
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5147,6 +5158,57 @@ h_1 + h_2 + 3h_3
 <p class="admonition-title">Note</p>
 <p>The approximations on the right sides of the two forms in the theorem above are affine functions of <span class="arithmatex">\(\mathbf{x} - \mathbf{a}\)</span> and <span class="arithmatex">\(\mathbf{h}\)</span> respectively, due to the addition of the vector <span class="arithmatex">\(\mathbf{f}(\mathbf{a})\)</span> that is usually nonzero. Nonetheless, everyone refers to them as the "best linear approximation" (even though as functions of <span class="arithmatex">\(\mathbf{x} - \mathbf{a}\)</span> and <span class="arithmatex">\(\mathbf{h}\)</span> they are typically just affine rather than linear). This informal terminology matches what we say in single-variable calculus, calling the tangent-line expression <span class="arithmatex">\(f(a) + f'(a)(x - a)\)</span> for the graph of <span class="arithmatex">\(f : \mathbb{R} \to \mathbb{R}\)</span> at the point <span class="arithmatex">\((a, f(a))\)</span> the "best linear approximation" to <span class="arithmatex">\(f\)</span> at <span class="arithmatex">\(x = a\)</span>.</p>
 </div>
+<h2 id="exercises">Exercises</h2>
+<p><strong>1.</strong> Let <span class="arithmatex">\(f : \mathbb{R} \to \mathbb{R}\)</span> be a function, so the graph of <span class="arithmatex">\(f\)</span> consists of points of the form <span class="arithmatex">\((x, f(x))\)</span>.</p>
+<p><strong>(a).</strong> Explain why the graph of <span class="arithmatex">\(3f(x)\)</span> is a <span class="arithmatex">\(3\)</span>-fold vertical expansion away from the <span class="arithmatex">\(x\)</span>-axis of the graph of <span class="arithmatex">\(f(x)\)</span>, the graph of <span class="arithmatex">\(h(x) = f(2x)\)</span> is a <span class="arithmatex">\(2\)</span>-fold horizontal shrinking towards the <span class="arithmatex">\(y\)</span>-axis of the graph of <span class="arithmatex">\(f(x)\)</span>, and the graph of <span class="arithmatex">\(k(x) = f(-x/5)\)</span> is a <span class="arithmatex">\(5\)</span>-fold horizontal expansion away from the <span class="arithmatex">\(y\)</span>-axis followed by reflection across the <span class="arithmatex">\(y\)</span>-axis of the graph of <span class="arithmatex">\(f(x)\)</span>.</p>
+<p><strong>Solution:</strong> A point of the graph of <span class="arithmatex">\(f\)</span> has the form <span class="arithmatex">\((x_0, f(x_0))\)</span>, so in each case we look for the point of the new graph having the <em>same height</em> <span class="arithmatex">\(f(x_0)\)</span>, and see how its horizontal position compares.</p>
+<p>For <span class="arithmatex">\(3f(x)\)</span>: at the same input <span class="arithmatex">\(x_0\)</span> the new height is <span class="arithmatex">\(3f(x_0)\)</span>. The horizontal position is unchanged and the height is multiplied by <span class="arithmatex">\(3\)</span>, so every point of the graph is moved to <span class="arithmatex">\(3\)</span> times its (signed) distance from the <span class="arithmatex">\(x\)</span>-axis, staying on the same side. That is a <span class="arithmatex">\(3\)</span>-fold vertical expansion away from the <span class="arithmatex">\(x\)</span>-axis. This is why <span class="arithmatex">\(3\sin(x)\)</span> oscillates between <span class="arithmatex">\(-3\)</span> and <span class="arithmatex">\(3\)</span> instead of between <span class="arithmatex">\(-1\)</span> and <span class="arithmatex">\(1\)</span>, while crossing zero at exactly the same places as <span class="arithmatex">\(\sin(x)\)</span>.</p>
+<p>For <span class="arithmatex">\(h(x) = f(2x)\)</span>: at the input <span class="arithmatex">\(x_0/2\)</span>, the height is <span class="arithmatex">\(f(x_0)\)</span> (in other words, <span class="arithmatex">\(h(x)\)</span> becomes <span class="arithmatex">\(f(x_0)\)</span>). Thus</p>
+<div class="arithmatex">\[(x_0, f(x_0)) \ \text{on the graph of } f \qquad \longleftrightarrow \qquad \left(\tfrac{x_0}{2},\, f(x_0)\right) \ \text{on the graph of } h .\]</div>
+<p>Heights are untouched and every horizontal distance from the <span class="arithmatex">\(y\)</span>-axis is halved, which is a <span class="arithmatex">\(2\)</span>-fold horizontal shrinking towards the <span class="arithmatex">\(y\)</span>-axis.</p>
+<p>For <span class="arithmatex">\(k(x) = f(-x/5)\)</span>:</p>
+<div class="arithmatex">\[(x_0, f(x_0)) \ \text{on the graph of } f \qquad \longleftrightarrow \qquad (-5x_0,\, f(x_0)) \ \text{on the graph of } k .\]</div>
+<p>Again heights are untouched, and the horizontal position undergoes a <span class="arithmatex">\(5\)</span>-fold horizontal expansion away from the <span class="arithmatex">\(y\)</span>-axis, then a reflection across the <span class="arithmatex">\(y\)</span>-axis. The two operations commute, so the order is a matter of taste.</p>
+<p>In general, for a constant <span class="arithmatex">\(c \neq 0\)</span>:</p>
+<ul>
+<li>The graph of <span class="arithmatex">\(f(cx)\)</span> is the graph of <span class="arithmatex">\(f\)</span> with every <strong>horizontal</strong> distance divided by <span class="arithmatex">\(c\)</span>:<ul>
+<li>a shrinking towards the <span class="arithmatex">\(y\)</span>-axis when <span class="arithmatex">\(|c| &gt; 1\)</span>;</li>
+<li>an expansion away from the <span class="arithmatex">\(y\)</span>-axis when <span class="arithmatex">\(|c| &lt; 1\)</span>;</li>
+<li>together with a reflection across the <span class="arithmatex">\(y\)</span>-axis when <span class="arithmatex">\(c &lt; 0\)</span>.</li>
+</ul>
+</li>
+<li>The graph of <span class="arithmatex">\(cf(x)\)</span> is the graph of <span class="arithmatex">\(f\)</span> with every <strong>vertical</strong> distance multiplied by <span class="arithmatex">\(c\)</span>.</li>
+</ul>
+<p><strong>(b).</strong> Imagine the graph <span class="arithmatex">\(y = f(x)\)</span> is made using some unit of distance along the <span class="arithmatex">\(x\)</span>-axis and <span class="arithmatex">\(y\)</span>-axis. If we "change units" by using a new unit of measurement that is <span class="arithmatex">\(c &gt; 0\)</span> times as long as the initial one (e.g., for going from feet to meters we have <span class="arithmatex">\(c = 3.28084\)</span> whereas going from meters to centimeters has <span class="arithmatex">\(c = 1/100\)</span>), explain in words why when the graph of <span class="arithmatex">\(f(x)\)</span> made in the old unit of measurement is viewed in the new unit of measurement it is the graph of <span class="arithmatex">\(c^{-1}f(cx)\)</span>.</p>
+<p><strong>Solution:</strong> The curve drawn on the page never moves. All that changes is the numbers we attach to its points, because we are measuring the same physical distances with a longer ruler.</p>
+<p>If the new unit is <span class="arithmatex">\(c\)</span> times as long as the old one, then a physical distance recorded as <span class="arithmatex">\(L\)</span> in old units is recorded as <span class="arithmatex">\(L/c\)</span> in new units (a longer ruler yields a smaller number).</p>
+<p>Because we changed the unit of distance (it applies to heights and widths) alike, both coordinates get divided by <span class="arithmatex">\(c\)</span>.</p>
+<p>As an example, draw <span class="arithmatex">\(y = \sin x\)</span> on paper with centimeters as the unit. Physically, the ink sits at: origin, a peak <span class="arithmatex">\(1\ \text{cm}\)</span> high located <span class="arithmatex">\(\pi/2 \approx 1.571\ \text{cm}\)</span> to the right, a zero crossing at <span class="arithmatex">\(\pi \approx 3.142\ \text{cm}\)</span>, a trough <span class="arithmatex">\(1\ \text{cm}\)</span> deep at <span class="arithmatex">\(3\pi/2\)</span>, back to zero at <span class="arithmatex">\(2\pi \approx 6.283\ \text{cm}\)</span>. Now switch to a unit twice as long. Call it a "double-centimeter", so <span class="arithmatex">\(c = 2\)</span>. The paper is untouched; we just measure with a longer ruler, so every reading halves.</p>
+<p>The peak is physically <span class="arithmatex">\(1\ \text{cm}\)</span> tall and <span class="arithmatex">\(1.571\ \text{cm}\)</span> out. In the new unit those same distances read <span class="arithmatex">\(0.5\)</span> and <span class="arithmatex">\(0.785\)</span>.</p>
+<p>So a point of the curve with old coordinates <span class="arithmatex">\((x, f(x))\)</span> has new coordinates</p>
+<div class="arithmatex">\[(X, Y) = \left(\frac{x}{c},\, \frac{f(x)}{c}\right).\]</div>
+<p>To recognise the curve as a graph in the new coordinates we must express <span class="arithmatex">\(Y\)</span> in terms of <span class="arithmatex">\(X\)</span>. From <span class="arithmatex">\(X = x/c\)</span> we get <span class="arithmatex">\(x = cX\)</span>, and substituting,</p>
+<div class="arithmatex">\[Y = \frac{f(x)}{c} = \frac{f(cX)}{c} = c^{-1}f(cX).\]</div>
+<p>Returning to the concrete example, with <span class="arithmatex">\(f = \sin\)</span> and <span class="arithmatex">\(c = 2\)</span> this says the curve we drew is the graph of</p>
+<div class="arithmatex">\[Y = \tfrac{1}{2}\sin(2X)\]</div>
+<p>in the new unit.</p>
+<p><strong>(c).</strong> Applying (b) to the parabola <span class="arithmatex">\(y = x^2\)</span>, explain the following surprising fact: "all parabolas with vertex at the origin and opening upwards are the same up to change of unit of distance", or equivalently: they are the same under zooming in near the origin under a microscope. This is not true for ellipses and hyperbolas.</p>
+<p><strong>Solution:</strong> Apply (b) to <span class="arithmatex">\(f(x) = x^2\)</span>:</p>
+<div class="arithmatex">\[c^{-1}f(cx) = c^{-1}(cx)^2 = c^{-1}c^2x^2 = c\,x^2 .\]</div>
+<p>So the parabola <span class="arithmatex">\(y = x^2\)</span>, viewed in a unit of distance <span class="arithmatex">\(c\)</span> times as long away, <em>is</em> the parabola <span class="arithmatex">\(y = cx^2\)</span>. Running it in the other direction, the parabola <span class="arithmatex">\(y = cx^2\)</span> viewed <span class="arithmatex">\(c\)</span> times <em>closer</em> (measuring with a unit <span class="arithmatex">\(c\)</span> times shorter, i.e. under a microscope magnifying by <span class="arithmatex">\(c\)</span>) is the parabola <span class="arithmatex">\(y = x^2\)</span>.</p>
+<p>Given two upward parabolas <span class="arithmatex">\(y = ax^2\)</span> and <span class="arithmatex">\(y = bx^2\)</span> with vertex at the origin, choose</p>
+<div class="arithmatex">\[c = \frac{b}{a} &gt; 0 .\]</div>
+<p>Then <span class="arithmatex">\(y = ax^2\)</span> measured in the new unit is precisely <span class="arithmatex">\(y = bx^2\)</span>. Since <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> were arbitrary positive numbers, every such parabola becomes every other one under a suitable change of unit: as curves in the plane they are indistinguishable, and only our choice of ruler makes one look "narrow" and another "wide". Equivalently, zooming in on <span class="arithmatex">\(y = ax^2\)</span> near the origin with the right magnification produces a picture identical to <span class="arithmatex">\(y = bx^2\)</span>.</p>
+<p>Here are two parabolas <span class="arithmatex">\(y = ax^2\)</span> and <span class="arithmatex">\(y = bx^2\)</span> with <span class="arithmatex">\(a = 1\)</span> and <span class="arithmatex">\(b = 2\)</span>. They look exactly the same but are at different zoom levels.</p>
+<p><img alt="img" src="../a1b2.png" /></p>
+<p>Why does the same trick fail for an ellipse? Picture one drawn on paper, say <span class="arithmatex">\(6\)</span> cm wide and <span class="arithmatex">\(2\)</span> cm tall. It is <strong>three times as wide as it is tall</strong>. Now zoom in by a factor of <span class="arithmatex">\(5\)</span>. It becomes <span class="arithmatex">\(30\)</span> cm wide and <span class="arithmatex">\(10\)</span> cm tall. It is still three times as wide as it is tall. Zoom out, zoom in, change from centimeters to inches to miles. The two measurements always move together, so the number <span class="arithmatex">\(3\)</span> never budges.</p>
+<p>That number is what your eye actually registers as the <em>shape</em> of the ellipse, and it is the one thing zooming cannot touch. A circle is "one times as wide as it is tall", and no microscope in the world will turn it into a squashed oval. So ellipses genuinely come in different shapes, and rescaling can never carry one to another.</p>
+<p>Written out, for the ellipse</p>
+<div class="arithmatex">\[\frac{x^2}{A^2} + \frac{y^2}{B^2} = 1,\]</div>
+<p>changing units replaces the two axis lengths <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span> by <span class="arithmatex">\(A/c\)</span> and <span class="arithmatex">\(B/c\)</span>. Both shrink by the same factor <span class="arithmatex">\(c\)</span>, so the ratio</p>
+<div class="arithmatex">\[\frac{A/c}{B/c} = \frac{A}{B}\]</div>
+<p>comes out unchanged. Hyperbolas are stuck for the same reason: the two branches open at a certain angle, and zooming into a picture never changes an angle.</p>
+<p>The parabola has nothing like this. Its only parameter is the single number <span class="arithmatex">\(a\)</span> in <span class="arithmatex">\(y = ax^2\)</span>, and <span class="arithmatex">\(a\)</span> is not a comparison of two lengths (it is not "how many times taller than wide"). So there is no fixed number for the zoom to preserve. Ask how wide a parabola is and the honest answer is "compared to what?". A parabola looks flat if you crop in close and steep if you back away. With no shape number of its own to defend, it surrenders to any rescaling we like.</p>
 
 
 

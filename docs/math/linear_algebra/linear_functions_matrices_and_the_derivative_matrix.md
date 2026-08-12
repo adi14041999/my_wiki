@@ -612,3 +612,93 @@ $$\mathbf{f}(1 + h_1,\, 1 + h_2,\, 1 + h_3) \approx (2h_1 - h_2,\ 2 + h_1 + h_2 
 
 !!! note
     The approximations on the right sides of the two forms in the theorem above are affine functions of $\mathbf{x} - \mathbf{a}$ and $\mathbf{h}$ respectively, due to the addition of the vector $\mathbf{f}(\mathbf{a})$ that is usually nonzero. Nonetheless, everyone refers to them as the "best linear approximation" (even though as functions of $\mathbf{x} - \mathbf{a}$ and $\mathbf{h}$ they are typically just affine rather than linear). This informal terminology matches what we say in single-variable calculus, calling the tangent-line expression $f(a) + f'(a)(x - a)$ for the graph of $f : \mathbb{R} \to \mathbb{R}$ at the point $(a, f(a))$ the "best linear approximation" to $f$ at $x = a$.
+
+## Exercises
+
+**1.** Let $f : \mathbb{R} \to \mathbb{R}$ be a function, so the graph of $f$ consists of points of the form $(x, f(x))$.
+
+**(a).** Explain why the graph of $3f(x)$ is a $3$-fold vertical expansion away from the $x$-axis of the graph of $f(x)$, the graph of $h(x) = f(2x)$ is a $2$-fold horizontal shrinking towards the $y$-axis of the graph of $f(x)$, and the graph of $k(x) = f(-x/5)$ is a $5$-fold horizontal expansion away from the $y$-axis followed by reflection across the $y$-axis of the graph of $f(x)$.
+
+**Solution:** A point of the graph of $f$ has the form $(x_0, f(x_0))$, so in each case we look for the point of the new graph having the *same height* $f(x_0)$, and see how its horizontal position compares.
+
+For $3f(x)$: at the same input $x_0$ the new height is $3f(x_0)$. The horizontal position is unchanged and the height is multiplied by $3$, so every point of the graph is moved to $3$ times its (signed) distance from the $x$-axis, staying on the same side. That is a $3$-fold vertical expansion away from the $x$-axis. This is why $3\sin(x)$ oscillates between $-3$ and $3$ instead of between $-1$ and $1$, while crossing zero at exactly the same places as $\sin(x)$.
+
+For $h(x) = f(2x)$: at the input $x_0/2$, the height is $f(x_0)$ (in other words, $h(x)$ becomes $f(x_0)$). Thus
+
+$$(x_0, f(x_0)) \ \text{on the graph of } f \qquad \longleftrightarrow \qquad \left(\tfrac{x_0}{2},\, f(x_0)\right) \ \text{on the graph of } h .$$
+
+Heights are untouched and every horizontal distance from the $y$-axis is halved, which is a $2$-fold horizontal shrinking towards the $y$-axis.
+
+For $k(x) = f(-x/5)$:
+
+$$(x_0, f(x_0)) \ \text{on the graph of } f \qquad \longleftrightarrow \qquad (-5x_0,\, f(x_0)) \ \text{on the graph of } k .$$
+
+Again heights are untouched, and the horizontal position undergoes a $5$-fold horizontal expansion away from the $y$-axis, then a reflection across the $y$-axis. The two operations commute, so the order is a matter of taste.
+
+In general, for a constant $c \neq 0$:
+
+- The graph of $f(cx)$ is the graph of $f$ with every **horizontal** distance divided by $c$:
+    - a shrinking towards the $y$-axis when $|c| > 1$;
+    - an expansion away from the $y$-axis when $|c| < 1$;
+    - together with a reflection across the $y$-axis when $c < 0$.
+- The graph of $cf(x)$ is the graph of $f$ with every **vertical** distance multiplied by $c$.
+
+**(b).** Imagine the graph $y = f(x)$ is made using some unit of distance along the $x$-axis and $y$-axis. If we "change units" by using a new unit of measurement that is $c > 0$ times as long as the initial one (e.g., for going from feet to meters we have $c = 3.28084$ whereas going from meters to centimeters has $c = 1/100$), explain in words why when the graph of $f(x)$ made in the old unit of measurement is viewed in the new unit of measurement it is the graph of $c^{-1}f(cx)$.
+
+**Solution:** The curve drawn on the page never moves. All that changes is the numbers we attach to its points, because we are measuring the same physical distances with a longer ruler.
+
+If the new unit is $c$ times as long as the old one, then a physical distance recorded as $L$ in old units is recorded as $L/c$ in new units (a longer ruler yields a smaller number).
+
+Because we changed the unit of distance (it applies to heights and widths) alike, both coordinates get divided by $c$.
+
+As an example, draw $y = \sin x$ on paper with centimeters as the unit. Physically, the ink sits at: origin, a peak $1\ \text{cm}$ high located $\pi/2 \approx 1.571\ \text{cm}$ to the right, a zero crossing at $\pi \approx 3.142\ \text{cm}$, a trough $1\ \text{cm}$ deep at $3\pi/2$, back to zero at $2\pi \approx 6.283\ \text{cm}$. Now switch to a unit twice as long. Call it a "double-centimeter", so $c = 2$. The paper is untouched; we just measure with a longer ruler, so every reading halves.
+
+The peak is physically $1\ \text{cm}$ tall and $1.571\ \text{cm}$ out. In the new unit those same distances read $0.5$ and $0.785$.
+
+So a point of the curve with old coordinates $(x, f(x))$ has new coordinates
+
+$$(X, Y) = \left(\frac{x}{c},\, \frac{f(x)}{c}\right).$$
+
+To recognise the curve as a graph in the new coordinates we must express $Y$ in terms of $X$. From $X = x/c$ we get $x = cX$, and substituting,
+
+$$Y = \frac{f(x)}{c} = \frac{f(cX)}{c} = c^{-1}f(cX).$$
+
+Returning to the concrete example, with $f = \sin$ and $c = 2$ this says the curve we drew is the graph of
+
+$$Y = \tfrac{1}{2}\sin(2X)$$
+
+in the new unit.
+
+**(c).** Applying (b) to the parabola $y = x^2$, explain the following surprising fact: "all parabolas with vertex at the origin and opening upwards are the same up to change of unit of distance", or equivalently: they are the same under zooming in near the origin under a microscope. This is not true for ellipses and hyperbolas.
+
+**Solution:** Apply (b) to $f(x) = x^2$:
+
+$$c^{-1}f(cx) = c^{-1}(cx)^2 = c^{-1}c^2x^2 = c\,x^2 .$$
+
+So the parabola $y = x^2$, viewed in a unit of distance $c$ times as long away, *is* the parabola $y = cx^2$. Running it in the other direction, the parabola $y = cx^2$ viewed $c$ times *closer* (measuring with a unit $c$ times shorter, i.e. under a microscope magnifying by $c$) is the parabola $y = x^2$.
+
+Given two upward parabolas $y = ax^2$ and $y = bx^2$ with vertex at the origin, choose
+
+$$c = \frac{b}{a} > 0 .$$
+
+Then $y = ax^2$ measured in the new unit is precisely $y = bx^2$. Since $a$ and $b$ were arbitrary positive numbers, every such parabola becomes every other one under a suitable change of unit: as curves in the plane they are indistinguishable, and only our choice of ruler makes one look "narrow" and another "wide". Equivalently, zooming in on $y = ax^2$ near the origin with the right magnification produces a picture identical to $y = bx^2$.
+
+Here are two parabolas $y = ax^2$ and $y = bx^2$ with $a = 1$ and $b = 2$. They look exactly the same but are at different zoom levels.
+
+![img](a1b2.png)
+
+Why does the same trick fail for an ellipse? Picture one drawn on paper, say $6$ cm wide and $2$ cm tall. It is **three times as wide as it is tall**. Now zoom in by a factor of $5$. It becomes $30$ cm wide and $10$ cm tall. It is still three times as wide as it is tall. Zoom out, zoom in, change from centimeters to inches to miles. The two measurements always move together, so the number $3$ never budges.
+
+That number is what your eye actually registers as the *shape* of the ellipse, and it is the one thing zooming cannot touch. A circle is "one times as wide as it is tall", and no microscope in the world will turn it into a squashed oval. So ellipses genuinely come in different shapes, and rescaling can never carry one to another.
+
+Written out, for the ellipse
+
+$$\frac{x^2}{A^2} + \frac{y^2}{B^2} = 1,$$
+
+changing units replaces the two axis lengths $A$ and $B$ by $A/c$ and $B/c$. Both shrink by the same factor $c$, so the ratio
+
+$$\frac{A/c}{B/c} = \frac{A}{B}$$
+
+comes out unchanged. Hyperbolas are stuck for the same reason: the two branches open at a certain angle, and zooming into a picture never changes an angle.
+
+The parabola has nothing like this. Its only parameter is the single number $a$ in $y = ax^2$, and $a$ is not a comparison of two lengths (it is not "how many times taller than wide"). So there is no fixed number for the zoom to preserve. Ask how wide a parabola is and the honest answer is "compared to what?". A parabola looks flat if you crop in close and steep if you back away. With no shape number of its own to defend, it surrenders to any rescaling we like.
