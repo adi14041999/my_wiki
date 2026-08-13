@@ -5196,19 +5196,49 @@ h_1 + h_2 + 3h_3
 <p><strong>Solution:</strong> Apply (b) to <span class="arithmatex">\(f(x) = x^2\)</span>:</p>
 <div class="arithmatex">\[c^{-1}f(cx) = c^{-1}(cx)^2 = c^{-1}c^2x^2 = c\,x^2 .\]</div>
 <p>So the parabola <span class="arithmatex">\(y = x^2\)</span>, viewed in a unit of distance <span class="arithmatex">\(c\)</span> times as long away, <em>is</em> the parabola <span class="arithmatex">\(y = cx^2\)</span>. Running it in the other direction, the parabola <span class="arithmatex">\(y = cx^2\)</span> viewed <span class="arithmatex">\(c\)</span> times <em>closer</em> (measuring with a unit <span class="arithmatex">\(c\)</span> times shorter, i.e. under a microscope magnifying by <span class="arithmatex">\(c\)</span>) is the parabola <span class="arithmatex">\(y = x^2\)</span>.</p>
-<p>Given two upward parabolas <span class="arithmatex">\(y = ax^2\)</span> and <span class="arithmatex">\(y = bx^2\)</span> with vertex at the origin, choose</p>
-<div class="arithmatex">\[c = \frac{b}{a} &gt; 0 .\]</div>
-<p>Since <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> were arbitrary positive numbers, every such parabola becomes every other one under a suitable change of unit: as curves in the plane they are indistinguishable, and only our choice of ruler makes one look "narrow" and another "wide".</p>
+<p>For two upward parabolas <span class="arithmatex">\(y = ax^2\)</span> and <span class="arithmatex">\(y = bx^2\)</span> with vertex at the origin, since <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> are arbitrary positive numbers, every such parabola becomes every other one under a suitable change of unit: as curves in the plane they are indistinguishable, and only our choice of ruler makes one look "narrow" and another "wide".</p>
 <p>Here are two parabolas <span class="arithmatex">\(y = ax^2\)</span> and <span class="arithmatex">\(y = bx^2\)</span> with <span class="arithmatex">\(a = 1\)</span> and <span class="arithmatex">\(b = 2\)</span>. They look exactly the same but are at different zoom levels.</p>
 <p><img alt="img" src="../a1b2.png" /></p>
 <p>Why does the same trick fail for an ellipse? Picture one drawn on paper, say <span class="arithmatex">\(6\)</span> cm wide and <span class="arithmatex">\(2\)</span> cm tall. It is <strong>three times as wide as it is tall</strong>. Now zoom in by a factor of <span class="arithmatex">\(5\)</span>. It becomes <span class="arithmatex">\(30\)</span> cm wide and <span class="arithmatex">\(10\)</span> cm tall. It is still three times as wide as it is tall. Zoom out, zoom in, change from centimeters to inches to miles. The two measurements always move together, so the number <span class="arithmatex">\(3\)</span> never budges.</p>
 <p>That number is what your eye actually registers as the <em>shape</em> of the ellipse, and it is the one thing zooming cannot touch. A circle is "one times as wide as it is tall", and no microscope in the world will turn it into a squashed oval. So ellipses genuinely come in different shapes, and rescaling can never carry one to another.</p>
-<p>Written out, for the ellipse</p>
+<p>Let us see this in the algebra. An ellipse is not the graph of a function, so instead of the form <span class="arithmatex">\(y = f(x)\)</span> we work with the equation it satisfies:</p>
 <div class="arithmatex">\[\frac{x^2}{A^2} + \frac{y^2}{B^2} = 1,\]</div>
-<p>changing units replaces the two axis lengths <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span> by <span class="arithmatex">\(A/c\)</span> and <span class="arithmatex">\(B/c\)</span>. Both shrink by the same factor <span class="arithmatex">\(c\)</span>, so the ratio</p>
-<div class="arithmatex">\[\frac{A/c}{B/c} = \frac{A}{B}\]</div>
-<p>comes out unchanged. Hyperbolas are stuck for the same reason: the two branches open at a certain angle, and zooming into a picture never changes an angle.</p>
-<p>The parabola has nothing like this. Its only parameter is the single number <span class="arithmatex">\(a\)</span> in <span class="arithmatex">\(y = ax^2\)</span>, and <span class="arithmatex">\(a\)</span> is not a comparison of two lengths (it is not "how many times taller than wide"). So there is no fixed number for the zoom to preserve. Ask how wide a parabola is and the honest answer is "compared to what?". A parabola looks flat if you crop in close and steep if you back away. With no shape number of its own to defend, it surrenders to any rescaling we like.</p>
+<p>where <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span> are the two semi-axis lengths measured in the old unit. The change of unit is the same one as in (b): a point with old coordinates <span class="arithmatex">\((x, y)\)</span> has new coordinates</p>
+<div class="arithmatex">\[(X, Y) = \left(\frac{x}{c},\, \frac{y}{c}\right), \qquad \text{equivalently} \qquad x = cX, \quad y = cY .\]</div>
+<p>Substituting these into the equation gives the condition satisfied by the new coordinates of points on the same curve:</p>
+<div class="arithmatex">\[\frac{(cX)^2}{A^2} + \frac{(cY)^2}{B^2} = 1 ,\]</div>
+<p>that is,</p>
+<div class="arithmatex">\[\frac{c^2X^2}{A^2} + \frac{c^2Y^2}{B^2} = 1 .\]</div>
+<p>Moving each <span class="arithmatex">\(c^2\)</span> down into the denominator puts this back into the standard form of an ellipse equation:</p>
+<div class="arithmatex">\[\frac{X^2}{(A/c)^2} + \frac{Y^2}{(B/c)^2} = 1 .\]</div>
+<p>So in the new unit the curve is again an ellipse, now with semi-axes</p>
+<div class="arithmatex">\[A' = \frac{A}{c}, \qquad B' = \frac{B}{c} .\]</div>
+<p>Here is the crucial point. There are <strong>two</strong> parameters <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span>, but only <strong>one</strong> knob <span class="arithmatex">\(c\)</span>, and it divides both of them by the same amount. So the ratio</p>
+<div class="arithmatex">\[\frac{A'}{B'} = \frac{A/c}{B/c} = \frac{A}{B}\]</div>
+<p>comes out unchanged, whatever <span class="arithmatex">\(c\)</span> we choose. Contrast this with the parabola, where there was a single parameter <span class="arithmatex">\(a\)</span> and the one knob <span class="arithmatex">\(c\)</span> could carry it to any value we pleased. Changing units lets us make an ellipse any <em>size</em> we like, but never a new <em>shape</em>. Hyperbolas are stuck for the same reason: the two branches open at a certain angle, and zooming into a picture never changes an angle.</p>
+<p>To conclude: just changing <span class="arithmatex">\(c\)</span> only changes the size of the ellipse, not the shape. Changing only one of <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span> would indeed produce a genuinely new shape, but a change of unit cannot do that, since it has a single factor <span class="arithmatex">\(c\)</span> and applies it to both. Changing one alone is a stretch of the picture, not a re-measurement of it. The parabola, by contrast, has no new shape to reach at all: every upward parabola with vertex at the origin is the same curve, and <span class="arithmatex">\(a\)</span> records only how far we have zoomed. Even if we stretch, say, just horizontally (but not the vertical axis), we still get an upward parabola with vertex at the origin but just a different coefficient. And by part (c), every such parabola is the same curve, so nothing new was produced.</p>
+<p><strong>2.</strong> Let <span class="arithmatex">\(T_{a,b} : \mathbb{R}^2 \to \mathbb{R}^2\)</span> be the linear function given by</p>
+<div class="arithmatex">\[
+T_{a,b}\begin{pmatrix} x \\[0.25em] y \end{pmatrix}
+=
+\begin{pmatrix} ax \\[0.25em] by \end{pmatrix}
+=
+\begin{pmatrix} a &amp; 0 \\[0.25em] 0 &amp; b \end{pmatrix}
+\begin{pmatrix} x \\[0.25em] y \end{pmatrix}
+\]</div>
+<p>with <span class="arithmatex">\(a, b &gt; 0\)</span>. Let <span class="arithmatex">\(C\)</span> be the curve with equation <span class="arithmatex">\(x^2 + y^2 = 1\)</span> (the unit circle with center at the origin), and for <span class="arithmatex">\(a, b &gt; 0\)</span> let <span class="arithmatex">\(E_{a,b}\)</span> be the curve with equation <span class="arithmatex">\(x^2/a^2 + y^2/b^2 = 1\)</span> (an ellipse). Check that if a point <span class="arithmatex">\(\mathbf{v} = \begin{pmatrix} v_1 \\ v_2 \end{pmatrix}\)</span> lies on <span class="arithmatex">\(C\)</span> then the point <span class="arithmatex">\(T_{a,b}(\mathbf{v}) = \begin{pmatrix} av_1 \\ bv_2 \end{pmatrix}\)</span> lies on <span class="arithmatex">\(E_{a,b}\)</span>. Also check the reverse property that if <span class="arithmatex">\(T_{a,b}(\mathbf{v}) \in E_{a,b}\)</span> then <span class="arithmatex">\(\mathbf{v} \in C\)</span>.</p>
+<p><strong>Solution:</strong> Everything follows from one computation. Whatever the point <span class="arithmatex">\(\mathbf{v} = (v_1, v_2)\)</span> may be, substituting the coordinates of <span class="arithmatex">\(T_{a,b}(\mathbf{v}) = (av_1, bv_2)\)</span> into the left side of the equation for <span class="arithmatex">\(E_{a,b}\)</span> gives</p>
+<div class="arithmatex">\[
+\frac{(av_1)^2}{a^2} + \frac{(bv_2)^2}{b^2}
+= \frac{a^2v_1^2}{a^2} + \frac{b^2v_2^2}{b^2}
+= v_1^2 + v_2^2 ,
+\]</div>
+<p>the cancellation being legitimate because <span class="arithmatex">\(a, b &gt; 0\)</span> are nonzero.</p>
+<p>Both directions are now immediate.</p>
+<p>If <span class="arithmatex">\(\mathbf{v} \in C\)</span> then <span class="arithmatex">\(v_1^2 + v_2^2 = 1\)</span>, so the displayed chain reads</p>
+<div class="arithmatex">\[\frac{(av_1)^2}{a^2} + \frac{(bv_2)^2}{b^2} = 1,\]</div>
+<p>which says exactly that <span class="arithmatex">\(T_{a,b}(\mathbf{v}) \in E_{a,b}\)</span>.</p>
+<p>Conversely, if <span class="arithmatex">\(T_{a,b}(\mathbf{v}) \in E_{a,b}\)</span> then the left side of the chain equals <span class="arithmatex">\(1\)</span>, so the right side does too: <span class="arithmatex">\(v_1^2 + v_2^2 = 1\)</span>, i.e. <span class="arithmatex">\(\mathbf{v} \in C\)</span>. Note that we did not need a new argument for the converse, only the same identity read from right to left.</p>
 
 
 

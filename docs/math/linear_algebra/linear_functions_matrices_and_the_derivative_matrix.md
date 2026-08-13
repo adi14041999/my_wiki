@@ -677,11 +677,7 @@ $$c^{-1}f(cx) = c^{-1}(cx)^2 = c^{-1}c^2x^2 = c\,x^2 .$$
 
 So the parabola $y = x^2$, viewed in a unit of distance $c$ times as long away, *is* the parabola $y = cx^2$. Running it in the other direction, the parabola $y = cx^2$ viewed $c$ times *closer* (measuring with a unit $c$ times shorter, i.e. under a microscope magnifying by $c$) is the parabola $y = x^2$.
 
-Given two upward parabolas $y = ax^2$ and $y = bx^2$ with vertex at the origin, choose
-
-$$c = \frac{b}{a} > 0 .$$
-
-Since $a$ and $b$ were arbitrary positive numbers, every such parabola becomes every other one under a suitable change of unit: as curves in the plane they are indistinguishable, and only our choice of ruler makes one look "narrow" and another "wide".
+For two upward parabolas $y = ax^2$ and $y = bx^2$ with vertex at the origin, since $a$ and $b$ are arbitrary positive numbers, every such parabola becomes every other one under a suitable change of unit: as curves in the plane they are indistinguishable, and only our choice of ruler makes one look "narrow" and another "wide".
 
 Here are two parabolas $y = ax^2$ and $y = bx^2$ with $a = 1$ and $b = 2$. They look exactly the same but are at different zoom levels.
 
@@ -691,14 +687,67 @@ Why does the same trick fail for an ellipse? Picture one drawn on paper, say $6$
 
 That number is what your eye actually registers as the *shape* of the ellipse, and it is the one thing zooming cannot touch. A circle is "one times as wide as it is tall", and no microscope in the world will turn it into a squashed oval. So ellipses genuinely come in different shapes, and rescaling can never carry one to another.
 
-Written out, for the ellipse
+Let us see this in the algebra. An ellipse is not the graph of a function, so instead of the form $y = f(x)$ we work with the equation it satisfies:
 
 $$\frac{x^2}{A^2} + \frac{y^2}{B^2} = 1,$$
 
-changing units replaces the two axis lengths $A$ and $B$ by $A/c$ and $B/c$. Both shrink by the same factor $c$, so the ratio
+where $A$ and $B$ are the two semi-axis lengths measured in the old unit. The change of unit is the same one as in (b): a point with old coordinates $(x, y)$ has new coordinates
 
-$$\frac{A/c}{B/c} = \frac{A}{B}$$
+$$(X, Y) = \left(\frac{x}{c},\, \frac{y}{c}\right), \qquad \text{equivalently} \qquad x = cX, \quad y = cY .$$
 
-comes out unchanged. Hyperbolas are stuck for the same reason: the two branches open at a certain angle, and zooming into a picture never changes an angle.
+Substituting these into the equation gives the condition satisfied by the new coordinates of points on the same curve:
 
-The parabola has nothing like this. Its only parameter is the single number $a$ in $y = ax^2$, and $a$ is not a comparison of two lengths (it is not "how many times taller than wide"). So there is no fixed number for the zoom to preserve. Ask how wide a parabola is and the honest answer is "compared to what?". A parabola looks flat if you crop in close and steep if you back away. With no shape number of its own to defend, it surrenders to any rescaling we like.
+$$\frac{(cX)^2}{A^2} + \frac{(cY)^2}{B^2} = 1 ,$$
+
+that is,
+
+$$\frac{c^2X^2}{A^2} + \frac{c^2Y^2}{B^2} = 1 .$$
+
+Moving each $c^2$ down into the denominator puts this back into the standard form of an ellipse equation:
+
+$$\frac{X^2}{(A/c)^2} + \frac{Y^2}{(B/c)^2} = 1 .$$
+
+So in the new unit the curve is again an ellipse, now with semi-axes
+
+$$A' = \frac{A}{c}, \qquad B' = \frac{B}{c} .$$
+
+Here is the crucial point. There are **two** parameters $A$ and $B$, but only **one** knob $c$, and it divides both of them by the same amount. So the ratio
+
+$$\frac{A'}{B'} = \frac{A/c}{B/c} = \frac{A}{B}$$
+
+comes out unchanged, whatever $c$ we choose. Contrast this with the parabola, where there was a single parameter $a$ and the one knob $c$ could carry it to any value we pleased. Changing units lets us make an ellipse any *size* we like, but never a new *shape*. Hyperbolas are stuck for the same reason: the two branches open at a certain angle, and zooming into a picture never changes an angle.
+
+To conclude: just changing $c$ only changes the size of the ellipse, not the shape. Changing only one of $A$, $B$ would indeed produce a genuinely new shape, but a change of unit cannot do that, since it has a single factor $c$ and applies it to both. Changing one alone is a stretch of the picture, not a re-measurement of it. The parabola, by contrast, has no new shape to reach at all: every upward parabola with vertex at the origin is the same curve, and $a$ records only how far we have zoomed. Even if we stretch, say, just horizontally (but not the vertical axis), we still get an upward parabola with vertex at the origin but just a different coefficient. And by part (c), every such parabola is the same curve, so nothing new was produced.
+
+**2.** Let $T_{a,b} : \mathbb{R}^2 \to \mathbb{R}^2$ be the linear function given by
+
+$$
+T_{a,b}\begin{pmatrix} x \\[0.25em] y \end{pmatrix}
+=
+\begin{pmatrix} ax \\[0.25em] by \end{pmatrix}
+=
+\begin{pmatrix} a & 0 \\[0.25em] 0 & b \end{pmatrix}
+\begin{pmatrix} x \\[0.25em] y \end{pmatrix}
+$$
+
+with $a, b > 0$. Let $C$ be the curve with equation $x^2 + y^2 = 1$ (the unit circle with center at the origin), and for $a, b > 0$ let $E_{a,b}$ be the curve with equation $x^2/a^2 + y^2/b^2 = 1$ (an ellipse). Check that if a point $\mathbf{v} = \begin{pmatrix} v_1 \\ v_2 \end{pmatrix}$ lies on $C$ then the point $T_{a,b}(\mathbf{v}) = \begin{pmatrix} av_1 \\ bv_2 \end{pmatrix}$ lies on $E_{a,b}$. Also check the reverse property that if $T_{a,b}(\mathbf{v}) \in E_{a,b}$ then $\mathbf{v} \in C$.
+
+**Solution:** Everything follows from one computation. Whatever the point $\mathbf{v} = (v_1, v_2)$ may be, substituting the coordinates of $T_{a,b}(\mathbf{v}) = (av_1, bv_2)$ into the left side of the equation for $E_{a,b}$ gives
+
+$$
+\frac{(av_1)^2}{a^2} + \frac{(bv_2)^2}{b^2}
+= \frac{a^2v_1^2}{a^2} + \frac{b^2v_2^2}{b^2}
+= v_1^2 + v_2^2 ,
+$$
+
+the cancellation being legitimate because $a, b > 0$ are nonzero.
+
+Both directions are now immediate.
+
+If $\mathbf{v} \in C$ then $v_1^2 + v_2^2 = 1$, so the displayed chain reads
+
+$$\frac{(av_1)^2}{a^2} + \frac{(bv_2)^2}{b^2} = 1,$$
+
+which says exactly that $T_{a,b}(\mathbf{v}) \in E_{a,b}$.
+
+Conversely, if $T_{a,b}(\mathbf{v}) \in E_{a,b}$ then the left side of the chain equals $1$, so the right side does too: $v_1^2 + v_2^2 = 1$, i.e. $\mathbf{v} \in C$. Note that we did not need a new argument for the converse, only the same identity read from right to left.
