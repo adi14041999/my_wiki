@@ -751,3 +751,314 @@ $$\frac{(av_1)^2}{a^2} + \frac{(bv_2)^2}{b^2} = 1,$$
 which says exactly that $T_{a,b}(\mathbf{v}) \in E_{a,b}$.
 
 Conversely, if $T_{a,b}(\mathbf{v}) \in E_{a,b}$ then the left side of the chain equals $1$, so the right side does too: $v_1^2 + v_2^2 = 1$, i.e. $\mathbf{v} \in C$. Note that we did not need a new argument for the converse, only the same identity read from right to left.
+
+**3.** Consider the affine functions $\mathbf{f} : \mathbb{R}^2 \to \mathbb{R}^3$ and $\mathbf{g} : \mathbb{R}^3 \to \mathbb{R}^2$ defined by
+
+$$
+\mathbf{f}\begin{pmatrix} x \\[0.25em] y \end{pmatrix}
+=
+\begin{pmatrix}
+2x - y \\[0.25em]
+3y - 2x + 7 \\[0.25em]
+x + y - 3
+\end{pmatrix},
+\qquad
+\mathbf{g}\begin{pmatrix} x \\[0.25em] y \\[0.25em] z \end{pmatrix}
+=
+\begin{pmatrix}
+x + 2y + 3z - 1 \\[0.25em]
+4x - y + 2z + 3
+\end{pmatrix}.
+$$
+
+Evaluate $(\mathbf{f} \circ \mathbf{g})\begin{pmatrix} x \\ y \\ z \end{pmatrix} \in \mathbb{R}^3$ by plugging $\mathbf{g}\begin{pmatrix} x \\ y \\ z \end{pmatrix} \in \mathbb{R}^2$ into $\mathbf{f}$, and write it in the usual form $A\mathbf{x} + \mathbf{b}$ for a $3 \times 3$ matrix $A$ and vector $\mathbf{b}$ (so $\mathbf{f} \circ \mathbf{g}$ is affine).
+
+**Solution:** To keep the substitution readable, name the two outputs of $\mathbf{g}$:
+
+$$u = x + 2y + 3z - 1, \qquad v = 4x - y + 2z + 3,$$
+
+so that $(\mathbf{f} \circ \mathbf{g})(x,y,z) = \mathbf{f}(u, v)$. Now feed $u$ and $v$ into the three component functions of $\mathbf{f}$ one at a time.
+
+The first component of $\mathbf{f}$ is $2u - v$:
+
+$$
+2(x + 2y + 3z - 1) - (4x - y + 2z + 3)
+= (2x - 4x) + (4y + y) + (6z - 2z) + (-2 - 3)
+= -2x + 5y + 4z - 5 .
+$$
+
+The second component is $3v - 2u + 7$:
+
+$$
+3(4x - y + 2z + 3) - 2(x + 2y + 3z - 1) + 7
+= (12x - 2x) + (-3y - 4y) + (6z - 6z) + (9 + 2 + 7)
+= 10x - 7y + 18 .
+$$
+
+The third component is $u + v - 3$:
+
+$$
+(x + 2y + 3z - 1) + (4x - y + 2z + 3) - 3
+= (x + 4x) + (2y - y) + (3z + 2z) + (-1 + 3 - 3)
+= 5x + y + 5z - 1 .
+$$
+
+Stacking the three results,
+
+$$
+(\mathbf{f} \circ \mathbf{g})\begin{pmatrix} x \\[0.25em] y \\[0.25em] z \end{pmatrix}
+=
+\begin{pmatrix}
+-2x + 5y + 4z - 5 \\[0.25em]
+10x - 7y + 18 \\[0.25em]
+5x + y + 5z - 1
+\end{pmatrix}.
+$$
+
+Every component is a linear combination of $x, y, z$ plus a constant, so $\mathbf{f} \circ \mathbf{g}$ is affine. Reading off the coefficients row by row for the matrix, and the constants for the vector,
+
+$$
+(\mathbf{f} \circ \mathbf{g})(\mathbf{x}) = A\mathbf{x} + \mathbf{b},
+\qquad
+A =
+\begin{pmatrix}
+-2 & 5 & 4 \\[0.25em]
+10 & -7 & 0 \\[0.25em]
+5 & 1 & 5
+\end{pmatrix},
+\qquad
+\mathbf{b} =
+\begin{pmatrix} -5 \\[0.25em] 18 \\[0.25em] -1 \end{pmatrix}.
+$$
+
+**4.** For each of the following functions $\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m$, compute $(D\mathbf{f})(\mathbf{x})$ as an $m \times n$ matrix whose entries are functions of $\mathbf{x} \in \mathbb{R}^n$.
+
+**(a).**
+
+$$
+\mathbf{f}\begin{pmatrix} x \\[0.25em] y \end{pmatrix}
+=
+\begin{pmatrix}
+\ln(x) + y \\[0.35em]
+3x^2y \\[0.35em]
+\sqrt{x} - e^{xy}
+\end{pmatrix}
+\qquad (\text{with } x > 0).
+$$
+
+**Solution:** Here $n = 2$ and $m = 3$, so $(D\mathbf{f})(x,y)$ is a $3 \times 2$ matrix: one row per component function, one column per input variable. Differentiate each component with respect to $x$ (holding $y$ fixed) and then with respect to $y$ (holding $x$ fixed).
+
+For $f_1 = \ln(x) + y$:
+
+$$\frac{\partial f_1}{\partial x} = \frac{1}{x}, \qquad \frac{\partial f_1}{\partial y} = 1 .$$
+
+For $f_2 = 3x^2y$, the factor $y$ is a constant when differentiating in $x$, and $3x^2$ is a constant when differentiating in $y$:
+
+$$\frac{\partial f_2}{\partial x} = 6xy, \qquad \frac{\partial f_2}{\partial y} = 3x^2 .$$
+
+For $f_3 = \sqrt{x} - e^{xy}$, the exponential needs the chain rule, with $xy$ differentiating to $y$ in the $x$-direction and to $x$ in the $y$-direction:
+
+$$\frac{\partial f_3}{\partial x} = \frac{1}{2\sqrt{x}} - y\,e^{xy}, \qquad \frac{\partial f_3}{\partial y} = -x\,e^{xy} .$$
+
+Assembling these,
+
+$$
+(D\mathbf{f})(x, y) =
+\begin{pmatrix}
+\dfrac{1}{x} & 1 \\[0.9em]
+6xy & 3x^2 \\[0.9em]
+\dfrac{1}{2\sqrt{x}} - y\,e^{xy} & -x\,e^{xy}
+\end{pmatrix}.
+$$
+
+The restriction $x > 0$ is what makes $\ln(x)$ and $\sqrt{x}$ available in the first place.
+
+**(b).**
+
+$$
+\mathbf{f}\begin{pmatrix} x \\[0.25em] y \end{pmatrix}
+=
+\begin{pmatrix}
+h(x - y) \\[0.35em]
+14.6
+\end{pmatrix}
+\qquad \text{for a function } h : \mathbb{R} \to \mathbb{R}.
+$$
+
+**Solution:** Now $n = m = 2$, so $(D\mathbf{f})(x,y)$ is a $2 \times 2$ matrix. We assume $h$ is differentiable, and we cannot say more about it than that, so the answer will be expressed in terms of $h'$.
+
+For $f_1 = h(x-y)$ the chain rule applies with inner function $x - y$, whose partial derivatives are $1$ and $-1$:
+
+$$\frac{\partial f_1}{\partial x} = h'(x-y) \cdot 1 = h'(x - y), \qquad \frac{\partial f_1}{\partial y} = h'(x-y) \cdot (-1) = -h'(x - y).$$
+
+For $f_2 = 14.6$, a constant function, both partial derivatives vanish. Hence
+
+$$
+(D\mathbf{f})(x, y) =
+\begin{pmatrix}
+h'(x - y) & -h'(x - y) \\[0.35em]
+0 & 0
+\end{pmatrix}.
+$$
+
+**5.** For the function $\mathbf{f}$ below, compute its derivative matrix in general and then at the specified point $\mathbf{a}$. Use the latter to compute the best linear approximation to the function at $\mathbf{a}$ in at least one of two forms: $\mathbf{f}(\mathbf{a} + \mathbf{h})$ for $\mathbf{h}$ near $\mathbf{0}$, and $\mathbf{f}(\mathbf{x})$ for $\mathbf{x}$ near $\mathbf{a}$.
+
+$$
+\mathbf{f}(x, y) =
+\begin{pmatrix}
+e^{x}(x - y)^2 \\[0.35em]
+3xy^2
+\end{pmatrix},
+\qquad \mathbf{a} = (0, 1).
+$$
+
+**Solution:** Here $n = m = 2$, so $(D\mathbf{f})$ is a $2 \times 2$ matrix.
+
+The first component $f_1 = e^{x}(x-y)^2$ is a product of two functions of $x$, so differentiating in $x$ needs the product rule:
+
+$$
+\frac{\partial f_1}{\partial x} = e^{x}(x - y)^2 + e^{x} \cdot 2(x - y) = e^{x}\bigl[(x - y)^2 + 2(x - y)\bigr] .
+$$
+
+In the $y$-direction the factor $e^x$ is a constant:
+
+$$\frac{\partial f_1}{\partial y} = e^{x} \cdot 2(x - y) \cdot (-1) = -2e^{x}(x - y) .$$
+
+The second component $f_2 = 3xy^2$ is straightforward:
+
+$$\frac{\partial f_2}{\partial x} = 3y^2, \qquad \frac{\partial f_2}{\partial y} = 6xy .$$
+
+So in general
+
+$$
+(D\mathbf{f})(x, y) =
+\begin{pmatrix}
+e^{x}\bigl[(x - y)^2 + 2(x - y)\bigr] & -2e^{x}(x - y) \\[0.5em]
+3y^2 & 6xy
+\end{pmatrix}.
+$$
+
+Now evaluate at $\mathbf{a} = (0,1)$, where $e^{x} = e^{0} = 1$ and $x - y = -1$:
+
+$$
+\frac{\partial f_1}{\partial x}(\mathbf{a}) = 1 \cdot \bigl[(-1)^2 + 2(-1)\bigr] = -1, \qquad
+\frac{\partial f_1}{\partial y}(\mathbf{a}) = -2 \cdot 1 \cdot (-1) = 2,
+$$
+
+$$
+\frac{\partial f_2}{\partial x}(\mathbf{a}) = 3 \cdot 1^2 = 3, \qquad
+\frac{\partial f_2}{\partial y}(\mathbf{a}) = 6 \cdot 0 \cdot 1 = 0 ,
+$$
+
+so that
+
+$$
+(D\mathbf{f})(0, 1) =
+\begin{pmatrix}
+-1 & 2 \\[0.25em]
+3 & 0
+\end{pmatrix}.
+$$
+
+We also need the value at the base point: $\mathbf{f}(0,1) = \bigl(e^{0}(0-1)^2,\ 3 \cdot 0 \cdot 1^2\bigr) = (1, 0)$.
+
+**Displacement form:** For $\mathbf{h} = (h_1, h_2)$ near $\mathbf{0}$,
+
+$$
+\mathbf{f}(0 + h_1,\ 1 + h_2) \approx
+\begin{pmatrix} 1 \\[0.25em] 0 \end{pmatrix}
++
+\begin{pmatrix} -1 & 2 \\[0.25em] 3 & 0 \end{pmatrix}
+\begin{pmatrix} h_1 \\[0.25em] h_2 \end{pmatrix}
+=
+\begin{pmatrix} 1 - h_1 + 2h_2 \\[0.25em] 3h_1 \end{pmatrix}.
+$$
+
+**Base-point form:** For $(x,y)$ near $(0,1)$ the displacement is $\mathbf{x} - \mathbf{a} = (x - 0,\ y - 1)$, so
+
+$$
+\mathbf{f}(x, y) \approx
+\begin{pmatrix} 1 \\[0.25em] 0 \end{pmatrix}
++
+\begin{pmatrix} -1 & 2 \\[0.25em] 3 & 0 \end{pmatrix}
+\begin{pmatrix} x \\[0.25em] y - 1 \end{pmatrix}
+=
+\begin{pmatrix} 1 - x + 2(y - 1) \\[0.25em] 3x \end{pmatrix}
+=
+\begin{pmatrix} -1 - x + 2y \\[0.25em] 3x \end{pmatrix}.
+$$
+
+**6.** For a general $2 \times 2$ matrix $A = \begin{pmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{pmatrix}$ and general $2$-vector $\mathbf{b} = \begin{pmatrix} b_1 \\ b_2 \end{pmatrix}$, verify that the function $\mathbf{f}(\mathbf{x}) = A\mathbf{x} + \mathbf{b}$ satisfies $(D\mathbf{f})(\mathbf{c}) = A$ for every $\mathbf{c} \in \mathbb{R}^2$ by explicitly computing partial derivatives of the component functions of $\mathbf{f}\begin{pmatrix} x \\ y \end{pmatrix}$.
+
+**Solution:** First write out the component functions. Carrying out the matrix-vector product and adding $\mathbf{b}$,
+
+$$
+\mathbf{f}\begin{pmatrix} x \\[0.25em] y \end{pmatrix}
+=
+\begin{pmatrix} a_{11} & a_{12} \\[0.25em] a_{21} & a_{22} \end{pmatrix}
+\begin{pmatrix} x \\[0.25em] y \end{pmatrix}
++
+\begin{pmatrix} b_1 \\[0.25em] b_2 \end{pmatrix}
+=
+\begin{pmatrix}
+a_{11}x + a_{12}y + b_1 \\[0.35em]
+a_{21}x + a_{22}y + b_2
+\end{pmatrix},
+$$
+
+so the two component functions are
+
+$$f_1(x,y) = a_{11}x + a_{12}y + b_1, \qquad f_2(x,y) = a_{21}x + a_{22}y + b_2 .$$
+
+Hence
+
+$$
+\frac{\partial f_1}{\partial x} = a_{11}, \qquad
+\frac{\partial f_1}{\partial y} = a_{12}, \qquad
+\frac{\partial f_2}{\partial x} = a_{21}, \qquad
+\frac{\partial f_2}{\partial y} = a_{22} .
+$$
+
+The essential point is that these four answers are **constants**: no $x$ or $y$ survives in any of them. So evaluating at an arbitrary point $\mathbf{c} \in \mathbb{R}^2$ changes nothing, and
+
+$$
+(D\mathbf{f})(\mathbf{c}) =
+\begin{pmatrix}
+\dfrac{\partial f_1}{\partial x}(\mathbf{c}) & \dfrac{\partial f_1}{\partial y}(\mathbf{c}) \\[0.9em]
+\dfrac{\partial f_2}{\partial x}(\mathbf{c}) & \dfrac{\partial f_2}{\partial y}(\mathbf{c})
+\end{pmatrix}
+=
+\begin{pmatrix}
+a_{11} & a_{12} \\[0.25em]
+a_{21} & a_{22}
+\end{pmatrix}
+= A
+$$
+
+for every $\mathbf{c} \in \mathbb{R}^2$. Note that $\mathbf{b}$ has disappeared: constants die under differentiation, which is why the derivative matrix records the linear part of $\mathbf{f}$ and nothing else.
+
+**7.** Briefly justify whether each of the following statements is either true (i.e., always true) or false (i.e., sometimes not true).
+
+**(a).** Let $A$ be an $n \times n$ matrix and $\mathbf{1} \in \mathbb{R}^n$ the $n$-vector whose entries are all $1$'s. The entries in each row of $A$ sum to $1$ precisely when $A\mathbf{1} = \mathbf{1}$.
+
+**Solution:** **True.** By the row description of the matrix-vector product, the $i$th entry of $A\mathbf{1}$ is the $i$th row of $A$ dotted with $\mathbf{1}$, and dotting with $\mathbf{1}$ simply adds up the entries:
+
+$$(A\mathbf{1})_i = a_{i1}\cdot 1 + a_{i2}\cdot 1 + \cdots + a_{in}\cdot 1 = \sum_{j=1}^{n} a_{ij} = (\text{sum of the } i\text{th row of } A).$$
+
+So the vector $A\mathbf{1}$ is precisely the list of row sums of $A$.
+
+**(b).** If $(D\mathbf{f})(\mathbf{x}) = \begin{pmatrix} 3 & 5 & -2 \\ -1 & 0 & 4 \end{pmatrix}$ for all $\mathbf{x} \in \mathbb{R}^3$ then $\mathbf{f}(\mathbf{x})$ is a linear function.
+
+**Solution:** **False.** Differentiation cannot see constants, so the derivative matrix records only the linear part of a function. Two functions that differ by a constant vector therefore have exactly the same derivative matrix.
+
+To see this concretely, note that the given matrix is $2 \times 3$, so $\mathbf{f} : \mathbb{R}^3 \to \mathbb{R}^2$, and consider the two functions
+
+$$
+\mathbf{f}(x, y, z) =
+\begin{pmatrix} 3x + 5y - 2z \\[0.25em] -x + 4z \end{pmatrix}
+\qquad \text{and} \qquad
+\mathbf{g}(x, y, z) =
+\begin{pmatrix} 3x + 5y - 2z + 1 \\[0.25em] -x + 4z + 1 \end{pmatrix} .
+$$
+
+So the hypothesis is not enough to conclude linearity. What it does give is that $\mathbf{f}$ is **affine**, of the form $\mathbf{f}(\mathbf{x}) = A\mathbf{x} + \mathbf{b}$, with the constant vector $\mathbf{b}$ left completely undetermined. The statement would become true with the extra assumption $\mathbf{f}(\mathbf{0}) = \mathbf{0}$, which forces $\mathbf{b} = \mathbf{0}$.
