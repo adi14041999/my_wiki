@@ -83,6 +83,7 @@ nav:
       - Projections: math/linear_algebra/projections.md
       - Applications of projections in Rn- orthogonal bases of planes and linear regression: math/linear_algebra/applications_of_projections_in_rn_orthogonal_bases_of_planes_and_linear_regression.md
       - Linear functions, matrices, and the derivative matrix: math/linear_algebra/linear_functions_matrices_and_the_derivative_matrix.md
+      - Linear transformations and matrix multiplication: math/linear_algebra/linear_transformations_and_matrix_multiplication.md
     - Probability:
       - Probability and Counting: math/probability/probability_and_counting.md
       - Story Proofs and Axioms of Probability: math/probability/story_proofs_and_axioms_of_probability.md
