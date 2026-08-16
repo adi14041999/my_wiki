@@ -4636,7 +4636,63 @@
 <li><strong>operation <span class="arithmatex">\(R_1\)</span></strong>: rotate the ball by <span class="arithmatex">\(-45\)</span> degrees around the vertical axis through its center;</li>
 <li><strong>operation <span class="arithmatex">\(R_2\)</span></strong>: rotate the ball by <span class="arithmatex">\(45\)</span> degrees around a specified horizontal axis through its center.</li>
 </ul>
+<p><img alt="img" src="../2r.png" /></p>
 <p>What if you do operation <span class="arithmatex">\(R_1\)</span> first and then operation <span class="arithmatex">\(R_2\)</span>? What if you do operation <span class="arithmatex">\(R_2\)</span> first and then operation <span class="arithmatex">\(R_1\)</span>? The overall effect of these is not the same!</p>
+<p><img alt="img" src="../assym.png" /></p>
+<p><strong>Definition:</strong> A function <span class="arithmatex">\(\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m\)</span> is called</p>
+<ul>
+<li>a <strong>linear function</strong>, or a <strong>linear transformation</strong>, if there is an <span class="arithmatex">\(m \times n\)</span> matrix <span class="arithmatex">\(A\)</span> for which <span class="arithmatex">\(\mathbf{f}(\mathbf{x}) = A\mathbf{x}\)</span> for all vectors <span class="arithmatex">\(\mathbf{x} \in \mathbb{R}^n\)</span> (so the <span class="arithmatex">\(j\)</span>th column of <span class="arithmatex">\(A\)</span> is <span class="arithmatex">\(A\mathbf{e}_j = \mathbf{f}(\mathbf{e}_j)\)</span>),</li>
+<li>an <strong>affine function</strong>, or an <strong>affine transformation</strong>, if there is an <span class="arithmatex">\(m \times n\)</span> matrix <span class="arithmatex">\(A\)</span> and a vector <span class="arithmatex">\(\mathbf{b} \in \mathbb{R}^m\)</span> for which <span class="arithmatex">\(\mathbf{f}(\mathbf{x}) = A\mathbf{x} + \mathbf{b}\)</span> for all vectors <span class="arithmatex">\(\mathbf{x} \in \mathbb{R}^n\)</span>.</li>
+</ul>
+<p>This is not a new class of functions. In <a href="../linear_functions_matrices_and_the_derivative_matrix/#linear-and-affine-functions">Linear functions, matrices, and the derivative matrix</a> we defined these notions one component at a time: <span class="arithmatex">\(\mathbf{f}\)</span> was called linear when each component function <span class="arithmatex">\(f_i\)</span> has the form <span class="arithmatex">\(a_{i1}x_1 + \cdots + a_{in}x_n\)</span>, and affine when each <span class="arithmatex">\(f_i\)</span> has that form plus a constant. We then recorded, as a consequence of inspecting the definitions, that linear functions are exactly those of the form <span class="arithmatex">\(\mathbf{f}(\mathbf{x}) = A\mathbf{x}\)</span> and affine functions exactly those of the form <span class="arithmatex">\(\mathbf{f}(\mathbf{x}) = A\mathbf{x} + \mathbf{b}\)</span>.</p>
+<p>What was a <em>consequence</em> there is taken as the <em>definition</em> here. The two formulations describe the same functions, and it is worth seeing exactly how each turns into the other. Starting from the componentwise description, suppose <span class="arithmatex">\(f_i(\mathbf{x}) = a_{i1}x_1 + \cdots + a_{in}x_n\)</span> for each <span class="arithmatex">\(i\)</span>. Collect the coefficients of <span class="arithmatex">\(f_i\)</span> as the <span class="arithmatex">\(i\)</span>th row of a matrix <span class="arithmatex">\(A\)</span>. Then <span class="arithmatex">\(\mathbf{f}(\mathbf{x}) = A\mathbf{x}\)</span>, because the <span class="arithmatex">\(i\)</span>th entry of <span class="arithmatex">\(A\mathbf{x}\)</span> is precisely the <span class="arithmatex">\(i\)</span>th row of <span class="arithmatex">\(A\)</span> dotted with <span class="arithmatex">\(\mathbf{x}\)</span>, which is <span class="arithmatex">\(f_i(\mathbf{x})\)</span>. Starting instead from <span class="arithmatex">\(\mathbf{f}(\mathbf{x}) = A\mathbf{x}\)</span>, reading off the <span class="arithmatex">\(i\)</span>th row of <span class="arithmatex">\(A\)</span> hands back the coefficients of <span class="arithmatex">\(f_i\)</span>. So the matrix is nothing but the table of coefficients of the component functions, one row per component. The advantage of starting from <span class="arithmatex">\(\mathbf{f}(\mathbf{x}) = A\mathbf{x}\)</span> is that it names the matrix up front.</p>
+<p>We want to discuss how to visualize the effect of the linear transformation <span class="arithmatex">\(\mathbf{f} : \mathbb{R}^2 \to \mathbb{R}^2\)</span> associated with a matrix</p>
+<div class="arithmatex">\[
+A = \begin{pmatrix} a &amp; b \\[0.25em] c &amp; d \end{pmatrix}
+\]</div>
+<p>whose columns span different lines through <span class="arithmatex">\(\mathbf{0}\)</span>. Let <span class="arithmatex">\(S\)</span> be the "unit square"</p>
+<div class="arithmatex">\[S = \{(x, y) \in \mathbb{R}^2 : 0 \leq x, y \leq 1\}\]</div>
+<p>(on the left in the figure below), so <span class="arithmatex">\(\mathbb{R}^2\)</span> is tiled by copies of <span class="arithmatex">\(S\)</span> laid out in all directions (like a bathroom floor). Let <span class="arithmatex">\(\mathbf{f}(S)\)</span> denote the output of <span class="arithmatex">\(\mathbf{f}\)</span> on <span class="arithmatex">\(S\)</span> (i.e., the collection of points <span class="arithmatex">\(\mathbf{f}(\mathbf{s})\)</span> for <span class="arithmatex">\(\mathbf{s} \in S\)</span>), also called the <strong>image</strong> of <span class="arithmatex">\(S\)</span> under <span class="arithmatex">\(\mathbf{f}\)</span>. The image <span class="arithmatex">\(\mathbf{f}(S)\)</span> is a parallelogram (on the right in the figure below). </p>
+<p><img alt="img" src="../tiling.png" /></p>
+<p>This helps to visualize the effect of <span class="arithmatex">\(\mathbf{f}\)</span> on <span class="arithmatex">\(\mathbb{R}^2\)</span> due to two facts:</p>
+<ul>
+<li><strong>Linearity Principle:</strong> for <span class="arithmatex">\(c_1, c_2 \in \mathbb{R}\)</span> and <span class="arithmatex">\(\mathbf{v}_1, \mathbf{v}_2 \in \mathbb{R}^2\)</span> we have <span class="arithmatex">\(\mathbf{f}(c_1\mathbf{v}_1 + c_2\mathbf{v}_2) = c_1\mathbf{f}(\mathbf{v}_1) + c_2\mathbf{f}(\mathbf{v}_2)\)</span>.</li>
+<li><strong>Tiling Principle:</strong> <span class="arithmatex">\(\mathbf{f}\)</span> transforms the tiling of <span class="arithmatex">\(\mathbb{R}^2\)</span> by copies of <span class="arithmatex">\(S\)</span> into a tiling of <span class="arithmatex">\(\mathbb{R}^2\)</span> by copies of <span class="arithmatex">\(\mathbf{f}(S)\)</span>.</li>
+</ul>
+<p><strong>Example:</strong> Consider <span class="arithmatex">\(\mathbf{f} : \mathbb{R}^2 \to \mathbb{R}^2\)</span> given by the matrix</p>
+<div class="arithmatex">\[
+A = \begin{pmatrix} 2 &amp; 1 \\[0.25em] 1 &amp; 2 \end{pmatrix}.
+\]</div>
+<p><span class="arithmatex">\(\mathbf{f}(S)\)</span> is the parallelogram with edges</p>
+<div class="arithmatex">\[
+\mathbf{f}\begin{pmatrix} 1 \\[0.25em] 0 \end{pmatrix} = \begin{pmatrix} 2 \\[0.25em] 1 \end{pmatrix}
+\quad (\text{first column of } A)
+\qquad \text{and} \qquad
+\mathbf{f}\begin{pmatrix} 0 \\[0.25em] 1 \end{pmatrix} = \begin{pmatrix} 1 \\[0.25em] 2 \end{pmatrix}
+\quad (\text{second column of } A),
+\]</div>
+<p>as shown in the figure below. </p>
+<p><img alt="img" src="../tiling2.png" /></p>
+<p>By the Tiling Principle, <span class="arithmatex">\(\mathbf{f}\)</span> transforms the usual tiling of <span class="arithmatex">\(\mathbb{R}^2\)</span> by unit squares into the tiling by copies of <span class="arithmatex">\(\mathbf{f}(S)\)</span> laid out in all directions parallel to the edges of <span class="arithmatex">\(\mathbf{f}(S)\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The tiling on the right in the figure above expresses the parametric form of <span class="arithmatex">\(\mathbb{R}^2\)</span> using the vectors</p>
+<div class="arithmatex">\[
+\mathbf{e} = \mathbf{f}\begin{pmatrix} 1 \\[0.25em] 0 \end{pmatrix} = \begin{pmatrix} 2 \\[0.25em] 1 \end{pmatrix}
+\quad (\text{first column of } A),
+\qquad
+\mathbf{e}' = \mathbf{f}\begin{pmatrix} 0 \\[0.25em] 1 \end{pmatrix} = \begin{pmatrix} 1 \\[0.25em] 2 \end{pmatrix}
+\quad (\text{second column of } A).
+\]</div>
+<p>In particular, the Linearity Principle</p>
+<div class="arithmatex">\[
+t\mathbf{e} + t'\mathbf{e}'
+= t\,\mathbf{f}\begin{pmatrix} 1 \\[0.25em] 0 \end{pmatrix} + t'\,\mathbf{f}\begin{pmatrix} 0 \\[0.25em] 1 \end{pmatrix}
+= \mathbf{f}\left( t\begin{pmatrix} 1 \\[0.25em] 0 \end{pmatrix} + t'\begin{pmatrix} 0 \\[0.25em] 1 \end{pmatrix} \right)
+= \mathbf{f}\begin{pmatrix} t \\[0.25em] t' \end{pmatrix}
+\]</div>
+<p>says that the point in parametric form <span class="arithmatex">\(t\mathbf{e} + t'\mathbf{e}'\)</span> is the output of <span class="arithmatex">\(\mathbf{f}\)</span> on <span class="arithmatex">\(\begin{pmatrix} t \\ t' \end{pmatrix}\)</span>.</p>
+</div>
 
 
 
