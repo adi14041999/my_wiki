@@ -86,3 +86,101 @@ By the Tiling Principle, $\mathbf{f}$ transforms the usual tiling of $\mathbb{R}
     $$
 
     says that the point in parametric form $t\mathbf{e} + t'\mathbf{e}'$ is the output of $\mathbf{f}$ on $\begin{pmatrix} t \\ t' \end{pmatrix}$.
+
+**Example:** When MRI is used to create a $3$-dimensional image of someone's brain and doctors use the image for medical diagnosis, the computers use many affine transformations $\mathbf{f}(\mathbf{x}) = A\mathbf{x} + \mathbf{b}$. The matrix $A$ accounts for rotation of the image in space, as well as dilation for "zooming in/out" on the image, and the vector $\mathbf{b}$ is a displacement vector that accounts for spatial translation of the image.
+
+## Linear functions are those which respect addition and scalar multiplication
+
+!!! note "Theorem"
+    A function $\mathbf{g} : \mathbb{R}^n \to \mathbb{R}^m$ is linear precisely when it respects the vector operations:
+
+    $$
+    \mathbf{g}(c\mathbf{x}) = c\,\mathbf{g}(\mathbf{x}), \qquad
+    \mathbf{g}(\mathbf{x} + \mathbf{y}) = \mathbf{g}(\mathbf{x}) + \mathbf{g}(\mathbf{y})
+    $$
+
+    for all scalars $c \in \mathbb{R}$ and vectors $\mathbf{x}, \mathbf{y} \in \mathbb{R}^n$.
+
+    If $\mathbf{g} : \mathbb{R}^n \to \mathbb{R}^m$ and $\mathbf{h} : \mathbb{R}^p \to \mathbb{R}^n$ are linear, then so is the composition $\mathbf{g} \circ \mathbf{h} : \mathbb{R}^p \to \mathbb{R}^m$.
+
+Affine functions $\mathbf{h}(\mathbf{x}) = A\mathbf{x} + \mathbf{b}$ with $\mathbf{b} \neq \mathbf{0}$ do not satisfy this property. For instance:
+
+$$
+\mathbf{h}(5\mathbf{x}) = A(5\mathbf{x}) + \mathbf{b} = 5(A\mathbf{x}) + \mathbf{b}
+\qquad \text{and} \qquad
+5\,\mathbf{h}(\mathbf{x}) = 5(A\mathbf{x} + \mathbf{b}) = 5(A\mathbf{x}) + 5\mathbf{b},
+$$
+
+so $\mathbf{h}(5\mathbf{x}) \neq 5\,\mathbf{h}(\mathbf{x})$ because $\mathbf{b} \neq 5\mathbf{b}$ when $\mathbf{b} \neq \mathbf{0}$ (compare lengths of $\mathbf{b}$ and $5\mathbf{b}$ for nonzero $\mathbf{b}$). Likewise,
+
+$$
+\mathbf{h}(\mathbf{x} + \mathbf{y}) = A(\mathbf{x} + \mathbf{y}) + \mathbf{b} = A\mathbf{x} + A\mathbf{y} + \mathbf{b},
+$$
+
+$$
+\mathbf{h}(\mathbf{x}) + \mathbf{h}(\mathbf{y}) = (A\mathbf{x} + \mathbf{b}) + (A\mathbf{y} + \mathbf{b}) = A\mathbf{x} + A\mathbf{y} + 2\mathbf{b},
+$$
+
+so $\mathbf{h}(\mathbf{x} + \mathbf{y}) \neq \mathbf{h}(\mathbf{x}) + \mathbf{h}(\mathbf{y})$ when $\mathbf{b}$ is nonzero (since $\mathbf{b} \neq 2\mathbf{b}$ for such $\mathbf{b}$). The failure of these identities for general affine functions is one of the reasons why linear functions are more fundamental than affine functions.
+
+**Example:** For any nonzero [linear subspace](span_subspaces_and_dimension.md#span-and-linear-subspaces) $V$ of $\mathbb{R}^n$ we claim that the [projection](projections.md) map $\text{Proj}_V : \mathbb{R}^n \to \mathbb{R}^n$ is linear (so it is given by some $n \times n$ matrix!). There is another way to describe $\text{Proj}_V$ that makes more contact with vector algebra: if $\{\mathbf{w}_1, \ldots, \mathbf{w}_k\}$ is an [orthogonal basis](basis_and_orthogonality.md) of $V$ then the formula from [Projections](projections.md#projection-onto-a-general-subspace) gives the explicit expression
+
+$$
+\text{Proj}_V(\mathbf{x}) = \sum_{i=1}^{k} \left( \frac{\mathbf{x} \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i .
+$$
+
+So the linearity of $\text{Proj}_V$ can be rephrased as: does this summation expression behave well with respect to addition and scalar multiplication in $\mathbf{x}$?
+
+Yes: for all $\mathbf{x}, \mathbf{y} \in \mathbb{R}^n$ we have $(\mathbf{x} + \mathbf{y}) \cdot \mathbf{w} = \mathbf{x} \cdot \mathbf{w} + \mathbf{y} \cdot \mathbf{w}$ for every $\mathbf{w} \in \mathbb{R}^n$, so
+
+$$
+\begin{aligned}
+\text{Proj}_V(\mathbf{x} + \mathbf{y})
+&= \sum_{i=1}^{k} \left( \frac{(\mathbf{x} + \mathbf{y}) \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i
+= \sum_{i=1}^{k} \left( \frac{\mathbf{x} \cdot \mathbf{w}_i + \mathbf{y} \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i \\[0.5em]
+&= \sum_{i=1}^{k} \left( \frac{\mathbf{x} \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i
++ \sum_{i=1}^{k} \left( \frac{\mathbf{y} \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i
+= \text{Proj}_V(\mathbf{x}) + \text{Proj}_V(\mathbf{y}) .
+\end{aligned}
+$$
+
+Likewise, for any $\mathbf{x} \in \mathbb{R}^n$ and $c \in \mathbb{R}$ we have $(c\mathbf{x}) \cdot \mathbf{w} = c(\mathbf{x} \cdot \mathbf{w})$ for every $\mathbf{w} \in \mathbb{R}^n$, so
+
+$$
+\text{Proj}_V(c\mathbf{x})
+= \sum_{i=1}^{k} \left( \frac{(c\mathbf{x}) \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i
+= \sum_{i=1}^{k} \left( \frac{c(\mathbf{x} \cdot \mathbf{w}_i)}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i
+= c \sum_{i=1}^{k} \left( \frac{\mathbf{x} \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i
+= c\,\text{Proj}_V(\mathbf{x}) .
+$$
+
+This concludes the verification that $\text{Proj}_V$ is linear. Actually, not quite: we swept something under the rug. Can you see the gap in our argument?
+
+The gap is that we took it for granted that $V$ has an orthogonal basis (so the formula above is actually applicable to $V$!). Up to now we don't know that linear subspaces $V$ always have orthogonal bases except when the [dimension](span_subspaces_and_dimension.md#dimension) $\dim V$ is $1$ or $2$, the case $\dim V = 2$ having been handled in [Applications of projections](applications_of_projections_in_rn_orthogonal_bases_of_planes_and_linear_regression.md#finding-an-orthogonal-basis-special-case). This hole in our knowledge will be filled in later.
+
+What is the $n \times n$ matrix for $\text{Proj}_V$? Recall the [coordinate vectors](linear_functions_matrices_and_the_derivative_matrix.md#further-viewpoints-on-matrix-vector-products) $\mathbf{e}_1, \ldots, \mathbf{e}_n$: the vector $\mathbf{e}_j \in \mathbb{R}^n$ has a $1$ in the $j$th position and $0$ everywhere else,
+
+$$
+\mathbf{e}_1 =
+\begin{pmatrix} 1 \\[0.25em] 0 \\[0.25em] \vdots \\[0.25em] 0 \end{pmatrix},
+\qquad
+\mathbf{e}_2 =
+\begin{pmatrix} 0 \\[0.25em] 1 \\[0.25em] \vdots \\[0.25em] 0 \end{pmatrix},
+\qquad \ldots, \qquad
+\mathbf{e}_n =
+\begin{pmatrix} 0 \\[0.25em] 0 \\[0.25em] \vdots \\[0.25em] 1 \end{pmatrix},
+$$
+
+and the matrix of a linear function has $\mathbf{f}(\mathbf{e}_j)$ as its $j$th column.
+
+So, as for any linear function $\mathbb{R}^n \to \mathbb{R}^n$, the $j$th column of the matrix for $\text{Proj}_V$ is its effect on $\mathbf{e}_j$, which is to say its $j$th column is
+
+$$
+\text{Proj}_V(\mathbf{e}_j) = \sum_{i=1}^{k} \left( \frac{\mathbf{e}_j \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i
+$$
+
+upon choosing an orthogonal basis $\{\mathbf{w}_1, \ldots, \mathbf{w}_k\}$ of $V$.
+
+**Example:** A "linear" circuit is one whose output (e.g., currents in various parts, which we want to know) is a linear function of its input (e.g., voltage differences in various parts, which we control). Concretely, these are the circuits involving only resistors, capacitors, and inductors; they account for all of the circuits studied in introductory physics (whereas circuits involving components such as transistors or diodes are not linear). The analysis of every linear circuit, no matter how big or complicated, always can be done systematically via (possibly very high-dimensional!) linear algebra.
+
+## Composing linear transformations and matrix multiplication

@@ -2959,6 +2959,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#linear-functions-are-those-which-respect-addition-and-scalar-multiplication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linear functions are those which respect addition and scalar multiplication
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#composing-linear-transformations-and-matrix-multiplication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composing linear transformations and matrix multiplication
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4693,6 +4715,77 @@ t\mathbf{e} + t'\mathbf{e}'
 \]</div>
 <p>says that the point in parametric form <span class="arithmatex">\(t\mathbf{e} + t'\mathbf{e}'\)</span> is the output of <span class="arithmatex">\(\mathbf{f}\)</span> on <span class="arithmatex">\(\begin{pmatrix} t \\ t' \end{pmatrix}\)</span>.</p>
 </div>
+<p><strong>Example:</strong> When MRI is used to create a <span class="arithmatex">\(3\)</span>-dimensional image of someone's brain and doctors use the image for medical diagnosis, the computers use many affine transformations <span class="arithmatex">\(\mathbf{f}(\mathbf{x}) = A\mathbf{x} + \mathbf{b}\)</span>. The matrix <span class="arithmatex">\(A\)</span> accounts for rotation of the image in space, as well as dilation for "zooming in/out" on the image, and the vector <span class="arithmatex">\(\mathbf{b}\)</span> is a displacement vector that accounts for spatial translation of the image.</p>
+<h2 id="linear-functions-are-those-which-respect-addition-and-scalar-multiplication">Linear functions are those which respect addition and scalar multiplication</h2>
+<div class="admonition note">
+<p class="admonition-title">Theorem</p>
+<p>A function <span class="arithmatex">\(\mathbf{g} : \mathbb{R}^n \to \mathbb{R}^m\)</span> is linear precisely when it respects the vector operations:</p>
+<div class="arithmatex">\[
+\mathbf{g}(c\mathbf{x}) = c\,\mathbf{g}(\mathbf{x}), \qquad
+\mathbf{g}(\mathbf{x} + \mathbf{y}) = \mathbf{g}(\mathbf{x}) + \mathbf{g}(\mathbf{y})
+\]</div>
+<p>for all scalars <span class="arithmatex">\(c \in \mathbb{R}\)</span> and vectors <span class="arithmatex">\(\mathbf{x}, \mathbf{y} \in \mathbb{R}^n\)</span>.</p>
+<p>If <span class="arithmatex">\(\mathbf{g} : \mathbb{R}^n \to \mathbb{R}^m\)</span> and <span class="arithmatex">\(\mathbf{h} : \mathbb{R}^p \to \mathbb{R}^n\)</span> are linear, then so is the composition <span class="arithmatex">\(\mathbf{g} \circ \mathbf{h} : \mathbb{R}^p \to \mathbb{R}^m\)</span>.</p>
+</div>
+<p>Affine functions <span class="arithmatex">\(\mathbf{h}(\mathbf{x}) = A\mathbf{x} + \mathbf{b}\)</span> with <span class="arithmatex">\(\mathbf{b} \neq \mathbf{0}\)</span> do not satisfy this property. For instance:</p>
+<div class="arithmatex">\[
+\mathbf{h}(5\mathbf{x}) = A(5\mathbf{x}) + \mathbf{b} = 5(A\mathbf{x}) + \mathbf{b}
+\qquad \text{and} \qquad
+5\,\mathbf{h}(\mathbf{x}) = 5(A\mathbf{x} + \mathbf{b}) = 5(A\mathbf{x}) + 5\mathbf{b},
+\]</div>
+<p>so <span class="arithmatex">\(\mathbf{h}(5\mathbf{x}) \neq 5\,\mathbf{h}(\mathbf{x})\)</span> because <span class="arithmatex">\(\mathbf{b} \neq 5\mathbf{b}\)</span> when <span class="arithmatex">\(\mathbf{b} \neq \mathbf{0}\)</span> (compare lengths of <span class="arithmatex">\(\mathbf{b}\)</span> and <span class="arithmatex">\(5\mathbf{b}\)</span> for nonzero <span class="arithmatex">\(\mathbf{b}\)</span>). Likewise,</p>
+<div class="arithmatex">\[
+\mathbf{h}(\mathbf{x} + \mathbf{y}) = A(\mathbf{x} + \mathbf{y}) + \mathbf{b} = A\mathbf{x} + A\mathbf{y} + \mathbf{b},
+\]</div>
+<div class="arithmatex">\[
+\mathbf{h}(\mathbf{x}) + \mathbf{h}(\mathbf{y}) = (A\mathbf{x} + \mathbf{b}) + (A\mathbf{y} + \mathbf{b}) = A\mathbf{x} + A\mathbf{y} + 2\mathbf{b},
+\]</div>
+<p>so <span class="arithmatex">\(\mathbf{h}(\mathbf{x} + \mathbf{y}) \neq \mathbf{h}(\mathbf{x}) + \mathbf{h}(\mathbf{y})\)</span> when <span class="arithmatex">\(\mathbf{b}\)</span> is nonzero (since <span class="arithmatex">\(\mathbf{b} \neq 2\mathbf{b}\)</span> for such <span class="arithmatex">\(\mathbf{b}\)</span>). The failure of these identities for general affine functions is one of the reasons why linear functions are more fundamental than affine functions.</p>
+<p><strong>Example:</strong> For any nonzero <a href="../span_subspaces_and_dimension/#span-and-linear-subspaces">linear subspace</a> <span class="arithmatex">\(V\)</span> of <span class="arithmatex">\(\mathbb{R}^n\)</span> we claim that the <a href="../projections/">projection</a> map <span class="arithmatex">\(\text{Proj}_V : \mathbb{R}^n \to \mathbb{R}^n\)</span> is linear (so it is given by some <span class="arithmatex">\(n \times n\)</span> matrix!). There is another way to describe <span class="arithmatex">\(\text{Proj}_V\)</span> that makes more contact with vector algebra: if <span class="arithmatex">\(\{\mathbf{w}_1, \ldots, \mathbf{w}_k\}\)</span> is an <a href="../basis_and_orthogonality/">orthogonal basis</a> of <span class="arithmatex">\(V\)</span> then the formula from <a href="../projections/#projection-onto-a-general-subspace">Projections</a> gives the explicit expression</p>
+<div class="arithmatex">\[
+\text{Proj}_V(\mathbf{x}) = \sum_{i=1}^{k} \left( \frac{\mathbf{x} \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i .
+\]</div>
+<p>So the linearity of <span class="arithmatex">\(\text{Proj}_V\)</span> can be rephrased as: does this summation expression behave well with respect to addition and scalar multiplication in <span class="arithmatex">\(\mathbf{x}\)</span>?</p>
+<p>Yes: for all <span class="arithmatex">\(\mathbf{x}, \mathbf{y} \in \mathbb{R}^n\)</span> we have <span class="arithmatex">\((\mathbf{x} + \mathbf{y}) \cdot \mathbf{w} = \mathbf{x} \cdot \mathbf{w} + \mathbf{y} \cdot \mathbf{w}\)</span> for every <span class="arithmatex">\(\mathbf{w} \in \mathbb{R}^n\)</span>, so</p>
+<div class="arithmatex">\[
+\begin{aligned}
+\text{Proj}_V(\mathbf{x} + \mathbf{y})
+&amp;= \sum_{i=1}^{k} \left( \frac{(\mathbf{x} + \mathbf{y}) \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i
+= \sum_{i=1}^{k} \left( \frac{\mathbf{x} \cdot \mathbf{w}_i + \mathbf{y} \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i \\[0.5em]
+&amp;= \sum_{i=1}^{k} \left( \frac{\mathbf{x} \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i
++ \sum_{i=1}^{k} \left( \frac{\mathbf{y} \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i
+= \text{Proj}_V(\mathbf{x}) + \text{Proj}_V(\mathbf{y}) .
+\end{aligned}
+\]</div>
+<p>Likewise, for any <span class="arithmatex">\(\mathbf{x} \in \mathbb{R}^n\)</span> and <span class="arithmatex">\(c \in \mathbb{R}\)</span> we have <span class="arithmatex">\((c\mathbf{x}) \cdot \mathbf{w} = c(\mathbf{x} \cdot \mathbf{w})\)</span> for every <span class="arithmatex">\(\mathbf{w} \in \mathbb{R}^n\)</span>, so</p>
+<div class="arithmatex">\[
+\text{Proj}_V(c\mathbf{x})
+= \sum_{i=1}^{k} \left( \frac{(c\mathbf{x}) \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i
+= \sum_{i=1}^{k} \left( \frac{c(\mathbf{x} \cdot \mathbf{w}_i)}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i
+= c \sum_{i=1}^{k} \left( \frac{\mathbf{x} \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i
+= c\,\text{Proj}_V(\mathbf{x}) .
+\]</div>
+<p>This concludes the verification that <span class="arithmatex">\(\text{Proj}_V\)</span> is linear. Actually, not quite: we swept something under the rug. Can you see the gap in our argument?</p>
+<p>The gap is that we took it for granted that <span class="arithmatex">\(V\)</span> has an orthogonal basis (so the formula above is actually applicable to <span class="arithmatex">\(V\)</span>!). Up to now we don't know that linear subspaces <span class="arithmatex">\(V\)</span> always have orthogonal bases except when the <a href="../span_subspaces_and_dimension/#dimension">dimension</a> <span class="arithmatex">\(\dim V\)</span> is <span class="arithmatex">\(1\)</span> or <span class="arithmatex">\(2\)</span>, the case <span class="arithmatex">\(\dim V = 2\)</span> having been handled in <a href="../applications_of_projections_in_rn_orthogonal_bases_of_planes_and_linear_regression/#finding-an-orthogonal-basis-special-case">Applications of projections</a>. This hole in our knowledge will be filled in later.</p>
+<p>What is the <span class="arithmatex">\(n \times n\)</span> matrix for <span class="arithmatex">\(\text{Proj}_V\)</span>? Recall the <a href="../linear_functions_matrices_and_the_derivative_matrix/#further-viewpoints-on-matrix-vector-products">coordinate vectors</a> <span class="arithmatex">\(\mathbf{e}_1, \ldots, \mathbf{e}_n\)</span>: the vector <span class="arithmatex">\(\mathbf{e}_j \in \mathbb{R}^n\)</span> has a <span class="arithmatex">\(1\)</span> in the <span class="arithmatex">\(j\)</span>th position and <span class="arithmatex">\(0\)</span> everywhere else,</p>
+<div class="arithmatex">\[
+\mathbf{e}_1 =
+\begin{pmatrix} 1 \\[0.25em] 0 \\[0.25em] \vdots \\[0.25em] 0 \end{pmatrix},
+\qquad
+\mathbf{e}_2 =
+\begin{pmatrix} 0 \\[0.25em] 1 \\[0.25em] \vdots \\[0.25em] 0 \end{pmatrix},
+\qquad \ldots, \qquad
+\mathbf{e}_n =
+\begin{pmatrix} 0 \\[0.25em] 0 \\[0.25em] \vdots \\[0.25em] 1 \end{pmatrix},
+\]</div>
+<p>and the matrix of a linear function has <span class="arithmatex">\(\mathbf{f}(\mathbf{e}_j)\)</span> as its <span class="arithmatex">\(j\)</span>th column.</p>
+<p>So, as for any linear function <span class="arithmatex">\(\mathbb{R}^n \to \mathbb{R}^n\)</span>, the <span class="arithmatex">\(j\)</span>th column of the matrix for <span class="arithmatex">\(\text{Proj}_V\)</span> is its effect on <span class="arithmatex">\(\mathbf{e}_j\)</span>, which is to say its <span class="arithmatex">\(j\)</span>th column is</p>
+<div class="arithmatex">\[
+\text{Proj}_V(\mathbf{e}_j) = \sum_{i=1}^{k} \left( \frac{\mathbf{e}_j \cdot \mathbf{w}_i}{\mathbf{w}_i \cdot \mathbf{w}_i} \right) \mathbf{w}_i
+\]</div>
+<p>upon choosing an orthogonal basis <span class="arithmatex">\(\{\mathbf{w}_1, \ldots, \mathbf{w}_k\}\)</span> of <span class="arithmatex">\(V\)</span>.</p>
+<p><strong>Example:</strong> A "linear" circuit is one whose output (e.g., currents in various parts, which we want to know) is a linear function of its input (e.g., voltage differences in various parts, which we control). Concretely, these are the circuits involving only resistors, capacitors, and inductors; they account for all of the circuits studied in introductory physics (whereas circuits involving components such as transistors or diodes are not linear). The analysis of every linear circuit, no matter how big or complicated, always can be done systematically via (possibly very high-dimensional!) linear algebra.</p>
+<h2 id="composing-linear-transformations-and-matrix-multiplication">Composing linear transformations and matrix multiplication</h2>
 
 
 
