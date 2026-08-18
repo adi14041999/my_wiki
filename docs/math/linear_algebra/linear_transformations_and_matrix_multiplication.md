@@ -184,3 +184,110 @@ upon choosing an orthogonal basis $\{\mathbf{w}_1, \ldots, \mathbf{w}_k\}$ of $V
 **Example:** A "linear" circuit is one whose output (e.g., currents in various parts, which we want to know) is a linear function of its input (e.g., voltage differences in various parts, which we control). Concretely, these are the circuits involving only resistors, capacitors, and inductors; they account for all of the circuits studied in introductory physics (whereas circuits involving components such as transistors or diodes are not linear). The analysis of every linear circuit, no matter how big or complicated, always can be done systematically via (possibly very high-dimensional!) linear algebra.
 
 ## Composing linear transformations and matrix multiplication
+
+**Definition:** Let $A$ be an $m \times n$ matrix and $B$ an $n \times p$ matrix as follows:
+
+$$
+A =
+\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1n} \\[0.25em]
+a_{21} & a_{22} & \cdots & a_{2n} \\[0.25em]
+\vdots & \vdots & \ddots & \vdots \\[0.25em]
+a_{m1} & a_{m2} & \cdots & a_{mn}
+\end{pmatrix},
+\qquad
+B =
+\begin{pmatrix}
+b_{11} & b_{12} & \cdots & b_{1p} \\[0.25em]
+b_{21} & b_{22} & \cdots & b_{2p} \\[0.25em]
+\vdots & \vdots & \ddots & \vdots \\[0.25em]
+b_{n1} & b_{n2} & \cdots & b_{np}
+\end{pmatrix}.
+$$
+
+Let $T_A : \mathbb{R}^n \to \mathbb{R}^m$ and $T_B : \mathbb{R}^p \to \mathbb{R}^n$ be the linear transformations with respective matrices $A$ and $B$ (i.e., $T_A(\mathbf{x}) = A\mathbf{x}$ for $\mathbf{x} \in \mathbb{R}^n$, and $T_B(\mathbf{y}) = B\mathbf{y}$ for $\mathbf{y} \in \mathbb{R}^p$), so the composition $T_A \circ T_B : \mathbb{R}^p \to \mathbb{R}^m$ is a linear transformation. The $m \times p$ matrix of $T_A \circ T_B$ is called the **matrix product** of $A$ and $B$, and is denoted $AB$.
+
+!!! note "Theorem"
+    The entries of $AB$ are the dot products of rows of $A$ with columns of $B$: if we write
+
+    $$
+    A =
+    \begin{pmatrix}
+    \mathbf{a}_1 \\[0.35em]
+    \mathbf{a}_2 \\[0.35em]
+    \vdots \\[0.35em]
+    \mathbf{a}_m
+    \end{pmatrix},
+    \qquad
+    B =
+    \begin{pmatrix}
+    | & | & & | \\
+    \mathbf{b}_1 & \mathbf{b}_2 & \cdots & \mathbf{b}_p \\
+    | & | & & |
+    \end{pmatrix}
+    $$
+
+    with rows $\mathbf{a}_i \in \mathbb{R}^n$ and columns $\mathbf{b}_j \in \mathbb{R}^n$, then we have
+
+    $$
+    AB =
+    \begin{pmatrix}
+    \mathbf{a}_1 \cdot \mathbf{b}_1 & \mathbf{a}_1 \cdot \mathbf{b}_2 & \cdots & \mathbf{a}_1 \cdot \mathbf{b}_p \\[0.35em]
+    \mathbf{a}_2 \cdot \mathbf{b}_1 & \mathbf{a}_2 \cdot \mathbf{b}_2 & \cdots & \mathbf{a}_2 \cdot \mathbf{b}_p \\[0.35em]
+    \vdots & \vdots & \ddots & \vdots \\[0.35em]
+    \mathbf{a}_m \cdot \mathbf{b}_1 & \mathbf{a}_m \cdot \mathbf{b}_2 & \cdots & \mathbf{a}_m \cdot \mathbf{b}_p
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+    | & | & & | \\
+    A\mathbf{b}_1 & A\mathbf{b}_2 & \cdots & A\mathbf{b}_p \\
+    | & | & & |
+    \end{pmatrix}.
+    $$
+
+    Written out more explicitly,
+
+    $$
+    ij\text{-entry of } AB = \sum_{k=1}^{n} a_{ik}b_{kj} .
+    $$
+
+!!! note
+    It only makes sense to form $AB$ when the number of columns of $A$ is the same as the number of rows of $B$ (so the dot product $\mathbf{a}_i \cdot \mathbf{b}_j$ of a row $\mathbf{a}_i$ of $A$ and a column $\mathbf{b}_j$ of $B$ makes sense); this requirement expresses the fact that it only makes sense to form $T_A \circ T_B$ when the output of $T_B$ is an input for $T_A$.
+
+You might find it disturbing that often $AB \neq BA$ (and that nonzero matrices can have product equal to a zero matrix).
+
+Since matrix multiplication is designed to express composition of linear functions, its "non-commutativity" is just an instance of the concrete fact that composing two functions in both possible orders (i.e., $f(g(x))$ and $g(f(x))$) often yields different outputs. For instance, in general:
+
+- $2x + 5 \neq 2(x + 5)$ (composing doubling and adding $5$),
+- $1/(x + 7) \neq (1/x) + 7$ (composing reciprocation and adding $7$),
+- $(2x)^3 \neq 2x^3$ (composing cubing and doubling),
+- $e^{x/2} \neq e^{x}/2$ (composing exponentiation and halving).
+
+!!! note "Proposition"
+    For $n \times n$ diagonal matrices $A$ and $B$, the product matrix $AB$ is also diagonal and is obtained by multiplying the corresponding entries in $A$ and $B$:
+
+    $$
+    \begin{pmatrix}
+    a_1 & 0 & \cdots & 0 \\[0.25em]
+    0 & a_2 & \cdots & 0 \\[0.25em]
+    \vdots & \vdots & \ddots & \vdots \\[0.25em]
+    0 & 0 & \cdots & a_n
+    \end{pmatrix}
+    \begin{pmatrix}
+    b_1 & 0 & \cdots & 0 \\[0.25em]
+    0 & b_2 & \cdots & 0 \\[0.25em]
+    \vdots & \vdots & \ddots & \vdots \\[0.25em]
+    0 & 0 & \cdots & b_n
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+    a_1b_1 & 0 & \cdots & 0 \\[0.25em]
+    0 & a_2b_2 & \cdots & 0 \\[0.25em]
+    \vdots & \vdots & \ddots & \vdots \\[0.25em]
+    0 & 0 & \cdots & a_nb_n
+    \end{pmatrix}.
+    $$
+
+    In particular, $AB = BA$ for diagonal $A$ and $B$ since $a_ib_i = b_ia_i$ for every $i$.
+
+## Rotations revisited in $R^2$

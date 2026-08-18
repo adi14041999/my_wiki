@@ -2981,6 +2981,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#rotations-revisited-in-r2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rotations revisited in \(R^2\)
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4786,6 +4797,104 @@ t\mathbf{e} + t'\mathbf{e}'
 <p>upon choosing an orthogonal basis <span class="arithmatex">\(\{\mathbf{w}_1, \ldots, \mathbf{w}_k\}\)</span> of <span class="arithmatex">\(V\)</span>.</p>
 <p><strong>Example:</strong> A "linear" circuit is one whose output (e.g., currents in various parts, which we want to know) is a linear function of its input (e.g., voltage differences in various parts, which we control). Concretely, these are the circuits involving only resistors, capacitors, and inductors; they account for all of the circuits studied in introductory physics (whereas circuits involving components such as transistors or diodes are not linear). The analysis of every linear circuit, no matter how big or complicated, always can be done systematically via (possibly very high-dimensional!) linear algebra.</p>
 <h2 id="composing-linear-transformations-and-matrix-multiplication">Composing linear transformations and matrix multiplication</h2>
+<p><strong>Definition:</strong> Let <span class="arithmatex">\(A\)</span> be an <span class="arithmatex">\(m \times n\)</span> matrix and <span class="arithmatex">\(B\)</span> an <span class="arithmatex">\(n \times p\)</span> matrix as follows:</p>
+<div class="arithmatex">\[
+A =
+\begin{pmatrix}
+a_{11} &amp; a_{12} &amp; \cdots &amp; a_{1n} \\[0.25em]
+a_{21} &amp; a_{22} &amp; \cdots &amp; a_{2n} \\[0.25em]
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\[0.25em]
+a_{m1} &amp; a_{m2} &amp; \cdots &amp; a_{mn}
+\end{pmatrix},
+\qquad
+B =
+\begin{pmatrix}
+b_{11} &amp; b_{12} &amp; \cdots &amp; b_{1p} \\[0.25em]
+b_{21} &amp; b_{22} &amp; \cdots &amp; b_{2p} \\[0.25em]
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\[0.25em]
+b_{n1} &amp; b_{n2} &amp; \cdots &amp; b_{np}
+\end{pmatrix}.
+\]</div>
+<p>Let <span class="arithmatex">\(T_A : \mathbb{R}^n \to \mathbb{R}^m\)</span> and <span class="arithmatex">\(T_B : \mathbb{R}^p \to \mathbb{R}^n\)</span> be the linear transformations with respective matrices <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span> (i.e., <span class="arithmatex">\(T_A(\mathbf{x}) = A\mathbf{x}\)</span> for <span class="arithmatex">\(\mathbf{x} \in \mathbb{R}^n\)</span>, and <span class="arithmatex">\(T_B(\mathbf{y}) = B\mathbf{y}\)</span> for <span class="arithmatex">\(\mathbf{y} \in \mathbb{R}^p\)</span>), so the composition <span class="arithmatex">\(T_A \circ T_B : \mathbb{R}^p \to \mathbb{R}^m\)</span> is a linear transformation. The <span class="arithmatex">\(m \times p\)</span> matrix of <span class="arithmatex">\(T_A \circ T_B\)</span> is called the <strong>matrix product</strong> of <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span>, and is denoted <span class="arithmatex">\(AB\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Theorem</p>
+<p>The entries of <span class="arithmatex">\(AB\)</span> are the dot products of rows of <span class="arithmatex">\(A\)</span> with columns of <span class="arithmatex">\(B\)</span>: if we write</p>
+<div class="arithmatex">\[
+A =
+\begin{pmatrix}
+\mathbf{a}_1 \\[0.35em]
+\mathbf{a}_2 \\[0.35em]
+\vdots \\[0.35em]
+\mathbf{a}_m
+\end{pmatrix},
+\qquad
+B =
+\begin{pmatrix}
+| &amp; | &amp; &amp; | \\
+\mathbf{b}_1 &amp; \mathbf{b}_2 &amp; \cdots &amp; \mathbf{b}_p \\
+| &amp; | &amp; &amp; |
+\end{pmatrix}
+\]</div>
+<p>with rows <span class="arithmatex">\(\mathbf{a}_i \in \mathbb{R}^n\)</span> and columns <span class="arithmatex">\(\mathbf{b}_j \in \mathbb{R}^n\)</span>, then we have</p>
+<div class="arithmatex">\[
+AB =
+\begin{pmatrix}
+\mathbf{a}_1 \cdot \mathbf{b}_1 &amp; \mathbf{a}_1 \cdot \mathbf{b}_2 &amp; \cdots &amp; \mathbf{a}_1 \cdot \mathbf{b}_p \\[0.35em]
+\mathbf{a}_2 \cdot \mathbf{b}_1 &amp; \mathbf{a}_2 \cdot \mathbf{b}_2 &amp; \cdots &amp; \mathbf{a}_2 \cdot \mathbf{b}_p \\[0.35em]
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\[0.35em]
+\mathbf{a}_m \cdot \mathbf{b}_1 &amp; \mathbf{a}_m \cdot \mathbf{b}_2 &amp; \cdots &amp; \mathbf{a}_m \cdot \mathbf{b}_p
+\end{pmatrix}
+=
+\begin{pmatrix}
+| &amp; | &amp; &amp; | \\
+A\mathbf{b}_1 &amp; A\mathbf{b}_2 &amp; \cdots &amp; A\mathbf{b}_p \\
+| &amp; | &amp; &amp; |
+\end{pmatrix}.
+\]</div>
+<p>Written out more explicitly,</p>
+<div class="arithmatex">\[
+ij\text{-entry of } AB = \sum_{k=1}^{n} a_{ik}b_{kj} .
+\]</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It only makes sense to form <span class="arithmatex">\(AB\)</span> when the number of columns of <span class="arithmatex">\(A\)</span> is the same as the number of rows of <span class="arithmatex">\(B\)</span> (so the dot product <span class="arithmatex">\(\mathbf{a}_i \cdot \mathbf{b}_j\)</span> of a row <span class="arithmatex">\(\mathbf{a}_i\)</span> of <span class="arithmatex">\(A\)</span> and a column <span class="arithmatex">\(\mathbf{b}_j\)</span> of <span class="arithmatex">\(B\)</span> makes sense); this requirement expresses the fact that it only makes sense to form <span class="arithmatex">\(T_A \circ T_B\)</span> when the output of <span class="arithmatex">\(T_B\)</span> is an input for <span class="arithmatex">\(T_A\)</span>.</p>
+</div>
+<p>You might find it disturbing that often <span class="arithmatex">\(AB \neq BA\)</span> (and that nonzero matrices can have product equal to a zero matrix).</p>
+<p>Since matrix multiplication is designed to express composition of linear functions, its "non-commutativity" is just an instance of the concrete fact that composing two functions in both possible orders (i.e., <span class="arithmatex">\(f(g(x))\)</span> and <span class="arithmatex">\(g(f(x))\)</span>) often yields different outputs. For instance, in general:</p>
+<ul>
+<li><span class="arithmatex">\(2x + 5 \neq 2(x + 5)\)</span> (composing doubling and adding <span class="arithmatex">\(5\)</span>),</li>
+<li><span class="arithmatex">\(1/(x + 7) \neq (1/x) + 7\)</span> (composing reciprocation and adding <span class="arithmatex">\(7\)</span>),</li>
+<li><span class="arithmatex">\((2x)^3 \neq 2x^3\)</span> (composing cubing and doubling),</li>
+<li><span class="arithmatex">\(e^{x/2} \neq e^{x}/2\)</span> (composing exponentiation and halving).</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Proposition</p>
+<p>For <span class="arithmatex">\(n \times n\)</span> diagonal matrices <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span>, the product matrix <span class="arithmatex">\(AB\)</span> is also diagonal and is obtained by multiplying the corresponding entries in <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span>:</p>
+<div class="arithmatex">\[
+\begin{pmatrix}
+a_1 &amp; 0 &amp; \cdots &amp; 0 \\[0.25em]
+0 &amp; a_2 &amp; \cdots &amp; 0 \\[0.25em]
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\[0.25em]
+0 &amp; 0 &amp; \cdots &amp; a_n
+\end{pmatrix}
+\begin{pmatrix}
+b_1 &amp; 0 &amp; \cdots &amp; 0 \\[0.25em]
+0 &amp; b_2 &amp; \cdots &amp; 0 \\[0.25em]
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\[0.25em]
+0 &amp; 0 &amp; \cdots &amp; b_n
+\end{pmatrix}
+=
+\begin{pmatrix}
+a_1b_1 &amp; 0 &amp; \cdots &amp; 0 \\[0.25em]
+0 &amp; a_2b_2 &amp; \cdots &amp; 0 \\[0.25em]
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\[0.25em]
+0 &amp; 0 &amp; \cdots &amp; a_nb_n
+\end{pmatrix}.
+\]</div>
+<p>In particular, <span class="arithmatex">\(AB = BA\)</span> for diagonal <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span> since <span class="arithmatex">\(a_ib_i = b_ia_i\)</span> for every <span class="arithmatex">\(i\)</span>.</p>
+</div>
+<h2 id="rotations-revisited-in-r2">Rotations revisited in <span class="arithmatex">\(R^2\)</span></h2>
 
 
 
