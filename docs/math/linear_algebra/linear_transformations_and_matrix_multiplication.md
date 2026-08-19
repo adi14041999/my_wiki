@@ -291,3 +291,111 @@ Since matrix multiplication is designed to express composition of linear functio
     In particular, $AB = BA$ for diagonal $A$ and $B$ since $a_ib_i = b_ia_i$ for every $i$.
 
 ## Rotations revisited in $R^2$
+
+!!! note "Proposition"
+    The matrix of counterclockwise rotation of $\mathbb{R}^2$ around the origin by $\theta$ is
+
+    $$
+    A_\theta =
+    \begin{pmatrix}
+    \cos\theta & -\sin\theta \\[0.25em]
+    \sin\theta & \cos\theta
+    \end{pmatrix}.
+    $$
+
+    In words, if $\mathbf{v} \in \mathbb{R}^2$, then $A_\theta\mathbf{v}$ is obtained by rotating $\mathbf{v}$ counterclockwise by $\theta$ around the origin.
+
+**Proof:** Write $R_\theta : \mathbb{R}^2 \to \mathbb{R}^2$ for counterclockwise rotation by $\theta$ about the origin. We argue in two steps: first that $R_\theta$ is linear, and then, using that, what its matrix must be.
+
+Throughout we describe a nonzero vector by its **polar data**: its length $r > 0$ together with the angle $\alpha$ it makes with the positive $x$-axis, so that
+
+$$\mathbf{v} = \begin{pmatrix} x \\[0.25em] y \end{pmatrix} = \begin{pmatrix} r\cos\alpha \\[0.25em] r\sin\alpha \end{pmatrix}.$$
+
+In this language, rotating by $\theta$ leaves $r$ alone and replaces $\alpha$ by $\alpha + \theta$; that is precisely what "rotate counterclockwise by $\theta$" means. Also $R_\theta(\mathbf{0}) = \mathbf{0}$.
+
+**Step 1: $R_\theta$ is linear:** By the theorem above, it suffices to check that $R_\theta$ respects the two vector operations.
+
+1. **Scalar multiples, $c > 0$:** If $\mathbf{v} \neq \mathbf{0}$ has polar data $(r, \alpha)$, then $c\mathbf{v}$ has polar data $(cr, \alpha)$ (scaling by a positive number changes the length and not the direction). Rotating $c\mathbf{v}$ gives polar data $(cr, \alpha + \theta)$, which is $c$ times the vector with polar data $(r, \alpha + \theta)$. That vector is $R_\theta(\mathbf{v})$. Hence $R_\theta(c\mathbf{v}) = c\,R_\theta(\mathbf{v})$.
+
+2. **Scalar multiples, $c < 0$:** Now $c\mathbf{v}$ has polar data $(|c|r,\, \alpha + 180°)$, since multiplying by a negative number reverses the direction. Rotating $c\mathbf{v}$ gives $(|c|r,\, \alpha + \theta + 180°)$, the reverse of the vector of length $|c|r$ at angle $\alpha + \theta$. That reverse is $-|c|\,R_\theta(\mathbf{v})$, which is nothing but $c\,R_\theta(\mathbf{v})$.
+
+3. **Scalar multiples, remaining cases:** For $c = 0$ or $\mathbf{v} = \mathbf{0}$ both sides are $\mathbf{0}$. Combining with the previous two items,
+
+    $$R_\theta(c\mathbf{v}) = c\,R_\theta(\mathbf{v}) \qquad \text{for all } c \in \mathbb{R},\ \mathbf{v} \in \mathbb{R}^2 .$$
+
+4. **Sums, the non-parallel case:** Let $\mathbf{u}, \mathbf{v}$ be non-parallel. Then $\mathbf{u} + \mathbf{v}$ is the fourth vertex of the parallelogram whose other three vertices are $\mathbf{0}, \mathbf{u}, \mathbf{v}$. A rotation about the origin is a rigid motion of the plane, so it carries this parallelogram to a parallelogram and carries $\mathbf{0}, \mathbf{u}, \mathbf{v}$ to $\mathbf{0}, R_\theta(\mathbf{u}), R_\theta(\mathbf{v})$. The fourth vertex of the rotated parallelogram is $R_\theta(\mathbf{u}) + R_\theta(\mathbf{v})$, so
+
+    $$R_\theta(\mathbf{u} + \mathbf{v}) = R_\theta(\mathbf{u}) + R_\theta(\mathbf{v}) .$$
+
+5. **Sums, the parallel case:** If $\mathbf{v} = c\mathbf{u}$ then $\mathbf{u} + \mathbf{v} = (1 + c)\mathbf{u}$, and the claim reduces to the scalar case already handled.
+
+6. **Conclusion:** $R_\theta$ respects both vector operations, hence is linear. In particular it is given by some $2 \times 2$ matrix.
+
+**Step 2: identifying the matrix:** We now compute $R_\theta(\mathbf{v})$ for an arbitrary $\mathbf{v}$ and read the matrix off the answer.
+
+1. **Write $\mathbf{v}$ in polar form:** For $\mathbf{v} \neq \mathbf{0}$ with polar data $(r, \alpha)$ we have $x = r\cos\alpha$ and $y = r\sin\alpha$.
+
+2. **Rotate:** Rotation keeps the length and adds $\theta$ to the angle, so
+
+    $$R_\theta(\mathbf{v}) = \begin{pmatrix} r\cos(\alpha + \theta) \\[0.25em] r\sin(\alpha + \theta) \end{pmatrix}.$$
+
+3. **Apply the angle addition formulas:** Using [$\cos(A + B) = \cos A\cos B - \sin A\sin B$ and $\sin(A + B) = \sin A\cos B + \cos A\sin B$](../foundational_math/complex_numbers.md#deriving-some-trigonometric-identities) on each entry,
+
+    $$
+    \begin{aligned}
+    r\cos(\alpha + \theta) &= r\cos\alpha\cos\theta - r\sin\alpha\sin\theta, \\[0.4em]
+    r\sin(\alpha + \theta) &= r\sin\alpha\cos\theta + r\cos\alpha\sin\theta .
+    \end{aligned}
+    $$
+
+4. **Eliminate $r$ and $\alpha$:** Substituting $x = r\cos\alpha$ and $y = r\sin\alpha$ turns these into
+
+    $$
+    r\cos(\alpha + \theta) = x\cos\theta - y\sin\theta, \qquad
+    r\sin(\alpha + \theta) = x\sin\theta + y\cos\theta .
+    $$
+
+    This is the crucial step: the polar quantities $r$ and $\alpha$ have disappeared, leaving an answer depending only on the original coordinates $x, y$ and the rotation angle $\theta$.
+
+5. **Recognize a matrix-vector product:** Hence
+
+    $$
+    R_\theta\begin{pmatrix} x \\[0.25em] y \end{pmatrix}
+    = \begin{pmatrix} x\cos\theta - y\sin\theta \\[0.25em] x\sin\theta + y\cos\theta \end{pmatrix}
+    = \begin{pmatrix} \cos\theta & -\sin\theta \\[0.25em] \sin\theta & \cos\theta \end{pmatrix}
+    \begin{pmatrix} x \\[0.25em] y \end{pmatrix},
+    $$
+
+    the last equality being the definition of the matrix-vector product. The case $\mathbf{v} = \mathbf{0}$ holds as well, both sides being $\mathbf{0}$.
+
+6. **Conclusion:** The matrix of $R_\theta$ is $A_\theta = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}$, as claimed. $\blacksquare$
+
+Setting $\theta = 90°$ is a quick sanity check: $A_{90°} = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}$ sends $\mathbf{e}_1$ to $\mathbf{e}_2$ and $\mathbf{e}_2$ to $-\mathbf{e}_1$, as a quarter turn should.
+
+**Example:** It is a familiar fact from experience with a steering wheel (in reality or virtual reality) that composing rotations corresponds to adding angles. In symbols:
+
+$$R_{\theta_1} \circ R_{\theta_2} = R_{\theta_1 + \theta_2} .$$
+
+Let's see that matrix multiplication gives the same conclusion: we compute the matrix product
+
+$$
+\begin{aligned}
+\begin{pmatrix} \cos\theta_1 & -\sin\theta_1 \\[0.25em] \sin\theta_1 & \cos\theta_1 \end{pmatrix}
+\begin{pmatrix} \cos\theta_2 & -\sin\theta_2 \\[0.25em] \sin\theta_2 & \cos\theta_2 \end{pmatrix}
+&=
+\begin{pmatrix}
+\cos\theta_1\cos\theta_2 - \sin\theta_1\sin\theta_2 & -(\cos\theta_1\sin\theta_2 + \sin\theta_1\cos\theta_2) \\[0.5em]
+\sin\theta_1\cos\theta_2 + \cos\theta_1\sin\theta_2 & -\sin\theta_1\sin\theta_2 + \cos\theta_1\cos\theta_2
+\end{pmatrix} \\[1em]
+&=
+\begin{pmatrix}
+\cos(\theta_1 + \theta_2) & -\sin(\theta_1 + \theta_2) \\[0.5em]
+\sin(\theta_1 + \theta_2) & \cos(\theta_1 + \theta_2)
+\end{pmatrix}
+= R_{\theta_1 + \theta_2} .
+\end{aligned}
+$$
+
+The essential content of this calculation is the addition laws for sine and cosine. So we see that those addition laws, which may have seemed complicated or bizarre are more intuitive than you thought them to be!
+
+## Rotations in $R^3$
