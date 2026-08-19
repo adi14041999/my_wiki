@@ -5008,6 +5008,37 @@ R_\theta\begin{pmatrix} x \\[0.25em] y \end{pmatrix}
 \]</div>
 <p>The essential content of this calculation is the addition laws for sine and cosine. So we see that those addition laws, which may have seemed complicated or bizarre are more intuitive than you thought them to be!</p>
 <h2 id="rotations-in-r3">Rotations in <span class="arithmatex">\(R^3\)</span></h2>
+<p>What is the matrix for a rotation by an angle <span class="arithmatex">\(\theta\)</span> around the <span class="arithmatex">\(z\)</span>-axis (as in the figure below)?</p>
+<p><img alt="img" src="../rot_z.png" /></p>
+<p>It leaves the <span class="arithmatex">\(z\)</span>-coordinate unchanged (so carries <span class="arithmatex">\(\mathbf{e}_3\)</span> to itself), and in the <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> coordinates it does just what we worked out for <span class="arithmatex">\(R_\theta(\mathbf{e}_1)\)</span> and <span class="arithmatex">\(R_\theta(\mathbf{e}_2)\)</span> in the <span class="arithmatex">\(xy\)</span>-plane in the previous section. So once again using the fundamental principle that the <span class="arithmatex">\(j\)</span>th column of a matrix is the effect of the linear transformation on <span class="arithmatex">\(\mathbf{e}_j\)</span>, we obtain that the matrix for rotation by angle <span class="arithmatex">\(\theta\)</span> counterclockwise around the <span class="arithmatex">\(z\)</span>-axis is</p>
+<div class="arithmatex">\[
+R_z(\theta) =
+\begin{pmatrix}
+\cos\theta &amp; -\sin\theta &amp; 0 \\[0.25em]
+\sin\theta &amp; \cos\theta &amp; 0 \\[0.25em]
+0 &amp; 0 &amp; 1
+\end{pmatrix}.
+\]</div>
+<p>Here "counterclockwise" means that you follow the <strong>right-hand rule</strong>: place your thumb in the direction of the positive <span class="arithmatex">\(z\)</span>-axis, and rotate by <span class="arithmatex">\(\theta\)</span> in the direction that your fingers curl, as shown in the figure below.</p>
+<p>Replacing the <span class="arithmatex">\(z\)</span>-axis and <span class="arithmatex">\(xy\)</span>-plane with the <span class="arithmatex">\(x\)</span>-axis and the <span class="arithmatex">\(yz\)</span>-plane respectively yields that the matrix for rotation by angle <span class="arithmatex">\(\theta\)</span> counterclockwise around the <span class="arithmatex">\(x\)</span>-axis is</p>
+<div class="arithmatex">\[
+R_x(\theta) =
+\begin{pmatrix}
+1 &amp; 0 &amp; 0 \\[0.25em]
+0 &amp; \cos\theta &amp; -\sin\theta \\[0.25em]
+0 &amp; \sin\theta &amp; \cos\theta
+\end{pmatrix}.
+\]</div>
+<p>Likewise, for rotation by an angle <span class="arithmatex">\(\theta\)</span> counterclockwise around the <span class="arithmatex">\(y\)</span>-axis, the matrix is</p>
+<div class="arithmatex">\[
+R_y(\theta) =
+\begin{pmatrix}
+\cos\theta &amp; 0 &amp; \sin\theta \\[0.25em]
+0 &amp; 1 &amp; 0 \\[0.25em]
+-\sin\theta &amp; 0 &amp; \cos\theta
+\end{pmatrix}
+\]</div>
+<p>(note the placement of <span class="arithmatex">\(\sin\theta\)</span> in the upper-right and <span class="arithmatex">\(-\sin\theta\)</span> in the lower-left!).</p>
 
 
 

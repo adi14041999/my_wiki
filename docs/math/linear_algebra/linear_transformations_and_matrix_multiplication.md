@@ -399,3 +399,44 @@ $$
 The essential content of this calculation is the addition laws for sine and cosine. So we see that those addition laws, which may have seemed complicated or bizarre are more intuitive than you thought them to be!
 
 ## Rotations in $R^3$
+
+What is the matrix for a rotation by an angle $\theta$ around the $z$-axis (as in the figure below)?
+
+![img](rot_z.png)
+
+It leaves the $z$-coordinate unchanged (so carries $\mathbf{e}_3$ to itself), and in the $x$ and $y$ coordinates it does just what we worked out for $R_\theta(\mathbf{e}_1)$ and $R_\theta(\mathbf{e}_2)$ in the $xy$-plane in the previous section. So once again using the fundamental principle that the $j$th column of a matrix is the effect of the linear transformation on $\mathbf{e}_j$, we obtain that the matrix for rotation by angle $\theta$ counterclockwise around the $z$-axis is
+
+$$
+R_z(\theta) =
+\begin{pmatrix}
+\cos\theta & -\sin\theta & 0 \\[0.25em]
+\sin\theta & \cos\theta & 0 \\[0.25em]
+0 & 0 & 1
+\end{pmatrix}.
+$$
+
+Here "counterclockwise" means that you follow the **right-hand rule**: place your thumb in the direction of the positive $z$-axis, and rotate by $\theta$ in the direction that your fingers curl, as shown in the figure below.
+
+Replacing the $z$-axis and $xy$-plane with the $x$-axis and the $yz$-plane respectively yields that the matrix for rotation by angle $\theta$ counterclockwise around the $x$-axis is
+
+$$
+R_x(\theta) =
+\begin{pmatrix}
+1 & 0 & 0 \\[0.25em]
+0 & \cos\theta & -\sin\theta \\[0.25em]
+0 & \sin\theta & \cos\theta
+\end{pmatrix}.
+$$
+
+Likewise, for rotation by an angle $\theta$ counterclockwise around the $y$-axis, the matrix is
+
+$$
+R_y(\theta) =
+\begin{pmatrix}
+\cos\theta & 0 & \sin\theta \\[0.25em]
+0 & 1 & 0 \\[0.25em]
+-\sin\theta & 0 & \cos\theta
+\end{pmatrix}
+$$
+
+(note the placement of $\sin\theta$ in the upper-right and $-\sin\theta$ in the lower-left!).
