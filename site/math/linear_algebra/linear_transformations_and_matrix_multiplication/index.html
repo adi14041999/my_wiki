@@ -4867,6 +4867,65 @@ A\mathbf{b}_1 &amp; A\mathbf{b}_2 &amp; \cdots &amp; A\mathbf{b}_p \\
 ij\text{-entry of } AB = \sum_{k=1}^{n} a_{ik}b_{kj} .
 \]</div>
 </div>
+<p><strong>Proof:</strong> We will write out the formula for <span class="arithmatex">\(T_A \circ T_B\)</span> to compute its matrix using some algebra, and making free use of summation notation and its properties.</p>
+<p>Suppose</p>
+<div class="arithmatex">\[
+\mathbf{x} =
+\begin{pmatrix} x_1 \\[0.25em] x_2 \\[0.25em] \vdots \\[0.25em] x_p \end{pmatrix}.
+\]</div>
+<p>Then the <span class="arithmatex">\(k\)</span>th component of <span class="arithmatex">\(T_B(\mathbf{x})\)</span> is <span class="arithmatex">\(\sum_{j=1}^{p} b_{kj}x_j\)</span>, so the <span class="arithmatex">\(i\)</span>th component of <span class="arithmatex">\(T_A(T_B(\mathbf{x}))\)</span> is</p>
+<div class="arithmatex">\[
+\sum_{k=1}^{n} a_{ik} \left( \sum_{j=1}^{p} b_{kj}x_j \right)
+= \sum_{k=1}^{n} \sum_{j=1}^{p} a_{ik}b_{kj}x_j
+= \sum_{j=1}^{p} \left( \sum_{k=1}^{n} a_{ik}b_{kj} \right) x_j ,
+\]</div>
+<p>where the last step used the maneuver of swapping the order of summation.</p>
+<p>That maneuver is worth a moment, since it is doing real work. Two separate things happen in it.</p>
+<p><strong>Swapping the order:</strong> Think of the numbers being added as filling a rectangular grid, with one row for each value of <span class="arithmatex">\(k\)</span> and one column for each value of <span class="arithmatex">\(j\)</span>. Writing <span class="arithmatex">\(\sum_{k}\sum_{j}\)</span> means "total each row, then add up the row totals", while <span class="arithmatex">\(\sum_{j}\sum_{k}\)</span> means "total each column, then add up the column totals". Both count every cell of the grid exactly once, so both give the same answer. For instance, with <span class="arithmatex">\(n = 2\)</span> rows and <span class="arithmatex">\(p = 3\)</span> columns:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><span class="arithmatex">\(j = 1\)</span></th>
+<th><span class="arithmatex">\(j = 2\)</span></th>
+<th><span class="arithmatex">\(j = 3\)</span></th>
+<th><strong>row total</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(k = 1\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td><span class="arithmatex">\(2\)</span></td>
+<td><span class="arithmatex">\(3\)</span></td>
+<td><span class="arithmatex">\(6\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(k = 2\)</span></td>
+<td><span class="arithmatex">\(4\)</span></td>
+<td><span class="arithmatex">\(5\)</span></td>
+<td><span class="arithmatex">\(6\)</span></td>
+<td><span class="arithmatex">\(15\)</span></td>
+</tr>
+<tr>
+<td><strong>column total</strong></td>
+<td><span class="arithmatex">\(5\)</span></td>
+<td><span class="arithmatex">\(7\)</span></td>
+<td><span class="arithmatex">\(9\)</span></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Adding the row totals gives <span class="arithmatex">\(6 + 15 = 21\)</span>, and adding the column totals gives <span class="arithmatex">\(5 + 7 + 9 = 21\)</span>. The grand total is <span class="arithmatex">\(21\)</span> either way, because in both cases we added up the same six numbers, merely gathering them in a different order.</p>
+<p><strong>Factoring out <span class="arithmatex">\(x_j\)</span>:</strong> Inside the sum over <span class="arithmatex">\(k\)</span>, the quantity <span class="arithmatex">\(x_j\)</span> is a constant: the index <span class="arithmatex">\(k\)</span> does not appear in it. So it can be pulled outside that sum,</p>
+<div class="arithmatex">\[\sum_{k=1}^{n} a_{ik}b_{kj}x_j = \left( \sum_{k=1}^{n} a_{ik}b_{kj} \right) x_j ,\]</div>
+<p>which is just the distributive law.</p>
+<p>Since <span class="arithmatex">\(AB\)</span> is defined to be the matrix that computes <span class="arithmatex">\(T_A \circ T_B\)</span>, so <span class="arithmatex">\((AB)\mathbf{x} = (T_A \circ T_B)(\mathbf{x}) = T_A(T_B(\mathbf{x}))\)</span>, we conclude that the <span class="arithmatex">\(i\)</span>th entry of <span class="arithmatex">\((AB)\mathbf{x}\)</span> is given by the final double summation above. But by the meaning of matrix-vector products, <span class="arithmatex">\((AB)\mathbf{x}\)</span> has <span class="arithmatex">\(i\)</span>th entry <span class="arithmatex">\(\sum_{j=1}^{p}(AB)_{ij}x_j\)</span>, where <span class="arithmatex">\((AB)_{ij}\)</span> denotes the <span class="arithmatex">\(ij\)</span>-entry of <span class="arithmatex">\(AB\)</span> that we are seeking to compute.</p>
+<p>Equating our two expressions for the <span class="arithmatex">\(i\)</span>th entry of <span class="arithmatex">\((AB)\mathbf{x}\)</span> yields</p>
+<div class="arithmatex">\[
+\sum_{j=1}^{p} (AB)_{ij}x_j = \sum_{j=1}^{p} \left( \sum_{k=1}^{n} a_{ik}b_{kj} \right) x_j ,
+\]</div>
+<p>so equating coefficients of <span class="arithmatex">\(x_j\)</span> on the two sides gives <span class="arithmatex">\((AB)_{ij} = \sum_{k=1}^{n} a_{ik}b_{kj}\)</span>, as desired. <span class="arithmatex">\(\blacksquare\)</span></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>It only makes sense to form <span class="arithmatex">\(AB\)</span> when the number of columns of <span class="arithmatex">\(A\)</span> is the same as the number of rows of <span class="arithmatex">\(B\)</span> (so the dot product <span class="arithmatex">\(\mathbf{a}_i \cdot \mathbf{b}_j\)</span> of a row <span class="arithmatex">\(\mathbf{a}_i\)</span> of <span class="arithmatex">\(A\)</span> and a column <span class="arithmatex">\(\mathbf{b}_j\)</span> of <span class="arithmatex">\(B\)</span> makes sense); this requirement expresses the fact that it only makes sense to form <span class="arithmatex">\(T_A \circ T_B\)</span> when the output of <span class="arithmatex">\(T_B\)</span> is an input for <span class="arithmatex">\(T_A\)</span>.</p>

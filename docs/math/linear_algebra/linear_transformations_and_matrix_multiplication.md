@@ -251,6 +251,53 @@ Let $T_A : \mathbb{R}^n \to \mathbb{R}^m$ and $T_B : \mathbb{R}^p \to \mathbb{R}
     ij\text{-entry of } AB = \sum_{k=1}^{n} a_{ik}b_{kj} .
     $$
 
+**Proof:** We will write out the formula for $T_A \circ T_B$ to compute its matrix using some algebra, and making free use of summation notation and its properties.
+
+Suppose
+
+$$
+\mathbf{x} =
+\begin{pmatrix} x_1 \\[0.25em] x_2 \\[0.25em] \vdots \\[0.25em] x_p \end{pmatrix}.
+$$
+
+Then the $k$th component of $T_B(\mathbf{x})$ is $\sum_{j=1}^{p} b_{kj}x_j$, so the $i$th component of $T_A(T_B(\mathbf{x}))$ is
+
+$$
+\sum_{k=1}^{n} a_{ik} \left( \sum_{j=1}^{p} b_{kj}x_j \right)
+= \sum_{k=1}^{n} \sum_{j=1}^{p} a_{ik}b_{kj}x_j
+= \sum_{j=1}^{p} \left( \sum_{k=1}^{n} a_{ik}b_{kj} \right) x_j ,
+$$
+
+where the last step used the maneuver of swapping the order of summation.
+
+That maneuver is worth a moment, since it is doing real work. Two separate things happen in it.
+
+**Swapping the order:** Think of the numbers being added as filling a rectangular grid, with one row for each value of $k$ and one column for each value of $j$. Writing $\sum_{k}\sum_{j}$ means "total each row, then add up the row totals", while $\sum_{j}\sum_{k}$ means "total each column, then add up the column totals". Both count every cell of the grid exactly once, so both give the same answer. For instance, with $n = 2$ rows and $p = 3$ columns:
+
+|  | $j = 1$ | $j = 2$ | $j = 3$ | **row total** |
+|---|---|---|---|---|
+| $k = 1$ | $1$ | $2$ | $3$ | $6$ |
+| $k = 2$ | $4$ | $5$ | $6$ | $15$ |
+| **column total** | $5$ | $7$ | $9$ |  |
+
+Adding the row totals gives $6 + 15 = 21$, and adding the column totals gives $5 + 7 + 9 = 21$. The grand total is $21$ either way, because in both cases we added up the same six numbers, merely gathering them in a different order.
+
+**Factoring out $x_j$:** Inside the sum over $k$, the quantity $x_j$ is a constant: the index $k$ does not appear in it. So it can be pulled outside that sum,
+
+$$\sum_{k=1}^{n} a_{ik}b_{kj}x_j = \left( \sum_{k=1}^{n} a_{ik}b_{kj} \right) x_j ,$$
+
+which is just the distributive law.
+
+Since $AB$ is defined to be the matrix that computes $T_A \circ T_B$, so $(AB)\mathbf{x} = (T_A \circ T_B)(\mathbf{x}) = T_A(T_B(\mathbf{x}))$, we conclude that the $i$th entry of $(AB)\mathbf{x}$ is given by the final double summation above. But by the meaning of matrix-vector products, $(AB)\mathbf{x}$ has $i$th entry $\sum_{j=1}^{p}(AB)_{ij}x_j$, where $(AB)_{ij}$ denotes the $ij$-entry of $AB$ that we are seeking to compute.
+
+Equating our two expressions for the $i$th entry of $(AB)\mathbf{x}$ yields
+
+$$
+\sum_{j=1}^{p} (AB)_{ij}x_j = \sum_{j=1}^{p} \left( \sum_{k=1}^{n} a_{ik}b_{kj} \right) x_j ,
+$$
+
+so equating coefficients of $x_j$ on the two sides gives $(AB)_{ij} = \sum_{k=1}^{n} a_{ik}b_{kj}$, as desired. $\blacksquare$
+
 !!! note
     It only makes sense to form $AB$ when the number of columns of $A$ is the same as the number of rows of $B$ (so the dot product $\mathbf{a}_i \cdot \mathbf{b}_j$ of a row $\mathbf{a}_i$ of $A$ and a column $\mathbf{b}_j$ of $B$ makes sense); this requirement expresses the fact that it only makes sense to form $T_A \circ T_B$ when the output of $T_B$ is an input for $T_A$.
 
