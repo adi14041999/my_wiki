@@ -487,3 +487,5 @@ R_y(\theta) =
 $$
 
 (note the placement of $\sin\theta$ in the upper-right and $-\sin\theta$ in the lower-left!).
+
+## Exercises
