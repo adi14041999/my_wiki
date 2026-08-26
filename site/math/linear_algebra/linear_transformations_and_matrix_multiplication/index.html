@@ -5110,6 +5110,98 @@ R_y(\theta) =
 \]</div>
 <p>(note the placement of <span class="arithmatex">\(\sin\theta\)</span> in the upper-right and <span class="arithmatex">\(-\sin\theta\)</span> in the lower-left!).</p>
 <h2 id="exercises">Exercises</h2>
+<p><strong>1.</strong> Let <span class="arithmatex">\(p : \mathbb{R}^4 \to \mathbb{R}^2\)</span> be the projection onto the last two components and <span class="arithmatex">\(i : \mathbb{R}^2 \to \mathbb{R}^4\)</span> be the inclusion into the first two components; in other words,</p>
+<div class="arithmatex">\[
+p\begin{pmatrix} x_1 \\[0.25em] x_2 \\[0.25em] x_3 \\[0.25em] x_4 \end{pmatrix} = \begin{pmatrix} x_3 \\[0.25em] x_4 \end{pmatrix},
+\qquad
+i\begin{pmatrix} v \\[0.25em] w \end{pmatrix} = \begin{pmatrix} v \\[0.25em] w \\[0.25em] 0 \\[0.25em] 0 \end{pmatrix}.
+\]</div>
+<p><strong>(a).</strong> Calculate the matrix <span class="arithmatex">\(A\)</span> representing <span class="arithmatex">\(p\)</span> and the matrix <span class="arithmatex">\(B\)</span> representing <span class="arithmatex">\(i\)</span>.</p>
+<p><strong>Solution:</strong> In both cases the <span class="arithmatex">\(j\)</span>th column of the matrix is the effect of the function on <span class="arithmatex">\(\mathbf{e}_j\)</span>.</p>
+<p>Since <span class="arithmatex">\(p\)</span> takes a <span class="arithmatex">\(4\)</span>-vector to a <span class="arithmatex">\(2\)</span>-vector, <span class="arithmatex">\(A\)</span> is <span class="arithmatex">\(2 \times 4\)</span>, with four columns. Reading off the last two components of each coordinate vector,</p>
+<div class="arithmatex">\[p(\mathbf{e}_1) = \begin{pmatrix} 0 \\ 0 \end{pmatrix}, \quad p(\mathbf{e}_2) = \begin{pmatrix} 0 \\ 0 \end{pmatrix}, \quad p(\mathbf{e}_3) = \begin{pmatrix} 1 \\ 0 \end{pmatrix}, \quad p(\mathbf{e}_4) = \begin{pmatrix} 0 \\ 1 \end{pmatrix},\]</div>
+<p>so</p>
+<div class="arithmatex">\[
+A = \begin{pmatrix}
+0 &amp; 0 &amp; 1 &amp; 0 \\[0.25em]
+0 &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}.
+\]</div>
+<p>Since <span class="arithmatex">\(i\)</span> takes a <span class="arithmatex">\(2\)</span>-vector to a <span class="arithmatex">\(4\)</span>-vector, <span class="arithmatex">\(B\)</span> is <span class="arithmatex">\(4 \times 2\)</span>, with two columns:</p>
+<div class="arithmatex">\[i(\mathbf{e}_1) = \begin{pmatrix} 1 \\ 0 \\ 0 \\ 0 \end{pmatrix}, \qquad i(\mathbf{e}_2) = \begin{pmatrix} 0 \\ 1 \\ 0 \\ 0 \end{pmatrix},\]</div>
+<p>so</p>
+<div class="arithmatex">\[
+B = \begin{pmatrix}
+1 &amp; 0 \\[0.25em]
+0 &amp; 1 \\[0.25em]
+0 &amp; 0 \\[0.25em]
+0 &amp; 0
+\end{pmatrix}.
+\]</div>
+<p><strong>(b).</strong> Calculate the product <span class="arithmatex">\(AB\)</span> in two ways: first by figuring out what <span class="arithmatex">\(p \circ i\)</span> does to basis vectors to find its matrix representation, then by computing the matrix product.</p>
+<p><strong>Solution:</strong> <em>Via the composite function:</em> The composite <span class="arithmatex">\(p \circ i : \mathbb{R}^2 \to \mathbb{R}^2\)</span> sends <span class="arithmatex">\((v, w)\)</span> to <span class="arithmatex">\(i(v,w) = (v, w, 0, 0)\)</span> and then keeps the <em>last two</em> components of that, which are both <span class="arithmatex">\(0\)</span>. So <span class="arithmatex">\(p \circ i\)</span> is the zero function. On basis vectors,</p>
+<div class="arithmatex">\[(p \circ i)(\mathbf{e}_1) = p\begin{pmatrix} 1 \\ 0 \\ 0 \\ 0 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix},
+\qquad
+(p \circ i)(\mathbf{e}_2) = p\begin{pmatrix} 0 \\ 1 \\ 0 \\ 0 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix},\]</div>
+<p>so both columns vanish and the matrix of <span class="arithmatex">\(p \circ i\)</span> is the <span class="arithmatex">\(2 \times 2\)</span> zero matrix.</p>
+<p><em>Via the matrix product:</em> Here <span class="arithmatex">\(A\)</span> is <span class="arithmatex">\(2 \times 4\)</span> and <span class="arithmatex">\(B\)</span> is <span class="arithmatex">\(4 \times 2\)</span>, so <span class="arithmatex">\(AB\)</span> is <span class="arithmatex">\(2 \times 2\)</span>. Dotting each row of <span class="arithmatex">\(A\)</span> with each column of <span class="arithmatex">\(B\)</span>:</p>
+<div class="arithmatex">\[
+AB =
+\begin{pmatrix}
+0 &amp; 0 &amp; 1 &amp; 0 \\[0.25em]
+0 &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}
+\begin{pmatrix}
+1 &amp; 0 \\[0.25em]
+0 &amp; 1 \\[0.25em]
+0 &amp; 0 \\[0.25em]
+0 &amp; 0
+\end{pmatrix}
+=
+\begin{pmatrix}
+0 &amp; 0 \\[0.25em]
+0 &amp; 0
+\end{pmatrix}.
+\]</div>
+<p><strong>(c).</strong> Calculate the product <span class="arithmatex">\(BA\)</span> in two ways: first by figuring out what <span class="arithmatex">\(i \circ p\)</span> does to basis vectors to find its matrix representation, then by computing the matrix product.</p>
+<p><strong>Solution:</strong> <em>Via the composite function:</em> The composite <span class="arithmatex">\(i \circ p : \mathbb{R}^4 \to \mathbb{R}^4\)</span> sends <span class="arithmatex">\((x_1, x_2, x_3, x_4)\)</span> to <span class="arithmatex">\(p(\mathbf{x}) = (x_3, x_4)\)</span> and then to <span class="arithmatex">\((x_3, x_4, 0, 0)\)</span>. In words, it moves the last two coordinates into the first two slots and zeroes out the rest. On basis vectors,</p>
+<div class="arithmatex">\[
+(i \circ p)(\mathbf{e}_1) = \mathbf{0}, \quad
+(i \circ p)(\mathbf{e}_2) = \mathbf{0}, \quad
+(i \circ p)(\mathbf{e}_3) = \begin{pmatrix} 1 \\ 0 \\ 0 \\ 0 \end{pmatrix}, \quad
+(i \circ p)(\mathbf{e}_4) = \begin{pmatrix} 0 \\ 1 \\ 0 \\ 0 \end{pmatrix},
+\]</div>
+<p>since <span class="arithmatex">\(\mathbf{e}_1\)</span> and <span class="arithmatex">\(\mathbf{e}_2\)</span> have last two components <span class="arithmatex">\(0\)</span>, while <span class="arithmatex">\(\mathbf{e}_3\)</span> and <span class="arithmatex">\(\mathbf{e}_4\)</span> have last two components <span class="arithmatex">\((1,0)\)</span> and <span class="arithmatex">\((0,1)\)</span>. Placing these four vectors as columns gives</p>
+<div class="arithmatex">\[
+\begin{pmatrix}
+0 &amp; 0 &amp; 1 &amp; 0 \\[0.25em]
+0 &amp; 0 &amp; 0 &amp; 1 \\[0.25em]
+0 &amp; 0 &amp; 0 &amp; 0 \\[0.25em]
+0 &amp; 0 &amp; 0 &amp; 0
+\end{pmatrix}.
+\]</div>
+<p><em>Via the matrix product:</em> Here <span class="arithmatex">\(B\)</span> is <span class="arithmatex">\(4 \times 2\)</span> and <span class="arithmatex">\(A\)</span> is <span class="arithmatex">\(2 \times 4\)</span>, so <span class="arithmatex">\(BA\)</span> is <span class="arithmatex">\(4 \times 4\)</span>:</p>
+<div class="arithmatex">\[
+BA =
+\begin{pmatrix}
+1 &amp; 0 \\[0.25em]
+0 &amp; 1 \\[0.25em]
+0 &amp; 0 \\[0.25em]
+0 &amp; 0
+\end{pmatrix}
+\begin{pmatrix}
+0 &amp; 0 &amp; 1 &amp; 0 \\[0.25em]
+0 &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}
+=
+\begin{pmatrix}
+0 &amp; 0 &amp; 1 &amp; 0 \\[0.25em]
+0 &amp; 0 &amp; 0 &amp; 1 \\[0.25em]
+0 &amp; 0 &amp; 0 &amp; 0 \\[0.25em]
+0 &amp; 0 &amp; 0 &amp; 0
+\end{pmatrix},
+\]</div>
+<p>the last two rows vanishing because the last two rows of <span class="arithmatex">\(B\)</span> are zero. Again the two methods agree.</p>
 
 
 

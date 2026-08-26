@@ -489,3 +489,121 @@ $$
 (note the placement of $\sin\theta$ in the upper-right and $-\sin\theta$ in the lower-left!).
 
 ## Exercises
+
+**1.** Let $p : \mathbb{R}^4 \to \mathbb{R}^2$ be the projection onto the last two components and $i : \mathbb{R}^2 \to \mathbb{R}^4$ be the inclusion into the first two components; in other words,
+
+$$
+p\begin{pmatrix} x_1 \\[0.25em] x_2 \\[0.25em] x_3 \\[0.25em] x_4 \end{pmatrix} = \begin{pmatrix} x_3 \\[0.25em] x_4 \end{pmatrix},
+\qquad
+i\begin{pmatrix} v \\[0.25em] w \end{pmatrix} = \begin{pmatrix} v \\[0.25em] w \\[0.25em] 0 \\[0.25em] 0 \end{pmatrix}.
+$$
+
+**(a).** Calculate the matrix $A$ representing $p$ and the matrix $B$ representing $i$.
+
+**Solution:** In both cases the $j$th column of the matrix is the effect of the function on $\mathbf{e}_j$.
+
+Since $p$ takes a $4$-vector to a $2$-vector, $A$ is $2 \times 4$, with four columns. Reading off the last two components of each coordinate vector,
+
+$$p(\mathbf{e}_1) = \begin{pmatrix} 0 \\ 0 \end{pmatrix}, \quad p(\mathbf{e}_2) = \begin{pmatrix} 0 \\ 0 \end{pmatrix}, \quad p(\mathbf{e}_3) = \begin{pmatrix} 1 \\ 0 \end{pmatrix}, \quad p(\mathbf{e}_4) = \begin{pmatrix} 0 \\ 1 \end{pmatrix},$$
+
+so
+
+$$
+A = \begin{pmatrix}
+0 & 0 & 1 & 0 \\[0.25em]
+0 & 0 & 0 & 1
+\end{pmatrix}.
+$$
+
+Since $i$ takes a $2$-vector to a $4$-vector, $B$ is $4 \times 2$, with two columns:
+
+$$i(\mathbf{e}_1) = \begin{pmatrix} 1 \\ 0 \\ 0 \\ 0 \end{pmatrix}, \qquad i(\mathbf{e}_2) = \begin{pmatrix} 0 \\ 1 \\ 0 \\ 0 \end{pmatrix},$$
+
+so
+
+$$
+B = \begin{pmatrix}
+1 & 0 \\[0.25em]
+0 & 1 \\[0.25em]
+0 & 0 \\[0.25em]
+0 & 0
+\end{pmatrix}.
+$$
+
+**(b).** Calculate the product $AB$ in two ways: first by figuring out what $p \circ i$ does to basis vectors to find its matrix representation, then by computing the matrix product.
+
+**Solution:** *Via the composite function:* The composite $p \circ i : \mathbb{R}^2 \to \mathbb{R}^2$ sends $(v, w)$ to $i(v,w) = (v, w, 0, 0)$ and then keeps the *last two* components of that, which are both $0$. So $p \circ i$ is the zero function. On basis vectors,
+
+$$(p \circ i)(\mathbf{e}_1) = p\begin{pmatrix} 1 \\ 0 \\ 0 \\ 0 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix},
+\qquad
+(p \circ i)(\mathbf{e}_2) = p\begin{pmatrix} 0 \\ 1 \\ 0 \\ 0 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix},$$
+
+so both columns vanish and the matrix of $p \circ i$ is the $2 \times 2$ zero matrix.
+
+*Via the matrix product:* Here $A$ is $2 \times 4$ and $B$ is $4 \times 2$, so $AB$ is $2 \times 2$. Dotting each row of $A$ with each column of $B$:
+
+$$
+AB =
+\begin{pmatrix}
+0 & 0 & 1 & 0 \\[0.25em]
+0 & 0 & 0 & 1
+\end{pmatrix}
+\begin{pmatrix}
+1 & 0 \\[0.25em]
+0 & 1 \\[0.25em]
+0 & 0 \\[0.25em]
+0 & 0
+\end{pmatrix}
+=
+\begin{pmatrix}
+0 & 0 \\[0.25em]
+0 & 0
+\end{pmatrix}.
+$$
+
+**(c).** Calculate the product $BA$ in two ways: first by figuring out what $i \circ p$ does to basis vectors to find its matrix representation, then by computing the matrix product.
+
+**Solution:** *Via the composite function:* The composite $i \circ p : \mathbb{R}^4 \to \mathbb{R}^4$ sends $(x_1, x_2, x_3, x_4)$ to $p(\mathbf{x}) = (x_3, x_4)$ and then to $(x_3, x_4, 0, 0)$. In words, it moves the last two coordinates into the first two slots and zeroes out the rest. On basis vectors,
+
+$$
+(i \circ p)(\mathbf{e}_1) = \mathbf{0}, \quad
+(i \circ p)(\mathbf{e}_2) = \mathbf{0}, \quad
+(i \circ p)(\mathbf{e}_3) = \begin{pmatrix} 1 \\ 0 \\ 0 \\ 0 \end{pmatrix}, \quad
+(i \circ p)(\mathbf{e}_4) = \begin{pmatrix} 0 \\ 1 \\ 0 \\ 0 \end{pmatrix},
+$$
+
+since $\mathbf{e}_1$ and $\mathbf{e}_2$ have last two components $0$, while $\mathbf{e}_3$ and $\mathbf{e}_4$ have last two components $(1,0)$ and $(0,1)$. Placing these four vectors as columns gives
+
+$$
+\begin{pmatrix}
+0 & 0 & 1 & 0 \\[0.25em]
+0 & 0 & 0 & 1 \\[0.25em]
+0 & 0 & 0 & 0 \\[0.25em]
+0 & 0 & 0 & 0
+\end{pmatrix}.
+$$
+
+*Via the matrix product:* Here $B$ is $4 \times 2$ and $A$ is $2 \times 4$, so $BA$ is $4 \times 4$:
+
+$$
+BA =
+\begin{pmatrix}
+1 & 0 \\[0.25em]
+0 & 1 \\[0.25em]
+0 & 0 \\[0.25em]
+0 & 0
+\end{pmatrix}
+\begin{pmatrix}
+0 & 0 & 1 & 0 \\[0.25em]
+0 & 0 & 0 & 1
+\end{pmatrix}
+=
+\begin{pmatrix}
+0 & 0 & 1 & 0 \\[0.25em]
+0 & 0 & 0 & 1 \\[0.25em]
+0 & 0 & 0 & 0 \\[0.25em]
+0 & 0 & 0 & 0
+\end{pmatrix},
+$$
+
+the last two rows vanishing because the last two rows of $B$ are zero. Again the two methods agree.
