@@ -949,9 +949,9 @@ To handle chance nodes, the minimax recursion is extended to **expectiminimax**.
 
 Computing bottom-up:
 
-$$\text{EXPECTIMINIMAX}(\text{chance\_left}) = 0.5 \times 10 + 0.5 \times 2 = 6$$
+$$\text{EXPECTIMINIMAX}(\text{chance left}) = 0.5 \times 10 + 0.5 \times 2 = 6$$
 
-$$\text{EXPECTIMINIMAX}(\text{chance\_right}) = 0.9 \times 4 + 0.1 \times (-5) = 3.6 - 0.5 = 3.1$$
+$$\text{EXPECTIMINIMAX}(\text{chance right}) = 0.9 \times 4 + 0.1 \times (-5) = 3.6 - 0.5 = 3.1$$
 
 $$\text{EXPECTIMINIMAX}(\text{root}) = \max(6,\ 3.1) = 6$$
 

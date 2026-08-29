@@ -607,3 +607,242 @@ BA =
 $$
 
 the last two rows vanishing because the last two rows of $B$ are zero. Again the two methods agree.
+
+**2.** Find a $3 \times 3$ matrix $A$ for which $A^4$ acts on $\mathbb{R}^3$ as the identity function (carrying each $3$-vector to itself) but $A$, $A^2$, $A^3$ are not the identity function.
+
+**Solution:** Since matrix multiplication expresses composition, we are looking for a linear transformation of $\mathbb{R}^3$ that returns everything to where it started after being applied four times, but not sooner. Turning by $90°$ does exactly this. Four such turns make a full turn, which puts everything back where it started; one, two or three of them do not.
+
+So take $A$ to be the matrix of rotation by $90°$ counterclockwise about the $z$-axis, computed earlier:
+
+$$
+A = R_z(90°) =
+\begin{pmatrix}
+\cos 90° & -\sin 90° & 0 \\[0.25em]
+\sin 90° & \cos 90° & 0 \\[0.25em]
+0 & 0 & 1
+\end{pmatrix}
+=
+\begin{pmatrix}
+0 & -1 & 0 \\[0.25em]
+1 & 0 & 0 \\[0.25em]
+0 & 0 & 1
+\end{pmatrix}.
+$$
+
+Composing rotations about a fixed axis adds the angles, so $A^k = R_z(90k°)$. Hence $A^4 = R_z(360°) = I$, since a full turn moves no point, whereas $A = R_z(90°)$, $A^2 = R_z(180°)$ and $A^3 = R_z(270°)$ are genuine rotations that move points.
+
+Multiplying out,
+
+$$
+A^2 =
+\begin{pmatrix}
+-1 & 0 & 0 \\[0.25em]
+0 & -1 & 0 \\[0.25em]
+0 & 0 & 1
+\end{pmatrix},
+\qquad
+A^3 =
+\begin{pmatrix}
+0 & 1 & 0 \\[0.25em]
+-1 & 0 & 0 \\[0.25em]
+0 & 0 & 1
+\end{pmatrix},
+\qquad
+A^4 =
+\begin{pmatrix}
+1 & 0 & 0 \\[0.25em]
+0 & 1 & 0 \\[0.25em]
+0 & 0 & 1
+\end{pmatrix} = I .
+$$
+
+**3.** This exercise uses a linear transformation to relate the curve $H_\pm$ defined by $x^2 - y^2 = \pm 1$ to the hyperbola defined by $xy = \pm 1/2$ (i.e., $y = \pm 1/(2x)$), with a single choice of sign ($\pm$) throughout.
+
+Let
+
+$$
+R = \begin{pmatrix}
+1/\sqrt{2} & 1/\sqrt{2} \\[0.35em]
+-1/\sqrt{2} & 1/\sqrt{2}
+\end{pmatrix};
+$$
+
+the effect of $T_R : \mathbb{R}^2 \to \mathbb{R}^2$ is clockwise rotation by $45°$ around the origin. For a point $\mathbf{v} = \begin{pmatrix} v_1 \\ v_2 \end{pmatrix}$, show that $\mathbf{v}$ lies on the hyperbola $xy = 1/2$ precisely when $R\mathbf{v}$ lies on the curve $H_+$ defined by $x^2 - y^2 = 1$. Also show that $\mathbf{v}$ lies on the hyperbola $xy = -1/2$ precisely when $R\mathbf{v}$ lies on the curve $H_-$ defined by $x^2 - y^2 = -1$. Put together, these say $H_\pm$ is exactly the output of applying the rotation $T_R$ to the graph of the function $\pm 1/(2x)$.
+
+**Solution:** Everything follows from a single identity, which handles both signs at once.
+
+Write $R\mathbf{v} = \begin{pmatrix} X \\ Y \end{pmatrix}$. Carrying out the matrix-vector product,
+
+$$
+\begin{pmatrix} X \\[0.25em] Y \end{pmatrix}
+= \begin{pmatrix}
+1/\sqrt{2} & 1/\sqrt{2} \\[0.35em]
+-1/\sqrt{2} & 1/\sqrt{2}
+\end{pmatrix}
+\begin{pmatrix} v_1 \\[0.25em] v_2 \end{pmatrix}
+= \frac{1}{\sqrt{2}} \begin{pmatrix} v_1 + v_2 \\[0.25em] v_2 - v_1 \end{pmatrix}.
+$$
+
+Rather than squaring these directly, use the difference of squares $X^2 - Y^2 = (X + Y)(X - Y)$, since the sum and difference simplify beautifully:
+
+$$
+X + Y = \frac{(v_1 + v_2) + (v_2 - v_1)}{\sqrt{2}} = \frac{2v_2}{\sqrt{2}} = \sqrt{2}\,v_2 ,
+\qquad
+X - Y = \frac{(v_1 + v_2) - (v_2 - v_1)}{\sqrt{2}} = \frac{2v_1}{\sqrt{2}} = \sqrt{2}\,v_1 .
+$$
+
+Multiplying these together gives the identity we want:
+
+$$
+X^2 - Y^2 = \left(\sqrt{2}\,v_2\right)\left(\sqrt{2}\,v_1\right) = 2\,v_1v_2 .
+$$
+
+This holds for **every** $\mathbf{v} \in \mathbb{R}^2$, with no condition imposed. The left side is the quantity that decides membership of $R\mathbf{v}$ in $H_\pm$, and the right side is twice the quantity that decides membership of $\mathbf{v}$ in the hyperbola $xy = \pm 1/2$. Both claims now drop out by reading the identity in the two directions.
+
+*The $+$ case:* $R\mathbf{v}$ lies on $H_+$ exactly when $X^2 - Y^2 = 1$, which by the identity says $2v_1v_2 = 1$, i.e. $v_1v_2 = 1/2$, which is exactly the statement that $\mathbf{v}$ lies on $xy = 1/2$.
+
+*The $-$ case:* Identically, $R\mathbf{v}$ lies on $H_-$ exactly when $X^2 - Y^2 = -1$, i.e. $2v_1v_2 = -1$, i.e. $v_1v_2 = -1/2$, which says $\mathbf{v}$ lies on $xy = -1/2$.
+
+**Comments on the two curves:** It is worth being concrete about what has just been shown, because the two equations look nothing alike.
+
+![img](plus1.png)
+![img](minus1.png)
+
+The curve $xy = 1/2$, i.e. $y = 1/(2x)$, is the reciprocal graph (two branches, one in the first quadrant and one in the third, each hugging the coordinate axes far from the origin). The axes are its asymptotes. Its closest approach to the origin happens at $(1/\sqrt{2},\ 1/\sqrt{2})$ and $(-1/\sqrt{2},\ -1/\sqrt{2})$, the points on the line $y = x$.
+
+The curve $H_+$, i.e. $x^2 - y^2 = 1$, is the textbook hyperbola in standard position (two branches opening left and right, with vertices at $(\pm 1, 0)$ and asymptotes $y = \pm x$).
+
+The exercise says these are the *same curve in two different poses*. The rotation carries asymptotes to asymptotes. $T_R$ sends the direction $(1,0)$ of the $x$-axis to $(1/\sqrt{2},\, -1/\sqrt{2})$, spanning the line $y = -x$, and sends $(0,1)$ to $(1/\sqrt{2},\, 1/\sqrt{2})$, spanning $y = x$. So the two asymptotes of $y = 1/(2x)$, which are the coordinate axes, become the two asymptotes of $H_+$, and the pair of branches in quadrants I and III swings around to the pair opening left and right. Likewise the closest points $(\pm 1/\sqrt{2},\, \pm 1/\sqrt{2})$ are carried to the vertices $(\pm 1, 0)$.
+
+The minus sign toggles between the two ways the same pair of asymptotes can be filled in. The curve $xy = -1/2$ has its branches in quadrants II and IV rather than I and III, and correspondingly $H_-$, i.e. $x^2 - y^2 = -1$, has branches opening up and down with vertices $(0, \pm 1)$ instead of left and right. The asymptotes $y = \pm x$ are shared by $H_+$ and $H_-$.
+
+**4.** This exercise explores the effect of linear transformations $\mathbf{f} : \mathbb{R}^2 \to \mathbb{R}^2$.
+
+**(a).** For points $\mathbf{v}, \mathbf{w} \in \mathbb{R}^2$, let $\ell$ be the line segment joining them (i.e., $\ell$ consists of the convex linear combinations $t\mathbf{v} + (1-t)\mathbf{w}$ with $0 \leq t \leq 1$). Explain why the output $\mathbf{f}(\ell)$ of applying $\mathbf{f}$ to all points of $\ell$ is the line segment joining $\mathbf{f}(\mathbf{v})$ and $\mathbf{f}(\mathbf{w})$.
+
+**Solution:** Apply $\mathbf{f}$ to a typical point of $\ell$ and use linearity, which lets us pass $\mathbf{f}$ through both the sum and the two scalar multiples:
+
+$$\mathbf{f}\bigl(t\mathbf{v} + (1-t)\mathbf{w}\bigr) = t\,\mathbf{f}(\mathbf{v}) + (1-t)\,\mathbf{f}(\mathbf{w}) .$$
+
+Read this from left to right and it says every point of $\mathbf{f}(\ell)$ is a convex combination of $\mathbf{f}(\mathbf{v})$ and $\mathbf{f}(\mathbf{w})$, hence lies on the segment joining them. Pick any point on the segment joining $\mathbf{f}(\mathbf{v})$ and $\mathbf{f}(\mathbf{w})$; it has the form $t\,\mathbf{f}(\mathbf{v}) + (1-t)\,\mathbf{f}(\mathbf{w})$ for some $t$ between $0$ and $1$. The equation says this is what $\mathbf{f}$ does to the point $t\mathbf{v} + (1-t)\mathbf{w}$, which lies on $\ell$. So that point of the image segment really is hit by something in $\ell$. So the two sets coincide.
+
+**(b).** If $P$ is the midpoint of $\ell$, explain why $\mathbf{f}(P)$ is the midpoint of $\mathbf{f}(\ell)$.
+
+**Solution:** The midpoint is the convex combination with equal weights, $t = 1/2$:
+
+$$P = \tfrac{1}{2}\mathbf{v} + \tfrac{1}{2}\mathbf{w} .$$
+
+Applying $\mathbf{f}$ and using linearity exactly as above,
+
+$$\mathbf{f}(P) = \tfrac{1}{2}\mathbf{f}(\mathbf{v}) + \tfrac{1}{2}\mathbf{f}(\mathbf{w}) ,$$
+
+which is the equal-weights combination of the two endpoints of $\mathbf{f}(\ell)$, i.e. its midpoint.
+
+**(c).** Suppose $T$ is a triangle in $\mathbb{R}^2$ with one vertex at $\mathbf{0}$ and another at $(c, 0)$ with $c > 0$, so the third is at $(a, b)$ with $b \neq 0$ (as the third vertex cannot be on the line through the other two vertices); any triangle can be arranged to be such a $T$ by sliding and rotating it in $\mathbb{R}^2$. In terms of $a, b, c$, build a $2 \times 2$ matrix $M$ of the form $\begin{pmatrix} 1 & x \\ 0 & y \end{pmatrix}$ for which the associated linear transformation $\mathbf{f}$ carries $T$ onto an equilateral triangle with side length $c$.
+
+**Solution:** By part (a), $\mathbf{f}$ carries each edge of $T$ onto the segment joining the images of its endpoints, so the image of $T$ is the triangle whose vertices are the images of the vertices of $T$. It is therefore enough to control where the three vertices go.
+
+For $M = \begin{pmatrix} 1 & x \\ 0 & y \end{pmatrix}$,
+
+$$
+M\begin{pmatrix} 0 \\ 0 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix},
+\qquad
+M\begin{pmatrix} c \\ 0 \end{pmatrix} = \begin{pmatrix} c \\ 0 \end{pmatrix},
+\qquad
+M\begin{pmatrix} a \\ b \end{pmatrix} = \begin{pmatrix} a + xb \\ yb \end{pmatrix}.
+$$
+
+So two of the vertices are already exactly where we want them: the base from $\mathbf{0}$ to $(c,0)$ is left completely alone, and it already has the required length $c$.
+
+An equilateral triangle with side $c$ built on that base has its third vertex equidistant from $\mathbf{0}$ and $(c,0)$, hence above the midpoint of the base, at height $\sqrt{c^2 - (c/2)^2} = \sqrt{3}\,c/2$. So we need
+
+$$\begin{pmatrix} a + xb \\ yb \end{pmatrix} = \begin{pmatrix} c/2 \\[0.25em] \sqrt{3}\,c/2 \end{pmatrix}.$$
+
+These are two equations in two unknowns, and since $b \neq 0$ we may divide by $b$:
+
+$$a + xb = \frac{c}{2} \ \Longrightarrow \ x = \frac{c/2 - a}{b} = \frac{c - 2a}{2b},
+\qquad
+yb = \frac{\sqrt{3}\,c}{2} \ \Longrightarrow \ y = \frac{\sqrt{3}\,c}{2b} .$$
+
+Hence
+
+$$
+M = \begin{pmatrix}
+1 & \dfrac{c - 2a}{2b} \\[0.9em]
+0 & \dfrac{\sqrt{3}\,c}{2b}
+\end{pmatrix}.
+$$
+
+*Verification:* The three vertices are carried to
+
+$$
+\mathbf{0} \mapsto \mathbf{0}, \qquad
+\begin{pmatrix} c \\ 0 \end{pmatrix} \mapsto \begin{pmatrix} c \\ 0 \end{pmatrix}, \qquad
+\begin{pmatrix} a \\ b \end{pmatrix} \mapsto \begin{pmatrix} a + \dfrac{c - 2a}{2} \\[0.6em] \dfrac{\sqrt{3}\,c}{2} \end{pmatrix} = \begin{pmatrix} c/2 \\[0.35em] \sqrt{3}\,c/2 \end{pmatrix}.
+$$
+
+The three side lengths of the image are then
+
+$$
+\left\| \begin{pmatrix} c \\ 0 \end{pmatrix} \right\| = c,
+\qquad
+\left\| \begin{pmatrix} c/2 \\ \sqrt{3}c/2 \end{pmatrix} \right\| = \sqrt{\frac{c^2}{4} + \frac{3c^2}{4}} = c,
+\qquad
+\left\| \begin{pmatrix} c/2 - c \\ \sqrt{3}c/2 \end{pmatrix} \right\| = \sqrt{\frac{c^2}{4} + \frac{3c^2}{4}} = c,
+$$
+
+so the image is equilateral with side length $c$, as required.
+
+**5.** Briefly justify whether each of the following statements is either true (i.e., always true) or false (i.e., sometimes not true).
+
+**(a).** If a function $\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m$ satisfies $\mathbf{f}(\mathbf{0}) = \mathbf{0}$ then $\mathbf{f}$ must be linear.
+
+**Solution:** **False.** The condition $\mathbf{f}(\mathbf{0}) = \mathbf{0}$ is *necessary* for linearity, since a linear function satisfies $\mathbf{f}(\mathbf{0}) = A\mathbf{0} = \mathbf{0}$, but it is nowhere near sufficient. It constrains $\mathbf{f}$ at a single point and says nothing about the other infinitely many points.
+
+For a counterexample take $n = m = 1$ and $f(x) = x^2$. Then $f(0) = 0$, yet
+
+$$f(2 \cdot 1) = 4 \neq 2 = 2f(1),$$
+
+so $f$ fails $f(cx) = cf(x)$ and is not linear. The function $f(x) = |x|$ is another: it fixes $0$, but $f(-1) = 1$ while $-f(1) = -1$.
+
+**(b).** There is exactly one linear function $\mathbf{f} : \mathbb{R}^2 \to \mathbb{R}^3$ satisfying
+
+$$\mathbf{f}(1, 1) = \begin{pmatrix} 1 \\[0.25em] 2 \\[0.25em] 3 \end{pmatrix}
+\qquad \text{and} \qquad
+\mathbf{f}(1, -1) = \begin{pmatrix} 1 \\[0.25em] -2 \\[0.25em] 1 \end{pmatrix}.$$
+
+**Solution:** **True.** The reason is that the two input vectors $(1,1)$ and $(1,-1)$ are enough to reach every vector of $\mathbb{R}^2$, so linearity forces the values everywhere, and the forced values turn out to be consistent.
+
+*Uniqueness:* A linear $\mathbf{f}$ is determined by the two columns $\mathbf{f}(\mathbf{e}_1)$ and $\mathbf{f}(\mathbf{e}_2)$ of its matrix, so it suffices to show these are forced. Adding the two given vectors gives $(1,1) + (1,-1) = (2,0) = 2\mathbf{e}_1$ and subtracting them gives $(1,1) - (1,-1) = (0,2) = 2\mathbf{e}_2$, so after halving,
+
+$$\mathbf{e}_1 = \tfrac{1}{2}\bigl[(1,1) + (1,-1)\bigr], \qquad \mathbf{e}_2 = \tfrac{1}{2}\bigl[(1,1) - (1,-1)\bigr],$$
+
+so linearity leaves no choice:
+
+$$
+\mathbf{f}(\mathbf{e}_1) = \tfrac{1}{2}\left[ \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix} + \begin{pmatrix} 1 \\ -2 \\ 1 \end{pmatrix} \right] = \begin{pmatrix} 1 \\ 0 \\ 2 \end{pmatrix},
+\qquad
+\mathbf{f}(\mathbf{e}_2) = \tfrac{1}{2}\left[ \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix} - \begin{pmatrix} 1 \\ -2 \\ 1 \end{pmatrix} \right] = \begin{pmatrix} 0 \\ 2 \\ 1 \end{pmatrix}.
+$$
+
+So at most one such $\mathbf{f}$ exists, and its matrix must be
+
+$$
+A = \begin{pmatrix}
+1 & 0 \\[0.25em]
+0 & 2 \\[0.25em]
+2 & 1
+\end{pmatrix}.
+$$
+
+*Existence:* It remains to check that this $A$ really does what was asked. Computing,
+
+$$
+A\begin{pmatrix} 1 \\ 1 \end{pmatrix} = \begin{pmatrix} 1 + 0 \\ 0 + 2 \\ 2 + 1 \end{pmatrix} = \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix},
+\qquad
+A\begin{pmatrix} 1 \\ -1 \end{pmatrix} = \begin{pmatrix} 1 - 0 \\ 0 - 2 \\ 2 - 1 \end{pmatrix} = \begin{pmatrix} 1 \\ -2 \\ 1 \end{pmatrix},
+$$
+
+both as required. Hence exactly one such linear function exists.
+
+What made this work is that $(1,1)$ and $(1,-1)$ are not parallel, so prescribing $\mathbf{f}$ on them prescribes it on all of $\mathbb{R}^2$ without over-determining it.

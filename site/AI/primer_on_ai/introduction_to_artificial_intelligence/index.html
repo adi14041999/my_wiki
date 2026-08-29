@@ -5848,8 +5848,8 @@ with the assignment for S, and</p>
 <p>To handle chance nodes, the minimax recursion is extended to <strong>expectiminimax</strong>. The idea is simple: MAX and MIN nodes are evaluated exactly as before, but a chance node is assigned the <strong>expected value</strong> of its children— a probability-weighted average over all possible outcomes. The algorithm backs these values up the tree in the usual bottom-up fashion, so MAX ultimately picks the action that leads to the chance node with the highest expected value.</p>
 <p><strong>Example:</strong> Consider a small game tree. The root is a MAX node. Its two children are chance nodes. The left chance node has two outcomes— "high" (probability <span class="arithmatex">\(0.5\)</span>, leading to a leaf worth <span class="arithmatex">\(10\)</span>) and "low" (probability <span class="arithmatex">\(0.5\)</span>, leading to a leaf worth <span class="arithmatex">\(2\)</span>). The right chance node has outcomes "high" (<span class="arithmatex">\(0.9\)</span>, leaf <span class="arithmatex">\(4\)</span>) and "low" (<span class="arithmatex">\(0.1\)</span>, leaf <span class="arithmatex">\(-5\)</span>).</p>
 <p>Computing bottom-up:</p>
-<div class="arithmatex">\[\text{EXPECTIMINIMAX}(\text{chance\_left}) = 0.5 \times 10 + 0.5 \times 2 = 6\]</div>
-<div class="arithmatex">\[\text{EXPECTIMINIMAX}(\text{chance\_right}) = 0.9 \times 4 + 0.1 \times (-5) = 3.6 - 0.5 = 3.1\]</div>
+<div class="arithmatex">\[\text{EXPECTIMINIMAX}(\text{chance left}) = 0.5 \times 10 + 0.5 \times 2 = 6\]</div>
+<div class="arithmatex">\[\text{EXPECTIMINIMAX}(\text{chance right}) = 0.9 \times 4 + 0.1 \times (-5) = 3.6 - 0.5 = 3.1\]</div>
 <div class="arithmatex">\[\text{EXPECTIMINIMAX}(\text{root}) = \max(6,\ 3.1) = 6\]</div>
 <p>MAX should therefore take the left action. The key insight is that MAX cannot control what the dice show— it can only choose which chance node to enter, and it prefers the one with the higher expected value.</p>
 

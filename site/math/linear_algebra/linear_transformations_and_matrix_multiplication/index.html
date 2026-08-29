@@ -5202,6 +5202,172 @@ BA =
 \end{pmatrix},
 \]</div>
 <p>the last two rows vanishing because the last two rows of <span class="arithmatex">\(B\)</span> are zero. Again the two methods agree.</p>
+<p><strong>2.</strong> Find a <span class="arithmatex">\(3 \times 3\)</span> matrix <span class="arithmatex">\(A\)</span> for which <span class="arithmatex">\(A^4\)</span> acts on <span class="arithmatex">\(\mathbb{R}^3\)</span> as the identity function (carrying each <span class="arithmatex">\(3\)</span>-vector to itself) but <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(A^2\)</span>, <span class="arithmatex">\(A^3\)</span> are not the identity function.</p>
+<p><strong>Solution:</strong> Since matrix multiplication expresses composition, we are looking for a linear transformation of <span class="arithmatex">\(\mathbb{R}^3\)</span> that returns everything to where it started after being applied four times, but not sooner. Turning by <span class="arithmatex">\(90°\)</span> does exactly this. Four such turns make a full turn, which puts everything back where it started; one, two or three of them do not.</p>
+<p>So take <span class="arithmatex">\(A\)</span> to be the matrix of rotation by <span class="arithmatex">\(90°\)</span> counterclockwise about the <span class="arithmatex">\(z\)</span>-axis, computed earlier:</p>
+<div class="arithmatex">\[
+A = R_z(90°) =
+\begin{pmatrix}
+\cos 90° &amp; -\sin 90° &amp; 0 \\[0.25em]
+\sin 90° &amp; \cos 90° &amp; 0 \\[0.25em]
+0 &amp; 0 &amp; 1
+\end{pmatrix}
+=
+\begin{pmatrix}
+0 &amp; -1 &amp; 0 \\[0.25em]
+1 &amp; 0 &amp; 0 \\[0.25em]
+0 &amp; 0 &amp; 1
+\end{pmatrix}.
+\]</div>
+<p>Composing rotations about a fixed axis adds the angles, so <span class="arithmatex">\(A^k = R_z(90k°)\)</span>. Hence <span class="arithmatex">\(A^4 = R_z(360°) = I\)</span>, since a full turn moves no point, whereas <span class="arithmatex">\(A = R_z(90°)\)</span>, <span class="arithmatex">\(A^2 = R_z(180°)\)</span> and <span class="arithmatex">\(A^3 = R_z(270°)\)</span> are genuine rotations that move points.</p>
+<p>Multiplying out,</p>
+<div class="arithmatex">\[
+A^2 =
+\begin{pmatrix}
+-1 &amp; 0 &amp; 0 \\[0.25em]
+0 &amp; -1 &amp; 0 \\[0.25em]
+0 &amp; 0 &amp; 1
+\end{pmatrix},
+\qquad
+A^3 =
+\begin{pmatrix}
+0 &amp; 1 &amp; 0 \\[0.25em]
+-1 &amp; 0 &amp; 0 \\[0.25em]
+0 &amp; 0 &amp; 1
+\end{pmatrix},
+\qquad
+A^4 =
+\begin{pmatrix}
+1 &amp; 0 &amp; 0 \\[0.25em]
+0 &amp; 1 &amp; 0 \\[0.25em]
+0 &amp; 0 &amp; 1
+\end{pmatrix} = I .
+\]</div>
+<p><strong>3.</strong> This exercise uses a linear transformation to relate the curve <span class="arithmatex">\(H_\pm\)</span> defined by <span class="arithmatex">\(x^2 - y^2 = \pm 1\)</span> to the hyperbola defined by <span class="arithmatex">\(xy = \pm 1/2\)</span> (i.e., <span class="arithmatex">\(y = \pm 1/(2x)\)</span>), with a single choice of sign (<span class="arithmatex">\(\pm\)</span>) throughout.</p>
+<p>Let</p>
+<div class="arithmatex">\[
+R = \begin{pmatrix}
+1/\sqrt{2} &amp; 1/\sqrt{2} \\[0.35em]
+-1/\sqrt{2} &amp; 1/\sqrt{2}
+\end{pmatrix};
+\]</div>
+<p>the effect of <span class="arithmatex">\(T_R : \mathbb{R}^2 \to \mathbb{R}^2\)</span> is clockwise rotation by <span class="arithmatex">\(45°\)</span> around the origin. For a point <span class="arithmatex">\(\mathbf{v} = \begin{pmatrix} v_1 \\ v_2 \end{pmatrix}\)</span>, show that <span class="arithmatex">\(\mathbf{v}\)</span> lies on the hyperbola <span class="arithmatex">\(xy = 1/2\)</span> precisely when <span class="arithmatex">\(R\mathbf{v}\)</span> lies on the curve <span class="arithmatex">\(H_+\)</span> defined by <span class="arithmatex">\(x^2 - y^2 = 1\)</span>. Also show that <span class="arithmatex">\(\mathbf{v}\)</span> lies on the hyperbola <span class="arithmatex">\(xy = -1/2\)</span> precisely when <span class="arithmatex">\(R\mathbf{v}\)</span> lies on the curve <span class="arithmatex">\(H_-\)</span> defined by <span class="arithmatex">\(x^2 - y^2 = -1\)</span>. Put together, these say <span class="arithmatex">\(H_\pm\)</span> is exactly the output of applying the rotation <span class="arithmatex">\(T_R\)</span> to the graph of the function <span class="arithmatex">\(\pm 1/(2x)\)</span>.</p>
+<p><strong>Solution:</strong> Everything follows from a single identity, which handles both signs at once.</p>
+<p>Write <span class="arithmatex">\(R\mathbf{v} = \begin{pmatrix} X \\ Y \end{pmatrix}\)</span>. Carrying out the matrix-vector product,</p>
+<div class="arithmatex">\[
+\begin{pmatrix} X \\[0.25em] Y \end{pmatrix}
+= \begin{pmatrix}
+1/\sqrt{2} &amp; 1/\sqrt{2} \\[0.35em]
+-1/\sqrt{2} &amp; 1/\sqrt{2}
+\end{pmatrix}
+\begin{pmatrix} v_1 \\[0.25em] v_2 \end{pmatrix}
+= \frac{1}{\sqrt{2}} \begin{pmatrix} v_1 + v_2 \\[0.25em] v_2 - v_1 \end{pmatrix}.
+\]</div>
+<p>Rather than squaring these directly, use the difference of squares <span class="arithmatex">\(X^2 - Y^2 = (X + Y)(X - Y)\)</span>, since the sum and difference simplify beautifully:</p>
+<div class="arithmatex">\[
+X + Y = \frac{(v_1 + v_2) + (v_2 - v_1)}{\sqrt{2}} = \frac{2v_2}{\sqrt{2}} = \sqrt{2}\,v_2 ,
+\qquad
+X - Y = \frac{(v_1 + v_2) - (v_2 - v_1)}{\sqrt{2}} = \frac{2v_1}{\sqrt{2}} = \sqrt{2}\,v_1 .
+\]</div>
+<p>Multiplying these together gives the identity we want:</p>
+<div class="arithmatex">\[
+X^2 - Y^2 = \left(\sqrt{2}\,v_2\right)\left(\sqrt{2}\,v_1\right) = 2\,v_1v_2 .
+\]</div>
+<p>This holds for <strong>every</strong> <span class="arithmatex">\(\mathbf{v} \in \mathbb{R}^2\)</span>, with no condition imposed. The left side is the quantity that decides membership of <span class="arithmatex">\(R\mathbf{v}\)</span> in <span class="arithmatex">\(H_\pm\)</span>, and the right side is twice the quantity that decides membership of <span class="arithmatex">\(\mathbf{v}\)</span> in the hyperbola <span class="arithmatex">\(xy = \pm 1/2\)</span>. Both claims now drop out by reading the identity in the two directions.</p>
+<p><em>The <span class="arithmatex">\(+\)</span> case:</em> <span class="arithmatex">\(R\mathbf{v}\)</span> lies on <span class="arithmatex">\(H_+\)</span> exactly when <span class="arithmatex">\(X^2 - Y^2 = 1\)</span>, which by the identity says <span class="arithmatex">\(2v_1v_2 = 1\)</span>, i.e. <span class="arithmatex">\(v_1v_2 = 1/2\)</span>, which is exactly the statement that <span class="arithmatex">\(\mathbf{v}\)</span> lies on <span class="arithmatex">\(xy = 1/2\)</span>.</p>
+<p><em>The <span class="arithmatex">\(-\)</span> case:</em> Identically, <span class="arithmatex">\(R\mathbf{v}\)</span> lies on <span class="arithmatex">\(H_-\)</span> exactly when <span class="arithmatex">\(X^2 - Y^2 = -1\)</span>, i.e. <span class="arithmatex">\(2v_1v_2 = -1\)</span>, i.e. <span class="arithmatex">\(v_1v_2 = -1/2\)</span>, which says <span class="arithmatex">\(\mathbf{v}\)</span> lies on <span class="arithmatex">\(xy = -1/2\)</span>.</p>
+<p><strong>Comments on the two curves:</strong> It is worth being concrete about what has just been shown, because the two equations look nothing alike.</p>
+<p><img alt="img" src="../plus1.png" />
+<img alt="img" src="../minus1.png" /></p>
+<p>The curve <span class="arithmatex">\(xy = 1/2\)</span>, i.e. <span class="arithmatex">\(y = 1/(2x)\)</span>, is the reciprocal graph (two branches, one in the first quadrant and one in the third, each hugging the coordinate axes far from the origin). The axes are its asymptotes. Its closest approach to the origin happens at <span class="arithmatex">\((1/\sqrt{2},\ 1/\sqrt{2})\)</span> and <span class="arithmatex">\((-1/\sqrt{2},\ -1/\sqrt{2})\)</span>, the points on the line <span class="arithmatex">\(y = x\)</span>.</p>
+<p>The curve <span class="arithmatex">\(H_+\)</span>, i.e. <span class="arithmatex">\(x^2 - y^2 = 1\)</span>, is the textbook hyperbola in standard position (two branches opening left and right, with vertices at <span class="arithmatex">\((\pm 1, 0)\)</span> and asymptotes <span class="arithmatex">\(y = \pm x\)</span>).</p>
+<p>The exercise says these are the <em>same curve in two different poses</em>. The rotation carries asymptotes to asymptotes. <span class="arithmatex">\(T_R\)</span> sends the direction <span class="arithmatex">\((1,0)\)</span> of the <span class="arithmatex">\(x\)</span>-axis to <span class="arithmatex">\((1/\sqrt{2},\, -1/\sqrt{2})\)</span>, spanning the line <span class="arithmatex">\(y = -x\)</span>, and sends <span class="arithmatex">\((0,1)\)</span> to <span class="arithmatex">\((1/\sqrt{2},\, 1/\sqrt{2})\)</span>, spanning <span class="arithmatex">\(y = x\)</span>. So the two asymptotes of <span class="arithmatex">\(y = 1/(2x)\)</span>, which are the coordinate axes, become the two asymptotes of <span class="arithmatex">\(H_+\)</span>, and the pair of branches in quadrants I and III swings around to the pair opening left and right. Likewise the closest points <span class="arithmatex">\((\pm 1/\sqrt{2},\, \pm 1/\sqrt{2})\)</span> are carried to the vertices <span class="arithmatex">\((\pm 1, 0)\)</span>.</p>
+<p>The minus sign toggles between the two ways the same pair of asymptotes can be filled in. The curve <span class="arithmatex">\(xy = -1/2\)</span> has its branches in quadrants II and IV rather than I and III, and correspondingly <span class="arithmatex">\(H_-\)</span>, i.e. <span class="arithmatex">\(x^2 - y^2 = -1\)</span>, has branches opening up and down with vertices <span class="arithmatex">\((0, \pm 1)\)</span> instead of left and right. The asymptotes <span class="arithmatex">\(y = \pm x\)</span> are shared by <span class="arithmatex">\(H_+\)</span> and <span class="arithmatex">\(H_-\)</span>.</p>
+<p><strong>4.</strong> This exercise explores the effect of linear transformations <span class="arithmatex">\(\mathbf{f} : \mathbb{R}^2 \to \mathbb{R}^2\)</span>.</p>
+<p><strong>(a).</strong> For points <span class="arithmatex">\(\mathbf{v}, \mathbf{w} \in \mathbb{R}^2\)</span>, let <span class="arithmatex">\(\ell\)</span> be the line segment joining them (i.e., <span class="arithmatex">\(\ell\)</span> consists of the convex linear combinations <span class="arithmatex">\(t\mathbf{v} + (1-t)\mathbf{w}\)</span> with <span class="arithmatex">\(0 \leq t \leq 1\)</span>). Explain why the output <span class="arithmatex">\(\mathbf{f}(\ell)\)</span> of applying <span class="arithmatex">\(\mathbf{f}\)</span> to all points of <span class="arithmatex">\(\ell\)</span> is the line segment joining <span class="arithmatex">\(\mathbf{f}(\mathbf{v})\)</span> and <span class="arithmatex">\(\mathbf{f}(\mathbf{w})\)</span>.</p>
+<p><strong>Solution:</strong> Apply <span class="arithmatex">\(\mathbf{f}\)</span> to a typical point of <span class="arithmatex">\(\ell\)</span> and use linearity, which lets us pass <span class="arithmatex">\(\mathbf{f}\)</span> through both the sum and the two scalar multiples:</p>
+<div class="arithmatex">\[\mathbf{f}\bigl(t\mathbf{v} + (1-t)\mathbf{w}\bigr) = t\,\mathbf{f}(\mathbf{v}) + (1-t)\,\mathbf{f}(\mathbf{w}) .\]</div>
+<p>Read this from left to right and it says every point of <span class="arithmatex">\(\mathbf{f}(\ell)\)</span> is a convex combination of <span class="arithmatex">\(\mathbf{f}(\mathbf{v})\)</span> and <span class="arithmatex">\(\mathbf{f}(\mathbf{w})\)</span>, hence lies on the segment joining them. Pick any point on the segment joining <span class="arithmatex">\(\mathbf{f}(\mathbf{v})\)</span> and <span class="arithmatex">\(\mathbf{f}(\mathbf{w})\)</span>; it has the form <span class="arithmatex">\(t\,\mathbf{f}(\mathbf{v}) + (1-t)\,\mathbf{f}(\mathbf{w})\)</span> for some <span class="arithmatex">\(t\)</span> between <span class="arithmatex">\(0\)</span> and <span class="arithmatex">\(1\)</span>. The equation says this is what <span class="arithmatex">\(\mathbf{f}\)</span> does to the point <span class="arithmatex">\(t\mathbf{v} + (1-t)\mathbf{w}\)</span>, which lies on <span class="arithmatex">\(\ell\)</span>. So that point of the image segment really is hit by something in <span class="arithmatex">\(\ell\)</span>. So the two sets coincide.</p>
+<p><strong>(b).</strong> If <span class="arithmatex">\(P\)</span> is the midpoint of <span class="arithmatex">\(\ell\)</span>, explain why <span class="arithmatex">\(\mathbf{f}(P)\)</span> is the midpoint of <span class="arithmatex">\(\mathbf{f}(\ell)\)</span>.</p>
+<p><strong>Solution:</strong> The midpoint is the convex combination with equal weights, <span class="arithmatex">\(t = 1/2\)</span>:</p>
+<div class="arithmatex">\[P = \tfrac{1}{2}\mathbf{v} + \tfrac{1}{2}\mathbf{w} .\]</div>
+<p>Applying <span class="arithmatex">\(\mathbf{f}\)</span> and using linearity exactly as above,</p>
+<div class="arithmatex">\[\mathbf{f}(P) = \tfrac{1}{2}\mathbf{f}(\mathbf{v}) + \tfrac{1}{2}\mathbf{f}(\mathbf{w}) ,\]</div>
+<p>which is the equal-weights combination of the two endpoints of <span class="arithmatex">\(\mathbf{f}(\ell)\)</span>, i.e. its midpoint.</p>
+<p><strong>(c).</strong> Suppose <span class="arithmatex">\(T\)</span> is a triangle in <span class="arithmatex">\(\mathbb{R}^2\)</span> with one vertex at <span class="arithmatex">\(\mathbf{0}\)</span> and another at <span class="arithmatex">\((c, 0)\)</span> with <span class="arithmatex">\(c &gt; 0\)</span>, so the third is at <span class="arithmatex">\((a, b)\)</span> with <span class="arithmatex">\(b \neq 0\)</span> (as the third vertex cannot be on the line through the other two vertices); any triangle can be arranged to be such a <span class="arithmatex">\(T\)</span> by sliding and rotating it in <span class="arithmatex">\(\mathbb{R}^2\)</span>. In terms of <span class="arithmatex">\(a, b, c\)</span>, build a <span class="arithmatex">\(2 \times 2\)</span> matrix <span class="arithmatex">\(M\)</span> of the form <span class="arithmatex">\(\begin{pmatrix} 1 &amp; x \\ 0 &amp; y \end{pmatrix}\)</span> for which the associated linear transformation <span class="arithmatex">\(\mathbf{f}\)</span> carries <span class="arithmatex">\(T\)</span> onto an equilateral triangle with side length <span class="arithmatex">\(c\)</span>.</p>
+<p><strong>Solution:</strong> By part (a), <span class="arithmatex">\(\mathbf{f}\)</span> carries each edge of <span class="arithmatex">\(T\)</span> onto the segment joining the images of its endpoints, so the image of <span class="arithmatex">\(T\)</span> is the triangle whose vertices are the images of the vertices of <span class="arithmatex">\(T\)</span>. It is therefore enough to control where the three vertices go.</p>
+<p>For <span class="arithmatex">\(M = \begin{pmatrix} 1 &amp; x \\ 0 &amp; y \end{pmatrix}\)</span>,</p>
+<div class="arithmatex">\[
+M\begin{pmatrix} 0 \\ 0 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix},
+\qquad
+M\begin{pmatrix} c \\ 0 \end{pmatrix} = \begin{pmatrix} c \\ 0 \end{pmatrix},
+\qquad
+M\begin{pmatrix} a \\ b \end{pmatrix} = \begin{pmatrix} a + xb \\ yb \end{pmatrix}.
+\]</div>
+<p>So two of the vertices are already exactly where we want them: the base from <span class="arithmatex">\(\mathbf{0}\)</span> to <span class="arithmatex">\((c,0)\)</span> is left completely alone, and it already has the required length <span class="arithmatex">\(c\)</span>.</p>
+<p>An equilateral triangle with side <span class="arithmatex">\(c\)</span> built on that base has its third vertex equidistant from <span class="arithmatex">\(\mathbf{0}\)</span> and <span class="arithmatex">\((c,0)\)</span>, hence above the midpoint of the base, at height <span class="arithmatex">\(\sqrt{c^2 - (c/2)^2} = \sqrt{3}\,c/2\)</span>. So we need</p>
+<div class="arithmatex">\[\begin{pmatrix} a + xb \\ yb \end{pmatrix} = \begin{pmatrix} c/2 \\[0.25em] \sqrt{3}\,c/2 \end{pmatrix}.\]</div>
+<p>These are two equations in two unknowns, and since <span class="arithmatex">\(b \neq 0\)</span> we may divide by <span class="arithmatex">\(b\)</span>:</p>
+<div class="arithmatex">\[a + xb = \frac{c}{2} \ \Longrightarrow \ x = \frac{c/2 - a}{b} = \frac{c - 2a}{2b},
+\qquad
+yb = \frac{\sqrt{3}\,c}{2} \ \Longrightarrow \ y = \frac{\sqrt{3}\,c}{2b} .\]</div>
+<p>Hence</p>
+<div class="arithmatex">\[
+M = \begin{pmatrix}
+1 &amp; \dfrac{c - 2a}{2b} \\[0.9em]
+0 &amp; \dfrac{\sqrt{3}\,c}{2b}
+\end{pmatrix}.
+\]</div>
+<p><em>Verification:</em> The three vertices are carried to</p>
+<div class="arithmatex">\[
+\mathbf{0} \mapsto \mathbf{0}, \qquad
+\begin{pmatrix} c \\ 0 \end{pmatrix} \mapsto \begin{pmatrix} c \\ 0 \end{pmatrix}, \qquad
+\begin{pmatrix} a \\ b \end{pmatrix} \mapsto \begin{pmatrix} a + \dfrac{c - 2a}{2} \\[0.6em] \dfrac{\sqrt{3}\,c}{2} \end{pmatrix} = \begin{pmatrix} c/2 \\[0.35em] \sqrt{3}\,c/2 \end{pmatrix}.
+\]</div>
+<p>The three side lengths of the image are then</p>
+<div class="arithmatex">\[
+\left\| \begin{pmatrix} c \\ 0 \end{pmatrix} \right\| = c,
+\qquad
+\left\| \begin{pmatrix} c/2 \\ \sqrt{3}c/2 \end{pmatrix} \right\| = \sqrt{\frac{c^2}{4} + \frac{3c^2}{4}} = c,
+\qquad
+\left\| \begin{pmatrix} c/2 - c \\ \sqrt{3}c/2 \end{pmatrix} \right\| = \sqrt{\frac{c^2}{4} + \frac{3c^2}{4}} = c,
+\]</div>
+<p>so the image is equilateral with side length <span class="arithmatex">\(c\)</span>, as required.</p>
+<p><strong>5.</strong> Briefly justify whether each of the following statements is either true (i.e., always true) or false (i.e., sometimes not true).</p>
+<p><strong>(a).</strong> If a function <span class="arithmatex">\(\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^m\)</span> satisfies <span class="arithmatex">\(\mathbf{f}(\mathbf{0}) = \mathbf{0}\)</span> then <span class="arithmatex">\(\mathbf{f}\)</span> must be linear.</p>
+<p><strong>Solution:</strong> <strong>False.</strong> The condition <span class="arithmatex">\(\mathbf{f}(\mathbf{0}) = \mathbf{0}\)</span> is <em>necessary</em> for linearity, since a linear function satisfies <span class="arithmatex">\(\mathbf{f}(\mathbf{0}) = A\mathbf{0} = \mathbf{0}\)</span>, but it is nowhere near sufficient. It constrains <span class="arithmatex">\(\mathbf{f}\)</span> at a single point and says nothing about the other infinitely many points.</p>
+<p>For a counterexample take <span class="arithmatex">\(n = m = 1\)</span> and <span class="arithmatex">\(f(x) = x^2\)</span>. Then <span class="arithmatex">\(f(0) = 0\)</span>, yet</p>
+<div class="arithmatex">\[f(2 \cdot 1) = 4 \neq 2 = 2f(1),\]</div>
+<p>so <span class="arithmatex">\(f\)</span> fails <span class="arithmatex">\(f(cx) = cf(x)\)</span> and is not linear. The function <span class="arithmatex">\(f(x) = |x|\)</span> is another: it fixes <span class="arithmatex">\(0\)</span>, but <span class="arithmatex">\(f(-1) = 1\)</span> while <span class="arithmatex">\(-f(1) = -1\)</span>.</p>
+<p><strong>(b).</strong> There is exactly one linear function <span class="arithmatex">\(\mathbf{f} : \mathbb{R}^2 \to \mathbb{R}^3\)</span> satisfying</p>
+<div class="arithmatex">\[\mathbf{f}(1, 1) = \begin{pmatrix} 1 \\[0.25em] 2 \\[0.25em] 3 \end{pmatrix}
+\qquad \text{and} \qquad
+\mathbf{f}(1, -1) = \begin{pmatrix} 1 \\[0.25em] -2 \\[0.25em] 1 \end{pmatrix}.\]</div>
+<p><strong>Solution:</strong> <strong>True.</strong> The reason is that the two input vectors <span class="arithmatex">\((1,1)\)</span> and <span class="arithmatex">\((1,-1)\)</span> are enough to reach every vector of <span class="arithmatex">\(\mathbb{R}^2\)</span>, so linearity forces the values everywhere, and the forced values turn out to be consistent.</p>
+<p><em>Uniqueness:</em> A linear <span class="arithmatex">\(\mathbf{f}\)</span> is determined by the two columns <span class="arithmatex">\(\mathbf{f}(\mathbf{e}_1)\)</span> and <span class="arithmatex">\(\mathbf{f}(\mathbf{e}_2)\)</span> of its matrix, so it suffices to show these are forced. Adding the two given vectors gives <span class="arithmatex">\((1,1) + (1,-1) = (2,0) = 2\mathbf{e}_1\)</span> and subtracting them gives <span class="arithmatex">\((1,1) - (1,-1) = (0,2) = 2\mathbf{e}_2\)</span>, so after halving,</p>
+<div class="arithmatex">\[\mathbf{e}_1 = \tfrac{1}{2}\bigl[(1,1) + (1,-1)\bigr], \qquad \mathbf{e}_2 = \tfrac{1}{2}\bigl[(1,1) - (1,-1)\bigr],\]</div>
+<p>so linearity leaves no choice:</p>
+<div class="arithmatex">\[
+\mathbf{f}(\mathbf{e}_1) = \tfrac{1}{2}\left[ \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix} + \begin{pmatrix} 1 \\ -2 \\ 1 \end{pmatrix} \right] = \begin{pmatrix} 1 \\ 0 \\ 2 \end{pmatrix},
+\qquad
+\mathbf{f}(\mathbf{e}_2) = \tfrac{1}{2}\left[ \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix} - \begin{pmatrix} 1 \\ -2 \\ 1 \end{pmatrix} \right] = \begin{pmatrix} 0 \\ 2 \\ 1 \end{pmatrix}.
+\]</div>
+<p>So at most one such <span class="arithmatex">\(\mathbf{f}\)</span> exists, and its matrix must be</p>
+<div class="arithmatex">\[
+A = \begin{pmatrix}
+1 &amp; 0 \\[0.25em]
+0 &amp; 2 \\[0.25em]
+2 &amp; 1
+\end{pmatrix}.
+\]</div>
+<p><em>Existence:</em> It remains to check that this <span class="arithmatex">\(A\)</span> really does what was asked. Computing,</p>
+<div class="arithmatex">\[
+A\begin{pmatrix} 1 \\ 1 \end{pmatrix} = \begin{pmatrix} 1 + 0 \\ 0 + 2 \\ 2 + 1 \end{pmatrix} = \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix},
+\qquad
+A\begin{pmatrix} 1 \\ -1 \end{pmatrix} = \begin{pmatrix} 1 - 0 \\ 0 - 2 \\ 2 - 1 \end{pmatrix} = \begin{pmatrix} 1 \\ -2 \\ 1 \end{pmatrix},
+\]</div>
+<p>both as required. Hence exactly one such linear function exists.</p>
+<p>What made this work is that <span class="arithmatex">\((1,1)\)</span> and <span class="arithmatex">\((1,-1)\)</span> are not parallel, so prescribing <span class="arithmatex">\(\mathbf{f}\)</span> on them prescribes it on all of <span class="arithmatex">\(\mathbb{R}^2\)</span> without over-determining it.</p>
 
 
 
