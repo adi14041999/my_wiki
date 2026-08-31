@@ -956,3 +956,90 @@ $$\text{EXPECTIMINIMAX}(\text{chance right}) = 0.9 \times 4 + 0.1 \times (-5) = 
 $$\text{EXPECTIMINIMAX}(\text{root}) = \max(6,\ 3.1) = 6$$
 
 MAX should therefore take the left action. The key insight is that MAX cannot control what the dice show— it can only choose which chance node to enter, and it prefers the one with the higher expected value.
+
+### Monte Carlo Tree Search
+
+#### Limits of alpha–beta search: the game of Go
+
+The game of Go illustrates two fundamental weaknesses of heuristic alpha–beta tree search.
+
+**Branching factor:** Go is played on a 19×19 board, so at the very first move there are 361 legal placements. Even with alpha–beta pruning (which in the best case reduces the effective branching factor from $b$ to roughly $\sqrt{b}$) the search can realistically reach only about 4 or 5 ply before the exponential cost becomes intractable. To put that in perspective, a 4-ply search means each player has looked only 2 moves ahead; chess engines, operating on a board with a branching factor of ~35 rather than ~361, routinely search 10–20 ply deeper. The problem is not the pruning strategy itself but the sheer size of the branching factor. No amount of clever ordering or pruning can overcome an explosion that starts at 361 and compounds with every additional ply.
+
+**Evaluation function:** Even if depth were not an issue, alpha–beta search still requires a heuristic to score non-terminal positions. In chess, material count (summing piece values) is a reliable proxy for advantage— it is wrong in edge cases but right often enough to guide search. In Go, material value is almost meaningless. A stone's worth depends entirely on how it connects to neighboring groups, and most positions remain genuinely ambiguous until late in the endgame when the board finally settles. Writing a hand-crafted evaluation function that meaningfully distinguishes a strong Go position from a weak one has proven extremely difficult.
+
+In response to both challenges, modern Go programs abandoned alpha–beta search and instead use **Monte Carlo Tree Search (MCTS)**, a strategy that sidesteps the need for an explicit evaluation function by running many random (or learned) playouts from each position and estimating value from the outcomes.
+
+#### Basic MCTS
+
+The basic MCTS strategy does not use a heuristic evaluation function. Instead, the value of a state is estimated as the average utility over a number of simulations of complete games starting from that state. A simulation (also called a **playout** or **rollout**) chooses moves first for one player, then for the other, repeating until a terminal position is reached. For games in which the only outcomes are a win or a loss, "average utility" is the same as "win percentage."
+
+#### The four phases of MCTS
+
+Each iteration of MCTS consists of four steps.
+
+**Selection:** Starting at the root of the search tree, we choose a move guided by something called the **selection policy** (descibed later in this page), move to the successor node, and repeat down the tree until we reach a leaf (leaf of the search tree). As an example, consider a search tree whose root represents a state where white has just moved, and white has won 37 out of 100 playouts so far. The selection policy might choose a black move leading to a node where black has won 60/79 playouts— the best win percentage among all available moves, making it the exploitative choice. It would also be reasonable to instead select a node with only 2/11 playouts: with so few samples its value estimate carries high uncertainty, and more information might reveal it to be the stronger move. Selection continues down to a leaf, say one marked 27/35.
+
+**Expansion:** We grow the search tree by generating a new child of the selected leaf node, initially marked 0/0. Some implementations generate more than one child in this step.
+
+**Simulation:** We run a playout from the newly generated child, choosing moves for both players according to something called the **playout policy** (descibed later in this page). These moves are not recorded in the search tree— only the final outcome matters. Suppose the playout results in a win for black.
+
+**Back-propagation:** The result is propagated back up through all nodes on the path to the root. Because black won, black nodes are incremented in both wins and total playouts (e.g. 27/35 becomes 28/36 and 60/79 becomes 61/80). Because white lost, white nodes are incremented in total playouts only (e.g. 16/53 becomes 16/54, and the root 37/100 becomes 37/101).
+
+These four steps repeat— select, expand, simulate, back-propagate— until the computational budget is exhausted, at which point the move with the highest visit count (or win percentage) from the root is chosen.
+
+![img](mts.png)
+
+```
+function MONTE-CARLO-TREE-SEARCH(state) returns an action
+    tree ← NODE(state)
+    while IS-TIME-REMAINING() do
+        leaf   ← SELECT(tree)
+        child  ← EXPAND(leaf)
+        result ← SIMULATE(child)
+        BACK-PROPAGATE(result, child)
+    return the move in ACTIONS(state) whose node has the highest number of playouts
+```
+
+We repeat these four steps either for a set number of iterations or until the allotted time has expired, then return the move with the highest number of playouts.
+
+#### Selection policy vs. playout policy
+
+MCTS uses two distinct policies, each operating in a different part of the algorithm.
+
+The **selection policy** operates *inside the search tree*— the part of the game tree that has already been visited and built up over previous iterations. At each internal node, it decides which child to descend to, trading off between nodes that have been explored rarely (uncertain value) and nodes that have performed well so far (high estimated value). UCT/UCB1, described below, is the standard selection policy. Because these nodes are revisited many times and their visit counts feed back into future selections, the selection policy needs to be statistically principled.
+
+The **playout policy** operates *outside the search tree*— once the expansion step creates a new leaf, the playout policy takes over and plays moves all the way to a terminal state. These moves are never added to the tree; only the final outcome is recorded and back-propagated. Because a playout must run quickly (we want to do thousands of them), the playout policy prioritizes speed. There are three main approaches:
+
+- **Random (uniform):** choose any legal move with equal probability. Extremely fast but weak. It generates many unrealistic game continuations.
+- **Heuristic/hand-crafted:** weight moves by domain knowledge (e.g. in Go, prefer moves that capture stones or respond to immediate threats). Stronger than random but requires game-specific expertise to design.
+- **Learned (neural network):** a policy network trained on expert games or self-play predicts high-quality moves. Much stronger than heuristics, but heavier to evaluate. There is a direct trade-off between playout quality and the number of playouts that fit within a time budget.
+
+In short: the selection policy decides *where in the tree to look next*; the playout policy decides *how to finish the game* after we've expanded to the new leaf.
+
+#### UCT selection policy
+
+One very effective selection policy is **UCT** ("upper confidence bounds applied to trees"). UCT ranks each possible move based on an upper confidence bound formula called **UCB1**:
+
+$$\text{UCB1}(n) = \frac{U(n)}{N(n)} + C \times \sqrt{\frac{\log N(\text{PARENT}(n))}{N(n)}}$$
+
+where $U(n)$ is the total utility of all playouts that went through node $n$, $N(n)$ is the number of playouts through node $n$, and $\text{PARENT}(n)$ is the parent of $n$ in the tree.
+
+The left term, $U(n)/N(n)$, is the **exploitation term**: the average utility of $n$. The right term with the square root is the **exploration term**. Its denominator is $N(n)$, so it is large for nodes that have been visited only a few times. Its numerator is $\log N(\text{PARENT}(n))$, the log of how many times the parent has been explored. The key consequence is that if node $n$ is being selected some nonzero fraction of the time, the exploration term shrinks toward zero as counts grow— and eventually all playouts flow to the node with the highest average utility.
+
+$C$ is a constant that balances exploitation and exploration. There is a theoretical argument that $C = \sqrt{2}$, but in practice game programmers try multiple values and choose the one that performs best.
+
+When the iterations terminate, the move with the highest number of playouts is returned. You might think it would be better to return the node with the highest average utility, but a node with 65/100 wins is more trustworthy than one with 2/3 wins— the latter has too few samples to be reliable. In any event, the UCB1 formula ensures that the node with the most playouts is almost always the node with the highest win percentage, because the selection process favors win percentage more and more as the number of playouts grows.
+
+The time to compute a single playout is linear, not exponential, in the depth of the game tree, because only one move is taken at each choice point. That gives MCTS plenty of time to run many playouts within a fixed budget.
+
+**Example:** Consider a game with a branching factor of 32 where the average game lasts 100 ply. Given enough computing power to examine one billion game states before making a move: minimax can search 6 ply deep; alpha–beta with perfect move ordering can reach 12 ply; and Monte Carlo search can run 10 million playouts. Which approach performs best depends on the accuracy of the heuristic evaluation function versus the quality of the selection and playout policies.
+
+#### MCTS vs. alpha–beta
+
+The conventional wisdom is that Monte Carlo search has an advantage over alpha–beta when the branching factor is very high (making deep alpha–beta search intractable) or when a good evaluation function is hard to define. Alpha–beta commits to the path leading to the node with the highest achievable evaluation score, assuming the opponent minimizes. If the evaluation function is inaccurate, that commitment is dangerous: a single miscalculated node can cause alpha–beta to erroneously choose (or avoid) an entire path. Monte Carlo search, by contrast, aggregates evidence across many independent playouts and is therefore far less sensitive to any single error.
+
+The two approaches can also be combined: run a playout for a fixed number of moves, then truncate it and apply an evaluation function rather than playing all the way to a terminal state. This hybrid lets a learned or hand-crafted evaluator fill in where random playouts would be too noisy, while still gaining the breadth and robustness benefits of Monte Carlo sampling.
+
+Monte Carlo search can also be applied to brand-new games where there is no body of experience to draw on for an evaluation function. As long as the rules are known, no additional domain knowledge is required. The selection and playout policies can incorporate hand-crafted expert knowledge when it is available, but effective policies can equally be learned from scratch— using neural networks trained by self-play alone.
+
+The general idea of simulating moves into the future, observing the outcome, and using that outcome to determine which moves are good ones is one form of **reinforcement learning**.

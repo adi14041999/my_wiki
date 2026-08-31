@@ -720,11 +720,15 @@ The minus sign toggles between the two ways the same pair of asymptotes can be f
 
 **(a).** For points $\mathbf{v}, \mathbf{w} \in \mathbb{R}^2$, let $\ell$ be the line segment joining them (i.e., $\ell$ consists of the convex linear combinations $t\mathbf{v} + (1-t)\mathbf{w}$ with $0 \leq t \leq 1$). Explain why the output $\mathbf{f}(\ell)$ of applying $\mathbf{f}$ to all points of $\ell$ is the line segment joining $\mathbf{f}(\mathbf{v})$ and $\mathbf{f}(\mathbf{w})$.
 
-**Solution:** Apply $\mathbf{f}$ to a typical point of $\ell$ and use linearity, which lets us pass $\mathbf{f}$ through both the sum and the two scalar multiples:
+**Solution:** Every point of $\ell$ has the form $t\mathbf{v} + (1-t)\mathbf{w}$ for some $t$ between $0$ and $1$. Apply $\mathbf{f}$ to it and use linearity, which lets $\mathbf{f}$ pass through the sum and through both scalar multiples:
 
 $$\mathbf{f}\bigl(t\mathbf{v} + (1-t)\mathbf{w}\bigr) = t\,\mathbf{f}(\mathbf{v}) + (1-t)\,\mathbf{f}(\mathbf{w}) .$$
 
-Read this from left to right and it says every point of $\mathbf{f}(\ell)$ is a convex combination of $\mathbf{f}(\mathbf{v})$ and $\mathbf{f}(\mathbf{w})$, hence lies on the segment joining them. Pick any point on the segment joining $\mathbf{f}(\mathbf{v})$ and $\mathbf{f}(\mathbf{w})$; it has the form $t\,\mathbf{f}(\mathbf{v}) + (1-t)\,\mathbf{f}(\mathbf{w})$ for some $t$ between $0$ and $1$. The equation says this is what $\mathbf{f}$ does to the point $t\mathbf{v} + (1-t)\mathbf{w}$, which lies on $\ell$. So that point of the image segment really is hit by something in $\ell$. So the two sets coincide.
+Look at what this equation says. The left side is a typical point of $\mathbf{f}(\ell)$. The right side is a typical point of the segment joining $\mathbf{f}(\mathbf{v})$ and $\mathbf{f}(\mathbf{w})$, because it has exactly the same shape: a weight $t$ on one endpoint and $1-t$ on the other.
+
+So imagine letting $t$ increase from $0$ to $1$. On the left, the input slides along $\ell$ from $\mathbf{w}$ to $\mathbf{v}$, passing through every point of $\ell$. On the right, the output slides along the segment from $\mathbf{f}(\mathbf{w})$ to $\mathbf{f}(\mathbf{v})$, passing through every point of that segment. The equation says these two motions happen together, one value of $t$ at a time. Hence the points $\mathbf{f}$ produces from $\ell$ are precisely the points of the segment joining $\mathbf{f}(\mathbf{v})$ and $\mathbf{f}(\mathbf{w})$, no more and no fewer.
+
+Notice that $t$ is the *same* on both sides. So $\mathbf{f}$ does not merely send the segment to the segment; it sends the point one-third of the way along $\ell$ to the point one-third of the way along the image, and similarly for any other fraction.
 
 **(b).** If $P$ is the midpoint of $\ell$, explain why $\mathbf{f}(P)$ is the midpoint of $\mathbf{f}(\ell)$.
 
