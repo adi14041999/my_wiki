@@ -161,3 +161,37 @@ $$
     for all $\mathbf{x} \in \mathbb{R}^n$.
 
 ## First properties of matrix algebra
+
+Important basic properties of matrix multiplication:
+
+**(MM1)** It recovers matrix-vector multiplication: if $A$ is an $m \times n$ matrix, and $\mathbf{x} \in \mathbb{R}^n$ is thought of as an $n \times 1$ matrix, the matrix-matrix product $A\mathbf{x}$ is the same as the matrix-vector product.
+
+**(MM2)** $A(B + C) = AB + AC$ and $(A' + B')C' = A'C' + B'C'$. These "distributive laws" are the reason we call it matrix multiplication. This settles the point left open in [Linear transformations and matrix multiplication](linear_transformations_and_matrix_multiplication.md#composing-linear-transformations-and-matrix-multiplication), where we noted that $AB \neq BA$ is only worth being troubled by once the name "multiplication" has been justified.
+
+**(MM3)** $A(BC) = (AB)C$, and $A(cB) = (cA)B = c(AB)$ for any scalar $c$. In particular, taking $C$ to be an $m \times 1$ matrix that is a column vector $\mathbf{v}$ by another name,
+
+$$A(B\mathbf{v}) = (AB)\mathbf{v}.$$
+
+**(MM4)** If $A$ is an $m \times n$ matrix, then $I_mA = A = AI_n$, where $I_m$ is the $m \times m$ identity matrix and $I_n$ is the $n \times n$ identity matrix.
+
+The distributive law for scalars explains "$(a + b)(c + d) = ac + ad + bc + bd$" (indeed, $(a+b)(c+d) = a(c+d) + b(c+d) = ac + ad + bc + bd$), and the same works for matrices for the same reason provided that we are careful about the order of matrix multiplication:
+
+$$(A + B)(C + D) = A(C + D) + B(C + D) = AC + AD + BC + BD .$$
+
+As a special case with $n \times n$ matrices,
+
+$$(A + B)^2 = (A + B)(A + B) = A^2 + AB + BA + B^2 .$$
+
+This is **not** $A^2 + 2AB + B^2$ except when $BA = AB$, so there is no "binomial theorem" for computing $(A + B)^m$ with general $n \times n$ matrices when $n > 1$.
+
+Let's see why **MM3** (Associative property) holds ($A(BC) = (AB)C$).
+
+Firstly, $BC$ is the matrix of the linear transformation $T_B \circ T_C$. Therefore $A(BC)$ is the matrix of the linear transformation $T_A \circ (T_B \circ T_C)$. This sends a vector $\mathbf{x}$ to
+
+$$T_A\bigl((T_B \circ T_C)(\mathbf{x})\bigr) = T_A\bigl(T_B(T_C(\mathbf{x}))\bigr).$$
+
+Going the other way, $AB$ is the matrix of the linear transformation $T_A \circ T_B$. Therefore $(AB)C$ is the matrix of the linear transformation $(T_A \circ T_B) \circ T_C$. This transformation sends an input $\mathbf{x}$ to
+
+$$(T_A \circ T_B)\bigl(T_C(\mathbf{x})\bigr) = T_A\bigl(T_B(T_C(\mathbf{x}))\bigr).$$
+
+So $(AB)C$ and $A(BC)$, considered as linear transformations, are the same: they take an input $\mathbf{x}$ to the output $T_A(T_B(T_C(\mathbf{x})))$. Thus $(AB)C = A(BC)$, since for any linear transformation $T(\mathbf{x}) = M\mathbf{x}$ with a matrix $M$, $T$ determines $M$ via the outputs $T(\mathbf{e}_j)$ (these are the columns of $M$).

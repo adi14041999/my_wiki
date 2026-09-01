@@ -301,7 +301,7 @@ so equating coefficients of $x_j$ on the two sides gives $(AB)_{ij} = \sum_{k=1}
 !!! note
     It only makes sense to form $AB$ when the number of columns of $A$ is the same as the number of rows of $B$ (so the dot product $\mathbf{a}_i \cdot \mathbf{b}_j$ of a row $\mathbf{a}_i$ of $A$ and a column $\mathbf{b}_j$ of $B$ makes sense); this requirement expresses the fact that it only makes sense to form $T_A \circ T_B$ when the output of $T_B$ is an input for $T_A$.
 
-You might find it disturbing that often $AB \neq BA$ (and that nonzero matrices can have product equal to a zero matrix).
+You might find it disturbing that often $AB \neq BA$ (and that nonzero matrices can have product equal to a zero matrix). This should only be bothersome once you have seen why the operation is called "multiplication" in the first place, which is the distributive law **(MM2)** in [Matrix algebra](matrix_algebra.md#first-properties-of-matrix-algebra).
 
 Since matrix multiplication is designed to express composition of linear functions, its "non-commutativity" is just an instance of the concrete fact that composing two functions in both possible orders (i.e., $f(g(x))$ and $g(f(x))$) often yields different outputs. For instance, in general:
 
