@@ -14,6 +14,24 @@ Below are some examples.
 
 **Kotlin compiler**— Compiles Kotlin to JVM bytecode, JavaScript, or anything else based on the target platform.
 
+## Intermediate Representation (IR)
+
+An Intermediate Representation is the form a compiler translates your program into after it has finished understanding it, but before it commits to a specific target. It sits in the middle: too low-level to look like source code, too high-level to be machine code.
+
+Why bother with a middle form at all? Mostly because it saves work. Without an IR, supporting *M* source languages on *N* target architectures means writing *M x N* separate compilers. With a shared IR, each language only needs a front end that emits IR, and each architecture only needs a back end that consumes it, so you write *M + N* pieces instead.
+
+An IR is also a much better surface for optimization than an AST. ASTs mirror the syntax a human wrote, with all its nesting and syntactic sugar.
+
+Some IRs are internal-only and some are shipped as artifacts:
+
+**LLVM IR**— Typed, platform-neutral, and serializable to `.ll` (text) or `.bc` (binary), so it can be written to disk and passed around.
+
+**GIMPLE**— GCC's middle-end IR. Machine-independent, but an in-memory data structure rather than an interchange format.
+
+**JVM bytecode**— The `.class` files `javac` produces. An IR that also happens to be a distribution format, executed by the JVM.
+
+**Kotlin IR**— A single representation the compiler lowers to JVM bytecode, JavaScript, or LLVM IR, depending on the target.
+
 ## Stages of a Compiler
 
 Compilers typically work in a pipeline of stages, each transforming the source into a progressively lower-level representation.

@@ -2109,6 +2109,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../ai/notes_from_ai_podcasts/may_2019_chris_lattner_compilers_llvm_swift_tpu_and_ml_accelerators_lex_fridman_podcast_no_21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    May 2019. Chris Lattner- Compilers, LLVM, Swift, TPU, and ML Accelerators | Lex Fridman Podcast no. 21
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../ai/notes_from_ai_podcasts/apr_2019_greg_brockman_open_ai_and_agi_lex_fridman_podcast_no_17/" class="md-nav__link">
         
   
@@ -4193,6 +4221,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#intermediate-representation-ir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intermediate Representation (IR)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#stages-of-a-compiler" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4730,6 +4769,15 @@
 <p><strong>TypeScript Compiler (tsc)</strong>— Compiles TypeScript to JavaScript. This is an example of a source-to-source compiler (also called a transpiler), where both the input and output are high-level languages.</p>
 <p><strong>Babel</strong>— Transpiles modern JavaScript (ES2015+) to older JavaScript compatible with legacy browsers.</p>
 <p><strong>Kotlin compiler</strong>— Compiles Kotlin to JVM bytecode, JavaScript, or anything else based on the target platform.</p>
+<h2 id="intermediate-representation-ir">Intermediate Representation (IR)</h2>
+<p>An Intermediate Representation is the form a compiler translates your program into after it has finished understanding it, but before it commits to a specific target. It sits in the middle: too low-level to look like source code, too high-level to be machine code.</p>
+<p>Why bother with a middle form at all? Mostly because it saves work. Without an IR, supporting <em>M</em> source languages on <em>N</em> target architectures means writing <em>M x N</em> separate compilers. With a shared IR, each language only needs a front end that emits IR, and each architecture only needs a back end that consumes it, so you write <em>M + N</em> pieces instead.</p>
+<p>An IR is also a much better surface for optimization than an AST. ASTs mirror the syntax a human wrote, with all its nesting and syntactic sugar.</p>
+<p>Some IRs are internal-only and some are shipped as artifacts:</p>
+<p><strong>LLVM IR</strong>— Typed, platform-neutral, and serializable to <code>.ll</code> (text) or <code>.bc</code> (binary), so it can be written to disk and passed around.</p>
+<p><strong>GIMPLE</strong>— GCC's middle-end IR. Machine-independent, but an in-memory data structure rather than an interchange format.</p>
+<p><strong>JVM bytecode</strong>— The <code>.class</code> files <code>javac</code> produces. An IR that also happens to be a distribution format, executed by the JVM.</p>
+<p><strong>Kotlin IR</strong>— A single representation the compiler lowers to JVM bytecode, JavaScript, or LLVM IR, depending on the target.</p>
 <h2 id="stages-of-a-compiler">Stages of a Compiler</h2>
 <p>Compilers typically work in a pipeline of stages, each transforming the source into a progressively lower-level representation.</p>
 <p><strong>1. Lexing (Tokenization)</strong>— The raw source text is broken into a flat list of tokens: keywords, identifiers, literals, operators, punctuation. Whitespace and comments are usually discarded here.</p>
