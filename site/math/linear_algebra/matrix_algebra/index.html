@@ -3149,6 +3149,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercises
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4976,6 +4987,85 @@ ca_{m1} &amp; ca_{m2} &amp; \cdots &amp; ca_{mn}
 <p>Going the other way, <span class="arithmatex">\(AB\)</span> is the matrix of the linear transformation <span class="arithmatex">\(T_A \circ T_B\)</span>. Therefore <span class="arithmatex">\((AB)C\)</span> is the matrix of the linear transformation <span class="arithmatex">\((T_A \circ T_B) \circ T_C\)</span>. This transformation sends an input <span class="arithmatex">\(\mathbf{x}\)</span> to</p>
 <div class="arithmatex">\[(T_A \circ T_B)\bigl(T_C(\mathbf{x})\bigr) = T_A\bigl(T_B(T_C(\mathbf{x}))\bigr).\]</div>
 <p>So <span class="arithmatex">\((AB)C\)</span> and <span class="arithmatex">\(A(BC)\)</span>, considered as linear transformations, are the same: they take an input <span class="arithmatex">\(\mathbf{x}\)</span> to the output <span class="arithmatex">\(T_A(T_B(T_C(\mathbf{x})))\)</span>. Thus <span class="arithmatex">\((AB)C = A(BC)\)</span>, since for any linear transformation <span class="arithmatex">\(T(\mathbf{x}) = M\mathbf{x}\)</span> with a matrix <span class="arithmatex">\(M\)</span>, <span class="arithmatex">\(T\)</span> determines <span class="arithmatex">\(M\)</span> via the outputs <span class="arithmatex">\(T(\mathbf{e}_j)\)</span> (these are the columns of <span class="arithmatex">\(M\)</span>).</p>
+<h2 id="exercises">Exercises</h2>
+<p><strong>1.</strong> If a matrix <span class="arithmatex">\(A\)</span> is square (i.e. size <span class="arithmatex">\(n \times n\)</span>), then we can multiply <span class="arithmatex">\(A\)</span> by itself, so the products <span class="arithmatex">\(A^2 = AA\)</span>, <span class="arithmatex">\(A^3 = AAA\)</span>, <span class="arithmatex">\(\ldots\)</span>, and so on are all defined. The operations of matrix algebra defined then allow us to define how to "evaluate" a single-variable polynomial <span class="arithmatex">\(f(t)\)</span> at <span class="arithmatex">\(A\)</span>, as follows. If <span class="arithmatex">\(f(t) = c_2t^2 + c_1t + c_0\)</span>, then we define the <span class="arithmatex">\(n \times n\)</span> matrix <span class="arithmatex">\(f(A)\)</span> to be</p>
+<div class="arithmatex">\[f(A) = c_2A^2 + c_1A + c_0I_n .\]</div>
+<p>A similar recipe is used if <span class="arithmatex">\(f\)</span> is a higher-degree polynomial (but we won't need it for this exercise). Perhaps surprisingly, this concept is very broadly useful, such as in the more advanced study of algebraic properties of matrices and for differential equations.</p>
+<p>Note the role of <span class="arithmatex">\(I_n\)</span>: the constant term <span class="arithmatex">\(c_0\)</span> is a scalar, and a scalar cannot be added to a matrix, so it must be converted into the matrix <span class="arithmatex">\(c_0I_n\)</span> first. This is one of the conveniences promised when <span class="arithmatex">\(I_n\)</span> was introduced.</p>
+<p><strong>(a).</strong> Let <span class="arithmatex">\(f(t) = 2t^2 + 3t - 1\)</span>, and</p>
+<div class="arithmatex">\[
+A = \begin{pmatrix} 1 &amp; 2 \\[0.25em] -5 &amp; 2 \end{pmatrix},
+\qquad
+B = \begin{pmatrix} 2 &amp; 1 &amp; 0 \\[0.25em] 0 &amp; -1 &amp; 0 \\[0.25em] 0 &amp; 0 &amp; 3 \end{pmatrix}.
+\]</div>
+<p>Compute <span class="arithmatex">\(f(A)\)</span> and <span class="arithmatex">\(f(B)\)</span>.</p>
+<p><strong>Solution:</strong> In each case compute the square first, then assemble the three pieces.</p>
+<p><em>For <span class="arithmatex">\(A\)</span>.</em> Multiplying out,</p>
+<div class="arithmatex">\[
+A^2 = \begin{pmatrix} 1 &amp; 2 \\[0.25em] -5 &amp; 2 \end{pmatrix}\begin{pmatrix} 1 &amp; 2 \\[0.25em] -5 &amp; 2 \end{pmatrix}
+= \begin{pmatrix} 1 - 10 &amp; 2 + 4 \\[0.25em] -5 - 10 &amp; -10 + 4 \end{pmatrix}
+= \begin{pmatrix} -9 &amp; 6 \\[0.25em] -15 &amp; -6 \end{pmatrix}.
+\]</div>
+<p>Hence</p>
+<div class="arithmatex">\[
+f(A) = 2A^2 + 3A - I_2
+= \begin{pmatrix} -18 &amp; 12 \\[0.25em] -30 &amp; -12 \end{pmatrix}
++ \begin{pmatrix} 3 &amp; 6 \\[0.25em] -15 &amp; 6 \end{pmatrix}
++ \begin{pmatrix} -1 &amp; 0 \\[0.25em] 0 &amp; -1 \end{pmatrix}
+= \begin{pmatrix} -16 &amp; 18 \\[0.25em] -45 &amp; -7 \end{pmatrix}.
+\]</div>
+<p><em>For <span class="arithmatex">\(B\)</span>.</em> Multiplying out,</p>
+<div class="arithmatex">\[
+B^2 = \begin{pmatrix} 2 &amp; 1 &amp; 0 \\[0.25em] 0 &amp; -1 &amp; 0 \\[0.25em] 0 &amp; 0 &amp; 3 \end{pmatrix}\begin{pmatrix} 2 &amp; 1 &amp; 0 \\[0.25em] 0 &amp; -1 &amp; 0 \\[0.25em] 0 &amp; 0 &amp; 3 \end{pmatrix}
+= \begin{pmatrix} 4 &amp; 1 &amp; 0 \\[0.25em] 0 &amp; 1 &amp; 0 \\[0.25em] 0 &amp; 0 &amp; 9 \end{pmatrix}.
+\]</div>
+<p>Hence</p>
+<div class="arithmatex">\[
+f(B) = 2B^2 + 3B - I_3
+= \begin{pmatrix} 8 &amp; 2 &amp; 0 \\[0.25em] 0 &amp; 2 &amp; 0 \\[0.25em] 0 &amp; 0 &amp; 18 \end{pmatrix}
++ \begin{pmatrix} 6 &amp; 3 &amp; 0 \\[0.25em] 0 &amp; -3 &amp; 0 \\[0.25em] 0 &amp; 0 &amp; 9 \end{pmatrix}
++ \begin{pmatrix} -1 &amp; 0 &amp; 0 \\[0.25em] 0 &amp; -1 &amp; 0 \\[0.25em] 0 &amp; 0 &amp; -1 \end{pmatrix}
+= \begin{pmatrix} 13 &amp; 5 &amp; 0 \\[0.25em] 0 &amp; -2 &amp; 0 \\[0.25em] 0 &amp; 0 &amp; 26 \end{pmatrix}.
+\]</div>
+<p>There is a useful check available for <span class="arithmatex">\(B\)</span>. It is triangular, with all entries below the diagonal equal to <span class="arithmatex">\(0\)</span>, and such matrices keep that shape under multiplication with diagonal entries multiplying separately. So the diagonal of <span class="arithmatex">\(f(B)\)</span> should just be <span class="arithmatex">\(f\)</span> applied to each diagonal entry of <span class="arithmatex">\(B\)</span>:</p>
+<div class="arithmatex">\[f(2) = 8 + 6 - 1 = 13, \qquad f(-1) = 2 - 3 - 1 = -2, \qquad f(3) = 18 + 9 - 1 = 26,\]</div>
+<p>matching the diagonal computed above.</p>
+<p><strong>(b).</strong> Let <span class="arithmatex">\(g(t) = t^2 - 3t + 12\)</span>. For <span class="arithmatex">\(A\)</span> as in part (a), check that <span class="arithmatex">\(g(A) = 0\)</span> (the <span class="arithmatex">\(2 \times 2\)</span> zero matrix).</p>
+<p><strong>Solution:</strong> We already have <span class="arithmatex">\(A^2\)</span>, so</p>
+<div class="arithmatex">\[
+g(A) = A^2 - 3A + 12I_2
+= \begin{pmatrix} -9 &amp; 6 \\[0.25em] -15 &amp; -6 \end{pmatrix}
++ \begin{pmatrix} -3 &amp; -6 \\[0.25em] 15 &amp; -6 \end{pmatrix}
++ \begin{pmatrix} 12 &amp; 0 \\[0.25em] 0 &amp; 12 \end{pmatrix}
+= \begin{pmatrix} 0 &amp; 0 \\[0.25em] 0 &amp; 0 \end{pmatrix}.
+\]</div>
+<p><strong>(c).</strong> Let <span class="arithmatex">\(h(t) = t^2 + 2t + 1\)</span> and <span class="arithmatex">\(C = \begin{pmatrix} 3 &amp; -1 \\ 0 &amp; 1 \end{pmatrix}\)</span>. Notice that <span class="arithmatex">\(h(t) = (t + 1)^2\)</span>. Verify (by computing both sides separately) that <span class="arithmatex">\(h(C) = (C + I_2)(C + I_2)\)</span> as <span class="arithmatex">\(2 \times 2\)</span> matrices.</p>
+<p><strong>Solution:</strong> <em>Left side.</em> First</p>
+<div class="arithmatex">\[
+C^2 = \begin{pmatrix} 3 &amp; -1 \\[0.25em] 0 &amp; 1 \end{pmatrix}\begin{pmatrix} 3 &amp; -1 \\[0.25em] 0 &amp; 1 \end{pmatrix}
+= \begin{pmatrix} 9 &amp; -3 - 1 \\[0.25em] 0 &amp; 1 \end{pmatrix}
+= \begin{pmatrix} 9 &amp; -4 \\[0.25em] 0 &amp; 1 \end{pmatrix},
+\]</div>
+<p>so</p>
+<div class="arithmatex">\[
+h(C) = C^2 + 2C + I_2
+= \begin{pmatrix} 9 &amp; -4 \\[0.25em] 0 &amp; 1 \end{pmatrix}
++ \begin{pmatrix} 6 &amp; -2 \\[0.25em] 0 &amp; 2 \end{pmatrix}
++ \begin{pmatrix} 1 &amp; 0 \\[0.25em] 0 &amp; 1 \end{pmatrix}
+= \begin{pmatrix} 16 &amp; -6 \\[0.25em] 0 &amp; 4 \end{pmatrix}.
+\]</div>
+<p><em>Right side.</em> Separately,</p>
+<div class="arithmatex">\[
+C + I_2 = \begin{pmatrix} 4 &amp; -1 \\[0.25em] 0 &amp; 2 \end{pmatrix},
+\qquad
+(C + I_2)(C + I_2) = \begin{pmatrix} 4 &amp; -1 \\[0.25em] 0 &amp; 2 \end{pmatrix}\begin{pmatrix} 4 &amp; -1 \\[0.25em] 0 &amp; 2 \end{pmatrix}
+= \begin{pmatrix} 16 &amp; -4 - 2 \\[0.25em] 0 &amp; 4 \end{pmatrix}
+= \begin{pmatrix} 16 &amp; -6 \\[0.25em] 0 &amp; 4 \end{pmatrix}.
+\]</div>
+<p>The two sides agree, as required.</p>
+<p>It is worth asking why the factorization <span class="arithmatex">\(h(t) = (t+1)^2\)</span> survived the passage to matrices, given the earlier warning that <span class="arithmatex">\((X + Y)^2 = X^2 + XY + YX + Y^2\)</span> is not <span class="arithmatex">\(X^2 + 2XY + Y^2\)</span> in general. The expansion here is</p>
+<div class="arithmatex">\[(C + I_2)^2 = C^2 + CI_2 + I_2C + I_2^2 ,\]</div>
+<p>and the middle two terms are <em>both</em> equal to <span class="arithmatex">\(C\)</span> by the identity property, so they combine into <span class="arithmatex">\(2C\)</span> with no commutativity issue. That is the special feature of <span class="arithmatex">\(I_2\)</span>: it commutes with every matrix.</p>
 
 
 

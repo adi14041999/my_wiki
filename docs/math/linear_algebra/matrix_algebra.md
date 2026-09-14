@@ -195,3 +195,116 @@ Going the other way, $AB$ is the matrix of the linear transformation $T_A \circ 
 $$(T_A \circ T_B)\bigl(T_C(\mathbf{x})\bigr) = T_A\bigl(T_B(T_C(\mathbf{x}))\bigr).$$
 
 So $(AB)C$ and $A(BC)$, considered as linear transformations, are the same: they take an input $\mathbf{x}$ to the output $T_A(T_B(T_C(\mathbf{x})))$. Thus $(AB)C = A(BC)$, since for any linear transformation $T(\mathbf{x}) = M\mathbf{x}$ with a matrix $M$, $T$ determines $M$ via the outputs $T(\mathbf{e}_j)$ (these are the columns of $M$).
+
+## Exercises
+
+**1.** If a matrix $A$ is square (i.e. size $n \times n$), then we can multiply $A$ by itself, so the products $A^2 = AA$, $A^3 = AAA$, $\ldots$, and so on are all defined. The operations of matrix algebra defined then allow us to define how to "evaluate" a single-variable polynomial $f(t)$ at $A$, as follows. If $f(t) = c_2t^2 + c_1t + c_0$, then we define the $n \times n$ matrix $f(A)$ to be
+
+$$f(A) = c_2A^2 + c_1A + c_0I_n .$$
+
+A similar recipe is used if $f$ is a higher-degree polynomial (but we won't need it for this exercise). Perhaps surprisingly, this concept is very broadly useful, such as in the more advanced study of algebraic properties of matrices and for differential equations.
+
+Note the role of $I_n$: the constant term $c_0$ is a scalar, and a scalar cannot be added to a matrix, so it must be converted into the matrix $c_0I_n$ first. This is one of the conveniences promised when $I_n$ was introduced.
+
+**(a).** Let $f(t) = 2t^2 + 3t - 1$, and
+
+$$
+A = \begin{pmatrix} 1 & 2 \\[0.25em] -5 & 2 \end{pmatrix},
+\qquad
+B = \begin{pmatrix} 2 & 1 & 0 \\[0.25em] 0 & -1 & 0 \\[0.25em] 0 & 0 & 3 \end{pmatrix}.
+$$
+
+Compute $f(A)$ and $f(B)$.
+
+**Solution:** In each case compute the square first, then assemble the three pieces.
+
+*For $A$.* Multiplying out,
+
+$$
+A^2 = \begin{pmatrix} 1 & 2 \\[0.25em] -5 & 2 \end{pmatrix}\begin{pmatrix} 1 & 2 \\[0.25em] -5 & 2 \end{pmatrix}
+= \begin{pmatrix} 1 - 10 & 2 + 4 \\[0.25em] -5 - 10 & -10 + 4 \end{pmatrix}
+= \begin{pmatrix} -9 & 6 \\[0.25em] -15 & -6 \end{pmatrix}.
+$$
+
+Hence
+
+$$
+f(A) = 2A^2 + 3A - I_2
+= \begin{pmatrix} -18 & 12 \\[0.25em] -30 & -12 \end{pmatrix}
++ \begin{pmatrix} 3 & 6 \\[0.25em] -15 & 6 \end{pmatrix}
++ \begin{pmatrix} -1 & 0 \\[0.25em] 0 & -1 \end{pmatrix}
+= \begin{pmatrix} -16 & 18 \\[0.25em] -45 & -7 \end{pmatrix}.
+$$
+
+*For $B$.* Multiplying out,
+
+$$
+B^2 = \begin{pmatrix} 2 & 1 & 0 \\[0.25em] 0 & -1 & 0 \\[0.25em] 0 & 0 & 3 \end{pmatrix}\begin{pmatrix} 2 & 1 & 0 \\[0.25em] 0 & -1 & 0 \\[0.25em] 0 & 0 & 3 \end{pmatrix}
+= \begin{pmatrix} 4 & 1 & 0 \\[0.25em] 0 & 1 & 0 \\[0.25em] 0 & 0 & 9 \end{pmatrix}.
+$$
+
+Hence
+
+$$
+f(B) = 2B^2 + 3B - I_3
+= \begin{pmatrix} 8 & 2 & 0 \\[0.25em] 0 & 2 & 0 \\[0.25em] 0 & 0 & 18 \end{pmatrix}
++ \begin{pmatrix} 6 & 3 & 0 \\[0.25em] 0 & -3 & 0 \\[0.25em] 0 & 0 & 9 \end{pmatrix}
++ \begin{pmatrix} -1 & 0 & 0 \\[0.25em] 0 & -1 & 0 \\[0.25em] 0 & 0 & -1 \end{pmatrix}
+= \begin{pmatrix} 13 & 5 & 0 \\[0.25em] 0 & -2 & 0 \\[0.25em] 0 & 0 & 26 \end{pmatrix}.
+$$
+
+There is a useful check available for $B$. It is triangular, with all entries below the diagonal equal to $0$, and such matrices keep that shape under multiplication with diagonal entries multiplying separately. So the diagonal of $f(B)$ should just be $f$ applied to each diagonal entry of $B$:
+
+$$f(2) = 8 + 6 - 1 = 13, \qquad f(-1) = 2 - 3 - 1 = -2, \qquad f(3) = 18 + 9 - 1 = 26,$$
+
+matching the diagonal computed above.
+
+**(b).** Let $g(t) = t^2 - 3t + 12$. For $A$ as in part (a), check that $g(A) = 0$ (the $2 \times 2$ zero matrix).
+
+**Solution:** We already have $A^2$, so
+
+$$
+g(A) = A^2 - 3A + 12I_2
+= \begin{pmatrix} -9 & 6 \\[0.25em] -15 & -6 \end{pmatrix}
++ \begin{pmatrix} -3 & -6 \\[0.25em] 15 & -6 \end{pmatrix}
++ \begin{pmatrix} 12 & 0 \\[0.25em] 0 & 12 \end{pmatrix}
+= \begin{pmatrix} 0 & 0 \\[0.25em] 0 & 0 \end{pmatrix}.
+$$
+
+**(c).** Let $h(t) = t^2 + 2t + 1$ and $C = \begin{pmatrix} 3 & -1 \\ 0 & 1 \end{pmatrix}$. Notice that $h(t) = (t + 1)^2$. Verify (by computing both sides separately) that $h(C) = (C + I_2)(C + I_2)$ as $2 \times 2$ matrices.
+
+**Solution:** *Left side.* First
+
+$$
+C^2 = \begin{pmatrix} 3 & -1 \\[0.25em] 0 & 1 \end{pmatrix}\begin{pmatrix} 3 & -1 \\[0.25em] 0 & 1 \end{pmatrix}
+= \begin{pmatrix} 9 & -3 - 1 \\[0.25em] 0 & 1 \end{pmatrix}
+= \begin{pmatrix} 9 & -4 \\[0.25em] 0 & 1 \end{pmatrix},
+$$
+
+so
+
+$$
+h(C) = C^2 + 2C + I_2
+= \begin{pmatrix} 9 & -4 \\[0.25em] 0 & 1 \end{pmatrix}
++ \begin{pmatrix} 6 & -2 \\[0.25em] 0 & 2 \end{pmatrix}
++ \begin{pmatrix} 1 & 0 \\[0.25em] 0 & 1 \end{pmatrix}
+= \begin{pmatrix} 16 & -6 \\[0.25em] 0 & 4 \end{pmatrix}.
+$$
+
+*Right side.* Separately,
+
+$$
+C + I_2 = \begin{pmatrix} 4 & -1 \\[0.25em] 0 & 2 \end{pmatrix},
+\qquad
+(C + I_2)(C + I_2) = \begin{pmatrix} 4 & -1 \\[0.25em] 0 & 2 \end{pmatrix}\begin{pmatrix} 4 & -1 \\[0.25em] 0 & 2 \end{pmatrix}
+= \begin{pmatrix} 16 & -4 - 2 \\[0.25em] 0 & 4 \end{pmatrix}
+= \begin{pmatrix} 16 & -6 \\[0.25em] 0 & 4 \end{pmatrix}.
+$$
+
+The two sides agree, as required.
+
+It is worth asking why the factorization $h(t) = (t+1)^2$ survived the passage to matrices, given the earlier warning that $(X + Y)^2 = X^2 + XY + YX + Y^2$ is not $X^2 + 2XY + Y^2$ in general. The expansion here is
+
+$$(C + I_2)^2 = C^2 + CI_2 + I_2C + I_2^2 ,$$
+
+and the middle two terms are *both* equal to $C$ by the identity property, so they combine into $2C$ with no commutativity issue. That is the special feature of $I_2$: it commutes with every matrix.
