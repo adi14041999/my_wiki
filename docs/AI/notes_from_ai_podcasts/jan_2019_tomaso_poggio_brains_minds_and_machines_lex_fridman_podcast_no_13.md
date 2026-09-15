@@ -14,7 +14,7 @@ Many agree that, sooner or later, a machine could become **indistinguishable fro
 
 Recent progress in AI (roughly the prior five to ten years) suggests that major breakthroughs often **start from neuroscience**:
 
-- **[Reinforcement learning](dec_2018_pieter_abbeel_deep_reinforcement_learning_lex_fridman_podcast_no_10.md)** (RL) sits at the core of **AlphaGo**, which defeated Lee Sedol (see also [solved games and chess engines](../primer_on_ai/introduction_to_artificial_intelligence.md#solved-games-and-chess-engines) for why exact minimax is infeasible at Go scale). RL traces to Pavlov, Skinner, Marvin Minsky in the 1960s, and later neuroscientists.
+- **[Reinforcement learning](dec_2018_pieter_abbeel_deep_reinforcement_learning_lex_fridman_podcast_no_10.md)** (RL) sits at the core of **AlphaGo**, which defeated Lee Sedol (see also [solved games and chess engines](../primer_on_ai/adversarial_search_and_games.md#solved-games-and-chess-engines) for why exact minimax is infeasible at Go scale). RL traces to Pavlov, Skinner, Marvin Minsky in the 1960s, and later neuroscientists.
 - **Deep learning** is likewise central to AlphaGo and to autonomous driving (e.g. **Mobileye**, founded by former student Amnon Shashua). Layered architectures echo **Hubel and Wiesel** at Harvard in the 1960s.
 
 Poggio’s view is that neuroscience will likely **continue to inspire** at least some future breakthroughs, not necessarily all of them, but enough to matter.

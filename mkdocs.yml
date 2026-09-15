@@ -7,7 +7,11 @@ nav:
   - Home: index.md
   - AI:
     - Primer on AI:
-      - Introduction to Artificial Intelligence: ai/primer_on_ai/introduction_to_artificial_intelligence.md
+      - History: ai/primer_on_ai/history.md
+      - Solving Problems by Searching: ai/primer_on_ai/solving_problems_by_searching.md
+      - Constraint Satisfaction Problems: ai/primer_on_ai/constraint_satisfaction_problems.md
+      - Adversarial Search and Games: ai/primer_on_ai/adversarial_search_and_games.md
+      - Logical Agents: ai/primer_on_ai/logical_agents.md
       - Model Taxonomy: ai/primer_on_ai/model_taxonomy.md
       - Introduction to Machine Learning: ai/primer_on_ai/introduction_to_machine_learning.md
       - Spatializing Data: ai/primer_on_ai/spatializing_data.md

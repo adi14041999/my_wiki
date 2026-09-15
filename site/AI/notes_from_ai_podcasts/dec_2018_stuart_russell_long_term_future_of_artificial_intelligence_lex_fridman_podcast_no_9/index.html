@@ -247,7 +247,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../primer_on_ai/introduction_to_artificial_intelligence/" class="md-tabs__link">
+        <a href="../../primer_on_ai/history/" class="md-tabs__link">
           
   
   
@@ -533,14 +533,126 @@
   
   
     <li class="md-nav__item">
-      <a href="../../primer_on_ai/introduction_to_artificial_intelligence/" class="md-nav__link">
+      <a href="../../primer_on_ai/history/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Introduction to Artificial Intelligence
+    History
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primer_on_ai/solving_problems_by_searching/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solving Problems by Searching
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primer_on_ai/constraint_satisfaction_problems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Constraint Satisfaction Problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primer_on_ai/adversarial_search_and_games/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adversarial Search and Games
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primer_on_ai/logical_agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logical Agents
   
 
     
@@ -4924,7 +5036,7 @@
 <p>Second, AlphaGo can look ahead <span class="arithmatex">\(40\)</span>, <span class="arithmatex">\(50\)</span>, or <span class="arithmatex">\(60\)</span> moves into the future. Searching every possibility that far ahead would be around <span class="arithmatex">\(10^{200}\)</span> positions, far more than the number of atoms in the universe, so it must be highly selective about what it examines.</p>
 <div class="admonition note">
 <p class="admonition-title">Evaluation + search approximate MINIMAX</p>
-<p>These two ingredients mirror how modern game engines achieve strong play. Go, like chess, is far too large to <a href="../../primer_on_ai/introduction_to_artificial_intelligence/#solved-games-and-chess-engines">solve</a> exactly (i.e. to compute the minimax value at the root). So AlphaGo, like the chess engine Stockfish, <strong>approximates</strong> <span class="arithmatex">\(\text{MINIMAX}\)</span> rather than computing it: a <strong>learned evaluation function</strong> supplies values for non-terminal positions, and a <strong>selective look-ahead search</strong> explores only the promising lines.</p>
+<p>These two ingredients mirror how modern game engines achieve strong play. Go, like chess, is far too large to <a href="../../primer_on_ai/adversarial_search_and_games/#solved-games-and-chess-engines">solve</a> exactly (i.e. to compute the minimax value at the root). So AlphaGo, like the chess engine Stockfish, <strong>approximates</strong> <span class="arithmatex">\(\text{MINIMAX}\)</span> rather than computing it: a <strong>learned evaluation function</strong> supplies values for non-terminal positions, and a <strong>selective look-ahead search</strong> explores only the promising lines.</p>
 </div>
 <h2 id="why-the-real-world-is-harder-than-chess">Why the real world is harder than chess</h2>
 <p>Several things about chess do not resemble the real world. The rules are known, and the board is completely visible. The real world is mostly not visible from wherever one is sitting, and overcoming partial observability needs qualitatively different algorithms.</p>

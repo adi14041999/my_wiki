@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/ai/primer_on_ai/introduction_to_artificial_intelligence/">
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/ai/primer_on_ai/solving_problems_by_searching/">
       
       
-        <link rel="prev" href="../../..">
+        <link rel="prev" href="../history/">
       
       
-        <link rel="next" href="../model_taxonomy/">
+        <link rel="next" href="../constraint_satisfaction_problems/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Introduction to Artificial Intelligence - My Wiki</title>
+        <title>Solving Problems by Searching - My Wiki</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#introduction-to-artificial-intelligence" class="md-skip">
+        <a href="#solving-problems-by-searching" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Introduction to Artificial Intelligence
+              Solving Problems by Searching
             
           </span>
         </div>
@@ -247,7 +247,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../history/" class="md-tabs__link">
           
   
   
@@ -532,6 +532,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../history/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    History
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -551,7 +579,7 @@
   <span class="md-ellipsis">
     
   
-    Introduction to Artificial Intelligence
+    Solving Problems by Searching
   
 
     
@@ -569,7 +597,7 @@
   <span class="md-ellipsis">
     
   
-    Introduction to Artificial Intelligence
+    Solving Problems by Searching
   
 
     
@@ -593,28 +621,6 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#neurons-and-hebbian-learning" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Neurons and Hebbian learning
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#brains-automata-and-the-birth-of-ai" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Brains, automata, and the birth of AI
-      
-    </span>
-  </a>
-  
-</li>
       
         <li class="md-nav__item">
   <a href="#rational-agents-and-problem-formulation" class="md-nav__link">
@@ -838,410 +844,94 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#constraint-satisfaction-problems" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Constraint Satisfaction Problems
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Constraint Satisfaction Problems">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#defining-constraint-satisfaction-problems" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Defining Constraint Satisfaction Problems
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sudoku-and-hill-climbing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sudoku and hill climbing
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#solving-sudoku-with-dfs-and-backtracking" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Solving Sudoku with DFS and backtracking
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#constraint-propagation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Constraint Propagation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#mrv-and-lcv" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        MRV and LCV
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="MRV and LCV">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#does-the-order-of-variable-assignment-matter" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Does the order of variable assignment matter?
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#a-probabilistic-argument" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        A probabilistic argument
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#minimum-remaining-values-mrv-heuristic" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Minimum Remaining Values (MRV) heuristic
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#degree-heuristic-tie-breaker" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Degree heuristic (tie-breaker)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#case-study-australia-map-coloring" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Case Study: Australia map coloring
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#least-constraining-value-lcv-heuristic" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Least Constraining Value (LCV) heuristic
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#summary_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Summary
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#exploiting-the-constraint-graph-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Exploiting the Constraint Graph structure
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Exploiting the Constraint Graph structure">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cutset-conditioning" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Cutset conditioning
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#adversarial-search-and-games" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Adversarial search and games
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Adversarial search and games">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#game-theory" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Game Theory
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Game Theory">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#two-player-zero-sum-games" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Two-player zero-sum games
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#optimal-decisions-in-games" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Optimal Decisions in Games
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Optimal Decisions in Games">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#the-minimax-search-algorithm" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The minimax search algorithm
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#solved-games-and-chess-engines" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Solved games and chess engines
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#alphabeta-pruning" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Alpha–Beta Pruning
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#stochastic-games" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Stochastic Games
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Stochastic Games">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#chance-nodes-in-minimax-game-trees" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Chance nodes in minimax game trees
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#expectiminimax" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Expectiminimax
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#monte-carlo-tree-search" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Monte Carlo Tree Search
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Monte Carlo Tree Search">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#limits-of-alphabeta-search-the-game-of-go" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Limits of alpha–beta search: the game of Go
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#basic-mcts" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Basic MCTS
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#the-four-phases-of-mcts" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The four phases of MCTS
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#selection-policy-vs-playout-policy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Selection policy vs. playout policy
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#uct-selection-policy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        UCT selection policy
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#mcts-vs-alphabeta" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        MCTS vs. alpha–beta
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../constraint_satisfaction_problems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Constraint Satisfaction Problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adversarial_search_and_games/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adversarial Search and Games
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../logical_agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logical Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -5432,19 +5122,7 @@
 
 
 
-<h1 id="introduction-to-artificial-intelligence">Introduction to Artificial Intelligence</h1>
-<h2 id="neurons-and-hebbian-learning">Neurons and Hebbian learning</h2>
-<p>John McCarthy named and helped found the field of AI. His thinking was influenced by the Hixon Symposium on Cerebral Mechanisms in Behavior, which he attended. To appreciate the analogy between brains and machines, it helps to have a minimal picture of how neurons work.</p>
-<p>A neuron has dendrites (inputs), a cell body, an axon hillock (where signals are summed), an axon (output cable), and axon terminals that meet other neurons at synapses. The neuron is in a resting state until the combined input at the axon hillock exceeds a threshold. Then it fires—an electrical signal (ion flow) propagates down the axon. The signal is all-or-nothing (same magnitude each time), so in a coarse model the axon output is binary (off or on). At a synapse, the presynaptic terminal releases neurotransmitters from synaptic vesicles. They bind to receptors on the postsynaptic neuron (often compared to a key fitting a lock). Depending on the receptor type, the effect is excitatory (pushes the postsynaptic neuron toward firing) or inhibitory (pushes it away from firing). Motor neurons drive muscle contraction by releasing neurotransmitters that open ion channels in muscle cells. Sensory neurons carry information from sense organs. Interneurons connect other neurons.</p>
-<p><img alt="img" src="../neuron.png" /></p>
-<p><strong>Hebbian learning</strong> is the idea that when a presynaptic neuron repeatedly helps activate a postsynaptic neuron, the connection between them is strengthened (e.g. more receptors, more neurotransmitter release, or both). The next time, the same presynaptic activity is more likely to trigger the postsynaptic neuron. In this way the brain learns associations— e.g. a “lightning” pattern and a “thunder” pattern that often occur together come to strengthen each other’s pathways. Knowledge is stored in the strength and direction of synaptic connections. The flip side is <strong>“use it or lose it”.</strong> Connections weaken when presynaptic and postsynaptic activity no longer co-occur, which is one basis for forgetting.</p>
-<h2 id="brains-automata-and-the-birth-of-ai">Brains, automata, and the birth of AI</h2>
-<p>Von Neumann argued that brains and computers were both implementing the same kind of <strong>automaton</strong>—a system that moves through discrete states according to fixed rules and inputs. An automaton is an abstract machine whose next state is determined by its current state and the current input. As a toy illustration, networks of simple threshold units (a neuron fires if weighted input ≥ <em>T</em>) can implement logic gates (AND, OR, NOT, etc.), so in principle neuron-like elements can perform logical computation.</p>
-<p>John McCarthy famously asked whether computers could be intelligent. Marvin Minsky built the <strong>SNARC</strong> (Stochastic Neural Analog Reinforcement Calculator), which implemented a small network of 40 “neurons” using vacuum tubes and included a form of reinforcement (strengthening successful pathways). That was an early step toward both neural and symbolic approaches to intelligence.</p>
-<p>In 1955, McCarthy and others drafted <strong>“A Proposal for the Dartmouth Summer Research Project on Artificial Intelligence.”</strong> The proposal framed seven research themes. (1) Automatic computers—any machine can be simulated by a program. The bottleneck is programming, not hardware. (2) Using language—model thought as manipulating words by rules. Generalize by new words and rules. (3) Neuron nets— how to wire hypothetical neurons to form concepts (partial work by Pitts, McCulloch, Minsky, others). (4) Size of a calculation— need a theory of complexity and efficiency (early work by Shannon, McCarthy). (5) Self-improvement— machines that improve themselves. (6) Abstractions— classify types and how machines could form them from data. Very much like feature extraction. (7) Randomness and creativity— creativity as guided randomness (e.g. hunches) in orderly thought.</p>
-<p>The 1956 Dartmouth workshop is often taken as the birth of AI as a named field.</p>
-<p><img alt="img" src="../dartmouth.png" /></p>
-<p>Arthur Samuel worked on checkers-playing programs and wrote “Some Studies in Machine Learning Using the Game of Checkers.” He is credited with coining the term machine learning.</p>
+<h1 id="solving-problems-by-searching">Solving Problems by Searching</h1>
 <h2 id="rational-agents-and-problem-formulation">Rational agents and problem formulation</h2>
 <p>A <strong>rational agent</strong> is an idealized intelligent system situated in an environment. It receives percepts via sensors and chooses actions via actuators according to an agent function. The agent is given a goal. In this framing, intelligence is figuring out how to reach it. This is a computational definition, not the same as how psychologists define intelligence.</p>
 <p>A general problem specification has an initial state, a goal state (or set of goal states), and a state transition function <span class="arithmatex">\(f(\text{current state}, \text{action}) = \text{next state}\)</span>. The agent faces choices along the way. Sometimes each transition has an associated cost. The set of all reachable states and transitions forms a state space graph. A search tree is any tree you get by expanding from the initial state. If a problem can be cast as state space search, solving it reduces to having an algorithm that explores this graph.</p>
@@ -5766,393 +5444,6 @@ heuristic.</p>
 </table>
 <p>Both are <strong>iterative</strong> algorithms that take steps to improve the objective and can get stuck in local optima (hill climbing at a local maximum, gradient ascent at a local maximum).</p>
 <p><img alt="img" src="../gd.png" /></p>
-<h2 id="constraint-satisfaction-problems">Constraint Satisfaction Problems</h2>
-<p>Consider a factored representation for each state: a set of variables, each of which has a value. A problem is solved when each variable has a value that satisfies all the constraints on the variable. A problem described this way is called a <strong>constraint satisfaction problem</strong>, or <strong>CSP</strong>. A <strong>solution</strong> is an assignment of a value to every variable such that all constraints are satisfied. Sudoku is a standard example. Each empty cell is a variable, the domain is <span class="arithmatex">\(\{1,\ldots,9\}\)</span>, and the constraints are “all digits in each row, column, and <span class="arithmatex">\(3\times 3\)</span> box are distinct.”</p>
-<h3 id="defining-constraint-satisfaction-problems">Defining Constraint Satisfaction Problems</h3>
-<p>A CSP is a triple <span class="arithmatex">\(\langle X, D, C \rangle\)</span>:</p>
-<p><span class="arithmatex">\(X = \{X_1, \ldots, X_n\}\)</span> is the set of variables.</p>
-<p><span class="arithmatex">\(D = \{D_1, \ldots, D_n\}\)</span> is the set of domains, where each <span class="arithmatex">\(D_i\)</span> is the domain of <span class="arithmatex">\(X_i\)</span>.</p>
-<p><span class="arithmatex">\(C = \{C_1, \ldots, C_m\}\)</span> is the set of constraints.</p>
-<p>For example, a Boolean variable has domain <span class="arithmatex">\(D_i = \{\text{true}, \text{false}\}\)</span>. In general, <span class="arithmatex">\(|D_i|\)</span> may vary across variables.</p>
-<p>Each constraint has the form</p>
-<div class="arithmatex">\[
-C_j = \langle \mathrm{scope}_j, \mathrm{rel}_j \rangle,
-\]</div>
-<p>where <span class="arithmatex">\(\mathrm{scope}_j = (X_{j_1}, \ldots, X_{j_t})\)</span> is a tuple of variables and <span class="arithmatex">\(\mathrm{rel}_j\)</span> can be represented as an explicit set of all tuples of values that satisfy the constraint. In Set Theory, a relation is a set of ordered pairs that defines a specific association between elements from one or more sets. Here, <span class="arithmatex">\(\mathrm{rel}_j \subseteq D_{j_1} \times \cdots \times D_{j_t}\)</span> is a relation. </p>
-<p>Equivalently, <span class="arithmatex">\(\mathrm{rel}_j\)</span> can be represented by a predicate <span class="arithmatex">\(\mathrm{rel}_j(\cdot)\)</span> that returns whether a tuple is allowed (a function that can compute whether a tuple is a member of the relation).</p>
-<p>Example: if <span class="arithmatex">\(D_1 = D_2 = \{1,2,3\}\)</span> and the constraint is <span class="arithmatex">\(X_1 &gt; X_2\)</span>, then</p>
-<div class="arithmatex">\[
-\left\langle (X_1, X_2), \{(3,1), (3,2), (2,1)\} \right\rangle
-\]</div>
-<p>or equivalently</p>
-<div class="arithmatex">\[
-\left\langle (X_1, X_2),\, X_1 &gt; X_2 \right\rangle.
-\]</div>
-<p>In a CSP, we reason over assignments such as <span class="arithmatex">\(\{X_i = v_i, X_j = v_j, \ldots\}\)</span>.</p>
-<p>An assignment is <strong>consistent</strong> (or <strong>legal</strong>) if it violates no constraint.</p>
-<p>A <strong>complete assignment</strong> assigns a value to every variable in <span class="arithmatex">\(X\)</span>.</p>
-<p>A <strong>solution</strong> to a CSP is a consistent, complete assignment.</p>
-<p>A <strong>partial assignment</strong> leaves at least one variable unassigned.</p>
-<p>A <strong>partial solution</strong> is a partial assignment that is consistent.</p>
-<h3 id="sudoku-and-hill-climbing">Sudoku and hill climbing</h3>
-<p>One might try <strong>hill climbing</strong> (or iterative improvement) on Sudoku as follows. Work only with <strong>complete</strong> grids. Every cell contains a digit in <span class="arithmatex">\(\{1,\ldots,9\}\)</span>. Define an <strong>objective</strong> to maximize the <strong>number of non-conflicting numbers</strong> (filled cells), where a placement is <strong>conflicting</strong> if <strong>another copy of the same digit</strong> appears elsewhere in its <strong>row</strong>, <strong>column</strong>, or <strong><span class="arithmatex">\(3\times 3\)</span> box</strong>; otherwise it counts as non-conflicting. A <strong>valid completed Sudoku</strong> is a grid where <strong>all</strong> <span class="arithmatex">\(81\)</span> placements are non-conflicting.</p>
-<p>This is <strong>not</strong> a good idea in practice, for a reason beyond local maxima and plateaus. <strong>Solutions are astronomically rare</strong> in the natural search space for such a formulation.</p>
-<p>Impose only that <strong>each row</strong> is a <strong>permutation</strong> of <span class="arithmatex">\(\{1,\ldots,9\}\)</span> (nine distinct digits per row, but no column or box constraint yet). There are <strong>9!</strong> ways to order one row, and rows are chosen independently, so there are</p>
-<div class="arithmatex">\[
-(9!)^9
-\]</div>
-<p>such grids. Felgenhauer and Jarvis (2005) showed that the number of <strong>full</strong> <span class="arithmatex">\(9\times 9\)</span> Sudoku solution grids (satisfying row, column, and box constraints) is</p>
-<div class="arithmatex">\[
-N_{\text{sudoku}} = 6{,}671{,}903{,}752{,}021{,}072{,}936{,}960 \approx 6.67 \times 10^{21}.
-\]</div>
-<p>The <strong>density</strong> of true solutions inside this row-permutation ensemble is therefore</p>
-<div class="arithmatex">\[
-\frac{N_{\text{sudoku}}}{(9!)^9} \approx \frac{6.67 \times 10^{21}}{1.091 \times 10^{50}} \approx 6.1 \times 10^{-29},
-\]</div>
-<p>If hill climbing is initialized at a random complete assignment (or a random grid in a similar huge family), the starting point is overwhelmingly likely to lie in a region of the search space <strong>nowhere near</strong> any valid solution. Hill climbing is a poor match to a landscape where admissible solutions occupy such a vanishingly small fraction of the states one is willing to visit.</p>
-<h3 id="solving-sudoku-with-dfs-and-backtracking">Solving Sudoku with DFS and backtracking</h3>
-<p>For a standard Sudoku puzzle, the <strong>start state</strong> is the given board configuration, where some cells are already filled. These given values are fixed and cannot be changed.</p>
-<p>A <strong>state</strong> is any partially filled board that agrees with all fixed givens. A <strong>goal state</strong> is a completely filled board that satisfies all Sudoku constraints (no repeated digit in any row, column, or <span class="arithmatex">\(3 \times 3\)</span> box).</p>
-<p>If we model this as search, BFS and DFS are both possible in principle. But BFS stores an entire frontier of partial boards, which can explode in size. If <span class="arithmatex">\(b\)</span> is the branching factor and <span class="arithmatex">\(d\)</span> is the search depth, BFS space is on the order of <span class="arithmatex">\(O(b^d)\)</span>, while DFS needs only the current path (plus small bookkeeping), about <span class="arithmatex">\(O(d)\)</span>. So for Sudoku, DFS is typically preferred over BFS on memory grounds.</p>
-<p>However, plain DFS is still extremely slow in the worst case. If there are <span class="arithmatex">\(m\)</span> empty cells and each cell may try up to <span class="arithmatex">\(9\)</span> values, the naive search tree can have up to <span class="arithmatex">\(9^m\)</span> leaves (worst case <span class="arithmatex">\(m=81\)</span>, so up to <span class="arithmatex">\(9^{81} \approx 1.97 \times 10^{77}\)</span> possibilities). That is astronomically large.</p>
-<p>To speed up DFS, we prune aggressively: as soon as a partial assignment violates a Sudoku constraint, we stop exploring that state and do <strong>not</strong> explore its subtree.</p>
-<p>This is exactly <strong>backtracking</strong>. Backtracking means:</p>
-<ol>
-<li>Choose an unassigned variable (cell).</li>
-<li>Try one candidate value.</li>
-<li>If the partial assignment is inconsistent, undo that choice and try the next candidate.</li>
-<li>If all candidates fail, return ("backtrack") to the previous decision point.</li>
-<li>If a candidate is consistent, recurse on the next unassigned variable.</li>
-</ol>
-<p>So backtracking is DFS plus early rejection of inconsistent partial assignments. The key gain is that entire invalid subtrees are cut off before full assignments are constructed.</p>
-<p>This is a direct example of a <strong>CSP</strong> formulation. Variables are the Sudoku cells (<span class="arithmatex">\(X=\{X_1,\ldots,X_{81}\}\)</span>). Domains are possible digits for each cell (<span class="arithmatex">\(D_i \subseteq \{1,\ldots,9\}\)</span>). Constraints enforce Sudoku rules: all variables in each row, each column, and each <span class="arithmatex">\(3 \times 3\)</span> box must take distinct values. A solution is therefore a consistent, complete assignment to all 81 variables. DFS with backtracking is the search procedure over partial assignments for this CSP.</p>
-<p>Note: the N-Queens problem can also be formulated as a CSP. But as we saw earlier, it also has other effective solution methods, especially iterative-improvement approaches such as hill climbing (including random restarts and related variants).</p>
-<h3 id="constraint-propagation">Constraint Propagation</h3>
-<p>Constraint propagation uses the constraints to shrink the set of legal values in variable domains, thereby reducing the number of choices that search must consider later.</p>
-<p>In Sudoku terms, once some cells are assigned, constraints from rows, columns, and <span class="arithmatex">\(3 \times 3\)</span> boxes can eliminate candidate digits in neighboring unassigned cells.</p>
-<p>This can be applied in two places:</p>
-<ol>
-<li><strong>Before search (preprocessing):</strong> simplify domains before backtracking begins.</li>
-<li><strong>During search (inference):</strong> after each assignment, propagate implications to prune domains further. We call this <strong>forward checking</strong>. Basically we shrink the set of legal values in domains of variables that have been impacted by the new assignment.</li>
-</ol>
-<p>Both uses reduce branching and can dramatically speed up backtracking.</p>
-<p>As an example, in the 4-Queens problem, let's assume the first queen is placed at (1,1) (1-indexed). As soon as this assignment is done, <strong>forward checking</strong> eliminates some of the possible values the variables <span class="arithmatex">\(x_2\)</span>, <span class="arithmatex">\(x_3\)</span> and <span class="arithmatex">\(x_4\)</span> can take right away. Thus, by the time we begin searching over other variables, their domains have already been pruned to smaller sets of legal values.</p>
-<p><img alt="img" src="../forward_checking.png" /></p>
-<p>When we <strong>backtrack</strong>, we discard an assignment and resume search from the previous choice point. Any constraint propagation that ran <strong>after</strong> that assignment depended on it. Now those domain updates are no longer valid. We must <strong>restore each affected variable’s domain</strong> to what it was <strong>before</strong> we tried that value. If we skip this step, later branches would search against stale, wrongly shrunk domains.</p>
-<p><strong>Chained forward checking</strong> goes further than plain forward checking.</p>
-<p>Whenever a variable's domain shrinks, we check its unassigned neighbors, and propogate constraints to those neighbors. We repeat until propagating cannot shrink anymore domains of variables; or until some variable's domain becomes empty, in which case the current partial assignment cannot be completed. Chained forward checking catches more dead ends early than a single pass of neighbor-only pruning right after one assignment.</p>
-<h3 id="mrv-and-lcv">MRV and LCV</h3>
-<p>Backtracking search with constraint propagation still leaves us with two choices at every step: <strong>which unassigned variable do we pick next</strong>, and <strong>which value from its domain do we try first</strong>. These choices do not change correctness, but they can change the size of the search tree by orders of magnitude. Two heuristics address them:</p>
-<ul>
-<li><strong>MRV (Minimum Remaining Values)</strong> orders <strong>variables</strong>.</li>
-<li><strong>LCV (Least Constraining Value)</strong> orders <strong>values</strong>.</li>
-</ul>
-<h4 id="does-the-order-of-variable-assignment-matter">Does the order of variable assignment matter?</h4>
-<p>Consider two variables <span class="arithmatex">\(v_1\)</span> and <span class="arithmatex">\(v_2\)</span> with domains <span class="arithmatex">\(\{1, 2\}\)</span> and <span class="arithmatex">\(\{1, 2, 3, 4\}\)</span> respectively, and no constraints. The search tree depends on which variable we assign first.</p>
-<p>If we assign <span class="arithmatex">\(v_1\)</span> first and <span class="arithmatex">\(v_2\)</span> second:</p>
-<ul>
-<li>The root has <span class="arithmatex">\(2\)</span> children (one per value of <span class="arithmatex">\(v_1\)</span>).</li>
-<li>Each of those children has <span class="arithmatex">\(4\)</span> children (one per value of <span class="arithmatex">\(v_2\)</span>).</li>
-<li>Total edges: <span class="arithmatex">\(2 + 2 \cdot 4 = 10\)</span>.</li>
-</ul>
-<p>If we assign <span class="arithmatex">\(v_2\)</span> first and <span class="arithmatex">\(v_1\)</span> second:</p>
-<ul>
-<li>The root has <span class="arithmatex">\(4\)</span> children, each with <span class="arithmatex">\(2\)</span> children of its own.</li>
-<li>Total edges: <span class="arithmatex">\(4 + 4 \cdot 2 = 12\)</span>.</li>
-</ul>
-<p>In general, with two variables of domain sizes <span class="arithmatex">\(d_1\)</span> and <span class="arithmatex">\(d_2\)</span>, putting variable <span class="arithmatex">\(i\)</span> first gives a tree with <span class="arithmatex">\(d_i (1 + d_j)\)</span> edges, which is smaller when <span class="arithmatex">\(d_i\)</span> is smaller. Both trees have the same number of leaves (<span class="arithmatex">\(d_1 \cdot d_2\)</span>), but the smaller-domain-first tree has fewer <strong>internal</strong> branches to explore, so it is cheaper for backtracking search.</p>
-<h4 id="a-probabilistic-argument">A probabilistic argument</h4>
-<p>Let <span class="arithmatex">\(p\)</span> be the probability that a partial assignment to a variable will eventually lead to a backtrack (e.g. because constraints cannot be satisfied further down). When we put <span class="arithmatex">\(v_1\)</span> at the top, each of the <span class="arithmatex">\(d_1\)</span> subtrees rooted at <span class="arithmatex">\(v_1 = c\)</span> may fail with probability <span class="arithmatex">\(p\)</span>, and the cost of the failure is the size of that subtree, roughly <span class="arithmatex">\(1 + d_2\)</span>. The expected work is on the order of</p>
-<div class="arithmatex">\[
-d_1 \cdot p \cdot (1 + d_2) = p \cdot d_1 (1 + d_2).
-\]</div>
-<p>Putting <span class="arithmatex">\(v_2\)</span> on top gives expected work proportional to <span class="arithmatex">\(p \cdot d_2 (1 + d_1)\)</span>. The smaller domain at the top wins for the same reason as in the deterministic count. We want to <strong>fail fast</strong>: discover dead ends as close to the root as possible.</p>
-<h4 id="minimum-remaining-values-mrv-heuristic">Minimum Remaining Values (MRV) heuristic</h4>
-<p>The <strong>MRV heuristic</strong> says: at every level of the search tree, pick the unassigned variable whose <strong>current domain is smallest</strong>.</p>
-<p>It is also called the <strong>fail-fast heuristic</strong> or the <strong>most constrained variable heuristic</strong>, because it preferentially expands the variable that is closest to having no options left. Intuitively, when solving Sudoku by hand, you naturally start with rows, columns, or <span class="arithmatex">\(3 \times 3\)</span> boxes that already have many filled cells, since the few empty cells there have very few candidate digits.</p>
-<p>MRV pairs especially well with constraint propagation. If forward checking (or chained forward checking) shrinks some unassigned variable's domain to the empty set, that partial assignment cannot be extended to a solution, and we should backtrack immediately. With MRV, the next variable picked is exactly that empty-domain variable (size <span class="arithmatex">\(0\)</span> is the smallest possible), so the algorithm detects the dead end on its very next step. We do not need a separate "is anyone wiped out?" check — MRV gets it for free.</p>
-<h4 id="degree-heuristic-tie-breaker">Degree heuristic (tie-breaker)</h4>
-<p>MRV often produces ties — at the start of search, every variable typically has the full domain. The <strong>degree heuristic</strong> breaks ties by picking the variable involved in the most constraints with <strong>other unassigned variables</strong>, i.e. the variable with the highest <strong>degree in the constraint graph restricted to unassigned variables</strong>.</p>
-<p>The intuition is that assigning a high-degree variable triggers the largest amount of forward checking on its neighbors, pruning their domains the most. This in turn shrinks the search tree everywhere below, and may even create new MRV opportunities (variables with small domains) for subsequent steps.</p>
-<p>For example, in the Australia map-coloring case study below, all variables start with domain size <span class="arithmatex">\(3\)</span>, so MRV is fully tied. SA borders five other regions, more than any other variable. Coloring SA first eliminates SA's color from the domains of all five neighbors at once, whereas coloring an edge region like WA only constrains two neighbors. Starting at SA therefore gives the rest of the search the strongest head start.</p>
-<h4 id="case-study-australia-map-coloring">Case Study: Australia map coloring</h4>
-<p>The CSP is:</p>
-<ul>
-<li><strong>Variables</strong> <span class="arithmatex">\(X = \{\text{WA}, \text{NT}, \text{SA}, \text{Q}, \text{NSW}, \text{V}, \text{T}\}\)</span>.</li>
-<li><strong>Domains</strong> <span class="arithmatex">\(D_i = \{R, G, B\}\)</span> for every variable.</li>
-<li><strong>Constraints</strong>: adjacent regions get different colors. From the constraint graph below, the adjacencies are</li>
-</ul>
-<div class="arithmatex">\[\text{WA} - \text{NT},\ \text{WA} - \text{SA},\ \text{NT} - \text{SA},\ \text{NT} - \text{Q},\ \text{SA} - \text{Q},\ \text{SA} - \text{NSW},\ \text{SA} - \text{V},\ \text{Q} - \text{NSW},\ \text{NSW} - \text{V}.\]</div>
-<p>Tasmania (T) is disconnected.</p>
-<p><img alt="img" src="../australia.png" /></p>
-<p>The degrees in the constraint graph are: WA=2, NT=3, SA=5, Q=3, NSW=3, V=2, T=0.</p>
-<p>We solve this with <strong>chained forward checking</strong> (propagate domain shrinks to neighbors until no more change) plus <strong>MRV with degree as tie-breaker</strong>.</p>
-<p><strong>Step 1.</strong> All domains have size <span class="arithmatex">\(3\)</span>, so MRV ties everyone. Degree picks SA (degree <span class="arithmatex">\(5\)</span>). Try <span class="arithmatex">\(\text{SA} = R\)</span>. Forward checking removes <span class="arithmatex">\(R\)</span> from every neighbor of SA:</p>
-<ul>
-<li>WA: <span class="arithmatex">\(\{G, B\}\)</span>, NT: <span class="arithmatex">\(\{G, B\}\)</span>, Q: <span class="arithmatex">\(\{G, B\}\)</span>, NSW: <span class="arithmatex">\(\{G, B\}\)</span>, V: <span class="arithmatex">\(\{G, B\}\)</span>, T: <span class="arithmatex">\(\{R, G, B\}\)</span>.</li>
-</ul>
-<p>Each of these neighbors shrank, but propagating further does not reduce anything: every adjacent unassigned pair (e.g. NT–Q, Q–NSW) has both domains <span class="arithmatex">\(\{G, B\}\)</span>, and any value on one side is compatible with at least one value on the other, so chained forward checking stops here.</p>
-<p><strong>Step 2.</strong> MRV picks any variable with domain size <span class="arithmatex">\(2\)</span> (WA, NT, Q, NSW, V are tied). Among these, NT, Q, NSW each have degree <span class="arithmatex">\(2\)</span> in the <strong>unassigned</strong> subgraph (their neighbor SA is now assigned), and WA, V have degree <span class="arithmatex">\(1\)</span>. Break the three-way tie arbitrarily and pick NT. Try <span class="arithmatex">\(\text{NT} = G\)</span>. Forward checking removes <span class="arithmatex">\(G\)</span> from NT's unassigned neighbors:</p>
-<ul>
-<li>WA: <span class="arithmatex">\(\{B\}\)</span>, Q: <span class="arithmatex">\(\{B\}\)</span>, NSW: <span class="arithmatex">\(\{G, B\}\)</span>, V: <span class="arithmatex">\(\{G, B\}\)</span>, T: <span class="arithmatex">\(\{R, G, B\}\)</span>.</li>
-</ul>
-<p>Chained propagation now revisits WA and Q (both shrank). WA's only unassigned neighbors are NT and SA (both assigned), so nothing propagates from WA. Q has the unassigned neighbor NSW. Q's domain is <span class="arithmatex">\(\{B\}\)</span>, so any NSW value equal to <span class="arithmatex">\(B\)</span> would have no support in Q. Remove <span class="arithmatex">\(B\)</span> from NSW: NSW <span class="arithmatex">\(= \{G\}\)</span>.</p>
-<p>NSW shrank, so we propagate to its unassigned neighbor V. NSW's only value is <span class="arithmatex">\(G\)</span>, so V <span class="arithmatex">\(= G\)</span> has no support and is removed. V <span class="arithmatex">\(= \{B\}\)</span>. V's only remaining unassigned neighbor is NSW, already updated. Propagation stops:</p>
-<ul>
-<li>WA: <span class="arithmatex">\(\{B\}\)</span>, Q: <span class="arithmatex">\(\{B\}\)</span>, NSW: <span class="arithmatex">\(\{G\}\)</span>, V: <span class="arithmatex">\(\{B\}\)</span>, T: <span class="arithmatex">\(\{R, G, B\}\)</span>.</li>
-</ul>
-<p><strong>Step 3.</strong> MRV picks a domain of size <span class="arithmatex">\(1\)</span>. WA, Q, NSW, V are all tied at size <span class="arithmatex">\(1\)</span>. In the unassigned subgraph, WA has degree <span class="arithmatex">\(0\)</span>, Q has degree <span class="arithmatex">\(1\)</span> (NSW), NSW has degree <span class="arithmatex">\(2\)</span> (Q and V), and V has degree <span class="arithmatex">\(1\)</span> (NSW). Degree picks NSW. Force <span class="arithmatex">\(\text{NSW} = G\)</span>. Forward checking has nothing to remove (<span class="arithmatex">\(G\)</span> is not in any other variable's current domain).</p>
-<p><strong>Step 4.</strong> MRV ties WA, Q, V at size <span class="arithmatex">\(1\)</span>. All three now have degree <span class="arithmatex">\(0\)</span> in the unassigned subgraph. Pick any, say Q <span class="arithmatex">\(= B\)</span>. No domain changes.</p>
-<p><strong>Step 5.</strong> Pick WA <span class="arithmatex">\(= B\)</span>. No changes.</p>
-<p><strong>Step 6.</strong> Force V <span class="arithmatex">\(= B\)</span>. No changes.</p>
-<p><strong>Step 7.</strong> Only T remains. Pick T <span class="arithmatex">\(= R\)</span> (or any color).</p>
-<p>The final assignment is <span class="arithmatex">\(\text{WA} = B\)</span>, <span class="arithmatex">\(\text{NT} = G\)</span>, <span class="arithmatex">\(\text{SA} = R\)</span>, <span class="arithmatex">\(\text{Q} = B\)</span>, <span class="arithmatex">\(\text{NSW} = G\)</span>, <span class="arithmatex">\(\text{V} = B\)</span>, <span class="arithmatex">\(\text{T} = R\)</span>. All constraints are satisfied, and the search produced <strong>zero backtracks</strong>. Chained forward checking + MRV + degree pruned the tree so aggressively that each step was forced.</p>
-<h4 id="least-constraining-value-lcv-heuristic">Least Constraining Value (LCV) heuristic</h4>
-<p>Once MRV has chosen a variable, we still have to pick <strong>which value</strong> from its domain to try first. The <strong>LCV heuristic</strong> says: try the value that <strong>rules out the fewest choices for the neighboring variables</strong>.</p>
-<p>Concretely, for each candidate value <span class="arithmatex">\(v\)</span> in the chosen variable's domain, count how many values <span class="arithmatex">\(v\)</span> would eliminate from the domains of unassigned neighbors via forward checking. Try values in increasing order of this count (least constraining first).</p>
-<p>The intuition is opposite to MRV's "fail fast." Once we have committed to a variable, we hope this branch <strong>succeeds</strong>. A value that wipes out many neighbor options is more likely to push us toward a dead end somewhere deeper in the tree.</p>
-<p>For example, suppose we have just chosen variable <span class="arithmatex">\(X\)</span> with current domain <span class="arithmatex">\(\{a, b\}\)</span>.</p>
-<ul>
-<li>Picking <span class="arithmatex">\(X = a\)</span> removes one value from one neighbor's domain.</li>
-<li>Picking <span class="arithmatex">\(X = b\)</span> removes values from three neighbors' domains, taking one of them down to size <span class="arithmatex">\(1\)</span>.</li>
-</ul>
-<p>LCV would try <span class="arithmatex">\(X = a\)</span> first. The reason is that <span class="arithmatex">\(X = a\)</span> leaves the neighbors with larger domains than <span class="arithmatex">\(X = b\)</span> does. There are simply more candidate combinations of neighbor values that are still consistent. That makes the subtree under <span class="arithmatex">\(a\)</span> more likely to contain a solution than the subtree under <span class="arithmatex">\(b\)</span>. </p>
-<p>Put differently: when <strong>no</strong> candidate value at this variable leads to a completed solution, we must eventually explore every failed subtree. Whichever order we use, the total work ends up the same. Order matters only when <strong>some</strong> value still admits a solution; then we want that branch tried <strong>first</strong>, so we stop before paying for the other subtrees. LCV is that principle operationalized: rank values so that the least constraining (most permissive of neighbors) comes first, improving the odds we hit a viable branch early.</p>
-<h4 id="summary_1">Summary</h4>
-<ul>
-<li><strong>MRV</strong> picks the next <em>variable</em> with the smallest current domain. It fails fast and pairs naturally with constraint propagation.</li>
-<li><strong>Degree heuristic</strong> breaks MRV ties by preferring variables connected to many unassigned neighbors, maximizing the impact of forward checking.</li>
-<li><strong>LCV</strong> picks the next <em>value</em> that constrains neighbors the least.</li>
-</ul>
-<p>Together, <strong>chained forward checking + MRV (with degree tie-breaking) + LCV</strong> is the standard recipe for an efficient backtracking CSP solver.</p>
-<h3 id="exploiting-the-constraint-graph-structure">Exploiting the Constraint Graph structure</h3>
-<p>Some structural properties of the constraint graph let us beat the exponential worst case of generic backtracking. </p>
-<p>If the constraint graph is a tree, it is <strong>bipartite</strong>.</p>
-<p>For the <strong>graph coloring CSP</strong> specifically, this means a tree-structured instance always has a valid 2-coloring, and we can find one in <strong>linear time</strong> <span class="arithmatex">\(O(n)\)</span>. Run a single DFS or BFS from any root, color the root arbitrarily (say red), and color every other vertex with the opposite of its parent's color. Each of the <span class="arithmatex">\(n\)</span> vertices and <span class="arithmatex">\(n - 1\)</span> edges is touched once.</p>
-<p>Even for a <strong>general</strong> tree-structured CSP (not just coloring), the tree shape lets us avoid backtracking entirely, in two passes:</p>
-<ol>
-<li>
-<p><strong>Bottom-up preprocessing:</strong> Pick any vertex as root and order the variables topologically: <span class="arithmatex">\(X_1, \ldots, X_n\)</span> with parents before children. For <span class="arithmatex">\(j\)</span> from <span class="arithmatex">\(n\)</span> down to <span class="arithmatex">\(2\)</span>, make the edge <span class="arithmatex">\(\mathrm{Parent}(X_j) \to X_j\)</span> <strong>arc-consistent</strong>: remove from <span class="arithmatex">\(\mathrm{Parent}(X_j)\)</span>'s domain every value that has no consistent partner in <span class="arithmatex">\(X_j\)</span>'s current domain. If any domain becomes empty, the CSP has no solution.</p>
-</li>
-<li>
-<p><strong>Top-down assignment:</strong> For <span class="arithmatex">\(j\)</span> from <span class="arithmatex">\(1\)</span> to <span class="arithmatex">\(n\)</span>, assign <span class="arithmatex">\(X_j\)</span> any value in its (now-pruned) domain that is consistent with the value already assigned to <span class="arithmatex">\(\mathrm{Parent}(X_j)\)</span>. Step 1 guarantees such a value exists, so this pass <strong>never backtracks</strong>.</p>
-</li>
-</ol>
-<p>The total time is <span class="arithmatex">\(O(n d^2)\)</span>, where <span class="arithmatex">\(d\)</span> is the largest domain size. The bottom-up pass touches each of the <span class="arithmatex">\(n-1\)</span> tree edges once, and per edge it tests every value in the parent's domain against every value in the child's domain (<span class="arithmatex">\(d \times d = d^2\)</span> pair checks in the worst case) to decide which parent values to drop. The top-down pass is <span class="arithmatex">\(O(n d)\)</span>. So tree-structured CSPs are solvable in time linear in <span class="arithmatex">\(n\)</span> (polynomial in <span class="arithmatex">\(d\)</span>), no backtracking required.</p>
-<p>Now that we have an efficient algorithm for trees, we can consider whether more general constraint graphs can be reduced to trees somehow.</p>
-<h4 id="cutset-conditioning">Cutset conditioning</h4>
-<p>The first way to reduce a constraint graph to a tree involves assigning values to some variables so that the remaining variables form a tree. Consider the constraint graph for Australia, shown again in the figure below. Without South Australia, the graph would become a tree, also shown in the figure below.</p>
-<p>Fortunately, we can delete South Australia (in the graph, not the country) by fixing a value for SA and deleting from the domains of the other variables any values that are inconsistent with the value chosen for SA.</p>
-<p><img alt="img" src="../delete_sa.png" /></p>
-<p>Therefore, we can solve the remaining tree with the algorithm given above and thus solve the whole problem. Of course, in the general case (as opposed to map coloring), the value chosen for SA could be the wrong one, so we would need to try each possible value. The general algorithm is as follows:</p>
-<ol>
-<li>Choose a subset S of the CSP’s variables such that the constraint graph becomes a tree <strong>after</strong> removal of S. S is called a cycle cutset.</li>
-<li>For each possible assignment to the variables in S that satisfies all constraints on S,</li>
-</ol>
-<p>(a) remove from the domains of the remaining variables any values that are inconsistent
-with the assignment for S, and</p>
-<p>(b) if the remaining CSP has a solution, return it together with the assignment for S.</p>
-<p><img alt="img" src="../subprobs.png" /></p>
-<p>If the cycle cutset has size <span class="arithmatex">\(c\)</span>, then the total run time is <span class="arithmatex">\(O\!\left(d^{c} \cdot (n - c)\, d^{2}\right)\)</span>: we have to try each of the <span class="arithmatex">\(d^{c}\)</span> combinations of values for the variables in <span class="arithmatex">\(S\)</span>, and for each combination we must solve a tree problem of size <span class="arithmatex">\(n - c\)</span>.</p>
-<p>For the Australia example, <span class="arithmatex">\(n = 7\)</span> (the seven regions WA, NT, SA, Q, NSW, V, T), <span class="arithmatex">\(d = 3\)</span> (the three colors <span class="arithmatex">\(R, G, B\)</span>), and <span class="arithmatex">\(c = 1\)</span> (the cutset <span class="arithmatex">\(S = \{\text{SA}\}\)</span>). So the cutset method runs in <span class="arithmatex">\(O(d^{c} \cdot (n - c)\, d^{2}) = O(3 \cdot 6 \cdot 9) = O(162)\)</span> work, versus the naive <span class="arithmatex">\(d^{n} = 3^{7} = 2187\)</span> assignments a plain backtracking search could explore.</p>
-<p>As another examplem, for the constraint graph below, <span class="arithmatex">\(c = 2\)</span>.</p>
-<p><img alt="img" src="../c2.png" /></p>
-<p>If we could find a cutset of size <span class="arithmatex">\(c = 20\)</span>, this would get us down from the lifetime of the Universe to a few minutes. In the worst case, however, <span class="arithmatex">\(c\)</span> can be as large as <span class="arithmatex">\((n−2)\)</span>.</p>
-<h2 id="adversarial-search-and-games">Adversarial search and games</h2>
-<p>So far, our problem formulations and search algorithms have assumed a <strong>single</strong> agent: one rational agent with a goal, percepts, and actions, cast as state-space search (see <a href="#rational-agents-and-problem-formulation">Rational agents and problem formulation</a>).</p>
-<p>Let's talk about competitive environments, in which two or more agents have conflicting goals, giving rise to adversarial search problems.</p>
-<h3 id="game-theory">Game Theory</h3>
-<p>There are at least three stances we can take towards multi-agent environments. </p>
-<p>The first stance, appropriate when there are a very large number of agents, is to consider them in the aggregate as an <strong>economy</strong>, allowing us to do things like predict that increasing demand will cause prices to rise, without having to predict the action of any individual agent.</p>
-<p>Second, we could consider adversarial agents as just a part of the environment— a part that makes the environment nondeterministic. But if we model the adversaries in the same way that, say, rain sometimes falls and sometimes doesn’t, we miss the idea that our adversaries are actively trying to defeat us, whereas the rain supposedly has no such intention.</p>
-<p>The third stance is to explicitly model the adversarial agents with the techniques of adversarial game-tree search.</p>
-<h4 id="two-player-zero-sum-games">Two-player zero-sum games</h4>
-<p>The games most commonly studied within AI (such as chess and Go) are what game theorists call <strong>deterministic, two-player, turn-taking, perfect information, zero-sum games</strong>. “Perfect information” is a synonym for “fully observable,” and “zero-sum” means that what is good for one player is just as bad for the other: there is no “win-win” outcome. For games we often use the term move as a synonym for “action” and position as a synonym for “state.”</p>
-<p>We will call our two players MAX and MIN.</p>
-<p>We define the complete <strong>game tree</strong> as a search tree that follows every sequence of moves all the way to a terminal state. The game tree may be infinite if the state space itself is unbounded or if the rules of the game allow for infinitely repeating positions.</p>
-<p>For tic-tac-toe the game tree is relatively small— fewer than <span class="arithmatex">\(9!=362,880\)</span> terminal nodes (with only 5,478 distinct states). But for chess there are over <span class="arithmatex">\(1040\)</span> nodes, so the game tree is best thought of as a theoretical construct that we cannot realize in the physical world.</p>
-<p>A <strong>utility function</strong> (also called an objective function or payoff function), defines the final numeric value to player <span class="arithmatex">\(p\)</span> when the game ends in terminal state <span class="arithmatex">\(s\)</span>.</p>
-<p>Below is a figure of a (partial) game tree for the game of tic-tac-toe. The top node is the initial state, and MAX moves first, placing an X in an empty square. We show part of the tree, giving alternating moves by MIN (O) and MAX (X), until we eventually reach terminal states, which can be assigned utilities according to the rules of the game.</p>
-<p><img alt="img" src="../ttt.png" /></p>
-<h3 id="optimal-decisions-in-games">Optimal Decisions in Games</h3>
-<h4 id="the-minimax-search-algorithm">The minimax search algorithm</h4>
-<p>Consider the trivial game in the figure below. The possible moves for MAX at the root node are labeled <span class="arithmatex">\(a1\)</span>, <span class="arithmatex">\(a2\)</span>, and <span class="arithmatex">\(a3\)</span>. The possible replies to <span class="arithmatex">\(a1\)</span> for MIN are <span class="arithmatex">\(b1\)</span>, <span class="arithmatex">\(b2\)</span>, <span class="arithmatex">\(b3\)</span>, and so on. This particular game ends after one move each by MAX and MIN. </p>
-<p><strong>Note:</strong> In some games, the word “move” means that both players have taken an action; therefore the word ply is used to unambiguously mean one move by one player, bringing us one level deeper in the game tree.</p>
-<p>The utilities of the terminal states in this game range from <span class="arithmatex">\(2\)</span> to <span class="arithmatex">\(14\)</span>.</p>
-<p><img alt="img" src="../mm.png" /></p>
-<p>Given a game tree, the optimal strategy can be determined by working out the <strong>minimax value</strong> of each state <span class="arithmatex">\(s\)</span>, written <span class="arithmatex">\(\text{MINIMAX}(s)\)</span>.</p>
-<p>For a terminal state, the minimax value is just its utility. In a nonterminal state, MAX prefers to move to a successor of maximum value, while MIN prefers a successor of minimum value:</p>
-<div class="arithmatex">\[\text{MINIMAX}(s) = \begin{cases} \text{UTILITY}(s) &amp; \text{if IS-TERMINAL}(s) \\ \displaystyle\max_{a \in \text{Actions}(s)} \text{MINIMAX}(\text{RESULT}(s, a)) &amp; \text{if TO-MOVE}(s) = \text{MAX} \\ \displaystyle\min_{a \in \text{Actions}(s)} \text{MINIMAX}(\text{RESULT}(s, a)) &amp; \text{if TO-MOVE}(s) = \text{MIN} \end{cases}\]</div>
-<p>For the game tree above, label the nonterminal states <span class="arithmatex">\(A\)</span> (root), <span class="arithmatex">\(B\)</span>, <span class="arithmatex">\(C\)</span>, <span class="arithmatex">\(D\)</span> (the three MIN nodes), with actions</p>
-<div class="arithmatex">\[\text{Actions}(A) = \{a_1, a_2, a_3\}, \quad \text{Actions}(B) = \{b_1, b_2, b_3\}, \quad \text{Actions}(C) = \{c_1, c_2, c_3\}, \quad \text{Actions}(D) = \{d_1, d_2, d_3\}.\]</div>
-<p>So <span class="arithmatex">\(\text{RESULT}(A, a_1) = B\)</span>, <span class="arithmatex">\(\text{RESULT}(A, a_2) = C\)</span>, <span class="arithmatex">\(\text{RESULT}(A, a_3) = D\)</span>, and <span class="arithmatex">\(B, C, D\)</span> each have three terminal successors via <span class="arithmatex">\(b_i\)</span>, <span class="arithmatex">\(c_i\)</span>, <span class="arithmatex">\(d_i\)</span>.</p>
-<p>Apply <span class="arithmatex">\(\text{MINIMAX}\)</span> bottom-up. The terminals get their values from <span class="arithmatex">\(\text{UTILITY}\)</span>. For MIN node <span class="arithmatex">\(B\)</span>, the children have values <span class="arithmatex">\(3, 12, 8\)</span>, so</p>
-<div class="arithmatex">\[\text{MINIMAX}(B) = \min(3, 12, 8) = 3.\]</div>
-<p>Similarly, <span class="arithmatex">\(\text{MINIMAX}(C) = \text{MINIMAX}(D) = 2\)</span>. At the MAX root,</p>
-<div class="arithmatex">\[\text{MINIMAX}(A) = \max\bigl(\text{MINIMAX}(B),\, \text{MINIMAX}(C),\, \text{MINIMAX}(D)\bigr) = \max(3, 2, 2) = 3.\]</div>
-<p>This is a therefore a <strong>recursive definition</strong>. <span class="arithmatex">\(\text{MINIMAX}(s)\)</span> for a nonterminal state is defined in terms of <span class="arithmatex">\(\text{MINIMAX}\)</span> on its children <span class="arithmatex">\(\text{RESULT}(s, a)\)</span>. The recursion bottoms out at terminal states, where <span class="arithmatex">\(\text{IS-TERMINAL}(s)\)</span> is true and the value is given directly by <span class="arithmatex">\(\text{UTILITY}(s)\)</span>. Computing <span class="arithmatex">\(\text{MINIMAX}\)</span> at the root therefore unfolds into a bottom-up pass over the game tree.</p>
-<p>This also identifies the <strong>minimax decision</strong> at the root: action <span class="arithmatex">\(a_1\)</span> is the optimal choice for MAX, because it leads to the successor with the highest minimax value.</p>
-<p>The minimax algorithm performs a <strong>complete depth-first exploration</strong> of the game tree. Let <span class="arithmatex">\(b\)</span> be the branching factor (legal moves at each node) and <span class="arithmatex">\(m\)</span> be the maximum depth of the tree. Then:</p>
-<ul>
-<li><strong>Time complexity:</strong> <span class="arithmatex">\(O(b^m)\)</span>.</li>
-<li><strong>Space complexity:</strong> <span class="arithmatex">\(O(b\,m)\)</span> if all actions are generated at once, or <span class="arithmatex">\(O(m)\)</span> if actions are generated one at a time.</li>
-</ul>
-<p>The exponential time makes <span class="arithmatex">\(\text{MINIMAX}\)</span> impractical for complex games. Chess, for example, has <span class="arithmatex">\(b \approx 35\)</span> and average game depth around <span class="arithmatex">\(80\)</span> ply, giving roughly <span class="arithmatex">\(35^{80} \approx 10^{123}\)</span> states— far beyond what we can search. <span class="arithmatex">\(\text{MINIMAX}\)</span> is still useful as the mathematical basis for game analysis; practical algorithms come from <strong>approximating</strong> it in various ways.</p>
-<div class="admonition note">
-<p class="admonition-title">Dynamic programming on the state DAG</p>
-<p>Different move sequences often reach the <strong>same</strong> state—i n chess this is called a <em>transposition</em>: two move orders leading to the identical board. So the underlying state graph is generally a <strong>DAG</strong>, and a tree-style search of size <span class="arithmatex">\(O(b^m)\)</span> revisits the same state many times.</p>
-<p>Let <span class="arithmatex">\(|S|\)</span> be the number of <strong>distinct reachable states</strong> in the DAG. Treating <span class="arithmatex">\(\text{MINIMAX}\)</span> as a recursion over states, there are exactly <span class="arithmatex">\(|S|\)</span> unique sub-problems, and each requires <span class="arithmatex">\(O(b)\)</span> work to take a <span class="arithmatex">\(\max\)</span> or <span class="arithmatex">\(\min\)</span> over its <span class="arithmatex">\(b\)</span> children's already-computed values. If we <strong>memoize</strong> <span class="arithmatex">\(\text{MINIMAX}(s)\)</span> the first time we compute it and look it up thereafter, computing the value for any state is constant-time once its children are known, and the total work is</p>
-<div class="arithmatex">\[O(b \cdot |S|)\]</div>
-<p>instead of <span class="arithmatex">\(O(b^m)\)</span>. This is <strong>dynamic programming</strong> applied to the game-tree DAG: each unique sub-problem is solved exactly once, and subsequent calls are <span class="arithmatex">\(O(1)\)</span> lookups.</p>
-<p>Many games have <span class="arithmatex">\(|S| \ll b^m\)</span>. For tic-tac-toe, <span class="arithmatex">\(|S| = 5{,}478\)</span> distinct states versus a search tree with up to <span class="arithmatex">\(9! = 362{,}880\)</span> leaves, where DP turns an exponential into something tractable.</p>
-</div>
-<h4 id="solved-games-and-chess-engines">Solved games and chess engines</h4>
-<p>Once <span class="arithmatex">\(\text{MINIMAX}(s_0)\)</span> is computed at the root <span class="arithmatex">\(s_0\)</span>, the game's outcome under optimal play is no longer uncertain. We then say the game is <strong>solved</strong>: every state has a known minimax value, and the optimal action from any reachable position is determined.</p>
-<p><strong>Tic-tac-toe</strong> is solved. With both players playing optimally, every game ends in a <strong>draw</strong>. <strong>Checkers</strong> has also been <a href="https://www.science.org/doi/10.1126/science.1144079">solved</a> (Schaeffer et al., 2007): perfect play by both sides ends in a draw.</p>
-<p><strong>Chess</strong> is <strong>not</strong> solved. The state space is far too large to compute <span class="arithmatex">\(\text{MINIMAX}\)</span> at the root. Chess has <span class="arithmatex">\(b \approx 35\)</span> and games run <span class="arithmatex">\(\sim 80\)</span> ply, so a full search would touch roughly <span class="arithmatex">\(10^{123}\)</span> states.</p>
-<p><img alt="img" src="../chess.png" /></p>
-<p>State-of-the-art engines such as <strong>Stockfish</strong> therefore approximate <span class="arithmatex">\(\text{MINIMAX}\)</span> rather than compute it exactly. Stockfish is a hybrid of two ideas:</p>
-<ul>
-<li><strong>Search:</strong> A heavily optimized minimax search over the game tree, assuming both players play their best moves. Pruning techniques like <strong>alpha-beta</strong> (covered later) reduce the effective branching factor without changing the result.</li>
-<li><strong>Evaluation:</strong> When the search stops at a non-terminal position, the engine still needs a value for it. Historically this was a hand-coded function (material count, pawn structure, king safety, mobility, etc.). Modern Stockfish uses <strong>NNUE</strong> (Efficiently Updatable Neural Network)— a small neural network that can be re-evaluated incrementally as positions change (to score the leaves of the truncated search tree).</li>
-</ul>
-<p>So Stockfish replaces the missing <span class="arithmatex">\(\text{UTILITY}\)</span> at non-terminal leaves with a learned evaluation, and replaces the full minimax recursion with a pruned, depth-limited search. The shape of the algorithm (<span class="arithmatex">\(\max\)</span> for the side to move, <span class="arithmatex">\(\min\)</span> for the opponent) is exactly <span class="arithmatex">\(\text{MINIMAX}\)</span> from the previous section.</p>
-<div class="admonition note">
-<p class="admonition-title">Chess as the <em>Drosophila</em> of AI</p>
-<p>The biologist's fruit fly, <em>Drosophila melanogaster</em>, became a standard <strong>model organism</strong>: simple enough to experiment on cheaply, yet rich enough that what we learn transfers to harder problems. The Russian mathematician Alexander Kronrod famously called <strong>chess the <em>Drosophila</em> of artificial intelligence</strong>: a single, well-defined testbed on which to develop and measure search, evaluation, and learning, with results that generalize to other domains.</p>
-<p>John McCarthy cautioned that over-optimizing for chess can yield engine-specific tricks rather than general intelligence (much as over-studying the fruit fly need not explain all of biology). Even so, chess and its successors (Go for AlphaGo, Atari and StarCraft for deep RL) remain the classic illustration of using a constrained game as a laboratory for general AI techniques.</p>
-</div>
-<h4 id="alphabeta-pruning">Alpha–Beta Pruning</h4>
-<p>Alpha–beta pruning applies to trees of any depth, and it can often prune <strong>entire subtrees</strong> rather than just individual leaves. The general principle: consider a node <span class="arithmatex">\(n\)</span> somewhere in the tree that the current player can choose to move to. If that player has a <strong>better choice</strong>— either at the same level (some sibling <span class="arithmatex">\(m'\)</span>, as shown in the figure below) or anywhere higher up in the tree (<span class="arithmatex">\(m\)</span> shown in the figure below), then the player will never actually move to <span class="arithmatex">\(n\)</span>. So once we have examined enough of <span class="arithmatex">\(n\)</span>'s descendants to establish that such a better alternative exists, we can stop exploring <span class="arithmatex">\(n\)</span> and <strong>prune</strong> it entirely.</p>
-<p><img alt="img" src="../ab.png" /></p>
-<p>Let us trace the calculation on the same game tree from <a href="#optimal-decisions-in-games">Optimal Decisions in Games</a>, with root <span class="arithmatex">\(A\)</span> (MAX) and children <span class="arithmatex">\(B, C, D\)</span> (MIN). At each stage we track a <strong>range</strong> of possible values for each node, narrowing it as we see more leaves.</p>
-<p><strong>(a)</strong> The first leaf below <span class="arithmatex">\(B\)</span> has value <span class="arithmatex">\(3\)</span>. Since <span class="arithmatex">\(B\)</span> is a MIN node, its value is <strong>at most</strong> <span class="arithmatex">\(3\)</span>: <span class="arithmatex">\(\text{MINIMAX}(B) \le 3\)</span>.</p>
-<p><strong>(b)</strong> The second leaf below <span class="arithmatex">\(B\)</span> has value <span class="arithmatex">\(12\)</span>. MIN would avoid this move, so <span class="arithmatex">\(B\)</span> is still at most <span class="arithmatex">\(3\)</span>.</p>
-<p><strong>(c)</strong> The third leaf below <span class="arithmatex">\(B\)</span> has value <span class="arithmatex">\(8\)</span>. We have now seen all of <span class="arithmatex">\(B\)</span>'s successors, so its value is <strong>exactly</strong> <span class="arithmatex">\(\text{MINIMAX}(B) = \min(3, 12, 8) = 3\)</span>. Because MAX has a choice worth <span class="arithmatex">\(3\)</span> at the root, we can already infer <span class="arithmatex">\(\text{MINIMAX}(A) \ge 3\)</span>.</p>
-<p><strong>(d)</strong> The first leaf below <span class="arithmatex">\(C\)</span> has value <span class="arithmatex">\(2\)</span>. Since <span class="arithmatex">\(C\)</span> is a MIN node, <span class="arithmatex">\(\text{MINIMAX}(C) \le 2\)</span>. But we already know <span class="arithmatex">\(B\)</span> is worth <span class="arithmatex">\(3\)</span>, so MAX would never choose <span class="arithmatex">\(C\)</span>. There is no point examining <span class="arithmatex">\(C\)</span>'s remaining successors. We <strong>prune</strong> them. This is alpha–beta pruning in action.</p>
-<p><strong>(e)</strong> The first leaf below <span class="arithmatex">\(D\)</span> has value <span class="arithmatex">\(14\)</span>, so <span class="arithmatex">\(\text{MINIMAX}(D) \le 14\)</span>. This is still above MAX's current best alternative (<span class="arithmatex">\(3\)</span>), so we must keep exploring <span class="arithmatex">\(D\)</span>. Note we now have bounds on every successor of the root, so <span class="arithmatex">\(\text{MINIMAX}(A) \le 14\)</span> as well.</p>
-<p><strong>(f)</strong> The second successor of <span class="arithmatex">\(D\)</span> is worth <span class="arithmatex">\(5\)</span> (still above <span class="arithmatex">\(3\)</span>, keep going); the third is worth <span class="arithmatex">\(2\)</span>, so <span class="arithmatex">\(\text{MINIMAX}(D) = \min(14, 5, 2) = 2\)</span>. MAX's decision at the root is therefore to move to <span class="arithmatex">\(B\)</span>, for a value of <span class="arithmatex">\(\text{MINIMAX}(A) = \max(3, 2, 2) = 3\)</span>.</p>
-<p><img alt="img" src="../ab1.png" /></p>
-<p>The two bounds we carried around in the trace (MAX's best choice so far and MIN's best choice so far) are exactly the parameters <span class="arithmatex">\(\alpha\)</span> and <span class="arithmatex">\(\beta\)</span> that give the algorithm its name:</p>
-<ul>
-<li><span class="arithmatex">\(\alpha\)</span> = the value of the best (highest) choice found so far for <strong>MAX</strong> along the path to the root. It only ever increases.</li>
-<li><span class="arithmatex">\(\beta\)</span> = the value of the best (lowest) choice found so far for <strong>MIN</strong> along the path to the root. It only ever decreases.</li>
-</ul>
-<p>Here is a recursive, top-down implementation that threads <span class="arithmatex">\(\alpha\)</span> and <span class="arithmatex">\(\beta\)</span> down the tree.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">alpha_beta</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">is_max</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">inf</span><span class="p">):</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the minimax value of `node`, pruning with alpha-beta bounds.</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="sd">    - node: either a terminal value (int/float) or a list of child nodes.</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="sd">    - is_max: True if it is MAX&#39;s turn to move at this node, else MIN&#39;s.</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="sd">    - alpha: best value MAX can guarantee so far (along the path to the root).</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="sd">    - beta:  best value MIN can guarantee so far (along the path to the root).</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="c1"># Terminal node: its value is given directly by UTILITY.</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>        <span class="k">return</span> <span class="n">node</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    <span class="k">if</span> <span class="n">is_max</span><span class="p">:</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>        <span class="c1"># MAX builds a rising lowerbound on this node&#39;s value.</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>        <span class="n">lowerbound</span> <span class="o">=</span> <span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">inf</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>            <span class="n">child_value</span> <span class="o">=</span> <span class="n">alpha_beta</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>            <span class="k">if</span> <span class="n">child_value</span> <span class="o">&gt;</span> <span class="n">lowerbound</span><span class="p">:</span>
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>                <span class="n">lowerbound</span> <span class="o">=</span> <span class="n">child_value</span>
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>            <span class="c1"># alpha tracks MAX&#39;s best guaranteed value along the path.</span>
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>            <span class="k">if</span> <span class="n">lowerbound</span> <span class="o">&gt;</span> <span class="n">alpha</span><span class="p">:</span>
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>                <span class="n">alpha</span> <span class="o">=</span> <span class="n">lowerbound</span>
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>            <span class="c1"># Prune: compare the lowerbound against beta. </span>
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>            <span class="c1"># A MIN ancestor would avoid this node, so we prune.</span>
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>            <span class="k">if</span> <span class="n">lowerbound</span> <span class="o">&gt;=</span> <span class="n">beta</span><span class="p">:</span>
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>                <span class="k">break</span>
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>        <span class="k">return</span> <span class="n">lowerbound</span>
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>    <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>        <span class="c1"># MIN builds a falling upperbound on this node&#39;s value.</span>
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>        <span class="n">upperbound</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
-<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>            <span class="n">child_value</span> <span class="o">=</span> <span class="n">alpha_beta</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span>
-<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>            <span class="k">if</span> <span class="n">child_value</span> <span class="o">&lt;</span> <span class="n">upperbound</span><span class="p">:</span>
-<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>                <span class="n">upperbound</span> <span class="o">=</span> <span class="n">child_value</span>
-<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>            <span class="c1"># beta tracks MIN&#39;s best guaranteed value along the path.</span>
-<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>            <span class="k">if</span> <span class="n">upperbound</span> <span class="o">&lt;</span> <span class="n">beta</span><span class="p">:</span>
-<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>                <span class="n">beta</span> <span class="o">=</span> <span class="n">upperbound</span>
-<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>            <span class="c1"># Prune: compare the upperbound against alpha.</span>
-<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>            <span class="c1"># A MAX ancestor would avoid this node, so we prune.</span>
-<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>            <span class="k">if</span> <span class="n">upperbound</span> <span class="o">&lt;=</span> <span class="n">alpha</span><span class="p">:</span>
-<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>                <span class="k">break</span>
-<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>        <span class="k">return</span> <span class="n">upperbound</span>
-</code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Pruned nodes do not get exact minimax values</p>
-<p>Once the algorithm completes, the value returned for the <strong>root</strong> is exactly its true <span class="arithmatex">\(\text{MINIMAX}\)</span> value, but the values computed for the <strong>other</strong> nodes are no longer guaranteed to be accurate. When a node is pruned, we stop after seeing just enough children to know it cannot affect the decision, so we return a <strong>bound</strong> (the partial <code>lowerbound</code> or <code>upperbound</code>) rather than its finalized minimax value. Pruning thus leaves many nodes in the game tree with provisional scores, not exact ones.</p>
-</div>
-<h3 id="stochastic-games">Stochastic Games</h3>
-<p>Stochastic games bring us a little closer to the unpredictability of real life by including a random element, such as the throwing of dice.</p>
-<h4 id="chance-nodes-in-minimax-game-trees">Chance nodes in minimax game trees</h4>
-<p>In a deterministic two-player game, every node in the game tree belongs to either MAX or MIN. In a stochastic game, there is a third type: a <strong>chance node</strong>, representing a random event (e.g. a dice roll, a card draw, or a coin flip) whose outcome is not controlled by either player.</p>
-<p><strong>How chance nodes fit into the tree:</strong> At a chance node, the branches correspond to the possible outcomes of the random event. Each branch is labeled with the probability <span class="arithmatex">\(p_i\)</span> of that outcome (with <span class="arithmatex">\(\sum_i p_i = 1\)</span>). The child reached by branch <span class="arithmatex">\(i\)</span> is an ordinary MAX or MIN node, and play continues from there as usual.</p>
-<p>A typical turn in backgammon, a game which has two dice, for example, proceeds as:</p>
-<div class="arithmatex">\[\text{MAX node} \;\to\; \text{chance node (dice roll)} \;\to\; \text{MIN node} \;\to\; \text{chance node} \;\to\; \cdots\]</div>
-<h4 id="expectiminimax">Expectiminimax</h4>
-<p>To handle chance nodes, the minimax recursion is extended to <strong>expectiminimax</strong>. The idea is simple: MAX and MIN nodes are evaluated exactly as before, but a chance node is assigned the <strong>expected value</strong> of its children— a probability-weighted average over all possible outcomes. The algorithm backs these values up the tree in the usual bottom-up fashion, so MAX ultimately picks the action that leads to the chance node with the highest expected value.</p>
-<p><strong>Example:</strong> Consider a small game tree. The root is a MAX node. Its two children are chance nodes. The left chance node has two outcomes— "high" (probability <span class="arithmatex">\(0.5\)</span>, leading to a leaf worth <span class="arithmatex">\(10\)</span>) and "low" (probability <span class="arithmatex">\(0.5\)</span>, leading to a leaf worth <span class="arithmatex">\(2\)</span>). The right chance node has outcomes "high" (<span class="arithmatex">\(0.9\)</span>, leaf <span class="arithmatex">\(4\)</span>) and "low" (<span class="arithmatex">\(0.1\)</span>, leaf <span class="arithmatex">\(-5\)</span>).</p>
-<p>Computing bottom-up:</p>
-<div class="arithmatex">\[\text{EXPECTIMINIMAX}(\text{chance left}) = 0.5 \times 10 + 0.5 \times 2 = 6\]</div>
-<div class="arithmatex">\[\text{EXPECTIMINIMAX}(\text{chance right}) = 0.9 \times 4 + 0.1 \times (-5) = 3.6 - 0.5 = 3.1\]</div>
-<div class="arithmatex">\[\text{EXPECTIMINIMAX}(\text{root}) = \max(6,\ 3.1) = 6\]</div>
-<p>MAX should therefore take the left action. The key insight is that MAX cannot control what the dice show— it can only choose which chance node to enter, and it prefers the one with the higher expected value.</p>
-<h3 id="monte-carlo-tree-search">Monte Carlo Tree Search</h3>
-<h4 id="limits-of-alphabeta-search-the-game-of-go">Limits of alpha–beta search: the game of Go</h4>
-<p>The game of Go illustrates two fundamental weaknesses of heuristic alpha–beta tree search.</p>
-<p><strong>Branching factor:</strong> Go is played on a 19×19 board, so at the very first move there are 361 legal placements. Even with alpha–beta pruning (which in the best case reduces the effective branching factor from <span class="arithmatex">\(b\)</span> to roughly <span class="arithmatex">\(\sqrt{b}\)</span>) the search can realistically reach only about 4 or 5 ply before the exponential cost becomes intractable. To put that in perspective, a 4-ply search means each player has looked only 2 moves ahead; chess engines, operating on a board with a branching factor of ~35 rather than ~361, routinely search 10–20 ply deeper. The problem is not the pruning strategy itself but the sheer size of the branching factor. No amount of clever ordering or pruning can overcome an explosion that starts at 361 and compounds with every additional ply.</p>
-<p><strong>Evaluation function:</strong> Even if depth were not an issue, alpha–beta search still requires a heuristic to score non-terminal positions. In chess, material count (summing piece values) is a reliable proxy for advantage— it is wrong in edge cases but right often enough to guide search. In Go, material value is almost meaningless. A stone's worth depends entirely on how it connects to neighboring groups, and most positions remain genuinely ambiguous until late in the endgame when the board finally settles. Writing a hand-crafted evaluation function that meaningfully distinguishes a strong Go position from a weak one has proven extremely difficult.</p>
-<p>In response to both challenges, modern Go programs abandoned alpha–beta search and instead use <strong>Monte Carlo Tree Search (MCTS)</strong>, a strategy that sidesteps the need for an explicit evaluation function by running many random (or learned) playouts from each position and estimating value from the outcomes.</p>
-<h4 id="basic-mcts">Basic MCTS</h4>
-<p>The basic MCTS strategy does not use a heuristic evaluation function. Instead, the value of a state is estimated as the average utility over a number of simulations of complete games starting from that state. A simulation (also called a <strong>playout</strong> or <strong>rollout</strong>) chooses moves first for one player, then for the other, repeating until a terminal position is reached. For games in which the only outcomes are a win or a loss, "average utility" is the same as "win percentage."</p>
-<h4 id="the-four-phases-of-mcts">The four phases of MCTS</h4>
-<p>Each iteration of MCTS consists of four steps.</p>
-<p><strong>Selection:</strong> Starting at the root of the search tree, we choose a move guided by something called the <strong>selection policy</strong> (descibed later in this page), move to the successor node, and repeat down the tree until we reach a leaf (leaf of the search tree). As an example, consider a search tree whose root represents a state where white has just moved, and white has won 37 out of 100 playouts so far. The selection policy might choose a black move leading to a node where black has won 60/79 playouts— the best win percentage among all available moves, making it the exploitative choice. It would also be reasonable to instead select a node with only 2/11 playouts: with so few samples its value estimate carries high uncertainty, and more information might reveal it to be the stronger move. Selection continues down to a leaf, say one marked 27/35.</p>
-<p><strong>Expansion:</strong> We grow the search tree by generating a new child of the selected leaf node, initially marked 0/0. Some implementations generate more than one child in this step.</p>
-<p><strong>Simulation:</strong> We run a playout from the newly generated child, choosing moves for both players according to something called the <strong>playout policy</strong> (descibed later in this page). These moves are not recorded in the search tree— only the final outcome matters. Suppose the playout results in a win for black.</p>
-<p><strong>Back-propagation:</strong> The result is propagated back up through all nodes on the path to the root. Because black won, black nodes are incremented in both wins and total playouts (e.g. 27/35 becomes 28/36 and 60/79 becomes 61/80). Because white lost, white nodes are incremented in total playouts only (e.g. 16/53 becomes 16/54, and the root 37/100 becomes 37/101).</p>
-<p>These four steps repeat— select, expand, simulate, back-propagate— until the computational budget is exhausted, at which point the move with the highest visit count (or win percentage) from the root is chosen.</p>
-<p><img alt="img" src="../mts.png" /></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>function MONTE-CARLO-TREE-SEARCH(state) returns an action
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    tree ← NODE(state)
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    while IS-TIME-REMAINING() do
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>        leaf   ← SELECT(tree)
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        child  ← EXPAND(leaf)
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        result ← SIMULATE(child)
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        BACK-PROPAGATE(result, child)
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    return the move in ACTIONS(state) whose node has the highest number of playouts
-</code></pre></div>
-<p>We repeat these four steps either for a set number of iterations or until the allotted time has expired, then return the move with the highest number of playouts.</p>
-<h4 id="selection-policy-vs-playout-policy">Selection policy vs. playout policy</h4>
-<p>MCTS uses two distinct policies, each operating in a different part of the algorithm.</p>
-<p>The <strong>selection policy</strong> operates <em>inside the search tree</em>— the part of the game tree that has already been visited and built up over previous iterations. At each internal node, it decides which child to descend to, trading off between nodes that have been explored rarely (uncertain value) and nodes that have performed well so far (high estimated value). UCT/UCB1, described below, is the standard selection policy. Because these nodes are revisited many times and their visit counts feed back into future selections, the selection policy needs to be statistically principled.</p>
-<p>The <strong>playout policy</strong> operates <em>outside the search tree</em>— once the expansion step creates a new leaf, the playout policy takes over and plays moves all the way to a terminal state. These moves are never added to the tree; only the final outcome is recorded and back-propagated. Because a playout must run quickly (we want to do thousands of them), the playout policy prioritizes speed. There are three main approaches:</p>
-<ul>
-<li><strong>Random (uniform):</strong> choose any legal move with equal probability. Extremely fast but weak. It generates many unrealistic game continuations.</li>
-<li><strong>Heuristic/hand-crafted:</strong> weight moves by domain knowledge (e.g. in Go, prefer moves that capture stones or respond to immediate threats). Stronger than random but requires game-specific expertise to design.</li>
-<li><strong>Learned (neural network):</strong> a policy network trained on expert games or self-play predicts high-quality moves. Much stronger than heuristics, but heavier to evaluate. There is a direct trade-off between playout quality and the number of playouts that fit within a time budget.</li>
-</ul>
-<p>In short: the selection policy decides <em>where in the tree to look next</em>; the playout policy decides <em>how to finish the game</em> after we've expanded to the new leaf.</p>
-<h4 id="uct-selection-policy">UCT selection policy</h4>
-<p>One very effective selection policy is <strong>UCT</strong> ("upper confidence bounds applied to trees"). UCT ranks each possible move based on an upper confidence bound formula called <strong>UCB1</strong>:</p>
-<div class="arithmatex">\[\text{UCB1}(n) = \frac{U(n)}{N(n)} + C \times \sqrt{\frac{\log N(\text{PARENT}(n))}{N(n)}}\]</div>
-<p>where <span class="arithmatex">\(U(n)\)</span> is the total utility of all playouts that went through node <span class="arithmatex">\(n\)</span>, <span class="arithmatex">\(N(n)\)</span> is the number of playouts through node <span class="arithmatex">\(n\)</span>, and <span class="arithmatex">\(\text{PARENT}(n)\)</span> is the parent of <span class="arithmatex">\(n\)</span> in the tree.</p>
-<p>The left term, <span class="arithmatex">\(U(n)/N(n)\)</span>, is the <strong>exploitation term</strong>: the average utility of <span class="arithmatex">\(n\)</span>. The right term with the square root is the <strong>exploration term</strong>. Its denominator is <span class="arithmatex">\(N(n)\)</span>, so it is large for nodes that have been visited only a few times. Its numerator is <span class="arithmatex">\(\log N(\text{PARENT}(n))\)</span>, the log of how many times the parent has been explored. The key consequence is that if node <span class="arithmatex">\(n\)</span> is being selected some nonzero fraction of the time, the exploration term shrinks toward zero as counts grow— and eventually all playouts flow to the node with the highest average utility.</p>
-<p><span class="arithmatex">\(C\)</span> is a constant that balances exploitation and exploration. There is a theoretical argument that <span class="arithmatex">\(C = \sqrt{2}\)</span>, but in practice game programmers try multiple values and choose the one that performs best.</p>
-<p>When the iterations terminate, the move with the highest number of playouts is returned. You might think it would be better to return the node with the highest average utility, but a node with 65/100 wins is more trustworthy than one with 2/3 wins— the latter has too few samples to be reliable. In any event, the UCB1 formula ensures that the node with the most playouts is almost always the node with the highest win percentage, because the selection process favors win percentage more and more as the number of playouts grows.</p>
-<p>The time to compute a single playout is linear, not exponential, in the depth of the game tree, because only one move is taken at each choice point. That gives MCTS plenty of time to run many playouts within a fixed budget.</p>
-<p><strong>Example:</strong> Consider a game with a branching factor of 32 where the average game lasts 100 ply. Given enough computing power to examine one billion game states before making a move: minimax can search 6 ply deep; alpha–beta with perfect move ordering can reach 12 ply; and Monte Carlo search can run 10 million playouts. Which approach performs best depends on the accuracy of the heuristic evaluation function versus the quality of the selection and playout policies.</p>
-<h4 id="mcts-vs-alphabeta">MCTS vs. alpha–beta</h4>
-<p>The conventional wisdom is that Monte Carlo search has an advantage over alpha–beta when the branching factor is very high (making deep alpha–beta search intractable) or when a good evaluation function is hard to define. Alpha–beta commits to the path leading to the node with the highest achievable evaluation score, assuming the opponent minimizes. If the evaluation function is inaccurate, that commitment is dangerous: a single miscalculated node can cause alpha–beta to erroneously choose (or avoid) an entire path. Monte Carlo search, by contrast, aggregates evidence across many independent playouts and is therefore far less sensitive to any single error.</p>
-<p>The two approaches can also be combined: run a playout for a fixed number of moves, then truncate it and apply an evaluation function rather than playing all the way to a terminal state. This hybrid lets a learned or hand-crafted evaluator fill in where random playouts would be too noisy, while still gaining the breadth and robustness benefits of Monte Carlo sampling.</p>
-<p>Monte Carlo search can also be applied to brand-new games where there is no body of experience to draw on for an evaluation function. As long as the rules are known, no additional domain knowledge is required. The selection and playout policies can incorporate hand-crafted expert knowledge when it is available, but effective policies can equally be learned from scratch— using neural networks trained by self-play alone.</p>
-<p>The general idea of simulating moves into the future, observing the outcome, and using that outcome to determine which moves are good ones is one form of <strong>reinforcement learning</strong>.</p>
 
 
 

@@ -12,7 +12,7 @@ Two kinds of learning are at work. First, AlphaGo learns to **evaluate board pos
 Second, AlphaGo can look ahead $40$, $50$, or $60$ moves into the future. Searching every possibility that far ahead would be around $10^{200}$ positions, far more than the number of atoms in the universe, so it must be highly selective about what it examines.
 
 !!! note "Evaluation + search approximate MINIMAX"
-    These two ingredients mirror how modern game engines achieve strong play. Go, like chess, is far too large to [solve](../primer_on_ai/introduction_to_artificial_intelligence.md#solved-games-and-chess-engines) exactly (i.e. to compute the minimax value at the root). So AlphaGo, like the chess engine Stockfish, **approximates** $\text{MINIMAX}$ rather than computing it: a **learned evaluation function** supplies values for non-terminal positions, and a **selective look-ahead search** explores only the promising lines.
+    These two ingredients mirror how modern game engines achieve strong play. Go, like chess, is far too large to [solve](../primer_on_ai/adversarial_search_and_games.md#solved-games-and-chess-engines) exactly (i.e. to compute the minimax value at the root). So AlphaGo, like the chess engine Stockfish, **approximates** $\text{MINIMAX}$ rather than computing it: a **learned evaluation function** supplies values for non-terminal positions, and a **selective look-ahead search** explores only the promising lines.
 
 ## Why the real world is harder than chess
 
