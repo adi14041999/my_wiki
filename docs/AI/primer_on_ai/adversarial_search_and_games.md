@@ -1,6 +1,6 @@
 # Adversarial search and games
 
-So far, our problem formulations and search algorithms have assumed a **single** agent: one rational agent with a goal, percepts, and actions, cast as state-space search (see [Rational agents and problem formulation](#rational-agents-and-problem-formulation)).
+So far, our problem formulations and search algorithms have assumed a **single** agent: one rational agent with a goal, percepts, and actions, cast as state-space search (see [Rational agents and problem formulation](solving_problems_by_searching.md#rational-agents-and-problem-formulation)).
 
 Let's talk about competitive environments, in which two or more agents have conflicting goals, giving rise to adversarial search problems.
 

@@ -717,6 +717,123 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logic
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#propositional-logic-a-very-simple-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Propositional Logic: A very simple Logic
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Propositional Logic: A very simple Logic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Syntax
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Semantics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-simple-knowledge-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A simple knowledge base
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-simple-inference-procedure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A simple inference procedure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#propositional-theorem-proving" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Propositional Theorem Proving
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Propositional Theorem Proving">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inference-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inference rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Inference rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modus-ponens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modus Ponens
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4913,9 +5030,9 @@
 
 <h1 id="logical-agents">Logical Agents</h1>
 <h2 id="knowledge-based-agents">Knowledge-Based Agents</h2>
-<p>The problem-solving agents encountered in revious chapters (<a href="../solving_problems_by_searching/">search</a>, <a href="../constraint_satisfaction_problems/">constraint satisfaction</a>, and <a href="../adversarial_search_and_games/">adversarial games</a>) know things, but only in a very limited, inflexible sense. They know what actions are available and what the result of performing a specific action from a specific state will be, but they don’t know general facts. A route-finding agent doesn’t know that it is impossible for a road to be a negative number of kilometers long. An 8-puzzle agent doesn’t know that two tiles cannot occupy the same space.</p>
-<p>The central component of a knowledge-based agent is its <strong>knowledge base (KB)</strong>. A knowledge base is a set of <strong>sentences</strong> — "sentence" here is a technical term, related but not identical to sentences in English or other natural languages. Each sentence is expressed in a <strong>knowledge representation language</strong> and represents some assertion about the world. When a sentence is taken as given without being derived from other sentences, we call it an <strong>axiom</strong>.</p>
-<p>There must be a way to add new sentences to the knowledge base and a way to query what is known. The standard names for these operations are <strong>TELL</strong> and <strong>ASK</strong>, respectively.</p>
+<p>The problem-solving agents encountered in previous chapters (<a href="../solving_problems_by_searching/">search</a>, <a href="../constraint_satisfaction_problems/">constraint satisfaction</a>, and <a href="../adversarial_search_and_games/">adversarial games</a>) know things, but only in a very limited, inflexible sense. They know what actions are available and what the result of performing a specific action from a specific state will be, but they don't know general facts. A route-finding agent doesn't know that it is impossible for a road to be a negative number of kilometers long. An 8-puzzle agent doesn't know that two tiles cannot occupy the same space.</p>
+<p>The central component of a knowledge-based agent is its <strong>knowledge base (<span class="arithmatex">\(\text{KB}\)</span>)</strong>. A knowledge base is a set of <strong>sentences</strong>. "Sentence" here is a technical term, related but not identical to sentences in English or other natural languages. Each sentence is expressed in a <strong>knowledge representation language</strong> and represents some assertion about the world. When a sentence is taken as given without being derived from other sentences, we call it an <strong>axiom</strong>.</p>
+<p>There must be a way to add new sentences to the knowledge base and a way to query what is known. The standard names for these operations are <span class="arithmatex">\(\text{TELL}\)</span> and <span class="arithmatex">\(\text{ASK}\)</span>, respectively.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>function KB-AGENT(percept) returns an action
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    persistent: KB, a knowledge base
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>                t, a counter, initially 0, indicating time
@@ -4926,10 +5043,425 @@
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    t ← t + 1
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    return action
 </code></pre></div>
-<p>Each time the agent program is called, it does three things. First, it TELLs the knowledge base what it perceives. Second, it ASKs the knowledge base what action it should perform— in the process of answering this query, extensive reasoning may be done about the current state of the world, the outcomes of possible action sequences, and so on. Third, it TELLs the knowledge base which action was chosen, and returns the action so it can be executed.</p>
-<p>The details of the representation language are hidden inside three helper functions that form the interface between sensors and actuators on one side, and the core representation and reasoning system on the other. <code>MAKE-PERCEPT-SENTENCE</code> constructs a sentence asserting that the agent perceived the given percept at the given time. <code>MAKE-ACTION-QUERY</code> constructs a sentence asking what action should be performed at the current time. <code>MAKE-ACTION-SENTENCE</code> constructs a sentence asserting that the chosen action was executed. The details of the inference mechanisms, in turn, are hidden inside <code>TELL</code> and <code>ASK</code>.</p>
-<p>For example, an automated taxi might have the goal of taking a passenger from San Francisco to Marin County and might know that the Golden Gate Bridge is the only link between the two locations. We can then expect it to cross the Golden Gate Bridge, because it knows that doing so will achieve its goal. Notice that this analysis is independent of how the taxi works at the implementation level — it doesn't matter whether its geographical knowledge is stored as linked lists or pixel maps, or whether it reasons by manipulating strings of symbols in registers or by propagating noisy signals through a network of neurons.</p>
-<p>The agent maintains a knowledge base, KB, which may initially contain some <strong>background knowledge</strong>.</p>
+<p>The agent maintains a knowledge base <span class="arithmatex">\(\text{KB}\)</span>, which may initially contain some <strong>background knowledge</strong>.</p>
+<p>Each time the agent program is called, it does three things. First, it <span class="arithmatex">\(\text{TELL}\)</span>s the knowledge base what it perceives. Second, it <span class="arithmatex">\(\text{ASK}\)</span>s the knowledge base what action it should perform— in the process of answering this query, extensive reasoning may be done about the current state of the world, the outcomes of possible action sequences, and so on. Third, it <span class="arithmatex">\(\text{TELL}\)</span>s the knowledge base which action was chosen, and returns the action so it can be executed.</p>
+<p>The details of the representation language are hidden inside three helper functions. <span class="arithmatex">\(\text{MAKE-PERCEPT-SENTENCE}\)</span> constructs a sentence asserting that the agent perceived the given percept at time <span class="arithmatex">\(t\)</span>. <span class="arithmatex">\(\text{MAKE-ACTION-QUERY}\)</span> constructs a sentence asking what action should be performed at time <span class="arithmatex">\(t\)</span>. <span class="arithmatex">\(\text{MAKE-ACTION-SENTENCE}\)</span> constructs a sentence asserting that the chosen action was executed. The details of the inference mechanisms are hidden inside <span class="arithmatex">\(\text{TELL}\)</span> and <span class="arithmatex">\(\text{ASK}\)</span>.</p>
+<p>For example, an automated taxi might have the goal of taking a passenger from San Francisco to Marin County and might know that the Golden Gate Bridge is the only link between the two locations. We can then expect it to cross the Golden Gate Bridge, because it knows that doing so will achieve its goal. Notice that this analysis is independent of how the taxi works at the implementation level. It doesn't matter whether its geographical knowledge is stored as linked lists or pixel maps, or whether it reasons by manipulating strings of symbols in registers or by propagating noisy signals through a network of neurons.</p>
+<h2 id="logic">Logic</h2>
+<p>We said that knowledge bases consist of sentences. These sentences are expressed according to the <strong>syntax</strong> of the representation language. <strong>Semantics</strong> defines the meaning of sentences. Specifically, it specifies what each sentence asserts about the world. A sentence is true or false relative to a <strong>possible world</strong> (also called a <strong>model</strong>). The semantics tells you, for any given sentence <span class="arithmatex">\(\alpha\)</span> and any given model <span class="arithmatex">\(m\)</span>, whether <span class="arithmatex">\(\alpha\)</span> holds in <span class="arithmatex">\(m\)</span>. This is what distinguishes a knowledge representation language from mere syntax: syntax is the form of sentences, semantics is what they mean. For example, the semantics for arithmetic specifies that the sentence <span class="arithmatex">\(x + y = 4\)</span> is true in a world where <span class="arithmatex">\(x = 2\)</span> and <span class="arithmatex">\(y = 2\)</span>, but false in a world where <span class="arithmatex">\(x = 1\)</span> and <span class="arithmatex">\(y = 1\)</span>.</p>
+<p>When we need to be precise, we use the term <strong>model</strong> in place of "possible world." Whereas possible worlds might be thought of as (potentially) real environments that the agent might or might not be in, models are mathematical abstractions, each of which has a fixed truth value (true or false) for every relevant sentence.</p>
+<p>Informally, we might think of a possible world as having <span class="arithmatex">\(x\)</span> men and <span class="arithmatex">\(y\)</span> women sitting at a table playing bridge, where the sentence <span class="arithmatex">\(x + y = 4\)</span> is true when there are four people in total. Formally, the possible models are all possible assignments of non-negative integers to the variables <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span>. Each such assignment determines the truth of any arithmetic sentence whose variables are <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span>.</p>
+<p>If a sentence <span class="arithmatex">\(\alpha\)</span> is true in model <span class="arithmatex">\(m\)</span>, we say that <span class="arithmatex">\(m\)</span> <strong>satisfies</strong> <span class="arithmatex">\(\alpha\)</span>. We use the notation <span class="arithmatex">\(M(\alpha)\)</span> to mean the set of all models of <span class="arithmatex">\(\alpha\)</span>.</p>
+<p>Now that we have a notion of truth, we are ready to talk about logical reasoning. This involves the relation of <strong>logical entailment</strong> between sentences— the idea that a sentence follows logically from another. In mathematical notation, we write <span class="arithmatex">\(\alpha \models \beta\)</span> to mean that the sentence <span class="arithmatex">\(\alpha\)</span> entails the sentence <span class="arithmatex">\(\beta\)</span>. The formal definition is: <span class="arithmatex">\(\alpha \models \beta\)</span> if and only if, in every model in which <span class="arithmatex">\(\alpha\)</span> is true, <span class="arithmatex">\(\beta\)</span> is also true.</p>
+<p>The definition of entailment can be applied to derive conclusions— that is, to carry out <strong>logical inference</strong>. Given a knowledge base <span class="arithmatex">\(\text{KB}\)</span> and a query sentence <span class="arithmatex">\(\alpha\)</span>, the goal of inference is to determine whether <span class="arithmatex">\(\text{KB} \models \alpha\)</span>: does everything the agent knows logically guarantee that <span class="arithmatex">\(\alpha\)</span> is true? An inference algorithm that only derives entailed sentences is called <strong>sound</strong>— it never draws a false conclusion. One that can derive every entailed sentence is called <strong>complete</strong>— it never misses a true one. Together, soundness and completeness characterize what it means for an inference procedure to be both trustworthy and thorough. </p>
+<p>If an inference algorithm <span class="arithmatex">\(i\)</span> can derive <span class="arithmatex">\(\alpha\)</span> from <span class="arithmatex">\(\text{KB}\)</span>, we write <span class="arithmatex">\(\text{KB} \vdash_i \alpha\)</span>, pronounced "<span class="arithmatex">\(\alpha\)</span> is derived from <span class="arithmatex">\(\text{KB}\)</span> by <span class="arithmatex">\(i\)</span>" or "<span class="arithmatex">\(i\)</span> derives <span class="arithmatex">\(\alpha\)</span> from <span class="arithmatex">\(\text{KB}\)</span>."</p>
+<h2 id="propositional-logic-a-very-simple-logic">Propositional Logic: A very simple Logic</h2>
+<h3 id="syntax">Syntax</h3>
+<p>The syntax of propositional logic defines the allowable sentences. The atomic sentences consist of a single proposition symbol. Each such symbol stands for a proposition that can be true or false.</p>
+<p>There are two proposition symbols with fixed meanings: <span class="arithmatex">\(\text{True}\)</span> is the always-true proposition and <span class="arithmatex">\(\text{False}\)</span> is the always-false proposition.</p>
+<p>Complex sentences are constructed from simpler sentences using parentheses and <strong>logical connectives</strong>. There are five connectives in common use:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(\lnot\)</span> <strong>(not).</strong> A sentence such as <span class="arithmatex">\(\lnot P\)</span> is called the <strong>negation</strong> of <span class="arithmatex">\(P\)</span>.</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\land\)</span> <strong>(and).</strong> A sentence whose main connective is <span class="arithmatex">\(\land\)</span>, such as <span class="arithmatex">\(P \land Q\)</span>, is called a <strong>conjunction</strong>; its parts are the <strong>conjuncts</strong>.</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\lor\)</span> <strong>(or).</strong> A sentence whose main connective is <span class="arithmatex">\(\lor\)</span>, such as <span class="arithmatex">\((P \land Q) \lor R\)</span>, is a <strong>disjunction</strong>; its parts are the <strong>disjuncts</strong>.</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\Rightarrow\)</span> <strong>(implies).</strong> A sentence such as <span class="arithmatex">\((P \land Q) \Rightarrow \lnot R\)</span> is called an <strong>implication</strong> (or <strong>conditional</strong>). Implications are also known as <strong>rules</strong> or if–then statements. The implication symbol is sometimes written as <span class="arithmatex">\(\supset\)</span> or <span class="arithmatex">\(\rightarrow\)</span>.</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\Leftrightarrow\)</span> <strong>(if and only if).</strong> A sentence such as <span class="arithmatex">\(P \Leftrightarrow \lnot Q\)</span> is a <strong>biconditional</strong>.</p>
+</li>
+</ul>
+<h3 id="semantics">Semantics</h3>
+<p>Having specified the syntax of propositional logic, we now specify its semantics. The semantics defines the rules for determining the truth of a sentence with respect to a particular model. In propositional logic, a model simply sets the truth value (<span class="arithmatex">\(\text{true}\)</span> or <span class="arithmatex">\(\text{false}\)</span>) for every proposition symbol. </p>
+<p>The Truth tables for the five logical connectives are shown below.</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(P\)</span></th>
+<th><span class="arithmatex">\(Q\)</span></th>
+<th><span class="arithmatex">\(\lnot P\)</span></th>
+<th><span class="arithmatex">\(P \land Q\)</span></th>
+<th><span class="arithmatex">\(P \lor Q\)</span></th>
+<th><span class="arithmatex">\(P \Rightarrow Q\)</span></th>
+<th><span class="arithmatex">\(P \Leftrightarrow Q\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>true</td>
+<td>true</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+<h3 id="a-simple-knowledge-base">A simple knowledge base</h3>
+<p>Now that we have defined the semantics for propositional logic, we can construct a knowledge base. Consider the following three proposition symbols:</p>
+<ul>
+<li><span class="arithmatex">\(R\)</span>: "It is raining."</li>
+<li><span class="arithmatex">\(U\)</span>: "I have an umbrella."</li>
+<li><span class="arithmatex">\(W\)</span>: "I get wet."</li>
+</ul>
+<p>We populate <span class="arithmatex">\(\text{KB}\)</span> with two sentences (axioms):</p>
+<ol>
+<li><span class="arithmatex">\(R\)</span>— it is raining.</li>
+<li><span class="arithmatex">\(R \land \lnot U \Rightarrow W\)</span>— if it is raining and I have no umbrella, then I get wet.</li>
+</ol>
+<p><strong>Syntax:</strong> Both sentences are well-formed according to the syntax of propositional logic. They are built from atomic symbols using the connectives <span class="arithmatex">\(\land\)</span>, <span class="arithmatex">\(\lnot\)</span>, and <span class="arithmatex">\(\Rightarrow\)</span>.</p>
+<p><strong>Semantics:</strong> Consider the model <span class="arithmatex">\(m = \{R = \text{true},\ U = \text{false},\ W = \text{true}\}\)</span>. Evaluating each sentence of <span class="arithmatex">\(\text{KB}\)</span> in <span class="arithmatex">\(m\)</span>:</p>
+<ul>
+<li><span class="arithmatex">\(R\)</span> is <span class="arithmatex">\(\text{true}\)</span> in <span class="arithmatex">\(m\)</span>. ✓</li>
+<li><span class="arithmatex">\(R \land \lnot U\)</span> is <span class="arithmatex">\(\text{true} \land \text{true} = \text{true}\)</span>, so <span class="arithmatex">\(R \land \lnot U \Rightarrow W\)</span> is <span class="arithmatex">\(\text{true} \Rightarrow \text{true} = \text{true}\)</span>. ✓</li>
+</ul>
+<p>Both sentences are satisfied, so <span class="arithmatex">\(m\)</span> is a model of <span class="arithmatex">\(\text{KB}\)</span>.</p>
+<h3 id="a-simple-inference-procedure">A simple inference procedure</h3>
+<p>Our goal now is to decide whether <span class="arithmatex">\(\text{KB} \models \alpha\)</span> for some sentence <span class="arithmatex">\(\alpha\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Axioms must be true</p>
+<p>The sentences in <span class="arithmatex">\(\text{KB}\)</span> are asserted to be true— they are not hypotheses to be tested. This is what makes them axioms. The only models that matter for inference are those in which every axiom is satisfied; assignments that violate any axiom are not models of <span class="arithmatex">\(\text{KB}\)</span> and are ignored. Entailment is therefore always relative to what the agent has committed to believing.</p>
+</div>
+<p>Take <span class="arithmatex">\(\alpha = W\)</span> ("I get wet") as our query. We want to know whether <span class="arithmatex">\(W\)</span> is <strong>true in every model of <span class="arithmatex">\(\text{KB}\)</span></strong>.</p>
+<p><span class="arithmatex">\(\text{KB}\)</span> has two axioms: <span class="arithmatex">\(R\)</span> and <span class="arithmatex">\(R \land \lnot U \Rightarrow W\)</span>. <span class="arithmatex">\(R\)</span> must be <span class="arithmatex">\(\text{true}\)</span> (otherwise the first axiom fails). Given <span class="arithmatex">\(R = \text{true}\)</span>, the second axiom says: if <span class="arithmatex">\(U = \text{false}\)</span>, then <span class="arithmatex">\(W\)</span> must be <span class="arithmatex">\(\text{true}\)</span>.</p>
+<ul>
+<li>If <span class="arithmatex">\(U = \text{false}\)</span>: the antecedent <span class="arithmatex">\(R \land \lnot U\)</span> is <span class="arithmatex">\(\text{true}\)</span>, so <span class="arithmatex">\(W\)</span> must be <span class="arithmatex">\(\text{true}\)</span> for the implication to hold. The only satisfying assignment is <span class="arithmatex">\(W = \text{true}\)</span>.</li>
+<li>If <span class="arithmatex">\(U = \text{true}\)</span>: the antecedent <span class="arithmatex">\(R \land \lnot U\)</span> is <span class="arithmatex">\(\text{false}\)</span>, so the implication holds regardless of <span class="arithmatex">\(W\)</span>. Both <span class="arithmatex">\(W = \text{true}\)</span> and <span class="arithmatex">\(W = \text{false}\)</span> are consistent with <span class="arithmatex">\(\text{KB}\)</span>.</li>
+</ul>
+<p>So <span class="arithmatex">\(M(\text{KB})\)</span> includes models where <span class="arithmatex">\(W = \text{false}\)</span> (when <span class="arithmatex">\(U = \text{true}\)</span>). Therefore <span class="arithmatex">\(\text{KB} \not\models W\)</span>.</p>
+<p>If we add a third axiom <span class="arithmatex">\(\lnot U\)</span> (I do not have an umbrella) to <span class="arithmatex">\(\text{KB}\)</span>, then every remaining model has <span class="arithmatex">\(R = \text{true}\)</span> and <span class="arithmatex">\(U = \text{false}\)</span>, forcing <span class="arithmatex">\(W = \text{true}\)</span> in all of them. Now <span class="arithmatex">\(\text{KB} \models W\)</span>.</p>
+<h2 id="propositional-theorem-proving">Propositional Theorem Proving</h2>
+<p>Two sentences <span class="arithmatex">\(\alpha\)</span> and <span class="arithmatex">\(\beta\)</span> are <strong>logically equivalent</strong> if they are true in the same set of models. We write this as <span class="arithmatex">\(\alpha \equiv \beta\)</span>, which is equivalent to saying <span class="arithmatex">\(M(\alpha) = M(\beta)\)</span>, or equivalently that <span class="arithmatex">\(\alpha \models \beta\)</span> and <span class="arithmatex">\(\beta \models \alpha\)</span>.</p>
+<p>A sentence is <strong>valid</strong> if it is true in all models. For example, the sentence <span class="arithmatex">\(P \lor \lnot P\)</span> is valid. Valid sentences are also known as <strong>tautologies</strong>— they are necessarily true.</p>
+<p>A sentence is <strong>satisfiable</strong> if it is true in, or satisfied by, some model. Satisfiability can be checked by enumerating the possible models until one is found that satisfies the sentence.</p>
+<p>Many problems in computer science are really satisfiability problems. For example, all the <a href="../constraint_satisfaction_problems/">constraint satisfaction problems</a> ask whether the constraints are satisfiable by some assignment.</p>
+<h3 id="inference-rules">Inference rules</h3>
+<p>Rather than checking entailment by enumerating all models, we can derive new sentences directly using <strong>inference rules</strong>— patterns that produce conclusions from premises. </p>
+<h4 id="modus-ponens">Modus Ponens</h4>
+<p>The most fundamental is <strong>modus ponens</strong>:</p>
+<div class="arithmatex">\[\frac{\alpha \Rightarrow \beta, \quad \alpha}{\beta}\]</div>
+<p>Read: if we know <span class="arithmatex">\(\alpha \Rightarrow \beta\)</span> and we know <span class="arithmatex">\(\alpha\)</span>, we can conclude <span class="arithmatex">\(\beta\)</span>. The sentences above the line are the premises; the sentence below is the conclusion.</p>
+<p>Modus ponens is <strong>sound</strong>: whenever both premises are true in a model, the conclusion is also true. It is not on its own <strong>complete</strong>. There are entailed sentences that cannot be reached by modus ponens alone. However, combined with other inference rules it forms the basis of complete proof systems for propositional logic.</p>
+<p><strong>Example:</strong> Does <span class="arithmatex">\(P \land \lnot P\)</span> entail <span class="arithmatex">\(Q\)</span>?</p>
+<p>Recall that <span class="arithmatex">\(\alpha \models \beta\)</span> if and only if <span class="arithmatex">\(M(\alpha) \subseteq M(\beta)\)</span>. The sentence <span class="arithmatex">\(P \land \lnot P\)</span> is a <strong>contradiction</strong>. It requires <span class="arithmatex">\(P\)</span> to be both <span class="arithmatex">\(\text{true}\)</span> and <span class="arithmatex">\(\text{false}\)</span> simultaneously, which is impossible. Therefore <span class="arithmatex">\(M(P \land \lnot P) = \emptyset\)</span>: there are no models in which it holds.</p>
+<p>The empty set is a subset of every set, so <span class="arithmatex">\(\emptyset \subseteq M(Q)\)</span> for any sentence <span class="arithmatex">\(Q\)</span> whatsoever. It follows that <span class="arithmatex">\(P \land \lnot P \models Q\)</span>. A contradiction entails everything.</p>
+<p>This is known as the <strong>principle of explosion</strong> (<em>ex contradictione quodlibet</em>: "from a contradiction, anything follows"). It is why keeping a knowledge base consistent is critical: if even one contradiction enters <span class="arithmatex">\(\text{KB}\)</span>, then <span class="arithmatex">\(\text{KB} \models \alpha\)</span> for every sentence <span class="arithmatex">\(\alpha\)</span>, making the KB useless as a reasoning tool.</p>
+<div class="admonition note">
+<p class="admonition-title">Entailment vs. derivability</p>
+<ul>
+<li><span class="arithmatex">\(\models\)</span> <strong>(entailment)</strong> is a <strong>semantic</strong> relation. <span class="arithmatex">\(\text{KB} \models \alpha\)</span> means <span class="arithmatex">\(\alpha\)</span> is true in every model where <span class="arithmatex">\(\text{KB}\)</span> is true— it's a statement about truth in the world, independent of any procedure.</li>
+<li><span class="arithmatex">\(\vdash\)</span> <strong>(derivability)</strong> is a <strong>syntactic</strong> relation. <span class="arithmatex">\(\text{KB} \vdash_i \alpha\)</span> means a specific inference algorithm <span class="arithmatex">\(i\)</span> can produce <span class="arithmatex">\(\alpha\)</span> from <span class="arithmatex">\(\text{KB}\)</span> by mechanically applying inference rules.</li>
+</ul>
+</div>
+<p><strong>Example:</strong> The vault wiping protocol</p>
+<p>An automated security system has triggered a lockdown on a secure vault. You are a digital forensics analyst trying to determine whether the automated wiping protocol was initiated. You extract the following six premises from the system log, using the proposition symbols <span class="arithmatex">\(F\)</span> (firewall breached), <span class="arithmatex">\(A\)</span> (alarm sounds), <span class="arithmatex">\(S\)</span> (silent alert sent), <span class="arithmatex">\(P\)</span> (main power grid shuts down), <span class="arithmatex">\(G\)</span> (backup generator activates), <span class="arithmatex">\(L\)</span> (vault door locked), <span class="arithmatex">\(W\)</span> (wiping protocol initiated).</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Natural language</th>
+<th>Formal sentence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>If <span class="arithmatex">\(F\)</span> then <span class="arithmatex">\(A\)</span> or <span class="arithmatex">\(S\)</span>, but not both (XOR)</td>
+<td><span class="arithmatex">\(F \Rightarrow (A \lor S) \land \lnot(A \land S)\)</span></td>
+</tr>
+<tr>
+<td>2</td>
+<td>The firewall was breached</td>
+<td><span class="arithmatex">\(F\)</span></td>
+</tr>
+<tr>
+<td>3</td>
+<td>The alarm sounds iff the power grid shuts down</td>
+<td><span class="arithmatex">\(A \Leftrightarrow P\)</span></td>
+</tr>
+<tr>
+<td>4</td>
+<td>If a silent alert is sent, the backup generator activates</td>
+<td><span class="arithmatex">\(S \Rightarrow G\)</span></td>
+</tr>
+<tr>
+<td>5</td>
+<td>The main power grid did not shut down</td>
+<td><span class="arithmatex">\(\lnot P\)</span></td>
+</tr>
+<tr>
+<td>6</td>
+<td>If the generator activates and the vault door is locked, the wiping protocol runs; the door remained locked</td>
+<td><span class="arithmatex">\(G \land L \Rightarrow W\)</span> and <span class="arithmatex">\(L\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Step 1.</strong> From premise 3 (<span class="arithmatex">\(A \Leftrightarrow P\)</span>) and premise 5 (<span class="arithmatex">\(\lnot P\)</span>):</p>
+<p><span class="arithmatex">\(A \Leftrightarrow P\)</span> is an axiom, so it must be <span class="arithmatex">\(\text{true}\)</span> in every model of <span class="arithmatex">\(\text{KB}\)</span>. A biconditional is <span class="arithmatex">\(\text{true}\)</span> only when both sides share the same truth value. Since premise 5 fixes <span class="arithmatex">\(P = \text{false}\)</span>, the only assignment that keeps the biconditional <span class="arithmatex">\(\text{true}\)</span> is <span class="arithmatex">\(A = \text{false}\)</span>.</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(A\)</span></th>
+<th><span class="arithmatex">\(P\)</span></th>
+<th><span class="arithmatex">\(A \Leftrightarrow P\)</span></th>
+<th>Valid model of <span class="arithmatex">\(\text{KB}\)</span>?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>✓ (both axioms satisfied)</td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+<td>✗ (violates axiom 3)</td>
+</tr>
+</tbody>
+</table>
+<p>Only the first row survives. In every model of <span class="arithmatex">\(\text{KB}\)</span>, <span class="arithmatex">\(A = \text{false}\)</span>.</p>
+<div class="arithmatex">\[\lnot P,\quad A \Leftrightarrow P \;\vdash\; \lnot A\]</div>
+<p><strong>Step 2.</strong> From premise 1 (<span class="arithmatex">\(F \Rightarrow (A \lor S) \land \lnot(A \land S)\)</span>) and premise 2 (<span class="arithmatex">\(F\)</span>), by modus ponens:</p>
+<div class="arithmatex">\[(A \lor S) \land \lnot(A \land S)\]</div>
+<p>We now know <span class="arithmatex">\(\lnot A\)</span> (Step 1). Substituting into the XOR: <span class="arithmatex">\(A \lor S\)</span> must be <span class="arithmatex">\(\text{true}\)</span> and since <span class="arithmatex">\(A\)</span> is <span class="arithmatex">\(\text{false}\)</span>, <span class="arithmatex">\(S\)</span> must be <span class="arithmatex">\(\text{true}\)</span>.</p>
+<div class="arithmatex">\[\lnot A,\quad (A \lor S) \land \lnot(A \land S) \;\vdash\; S\]</div>
+<p><strong>Step 3.</strong> From premise 4 (<span class="arithmatex">\(S \Rightarrow G\)</span>) and <span class="arithmatex">\(S\)</span> (Step 2), by modus ponens:</p>
+<div class="arithmatex">\[S \Rightarrow G,\quad S \;\vdash\; G\]</div>
+<p><strong>Step 4.</strong> From premise 6 (<span class="arithmatex">\(G \land L \Rightarrow W\)</span>), <span class="arithmatex">\(G\)</span> (Step 3), and <span class="arithmatex">\(L\)</span> (given in premise 6), by <span class="arithmatex">\(\land\)</span>-introduction then modus ponens:</p>
+<div class="arithmatex">\[G \land L \Rightarrow W,\quad G \land L \;\vdash\; W\]</div>
+<p><strong>Conclusion:</strong> <span class="arithmatex">\(\text{KB} \models W\)</span>. The automated wiping protocol <strong>was initiated</strong>. Each step used modus ponens on a sound, consistent knowledge base, so the conclusion is guaranteed to be true in every model of <span class="arithmatex">\(\text{KB}\)</span>.</p>
+<p><strong>Combined truth table (the tedious way; without using inference rules):</strong> Premises 2, 5, and the <span class="arithmatex">\(L\)</span> clause of premise 6 fix <span class="arithmatex">\(F = \text{true}\)</span>, <span class="arithmatex">\(P = \text{false}\)</span>, and <span class="arithmatex">\(L = \text{true}\)</span> in every model of <span class="arithmatex">\(\text{KB}\)</span>. We enumerate all <span class="arithmatex">\(2^4 = 16\)</span> combinations of the remaining variables <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(S\)</span>, <span class="arithmatex">\(G\)</span>, <span class="arithmatex">\(W\)</span> and check which rows satisfy all four remaining premises simultaneously. A check (✓) means the premise holds in that row; a cross (✗) means it fails and the row is not a model of <span class="arithmatex">\(\text{KB}\)</span>.</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(A\)</span></th>
+<th><span class="arithmatex">\(S\)</span></th>
+<th><span class="arithmatex">\(G\)</span></th>
+<th><span class="arithmatex">\(W\)</span></th>
+<th>P1: <span class="arithmatex">\((A \oplus S)\)</span></th>
+<th>P3: <span class="arithmatex">\(A \Leftrightarrow \text{false}\)</span></th>
+<th>P4: <span class="arithmatex">\(S \Rightarrow G\)</span></th>
+<th>P6: <span class="arithmatex">\(G \Rightarrow W\)</span></th>
+<th>Model of <span class="arithmatex">\(\text{KB}\)</span>?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+<td>✗</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+<td>✗</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+<td>F</td>
+<td>✗</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+<td>T</td>
+<td>✗</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>F</td>
+<td>T</td>
+<td>F</td>
+<td>F</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+<td>✓</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>F</td>
+<td>T</td>
+<td>F</td>
+<td>T</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+<td>✓</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>F</td>
+<td>T</td>
+<td>T</td>
+<td>F</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr>
+<td><strong>F</strong></td>
+<td><strong>T</strong></td>
+<td><strong>T</strong></td>
+<td><strong>T</strong></td>
+<td><strong>✓</strong></td>
+<td><strong>✓</strong></td>
+<td><strong>✓</strong></td>
+<td><strong>✓</strong></td>
+<td><strong>✓</strong></td>
+</tr>
+<tr>
+<td>T</td>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+<td>✓</td>
+<td>✗</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>T</td>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+<td>✓</td>
+<td>✗</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>T</td>
+<td>F</td>
+<td>T</td>
+<td>F</td>
+<td>✓</td>
+<td>✗</td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>T</td>
+<td>F</td>
+<td>T</td>
+<td>T</td>
+<td>✓</td>
+<td>✗</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>T</td>
+<td>T</td>
+<td>F</td>
+<td>F</td>
+<td>✗</td>
+<td>✗</td>
+<td>✗</td>
+<td>✓</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>T</td>
+<td>T</td>
+<td>F</td>
+<td>T</td>
+<td>✗</td>
+<td>✗</td>
+<td>✗</td>
+<td>✓</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+<td>F</td>
+<td>✗</td>
+<td>✗</td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+<td>✗</td>
+<td>✗</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+</tr>
+</tbody>
+</table>
+<p>Exactly one row satisfies all premises: <span class="arithmatex">\(A = \text{false}\)</span>, <span class="arithmatex">\(S = \text{true}\)</span>, <span class="arithmatex">\(G = \text{true}\)</span>, <span class="arithmatex">\(W = \text{true}\)</span>. Since <span class="arithmatex">\(W = \text{true}\)</span> in the unique model of <span class="arithmatex">\(\text{KB}\)</span>, we confirm <span class="arithmatex">\(\text{KB} \models W\)</span>.</p>
 
 
 
