@@ -308,3 +308,77 @@ It is worth asking why the factorization $h(t) = (t+1)^2$ survived the passage t
 $$(C + I_2)^2 = C^2 + CI_2 + I_2C + I_2^2 ,$$
 
 and the middle two terms are *both* equal to $C$ by the identity property, so they combine into $2C$ with no commutativity issue. That is the special feature of $I_2$: it commutes with every matrix.
+
+**2.** Let
+
+$$
+A = \begin{pmatrix}
+2 & 3 & -4 \\[0.25em]
+4 & -1 & 6 \\[0.25em]
+5 & 2 & 1
+\end{pmatrix}.
+$$
+
+Find a non-zero $3 \times 3$ matrix $M$ for which $AM$ is the $3 \times 3$ zero matrix (there are many valid solutions).
+
+**Solution:** The key is to remember how the columns of a product behave: the $j$th column of $AM$ is $A$ applied to the $j$th column of $M$. So $AM$ is the zero matrix exactly when **every column of $M$ is a vector that $A$ sends to $\mathbf{0}$.** The problem therefore reduces to finding a single nonzero $3$-vector $\mathbf{v}$ with $A\mathbf{v} = \mathbf{0}$, after which we may use $\mathbf{v}$ to build the columns of $M$.
+
+*Finding such a $\mathbf{v}$.* Writing $\mathbf{v} = (x, y, z)$, the condition $A\mathbf{v} = \mathbf{0}$ says
+
+$$
+2x + 3y - 4z = 0, \qquad
+4x - y + 6z = 0, \qquad
+5x + 2y + z = 0 .
+$$
+
+The solutions are exactly the multiples of $(-1, 2, 1)$, obtained by taking $z = 1$. As a check,
+
+$$
+A\begin{pmatrix} -1 \\[0.25em] 2 \\[0.25em] 1 \end{pmatrix}
+= \begin{pmatrix} -2 + 6 - 4 \\[0.25em] -4 - 2 + 6 \\[0.25em] -5 + 4 + 1 \end{pmatrix}
+= \begin{pmatrix} 0 \\[0.25em] 0 \\[0.25em] 0 \end{pmatrix}.
+$$
+
+*Building $M$:* Put $\mathbf{v}$ in the first column and fill the rest with zeros:
+
+$$
+M = \begin{pmatrix}
+-1 & 0 & 0 \\[0.25em]
+2 & 0 & 0 \\[0.25em]
+1 & 0 & 0
+\end{pmatrix}.
+$$
+
+This $M$ is nonzero, and $AM$ has first column $A\mathbf{v} = \mathbf{0}$ and second and third columns $A\mathbf{0} = \mathbf{0}$, so $AM$ is the zero matrix.
+
+**3.** Let $T : \mathbb{R}^2 \to \mathbb{R}^2$ be the linear transformation that, on an input $\mathbf{x}$, outputs the sum of the rotation counterclockwise by $45°$ of $\mathbf{x}$ and twice $\mathbf{x}$. That is, $T(\mathbf{x}) = R_{\pi/4}(\mathbf{x}) + 2\mathbf{x}$. Find the matrix $A$ for $T$.
+
+**Solution:** Recall that $T_{A+B}(\mathbf{x}) = T_A(\mathbf{x}) + T_B(\mathbf{x})$ and $T_{cA}(\mathbf{x}) = c\,T_A(\mathbf{x})$. Reading those from right to left lets us assemble the matrix of $T$ out of the matrices of its two pieces.
+
+The first piece is rotation counterclockwise by $\pi/4$, whose matrix is
+
+$$
+A_{\pi/4} = \begin{pmatrix} \cos(\pi/4) & -\sin(\pi/4) \\[0.35em] \sin(\pi/4) & \cos(\pi/4) \end{pmatrix}
+= \begin{pmatrix} 1/\sqrt{2} & -1/\sqrt{2} \\[0.35em] 1/\sqrt{2} & 1/\sqrt{2} \end{pmatrix}.
+$$
+
+The second piece is the map $\mathbf{x} \mapsto 2\mathbf{x}$, which is $2$ times the identity transformation, so its matrix is $2I_2$. Therefore
+
+$$
+A = A_{\pi/4} + 2I_2
+= \begin{pmatrix} 1/\sqrt{2} & -1/\sqrt{2} \\[0.35em] 1/\sqrt{2} & 1/\sqrt{2} \end{pmatrix}
++ \begin{pmatrix} 2 & 0 \\[0.35em] 0 & 2 \end{pmatrix}
+= \begin{pmatrix} 2 + \dfrac{1}{\sqrt{2}} & -\dfrac{1}{\sqrt{2}} \\[0.9em] \dfrac{1}{\sqrt{2}} & 2 + \dfrac{1}{\sqrt{2}} \end{pmatrix},
+$$
+
+where $1/\sqrt{2} = \sqrt{2}/2 \approx 0.707$ if a decimal form is wanted.
+
+*Check by columns:* The columns of the matrix of a linear transformation are its values on $\mathbf{e}_1$ and $\mathbf{e}_2$, so we can confirm the answer without using matrix addition at all. Rotating $\mathbf{e}_1$ by $45°$ gives $(1/\sqrt{2},\ 1/\sqrt{2})$, and doubling $\mathbf{e}_1$ gives $(2, 0)$, so
+
+$$T(\mathbf{e}_1) = \begin{pmatrix} 1/\sqrt{2} \\[0.35em] 1/\sqrt{2} \end{pmatrix} + \begin{pmatrix} 2 \\[0.35em] 0 \end{pmatrix} = \begin{pmatrix} 2 + 1/\sqrt{2} \\[0.35em] 1/\sqrt{2} \end{pmatrix},$$
+
+which is the first column above. Rotating $\mathbf{e}_2$ gives $(-1/\sqrt{2},\ 1/\sqrt{2})$, and doubling $\mathbf{e}_2$ gives $(0, 2)$, so
+
+$$T(\mathbf{e}_2) = \begin{pmatrix} -1/\sqrt{2} \\[0.35em] 1/\sqrt{2} \end{pmatrix} + \begin{pmatrix} 0 \\[0.35em] 2 \end{pmatrix} = \begin{pmatrix} -1/\sqrt{2} \\[0.35em] 2 + 1/\sqrt{2} \end{pmatrix},$$
+
+the second column. The two methods agree.

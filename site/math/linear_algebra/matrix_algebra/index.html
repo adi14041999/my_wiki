@@ -5206,6 +5206,57 @@ C + I_2 = \begin{pmatrix} 4 &amp; -1 \\[0.25em] 0 &amp; 2 \end{pmatrix},
 <p>It is worth asking why the factorization <span class="arithmatex">\(h(t) = (t+1)^2\)</span> survived the passage to matrices, given the earlier warning that <span class="arithmatex">\((X + Y)^2 = X^2 + XY + YX + Y^2\)</span> is not <span class="arithmatex">\(X^2 + 2XY + Y^2\)</span> in general. The expansion here is</p>
 <div class="arithmatex">\[(C + I_2)^2 = C^2 + CI_2 + I_2C + I_2^2 ,\]</div>
 <p>and the middle two terms are <em>both</em> equal to <span class="arithmatex">\(C\)</span> by the identity property, so they combine into <span class="arithmatex">\(2C\)</span> with no commutativity issue. That is the special feature of <span class="arithmatex">\(I_2\)</span>: it commutes with every matrix.</p>
+<p><strong>2.</strong> Let</p>
+<div class="arithmatex">\[
+A = \begin{pmatrix}
+2 &amp; 3 &amp; -4 \\[0.25em]
+4 &amp; -1 &amp; 6 \\[0.25em]
+5 &amp; 2 &amp; 1
+\end{pmatrix}.
+\]</div>
+<p>Find a non-zero <span class="arithmatex">\(3 \times 3\)</span> matrix <span class="arithmatex">\(M\)</span> for which <span class="arithmatex">\(AM\)</span> is the <span class="arithmatex">\(3 \times 3\)</span> zero matrix (there are many valid solutions).</p>
+<p><strong>Solution:</strong> The key is to remember how the columns of a product behave: the <span class="arithmatex">\(j\)</span>th column of <span class="arithmatex">\(AM\)</span> is <span class="arithmatex">\(A\)</span> applied to the <span class="arithmatex">\(j\)</span>th column of <span class="arithmatex">\(M\)</span>. So <span class="arithmatex">\(AM\)</span> is the zero matrix exactly when <strong>every column of <span class="arithmatex">\(M\)</span> is a vector that <span class="arithmatex">\(A\)</span> sends to <span class="arithmatex">\(\mathbf{0}\)</span>.</strong> The problem therefore reduces to finding a single nonzero <span class="arithmatex">\(3\)</span>-vector <span class="arithmatex">\(\mathbf{v}\)</span> with <span class="arithmatex">\(A\mathbf{v} = \mathbf{0}\)</span>, after which we may use <span class="arithmatex">\(\mathbf{v}\)</span> to build the columns of <span class="arithmatex">\(M\)</span>.</p>
+<p><em>Finding such a <span class="arithmatex">\(\mathbf{v}\)</span>.</em> Writing <span class="arithmatex">\(\mathbf{v} = (x, y, z)\)</span>, the condition <span class="arithmatex">\(A\mathbf{v} = \mathbf{0}\)</span> says</p>
+<div class="arithmatex">\[
+2x + 3y - 4z = 0, \qquad
+4x - y + 6z = 0, \qquad
+5x + 2y + z = 0 .
+\]</div>
+<p>The solutions are exactly the multiples of <span class="arithmatex">\((-1, 2, 1)\)</span>, obtained by taking <span class="arithmatex">\(z = 1\)</span>. As a check,</p>
+<div class="arithmatex">\[
+A\begin{pmatrix} -1 \\[0.25em] 2 \\[0.25em] 1 \end{pmatrix}
+= \begin{pmatrix} -2 + 6 - 4 \\[0.25em] -4 - 2 + 6 \\[0.25em] -5 + 4 + 1 \end{pmatrix}
+= \begin{pmatrix} 0 \\[0.25em] 0 \\[0.25em] 0 \end{pmatrix}.
+\]</div>
+<p><em>Building <span class="arithmatex">\(M\)</span>:</em> Put <span class="arithmatex">\(\mathbf{v}\)</span> in the first column and fill the rest with zeros:</p>
+<div class="arithmatex">\[
+M = \begin{pmatrix}
+-1 &amp; 0 &amp; 0 \\[0.25em]
+2 &amp; 0 &amp; 0 \\[0.25em]
+1 &amp; 0 &amp; 0
+\end{pmatrix}.
+\]</div>
+<p>This <span class="arithmatex">\(M\)</span> is nonzero, and <span class="arithmatex">\(AM\)</span> has first column <span class="arithmatex">\(A\mathbf{v} = \mathbf{0}\)</span> and second and third columns <span class="arithmatex">\(A\mathbf{0} = \mathbf{0}\)</span>, so <span class="arithmatex">\(AM\)</span> is the zero matrix.</p>
+<p><strong>3.</strong> Let <span class="arithmatex">\(T : \mathbb{R}^2 \to \mathbb{R}^2\)</span> be the linear transformation that, on an input <span class="arithmatex">\(\mathbf{x}\)</span>, outputs the sum of the rotation counterclockwise by <span class="arithmatex">\(45°\)</span> of <span class="arithmatex">\(\mathbf{x}\)</span> and twice <span class="arithmatex">\(\mathbf{x}\)</span>. That is, <span class="arithmatex">\(T(\mathbf{x}) = R_{\pi/4}(\mathbf{x}) + 2\mathbf{x}\)</span>. Find the matrix <span class="arithmatex">\(A\)</span> for <span class="arithmatex">\(T\)</span>.</p>
+<p><strong>Solution:</strong> Recall that <span class="arithmatex">\(T_{A+B}(\mathbf{x}) = T_A(\mathbf{x}) + T_B(\mathbf{x})\)</span> and <span class="arithmatex">\(T_{cA}(\mathbf{x}) = c\,T_A(\mathbf{x})\)</span>. Reading those from right to left lets us assemble the matrix of <span class="arithmatex">\(T\)</span> out of the matrices of its two pieces.</p>
+<p>The first piece is rotation counterclockwise by <span class="arithmatex">\(\pi/4\)</span>, whose matrix is</p>
+<div class="arithmatex">\[
+A_{\pi/4} = \begin{pmatrix} \cos(\pi/4) &amp; -\sin(\pi/4) \\[0.35em] \sin(\pi/4) &amp; \cos(\pi/4) \end{pmatrix}
+= \begin{pmatrix} 1/\sqrt{2} &amp; -1/\sqrt{2} \\[0.35em] 1/\sqrt{2} &amp; 1/\sqrt{2} \end{pmatrix}.
+\]</div>
+<p>The second piece is the map <span class="arithmatex">\(\mathbf{x} \mapsto 2\mathbf{x}\)</span>, which is <span class="arithmatex">\(2\)</span> times the identity transformation, so its matrix is <span class="arithmatex">\(2I_2\)</span>. Therefore</p>
+<div class="arithmatex">\[
+A = A_{\pi/4} + 2I_2
+= \begin{pmatrix} 1/\sqrt{2} &amp; -1/\sqrt{2} \\[0.35em] 1/\sqrt{2} &amp; 1/\sqrt{2} \end{pmatrix}
++ \begin{pmatrix} 2 &amp; 0 \\[0.35em] 0 &amp; 2 \end{pmatrix}
+= \begin{pmatrix} 2 + \dfrac{1}{\sqrt{2}} &amp; -\dfrac{1}{\sqrt{2}} \\[0.9em] \dfrac{1}{\sqrt{2}} &amp; 2 + \dfrac{1}{\sqrt{2}} \end{pmatrix},
+\]</div>
+<p>where <span class="arithmatex">\(1/\sqrt{2} = \sqrt{2}/2 \approx 0.707\)</span> if a decimal form is wanted.</p>
+<p><em>Check by columns:</em> The columns of the matrix of a linear transformation are its values on <span class="arithmatex">\(\mathbf{e}_1\)</span> and <span class="arithmatex">\(\mathbf{e}_2\)</span>, so we can confirm the answer without using matrix addition at all. Rotating <span class="arithmatex">\(\mathbf{e}_1\)</span> by <span class="arithmatex">\(45°\)</span> gives <span class="arithmatex">\((1/\sqrt{2},\ 1/\sqrt{2})\)</span>, and doubling <span class="arithmatex">\(\mathbf{e}_1\)</span> gives <span class="arithmatex">\((2, 0)\)</span>, so</p>
+<div class="arithmatex">\[T(\mathbf{e}_1) = \begin{pmatrix} 1/\sqrt{2} \\[0.35em] 1/\sqrt{2} \end{pmatrix} + \begin{pmatrix} 2 \\[0.35em] 0 \end{pmatrix} = \begin{pmatrix} 2 + 1/\sqrt{2} \\[0.35em] 1/\sqrt{2} \end{pmatrix},\]</div>
+<p>which is the first column above. Rotating <span class="arithmatex">\(\mathbf{e}_2\)</span> gives <span class="arithmatex">\((-1/\sqrt{2},\ 1/\sqrt{2})\)</span>, and doubling <span class="arithmatex">\(\mathbf{e}_2\)</span> gives <span class="arithmatex">\((0, 2)\)</span>, so</p>
+<div class="arithmatex">\[T(\mathbf{e}_2) = \begin{pmatrix} -1/\sqrt{2} \\[0.35em] 1/\sqrt{2} \end{pmatrix} + \begin{pmatrix} 0 \\[0.35em] 2 \end{pmatrix} = \begin{pmatrix} -1/\sqrt{2} \\[0.35em] 2 + 1/\sqrt{2} \end{pmatrix},\]</div>
+<p>the second column. The two methods agree.</p>
 
 
 
