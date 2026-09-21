@@ -5285,6 +5285,122 @@ A = A_{\pi/4} + 2I_2
 <p>which is the first column above. Rotating <span class="arithmatex">\(\mathbf{e}_2\)</span> gives <span class="arithmatex">\((-1/\sqrt{2},\ 1/\sqrt{2})\)</span>, and doubling <span class="arithmatex">\(\mathbf{e}_2\)</span> gives <span class="arithmatex">\((0, 2)\)</span>, so</p>
 <div class="arithmatex">\[T(\mathbf{e}_2) = \begin{pmatrix} -1/\sqrt{2} \\[0.35em] 1/\sqrt{2} \end{pmatrix} + \begin{pmatrix} 0 \\[0.35em] 2 \end{pmatrix} = \begin{pmatrix} -1/\sqrt{2} \\[0.35em] 2 + 1/\sqrt{2} \end{pmatrix},\]</div>
 <p>the second column. The two methods agree.</p>
+<p><strong>4.</strong> Let <span class="arithmatex">\(D\)</span> be a <span class="arithmatex">\(5 \times 5\)</span> diagonal matrix with diagonal entries <span class="arithmatex">\(d_1, d_2, \ldots, d_5 \in \mathbb{R}\)</span> (from top left to bottom right). Suppose <span class="arithmatex">\(A\)</span> is a <span class="arithmatex">\(5 \times 5\)</span> matrix whose second and fourth columns, respectively, are</p>
+<div class="arithmatex">\[
+\begin{pmatrix} 2 \\[0.25em] -1 \\[0.25em] 0 \\[0.25em] 3 \\[0.25em] 4 \end{pmatrix}
+\qquad \text{and} \qquad
+\begin{pmatrix} 1 \\[0.25em] 8 \\[0.25em] -9 \\[0.25em] 3 \\[0.25em] 1 \end{pmatrix}.
+\]</div>
+<p>For each of the following, compute it in terms of the <span class="arithmatex">\(d_i\)</span>'s or explain why there is not enough information given to do so.</p>
+<p><strong>(a).</strong> The second column of <span class="arithmatex">\(DA\)</span>.</p>
+<p><strong>Solution:</strong> The second column of <span class="arithmatex">\(DA\)</span> is <span class="arithmatex">\(D\)</span> applied to the second column of <span class="arithmatex">\(A\)</span>, which we are given. Multiplying by a diagonal matrix scales the <span class="arithmatex">\(i\)</span>th entry of a vector by <span class="arithmatex">\(d_i\)</span>, so</p>
+<div class="arithmatex">\[
+D\begin{pmatrix} 2 \\[0.25em] -1 \\[0.25em] 0 \\[0.25em] 3 \\[0.25em] 4 \end{pmatrix}
+= \begin{pmatrix} 2d_1 \\[0.25em] -d_2 \\[0.25em] 0 \\[0.25em] 3d_4 \\[0.25em] 4d_5 \end{pmatrix}.
+\]</div>
+<p>There is enough information. Note that <span class="arithmatex">\(d_3\)</span> does not appear, since the entry it scales is <span class="arithmatex">\(0\)</span>.</p>
+<p><strong>(b).</strong> The fourth column of <span class="arithmatex">\(AD\)</span>.</p>
+<p><strong>Solution:</strong> Again the fourth column of <span class="arithmatex">\(AD\)</span> is <span class="arithmatex">\(A\)</span> applied to the fourth column of <span class="arithmatex">\(D\)</span>. Since <span class="arithmatex">\(D\)</span> is diagonal, its fourth column has <span class="arithmatex">\(d_4\)</span> in the fourth slot and <span class="arithmatex">\(0\)</span> everywhere else, so it equals <span class="arithmatex">\(d_4\mathbf{e}_4\)</span>. Here <span class="arithmatex">\(d_4\)</span> is a single real number (a scalar) and <span class="arithmatex">\(\mathbf{e}_4\)</span> is the <span class="arithmatex">\(5 \times 1\)</span> column vector with a <span class="arithmatex">\(1\)</span> in the fourth entry and <span class="arithmatex">\(0\)</span> elsewhere, so <span class="arithmatex">\(d_4\mathbf{e}_4\)</span> is a scalar multiple of a vector, not a product of two matrices. Pulling that scalar out through <span class="arithmatex">\(A\)</span> is allowed by linearity, and therefore</p>
+<div class="arithmatex">\[A(d_4\mathbf{e}_4) = d_4\,(A\mathbf{e}_4) = d_4 \cdot (\text{fourth column of } A),\]</div>
+<p>using that <span class="arithmatex">\(A\mathbf{e}_4\)</span> is the fourth column of <span class="arithmatex">\(A\)</span>. That column is given, so</p>
+<div class="arithmatex">\[
+d_4 \begin{pmatrix} 1 \\[0.25em] 8 \\[0.25em] -9 \\[0.25em] 3 \\[0.25em] 1 \end{pmatrix}
+= \begin{pmatrix} d_4 \\[0.25em] 8d_4 \\[0.25em] -9d_4 \\[0.25em] 3d_4 \\[0.25em] d_4 \end{pmatrix}.
+\]</div>
+<p>There is enough information here too, and notice that only the single number <span class="arithmatex">\(d_4\)</span> is involved.</p>
+<p><strong>5.</strong> We defined an <span class="arithmatex">\(m \times n\)</span> matrix <span class="arithmatex">\(U\)</span> to be <strong>upper triangular</strong> if all its entries below the diagonal vanish: <span class="arithmatex">\(u_{ij} = 0\)</span> when <span class="arithmatex">\(i &gt; j\)</span>. Examples include:</p>
+<div class="arithmatex">\[
+\begin{pmatrix} 2 &amp; 1 \\[0.25em] 0 &amp; -3 \end{pmatrix},
+\qquad
+\begin{pmatrix} 1 &amp; -3 &amp; 1 \\[0.25em] 0 &amp; 5 &amp; 2 \\[0.25em] 0 &amp; 0 &amp; 7 \end{pmatrix},
+\qquad
+\begin{pmatrix} 2 &amp; 4 \\[0.25em] 0 &amp; 9 \\[0.25em] 0 &amp; 0 \end{pmatrix},
+\qquad
+\begin{pmatrix} 2 &amp; 1 &amp; 1 &amp; -3 \\[0.25em] 0 &amp; -1 &amp; 0 &amp; 5 \\[0.25em] 0 &amp; 0 &amp; 6 &amp; 3 \\[0.25em] 0 &amp; 0 &amp; 0 &amp; -1 \end{pmatrix}
+\]</div>
+<p>There is no requirement on diagonal entries or on entries above the diagonal, so some of them could vanish; e.g., an <span class="arithmatex">\(n \times n\)</span> zero matrix is upper triangular. The only requirement is that entries below the diagonal must vanish.</p>
+<p><strong>(a).</strong> For <span class="arithmatex">\(1 \leq i \leq n\)</span>, let <span class="arithmatex">\(V_i = \text{span}(\mathbf{e}_1, \ldots, \mathbf{e}_i)\)</span> be the span of the first <span class="arithmatex">\(i\)</span> standard basis vectors of <span class="arithmatex">\(\mathbb{R}^n\)</span> (equivalently: <span class="arithmatex">\(V_i\)</span> consists of vectors whose entries beyond the <span class="arithmatex">\(i\)</span>th position all vanish); define <span class="arithmatex">\(V_i = \mathbb{R}^n\)</span> for <span class="arithmatex">\(i &gt; n\)</span>. Letting <span class="arithmatex">\(\mathbf{e}'_1, \ldots, \mathbf{e}'_m\)</span> denote the standard basis of <span class="arithmatex">\(\mathbb{R}^m\)</span>, likewise define <span class="arithmatex">\(V'_i = \text{span}(\mathbf{e}'_1, \ldots, \mathbf{e}'_i)\)</span> for <span class="arithmatex">\(1 \leq i \leq m\)</span> (and <span class="arithmatex">\(V'_i = \mathbb{R}^m\)</span> for <span class="arithmatex">\(i &gt; m\)</span>). If <span class="arithmatex">\(L : \mathbb{R}^n \to \mathbb{R}^m\)</span> is a linear transformation and <span class="arithmatex">\(A\)</span> is the corresponding <span class="arithmatex">\(m \times n\)</span> matrix, use the relationship between the columns of <span class="arithmatex">\(A\)</span> and the vectors <span class="arithmatex">\(L(\mathbf{e}_i)\)</span> to explain why <span class="arithmatex">\(A\)</span> is upper triangular precisely when <span class="arithmatex">\(L\)</span> carries <span class="arithmatex">\(V_i\)</span> into <span class="arithmatex">\(V'_i\)</span> for every <span class="arithmatex">\(i\)</span>.</p>
+<p>The conventions for <span class="arithmatex">\(i\)</span> beyond <span class="arithmatex">\(n\)</span> or <span class="arithmatex">\(m\)</span> are there so that the phrase "for every <span class="arithmatex">\(i\)</span>" makes sense when the matrix is not square.</p>
+<p><strong>Solution:</strong> Before any general argument, look at what the condition says on a concrete matrix. Take the <span class="arithmatex">\(3 \times 3\)</span> example from the list above,</p>
+<div class="arithmatex">\[
+A = \begin{pmatrix} 1 &amp; -3 &amp; 1 \\[0.25em] 0 &amp; 5 &amp; 2 \\[0.25em] 0 &amp; 0 &amp; 7 \end{pmatrix},
+\]</div>
+<p>and read off its columns, which are the vectors <span class="arithmatex">\(L(\mathbf{e}_1), L(\mathbf{e}_2), L(\mathbf{e}_3)\)</span>:</p>
+<div class="arithmatex">\[
+L(\mathbf{e}_1) = \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix} \in V'_1,
+\qquad
+L(\mathbf{e}_2) = \begin{pmatrix} -3 \\ 5 \\ 0 \end{pmatrix} \in V'_2,
+\qquad
+L(\mathbf{e}_3) = \begin{pmatrix} 1 \\ 2 \\ 7 \end{pmatrix} \in V'_3 .
+\]</div>
+<p>Each column is allowed one more nonzero slot than the last, and the staircase of zeros below the diagonal is exactly that pattern</p>
+<p>In general the <span class="arithmatex">\(j\)</span>th column of <span class="arithmatex">\(A\)</span> is <span class="arithmatex">\(L(\mathbf{e}_j)\)</span>. Saying that all entries below the diagonal vanish says that in each column <span class="arithmatex">\(j\)</span>, the entries in positions <span class="arithmatex">\(i &gt; j\)</span> are zero, so the only entries of <span class="arithmatex">\(L(\mathbf{e}_j)\)</span> that may be nonzero are those in positions <span class="arithmatex">\(1, 2, \ldots, j\)</span>. A vector of <span class="arithmatex">\(\mathbb{R}^m\)</span> whose entries vanish past position <span class="arithmatex">\(j\)</span> is precisely a vector of <span class="arithmatex">\(V'_j\)</span>. Hence</p>
+<div class="arithmatex">\[A \text{ is upper triangular} \iff L(\mathbf{e}_j) \in V'_j \text{ for every } j. \tag{$\ast$}\]</div>
+<p>What remains is to upgrade <span class="arithmatex">\((\ast)\)</span>, which only talks about the special vectors <span class="arithmatex">\(\mathbf{e}_j\)</span>, into the statement about all of <span class="arithmatex">\(V_i\)</span> at once.</p>
+<p>One direction is immediate. If <span class="arithmatex">\(L\)</span> carries <span class="arithmatex">\(V_i\)</span> into <span class="arithmatex">\(V'_i\)</span> for every <span class="arithmatex">\(i\)</span>, then since <span class="arithmatex">\(\mathbf{e}_j\)</span> is itself a vector in <span class="arithmatex">\(V_j\)</span>, we get <span class="arithmatex">\(L(\mathbf{e}_j) \in V'_j\)</span>, which is <span class="arithmatex">\((\ast)\)</span>.</p>
+<p>For the other direction, suppose <span class="arithmatex">\((\ast)\)</span> holds and take any vector in <span class="arithmatex">\(V_i\)</span>. Let us do this with the example first, with <span class="arithmatex">\(i = 2\)</span>. A vector of <span class="arithmatex">\(V_2\)</span> looks like <span class="arithmatex">\(\mathbf{x} = (c_1, c_2, 0)\)</span>, that is <span class="arithmatex">\(\mathbf{x} = c_1\mathbf{e}_1 + c_2\mathbf{e}_2\)</span>, so by linearity</p>
+<div class="arithmatex">\[L(\mathbf{x}) = c_1L(\mathbf{e}_1) + c_2L(\mathbf{e}_2) = c_1\begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix} + c_2\begin{pmatrix} -3 \\ 5 \\ 0 \end{pmatrix} = \begin{pmatrix} c_1 - 3c_2 \\ 5c_2 \\ 0 \end{pmatrix},\]</div>
+<p>whose third entry is <span class="arithmatex">\(0\)</span> no matter what <span class="arithmatex">\(c_1\)</span> and <span class="arithmatex">\(c_2\)</span> are. So <span class="arithmatex">\(L(\mathbf{x}) \in V'_2\)</span>. The third entry had to vanish because it was <span class="arithmatex">\(0\)</span> in <em>both</em> of the two columns being combined.</p>
+<p>The general argument is the same sentence with indices. Any <span class="arithmatex">\(\mathbf{x} \in V_i\)</span> can be written <span class="arithmatex">\(\mathbf{x} = c_1\mathbf{e}_1 + \cdots + c_i\mathbf{e}_i\)</span>, precisely because its entries past position <span class="arithmatex">\(i\)</span> vanish, so</p>
+<div class="arithmatex">\[L(\mathbf{x}) = c_1L(\mathbf{e}_1) + \cdots + c_iL(\mathbf{e}_i).\]</div>
+<p>Two facts finish it. First, the subspaces are <strong>nested</strong>,</p>
+<div class="arithmatex">\[V'_1 \subseteq V'_2 \subseteq V'_3 \subseteq \cdots,\]</div>
+<p>since allowing more nonzero slots only enlarges the collection; so each term <span class="arithmatex">\(L(\mathbf{e}_j)\)</span>, which lies in <span class="arithmatex">\(V'_j\)</span> by <span class="arithmatex">\((\ast)\)</span>, also lies in the larger <span class="arithmatex">\(V'_i\)</span> whenever <span class="arithmatex">\(j \leq i\)</span>. Second, <span class="arithmatex">\(V'_i\)</span> is a <a href="../span_subspaces_and_dimension/#span-and-linear-subspaces">linear subspace</a>, hence closed under sums and scalar multiples, so the whole combination stays inside <span class="arithmatex">\(V'_i\)</span>. Therefore <span class="arithmatex">\(L(\mathbf{x}) \in V'_i\)</span>, and since <span class="arithmatex">\(\mathbf{x} \in V_i\)</span> was arbitrary, <span class="arithmatex">\(L\)</span> carries <span class="arithmatex">\(V_i\)</span> into <span class="arithmatex">\(V'_i\)</span>.</p>
+<p>Together with <span class="arithmatex">\((\ast)\)</span>, the two directions give the claim.</p>
+<p><strong>(b).</strong> Using (a) and the relationship between matrix multiplication and composition of linear functions, show that a product <span class="arithmatex">\(U_1U_2\)</span> of an upper triangular <span class="arithmatex">\(m \times n\)</span> matrix <span class="arithmatex">\(U_1\)</span> and an upper triangular <span class="arithmatex">\(n \times p\)</span> matrix <span class="arithmatex">\(U_2\)</span> is an upper triangular <span class="arithmatex">\(m \times p\)</span> matrix.</p>
+<p><strong>Solution:</strong> Write <span class="arithmatex">\(L_1 = T_{U_1} : \mathbb{R}^n \to \mathbb{R}^m\)</span> and <span class="arithmatex">\(L_2 = T_{U_2} : \mathbb{R}^p \to \mathbb{R}^n\)</span>. Since matrix multiplication was defined to express composition, <span class="arithmatex">\(U_1U_2\)</span> is the <span class="arithmatex">\(m \times p\)</span> matrix of <span class="arithmatex">\(L_1 \circ L_2 : \mathbb{R}^p \to \mathbb{R}^m\)</span>. Three spaces are involved, so name the staircase of subspaces in each:</p>
+<div class="arithmatex">\[V_i \subseteq \mathbb{R}^p, \qquad V'_i \subseteq \mathbb{R}^n, \qquad V''_i \subseteq \mathbb{R}^m,\]</div>
+<p>each the span of the first <span class="arithmatex">\(i\)</span> standard basis vectors of its own space (with the conventions of part (a) once <span class="arithmatex">\(i\)</span> runs past the dimension).</p>
+<p>Part (a) applied to each factor says</p>
+<div class="arithmatex">\[L_2(V_i) \subseteq V'_i \quad \text{for every } i, \qquad L_1(V'_i) \subseteq V''_i \quad \text{for every } i .\]</div>
+<p>Now fix an <span class="arithmatex">\(i\)</span> and follow a vector <span class="arithmatex">\(\mathbf{x} \in V_i\)</span> through the two stages.</p>
+<p><strong>Stage 1:</strong> Apply <span class="arithmatex">\(L_2\)</span>. Because <span class="arithmatex">\(L_2(V_i) \subseteq V'_i\)</span>, the output <span class="arithmatex">\(L_2(\mathbf{x})\)</span> lands somewhere in <span class="arithmatex">\(V'_i\)</span>.</p>
+<p><strong>Stage 2:</strong> Apply <span class="arithmatex">\(L_1\)</span> to that output. The second fact says <span class="arithmatex">\(L_1\)</span> sends <em>every</em> vector of <span class="arithmatex">\(V'_i\)</span> into <span class="arithmatex">\(V''_i\)</span>. Our vector <span class="arithmatex">\(L_2(\mathbf{x})\)</span> is one of those vectors, by Stage 1. So <span class="arithmatex">\(L_1(L_2(\mathbf{x})) \in V''_i\)</span>.</p>
+<p>Since <span class="arithmatex">\((L_1 \circ L_2)(\mathbf{x})\)</span> <em>means</em> <span class="arithmatex">\(L_1(L_2(\mathbf{x}))\)</span>, we have shown that <span class="arithmatex">\((L_1 \circ L_2)(\mathbf{x}) \in V''_i\)</span> for every <span class="arithmatex">\(\mathbf{x} \in V_i\)</span>, which is exactly the statement</p>
+<div class="arithmatex">\[(L_1 \circ L_2)(V_i) \subseteq V''_i .\]</div>
+<p>The same reasoning written as a chain of sets, rather than by chasing one vector, is</p>
+<div class="arithmatex">\[(L_1 \circ L_2)(V_i) = L_1\bigl(L_2(V_i)\bigr) \subseteq L_1(V'_i) \subseteq V''_i ,\]</div>
+<p>where the first equality is the definition of composition, the middle inclusion holds because <span class="arithmatex">\(L_2(V_i)\)</span> sits inside <span class="arithmatex">\(V'_i\)</span> and feeding a <em>smaller</em> set into <span class="arithmatex">\(L_1\)</span> produces a smaller output set, and the last inclusion is the second fact above.</p>
+<p>Since <span class="arithmatex">\(i\)</span> was arbitrary, <span class="arithmatex">\(L_1 \circ L_2\)</span> carries <span class="arithmatex">\(V_i\)</span> into <span class="arithmatex">\(V''_i\)</span> for every <span class="arithmatex">\(i\)</span>. Applying part (a) in the reverse direction to the composite, its matrix <span class="arithmatex">\(U_1U_2\)</span> is upper triangular. <span class="arithmatex">\(\blacksquare\)</span></p>
+<p>Watch it happen with</p>
+<div class="arithmatex">\[
+U_1 = \begin{pmatrix} 2 &amp; 1 \\[0.25em] 0 &amp; -3 \end{pmatrix},
+\qquad
+U_2 = \begin{pmatrix} 1 &amp; 4 \\[0.25em] 0 &amp; 5 \end{pmatrix},
+\qquad
+U_1U_2 = \begin{pmatrix} 2 &amp; 13 \\[0.25em] 0 &amp; -15 \end{pmatrix}.
+\]</div>
+<p>Track <span class="arithmatex">\(\mathbf{e}_1\)</span> through the two stages: <span class="arithmatex">\(U_2\)</span> sends it to <span class="arithmatex">\((1, 0)\)</span>, which lies in the first-slot-only subspace, and then <span class="arithmatex">\(U_1\)</span> sends <span class="arithmatex">\((1,0)\)</span> to <span class="arithmatex">\((2, 0)\)</span>, still first-slot-only.</p>
+<p><strong>6.</strong> Let</p>
+<div class="arithmatex">\[
+C = \begin{pmatrix}
+3 &amp; -2 &amp; 2 \\[0.25em]
+-6 &amp; 4 &amp; -4 \\[0.25em]
+12 &amp; -8 &amp; 8
+\end{pmatrix}.
+\]</div>
+<p>Find a <span class="arithmatex">\(3 \times 1\)</span> matrix <span class="arithmatex">\(A\)</span> and a <span class="arithmatex">\(1 \times 3\)</span> matrix <span class="arithmatex">\(B\)</span> for which <span class="arithmatex">\(C = AB\)</span>.</p>
+<p><strong>Solution:</strong> First see what a product of this shape looks like. Write</p>
+<div class="arithmatex">\[
+A = \begin{pmatrix} a_1 \\[0.25em] a_2 \\[0.25em] a_3 \end{pmatrix},
+\qquad
+B = \begin{pmatrix} b_1 &amp; b_2 &amp; b_3 \end{pmatrix}.
+\]</div>
+<p>Thus,</p>
+<div class="arithmatex">\[
+AB = \begin{pmatrix}
+a_1b_1 &amp; a_1b_2 &amp; a_1b_3 \\[0.25em]
+a_2b_1 &amp; a_2b_2 &amp; a_2b_3 \\[0.25em]
+a_3b_1 &amp; a_3b_2 &amp; a_3b_3
+\end{pmatrix}.
+\]</div>
+<p>Look at the rows. The first row is <span class="arithmatex">\(a_1(b_1, b_2, b_3)\)</span>, the second is <span class="arithmatex">\(a_2(b_1, b_2, b_3)\)</span>, and the third is <span class="arithmatex">\(a_3(b_1, b_2, b_3)\)</span>. So <strong>every row of <span class="arithmatex">\(AB\)</span> is a multiple of the single row <span class="arithmatex">\(B\)</span></strong>, and the multipliers are the entries of <span class="arithmatex">\(A\)</span>.</p>
+<p>We can spot that:</p>
+<div class="arithmatex">\[
+A = \begin{pmatrix} 1 \\[0.25em] -2 \\[0.25em] 4 \end{pmatrix},
+\qquad
+B = \begin{pmatrix} 3 &amp; -2 &amp; 2 \end{pmatrix}.
+\]</div>
 
 
 
