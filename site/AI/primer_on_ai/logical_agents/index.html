@@ -834,6 +834,84 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#first-order-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First-Order Logic
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="First-Order Logic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntax-and-semantics-of-first-order-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Syntax and Semantics of First-Order Logic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quantifiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quantifiers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Quantifiers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#universal-quantification-forall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Universal quantification (\(\forall\))
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#existential-quantification-exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Existential quantification (\(\exists\))
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connections-between-forall-and-exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connections between \(\forall\) and \(\exists\)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5216,6 +5294,7 @@
 <p>The details of the representation language are hidden inside three helper functions. <span class="arithmatex">\(\text{MAKE-PERCEPT-SENTENCE}\)</span> constructs a sentence asserting that the agent perceived the given percept at time <span class="arithmatex">\(t\)</span>. <span class="arithmatex">\(\text{MAKE-ACTION-QUERY}\)</span> constructs a sentence asking what action should be performed at time <span class="arithmatex">\(t\)</span>. <span class="arithmatex">\(\text{MAKE-ACTION-SENTENCE}\)</span> constructs a sentence asserting that the chosen action was executed. The details of the inference mechanisms are hidden inside <span class="arithmatex">\(\text{TELL}\)</span> and <span class="arithmatex">\(\text{ASK}\)</span>.</p>
 <p>For example, an automated taxi might have the goal of taking a passenger from San Francisco to Marin County and might know that the Golden Gate Bridge is the only link between the two locations. We can then expect it to cross the Golden Gate Bridge, because it knows that doing so will achieve its goal. Notice that this analysis is independent of how the taxi works at the implementation level. It doesn't matter whether its geographical knowledge is stored as linked lists or pixel maps, or whether it reasons by manipulating strings of symbols in registers or by propagating noisy signals through a network of neurons.</p>
 <h2 id="logic">Logic</h2>
+<p>Informally, <strong>logic</strong> is the study of what follows from what. Given a set of things you know to be true, logic tells you what else must be true— not by guessing or observing, but by the structure of the statements themselves. It has three parts: the words and symbols we use to express facts (<strong>syntax</strong>), what those facts actually mean in the world (<strong>semantics</strong>), and the rules for deriving new facts from existing ones (<strong>inference</strong>).</p>
 <p>We said that knowledge bases consist of sentences. These sentences are expressed according to the <strong>syntax</strong> of the representation language. <strong>Semantics</strong> defines the meaning of sentences. Specifically, it specifies what each sentence asserts about the world. A sentence is true or false relative to a <strong>possible world</strong> (also called a <strong>model</strong>). The semantics tells you, for any given sentence <span class="arithmatex">\(\alpha\)</span> and any given model <span class="arithmatex">\(m\)</span>, whether <span class="arithmatex">\(\alpha\)</span> holds in <span class="arithmatex">\(m\)</span>. This is what distinguishes a knowledge representation language from mere syntax: syntax is the form of sentences, semantics is what they mean. For example, the semantics for arithmetic specifies that the sentence <span class="arithmatex">\(x + y = 4\)</span> is true in a world where <span class="arithmatex">\(x = 2\)</span> and <span class="arithmatex">\(y = 2\)</span>, but false in a world where <span class="arithmatex">\(x = 1\)</span> and <span class="arithmatex">\(y = 1\)</span>.</p>
 <p>When we need to be precise, we use the term <strong>model</strong> in place of "possible world." Whereas possible worlds might be thought of as (potentially) real environments that the agent might or might not be in, models are mathematical abstractions, each of which has a fixed truth value (true or false) for every relevant sentence.</p>
 <p>Informally, we might think of a possible world as having <span class="arithmatex">\(x\)</span> men and <span class="arithmatex">\(y\)</span> women sitting at a table playing bridge, where the sentence <span class="arithmatex">\(x + y = 4\)</span> is true when there are four people in total. Formally, the possible models are all possible assignments of non-negative integers to the variables <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span>. Each such assignment determines the truth of any arithmetic sentence whose variables are <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span>.</p>
@@ -5630,6 +5709,94 @@
 </tbody>
 </table>
 <p>Exactly one row satisfies all premises: <span class="arithmatex">\(A = \text{false}\)</span>, <span class="arithmatex">\(S = \text{true}\)</span>, <span class="arithmatex">\(G = \text{true}\)</span>, <span class="arithmatex">\(W = \text{true}\)</span>. Since <span class="arithmatex">\(W = \text{true}\)</span> in the unique model of <span class="arithmatex">\(\text{KB}\)</span>, we confirm <span class="arithmatex">\(\text{KB} \models W\)</span>.</p>
+<h2 id="first-order-logic">First-Order Logic</h2>
+<p>Propositional logic sufficed to illustrate the basic concepts of logic, inference, and knowledge based agents. Unfortunately, propositional logic is limited in what it can say.</p>
+<h3 id="syntax-and-semantics-of-first-order-logic">Syntax and Semantics of First-Order Logic</h3>
+<p>Models of a logical language are the formal structures that constitute the possible worlds under consideration. In First-Order Logic, the domain of a model is the set of objects or domain elements it contains. The domain is required to be nonempty— every possible world must contain at least one object.</p>
+<p><strong>Example: models and domains:</strong> Suppose we are reasoning about a small office. One possible model <span class="arithmatex">\(m_1\)</span> has the domain <span class="arithmatex">\(\{ \text{Alice}, \text{Bob}, \text{Room101}, \text{Laptop} \}\)</span>. A second model <span class="arithmatex">\(m_2\)</span> has a larger domain <span class="arithmatex">\(\{ \text{Alice}, \text{Bob}, \text{Carol}, \text{Room101}, \text{Laptop} \}\)</span>, representing a possible world where a third employee exists. A third model <span class="arithmatex">\(m_3\)</span> might have a completely different domain <span class="arithmatex">\(\{ \text{Dave}, \text{Server}, \text{Room202} \}\)</span>, representing an entirely different office. Each possible world is a different model with its own domain.</p>
+<p>The objects in the model may be related in various ways. Formally speaking, a relation is just the set of tuples of objects that are related. A tuple is a collection of objects arranged in a fixed order and is written with angle brackets surrounding the objects.</p>
+<p><strong>Example: tuples:</strong> Suppose our domain contains three people: Alice, Bob, and Carol. The tuple <span class="arithmatex">\(\langle \text{Alice}, \text{Bob} \rangle\)</span> represents an ordered pair. It is different from <span class="arithmatex">\(\langle \text{Bob}, \text{Alice} \rangle\)</span> because order matters.</p>
+<p><strong>Example: a relation:</strong> The relation <span class="arithmatex">\(\text{Knows}\)</span> might capture who knows whom. If Alice knows Bob and Bob knows Carol, the relation is the set of tuples:</p>
+<div class="arithmatex">\[\text{Knows} = \{ \langle \text{Alice}, \text{Bob} \rangle,\ \langle \text{Bob}, \text{Carol} \rangle \}\]</div>
+<p>We say <span class="arithmatex">\(\text{Knows}(\text{Alice}, \text{Bob})\)</span> is true (the tuple is in the relation) and <span class="arithmatex">\(\text{Knows}(\text{Alice}, \text{Carol})\)</span> is false (the tuple is not). Relations can involve any number of objects: a unary relation (one object) such as <span class="arithmatex">\(\text{IsAdult} = \{ \langle \text{Alice} \rangle,\ \langle \text{Carol} \rangle \}\)</span> captures a property of individual objects, while a ternary relation such as <span class="arithmatex">\(\text{Introduced}(\text{Alice}, \text{Bob}, \text{Carol})\)</span> (Alice introduced Bob to Carol) involves three.</p>
+<p><strong>Every model must provide the information required to determine if any given sentence is true or false.</strong></p>
+<p><strong>Example:</strong> Suppose we want to describe a small university department. We define a model <span class="arithmatex">\(m\)</span> as follows.</p>
+<p><strong>Domain:</strong> <span class="arithmatex">\(\Delta = \{ \text{Alice}, \text{Bob}, \text{Carol}, \text{CS101}, \text{CS201} \}\)</span></p>
+<p>Alice, Bob, and Carol are people; CS101 and CS201 are courses.</p>
+<p><strong>Relations:</strong></p>
+<ul>
+<li><span class="arithmatex">\(\text{Professor} = \{ \langle \text{Alice} \rangle,\ \langle \text{Bob} \rangle \}\)</span>. Alice and Bob are professors (unary; captures a property of individuals).</li>
+<li><span class="arithmatex">\(\text{Student} = \{ \langle \text{Carol} \rangle \}\)</span>. Carol is a student.</li>
+<li><span class="arithmatex">\(\text{Course} = \{ \langle \text{CS101} \rangle,\ \langle \text{CS201} \rangle \}\)</span>. CS101 and CS201 are courses.</li>
+<li><span class="arithmatex">\(\text{Teaches} = \{ \langle \text{Alice}, \text{CS101} \rangle,\ \langle \text{Bob}, \text{CS201} \rangle \}\)</span>. Alice teaches CS101, Bob teaches CS201 (binary relations).</li>
+<li><span class="arithmatex">\(\text{EnrolledIn} = \{ \langle \text{Carol}, \text{CS101} \rangle,\ \langle \text{Carol}, \text{CS201} \rangle \}\)</span>. Carol is enrolled in both courses.</li>
+<li><span class="arithmatex">\(\text{Prerequisite} = \{ \langle \text{CS101}, \text{CS201} \rangle \}\)</span>. CS101 is a prerequisite for CS201.</li>
+</ul>
+<p><strong>Querying the model:</strong> Given <span class="arithmatex">\(m\)</span>, we can now evaluate sentences:</p>
+<ul>
+<li><span class="arithmatex">\(\text{Teaches}(\text{Alice}, \text{CS101})\)</span> says Alice teaches CS101. <span class="arithmatex">\(\langle \text{Alice}, \text{CS101} \rangle \in \text{Teaches}\)</span>, so this is <span class="arithmatex">\(\text{true}\)</span>.</li>
+<li><span class="arithmatex">\(\text{Teaches}(\text{Carol}, \text{CS101})\)</span> says Carol teaches CS101. <span class="arithmatex">\(\langle \text{Carol}, \text{CS101} \rangle \notin \text{Teaches}\)</span>, so this is <span class="arithmatex">\(\text{false}\)</span>.</li>
+<li><span class="arithmatex">\(\text{EnrolledIn}(\text{Carol}, \text{CS101}) \land \text{Prerequisite}(\text{CS101}, \text{CS201})\)</span>. Both tuples are in their respective relations, so this conjunction is <span class="arithmatex">\(\text{true}\)</span>.</li>
+</ul>
+<p>A different model <span class="arithmatex">\(m'\)</span> with the same domain but <span class="arithmatex">\(\text{Teaches} = \{ \langle \text{Carol}, \text{CS101} \rangle \}\)</span> would make <span class="arithmatex">\(\text{Teaches}(\text{Carol}, \text{CS101})\)</span> true and <span class="arithmatex">\(\text{Teaches}(\text{Alice}, \text{CS101})\)</span> false— a different possible world, even though the objects are the same.</p>
+<p><strong>A predicate is the name we use in a sentence to refer to a relation.</strong> It is a symbol that takes one or more objects as arguments and evaluates to <span class="arithmatex">\(\text{true}\)</span> or <span class="arithmatex">\(\text{false}\)</span> depending on whether the corresponding tuple is in the relation.</p>
+<p>In the university example above, <span class="arithmatex">\(\text{Professor()}\)</span>, <span class="arithmatex">\(\text{Student()}\)</span>, <span class="arithmatex">\(\text{Teaches()}\)</span>, etc. are all predicates. When we write <span class="arithmatex">\(\text{Teaches}(\text{Alice}, \text{CS101})\)</span>, we are applying the predicate <span class="arithmatex">\(\text{Teaches}\)</span> to the arguments <span class="arithmatex">\(\text{Alice}\)</span> and <span class="arithmatex">\(\text{CS101}\)</span>. The model <span class="arithmatex">\(m\)</span> then determines whether that sentence is true by checking whether <span class="arithmatex">\(\langle \text{Alice}, \text{CS101} \rangle\)</span> belongs to the relation <span class="arithmatex">\(\text{Teaches}\)</span> in <span class="arithmatex">\(m\)</span>.</p>
+<p>The key distinction: the <strong>relation</strong> is the mathematical object (a set of tuples) that lives inside the model; the <strong>predicate</strong> is the syntactic symbol in the language that we use to talk about it. Writing <span class="arithmatex">\(\text{Teaches}(\text{Alice}, \text{CS101})\)</span> in a sentence is syntax; looking up whether <span class="arithmatex">\(\langle \text{Alice}, \text{CS101} \rangle \in \text{Teaches}\)</span> in the model to get a truth value is semantics.</p>
+<h3 id="quantifiers">Quantifiers</h3>
+<p>Once we have a logic that allows objects, it is only natural to want to express properties of entire collections of objects, instead of enumerating the objects by name. Quantifiers let us do this. First-order logic contains two standard quantifiers, called <strong>universal</strong> and <strong>existential</strong>.</p>
+<h4 id="universal-quantification-forall">Universal quantification (<span class="arithmatex">\(\forall\)</span>)</h4>
+<p>The symbol <span class="arithmatex">\(\forall\)</span> means "for all." A sentence <span class="arithmatex">\(\forall x\; \alpha(x)\)</span> is true in a model if and only if <span class="arithmatex">\(\alpha(x)\)</span> is true for every object in the domain when <span class="arithmatex">\(x\)</span> is substituted with that object.</p>
+<p><strong>Example:</strong> In model <span class="arithmatex">\(m\)</span>, the domain is <span class="arithmatex">\(\{ \text{Alice}, \text{Bob}, \text{Carol}, \text{CS101}, \text{CS201} \}\)</span> and <span class="arithmatex">\(\text{Professor} = \{ \langle \text{Alice} \rangle, \langle \text{Bob} \rangle \}\)</span>.</p>
+<p>Consider the sentence:</p>
+<div class="arithmatex">\[\forall x\; \text{Professor}(x) \Rightarrow \text{Teaches}(x, \text{CS101})\]</div>
+<p>"Every professor teaches CS101." We check every object in the domain:</p>
+<ul>
+<li><span class="arithmatex">\(x = \text{Alice}\)</span>: <span class="arithmatex">\(\text{Professor}(\text{Alice})\)</span> is true, and <span class="arithmatex">\(\langle \text{Alice}, \text{CS101} \rangle \in \text{Teaches}\)</span>, so the implication holds. ✓</li>
+<li><span class="arithmatex">\(x = \text{Bob}\)</span>: <span class="arithmatex">\(\text{Professor}(\text{Bob})\)</span> is true, but <span class="arithmatex">\(\langle \text{Bob}, \text{CS101} \rangle \notin \text{Teaches}\)</span> (Bob teaches CS201). The implication fails. ✗</li>
+<li><span class="arithmatex">\(x = \text{Carol}, \text{CS101}, \text{CS201}\)</span>: <span class="arithmatex">\(\text{Professor}\)</span> is false for all three, so the implication is vacuously true. ✓</li>
+</ul>
+<p>Since <span class="arithmatex">\(x = \text{Bob}\)</span> fails, the sentence is <strong>false</strong> in <span class="arithmatex">\(m\)</span>.</p>
+<h4 id="existential-quantification-exists">Existential quantification (<span class="arithmatex">\(\exists\)</span>)</h4>
+<p>The symbol <span class="arithmatex">\(\exists\)</span> means "there exists." A sentence <span class="arithmatex">\(\exists x\; \alpha(x)\)</span> is true in a model if and only if <span class="arithmatex">\(\alpha(x)\)</span> is true for at least one object in the domain.</p>
+<p><strong>Example:</strong> Using the same university domain:</p>
+<div class="arithmatex">\[\exists x\; \text{Student}(x)\]</div>
+<p>This is true if at least one object in the domain satisfies <span class="arithmatex">\(\text{Student}(x)\)</span>. In model <span class="arithmatex">\(m\)</span>, Carol is a student, so the sentence is true. If we considered a model with no students in the domain, it would be false.</p>
+<p>A combined example:</p>
+<div class="arithmatex">\[\exists x\; \text{Professor}(x) \land \text{Teaches}(x, \text{CS101})\]</div>
+<p>This says "there exists someone who is a professor and teaches CS101." In model <span class="arithmatex">\(m\)</span>, Alice satisfies this. So the sentence is true.</p>
+<p><strong>Example:</strong> Using the full model <span class="arithmatex">\(m\)</span>, we can write and evaluate several quantified sentences.</p>
+<p><strong>1.</strong> <span class="arithmatex">\(\forall x\; \text{Professor}(x) \Rightarrow \exists y\; \text{Course}(y) \land \text{Teaches}(x, y)\)</span></p>
+<p>"Every professor teaches at least one course." Without the <span class="arithmatex">\(\text{Course}(y)\)</span> guard, <span class="arithmatex">\(y\)</span> would range over all domain objects (including people), which is nonsensical. The predicate <span class="arithmatex">\(\text{Course}\)</span> is defined in <span class="arithmatex">\(m\)</span> and restricts <span class="arithmatex">\(y\)</span> to actual courses.</p>
+<ul>
+<li>For <span class="arithmatex">\(x = \text{Alice}\)</span>: <span class="arithmatex">\(\text{Professor}(\text{Alice})\)</span> is true. Is there a course <span class="arithmatex">\(y\)</span> such that <span class="arithmatex">\(\text{Teaches}(\text{Alice}, y)\)</span>? Yes. <span class="arithmatex">\(\langle \text{Alice}, \text{CS101} \rangle \in \text{Teaches}\)</span> and <span class="arithmatex">\(\text{Course}(\text{CS101})\)</span> holds. ✓</li>
+<li>For <span class="arithmatex">\(x = \text{Bob}\)</span>: <span class="arithmatex">\(\text{Professor}(\text{Bob})\)</span> is true. <span class="arithmatex">\(\langle \text{Bob}, \text{CS201} \rangle \in \text{Teaches}\)</span> and <span class="arithmatex">\(\text{Course}(\text{CS201})\)</span> holds. ✓</li>
+<li><span class="arithmatex">\(x = \text{Carol}, \text{CS101}, \text{CS201}\)</span>: <span class="arithmatex">\(\text{Professor}\)</span> is false for all three, so the implication is vacuously true. ✓</li>
+</ul>
+<p>The sentence is <strong>true</strong> in <span class="arithmatex">\(m\)</span>.</p>
+<p><strong>2.</strong> <span class="arithmatex">\(\exists x\; \text{Student}(x) \land \forall y\; \text{Course}(y) \Rightarrow \text{EnrolledIn}(x, y)\)</span></p>
+<p>"There exists a student who is enrolled in every course." Without the <span class="arithmatex">\(\text{Course}(y)\)</span> guard, <span class="arithmatex">\(\forall y\)</span> would range over people and courses alike (demanding, for example, that Carol be enrolled in Alice), which makes no sense.</p>
+<ul>
+<li>The only student is Carol. We check every object <span class="arithmatex">\(y\)</span> where <span class="arithmatex">\(\text{Course}(y)\)</span> holds— CS101 and CS201. Is <span class="arithmatex">\(\langle \text{Carol}, \text{CS101} \rangle \in \text{EnrolledIn}\)</span>? ✓. Is <span class="arithmatex">\(\langle \text{Carol}, \text{CS201} \rangle \in \text{EnrolledIn}\)</span>? ✓. For all other <span class="arithmatex">\(y\)</span> (Alice, Bob, Carol), <span class="arithmatex">\(\text{Course}(y)\)</span> is false, so the implication is vacuously true.</li>
+</ul>
+<p>The sentence is <strong>true</strong> in <span class="arithmatex">\(m\)</span>.</p>
+<p><strong>3.</strong> <span class="arithmatex">\(\forall x\; \forall y\; \text{Teaches}(x, y) \Rightarrow \text{Professor}(x)\)</span></p>
+<p>"Only professors teach courses."</p>
+<ul>
+<li>Check every <span class="arithmatex">\(\langle x, y \rangle \in \text{Teaches}\)</span>: <span class="arithmatex">\(\langle \text{Alice}, \text{CS101} \rangle\)</span>. Is Alice a professor? Yes. <span class="arithmatex">\(\langle \text{Bob}, \text{CS201} \rangle\)</span>. Is Bob a professor? Yes.</li>
+</ul>
+<p>The sentence is <strong>true</strong> in <span class="arithmatex">\(m\)</span>.</p>
+<h4 id="connections-between-forall-and-exists">Connections between <span class="arithmatex">\(\forall\)</span> and <span class="arithmatex">\(\exists\)</span></h4>
+<p>The two quantifiers are interdefinable via negation— you only ever need one of them. This is the quantifier analogue of De Morgan's laws.</p>
+<p><strong>De Morgan's laws for quantifiers:</strong></p>
+<div class="arithmatex">\[\lnot \forall x\; \alpha(x) \equiv \exists x\; \lnot \alpha(x)\]</div>
+<div class="arithmatex">\[\lnot \exists x\; \alpha(x) \equiv \forall x\; \lnot \alpha(x)\]</div>
+<p>The first says: "it is not the case that all <span class="arithmatex">\(x\)</span> satisfy <span class="arithmatex">\(\alpha\)</span>" is the same as "there exists some <span class="arithmatex">\(x\)</span> that does not satisfy <span class="arithmatex">\(\alpha\)</span>." The second says: "there is no <span class="arithmatex">\(x\)</span> satisfying <span class="arithmatex">\(\alpha\)</span>" is the same as "every <span class="arithmatex">\(x\)</span> fails to satisfy <span class="arithmatex">\(\alpha\)</span>."</p>
+<p><strong>Example using model <span class="arithmatex">\(m\)</span>:</strong></p>
+<p>Consider the sentence <span class="arithmatex">\(\forall x\; \text{Professor}(x) \Rightarrow \text{Teaches}(x, \text{CS101})\)</span>. "Every professor teaches CS101." We showed earlier this is <strong>false</strong> in <span class="arithmatex">\(m\)</span> (Bob doesn't teach CS101). By the first law, its negation must be true:</p>
+<div class="arithmatex">\[\lnot(\forall x\; \text{Professor}(x) \Rightarrow \text{Teaches}(x, \text{CS101})) \equiv \exists x\; \lnot(\text{Professor}(x) \Rightarrow \text{Teaches}(x, \text{CS101}))\]</div>
+<p>Recall that <span class="arithmatex">\(\lnot(P \Rightarrow Q) \equiv P \land \lnot Q\)</span>, so this simplifies to:</p>
+<div class="arithmatex">\[\exists x\; \text{Professor}(x) \land \lnot\text{Teaches}(x, \text{CS101})\]</div>
+<p>"There exists a professor who does not teach CS101." In <span class="arithmatex">\(m\)</span>, Bob is that professor. ✓ The two sentences are equivalent. One is the negation of the other. Checking one is enough to know the truth value of both.</p>
 
 
 

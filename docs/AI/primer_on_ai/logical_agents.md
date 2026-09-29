@@ -30,6 +30,8 @@ For example, an automated taxi might have the goal of taking a passenger from Sa
 
 ## Logic
 
+Informally, **logic** is the study of what follows from what. Given a set of things you know to be true, logic tells you what else must be true— not by guessing or observing, but by the structure of the statements themselves. It has three parts: the words and symbols we use to express facts (**syntax**), what those facts actually mean in the world (**semantics**), and the rules for deriving new facts from existing ones (**inference**).
+
 We said that knowledge bases consist of sentences. These sentences are expressed according to the **syntax** of the representation language. **Semantics** defines the meaning of sentences. Specifically, it specifies what each sentence asserts about the world. A sentence is true or false relative to a **possible world** (also called a **model**). The semantics tells you, for any given sentence $\alpha$ and any given model $m$, whether $\alpha$ holds in $m$. This is what distinguishes a knowledge representation language from mere syntax: syntax is the form of sentences, semantics is what they mean. For example, the semantics for arithmetic specifies that the sentence $x + y = 4$ is true in a world where $x = 2$ and $y = 2$, but false in a world where $x = 1$ and $y = 1$.
 
 When we need to be precise, we use the term **model** in place of "possible world." Whereas possible worlds might be thought of as (potentially) real environments that the agent might or might not be in, models are mathematical abstractions, each of which has a fixed truth value (true or false) for every relevant sentence.
@@ -219,3 +221,144 @@ $$G \land L \Rightarrow W,\quad G \land L \;\vdash\; W$$
 | T | T | T | T | ✗ | ✗ | ✓ | ✓ | ✗ |
 
 Exactly one row satisfies all premises: $A = \text{false}$, $S = \text{true}$, $G = \text{true}$, $W = \text{true}$. Since $W = \text{true}$ in the unique model of $\text{KB}$, we confirm $\text{KB} \models W$.
+
+## First-Order Logic
+
+Propositional logic sufficed to illustrate the basic concepts of logic, inference, and knowledge based agents. Unfortunately, propositional logic is limited in what it can say.
+
+### Syntax and Semantics of First-Order Logic
+
+Models of a logical language are the formal structures that constitute the possible worlds under consideration. In First-Order Logic, the domain of a model is the set of objects or domain elements it contains. The domain is required to be nonempty— every possible world must contain at least one object.
+
+**Example: models and domains:** Suppose we are reasoning about a small office. One possible model $m_1$ has the domain $\{ \text{Alice}, \text{Bob}, \text{Room101}, \text{Laptop} \}$. A second model $m_2$ has a larger domain $\{ \text{Alice}, \text{Bob}, \text{Carol}, \text{Room101}, \text{Laptop} \}$, representing a possible world where a third employee exists. A third model $m_3$ might have a completely different domain $\{ \text{Dave}, \text{Server}, \text{Room202} \}$, representing an entirely different office. Each possible world is a different model with its own domain.
+
+The objects in the model may be related in various ways. Formally speaking, a relation is just the set of tuples of objects that are related. A tuple is a collection of objects arranged in a fixed order and is written with angle brackets surrounding the objects.
+
+**Example: tuples:** Suppose our domain contains three people: Alice, Bob, and Carol. The tuple $\langle \text{Alice}, \text{Bob} \rangle$ represents an ordered pair. It is different from $\langle \text{Bob}, \text{Alice} \rangle$ because order matters.
+
+**Example: a relation:** The relation $\text{Knows}$ might capture who knows whom. If Alice knows Bob and Bob knows Carol, the relation is the set of tuples:
+
+$$\text{Knows} = \{ \langle \text{Alice}, \text{Bob} \rangle,\ \langle \text{Bob}, \text{Carol} \rangle \}$$
+
+We say $\text{Knows}(\text{Alice}, \text{Bob})$ is true (the tuple is in the relation) and $\text{Knows}(\text{Alice}, \text{Carol})$ is false (the tuple is not). Relations can involve any number of objects: a unary relation (one object) such as $\text{IsAdult} = \{ \langle \text{Alice} \rangle,\ \langle \text{Carol} \rangle \}$ captures a property of individual objects, while a ternary relation such as $\text{Introduced}(\text{Alice}, \text{Bob}, \text{Carol})$ (Alice introduced Bob to Carol) involves three.
+
+**Every model must provide the information required to determine if any given sentence is true or false.**
+
+**Example:** Suppose we want to describe a small university department. We define a model $m$ as follows.
+
+**Domain:** $\Delta = \{ \text{Alice}, \text{Bob}, \text{Carol}, \text{CS101}, \text{CS201} \}$
+
+Alice, Bob, and Carol are people; CS101 and CS201 are courses.
+
+**Relations:**
+
+- $\text{Professor} = \{ \langle \text{Alice} \rangle,\ \langle \text{Bob} \rangle \}$. Alice and Bob are professors (unary; captures a property of individuals).
+- $\text{Student} = \{ \langle \text{Carol} \rangle \}$. Carol is a student.
+- $\text{Course} = \{ \langle \text{CS101} \rangle,\ \langle \text{CS201} \rangle \}$. CS101 and CS201 are courses.
+- $\text{Teaches} = \{ \langle \text{Alice}, \text{CS101} \rangle,\ \langle \text{Bob}, \text{CS201} \rangle \}$. Alice teaches CS101, Bob teaches CS201 (binary relations).
+- $\text{EnrolledIn} = \{ \langle \text{Carol}, \text{CS101} \rangle,\ \langle \text{Carol}, \text{CS201} \rangle \}$. Carol is enrolled in both courses.
+- $\text{Prerequisite} = \{ \langle \text{CS101}, \text{CS201} \rangle \}$. CS101 is a prerequisite for CS201.
+
+**Querying the model:** Given $m$, we can now evaluate sentences:
+
+- $\text{Teaches}(\text{Alice}, \text{CS101})$ says Alice teaches CS101. $\langle \text{Alice}, \text{CS101} \rangle \in \text{Teaches}$, so this is $\text{true}$.
+- $\text{Teaches}(\text{Carol}, \text{CS101})$ says Carol teaches CS101. $\langle \text{Carol}, \text{CS101} \rangle \notin \text{Teaches}$, so this is $\text{false}$.
+- $\text{EnrolledIn}(\text{Carol}, \text{CS101}) \land \text{Prerequisite}(\text{CS101}, \text{CS201})$. Both tuples are in their respective relations, so this conjunction is $\text{true}$.
+
+A different model $m'$ with the same domain but $\text{Teaches} = \{ \langle \text{Carol}, \text{CS101} \rangle \}$ would make $\text{Teaches}(\text{Carol}, \text{CS101})$ true and $\text{Teaches}(\text{Alice}, \text{CS101})$ false— a different possible world, even though the objects are the same.
+
+**A predicate is the name we use in a sentence to refer to a relation.** It is a symbol that takes one or more objects as arguments and evaluates to $\text{true}$ or $\text{false}$ depending on whether the corresponding tuple is in the relation.
+
+In the university example above, $\text{Professor()}$, $\text{Student()}$, $\text{Teaches()}$, etc. are all predicates. When we write $\text{Teaches}(\text{Alice}, \text{CS101})$, we are applying the predicate $\text{Teaches}$ to the arguments $\text{Alice}$ and $\text{CS101}$. The model $m$ then determines whether that sentence is true by checking whether $\langle \text{Alice}, \text{CS101} \rangle$ belongs to the relation $\text{Teaches}$ in $m$.
+
+The key distinction: the **relation** is the mathematical object (a set of tuples) that lives inside the model; the **predicate** is the syntactic symbol in the language that we use to talk about it. Writing $\text{Teaches}(\text{Alice}, \text{CS101})$ in a sentence is syntax; looking up whether $\langle \text{Alice}, \text{CS101} \rangle \in \text{Teaches}$ in the model to get a truth value is semantics.
+
+### Quantifiers
+
+Once we have a logic that allows objects, it is only natural to want to express properties of entire collections of objects, instead of enumerating the objects by name. Quantifiers let us do this. First-order logic contains two standard quantifiers, called **universal** and **existential**.
+
+#### Universal quantification ($\forall$)
+
+The symbol $\forall$ means "for all." A sentence $\forall x\; \alpha(x)$ is true in a model if and only if $\alpha(x)$ is true for every object in the domain when $x$ is substituted with that object.
+
+**Example:** In model $m$, the domain is $\{ \text{Alice}, \text{Bob}, \text{Carol}, \text{CS101}, \text{CS201} \}$ and $\text{Professor} = \{ \langle \text{Alice} \rangle, \langle \text{Bob} \rangle \}$.
+
+Consider the sentence:
+
+$$\forall x\; \text{Professor}(x) \Rightarrow \text{Teaches}(x, \text{CS101})$$
+
+"Every professor teaches CS101." We check every object in the domain:
+
+- $x = \text{Alice}$: $\text{Professor}(\text{Alice})$ is true, and $\langle \text{Alice}, \text{CS101} \rangle \in \text{Teaches}$, so the implication holds. ✓
+- $x = \text{Bob}$: $\text{Professor}(\text{Bob})$ is true, but $\langle \text{Bob}, \text{CS101} \rangle \notin \text{Teaches}$ (Bob teaches CS201). The implication fails. ✗
+- $x = \text{Carol}, \text{CS101}, \text{CS201}$: $\text{Professor}$ is false for all three, so the implication is vacuously true. ✓
+
+Since $x = \text{Bob}$ fails, the sentence is **false** in $m$.
+
+#### Existential quantification ($\exists$)
+
+The symbol $\exists$ means "there exists." A sentence $\exists x\; \alpha(x)$ is true in a model if and only if $\alpha(x)$ is true for at least one object in the domain.
+
+**Example:** Using the same university domain:
+
+$$\exists x\; \text{Student}(x)$$
+
+This is true if at least one object in the domain satisfies $\text{Student}(x)$. In model $m$, Carol is a student, so the sentence is true. If we considered a model with no students in the domain, it would be false.
+
+A combined example:
+
+$$\exists x\; \text{Professor}(x) \land \text{Teaches}(x, \text{CS101})$$
+
+This says "there exists someone who is a professor and teaches CS101." In model $m$, Alice satisfies this. So the sentence is true.
+
+**Example:** Using the full model $m$, we can write and evaluate several quantified sentences.
+
+**1.** $\forall x\; \text{Professor}(x) \Rightarrow \exists y\; \text{Course}(y) \land \text{Teaches}(x, y)$
+
+"Every professor teaches at least one course." Without the $\text{Course}(y)$ guard, $y$ would range over all domain objects (including people), which is nonsensical. The predicate $\text{Course}$ is defined in $m$ and restricts $y$ to actual courses.
+
+- For $x = \text{Alice}$: $\text{Professor}(\text{Alice})$ is true. Is there a course $y$ such that $\text{Teaches}(\text{Alice}, y)$? Yes. $\langle \text{Alice}, \text{CS101} \rangle \in \text{Teaches}$ and $\text{Course}(\text{CS101})$ holds. ✓
+- For $x = \text{Bob}$: $\text{Professor}(\text{Bob})$ is true. $\langle \text{Bob}, \text{CS201} \rangle \in \text{Teaches}$ and $\text{Course}(\text{CS201})$ holds. ✓
+- $x = \text{Carol}, \text{CS101}, \text{CS201}$: $\text{Professor}$ is false for all three, so the implication is vacuously true. ✓
+
+The sentence is **true** in $m$.
+
+**2.** $\exists x\; \text{Student}(x) \land \forall y\; \text{Course}(y) \Rightarrow \text{EnrolledIn}(x, y)$
+
+"There exists a student who is enrolled in every course." Without the $\text{Course}(y)$ guard, $\forall y$ would range over people and courses alike (demanding, for example, that Carol be enrolled in Alice), which makes no sense.
+
+- The only student is Carol. We check every object $y$ where $\text{Course}(y)$ holds— CS101 and CS201. Is $\langle \text{Carol}, \text{CS101} \rangle \in \text{EnrolledIn}$? ✓. Is $\langle \text{Carol}, \text{CS201} \rangle \in \text{EnrolledIn}$? ✓. For all other $y$ (Alice, Bob, Carol), $\text{Course}(y)$ is false, so the implication is vacuously true.
+
+The sentence is **true** in $m$.
+
+**3.** $\forall x\; \forall y\; \text{Teaches}(x, y) \Rightarrow \text{Professor}(x)$
+
+"Only professors teach courses."
+
+- Check every $\langle x, y \rangle \in \text{Teaches}$: $\langle \text{Alice}, \text{CS101} \rangle$. Is Alice a professor? Yes. $\langle \text{Bob}, \text{CS201} \rangle$. Is Bob a professor? Yes.
+
+The sentence is **true** in $m$.
+
+#### Connections between $\forall$ and $\exists$
+
+The two quantifiers are interdefinable via negation— you only ever need one of them. This is the quantifier analogue of De Morgan's laws.
+
+**De Morgan's laws for quantifiers:**
+
+$$\lnot \forall x\; \alpha(x) \equiv \exists x\; \lnot \alpha(x)$$
+
+$$\lnot \exists x\; \alpha(x) \equiv \forall x\; \lnot \alpha(x)$$
+
+The first says: "it is not the case that all $x$ satisfy $\alpha$" is the same as "there exists some $x$ that does not satisfy $\alpha$." The second says: "there is no $x$ satisfying $\alpha$" is the same as "every $x$ fails to satisfy $\alpha$."
+
+**Example using model $m$:**
+
+Consider the sentence $\forall x\; \text{Professor}(x) \Rightarrow \text{Teaches}(x, \text{CS101})$. "Every professor teaches CS101." We showed earlier this is **false** in $m$ (Bob doesn't teach CS101). By the first law, its negation must be true:
+
+$$\lnot(\forall x\; \text{Professor}(x) \Rightarrow \text{Teaches}(x, \text{CS101})) \equiv \exists x\; \lnot(\text{Professor}(x) \Rightarrow \text{Teaches}(x, \text{CS101}))$$
+
+Recall that $\lnot(P \Rightarrow Q) \equiv P \land \lnot Q$, so this simplifies to:
+
+$$\exists x\; \text{Professor}(x) \land \lnot\text{Teaches}(x, \text{CS101})$$
+
+"There exists a professor who does not teach CS101." In $m$, Bob is that professor. ✓ The two sentences are equivalent. One is the negation of the other. Checking one is enough to know the truth value of both.
