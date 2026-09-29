@@ -36,6 +36,8 @@ The common mistake is to assume that a successful demo means the job is nearly d
 
 Google's early architecture was thoroughly classical: machine vision detected the cars, pedestrians, white lines, and road signs, fed the results into a logical database, and a 1970s-style rule-based expert system decided what to do. The problem was that almost every day brought a situation the rules did not cover (say, a little girl riding a bicycle the wrong way around a traffic circle). Adding more rules never converged.
 
+> Expert systems encode domain knowledge as first-order logical rules and apply an inference engine to derive conclusions. For more on the formal foundations of this approach, see [Logical Agents and First-Order Logic](../primer_on_ai/logical_agents.md).
+
 The deeper question is how to handle a genuinely **novel situation**, where no past case applies and the required reasoning has never been done before. In chess this happens constantly. Each new position is handled by weighing the available actions, their outcomes, and how desirable those outcomes are, and then picking the best one. 
 
 The conclusion in the 1990s was that automated vehicles would likewise need a **look-ahead** capability. But look-ahead is harder for driving than for chess, because humans are less predictable. A chess opponent's intention is known (to win), whereas a driver's is not: turning left, a forgotten turn signal, drunk, or fiddling with the radio. 

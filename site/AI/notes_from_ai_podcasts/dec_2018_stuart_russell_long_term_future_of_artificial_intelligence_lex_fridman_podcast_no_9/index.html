@@ -5217,6 +5217,9 @@
 <p>The common mistake is to assume that a successful demo means the job is nearly done.</p>
 <h3 id="why-rules-are-not-enough">Why rules are not enough</h3>
 <p>Google's early architecture was thoroughly classical: machine vision detected the cars, pedestrians, white lines, and road signs, fed the results into a logical database, and a 1970s-style rule-based expert system decided what to do. The problem was that almost every day brought a situation the rules did not cover (say, a little girl riding a bicycle the wrong way around a traffic circle). Adding more rules never converged.</p>
+<blockquote>
+<p>Expert systems encode domain knowledge as first-order logical rules and apply an inference engine to derive conclusions. For more on the formal foundations of this approach, see <a href="../../primer_on_ai/logical_agents/">Logical Agents and First-Order Logic</a>.</p>
+</blockquote>
 <p>The deeper question is how to handle a genuinely <strong>novel situation</strong>, where no past case applies and the required reasoning has never been done before. In chess this happens constantly. Each new position is handled by weighing the available actions, their outcomes, and how desirable those outcomes are, and then picking the best one. </p>
 <p>The conclusion in the 1990s was that automated vehicles would likewise need a <strong>look-ahead</strong> capability. But look-ahead is harder for driving than for chess, because humans are less predictable. A chess opponent's intention is known (to win), whereas a driver's is not: turning left, a forgotten turn signal, drunk, or fiddling with the radio. </p>
 <p>The car must estimate the intent of other drivers, forecast how their trajectories might evolve, and choose the safest trajectory— all coupled, since the others react to its own trajectory. The classic case is merging onto the freeway, racing a vehicle already there with uncertainty about who goes first.</p>

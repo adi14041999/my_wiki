@@ -907,6 +907,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#first-order-logic-in-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First-Order Logic in AI
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5797,6 +5808,13 @@
 <p>Recall that <span class="arithmatex">\(\lnot(P \Rightarrow Q) \equiv P \land \lnot Q\)</span>, so this simplifies to:</p>
 <div class="arithmatex">\[\exists x\; \text{Professor}(x) \land \lnot\text{Teaches}(x, \text{CS101})\]</div>
 <p>"There exists a professor who does not teach CS101." In <span class="arithmatex">\(m\)</span>, Bob is that professor. ✓ The two sentences are equivalent. One is the negation of the other. Checking one is enough to know the truth value of both.</p>
+<h3 id="first-order-logic-in-ai">First-Order Logic in AI</h3>
+<p>John McCarthy (1958) was primarily responsible for the introduction of first-order logic as a tool for building AI systems. The prospects for logic-based AI were advanced significantly by Robinson’s (1965) development of resolution, a complete procedure for first-order inference. The logicist approach took root at Stanford University. Cordell Green (1969a, 1969b) developed a first-order reasoning system, QA3, leading to the first attempts to build a logical robot at SRI (Fikes and Nilsson, 1971). The field of First-Order Logic took off from there.</p>
+<p>One of the most prominent applications of FOL in AI was <strong>expert systems</strong>— programs designed to replicate the decision-making of a human expert in a narrow domain. An expert system encodes domain knowledge as a set of first-order rules (often written as Horn clauses of the form <span class="arithmatex">\(P_1 \wedge P_2 \wedge \cdots \wedge P_n \Rightarrow Q\)</span>) and applies an inference engine to derive conclusions from those rules given observed facts.</p>
+<p>Classic expert systems include MYCIN (medical diagnosis of blood infections), DENDRAL (chemical structure identification), and R1/XCON (computer configuration). These systems demonstrated that FOL-style reasoning could achieve expert-level performance in specific domains when the knowledge was carefully encoded. The rules in MYCIN, for example, were of the form: "if the infection is primary-bacteremia and the site is one of the sterile sites and the suspected portal of entry is the gastrointestinal tract, then there is evidence that the organism is bacteroides." This is essentially a quantified conditional in FOL.</p>
+<p>Despite their successes, expert systems exposed a fundamental limitation of the hand-coded knowledge approach: the <strong>knowledge acquisition bottleneck</strong>. Encoding all the relevant facts and rules for even a moderately complex domain required enormous effort from human experts. Worse, a rule-based system struggles with genuinely novel situations. Anything not already covered by its rules falls through the cracks. Stuart Russell describes this problem directly in the context of self-driving cars: Google’s early architecture used "a 1970s-style rule-based expert system" to decide what to do, but "almost every day brought a situation the rules did not cover." Adding more rules never converged. See <a href="../../notes_from_ai_podcasts/dec_2018_stuart_russell_long_term_future_of_artificial_intelligence_lex_fridman_podcast_no_9/">Stuart Russell on the Long-Term Future of AI</a>.</p>
+<p>Yann LeCun similarly characterizes expert systems and knowledge graphs as "too rigid and too brittle," pointing to the knowledge acquisition problem as essentially impractical at scale. See <a href="../../notes_from_ai_podcasts/aug_2019_yann_lecun_deep_learning_convnets_and_self_supervised_learning_lex_fridman_podcast_no_36/">Yann LeCun on Deep Learning</a>.</p>
+<p>Yet Peter Norvig argues that expert systems got some things right: representation and reasoning remain crucial, especially when there is not enough data to learn from scratch. The insight that you need a way to represent structured knowledge and take steps of inference over it, is exactly what FOL provides, and it continues to underpin areas like knowledge graphs, etc. today. See <a href="../../notes_from_ai_podcasts/sep_2019_peter_norvig_artificial_intelligence_a_modern_approach_lex_fridman_podcast_no_42/">Peter Norvig on AI: A Modern Approach</a>.</p>
 
 
 

@@ -63,6 +63,8 @@ Suppose you want to work out what gestures you need to grab an object or walk ou
 
 On expert systems and knowledge graphs: too rigid and too brittle. Variables with values and constraints between them, represented by rules.
 
+> Expert systems use first-order logic rules to represent and reason over domain knowledge. For a primer on how this works formally, see [Logical Agents and First-Order Logic](../primer_on_ai/logical_agents.md).
+
 The main issue is **knowledge acquisition**. How do you reduce a pile of data into a network or graph of any kind? It relies on a human expert to encode the knowledge, which is essentially impractical.
 
 The second issue is the compatibility problem again: symbols manipulated by logic are incompatible with learning. The suggestion Hinton has advocated for decades is to **replace symbols by vectors** and **replace logic by continuous functions**. That is compatible.

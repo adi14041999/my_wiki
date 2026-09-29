@@ -29,7 +29,9 @@ The obvious restriction is that **people frequently act against their own intere
 
 ## What was right in expert systems
 
-Asked whether the symbolic systems of the 1980s left anything worth reviving, Norvig says representation and reasoning are crucial. Sometimes you simply **do not have enough data to learn de novo**, so you need some representation (programmed in, told, or otherwise acquired) and the ability to take steps of reasoning over it.
+Asked whether the symbolic systems of the 1980s left anything worth reviving, Norvig says representation and reasoning are crucial.
+
+> Expert systems apply first-order logic rules and an inference engine over a hand-coded knowledge base. The formal foundations of knowledge representation and FOL are covered in [Logical Agents and First-Order Logic](../primer_on_ai/logical_agents.md). Sometimes you simply **do not have enough data to learn de novo**, so you need some representation (programmed in, told, or otherwise acquired) and the ability to take steps of reasoning over it.
 
 He identifies two specific failures of the old approach.
 

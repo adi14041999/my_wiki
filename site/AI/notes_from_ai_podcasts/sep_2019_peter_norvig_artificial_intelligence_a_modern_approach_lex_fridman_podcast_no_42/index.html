@@ -5206,7 +5206,10 @@
 <p>The main technique is <strong>inverse reinforcement learning</strong>. Ordinary <a href="../dec_2018_pieter_abbeel_deep_reinforcement_learning_lex_fridman_podcast_no_10/">reinforcement learning</a> takes actions, receives rewards, and figures out what actions to take. Inverse RL runs the other way: you observe somebody taking actions and infer what they must have been trying to do.</p>
 <p>The obvious restriction is that <strong>people frequently act against their own interests</strong>. Plenty of human actions are self-destructive or suboptimal, and you do not want to learn those. You want to recover the actions a person <em>should</em> have taken rather than the ones they did. That gap is a standing challenge for the field.</p>
 <h2 id="what-was-right-in-expert-systems">What was right in expert systems</h2>
-<p>Asked whether the symbolic systems of the 1980s left anything worth reviving, Norvig says representation and reasoning are crucial. Sometimes you simply <strong>do not have enough data to learn de novo</strong>, so you need some representation (programmed in, told, or otherwise acquired) and the ability to take steps of reasoning over it.</p>
+<p>Asked whether the symbolic systems of the 1980s left anything worth reviving, Norvig says representation and reasoning are crucial.</p>
+<blockquote>
+<p>Expert systems apply first-order logic rules and an inference engine over a hand-coded knowledge base. The formal foundations of knowledge representation and FOL are covered in <a href="../../primer_on_ai/logical_agents/">Logical Agents and First-Order Logic</a>. Sometimes you simply <strong>do not have enough data to learn de novo</strong>, so you need some representation (programmed in, told, or otherwise acquired) and the ability to take steps of reasoning over it.</p>
+</blockquote>
 <p>He identifies two specific failures of the old approach.</p>
 <p><strong>Atomic symbols were a poor match for the world.</strong> They work beautifully for something like a triangle, which has necessary and sufficient conditions. But the real world is messy and does not have sharp edges, while atomic symbols do.</p>
 <p><strong>Reasoning was universal, with no guidance about where to apply it.</strong> Being applicable anywhere sounds like a virtue, but it means nothing stops you from applying a rule repeatedly.</p>
