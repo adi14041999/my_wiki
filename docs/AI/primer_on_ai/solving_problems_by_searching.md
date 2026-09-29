@@ -96,6 +96,8 @@ One explanation is evolution and development. Skills that humans have had for te
 
 The book *Thinking, Fast and Slow* (Kahneman) distinguishes two modes of thinking.
 
+See the notes on [Daniel Kahneman's conversation with Lex Fridman](../notes_from_ai_podcasts/jan_2020_daniel_kahneman_thinking_fast_and_slow_deep_learning_and_ai_lex_fridman_podcast_no_65.md) for Kahneman's own explanation of the distinction, and for his skepticism that current neural networks (System 1) will reach System-2-style reasoning without a fundamental change in architecture.
+
 - **System 1:** Fast, intuitive—snap judgments, emotional reactions, pattern recognition. Mostly automatic and low effort.
 - **System 2:** Slow, deliberate—logical deduction, calculation, step-by-step analysis. Requires attention and effort.
 
