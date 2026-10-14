@@ -101,7 +101,7 @@ nav:
       - Linear functions, matrices, and the derivative matrix: math/linear_algebra/linear_functions_matrices_and_the_derivative_matrix.md
       - Linear transformations and matrix multiplication: math/linear_algebra/linear_transformations_and_matrix_multiplication.md
       - Matrix algebra: math/linear_algebra/matrix_algebra.md
-      - Applications of matrix algebra- population dynamics, PageRank, and gambling: math/linear_algebra/applications_of_matrix_algebra_population_dynamics_pagerank_and_gambling.md
+      - Applications of matrix algebra- population dynamics and gambling: math/linear_algebra/applications_of_matrix_algebra_population_dynamics_and_gambling.md
     - Probability:
       - Probability and Counting: math/probability/probability_and_counting.md
       - Story Proofs and Axioms of Probability: math/probability/story_proofs_and_axioms_of_probability.md
