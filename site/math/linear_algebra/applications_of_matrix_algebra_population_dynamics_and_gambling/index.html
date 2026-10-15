@@ -5230,6 +5230,103 @@ M^5 = MM^4 = MI_2 = M,
 <p>and so on: the powers of <span class="arithmatex">\(M\)</span> alternate between <span class="arithmatex">\(M\)</span> and <span class="arithmatex">\(I_2\)</span>, with <span class="arithmatex">\(M^{\text{odd}} = M\)</span> and <span class="arithmatex">\(M^{\text{even}} = I_2\)</span>. So in this case there is no stabilizing behavior for <span class="arithmatex">\(M^r\)</span> as <span class="arithmatex">\(r\)</span> grows!</p>
 </div>
 <h2 id="gamblers-ruin-and-genetic-evolution">Gambler’s ruin and genetic evolution</h2>
+<p>Alice with <span class="arithmatex">\(\$2\)</span> in her pocket and Bob with <span class="arithmatex">\(\$3\)</span> in his pocket play a game whose rules go as follows. They flip a biased coin which has <span class="arithmatex">\(1/3\)</span> chance to be heads and <span class="arithmatex">\(2/3\)</span> chance to be tails. If it comes up heads, Alice gives Bob a dollar; if it comes up tails, Bob gives Alice a dollar. Eventually one of them runs out of money, at which point the game ends.</p>
+<p>What happens after the first turn? There is a <span class="arithmatex">\(1/3\)</span> chance that Alice will end up with <span class="arithmatex">\(\$1\)</span>, and a <span class="arithmatex">\(2/3\)</span> chance that Alice will end up with <span class="arithmatex">\(\$3\)</span>. Since Alice has not yet reached <span class="arithmatex">\(\$5\)</span> (so Bob still has some money) nor <span class="arithmatex">\(\$0\)</span> (so Alice still has some money), the game goes on for at least one more turn.</p>
+<p>What are the odds of various possibilities for what may happen after two turns? Or more turns? This is complicated, since the outcome at each turn depends on the previous turn, which itself is a probabilistic situation. Matrix algebra is the right tool to analyze the long-term question: what are the odds that eventually Alice reaches <span class="arithmatex">\(\$5\)</span> (i.e., she wins), or the odds that eventually Alice reaches <span class="arithmatex">\(\$0\)</span> ("gambler's ruin")?</p>
+<p>To model the game, we shall keep track of the probability, or chance, that Alice has a given amount of money. We turn it into a vector, keeping in mind that the total number of dollars in play is always <span class="arithmatex">\(\$2 + \$3 = \$5\)</span>, so Alice cannot ever have more than <span class="arithmatex">\(\$5\)</span>:</p>
+<div class="arithmatex">\[
+\mathbf{p} = \begin{pmatrix}
+\text{probability that Alice has } \$0 \\
+\text{probability that Alice has } \$1 \\
+\text{probability that Alice has } \$2 \\
+\text{probability that Alice has } \$3 \\
+\text{probability that Alice has } \$4 \\
+\text{probability that Alice has } \$5
+\end{pmatrix} \in \mathbf{R}^6 .
+\]</div>
+<p>Since it matters how many turns have been played, <span class="arithmatex">\(\mathbf{p}\)</span> is really a function <span class="arithmatex">\(\mathbf{p}(n)\)</span> of the number <span class="arithmatex">\(n\)</span> of turns. Thus, for example, what we have said about the odds for the outcomes after the first turn amounts to saying</p>
+<div class="arithmatex">\[
+\mathbf{p}(1) = \begin{pmatrix} 0 \\ 1/3 \\ 0 \\ 2/3 \\ 0 \\ 0 \end{pmatrix} ,
+\]</div>
+<p>and it is convenient to make the definition</p>
+<div class="arithmatex">\[
+\mathbf{p}(0) = \begin{pmatrix} 0 \\ 0 \\ 1 \\ 0 \\ 0 \\ 0 \end{pmatrix}
+\]</div>
+<p>since Alice definitely has <span class="arithmatex">\(\$2\)</span> when the game starts (the "zero" turn).</p>
+<p>After <span class="arithmatex">\(n\)</span> turns we have</p>
+<div class="arithmatex">\[
+\mathbf{p}(n) = \begin{pmatrix} p_0(n) \\ p_1(n) \\ p_2(n) \\ p_3(n) \\ p_4(n) \\ p_5(n) \end{pmatrix}
+\]</div>
+<p>for some probabilities <span class="arithmatex">\(p_i(n)\)</span> that we do not (yet) know.</p>
+<p>What happens in the next turn? For example, how likely is Alice to have <span class="arithmatex">\(\$3\)</span> at the end of the <span class="arithmatex">\((n+1)\)</span>th turn, with <span class="arithmatex">\(n \ge 1\)</span>? There are two ways this could happen:</p>
+<ul>
+<li>Alice had <span class="arithmatex">\(\$2\)</span> right after her <span class="arithmatex">\(n\)</span>th turn, and then the coin came up tails. Chance: <span class="arithmatex">\(p_2(n) \times \frac{2}{3}\)</span>.</li>
+<li>Alice had <span class="arithmatex">\(\$4\)</span> right after her <span class="arithmatex">\(n\)</span>th turn, and then the coin came up heads. Chance: <span class="arithmatex">\(p_4(n) \times \frac{1}{3}\)</span>.</li>
+</ul>
+<p>In summary, the chance that Alice has <span class="arithmatex">\(\$3\)</span> right after her <span class="arithmatex">\((n+1)\)</span>th turn is <span class="arithmatex">\(2p_2(n)/3 + p_4(n)/3\)</span>. In symbols:</p>
+<div class="arithmatex">\[
+p_3(n+1) = \tfrac{2}{3} p_2(n) + \tfrac{1}{3} p_4(n) \quad \text{for all } n \ge 0 .
+\]</div>
+<p>Likewise, for Alice to have <span class="arithmatex">\(\$0\)</span> right after the <span class="arithmatex">\((n+1)\)</span>th turn, with <span class="arithmatex">\(n \ge 1\)</span>, the two possibilities leading to this are:</p>
+<ul>
+<li>Alice had <span class="arithmatex">\(\$0\)</span> right after her <span class="arithmatex">\(n\)</span>th turn, and so stays in that "gambler's ruin" state forever. Chance: <span class="arithmatex">\(p_0(n) \times 1 = p_0(n)\)</span>.</li>
+<li>Alice had <span class="arithmatex">\(\$1\)</span> right after her <span class="arithmatex">\(n\)</span>th turn, and then the coin came up heads. Chance: <span class="arithmatex">\(p_1(n) \times \frac{1}{3}\)</span>.</li>
+</ul>
+<p>Thus, <span class="arithmatex">\(p_0(n+1) = p_0(n) + p_1(n)/3\)</span> for all <span class="arithmatex">\(n \ge 0\)</span>.</p>
+<p>If you go through such reasoning for the other possible outcomes right after a given turn, and express the answer in matrix notation, you will find:</p>
+<div class="arithmatex">\[
+\mathbf{p}(n+1) = \underbrace{\begin{pmatrix}
+1 &amp; 1/3 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 1/3 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 2/3 &amp; 0 &amp; 1/3 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 2/3 &amp; 0 &amp; 1/3 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 2/3 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 2/3 &amp; 1
+\end{pmatrix}}_{M} \mathbf{p}(n) = M\mathbf{p}(n)
+\]</div>
+<p>for all <span class="arithmatex">\(n \ge 0\)</span>. The entries in each column of <span class="arithmatex">\(M\)</span> are non-negative and sum to <span class="arithmatex">\(1\)</span>: another Markov matrix!</p>
+<p><img alt="img" src="../gamblers.png" /></p>
+<p>In contrast with the bird migration example, for which high powers of the Markov matrix converge toward a matrix with all columns equal, in this example the high powers <span class="arithmatex">\(M^n\)</span> do converge toward a limiting matrix but without all columns equal:</p>
+<div class="arithmatex">\[
+M^n \to \begin{pmatrix}
+1 &amp; 0.4839 &amp; 0.2258 &amp; 0.0968 &amp; 0.0323 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0.5161 &amp; 0.7742 &amp; 0.9032 &amp; 0.9677 &amp; 1
+\end{pmatrix}
+\qquad \text{as } n \to \infty
+\]</div>
+<p>(the matrix entries are approximations to 4 decimal digits). The powers <span class="arithmatex">\(M^n\)</span> become close to this limit already for <span class="arithmatex">\(n = 30\)</span>.</p>
+<p>More concretely,</p>
+<div class="arithmatex">\[
+\mathbf{p}(100) = M^{100}\mathbf{p}(0) \approx \begin{pmatrix}
+1 &amp; 0.4839 &amp; 0.2258 &amp; 0.0968 &amp; 0.0323 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0.5161 &amp; 0.7742 &amp; 0.9032 &amp; 0.9677 &amp; 1
+\end{pmatrix}
+\begin{pmatrix} 0 \\ 0 \\ 1 \\ 0 \\ 0 \\ 0 \end{pmatrix}
+\approx \begin{pmatrix} 0.2258 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0.7742 \end{pmatrix} .
+\]</div>
+<p>This calculation means that after very many turns, there is a chance of around <span class="arithmatex">\(22.58\%\)</span> that Alice has <span class="arithmatex">\(\$0\)</span> (i.e., loses) and a chance of around <span class="arithmatex">\(77.42\%\)</span> that Alice has <span class="arithmatex">\(\$5\)</span> (i.e., wins).</p>
+<p><strong>Example:</strong> Suppose we want to compute the probability that the game ends before the 10th turn. How would we do this?</p>
+<p>Recall that if at any stage Alice reaches <span class="arithmatex">\(\$0\)</span> or <span class="arithmatex">\(\$5\)</span> then she remains in that state forever. Thus, the game ends before the 10th turn precisely when Alice is in the state of <span class="arithmatex">\(\$0\)</span> or <span class="arithmatex">\(\$5\)</span> after the 9th turn.</p>
+<p>Hence, this probability is <span class="arithmatex">\(p_0(9) + p_5(9)\)</span>. In other words, we compute</p>
+<div class="arithmatex">\[
+\mathbf{p}(9) = M^9 \begin{pmatrix} 0 \\ 0 \\ 1 \\ 0 \\ 0 \\ 0 \end{pmatrix}
+\approx \begin{pmatrix} 0.204 \\ 0.028 \\ 0 \\ 0.089 \\ 0 \\ 0.679 \end{pmatrix} ,
+\]</div>
+<p>so <span class="arithmatex">\(p_0(9) + p_5(9) \approx 0.204 + 0.679 = 0.883\)</span> (where again we do the computation on a computer). So the chance is approximately <span class="arithmatex">\(88.3\%\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The mathematics of the situation we are considering is identical to that which arises in an entirely different context: understanding the effects of mutations over many generations via the Wright–Fisher model for genetic drift. Roughly speaking, here is the dictionary relating the gambling setup with the population dynamics setup: the total amount of money in the gambling setting is replaced with a fixed population size, flipping a coin is replaced with the passage of a specified genetic trait from each generation to the next, the probabilities <span class="arithmatex">\(1/3\)</span> for heads and <span class="arithmatex">\(2/3\)</span> for tails are replaced with probabilities <span class="arithmatex">\(p\)</span> and <span class="arithmatex">\(1-p\)</span> that an offspring inherits a certain genetic trait or not, and Alice's odds of eventually winning are replaced with the proportion of the population in the long run that has the genetic trait of interest.</p>
+<p>We won't say more about the biological application here, but up to appropriate changes in terminology it is analyzed mathematically by exactly the same procedure that is used below.</p>
+<p>Of course, in the biological context one can seek a more robust framework that analyzes several genetic traits at once (this has no analogue in the win-lose gambling context). The mathematical model of Wright–Fisher can be generalized to accommodate this, and it is the focus of a lot of research in biology.</p>
+</div>
 
 
 
