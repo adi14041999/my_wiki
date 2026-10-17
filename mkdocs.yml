@@ -16,6 +16,8 @@ nav:
       - Introduction to Machine Learning: ai/primer_on_ai/introduction_to_machine_learning.md
       - Spatializing Data: ai/primer_on_ai/spatializing_data.md
       - Vector Similarity Search: ai/primer_on_ai/vector_similarity_search.md
+      - Model Evaluation: ai/primer_on_ai/model_evaluation.md
+      - Hyperparameter Tuning: ai/primer_on_ai/hyperparameter_tuning.md
     - Deep Learning for Computer Vision:
       - Introduction: ai/deep_learning_for_computer_vision/introduction.md
       - Image Classification with Linear Classifiers: ai/deep_learning_for_computer_vision/image_classification_with_linear_classifiers.md
