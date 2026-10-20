@@ -5404,6 +5404,23 @@ V(s) \approx P(\text{win} \mid s, \pi_{\text{opp}}).
 <p>Here <span class="arithmatex">\(s\)</span> is the board state, <span class="arithmatex">\(b\)</span> is the opponent's reply (the square it marks) in that state, and <span class="arithmatex">\(\pi_{\text{opp}}(b \mid s)\)</span> is the probability it plays <span class="arithmatex">\(b\)</span> from <span class="arithmatex">\(s\)</span>. <span class="arithmatex">\(g(s)\)</span> and <span class="arithmatex">\(g(b)\)</span> are the same board and the same square after applying the rotation or reflection <span class="arithmatex">\(g\)</span>.</p>
 <p>An imperfect opponent may not satisfy this. For example, suppose it always blocks a threat along the top row but often misses the same threat along the bottom row. Then the two mirror-image positions have different true values: the bottom-row one is a likely win for us, the top-row one isn't. If we force them to share one value, we average them together and can no longer tell that the bottom-row version is the better one to steer toward. <strong>We lose exactly the kind of opponent-specific weakness that reinforcement learning is supposed to find.</strong></p>
 <p>So, should symmetric positions necessarily have the same value? No. They do under perfect play, or against any opponent that plays symmetrically, but not in general. A sensible compromise is to use symmetry as a starting point, not a hard constraint: for example, start each new state at the value of its symmetric copies instead of <span class="arithmatex">\(0.5\)</span>, then let the values separate if this opponent's play gives a reason to.</p>
+<p><strong>3. Greedy Play:</strong> Suppose the reinforcement learning player was greedy, that is, it always played the move that brought it to the position that it rated the best. Might it learn to play better, or worse, than a nongreedy player? What problems might occur?</p>
+<p><strong>Solution:</strong> A purely greedy player always picks</p>
+<div class="arithmatex">\[
+s_{\text{next}} = \arg\max_{s'} V(s'),
+\]</div>
+<p>where <span class="arithmatex">\(s'\)</span> ranges over the positions reachable in one move. It never makes an exploratory move. In general it will <strong>learn to play worse</strong> than a nongreedy (e.g. <span class="arithmatex">\(\varepsilon\)</span>-greedy) player, because it only ever learns about the moves it already likes.</p>
+<p>What problems might occur? The values <span class="arithmatex">\(V(s)\)</span> are only estimates, and an estimate only improves if the player actually visits that state. A greedy player gets stuck in two ways.</p>
+<ol>
+<li>It never tries moves that look worse but are actually better.</li>
+<li>One unlucky game can rule out a good move for good. Suppose we take the greedy move <span class="arithmatex">\(B\)</span>. Suppose the opponent happens to play well that game and we lose. Then <span class="arithmatex">\(V(B)\)</span> drops below <span class="arithmatex">\(0.5\)</span>, say to <span class="arithmatex">\(0.25\)</span>. The greedy player switches to <span class="arithmatex">\(A\)</span>, whose value settles and never goes back to where <span class="arithmatex">\(B\)</span> was originally. Since <span class="arithmatex">\(B\)</span> is never played again, its estimate is never corrected.</li>
+</ol>
+<p>Other problems follow from the same cause:</p>
+<ul>
+<li><strong>It only learns values along its own narrow path</strong> through the game. Large parts of the state space keep their initial value of <span class="arithmatex">\(0.5\)</span>, so if the opponent ever steers the game somewhere new, the player has no idea what to do.</li>
+<li><strong>It can't adapt if the opponent changes.</strong> If the opponent fixes a mistake, or starts making a new one, a greedy player only notices on the moves it already plays. It will never find a new weakness on a line it has stopped exploring.</li>
+</ul>
+<p>Might it play better? In one narrow sense, yes. <strong>During training, a greedy player may win more games</strong>, because it never wastes a move on a random exploratory choice. If its initial estimates happen to point it toward good moves, it also settles on them quickly. But what it ends up with is usually a locally good policy, not the best one. The nongreedy player loses a few games to exploration, and in exchange it keeps checking every move's value and eventually finds the best moves against this opponent.</p>
 
 
 

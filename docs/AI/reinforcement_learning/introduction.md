@@ -139,3 +139,25 @@ Here $s$ is the board state, $b$ is the opponent's reply (the square it marks) i
 An imperfect opponent may not satisfy this. For example, suppose it always blocks a threat along the top row but often misses the same threat along the bottom row. Then the two mirror-image positions have different true values: the bottom-row one is a likely win for us, the top-row one isn't. If we force them to share one value, we average them together and can no longer tell that the bottom-row version is the better one to steer toward. **We lose exactly the kind of opponent-specific weakness that reinforcement learning is supposed to find.**
 
 So, should symmetric positions necessarily have the same value? No. They do under perfect play, or against any opponent that plays symmetrically, but not in general. A sensible compromise is to use symmetry as a starting point, not a hard constraint: for example, start each new state at the value of its symmetric copies instead of $0.5$, then let the values separate if this opponent's play gives a reason to.
+
+**3. Greedy Play:** Suppose the reinforcement learning player was greedy, that is, it always played the move that brought it to the position that it rated the best. Might it learn to play better, or worse, than a nongreedy player? What problems might occur?
+
+**Solution:** A purely greedy player always picks
+
+$$
+s_{\text{next}} = \arg\max_{s'} V(s'),
+$$
+
+where $s'$ ranges over the positions reachable in one move. It never makes an exploratory move. In general it will **learn to play worse** than a nongreedy (e.g. $\varepsilon$-greedy) player, because it only ever learns about the moves it already likes.
+
+What problems might occur? The values $V(s)$ are only estimates, and an estimate only improves if the player actually visits that state. A greedy player gets stuck in two ways.
+
+1. It never tries moves that look worse but are actually better.
+2. One unlucky game can rule out a good move for good. Suppose we take the greedy move $B$. Suppose the opponent happens to play well that game and we lose. Then $V(B)$ drops below $0.5$, say to $0.25$. The greedy player switches to $A$, whose value settles and never goes back to where $B$ was originally. Since $B$ is never played again, its estimate is never corrected.
+
+Other problems follow from the same cause:
+
+- **It only learns values along its own narrow path** through the game. Large parts of the state space keep their initial value of $0.5$, so if the opponent ever steers the game somewhere new, the player has no idea what to do.
+- **It can't adapt if the opponent changes.** If the opponent fixes a mistake, or starts making a new one, a greedy player only notices on the moves it already plays. It will never find a new weakness on a line it has stopped exploring.
+
+Might it play better? In one narrow sense, yes. **During training, a greedy player may win more games**, because it never wastes a move on a random exploratory choice. If its initial estimates happen to point it toward good moves, it also settles on them quickly. But what it ends up with is usually a locally good policy, not the best one. The nongreedy player loses a few games to exploration, and in exchange it keeps checking every move's value and eventually finds the best moves against this opponent.
