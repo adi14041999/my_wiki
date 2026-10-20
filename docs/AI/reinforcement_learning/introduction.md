@@ -1,12 +1,12 @@
 # Introduction
 
-The idea that we learn by interacting with our environment is probably the first to occur to us when we think about the nature of learning. When an infant plays, waves its arms, or looks about, it has no explicit teacher, but it does have a direct sensorimotor connection to its environment. Exercising this connection produces a wealth of information about cause and e↵ect, about the consequences of actions, and about what to do in order to achieve goals.
+The idea that we learn by interacting with our environment is probably the first to occur to us when we think about the nature of learning. When an infant plays, waves its arms, or looks about, it has no explicit teacher, but it does have a direct sensorimotor connection to its environment. Exercising this connection produces a wealth of information about cause and effect, about the consequences of actions, and about what to do in order to achieve goals.
 
 Reinforcement learning is learning what to do (how to map situations to actions) so as to maximize a numerical reward signal. The learner (also known as the **agent**) is not told which actions to take, but instead must discover which actions yield the most reward by trying them. In the most interesting and challenging cases, actions may affect not only the immediate reward but also the next situation and, through that, all subsequent rewards. These two characteristics **(trial-and-error search and delayed reward)** are the two most important distinguishing features of reinforcement learning.
 
 The terms supervised learning and unsupervised learning would seem to exhaustively classify machine learning paradigms, but they do not. Although one might be tempted to think of reinforcement learning as a kind of unsupervised learning because it does not rely on examples of correct behavior, reinforcement learning is trying to maximize a reward signal instead of trying to find hidden structure. Uncovering structure in an agent’s experience can certainly be useful in reinforcement learning, but by itself does not address the reinforcement learning problem of maximizing a reward signal. We therefore consider reinforcement learning to be a third machine learning paradigm, alongside supervised learning and unsupervised learning.
 
-One of the challenges that arise in reinforcement learning, and not in other kinds of learning, is the trade-off between exploration and exploitation. To obtain a lot of reward, a reinforcement learning agent must prefer actions that it has tried in the past and found to be e↵ective in producing reward. But to discover such actions, it has to try actions that it has not selected before. The agent has to exploit what it has already experienced in order to obtain reward, but it also has to explore in order to make better action selections in the future. The dilemma is that neither exploration nor exploitation can be pursued exclusively without failing at the task.
+One of the challenges that arise in reinforcement learning, and not in other kinds of learning, is the trade-off between exploration and exploitation. To obtain a lot of reward, a reinforcement learning agent must prefer actions that it has tried in the past and found to be effective in producing reward. But to discover such actions, it has to try actions that it has not selected before. The agent has to exploit what it has already experienced in order to obtain reward, but it also has to explore in order to make better action selections in the future. The dilemma is that neither exploration nor exploitation can be pursued exclusively without failing at the task.
 
 Another key feature of reinforcement learning is that it explicitly considers the **whole** problem of a goal-directed agent interacting with an uncertain environment. This is in contrast to many approaches that consider subproblems without addressing how they might fit into a larger picture. All reinforcement learning agents have explicit goals, can sense aspects of their environments, and can choose actions to influence their environments. Moreover, it is usually assumed from the beginning that the agent has to operate despite significant uncertainty about the environment it faces. By a complete, interactive, goal-seeking agent we do not always mean something like a complete organism or robot. These are clearly examples, but a complete, interactive, goal-seeking agent can also be a component of a larger behaving system. In this case, the agent directly interacts with the rest of the larger system and indirectly interacts with the larger system’s environment. A simple example is an agent that monitors the charge level of robot’s battery and sends commands to the robot’s control architecture. This agent’s environment is the rest of the robot together with the robot’s environment.
 
@@ -52,10 +52,10 @@ Because a skilled player can play so as never to lose, let us assume that we are
 
 1. **It can't tell moves apart.** Tic-tac-toe is a draw under perfect play, and here we count draws as losses. So minimax rates almost every position as "can't win" and has no reason to prefer one move over another.
 2. **It ignores the opponent's mistakes.** Say we're in a position with two options:
-    - **Move A** sets a trap. A perfect opponent can find the one reply that beats us, but our imperfect opponent misses it 9 times out of 10 ($P(\text{miss}) = 0.9$), and then we win.
+    - **Move A** sets a trap. A perfect opponent can find the one reply that beats us, but our imperfect opponent misses it 9 times out of 10, and then we win.
     - **Move B** is safe, but it can only ever lead to a draw.
 
-    Minimax picks B, or at best treats A and B as equally good, because A has a line where we lose. Against this opponent, though, $P(\text{win} \mid A) = 0.9$ while $P(\text{win} \mid B) = 0$.
+    Minimax picks B, or at best treats A and B as equally good, because A has a line where we lose. Against this opponent, though, move A wins 90% of the time.
 
 **What we actually want is a player that learns how *this* opponent plays and takes advantage of its weaknesses.** Minimax can't do that, because it never looks at how the opponent really behaves.
 
@@ -82,3 +82,60 @@ This simple example illustrates some of the key features of reinforcement learni
 While this example illustrates some of the key features of reinforcement learning, it is so simple that it might give the impression that reinforcement learning is more limited than it really is. Although tic-tac-toe is a two-person game, reinforcement learning also applies in the case in which there is no external adversary, that is, in the case of a “game against nature.” Reinforcement learning also is not restricted to problems in which behavior breaks down into separate episodes, like the separate games of tic-tac-toe, with reward only at the end of each episode. It is just as applicable when behavior continues indefinitely and when rewards of various magnitudes can be received at any time. Reinforcement learning is also applicable to problems that do not even break down into discrete time steps like the plays of tic-tac-toe. The general principles apply to continuous-time problems as well, although the theory gets more complicated.
 
 ## Exercises
+
+**1. Self-Play:** Suppose, instead of playing against a random opponent, the reinforcement learning algorithm described above played against itself, with both sides learning. What do you think would happen in this case? Would it learn a different policy for selecting moves?
+
+**Solution:** The key change is that **the opponent is no longer fixed**. Earlier, the opponent's move probabilities $\pi_{\text{opp}}(b \mid s)$ (the probability that the opponent replies with move $b$ when the board is in state $s$) never changed, so the values $V(s) \approx P(\text{win} \mid s)$ had a fixed target to converge to. In self-play there are two learners, say with value tables $V_X$ and $V_O$, and each one is the other's environment. Every time O improves, the true probability that X wins from a given state changes, so the target X is chasing keeps moving (and the same holds for O).
+
+What happens over time? Suppose X finds a trap that O falls into. X's value for the trap state goes up, $V_X(s_{\text{trap}}) \to 1$, and X plays into it more often. But O now loses from that state again and again, so its own value drops, $V_O(s_{\text{trap}}) \to 0$, and O learns to avoid it. The trap stops working, and X's estimate falls back down. This repeats for every weakness either side has: **any mistake one side makes is exploited by the other until it is learned away**. The only stable outcome is a pair of policies neither side can exploit, which in tic-tac-toe means perfect play, and every game ends in a draw. In other words, self-play tends to drive both players toward the minimax solution:
+
+$$
+V(s) \;\longrightarrow\; V_{\text{minimax}}(s).
+$$
+
+This is not guaranteed in general. The two learners can also chase each other in cycles instead of settling down, since neither one's target is fixed.
+
+Would it learn a different policy? Yes.
+
+- **Against the fixed imperfect opponent**, the learned policy is the best response to *that* opponent. It happily plays risky moves like Move A above, because $P(\text{win} \mid A) = 0.9$ against that opponent, even though a perfect player could punish them.
+- **In self-play**, the learned policy is the cautious, never-lose policy. Risky moves get punished, because the opponent learns to find the refutation, so the policy settles on moves whose worst case is a draw.
+
+So the self-play player is harder to beat, but worse at exploiting a weak opponent. If you put it up against the original imperfect opponent, it would win less often than the player that trained against that opponent directly.
+
+Two details worth noticing.
+
+1. **The reward choice matters.** With $r = 1$ for a win and $r = 0$ for a draw or loss, perfect play by both sides makes almost every state worth $V(s) \approx 0$ to both players. All the drawing moves then look equally bad, and the learning signal goes flat. Giving a draw its own value, e.g. $r_{\text{draw}} = 0.5$, lets each side tell "safe draw" apart from "likely loss" and learn sensible moves.
+2. **Exploration keeps it from being perfect.** Both sides still play a random exploratory move with probability $\varepsilon$. So the values $V(s)$ estimate the chance of winning when both players occasionally blunder, not under perfect play, and both sides learn to set traps for those occasional random mistakes. As $\varepsilon \to 0$, the policy approaches true minimax play.
+
+**2. Symmetries:** Many tic-tac-toe positions appear different but are really the same because of symmetries. How might we amend the learning process described above to take advantage of this? In what ways would this change improve the learning process? Now think again. Suppose the opponent did not take advantage of symmetries. In that case, should we? Is it true, then, that symmetrically equivalent positions should necessarily have the same value?
+
+**Solution:** The board has 8 symmetries: 4 rotations (by $0^\circ, 90^\circ, 180^\circ, 270^\circ$) and 4 reflections (horizontal, vertical, and the two diagonals). Call this set of transformations $G$, with $|G| = 8$. For a board $s$ and a symmetry $g \in G$, let $g(s)$ be the rotated or reflected board. Two boards $s$ and $g(s)$ are the same position, just viewed differently.
+
+How would we amend the learning process? Store **one value per equivalence class** instead of one per board. Before looking up or updating a state, map it to a fixed representative of its class.
+
+This forces $V(s) = V(g(s))$ for every $g \in G$.
+
+How does this improve learning?
+
+- **Fewer states to learn.** Tic-tac-toe has 5,478 legal positions, but only 765 once symmetric ones are merged, roughly $7\times$ fewer.
+- **Experience is shared.** One game that passes through $s$ updates the value of all up to 8 versions of $s$ at once, so values converge in fewer games.
+- **Less exploration needed**, since there are fewer distinct states to visit.
+- **Less memory**, since the table is smaller.
+
+Now think again: should we use symmetries if the opponent doesn't? The value of a state is not a property of the board alone. It depends on how the opponent plays, i.e. on its policy $\pi_{\text{opp}}$:
+
+$$
+V(s) \approx P(\text{win} \mid s, \pi_{\text{opp}}).
+$$
+
+Two symmetric positions have the same true value only if the opponent also treats them the same way, i.e. it makes the "same" move in both, up to the symmetry:
+
+$$
+\pi_{\text{opp}}\big(g(b) \mid g(s)\big) = \pi_{\text{opp}}(b \mid s) \quad \text{for all } g \in G \implies V(g(s)) = V(s).
+$$
+
+Here $s$ is the board state, $b$ is the opponent's reply (the square it marks) in that state, and $\pi_{\text{opp}}(b \mid s)$ is the probability it plays $b$ from $s$. $g(s)$ and $g(b)$ are the same board and the same square after applying the rotation or reflection $g$.
+
+An imperfect opponent may not satisfy this. For example, suppose it always blocks a threat along the top row but often misses the same threat along the bottom row. Then the two mirror-image positions have different true values: the bottom-row one is a likely win for us, the top-row one isn't. If we force them to share one value, we average them together and can no longer tell that the bottom-row version is the better one to steer toward. **We lose exactly the kind of opponent-specific weakness that reinforcement learning is supposed to find.**
+
+So, should symmetric positions necessarily have the same value? No. They do under perfect play, or against any opponent that plays symmetrically, but not in general. A sensible compromise is to use symmetry as a starting point, not a hard constraint: for example, start each new state at the value of its symmetric copies instead of $0.5$, then let the values separate if this opponent's play gives a reason to.
