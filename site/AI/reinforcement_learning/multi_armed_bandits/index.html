@@ -2369,6 +2369,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#action-value-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action-value Methods
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5335,6 +5346,44 @@ A_t^{\text{greedy}} \in \arg\max_a Q_t(a).
 \]</div>
 <p>When you select one of these actions, we say that you are <strong>exploiting</strong> your current knowledge of the values of the actions. If instead you select one of the nongreedy actions, <span class="arithmatex">\(a \notin \arg\max_a Q_t(a)\)</span>, then we say you are <strong>exploring</strong>, because this enables you to improve your estimate <span class="arithmatex">\(Q_t(a)\)</span> of the nongreedy action’s value. Exploitation is the right thing to do to maximize the expected reward <span class="arithmatex">\(\mathbb{E}[R_t]\)</span> on the one step, but exploration may produce the greater total reward <span class="arithmatex">\(\sum_{t=1}^{T} R_t\)</span> in the long run.</p>
 <p>For example, suppose a greedy action’s value is known with certainty, while several other actions are estimated to be nearly as good but with substantial uncertainty. The uncertainty is such that at least one of these other actions probably is actually better than the greedy action, i.e. <span class="arithmatex">\(q_*(a) &gt; q_*(A_t^{\text{greedy}})\)</span> for some nongreedy <span class="arithmatex">\(a\)</span>, but you don’t know which one. If you have many time steps ahead on which to make action selections, then it may be better to explore the nongreedy actions and discover which of them are better than the greedy action. Reward is lower in the short run, during exploration, but higher in the long run because after you have discovered the better actions, you can exploit them many times. Because it is not possible both to explore and to exploit with any single action selection, one often refers to the “conflict” between exploration and exploitation.</p>
+<h2 id="action-value-methods">Action-value Methods</h2>
+<p>We begin by looking more closely at methods for estimating the values of actions and for using the estimates to make action selection decisions, which we collectively call <strong>action-value methods</strong>.</p>
+<p>Every action-value method therefore has two parts. The first is an <strong>estimation rule</strong>, which uses the rewards observed so far to compute estimates <span class="arithmatex">\(Q_t(a) \approx q_*(a)\)</span>. The second is a <strong>selection rule</strong>, which uses those estimates to choose the next action <span class="arithmatex">\(A_t\)</span>, deciding on each step whether to exploit (pick an action in <span class="arithmatex">\(\arg\max_a Q_t(a)\)</span>) or explore.</p>
+<p>Recall that the true value <span class="arithmatex">\(q_*(a)\)</span> of an action is the mean reward when that action is selected. One natural way to estimate this is by averaging the rewards actually received:</p>
+<div class="arithmatex">\[
+Q_t(a) \doteq \frac{\text{sum of rewards when } a \text{ taken prior to } t}{\text{number of times } a \text{ taken prior to } t} = \frac{\sum_{i=1}^{t-1} R_i \cdot \mathbf{1}_{A_i = a}}{\sum_{i=1}^{t-1} \mathbf{1}_{A_i = a}},
+\]</div>
+<p>where <span class="arithmatex">\(\mathbf{1}_{\text{predicate}}\)</span> denotes the random variable that is <span class="arithmatex">\(1\)</span> if the predicate is true and <span class="arithmatex">\(0\)</span> if it is not. If the denominator is zero, then we instead define <span class="arithmatex">\(Q_t(a)\)</span> as some default value, such as <span class="arithmatex">\(Q_t(a) = 0\)</span>. As the denominator goes to infinity, by the law of large numbers, <span class="arithmatex">\(Q_t(a)\)</span> converges to <span class="arithmatex">\(q_*(a)\)</span>:</p>
+<div class="arithmatex">\[
+\sum_{i=1}^{t-1} \mathbf{1}_{A_i = a} \to \infty \implies Q_t(a) \to q_*(a).
+\]</div>
+<p>We call this the <strong>sample-average method</strong> for estimating action values because each estimate is an average of the sample of relevant rewards. Of course this is just one way to estimate action values, and not necessarily the best one.</p>
+<p>The simplest action selection rule is to select one of the actions with the highest estimated value, that is, one of the greedy actions. If there is more than one greedy action, then a selection is made among them in some arbitrary way, perhaps randomly. We write this <strong>greedy action selection</strong> method as</p>
+<div class="arithmatex">\[
+A_t \doteq \arg\max_a Q_t(a),
+\]</div>
+<p>where <span class="arithmatex">\(\arg\max_a\)</span> denotes the action <span class="arithmatex">\(a\)</span> for which the expression that follows is maximized (with ties broken arbitrarily).</p>
+<p>A simple alternative is to behave greedily most of the time, but every once in a while, say with small probability <span class="arithmatex">\(\varepsilon\)</span>, instead select randomly from among all the actions with equal probability, independently of the action-value estimates:</p>
+<div class="arithmatex">\[
+A_t = \begin{cases} \arg\max_a Q_t(a) &amp; \text{with probability } 1 - \varepsilon, \\ \text{a uniformly random action} &amp; \text{with probability } \varepsilon. \end{cases}
+\]</div>
+<p>We call methods using this near-greedy action selection rule <strong><span class="arithmatex">\(\varepsilon\)</span>-greedy methods</strong>. An advantage of these methods is that, in the limit as the number of steps increases, every action will be sampled an infinite number of times, thus ensuring that all the <span class="arithmatex">\(Q_t(a)\)</span> converge to their respective <span class="arithmatex">\(q_*(a)\)</span>.</p>
+<p>These are just asymptotic guarantees, however, and say little about the practical effectiveness of the methods.</p>
+<p><strong>Example:</strong> In <span class="arithmatex">\(\varepsilon\)</span>-greedy action selection, for the case of two actions and <span class="arithmatex">\(\varepsilon = 0.5\)</span>, what is the probability that the greedy action is selected?</p>
+<p><strong>Solution:</strong> There are two ways the greedy action can be selected:</p>
+<ol>
+<li>We exploit, which happens with probability <span class="arithmatex">\(1 - \varepsilon\)</span>, and then we always pick the greedy action.</li>
+<li>We explore, which happens with probability <span class="arithmatex">\(\varepsilon\)</span>, and then we pick one of the <span class="arithmatex">\(k\)</span> actions uniformly at random. The greedy action is one of them, so it is picked with probability <span class="arithmatex">\(\frac{1}{k}\)</span>.</li>
+</ol>
+<p>Adding the two cases,</p>
+<div class="arithmatex">\[
+P(A_t = \text{greedy}) = (1 - \varepsilon) + \varepsilon \cdot \frac{1}{k}.
+\]</div>
+<p>With <span class="arithmatex">\(k = 2\)</span> and <span class="arithmatex">\(\varepsilon = 0.5\)</span>,</p>
+<div class="arithmatex">\[
+P(A_t = \text{greedy}) = (1 - 0.5) + 0.5 \cdot \frac{1}{2} = 0.5 + 0.25 = 0.75.
+\]</div>
+<p>So the greedy action is selected <span class="arithmatex">\(75\%\)</span> of the time, not <span class="arithmatex">\(50\%\)</span>, because exploration picks the greedy action by chance half the time.</p>
 
 
 
