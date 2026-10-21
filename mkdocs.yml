@@ -65,6 +65,7 @@ nav:
       - Score Based Diffusion Models: ai/deep_generative_models/score_based_diffusion_models.md
     - Reinforcement Learning:
       - Introduction: ai/reinforcement_learning/introduction.md
+      - Multi-armed Bandits: ai/reinforcement_learning/multi_armed_bandits.md
     - Notes from AI podcasts:
       - Nov 2025. Mindscape 336 | Anil Ananthaswamy on the Mathematics of Neural Nets and AI: ai/notes_from_ai_podcasts/nov_2025_mindscape_336_anil_ananthaswamy_on_the_mathematics_of_neural_nets_and_ai.md
       - Nov 2020. Charles Isbell- Computing, Interactive AI, and Race in America | Lex Fridman Podcast no. 135: ai/notes_from_ai_podcasts/nov_2020_charles_isbell_computing_interactive_ai_and_race_in_america_lex_fridman_podcast_no_135.md

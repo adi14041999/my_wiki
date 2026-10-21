@@ -97,7 +97,7 @@ This is not guaranteed in general. The two learners can also chase each other in
 
 Would it learn a different policy? Yes.
 
-- **Against the fixed imperfect opponent**, the learned policy is the best response to *that* opponent. It happily plays risky moves like Move A above, because $P(\text{win} \mid A) = 0.9$ against that opponent, even though a perfect player could punish them.
+- **Against the fixed imperfect opponent**, the original learned policy (not from the self-played one) is the best response to *that* opponent. It happily plays risky moves like Move A above, because $P(\text{win} \mid A) = 0.9$ against that opponent, even though a perfect player could punish them.
 - **In self-play**, the learned policy is the cautious, never-lose policy. Risky moves get punished, because the opponent learns to find the refutation, so the policy settles on moves whose worst case is a draw.
 
 So the self-play player is harder to beat, but worse at exploiting a weak opponent. If you put it up against the original imperfect opponent, it would win less often than the player that trained against that opponent directly.
