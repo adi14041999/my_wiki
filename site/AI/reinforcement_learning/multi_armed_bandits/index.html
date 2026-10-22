@@ -2380,6 +2380,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#incremental-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Incremental Implementation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tracking-a-nonstationary-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tracking a Nonstationary Problem
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercises
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5369,7 +5402,123 @@ A_t = \begin{cases} \arg\max_a Q_t(a) &amp; \text{with probability } 1 - \vareps
 \]</div>
 <p>We call methods using this near-greedy action selection rule <strong><span class="arithmatex">\(\varepsilon\)</span>-greedy methods</strong>. An advantage of these methods is that, in the limit as the number of steps increases, every action will be sampled an infinite number of times, thus ensuring that all the <span class="arithmatex">\(Q_t(a)\)</span> converge to their respective <span class="arithmatex">\(q_*(a)\)</span>.</p>
 <p>These are just asymptotic guarantees, however, and say little about the practical effectiveness of the methods.</p>
-<p><strong>Example:</strong> In <span class="arithmatex">\(\varepsilon\)</span>-greedy action selection, for the case of two actions and <span class="arithmatex">\(\varepsilon = 0.5\)</span>, what is the probability that the greedy action is selected?</p>
+<h2 id="incremental-implementation">Incremental Implementation</h2>
+<p>To simplify notation we concentrate on a single action. Let <span class="arithmatex">\(R_i\)</span> now denote the reward received after the <span class="arithmatex">\(i\)</span>th selection of this action, and let <span class="arithmatex">\(Q_n\)</span> denote the estimate of its action value after it has been selected <span class="arithmatex">\(n - 1\)</span> times, which we can now write simply as</p>
+<div class="arithmatex">\[
+Q_n \doteq \frac{R_1 + R_2 + \cdots + R_{n-1}}{n - 1}.
+\]</div>
+<p>The obvious implementation would be to maintain a record of all the rewards and then perform this computation whenever the estimated value was needed. However, if this is done, then the memory and computational requirements would grow over time as more rewards are seen. Each additional reward would require additional memory to store it and additional computation to compute the sum in the numerator.</p>
+<p>As you might suspect, this is not really necessary. It is easy to devise <strong>incremental formulas</strong> for updating averages with small, constant computation required to process each new reward. Given <span class="arithmatex">\(Q_n\)</span> and the <span class="arithmatex">\(n\)</span>th reward, <span class="arithmatex">\(R_n\)</span>, the new average of all <span class="arithmatex">\(n\)</span> rewards can be computed by</p>
+<div class="arithmatex">\[
+\begin{aligned}
+Q_{n+1} &amp;= \frac{1}{n} \sum_{i=1}^{n} R_i \\
+&amp;= \frac{1}{n} \left( R_n + \sum_{i=1}^{n-1} R_i \right) \\
+&amp;= \frac{1}{n} \left( R_n + (n - 1) \frac{1}{n - 1} \sum_{i=1}^{n-1} R_i \right) \\
+&amp;= \frac{1}{n} \Big( R_n + (n - 1) Q_n \Big) \\
+&amp;= \frac{1}{n} \Big( R_n + n Q_n - Q_n \Big) \\
+&amp;= Q_n + \frac{1}{n} \Big[ R_n - Q_n \Big],
+\end{aligned}
+\]</div>
+<p>which holds even for <span class="arithmatex">\(n = 1\)</span>, obtaining <span class="arithmatex">\(Q_2 = R_1\)</span> for arbitrary <span class="arithmatex">\(Q_1\)</span>:</p>
+<div class="arithmatex">\[
+Q_2 = Q_1 + \frac{1}{1} \Big[ R_1 - Q_1 \Big] = R_1.
+\]</div>
+<p>This implementation requires memory only for <span class="arithmatex">\(Q_n\)</span> and <span class="arithmatex">\(n\)</span>, and only the small computation of the update above for each new reward.</p>
+<p>This update rule has a form that occurs frequently throughout reinforcement learning. The general form is</p>
+<div class="arithmatex">\[
+\text{NewEstimate} \leftarrow \text{OldEstimate} + \text{StepSize} \Big[ \text{Target} - \text{OldEstimate} \Big].
+\]</div>
+<p>The expression <span class="arithmatex">\(\big[ \text{Target} - \text{OldEstimate} \big]\)</span> is an <strong>error</strong> in the estimate. It is reduced by taking a step toward the “Target.” The target is presumed to indicate a desirable direction in which to move, though it may be noisy. In the case above, for example, the target is the <span class="arithmatex">\(n\)</span>th reward, <span class="arithmatex">\(R_n\)</span>:</p>
+<div class="arithmatex">\[
+\underbrace{Q_{n+1}}_{\text{NewEstimate}} = \underbrace{Q_n}_{\text{OldEstimate}} + \underbrace{\frac{1}{n}}_{\text{StepSize}} \Big[ \underbrace{R_n}_{\text{Target}} - \underbrace{Q_n}_{\text{OldEstimate}} \Big].
+\]</div>
+<p>Note that the step-size parameter (<span class="arithmatex">\(\text{StepSize}\)</span>) used in the incremental method changes from time step to time step. In processing the <span class="arithmatex">\(n\)</span>th reward for action <span class="arithmatex">\(a\)</span>, the method uses the step-size parameter <span class="arithmatex">\(\frac{1}{n}\)</span>.</p>
+<p>Pseudocode for a complete bandit algorithm using incrementally computed sample averages and <span class="arithmatex">\(\varepsilon\)</span>-greedy action selection is shown in the box below. The function <span class="arithmatex">\(\text{bandit}(a)\)</span> is assumed to take an action and return a corresponding reward.</p>
+<div class="admonition note">
+<p class="admonition-title">A simple bandit algorithm</p>
+<p><strong>Initialize</strong>, for <span class="arithmatex">\(a = 1\)</span> to <span class="arithmatex">\(k\)</span>:</p>
+<div class="arithmatex">\[
+\begin{aligned}
+Q(a) &amp;\leftarrow 0 \\
+N(a) &amp;\leftarrow 0
+\end{aligned}
+\]</div>
+<p><strong>Loop forever:</strong></p>
+<div class="arithmatex">\[
+\begin{aligned}
+A &amp;\leftarrow \begin{cases} \arg\max_a Q(a) &amp; \text{with probability } 1 - \varepsilon \quad \text{(breaking ties randomly)} \\ \text{a random action} &amp; \text{with probability } \varepsilon \end{cases} \\
+R &amp;\leftarrow \text{bandit}(A) \\
+N(A) &amp;\leftarrow N(A) + 1 \\
+Q(A) &amp;\leftarrow Q(A) + \frac{1}{N(A)} \Big[ R - Q(A) \Big]
+\end{aligned}
+\]</div>
+</div>
+<h2 id="tracking-a-nonstationary-problem">Tracking a Nonstationary Problem</h2>
+<p>The averaging methods discussed so far are appropriate for <strong>stationary</strong> bandit problems, that is, for bandit problems in which the reward probabilities do not change over time. As noted earlier, we often encounter reinforcement learning problems that are effectively <strong>nonstationary</strong>. In such cases it makes sense to give more weight to recent rewards than to long-past rewards. One of the most popular ways of doing this is to use a constant step-size parameter. For example, the incremental update rule for updating an average <span class="arithmatex">\(Q_n\)</span> of the <span class="arithmatex">\(n - 1\)</span> past rewards is modified to be</p>
+<div class="arithmatex">\[
+Q_{n+1} \doteq Q_n + \alpha \Big[ R_n - Q_n \Big],
+\]</div>
+<p>where the step-size parameter <span class="arithmatex">\(\alpha \in (0, 1]\)</span> is constant. This results in <span class="arithmatex">\(Q_{n+1}\)</span> being a weighted average of past rewards and the initial estimate <span class="arithmatex">\(Q_1\)</span>:</p>
+<div class="arithmatex">\[
+\begin{aligned}
+Q_{n+1} &amp;= Q_n + \alpha \Big[ R_n - Q_n \Big] \\
+&amp;= \alpha R_n + (1 - \alpha) Q_n \\
+&amp;= \alpha R_n + (1 - \alpha) \big[ \alpha R_{n-1} + (1 - \alpha) Q_{n-1} \big] \\
+&amp;= \alpha R_n + (1 - \alpha) \alpha R_{n-1} + (1 - \alpha)^2 Q_{n-1} \\
+&amp;= \alpha R_n + (1 - \alpha) \alpha R_{n-1} + (1 - \alpha)^2 \alpha R_{n-2} + \cdots + (1 - \alpha)^{n-1} \alpha R_1 + (1 - \alpha)^n Q_1 \\
+&amp;= (1 - \alpha)^n Q_1 + \sum_{i=1}^{n} \alpha (1 - \alpha)^{n-i} R_i.
+\end{aligned}
+\]</div>
+<p>We call this a <strong>weighted average</strong> because the sum of the weights is</p>
+<div class="arithmatex">\[
+(1 - \alpha)^n + \sum_{i=1}^{n} \alpha (1 - \alpha)^{n-i} = 1.
+\]</div>
+<p>To check this, substitute <span class="arithmatex">\(j = n - i\)</span> in the sum. As <span class="arithmatex">\(i\)</span> goes from <span class="arithmatex">\(1\)</span> to <span class="arithmatex">\(n\)</span>, <span class="arithmatex">\(j\)</span> goes from <span class="arithmatex">\(n - 1\)</span> down to <span class="arithmatex">\(0\)</span>, so the sum is a geometric series with ratio <span class="arithmatex">\(1 - \alpha\)</span>:</p>
+<div class="arithmatex">\[
+\sum_{i=1}^{n} \alpha (1 - \alpha)^{n-i} = \alpha \sum_{j=0}^{n-1} (1 - \alpha)^j = \alpha \cdot \frac{1 - (1 - \alpha)^n}{1 - (1 - \alpha)} = 1 - (1 - \alpha)^n.
+\]</div>
+<p>Adding the weight <span class="arithmatex">\((1 - \alpha)^n\)</span> on <span class="arithmatex">\(Q_1\)</span> gives exactly <span class="arithmatex">\(1\)</span>.</p>
+<p>Note that the weight, <span class="arithmatex">\(\alpha (1 - \alpha)^{n-i}\)</span>, given to the reward <span class="arithmatex">\(R_i\)</span> depends on how many rewards ago, <span class="arithmatex">\(n - i\)</span>, it was observed. The quantity <span class="arithmatex">\(1 - \alpha\)</span> is less than <span class="arithmatex">\(1\)</span>, and thus the weight given to <span class="arithmatex">\(R_i\)</span> decreases as the number of intervening rewards increases. In fact, the weight decays exponentially according to the exponent on <span class="arithmatex">\(1 - \alpha\)</span>. Accordingly, this is sometimes called an <strong>exponential recency-weighted average</strong>.</p>
+<p>For example, with <span class="arithmatex">\(\alpha = 0.1\)</span> the weights on the most recent rewards are</p>
+<table>
+<thead>
+<tr>
+<th>Reward</th>
+<th>Rewards ago, <span class="arithmatex">\(n - i\)</span></th>
+<th>Weight <span class="arithmatex">\(\alpha (1 - \alpha)^{n-i}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(R_n\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(0.1\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(R_{n-1}\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td><span class="arithmatex">\(0.09\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(R_{n-2}\)</span></td>
+<td><span class="arithmatex">\(2\)</span></td>
+<td><span class="arithmatex">\(0.081\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(R_{n-10}\)</span></td>
+<td><span class="arithmatex">\(10\)</span></td>
+<td><span class="arithmatex">\(\approx 0.035\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(R_{n-50}\)</span></td>
+<td><span class="arithmatex">\(50\)</span></td>
+<td><span class="arithmatex">\(\approx 0.0005\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>So a reward from <span class="arithmatex">\(50\)</span> steps ago counts about <span class="arithmatex">\(200\)</span> times less than the latest one.</p>
+<h2 id="exercises">Exercises</h2>
+<p><strong>1.</strong> In <span class="arithmatex">\(\varepsilon\)</span>-greedy action selection, for the case of two actions and <span class="arithmatex">\(\varepsilon = 0.5\)</span>, what is the probability that the greedy action is selected?</p>
 <p><strong>Solution:</strong> There are two ways the greedy action can be selected:</p>
 <ol>
 <li>We exploit, which happens with probability <span class="arithmatex">\(1 - \varepsilon\)</span>, and then we always pick the greedy action.</li>
@@ -5384,6 +5533,194 @@ P(A_t = \text{greedy}) = (1 - \varepsilon) + \varepsilon \cdot \frac{1}{k}.
 P(A_t = \text{greedy}) = (1 - 0.5) + 0.5 \cdot \frac{1}{2} = 0.5 + 0.25 = 0.75.
 \]</div>
 <p>So the greedy action is selected <span class="arithmatex">\(75\%\)</span> of the time, not <span class="arithmatex">\(50\%\)</span>, because exploration picks the greedy action by chance half the time.</p>
+<p><strong>2.</strong> Consider a <span class="arithmatex">\(k\)</span>-armed bandit problem with <span class="arithmatex">\(k = 4\)</span> actions, denoted <span class="arithmatex">\(1, 2, 3\)</span>, and <span class="arithmatex">\(4\)</span>. Consider applying to this problem a bandit algorithm using <span class="arithmatex">\(\varepsilon\)</span>-greedy action selection, sample-average action-value estimates, and initial estimates of <span class="arithmatex">\(Q_1(a) = 0\)</span>, for all <span class="arithmatex">\(a\)</span>. Suppose the initial sequence of actions and rewards is <span class="arithmatex">\(A_1 = 1, R_1 = -1, A_2 = 2, R_2 = 1, A_3 = 2, R_3 = -2, A_4 = 2, R_4 = 2, A_5 = 3, R_5 = 0\)</span>. On some of these time steps the <span class="arithmatex">\(\varepsilon\)</span> case may have occurred, causing an action to be selected at random. On which time steps did this definitely occur? On which time steps could this possibly have occurred?</p>
+<p><strong>Solution:</strong> On each step, we write down the estimates <span class="arithmatex">\(Q_t(a)\)</span> <em>before</em> the action is taken, find the greedy actions <span class="arithmatex">\(\arg\max_a Q_t(a)\)</span>, and check whether <span class="arithmatex">\(A_t\)</span> is one of them. After each step, only the estimate of the action that was taken changes: it becomes the average of all rewards received for that action so far.</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(t\)</span></th>
+<th><span class="arithmatex">\(Q_t(1)\)</span></th>
+<th><span class="arithmatex">\(Q_t(2)\)</span></th>
+<th><span class="arithmatex">\(Q_t(3)\)</span></th>
+<th><span class="arithmatex">\(Q_t(4)\)</span></th>
+<th>Greedy actions</th>
+<th><span class="arithmatex">\(A_t\)</span></th>
+<th><span class="arithmatex">\(R_t\)</span></th>
+<th>Greedy?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(\{1, 2, 3, 4\}\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td><span class="arithmatex">\(-1\)</span></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>2</td>
+<td><span class="arithmatex">\(-1\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(\{2, 3, 4\}\)</span></td>
+<td><span class="arithmatex">\(2\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>3</td>
+<td><span class="arithmatex">\(-1\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(\{2\}\)</span></td>
+<td><span class="arithmatex">\(2\)</span></td>
+<td><span class="arithmatex">\(-2\)</span></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>4</td>
+<td><span class="arithmatex">\(-1\)</span></td>
+<td><span class="arithmatex">\(-\tfrac{1}{2}\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(\{3, 4\}\)</span></td>
+<td><span class="arithmatex">\(2\)</span></td>
+<td><span class="arithmatex">\(2\)</span></td>
+<td><strong>no</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td><span class="arithmatex">\(-1\)</span></td>
+<td><span class="arithmatex">\(\tfrac{1}{3}\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(\{2\}\)</span></td>
+<td><span class="arithmatex">\(3\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><strong>no</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Each estimate is the average of the rewards received for that action so far, or the default <span class="arithmatex">\(0\)</span> if the action has not been taken yet. Only the action that was taken changes from one step to the next.</p>
+<p>After step <span class="arithmatex">\(1\)</span> (action <span class="arithmatex">\(1\)</span> was taken):</p>
+<div class="arithmatex">\[
+Q_2(1) = \frac{R_1}{1} = \frac{-1}{1} = -1.
+\]</div>
+<p>After steps <span class="arithmatex">\(2\)</span>, <span class="arithmatex">\(3\)</span> and <span class="arithmatex">\(4\)</span> (action <span class="arithmatex">\(2\)</span> was taken each time):</p>
+<div class="arithmatex">\[
+Q_3(2) = \frac{R_2}{1} = \frac{1}{1} = 1, \qquad Q_4(2) = \frac{R_2 + R_3}{2} = \frac{1 + (-2)}{2} = -\frac{1}{2}, \qquad Q_5(2) = \frac{R_2 + R_3 + R_4}{3} = \frac{1 + (-2) + 2}{3} = \frac{1}{3}.
+\]</div>
+<p>After step <span class="arithmatex">\(5\)</span> (action <span class="arithmatex">\(3\)</span> was taken), the estimates for all four actions are</p>
+<div class="arithmatex">\[
+\begin{aligned}
+Q_6(1) &amp;= \frac{R_1}{1} = \frac{-1}{1} = -1, \\
+Q_6(2) &amp;= \frac{R_2 + R_3 + R_4}{3} = \frac{1 + (-2) + 2}{3} = \frac{1}{3}, \\
+Q_6(3) &amp;= \frac{R_5}{1} = \frac{0}{1} = 0, \\
+Q_6(4) &amp;= 0 \quad \text{(never taken, so it keeps the default value).}
+\end{aligned}
+\]</div>
+<p>So after these five steps, the greedy action is <span class="arithmatex">\(\arg\max_a Q_6(a) = 2\)</span>.</p>
+<p>On which time steps did the <span class="arithmatex">\(\varepsilon\)</span> case definitely occur? On steps <span class="arithmatex">\(t = 4\)</span> and <span class="arithmatex">\(t = 5\)</span>. On both, the action taken was not greedy. A greedy step can only pick a greedy action, so these must have been random picks.</p>
+<p>On which time steps could it possibly have occurred? On every step, <span class="arithmatex">\(t = 1, \dots, 5\)</span>. When exploring, we pick uniformly from <strong>all</strong> <span class="arithmatex">\(k\)</span> actions, greedy ones included. So on steps <span class="arithmatex">\(1\)</span>, <span class="arithmatex">\(2\)</span> and <span class="arithmatex">\(3\)</span>, the action taken could have come from either a greedy step or a random pick that happened to land on a greedy action. Looking at the actions alone, we can't tell which.</p>
+<p><strong>3. Varying Step Sizes:</strong> If the step-size parameters, <span class="arithmatex">\(\alpha_n\)</span>, are not constant, then the estimate <span class="arithmatex">\(Q_n\)</span> is a weighted average of previously received rewards with a weighting different from that given by the constant-<span class="arithmatex">\(\alpha\)</span> formula above. What is the weighting on each prior reward for the general case, analogous to that formula, in terms of the sequence of step-size parameters?</p>
+<p><strong>Solution:</strong> Now the step size used for the <span class="arithmatex">\(n\)</span>th reward is <span class="arithmatex">\(\alpha_n\)</span>, so the update is</p>
+<div class="arithmatex">\[
+Q_{n+1} = Q_n + \alpha_n \Big[ R_n - Q_n \Big] = \alpha_n R_n + (1 - \alpha_n) Q_n.
+\]</div>
+<p>We unroll it exactly as in the constant case, except that each step keeps its own <span class="arithmatex">\(\alpha\)</span>:</p>
+<div class="arithmatex">\[
+\begin{aligned}
+Q_{n+1} &amp;= \alpha_n R_n + (1 - \alpha_n) Q_n \\
+&amp;= \alpha_n R_n + (1 - \alpha_n) \big[ \alpha_{n-1} R_{n-1} + (1 - \alpha_{n-1}) Q_{n-1} \big] \\
+&amp;= \alpha_n R_n + (1 - \alpha_n) \alpha_{n-1} R_{n-1} + (1 - \alpha_n)(1 - \alpha_{n-1}) Q_{n-1} \\
+&amp;= \alpha_n R_n + (1 - \alpha_n) \alpha_{n-1} R_{n-1} + \cdots + (1 - \alpha_n) \cdots (1 - \alpha_2) \, \alpha_1 R_1 + (1 - \alpha_n) \cdots (1 - \alpha_1) \, Q_1 \\
+&amp;= \left[ \prod_{j=1}^{n} (1 - \alpha_j) \right] Q_1 + \sum_{i=1}^{n} \left[ \alpha_i \prod_{j=i+1}^{n} (1 - \alpha_j) \right] R_i.
+\end{aligned}
+\]</div>
+<p>So the weight on each prior reward <span class="arithmatex">\(R_i\)</span> is</p>
+<div class="arithmatex">\[
+w_i = \alpha_i \prod_{j=i+1}^{n} (1 - \alpha_j),
+\]</div>
+<p>and the weight on the initial estimate <span class="arithmatex">\(Q_1\)</span> is <span class="arithmatex">\(\prod_{j=1}^{n} (1 - \alpha_j)\)</span>.</p>
+<p>Two checks:</p>
+<ol>
+<li><strong>Constant step size</strong>, <span class="arithmatex">\(\alpha_j = \alpha\)</span> for all <span class="arithmatex">\(j\)</span>. Every factor is <span class="arithmatex">\(1 - \alpha\)</span>, and there are <span class="arithmatex">\(n - i\)</span> of them, so <span class="arithmatex">\(w_i = \alpha (1 - \alpha)^{n-i}\)</span> and the weight on <span class="arithmatex">\(Q_1\)</span> is <span class="arithmatex">\((1 - \alpha)^n\)</span>. This is the constant-<span class="arithmatex">\(\alpha\)</span> formula.</li>
+<li>
+<p><strong>Sample averages</strong>, <span class="arithmatex">\(\alpha_j = \frac{1}{j}\)</span>. Then <span class="arithmatex">\(1 - \alpha_j = \frac{j-1}{j}\)</span>, and the product telescopes:</p>
+<div class="arithmatex">\[
+w_i = \frac{1}{i} \cdot \frac{i}{i+1} \cdot \frac{i+1}{i+2} \cdots \frac{n-1}{n} = \frac{1}{n}.
+\]</div>
+<p>Every reward gets the same weight <span class="arithmatex">\(\frac{1}{n}\)</span>, and since <span class="arithmatex">\(1 - \alpha_1 = 0\)</span>, the initial estimate <span class="arithmatex">\(Q_1\)</span> gets weight <span class="arithmatex">\(0\)</span>. This is the plain average <span class="arithmatex">\(Q_{n+1} = \frac{1}{n} \sum_{i=1}^{n} R_i\)</span>, as it should be.</p>
+</li>
+</ol>
+<p><strong>Do the weights always sum to 1?</strong> Yes, for any sequence of step sizes. Each update <span class="arithmatex">\(Q_{n+1} = \alpha_n R_n + (1 - \alpha_n) Q_n\)</span> gives weight <span class="arithmatex">\(\alpha_n\)</span> to the new reward and <span class="arithmatex">\(1 - \alpha_n\)</span> to everything that was already in <span class="arithmatex">\(Q_n\)</span>, and <span class="arithmatex">\(\alpha_n + (1 - \alpha_n) = 1\)</span>. If the old weights summed to <span class="arithmatex">\(1\)</span>, the new ones do too. The very first estimate <span class="arithmatex">\(Q_1\)</span> starts with weight <span class="arithmatex">\(1\)</span>, so at every step</p>
+<div class="arithmatex">\[
+\prod_{j=1}^{n} (1 - \alpha_j) + \sum_{i=1}^{n} \alpha_i \prod_{j=i+1}^{n} (1 - \alpha_j) = 1.
+\]</div>
+<p>What the step sizes decide is how that total weight of <span class="arithmatex">\(1\)</span> is shared out. For example, take <span class="arithmatex">\(Q_1 = 0\)</span> and three rewards <span class="arithmatex">\(R_1 = 2\)</span>, <span class="arithmatex">\(R_2 = 4\)</span>, <span class="arithmatex">\(R_3 = 6\)</span>.</p>
+<p><em>Example 1: sample averages, <span class="arithmatex">\(\alpha_n = \frac{1}{n}\)</span></em> (the incremental implementation). Running the update,</p>
+<div class="arithmatex">\[
+Q_2 = 0 + 1 \cdot (2 - 0) = 2, \qquad Q_3 = 2 + \tfrac{1}{2} (4 - 2) = 3, \qquad Q_4 = 3 + \tfrac{1}{3} (6 - 3) = 4.
+\]</div>
+<p>The weights are</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><span class="arithmatex">\(Q_1\)</span></th>
+<th><span class="arithmatex">\(R_1\)</span></th>
+<th><span class="arithmatex">\(R_2\)</span></th>
+<th><span class="arithmatex">\(R_3\)</span></th>
+<th>Sum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Weight</td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(\tfrac{1}{3}\)</span></td>
+<td><span class="arithmatex">\(\tfrac{1}{3}\)</span></td>
+<td><span class="arithmatex">\(\tfrac{1}{3}\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>so <span class="arithmatex">\(Q_4 = \tfrac{1}{3}(2 + 4 + 6) = 4\)</span>, the plain average. <span class="arithmatex">\(Q_1\)</span> gets weight <span class="arithmatex">\(0\)</span> because <span class="arithmatex">\(1 - \alpha_1 = 0\)</span>: the first reward completely replaces the initial guess.</p>
+<p><em>Example 2: constant step size, <span class="arithmatex">\(\alpha = 0.5\)</span>.</em> Running the update,</p>
+<div class="arithmatex">\[
+Q_2 = 0 + 0.5 (2 - 0) = 1, \qquad Q_3 = 1 + 0.5 (4 - 1) = 2.5, \qquad Q_4 = 2.5 + 0.5 (6 - 2.5) = 4.25.
+\]</div>
+<p>The weights are <span class="arithmatex">\(\alpha (1 - \alpha)^{n-i}\)</span> for the rewards and <span class="arithmatex">\((1 - \alpha)^n\)</span> for <span class="arithmatex">\(Q_1\)</span>:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><span class="arithmatex">\(Q_1\)</span></th>
+<th><span class="arithmatex">\(R_1\)</span></th>
+<th><span class="arithmatex">\(R_2\)</span></th>
+<th><span class="arithmatex">\(R_3\)</span></th>
+<th>Sum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Weight</td>
+<td><span class="arithmatex">\(0.125\)</span></td>
+<td><span class="arithmatex">\(0.125\)</span></td>
+<td><span class="arithmatex">\(0.25\)</span></td>
+<td><span class="arithmatex">\(0.5\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>so <span class="arithmatex">\(Q_4 = 0.125 \cdot 0 + 0.125 \cdot 2 + 0.25 \cdot 4 + 0.5 \cdot 6 = 4.25\)</span>, matching the update. The most recent reward gets half the weight, each older one half as much as the next, and <span class="arithmatex">\(Q_1\)</span> never quite disappears.</p>
+<p>Both estimates use the same three rewards. The constant-<span class="arithmatex">\(\alpha\)</span> estimate (<span class="arithmatex">\(4.25\)</span>) sits above the sample average (<span class="arithmatex">\(4\)</span>) because it leans toward the latest reward, <span class="arithmatex">\(R_3 = 6\)</span>.</p>
 
 
 
