@@ -2403,6 +2403,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#gradient-bandit-algorithms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gradient Bandit Algorithms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exercises" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5517,6 +5528,59 @@ Q_{n+1} &amp;= Q_n + \alpha \Big[ R_n - Q_n \Big] \\
 </tbody>
 </table>
 <p>So a reward from <span class="arithmatex">\(50\)</span> steps ago counts about <span class="arithmatex">\(200\)</span> times less than the latest one.</p>
+<h2 id="gradient-bandit-algorithms">Gradient Bandit Algorithms</h2>
+<p>So far in this chapter we have considered methods that estimate action values and use those estimates to select actions. This is often a good approach, but it is not the only one possible. In this section we consider learning a numerical <strong>preference</strong> for each action <span class="arithmatex">\(a\)</span>, which we denote <span class="arithmatex">\(H_t(a) \in \mathbb{R}\)</span>. The larger the preference, the more often that action is taken, but the preference has no interpretation in terms of reward. Only the relative preference of one action over another is important; if we add <span class="arithmatex">\(1000\)</span> to all the action preferences there is no effect on the action probabilities, which are determined according to a <strong>soft-max distribution</strong> (i.e., Gibbs or Boltzmann distribution) as follows:</p>
+<div class="arithmatex">\[
+\Pr\{A_t = a\} \doteq \frac{e^{H_t(a)}}{\sum_{b=1}^{k} e^{H_t(b)}} \doteq \pi_t(a),
+\]</div>
+<p>where here we have also introduced a useful new notation, <span class="arithmatex">\(\pi_t(a)\)</span>, for the probability of taking action <span class="arithmatex">\(a\)</span> at time <span class="arithmatex">\(t\)</span>. Initially all action preferences are the same (e.g., <span class="arithmatex">\(H_1(a) = 0\)</span>, for all <span class="arithmatex">\(a\)</span>) so that all actions have an equal probability of being selected, <span class="arithmatex">\(\pi_1(a) = \frac{1}{k}\)</span>.</p>
+<p>To see why adding a constant has no effect, add <span class="arithmatex">\(c\)</span> to every preference. The common factor <span class="arithmatex">\(e^c\)</span> cancels:</p>
+<div class="arithmatex">\[
+\frac{e^{H_t(a) + c}}{\sum_{b=1}^{k} e^{H_t(b) + c}} = \frac{e^{c} \, e^{H_t(a)}}{e^{c} \sum_{b=1}^{k} e^{H_t(b)}} = \frac{e^{H_t(a)}}{\sum_{b=1}^{k} e^{H_t(b)}} = \pi_t(a).
+\]</div>
+<p>There is a natural learning algorithm for soft-max action preferences based on the idea of stochastic gradient ascent. On each step, after selecting action <span class="arithmatex">\(A_t\)</span> and receiving the reward <span class="arithmatex">\(R_t\)</span>, the action preferences are updated by:</p>
+<div class="arithmatex">\[
+\begin{aligned}
+H_{t+1}(A_t) &amp;\doteq H_t(A_t) + \alpha \big( R_t - \bar{R}_t \big) \big( 1 - \pi_t(A_t) \big), &amp;&amp; \text{and} \\
+H_{t+1}(a) &amp;\doteq H_t(a) - \alpha \big( R_t - \bar{R}_t \big) \, \pi_t(a), &amp;&amp; \text{for all } a \neq A_t,
+\end{aligned}
+\]</div>
+<p>where <span class="arithmatex">\(\alpha &gt; 0\)</span> is a step-size parameter, and <span class="arithmatex">\(\bar{R}_t \in \mathbb{R}\)</span> is the average of the rewards up to but not including time <span class="arithmatex">\(t\)</span> (with <span class="arithmatex">\(\bar{R}_1 \doteq R_1\)</span>), which can be computed incrementally. The <span class="arithmatex">\(\bar{R}_t\)</span> term serves as a <strong>baseline</strong> with which the reward is compared. If the reward is higher than the baseline, <span class="arithmatex">\(R_t &gt; \bar{R}_t\)</span>, then the probability of taking <span class="arithmatex">\(A_t\)</span> in the future is increased, and if the reward is below baseline, <span class="arithmatex">\(R_t &lt; \bar{R}_t\)</span>, then the probability is decreased. The non-selected actions move in the opposite direction.</p>
+<p>Both updates can be written as one rule using the indicator <span class="arithmatex">\(\mathbf{1}_{a = A_t}\)</span>, which is <span class="arithmatex">\(1\)</span> for the selected action and <span class="arithmatex">\(0\)</span> for the rest:</p>
+<div class="arithmatex">\[
+H_{t+1}(a) \doteq H_t(a) + \alpha \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big), \qquad \text{for all } a.
+\]</div>
+<div class="admonition note">
+<p class="admonition-title">Why <span class="arithmatex">\(1 - \pi_t(A_t)\)</span> for the selected action and <span class="arithmatex">\(\pi_t(a)\)</span> for the others?</p>
+<p>Each term has a simple meaning.</p>
+<ul>
+<li><span class="arithmatex">\(1 - \pi_t(A_t)\)</span> is <strong>how much room the selected action has left to grow</strong>. If <span class="arithmatex">\(A_t\)</span> is already taken with probability <span class="arithmatex">\(0.99\)</span>, there is little left to gain, so its preference moves only a little. If it had probability <span class="arithmatex">\(0.1\)</span>, it moves a lot.</li>
+<li><span class="arithmatex">\(\pi_t(a)\)</span> means each non-selected action <strong>gives up probability in proportion to how much it has</strong>. An action with probability <span class="arithmatex">\(0.4\)</span> is pushed down a lot, while one with <span class="arithmatex">\(0.01\)</span> barely moves. So the probability that <span class="arithmatex">\(A_t\)</span> gains comes mostly from the actions that currently hold the most.</li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Why do the selected and non-selected actions move in opposite directions?</p>
+<p>The probabilities <span class="arithmatex">\(\pi_t(a)\)</span> must always sum to <span class="arithmatex">\(1\)</span>, so one action cannot become more likely without the others becoming less likely. Raising <span class="arithmatex">\(H_t(A_t)\)</span> while lowering the rest is the most direct way to shift probability toward <span class="arithmatex">\(A_t\)</span>.</p>
+<p>The direction is not fixed, though. It depends on the sign of <span class="arithmatex">\(R_t - \bar{R}_t\)</span>: if the reward was <strong>below</strong> the baseline, the selected action goes <strong>down</strong> and the others go <strong>up</strong>.</p>
+<p>In fact, the changes to the preferences always sum to zero:</p>
+<div class="arithmatex">\[
+\sum_{a} \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big) = 1 - \sum_{a} \pi_t(a) = 1 - 1 = 0.
+\]</div>
+<p>So the update never shifts all preferences up or down together, which would have no effect anyway, since adding a constant to every preference leaves <span class="arithmatex">\(\pi_t\)</span> unchanged. Every step goes entirely into changing their relative sizes.</p>
+<p>For example, take <span class="arithmatex">\(k = 3\)</span> with <span class="arithmatex">\(\pi_t = (0.5, 0.3, 0.2)\)</span>. Action <span class="arithmatex">\(1\)</span> is selected, and suppose <span class="arithmatex">\(\alpha (R_t - \bar{R}_t) = 1\)</span>. The preferences change by</p>
+<div class="arithmatex">\[
+\Delta H = (1 - 0.5, \; -0.3, \; -0.2) = (+0.5, \; -0.3, \; -0.2), \qquad \text{sum} = 0,
+\]</div>
+<p>and the new probabilities are about <span class="arithmatex">\((0.68, \; 0.18, \; 0.14)\)</span>. Action <span class="arithmatex">\(1\)</span> went from <span class="arithmatex">\(0.5\)</span> to <span class="arithmatex">\(0.68\)</span>. Action <span class="arithmatex">\(2\)</span> lost <span class="arithmatex">\(0.12\)</span> and action <span class="arithmatex">\(3\)</span> lost <span class="arithmatex">\(0.06\)</span>, so the action holding more probability gave up more.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Isn't there a risk of a runaway effect, where one action gets picked again and again?</p>
+<p>Two things keep this from happening.</p>
+<ol>
+<li><strong>The baseline tracks the rewards.</strong> A single reward can land below the baseline, <span class="arithmatex">\(R_t &lt; \bar{R}_t\)</span>, and then the selected action's preference goes down, so no action is pushed up on every step. And as one action comes to be picked most of the time, the baseline <span class="arithmatex">\(\bar{R}_t\)</span> moves toward that action's typical reward. Its rewards then land above and below the baseline about equally often, so the ups and downs cancel out and there is no steady climb. This only works because the baseline moves: with a fixed baseline, say <span class="arithmatex">\(\bar{R}_t = 0\)</span> while all rewards are positive, every reward counts as "above baseline", the selected action is always pushed up, and early luck locks in much more easily.</li>
+<li><strong>The step shrinks near certainty.</strong> The selected action's increase is scaled by <span class="arithmatex">\(1 - \pi_t(A_t)\)</span>, which goes to <span class="arithmatex">\(0\)</span> as <span class="arithmatex">\(\pi_t(A_t) \to 1\)</span>. The more dominant an action already is, the less each good reward raises it further.</li>
+</ol>
+</div>
 <h2 id="exercises">Exercises</h2>
 <p><strong>1.</strong> In <span class="arithmatex">\(\varepsilon\)</span>-greedy action selection, for the case of two actions and <span class="arithmatex">\(\varepsilon = 0.5\)</span>, what is the probability that the greedy action is selected?</p>
 <p><strong>Solution:</strong> There are two ways the greedy action can be selected:</p>
@@ -5720,7 +5784,6 @@ Q_2 = 0 + 0.5 (2 - 0) = 1, \qquad Q_3 = 1 + 0.5 (4 - 1) = 2.5, \qquad Q_4 = 2.5 
 </tbody>
 </table>
 <p>so <span class="arithmatex">\(Q_4 = 0.125 \cdot 0 + 0.125 \cdot 2 + 0.25 \cdot 4 + 0.5 \cdot 6 = 4.25\)</span>, matching the update. The most recent reward gets half the weight, each older one half as much as the next, and <span class="arithmatex">\(Q_1\)</span> never quite disappears.</p>
-<p>Both estimates use the same three rewards. The constant-<span class="arithmatex">\(\alpha\)</span> estimate (<span class="arithmatex">\(4.25\)</span>) sits above the sample average (<span class="arithmatex">\(4\)</span>) because it leans toward the latest reward, <span class="arithmatex">\(R_3 = 6\)</span>.</p>
 
 
 

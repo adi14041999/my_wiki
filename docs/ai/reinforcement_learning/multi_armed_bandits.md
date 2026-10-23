@@ -193,7 +193,71 @@ For example, with $\alpha = 0.1$ the weights on the most recent rewards are
 
 So a reward from $50$ steps ago counts about $200$ times less than the latest one.
 
-## Optimistic Initial Values
+## Gradient Bandit Algorithms
+
+So far in this chapter we have considered methods that estimate action values and use those estimates to select actions. This is often a good approach, but it is not the only one possible. In this section we consider learning a numerical **preference** for each action $a$, which we denote $H_t(a) \in \mathbb{R}$. The larger the preference, the more often that action is taken, but the preference has no interpretation in terms of reward. Only the relative preference of one action over another is important; if we add $1000$ to all the action preferences there is no effect on the action probabilities, which are determined according to a **soft-max distribution** (i.e., Gibbs or Boltzmann distribution) as follows:
+
+$$
+\Pr\{A_t = a\} \doteq \frac{e^{H_t(a)}}{\sum_{b=1}^{k} e^{H_t(b)}} \doteq \pi_t(a),
+$$
+
+where here we have also introduced a useful new notation, $\pi_t(a)$, for the probability of taking action $a$ at time $t$. Initially all action preferences are the same (e.g., $H_1(a) = 0$, for all $a$) so that all actions have an equal probability of being selected, $\pi_1(a) = \frac{1}{k}$.
+
+To see why adding a constant has no effect, add $c$ to every preference. The common factor $e^c$ cancels:
+
+$$
+\frac{e^{H_t(a) + c}}{\sum_{b=1}^{k} e^{H_t(b) + c}} = \frac{e^{c} \, e^{H_t(a)}}{e^{c} \sum_{b=1}^{k} e^{H_t(b)}} = \frac{e^{H_t(a)}}{\sum_{b=1}^{k} e^{H_t(b)}} = \pi_t(a).
+$$
+
+There is a natural learning algorithm for soft-max action preferences based on the idea of stochastic gradient ascent. On each step, after selecting action $A_t$ and receiving the reward $R_t$, the action preferences are updated by:
+
+$$
+\begin{aligned}
+H_{t+1}(A_t) &\doteq H_t(A_t) + \alpha \big( R_t - \bar{R}_t \big) \big( 1 - \pi_t(A_t) \big), && \text{and} \\
+H_{t+1}(a) &\doteq H_t(a) - \alpha \big( R_t - \bar{R}_t \big) \, \pi_t(a), && \text{for all } a \neq A_t,
+\end{aligned}
+$$
+
+where $\alpha > 0$ is a step-size parameter, and $\bar{R}_t \in \mathbb{R}$ is the average of the rewards up to but not including time $t$ (with $\bar{R}_1 \doteq R_1$), which can be computed incrementally. The $\bar{R}_t$ term serves as a **baseline** with which the reward is compared. If the reward is higher than the baseline, $R_t > \bar{R}_t$, then the probability of taking $A_t$ in the future is increased, and if the reward is below baseline, $R_t < \bar{R}_t$, then the probability is decreased. The non-selected actions move in the opposite direction.
+
+Both updates can be written as one rule using the indicator $\mathbf{1}_{a = A_t}$, which is $1$ for the selected action and $0$ for the rest:
+
+$$
+H_{t+1}(a) \doteq H_t(a) + \alpha \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big), \qquad \text{for all } a.
+$$
+
+!!! note "Why $1 - \pi_t(A_t)$ for the selected action and $\pi_t(a)$ for the others?"
+    Each term has a simple meaning.
+
+    - $1 - \pi_t(A_t)$ is **how much room the selected action has left to grow**. If $A_t$ is already taken with probability $0.99$, there is little left to gain, so its preference moves only a little. If it had probability $0.1$, it moves a lot.
+    - $\pi_t(a)$ means each non-selected action **gives up probability in proportion to how much it has**. An action with probability $0.4$ is pushed down a lot, while one with $0.01$ barely moves. So the probability that $A_t$ gains comes mostly from the actions that currently hold the most.
+
+!!! note "Why do the selected and non-selected actions move in opposite directions?"
+    The probabilities $\pi_t(a)$ must always sum to $1$, so one action cannot become more likely without the others becoming less likely. Raising $H_t(A_t)$ while lowering the rest is the most direct way to shift probability toward $A_t$.
+
+    The direction is not fixed, though. It depends on the sign of $R_t - \bar{R}_t$: if the reward was **below** the baseline, the selected action goes **down** and the others go **up**.
+
+    In fact, the changes to the preferences always sum to zero:
+
+    $$
+    \sum_{a} \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big) = 1 - \sum_{a} \pi_t(a) = 1 - 1 = 0.
+    $$
+
+    So the update never shifts all preferences up or down together, which would have no effect anyway, since adding a constant to every preference leaves $\pi_t$ unchanged. Every step goes entirely into changing their relative sizes.
+
+    For example, take $k = 3$ with $\pi_t = (0.5, 0.3, 0.2)$. Action $1$ is selected, and suppose $\alpha (R_t - \bar{R}_t) = 1$. The preferences change by
+
+    $$
+    \Delta H = (1 - 0.5, \; -0.3, \; -0.2) = (+0.5, \; -0.3, \; -0.2), \qquad \text{sum} = 0,
+    $$
+
+    and the new probabilities are about $(0.68, \; 0.18, \; 0.14)$. Action $1$ went from $0.5$ to $0.68$. Action $2$ lost $0.12$ and action $3$ lost $0.06$, so the action holding more probability gave up more.
+
+!!! note "Isn't there a risk of a runaway effect, where one action gets picked again and again?"
+    Two things keep this from happening.
+
+    1. **The baseline tracks the rewards.** A single reward can land below the baseline, $R_t < \bar{R}_t$, and then the selected action's preference goes down, so no action is pushed up on every step. And as one action comes to be picked most of the time, the baseline $\bar{R}_t$ moves toward that action's typical reward. Its rewards then land above and below the baseline about equally often, so the ups and downs cancel out and there is no steady climb. This only works because the baseline moves.
+    2. **The step shrinks near certainty.** The selected action's increase is scaled by $1 - \pi_t(A_t)$, which goes to $0$ as $\pi_t(A_t) \to 1$.
 
 ## Exercises
 
