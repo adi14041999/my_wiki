@@ -259,6 +259,92 @@ $$
     1. **The baseline tracks the rewards.** A single reward can land below the baseline, $R_t < \bar{R}_t$, and then the selected action's preference goes down, so no action is pushed up on every step. And as one action comes to be picked most of the time, the baseline $\bar{R}_t$ moves toward that action's typical reward. Its rewards then land above and below the baseline about equally often, so the ups and downs cancel out and there is no steady climb. This only works because the baseline moves.
     2. **The step shrinks near certainty.** The selected action's increase is scaled by $1 - \pi_t(A_t)$, which goes to $0$ as $\pi_t(A_t) \to 1$.
 
+### The Bandit Gradient Algorithm as Stochastic Gradient Ascent
+
+One can gain a deeper insight into the gradient bandit algorithm by understanding it as a stochastic approximation to gradient ascent. In exact **gradient ascent**, each action preference $H_t(a)$ would be incremented in proportion to the increment’s effect on performance:
+
+$$
+H_{t+1}(a) \doteq H_t(a) + \alpha \frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)},
+$$
+
+where the measure of performance here is the expected reward:
+
+$$
+\mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x),
+$$
+
+and the measure of the increment’s effect is the partial derivative of this performance measure with respect to the action preference. Of course, it is not possible to implement gradient ascent exactly in our case because by assumption we do not know the $q_*(x)$, but in fact the updates of our algorithm are equal to the exact gradient ascent update in expected value, making the algorithm an instance of **stochastic gradient ascent**. The calculations showing this require only beginning calculus, but take several steps.
+
+First we take a closer look at the exact performance gradient:
+
+$$
+\begin{aligned}
+\frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)} &= \frac{\partial}{\partial H_t(a)} \left[ \sum_x \pi_t(x) \, q_*(x) \right] \\
+&= \sum_x q_*(x) \frac{\partial \pi_t(x)}{\partial H_t(a)} \\
+&= \sum_x \big( q_*(x) - B_t \big) \frac{\partial \pi_t(x)}{\partial H_t(a)},
+\end{aligned}
+$$
+
+where $B_t$, called the **baseline**, can be any scalar that does not depend on $x$. We can include a baseline here without changing the equality because the gradient sums to zero over all the actions, $\sum_x \frac{\partial \pi_t(x)}{\partial H_t(a)} = 0$. As $H_t(a)$ is changed, some actions’ probabilities go up and some go down, but the sum of the changes must be zero because the sum of the probabilities is always one.
+
+Next we multiply each term of the sum by $\pi_t(x) / \pi_t(x)$:
+
+$$
+\frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)} = \sum_x \pi_t(x) \big( q_*(x) - B_t \big) \frac{\partial \pi_t(x)}{\partial H_t(a)} \Big/ \pi_t(x).
+$$
+
+The equation is now in the form of an expectation, summing over all possible values $x$ of the random variable $A_t$, then multiplying by the probability of taking those values. Thus:
+
+$$
+\begin{aligned}
+&= \mathbb{E}\left[ \big( q_*(A_t) - B_t \big) \frac{\partial \pi_t(A_t)}{\partial H_t(a)} \Big/ \pi_t(A_t) \right] \\
+&= \mathbb{E}\left[ \big( R_t - \bar{R}_t \big) \frac{\partial \pi_t(A_t)}{\partial H_t(a)} \Big/ \pi_t(A_t) \right],
+\end{aligned}
+$$
+
+where here we have chosen the baseline $B_t = \bar{R}_t$ and substituted $R_t$ for $q_*(A_t)$, which is permitted because $\mathbb{E}[R_t \mid A_t] = q_*(A_t)$.
+
+Shortly we will establish that $\frac{\partial \pi_t(x)}{\partial H_t(a)} = \pi_t(x) \big( \mathbf{1}_{a = x} - \pi_t(a) \big)$, where $\mathbf{1}_{a = x}$ is defined to be $1$ if $a = x$, else $0$. Assuming that for now, we have
+
+$$
+\begin{aligned}
+&= \mathbb{E}\Big[ \big( R_t - \bar{R}_t \big) \, \pi_t(A_t) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big) \big/ \pi_t(A_t) \Big] \\
+&= \mathbb{E}\Big[ \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big) \Big].
+\end{aligned}
+$$
+
+Recall that our plan has been to write the performance gradient as an expectation of something that we can sample on each step, as we have just done, and then update on each step in proportion to the sample. Substituting a sample of the expectation above for the performance gradient in the exact gradient ascent update yields:
+
+$$
+H_{t+1}(a) = H_t(a) + \alpha \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big), \qquad \text{for all } a,
+$$
+
+which you may recognize as being equivalent to our original algorithm.
+
+Thus it remains only to show that $\frac{\partial \pi_t(x)}{\partial H_t(a)} = \pi_t(x) \big( \mathbf{1}_{a = x} - \pi_t(a) \big)$, as we assumed. Recall the standard quotient rule for derivatives:
+
+$$
+\frac{\partial}{\partial x} \left[ \frac{f(x)}{g(x)} \right] = \frac{\frac{\partial f(x)}{\partial x} g(x) - f(x) \frac{\partial g(x)}{\partial x}}{g(x)^2}.
+$$
+
+Using this, we can write
+
+$$
+\begin{aligned}
+\frac{\partial \pi_t(x)}{\partial H_t(a)} &= \frac{\partial}{\partial H_t(a)} \pi_t(x) \\
+&= \frac{\partial}{\partial H_t(a)} \left[ \frac{e^{H_t(x)}}{\sum_{y=1}^{k} e^{H_t(y)}} \right] \\
+&= \frac{\frac{\partial e^{H_t(x)}}{\partial H_t(a)} \sum_{y=1}^{k} e^{H_t(y)} - e^{H_t(x)} \frac{\partial \sum_{y=1}^{k} e^{H_t(y)}}{\partial H_t(a)}}{\left( \sum_{y=1}^{k} e^{H_t(y)} \right)^2} && \text{(by the quotient rule)} \\
+&= \frac{\mathbf{1}_{a = x} \, e^{H_t(x)} \sum_{y=1}^{k} e^{H_t(y)} - e^{H_t(x)} e^{H_t(a)}}{\left( \sum_{y=1}^{k} e^{H_t(y)} \right)^2} && \left( \text{because } \tfrac{\partial e^x}{\partial x} = e^x \right) \\
+&= \frac{\mathbf{1}_{a = x} \, e^{H_t(x)}}{\sum_{y=1}^{k} e^{H_t(y)}} - \frac{e^{H_t(x)} e^{H_t(a)}}{\left( \sum_{y=1}^{k} e^{H_t(y)} \right)^2} \\
+&= \mathbf{1}_{a = x} \, \pi_t(x) - \pi_t(x) \, \pi_t(a) \\
+&= \pi_t(x) \big( \mathbf{1}_{a = x} - \pi_t(a) \big). && \text{Q.E.D.}
+\end{aligned}
+$$
+
+We have just shown that the expected update of the gradient bandit algorithm is equal to the gradient of expected reward, and thus that the algorithm is an instance of stochastic gradient ascent. This assures us that the algorithm has robust convergence properties.
+
+Note that we did not require any properties of the reward baseline other than that it does not depend on the selected action. For example, we could have set it to zero, or to $1000$, and the algorithm would still be an instance of stochastic gradient ascent.
+
 ## Exercises
 
 **1.** In $\varepsilon$-greedy action selection, for the case of two actions and $\varepsilon = 0.5$, what is the probability that the greedy action is selected?
