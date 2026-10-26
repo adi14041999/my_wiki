@@ -5598,66 +5598,189 @@ H_{t+1}(a) \doteq H_t(a) + \alpha \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{
 <li><strong>The step shrinks near certainty.</strong> The selected action's increase is scaled by <span class="arithmatex">\(1 - \pi_t(A_t)\)</span>, which goes to <span class="arithmatex">\(0\)</span> as <span class="arithmatex">\(\pi_t(A_t) \to 1\)</span>.</li>
 </ol>
 </div>
-<h3 id="the-bandit-gradient-algorithm-as-stochastic-gradient-ascent">The Bandit Gradient Algorithm as Stochastic Gradient Ascent</h3>
-<p>One can gain a deeper insight into the gradient bandit algorithm by understanding it as a stochastic approximation to gradient ascent. In exact <strong>gradient ascent</strong>, each action preference <span class="arithmatex">\(H_t(a)\)</span> would be incremented in proportion to the increment’s effect on performance:</p>
+<p>Later, when we compare this update with exact gradient ascent, we will need to tell the two apart. So we will sometimes write the result of this algorithm's update as <span class="arithmatex">\(H_{t+1}^{\text{alg}}(a)\)</span>:</p>
 <div class="arithmatex">\[
-H_{t+1}(a) \doteq H_t(a) + \alpha \frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)},
+H_{t+1}^{\text{alg}}(a) \doteq H_t(a) + \alpha \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big).
 \]</div>
-<p>where the measure of performance here is the expected reward:</p>
+<p>The label "alg" just means "the update the gradient bandit algorithm actually performs". It is the same rule as above. Because it depends on the randomly selected action <span class="arithmatex">\(A_t\)</span> and the sampled reward <span class="arithmatex">\(R_t\)</span>, <span class="arithmatex">\(H_{t+1}^{\text{alg}}(a)\)</span> is a random quantity: running the same step again from the same <span class="arithmatex">\(H_t\)</span> could give a different result.</p>
+<h3 id="the-bandit-gradient-algorithm-as-stochastic-gradient-ascent">The Bandit Gradient Algorithm as Stochastic Gradient Ascent</h3>
+<p>Three different action symbols appear in the derivation below, so it helps to keep them apart:</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>What it is</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(A_t\)</span></td>
+<td>random variable</td>
+<td>the action actually selected at step <span class="arithmatex">\(t\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(x\)</span></td>
+<td>sum index</td>
+<td>runs over all possible actions <span class="arithmatex">\(1, \dots, k\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(a\)</span></td>
+<td>fixed action</td>
+<td>whichever action's preference we're computing the update for</td>
+</tr>
+</tbody>
+</table>
+<p>The definition of expectation connects <span class="arithmatex">\(A_t\)</span> and <span class="arithmatex">\(x\)</span>: to average any quantity <span class="arithmatex">\(f(A_t)\)</span>, we sum over every possible action <span class="arithmatex">\(x\)</span>, weighted by its probability,</p>
+<div class="arithmatex">\[
+\mathbb{E}\big[ f(A_t) \big] = \sum_{x=1}^{k} \Pr\{A_t = x\} \, f(x) = \sum_{x=1}^{k} \pi_t(x) \, f(x).
+\]</div>
+<p>Now, let's get to the derivation.</p>
+<p>In exact <strong>gradient ascent</strong>, each action preference <span class="arithmatex">\(H_t(a)\)</span> would be incremented in proportion to the <strong>increment’s effect on performance</strong>:</p>
+<div class="arithmatex">\[
+H_{t+1}^{\text{exact}}(a) \doteq H_t(a) + \alpha \frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)},
+\]</div>
+<p>where the <strong>measure of performance here is the expected reward</strong>:</p>
 <div class="arithmatex">\[
 \mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x),
 \]</div>
-<p>and the measure of the increment’s effect is the partial derivative of this performance measure with respect to the action preference. Of course, it is not possible to implement gradient ascent exactly in our case because by assumption we do not know the <span class="arithmatex">\(q_*(x)\)</span>, but in fact the updates of our algorithm are equal to the exact gradient ascent update in expected value, making the algorithm an instance of <strong>stochastic gradient ascent</strong>. The calculations showing this require only beginning calculus, but take several steps.</p>
-<p>First we take a closer look at the exact performance gradient:</p>
+<p><strong>The measure of the increment’s effect is the partial derivative of this performance measure with respect to the action preference.</strong> Of course, it is not possible to implement gradient ascent exactly in our case because by assumption we do not know the <span class="arithmatex">\(q_*(x)\)</span>.</p>
+<p>Recall that <span class="arithmatex">\(q_*(x) = \mathbb{E}[R_t \mid A_t = x]\)</span> is the true mean reward of action <span class="arithmatex">\(x\)</span>: a fixed real number for each action, set by the environment and unknown to the agent. Unlike the reward <span class="arithmatex">\(R_t\)</span> it is not random, and unlike <span class="arithmatex">\(\pi_t(x)\)</span> it does not change with <span class="arithmatex">\(t\)</span>. So <span class="arithmatex">\(\mathbb{E}[R_t]\)</span> is the average of these true values, weighted by how often the agent currently selects each action.</p>
+<p>Any single update of the gradient bandit algorithm,</p>
+<div class="arithmatex">\[
+H_{t+1}^{\text{alg}}(a) = H_t(a) + \alpha \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big),
+\]</div>
+<p>is noisy. It is based on one randomly selected action <span class="arithmatex">\(A_t\)</span> and one sampled reward <span class="arithmatex">\(R_t\)</span>, not on the unknown true values <span class="arithmatex">\(q_*(x)\)</span>, so it does not point exactly along the true gradient.</p>
+<div class="admonition note">
+<p class="admonition-title">What we want to prove</p>
+<p>Starting from the same preferences <span class="arithmatex">\(H_t\)</span>, we compare two updates:</p>
+<ul>
+<li><span class="arithmatex">\(H_{t+1}^{\text{exact}}(a)\)</span>, the exact gradient ascent update. It is a <strong>fixed number</strong>: given <span class="arithmatex">\(H_t\)</span> there is only one possible result. But we cannot compute it, because it needs the unknown true values <span class="arithmatex">\(q_*(x)\)</span>.</li>
+<li><span class="arithmatex">\(H_{t+1}^{\text{alg}}(a)\)</span>, the gradient bandit update. It is a <strong>random variable</strong>: its value depends on which action <span class="arithmatex">\(A_t\)</span> is selected and which reward <span class="arithmatex">\(R_t\)</span> comes back. But we can compute it, because it only needs <span class="arithmatex">\(A_t\)</span> and <span class="arithmatex">\(R_t\)</span>.</li>
+</ul>
+<p>We want to show that the algorithm is right <strong>on average</strong>:</p>
+<div class="arithmatex">\[
+\mathbb{E}\big[ H_{t+1}^{\text{alg}}(a) \big] = H_{t+1}^{\text{exact}}(a), \qquad \text{for all } a,
+\]</div>
+<p>where the expectation is over <span class="arithmatex">\(A_t\)</span> and <span class="arithmatex">\(R_t\)</span>, with <span class="arithmatex">\(H_t\)</span> and <span class="arithmatex">\(\bar{R}_t\)</span> held fixed. Subtracting <span class="arithmatex">\(H_t(a)\)</span> from both sides and dividing by <span class="arithmatex">\(\alpha\)</span>, this is the same as showing</p>
+<div class="arithmatex">\[
+\mathbb{E}\Big[ \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big) \Big] = \frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)},
+\]</div>
+<p>which is what the steps below establish.</p>
+<p>This does <strong>not</strong> mean <span class="arithmatex">\(H_{t+1}^{\text{alg}}(a) = H_{t+1}^{\text{exact}}(a)\)</span>. A single update is usually off, sometimes even in the wrong direction; it is only its average that matches. Like a fair die, whose average roll is <span class="arithmatex">\(3.5\)</span> even though no single roll is ever <span class="arithmatex">\(3.5\)</span>.</p>
+</div>
+<p>First we take a closer look at the exact performance gradient (<span class="arithmatex">\(a\)</span> is the action whose preference we're computing the update for):</p>
 <div class="arithmatex">\[
 \begin{aligned}
 \frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)} &amp;= \frac{\partial}{\partial H_t(a)} \left[ \sum_x \pi_t(x) \, q_*(x) \right] \\
-&amp;= \sum_x q_*(x) \frac{\partial \pi_t(x)}{\partial H_t(a)} \\
+&amp;= \sum_x \frac{\partial}{\partial H_t(a)} \Big[ \pi_t(x) \, q_*(x) \Big] &amp;&amp; \text{(derivative of a sum)} \\
+&amp;= \sum_x \left[ q_*(x) \frac{\partial \pi_t(x)}{\partial H_t(a)} + \pi_t(x) \frac{\partial q_*(x)}{\partial H_t(a)} \right] &amp;&amp; \text{(product rule)} \\
+&amp;= \sum_x q_*(x) \frac{\partial \pi_t(x)}{\partial H_t(a)} &amp;&amp; \left( \tfrac{\partial q_*(x)}{\partial H_t(a)} = 0 \right) \\
 &amp;= \sum_x \big( q_*(x) - B_t \big) \frac{\partial \pi_t(x)}{\partial H_t(a)},
 \end{aligned}
 \]</div>
-<p>where <span class="arithmatex">\(B_t\)</span>, called the <strong>baseline</strong>, can be any scalar that does not depend on <span class="arithmatex">\(x\)</span>. We can include a baseline here without changing the equality because the gradient sums to zero over all the actions, <span class="arithmatex">\(\sum_x \frac{\partial \pi_t(x)}{\partial H_t(a)} = 0\)</span>. As <span class="arithmatex">\(H_t(a)\)</span> is changed, some actions’ probabilities go up and some go down, but the sum of the changes must be zero because the sum of the probabilities is always one.</p>
+<p>The term with <span class="arithmatex">\(\frac{\partial q_*(x)}{\partial H_t(a)}\)</span> vanishes because <span class="arithmatex">\(q_*(x)\)</span> is set by the environment, not by the agent: changing the preferences changes the probabilities <span class="arithmatex">\(\pi_t(x) = \frac{e^{H_t(x)}}{\sum_{y=1}^{k} e^{H_t(y)}}\)</span>, but not the true mean rewards.</p>
+<p>Here, <span class="arithmatex">\(B_t\)</span> is called the <strong>baseline</strong>. It can be any scalar that does not depend on <span class="arithmatex">\(x\)</span>. We can include a baseline here without changing the equality because the gradient sums to zero over all the actions, <span class="arithmatex">\(\sum_x \frac{\partial \pi_t(x)}{\partial H_t(a)} = 0\)</span>. As <span class="arithmatex">\(H_t(a)\)</span> is changed, some actions’ probabilities go up and some go down, but the sum of the changes must be zero because the sum of the probabilities is always one.</p>
 <p>Next we multiply each term of the sum by <span class="arithmatex">\(\pi_t(x) / \pi_t(x)\)</span>:</p>
 <div class="arithmatex">\[
 \frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)} = \sum_x \pi_t(x) \big( q_*(x) - B_t \big) \frac{\partial \pi_t(x)}{\partial H_t(a)} \Big/ \pi_t(x).
 \]</div>
 <p>The equation is now in the form of an expectation, summing over all possible values <span class="arithmatex">\(x\)</span> of the random variable <span class="arithmatex">\(A_t\)</span>, then multiplying by the probability of taking those values. Thus:</p>
 <div class="arithmatex">\[
+\frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)} = \mathbb{E}\left[ \big( q_*(A_t) - B_t \big) \frac{\partial \pi_t(A_t)}{\partial H_t(a)} \Big/ \pi_t(A_t) \right].
+\]</div>
+<p>To shorten the next few steps, write <span class="arithmatex">\(g(A_t) = \frac{\partial \pi_t(A_t)}{\partial H_t(a)} \Big/ \pi_t(A_t)\)</span>, which depends only on the action <span class="arithmatex">\(A_t\)</span> (taken at timestamp <span class="arithmatex">\(t\)</span>). We now choose the baseline <span class="arithmatex">\(B_t = \bar{R}_t\)</span>. This is allowed because <span class="arithmatex">\(\bar{R}_t\)</span> is computed only from rewards before time <span class="arithmatex">\(t\)</span>, so it does not depend on <span class="arithmatex">\(A_t\)</span>. Then, splitting the expectation by linearity,</p>
+<div class="arithmatex">\[
 \begin{aligned}
-&amp;= \mathbb{E}\left[ \big( q_*(A_t) - B_t \big) \frac{\partial \pi_t(A_t)}{\partial H_t(a)} \Big/ \pi_t(A_t) \right] \\
-&amp;= \mathbb{E}\left[ \big( R_t - \bar{R}_t \big) \frac{\partial \pi_t(A_t)}{\partial H_t(a)} \Big/ \pi_t(A_t) \right],
+\frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)} &amp;= \mathbb{E}\Big[ \big( q_*(A_t) - \bar{R}_t \big) \, g(A_t) \Big] \\
+&amp;= \mathbb{E}\big[ q_*(A_t) \, g(A_t) \big] - \bar{R}_t \, \mathbb{E}\big[ g(A_t) \big].
 \end{aligned}
 \]</div>
-<p>where here we have chosen the baseline <span class="arithmatex">\(B_t = \bar{R}_t\)</span> and substituted <span class="arithmatex">\(R_t\)</span> for <span class="arithmatex">\(q_*(A_t)\)</span>, which is permitted because <span class="arithmatex">\(\mathbb{E}[R_t \mid A_t] = q_*(A_t)\)</span>.</p>
-<p>Shortly we will establish that <span class="arithmatex">\(\frac{\partial \pi_t(x)}{\partial H_t(a)} = \pi_t(x) \big( \mathbf{1}_{a = x} - \pi_t(a) \big)\)</span>, where <span class="arithmatex">\(\mathbf{1}_{a = x}\)</span> is defined to be <span class="arithmatex">\(1\)</span> if <span class="arithmatex">\(a = x\)</span>, else <span class="arithmatex">\(0\)</span>. Assuming that for now, we have</p>
+<p>Next we replace the unknown <span class="arithmatex">\(q_*(A_t)\)</span> with the observed reward <span class="arithmatex">\(R_t\)</span>. How can we do that? The next few steps show it.</p>
+<p>Consider <span class="arithmatex">\(\mathbb{E}\big[ R_t \, g(A_t) \big]\)</span>.</p>
+<p>We can compute the average of <span class="arithmatex">\(R_t \, g(A_t)\)</span> in two stages. First, find the average for each action separately. Then, combine those averages, weighting each by how often that action is picked.</p>
+<p>For example, take two actions, each picked half the time, <span class="arithmatex">\(\pi_t = (0.5, 0.5)\)</span>, with <span class="arithmatex">\(g(1) = 2\)</span> and <span class="arithmatex">\(g(2) = -1\)</span>:</p>
+<ul>
+<li>Action <span class="arithmatex">\(1\)</span> always pays <span class="arithmatex">\(1\)</span>.</li>
+<li>Action <span class="arithmatex">\(2\)</span> pays <span class="arithmatex">\(0\)</span> or <span class="arithmatex">\(6\)</span>, each with probability <span class="arithmatex">\(\tfrac{1}{2}\)</span>.</li>
+</ul>
+<p><em>Stage 1: average for each action on its own.</em></p>
+<table>
+<thead>
+<tr>
+<th>Action <span class="arithmatex">\(x\)</span></th>
+<th>Possible <span class="arithmatex">\(R_t \, g(x)\)</span></th>
+<th>Average given <span class="arithmatex">\(A_t = x\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(1\)</span></td>
+<td><span class="arithmatex">\(1 \cdot 2 = 2\)</span></td>
+<td><span class="arithmatex">\(2\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(2\)</span></td>
+<td><span class="arithmatex">\(0 \cdot (-1) = 0\)</span> or <span class="arithmatex">\(6 \cdot (-1) = -6\)</span></td>
+<td><span class="arithmatex">\(\tfrac{0 + (-6)}{2} = -3\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><em>Stage 2: combine, weighting by how often each action is picked.</em></p>
+<div class="arithmatex">\[
+\mathbb{E}\big[ R_t \, g(A_t) \big] = \underbrace{0.5}_{\pi_t(1)} \cdot \underbrace{2}_{\text{avg. for } 1} + \underbrace{0.5}_{\pi_t(2)} \cdot \underbrace{(-3)}_{\text{avg. for } 2} = -0.5.
+\]</div>
+<p>That is all the <strong>law of total expectation</strong> says. In general:</p>
+<div class="arithmatex">\[
+\mathbb{E}\big[ R_t \, g(A_t) \big] = \sum_x \underbrace{\Pr\{A_t = x\}}_{\text{how often } x \text{ is picked}} \cdot \underbrace{\mathbb{E}\big[ R_t \, g(A_t) \mid A_t = x \big]}_{\text{average when } x \text{ is picked}}.
+\]</div>
+<div class="arithmatex">\[
+\begin{aligned}
+\mathbb{E}\big[ R_t \, g(A_t) \big] &amp;= \sum_x \Pr\{A_t = x\} \, \mathbb{E}\big[ R_t \, g(A_t) \mid A_t = x \big] &amp;&amp; \text{(law of total expectation)} \\
+&amp;= \sum_x \pi_t(x) \, \mathbb{E}\big[ R_t \, g(A_t) \mid A_t = x \big] &amp;&amp; \left( \Pr\{A_t = x\} = \pi_t(x) \right) \\
+&amp;= \sum_x \pi_t(x) \, \mathbb{E}\big[ R_t \, g(x) \mid A_t = x \big] &amp;&amp; \text{(given } A_t = x \text{, } g(A_t) = g(x)\text{)} \\
+&amp;= \sum_x \pi_t(x) \, g(x) \, \mathbb{E}\big[ R_t \mid A_t = x \big] &amp;&amp; \text{($g(x)$ is a fixed number once $x$ is fixed)} \\
+&amp;= \sum_x \pi_t(x) \, g(x) \, q_*(x) &amp;&amp; \left( \mathbb{E}[R_t \mid A_t = x] = q_*(x) \right) \\
+&amp;= \mathbb{E}\big[ q_*(A_t) \, g(A_t) \big]. &amp;&amp; \text{(definition of expectation)}
+\end{aligned}
+\]</div>
+<p>So <span class="arithmatex">\(R_t\)</span> can stand in for <span class="arithmatex">\(q_*(A_t)\)</span> inside the expectation. Substituting this in and recombining,</p>
+<div class="arithmatex">\[
+\begin{aligned}
+\frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)} &amp;= \mathbb{E}\big[ R_t \, g(A_t) \big] - \bar{R}_t \, \mathbb{E}\big[ g(A_t) \big] \\
+&amp;= \mathbb{E}\Big[ \big( R_t - \bar{R}_t \big) \, g(A_t) \Big] \\
+&amp;= \mathbb{E}\left[ \big( R_t - \bar{R}_t \big) \frac{\partial \pi_t(A_t)}{\partial H_t(a)} \Big/ \pi_t(A_t) \right].
+\end{aligned}
+\]</div>
+<p>Shortly we will establish that <span class="arithmatex">\(\frac{\partial \pi_t(A_t)}{\partial H_t(a)} = \pi_t(A_t) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big)\)</span>, where <span class="arithmatex">\(\mathbf{1}_{a = A_t}\)</span> is defined to be <span class="arithmatex">\(1\)</span> if <span class="arithmatex">\(a = A_t\)</span>, else <span class="arithmatex">\(0\)</span>.</p>
+<p><strong>Assuming that is true for now</strong>, we have</p>
 <div class="arithmatex">\[
 \begin{aligned}
 &amp;= \mathbb{E}\Big[ \big( R_t - \bar{R}_t \big) \, \pi_t(A_t) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big) \big/ \pi_t(A_t) \Big] \\
 &amp;= \mathbb{E}\Big[ \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big) \Big].
 \end{aligned}
 \]</div>
-<p>Recall that our plan has been to write the performance gradient as an expectation of something that we can sample on each step, as we have just done, and then update on each step in proportion to the sample. Substituting a sample of the expectation above for the performance gradient in the exact gradient ascent update yields:</p>
+<p>Thus,</p>
 <div class="arithmatex">\[
-H_{t+1}(a) = H_t(a) + \alpha \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big), \qquad \text{for all } a,
+\mathbb{E}\Big[ \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big) \Big] = \frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)},
 \]</div>
-<p>which you may recognize as being equivalent to our original algorithm.</p>
-<p>Thus it remains only to show that <span class="arithmatex">\(\frac{\partial \pi_t(x)}{\partial H_t(a)} = \pi_t(x) \big( \mathbf{1}_{a = x} - \pi_t(a) \big)\)</span>, as we assumed. Recall the standard quotient rule for derivatives:</p>
+<p>Now, it remains only to show that <span class="arithmatex">\(\frac{\partial \pi_t(A_t)}{\partial H_t(a)} = \pi_t(A_t) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big)\)</span>, as we assumed. Recall the standard quotient rule for derivatives:</p>
 <div class="arithmatex">\[
-\frac{\partial}{\partial x} \left[ \frac{f(x)}{g(x)} \right] = \frac{\frac{\partial f(x)}{\partial x} g(x) - f(x) \frac{\partial g(x)}{\partial x}}{g(x)^2}.
+\frac{\partial}{\partial u} \left[ \frac{f(u)}{g(u)} \right] = \frac{\frac{\partial f(u)}{\partial u} g(u) - f(u) \frac{\partial g(u)}{\partial u}}{g(u)^2}.
 \]</div>
 <p>Using this, we can write</p>
 <div class="arithmatex">\[
 \begin{aligned}
-\frac{\partial \pi_t(x)}{\partial H_t(a)} &amp;= \frac{\partial}{\partial H_t(a)} \pi_t(x) \\
-&amp;= \frac{\partial}{\partial H_t(a)} \left[ \frac{e^{H_t(x)}}{\sum_{y=1}^{k} e^{H_t(y)}} \right] \\
-&amp;= \frac{\frac{\partial e^{H_t(x)}}{\partial H_t(a)} \sum_{y=1}^{k} e^{H_t(y)} - e^{H_t(x)} \frac{\partial \sum_{y=1}^{k} e^{H_t(y)}}{\partial H_t(a)}}{\left( \sum_{y=1}^{k} e^{H_t(y)} \right)^2} &amp;&amp; \text{(by the quotient rule)} \\
-&amp;= \frac{\mathbf{1}_{a = x} \, e^{H_t(x)} \sum_{y=1}^{k} e^{H_t(y)} - e^{H_t(x)} e^{H_t(a)}}{\left( \sum_{y=1}^{k} e^{H_t(y)} \right)^2} &amp;&amp; \left( \text{because } \tfrac{\partial e^x}{\partial x} = e^x \right) \\
-&amp;= \frac{\mathbf{1}_{a = x} \, e^{H_t(x)}}{\sum_{y=1}^{k} e^{H_t(y)}} - \frac{e^{H_t(x)} e^{H_t(a)}}{\left( \sum_{y=1}^{k} e^{H_t(y)} \right)^2} \\
-&amp;= \mathbf{1}_{a = x} \, \pi_t(x) - \pi_t(x) \, \pi_t(a) \\
-&amp;= \pi_t(x) \big( \mathbf{1}_{a = x} - \pi_t(a) \big). &amp;&amp; \text{Q.E.D.}
+\frac{\partial \pi_t(A_t)}{\partial H_t(a)} &amp;= \frac{\partial}{\partial H_t(a)} \pi_t(A_t) \\
+&amp;= \frac{\partial}{\partial H_t(a)} \left[ \frac{e^{H_t(A_t)}}{\sum_{y=1}^{k} e^{H_t(y)}} \right] \\
+&amp;= \frac{\frac{\partial e^{H_t(A_t)}}{\partial H_t(a)} \sum_{y=1}^{k} e^{H_t(y)} - e^{H_t(A_t)} \frac{\partial \sum_{y=1}^{k} e^{H_t(y)}}{\partial H_t(a)}}{\left( \sum_{y=1}^{k} e^{H_t(y)} \right)^2} &amp;&amp; \text{(by the quotient rule)} \\
+&amp;= \frac{\mathbf{1}_{a = A_t} \, e^{H_t(A_t)} \sum_{y=1}^{k} e^{H_t(y)} - e^{H_t(A_t)} e^{H_t(a)}}{\left( \sum_{y=1}^{k} e^{H_t(y)} \right)^2} &amp;&amp; \left( \text{because } \tfrac{\partial e^u}{\partial u} = e^u \right) \\
+&amp;= \frac{\mathbf{1}_{a = A_t} \, e^{H_t(A_t)}}{\sum_{y=1}^{k} e^{H_t(y)}} - \frac{e^{H_t(A_t)} e^{H_t(a)}}{\left( \sum_{y=1}^{k} e^{H_t(y)} \right)^2} \\
+&amp;= \mathbf{1}_{a = A_t} \, \pi_t(A_t) - \pi_t(A_t) \, \pi_t(a) \\
+&amp;= \pi_t(A_t) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big). &amp;&amp; \text{Q.E.D.}
 \end{aligned}
 \]</div>
-<p>We have just shown that the expected update of the gradient bandit algorithm is equal to the gradient of expected reward, and thus that the algorithm is an instance of stochastic gradient ascent. This assures us that the algorithm has robust convergence properties.</p>
+<p><strong>We have just shown that the expected update of the gradient bandit algorithm is equal to the gradient of expected reward, and thus that the algorithm is an instance of stochastic gradient ascent. This assures us that the algorithm has robust convergence properties.</strong></p>
 <p>Note that we did not require any properties of the reward baseline other than that it does not depend on the selected action. For example, we could have set it to zero, or to <span class="arithmatex">\(1000\)</span>, and the algorithm would still be an instance of stochastic gradient ascent.</p>
 <h2 id="exercises">Exercises</h2>
 <p><strong>1.</strong> In <span class="arithmatex">\(\varepsilon\)</span>-greedy action selection, for the case of two actions and <span class="arithmatex">\(\varepsilon = 0.5\)</span>, what is the probability that the greedy action is selected?</p>

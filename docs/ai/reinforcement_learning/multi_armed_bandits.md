@@ -259,33 +259,93 @@ $$
     1. **The baseline tracks the rewards.** A single reward can land below the baseline, $R_t < \bar{R}_t$, and then the selected action's preference goes down, so no action is pushed up on every step. And as one action comes to be picked most of the time, the baseline $\bar{R}_t$ moves toward that action's typical reward. Its rewards then land above and below the baseline about equally often, so the ups and downs cancel out and there is no steady climb. This only works because the baseline moves.
     2. **The step shrinks near certainty.** The selected action's increase is scaled by $1 - \pi_t(A_t)$, which goes to $0$ as $\pi_t(A_t) \to 1$.
 
+Later, when we compare this update with exact gradient ascent, we will need to tell the two apart. So we will sometimes write the result of this algorithm's update as $H_{t+1}^{\text{alg}}(a)$:
+
+$$
+H_{t+1}^{\text{alg}}(a) \doteq H_t(a) + \alpha \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big).
+$$
+
+The label "alg" just means "the update the gradient bandit algorithm actually performs". It is the same rule as above. Because it depends on the randomly selected action $A_t$ and the sampled reward $R_t$, $H_{t+1}^{\text{alg}}(a)$ is a random quantity: running the same step again from the same $H_t$ could give a different result.
+
 ### The Bandit Gradient Algorithm as Stochastic Gradient Ascent
 
-One can gain a deeper insight into the gradient bandit algorithm by understanding it as a stochastic approximation to gradient ascent. In exact **gradient ascent**, each action preference $H_t(a)$ would be incremented in proportion to the increment’s effect on performance:
+Three different action symbols appear in the derivation below, so it helps to keep them apart:
+
+| Symbol | What it is | Role |
+|---|---|---|
+| $A_t$ | random variable | the action actually selected at step $t$ |
+| $x$ | sum index | runs over all possible actions $1, \dots, k$ |
+| $a$ | fixed action | whichever action's preference we're computing the update for |
+
+The definition of expectation connects $A_t$ and $x$: to average any quantity $f(A_t)$, we sum over every possible action $x$, weighted by its probability,
 
 $$
-H_{t+1}(a) \doteq H_t(a) + \alpha \frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)},
+\mathbb{E}\big[ f(A_t) \big] = \sum_{x=1}^{k} \Pr\{A_t = x\} \, f(x) = \sum_{x=1}^{k} \pi_t(x) \, f(x).
 $$
 
-where the measure of performance here is the expected reward:
+Now, let's get to the derivation.
+
+In exact **gradient ascent**, each action preference $H_t(a)$ would be incremented in proportion to the **increment’s effect on performance**:
+
+$$
+H_{t+1}^{\text{exact}}(a) \doteq H_t(a) + \alpha \frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)},
+$$
+
+where the **measure of performance here is the expected reward**:
 
 $$
 \mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x),
 $$
 
-and the measure of the increment’s effect is the partial derivative of this performance measure with respect to the action preference. Of course, it is not possible to implement gradient ascent exactly in our case because by assumption we do not know the $q_*(x)$, but in fact the updates of our algorithm are equal to the exact gradient ascent update in expected value, making the algorithm an instance of **stochastic gradient ascent**. The calculations showing this require only beginning calculus, but take several steps.
+**The measure of the increment’s effect is the partial derivative of this performance measure with respect to the action preference.** Of course, it is not possible to implement gradient ascent exactly in our case because by assumption we do not know the $q_*(x)$.
 
-First we take a closer look at the exact performance gradient:
+Recall that $q_*(x) = \mathbb{E}[R_t \mid A_t = x]$ is the true mean reward of action $x$: a fixed real number for each action, set by the environment and unknown to the agent. Unlike the reward $R_t$ it is not random, and unlike $\pi_t(x)$ it does not change with $t$. So $\mathbb{E}[R_t]$ is the average of these true values, weighted by how often the agent currently selects each action.
+
+Any single update of the gradient bandit algorithm,
+
+$$
+H_{t+1}^{\text{alg}}(a) = H_t(a) + \alpha \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big),
+$$
+
+is noisy. It is based on one randomly selected action $A_t$ and one sampled reward $R_t$, not on the unknown true values $q_*(x)$, so it does not point exactly along the true gradient.
+
+!!! note "What we want to prove"
+    Starting from the same preferences $H_t$, we compare two updates:
+
+    - $H_{t+1}^{\text{exact}}(a)$, the exact gradient ascent update. It is a **fixed number**: given $H_t$ there is only one possible result. But we cannot compute it, because it needs the unknown true values $q_*(x)$.
+    - $H_{t+1}^{\text{alg}}(a)$, the gradient bandit update. It is a **random variable**: its value depends on which action $A_t$ is selected and which reward $R_t$ comes back. But we can compute it, because it only needs $A_t$ and $R_t$.
+
+    We want to show that the algorithm is right **on average**:
+
+    $$
+    \mathbb{E}\big[ H_{t+1}^{\text{alg}}(a) \big] = H_{t+1}^{\text{exact}}(a), \qquad \text{for all } a,
+    $$
+
+    where the expectation is over $A_t$ and $R_t$, with $H_t$ and $\bar{R}_t$ held fixed. Subtracting $H_t(a)$ from both sides and dividing by $\alpha$, this is the same as showing
+
+    $$
+    \mathbb{E}\Big[ \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big) \Big] = \frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)},
+    $$
+
+    which is what the steps below establish.
+
+    This does **not** mean $H_{t+1}^{\text{alg}}(a) = H_{t+1}^{\text{exact}}(a)$. A single update is usually off, sometimes even in the wrong direction; it is only its average that matches. Like a fair die, whose average roll is $3.5$ even though no single roll is ever $3.5$.
+
+First we take a closer look at the exact performance gradient ($a$ is the action whose preference we're computing the update for):
 
 $$
 \begin{aligned}
 \frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)} &= \frac{\partial}{\partial H_t(a)} \left[ \sum_x \pi_t(x) \, q_*(x) \right] \\
-&= \sum_x q_*(x) \frac{\partial \pi_t(x)}{\partial H_t(a)} \\
+&= \sum_x \frac{\partial}{\partial H_t(a)} \Big[ \pi_t(x) \, q_*(x) \Big] && \text{(derivative of a sum)} \\
+&= \sum_x \left[ q_*(x) \frac{\partial \pi_t(x)}{\partial H_t(a)} + \pi_t(x) \frac{\partial q_*(x)}{\partial H_t(a)} \right] && \text{(product rule)} \\
+&= \sum_x q_*(x) \frac{\partial \pi_t(x)}{\partial H_t(a)} && \left( \tfrac{\partial q_*(x)}{\partial H_t(a)} = 0 \right) \\
 &= \sum_x \big( q_*(x) - B_t \big) \frac{\partial \pi_t(x)}{\partial H_t(a)},
 \end{aligned}
 $$
 
-where $B_t$, called the **baseline**, can be any scalar that does not depend on $x$. We can include a baseline here without changing the equality because the gradient sums to zero over all the actions, $\sum_x \frac{\partial \pi_t(x)}{\partial H_t(a)} = 0$. As $H_t(a)$ is changed, some actions’ probabilities go up and some go down, but the sum of the changes must be zero because the sum of the probabilities is always one.
+The term with $\frac{\partial q_*(x)}{\partial H_t(a)}$ vanishes because $q_*(x)$ is set by the environment, not by the agent: changing the preferences changes the probabilities $\pi_t(x) = \frac{e^{H_t(x)}}{\sum_{y=1}^{k} e^{H_t(y)}}$, but not the true mean rewards.
+
+Here, $B_t$ is called the **baseline**. It can be any scalar that does not depend on $x$. We can include a baseline here without changing the equality because the gradient sums to zero over all the actions, $\sum_x \frac{\partial \pi_t(x)}{\partial H_t(a)} = 0$. As $H_t(a)$ is changed, some actions’ probabilities go up and some go down, but the sum of the changes must be zero because the sum of the probabilities is always one.
 
 Next we multiply each term of the sum by $\pi_t(x) / \pi_t(x)$:
 
@@ -296,15 +356,72 @@ $$
 The equation is now in the form of an expectation, summing over all possible values $x$ of the random variable $A_t$, then multiplying by the probability of taking those values. Thus:
 
 $$
+\frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)} = \mathbb{E}\left[ \big( q_*(A_t) - B_t \big) \frac{\partial \pi_t(A_t)}{\partial H_t(a)} \Big/ \pi_t(A_t) \right].
+$$
+
+To shorten the next few steps, write $g(A_t) = \frac{\partial \pi_t(A_t)}{\partial H_t(a)} \Big/ \pi_t(A_t)$, which depends only on the action $A_t$ (taken at timestamp $t$). We now choose the baseline $B_t = \bar{R}_t$. This is allowed because $\bar{R}_t$ is computed only from rewards before time $t$, so it does not depend on $A_t$. Then, splitting the expectation by linearity,
+
+$$
 \begin{aligned}
-&= \mathbb{E}\left[ \big( q_*(A_t) - B_t \big) \frac{\partial \pi_t(A_t)}{\partial H_t(a)} \Big/ \pi_t(A_t) \right] \\
-&= \mathbb{E}\left[ \big( R_t - \bar{R}_t \big) \frac{\partial \pi_t(A_t)}{\partial H_t(a)} \Big/ \pi_t(A_t) \right],
+\frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)} &= \mathbb{E}\Big[ \big( q_*(A_t) - \bar{R}_t \big) \, g(A_t) \Big] \\
+&= \mathbb{E}\big[ q_*(A_t) \, g(A_t) \big] - \bar{R}_t \, \mathbb{E}\big[ g(A_t) \big].
 \end{aligned}
 $$
 
-where here we have chosen the baseline $B_t = \bar{R}_t$ and substituted $R_t$ for $q_*(A_t)$, which is permitted because $\mathbb{E}[R_t \mid A_t] = q_*(A_t)$.
+Next we replace the unknown $q_*(A_t)$ with the observed reward $R_t$. How can we do that? The next few steps show it.
 
-Shortly we will establish that $\frac{\partial \pi_t(x)}{\partial H_t(a)} = \pi_t(x) \big( \mathbf{1}_{a = x} - \pi_t(a) \big)$, where $\mathbf{1}_{a = x}$ is defined to be $1$ if $a = x$, else $0$. Assuming that for now, we have
+Consider $\mathbb{E}\big[ R_t \, g(A_t) \big]$.
+
+We can compute the average of $R_t \, g(A_t)$ in two stages. First, find the average for each action separately. Then, combine those averages, weighting each by how often that action is picked.
+
+For example, take two actions, each picked half the time, $\pi_t = (0.5, 0.5)$, with $g(1) = 2$ and $g(2) = -1$:
+
+- Action $1$ always pays $1$.
+- Action $2$ pays $0$ or $6$, each with probability $\tfrac{1}{2}$.
+
+*Stage 1: average for each action on its own.*
+
+| Action $x$ | Possible $R_t \, g(x)$ | Average given $A_t = x$ |
+|---|---|---|
+| $1$ | $1 \cdot 2 = 2$ | $2$ |
+| $2$ | $0 \cdot (-1) = 0$ or $6 \cdot (-1) = -6$ | $\tfrac{0 + (-6)}{2} = -3$ |
+
+*Stage 2: combine, weighting by how often each action is picked.*
+
+$$
+\mathbb{E}\big[ R_t \, g(A_t) \big] = \underbrace{0.5}_{\pi_t(1)} \cdot \underbrace{2}_{\text{avg. for } 1} + \underbrace{0.5}_{\pi_t(2)} \cdot \underbrace{(-3)}_{\text{avg. for } 2} = -0.5.
+$$
+
+That is all the **law of total expectation** says. In general:
+
+$$
+\mathbb{E}\big[ R_t \, g(A_t) \big] = \sum_x \underbrace{\Pr\{A_t = x\}}_{\text{how often } x \text{ is picked}} \cdot \underbrace{\mathbb{E}\big[ R_t \, g(A_t) \mid A_t = x \big]}_{\text{average when } x \text{ is picked}}.
+$$
+
+$$
+\begin{aligned}
+\mathbb{E}\big[ R_t \, g(A_t) \big] &= \sum_x \Pr\{A_t = x\} \, \mathbb{E}\big[ R_t \, g(A_t) \mid A_t = x \big] && \text{(law of total expectation)} \\
+&= \sum_x \pi_t(x) \, \mathbb{E}\big[ R_t \, g(A_t) \mid A_t = x \big] && \left( \Pr\{A_t = x\} = \pi_t(x) \right) \\
+&= \sum_x \pi_t(x) \, \mathbb{E}\big[ R_t \, g(x) \mid A_t = x \big] && \text{(given } A_t = x \text{, } g(A_t) = g(x)\text{)} \\
+&= \sum_x \pi_t(x) \, g(x) \, \mathbb{E}\big[ R_t \mid A_t = x \big] && \text{($g(x)$ is a fixed number once $x$ is fixed)} \\
+&= \sum_x \pi_t(x) \, g(x) \, q_*(x) && \left( \mathbb{E}[R_t \mid A_t = x] = q_*(x) \right) \\
+&= \mathbb{E}\big[ q_*(A_t) \, g(A_t) \big]. && \text{(definition of expectation)}
+\end{aligned}
+$$
+
+So $R_t$ can stand in for $q_*(A_t)$ inside the expectation. Substituting this in and recombining,
+
+$$
+\begin{aligned}
+\frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)} &= \mathbb{E}\big[ R_t \, g(A_t) \big] - \bar{R}_t \, \mathbb{E}\big[ g(A_t) \big] \\
+&= \mathbb{E}\Big[ \big( R_t - \bar{R}_t \big) \, g(A_t) \Big] \\
+&= \mathbb{E}\left[ \big( R_t - \bar{R}_t \big) \frac{\partial \pi_t(A_t)}{\partial H_t(a)} \Big/ \pi_t(A_t) \right].
+\end{aligned}
+$$
+
+Shortly we will establish that $\frac{\partial \pi_t(A_t)}{\partial H_t(a)} = \pi_t(A_t) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big)$, where $\mathbf{1}_{a = A_t}$ is defined to be $1$ if $a = A_t$, else $0$.
+
+**Assuming that is true for now**, we have
 
 $$
 \begin{aligned}
@@ -313,35 +430,33 @@ $$
 \end{aligned}
 $$
 
-Recall that our plan has been to write the performance gradient as an expectation of something that we can sample on each step, as we have just done, and then update on each step in proportion to the sample. Substituting a sample of the expectation above for the performance gradient in the exact gradient ascent update yields:
+Thus,
 
 $$
-H_{t+1}(a) = H_t(a) + \alpha \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big), \qquad \text{for all } a,
+\mathbb{E}\Big[ \big( R_t - \bar{R}_t \big) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big) \Big] = \frac{\partial \, \mathbb{E}[R_t]}{\partial H_t(a)},
 $$
 
-which you may recognize as being equivalent to our original algorithm.
-
-Thus it remains only to show that $\frac{\partial \pi_t(x)}{\partial H_t(a)} = \pi_t(x) \big( \mathbf{1}_{a = x} - \pi_t(a) \big)$, as we assumed. Recall the standard quotient rule for derivatives:
+Now, it remains only to show that $\frac{\partial \pi_t(A_t)}{\partial H_t(a)} = \pi_t(A_t) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big)$, as we assumed. Recall the standard quotient rule for derivatives:
 
 $$
-\frac{\partial}{\partial x} \left[ \frac{f(x)}{g(x)} \right] = \frac{\frac{\partial f(x)}{\partial x} g(x) - f(x) \frac{\partial g(x)}{\partial x}}{g(x)^2}.
+\frac{\partial}{\partial u} \left[ \frac{f(u)}{g(u)} \right] = \frac{\frac{\partial f(u)}{\partial u} g(u) - f(u) \frac{\partial g(u)}{\partial u}}{g(u)^2}.
 $$
 
 Using this, we can write
 
 $$
 \begin{aligned}
-\frac{\partial \pi_t(x)}{\partial H_t(a)} &= \frac{\partial}{\partial H_t(a)} \pi_t(x) \\
-&= \frac{\partial}{\partial H_t(a)} \left[ \frac{e^{H_t(x)}}{\sum_{y=1}^{k} e^{H_t(y)}} \right] \\
-&= \frac{\frac{\partial e^{H_t(x)}}{\partial H_t(a)} \sum_{y=1}^{k} e^{H_t(y)} - e^{H_t(x)} \frac{\partial \sum_{y=1}^{k} e^{H_t(y)}}{\partial H_t(a)}}{\left( \sum_{y=1}^{k} e^{H_t(y)} \right)^2} && \text{(by the quotient rule)} \\
-&= \frac{\mathbf{1}_{a = x} \, e^{H_t(x)} \sum_{y=1}^{k} e^{H_t(y)} - e^{H_t(x)} e^{H_t(a)}}{\left( \sum_{y=1}^{k} e^{H_t(y)} \right)^2} && \left( \text{because } \tfrac{\partial e^x}{\partial x} = e^x \right) \\
-&= \frac{\mathbf{1}_{a = x} \, e^{H_t(x)}}{\sum_{y=1}^{k} e^{H_t(y)}} - \frac{e^{H_t(x)} e^{H_t(a)}}{\left( \sum_{y=1}^{k} e^{H_t(y)} \right)^2} \\
-&= \mathbf{1}_{a = x} \, \pi_t(x) - \pi_t(x) \, \pi_t(a) \\
-&= \pi_t(x) \big( \mathbf{1}_{a = x} - \pi_t(a) \big). && \text{Q.E.D.}
+\frac{\partial \pi_t(A_t)}{\partial H_t(a)} &= \frac{\partial}{\partial H_t(a)} \pi_t(A_t) \\
+&= \frac{\partial}{\partial H_t(a)} \left[ \frac{e^{H_t(A_t)}}{\sum_{y=1}^{k} e^{H_t(y)}} \right] \\
+&= \frac{\frac{\partial e^{H_t(A_t)}}{\partial H_t(a)} \sum_{y=1}^{k} e^{H_t(y)} - e^{H_t(A_t)} \frac{\partial \sum_{y=1}^{k} e^{H_t(y)}}{\partial H_t(a)}}{\left( \sum_{y=1}^{k} e^{H_t(y)} \right)^2} && \text{(by the quotient rule)} \\
+&= \frac{\mathbf{1}_{a = A_t} \, e^{H_t(A_t)} \sum_{y=1}^{k} e^{H_t(y)} - e^{H_t(A_t)} e^{H_t(a)}}{\left( \sum_{y=1}^{k} e^{H_t(y)} \right)^2} && \left( \text{because } \tfrac{\partial e^u}{\partial u} = e^u \right) \\
+&= \frac{\mathbf{1}_{a = A_t} \, e^{H_t(A_t)}}{\sum_{y=1}^{k} e^{H_t(y)}} - \frac{e^{H_t(A_t)} e^{H_t(a)}}{\left( \sum_{y=1}^{k} e^{H_t(y)} \right)^2} \\
+&= \mathbf{1}_{a = A_t} \, \pi_t(A_t) - \pi_t(A_t) \, \pi_t(a) \\
+&= \pi_t(A_t) \big( \mathbf{1}_{a = A_t} - \pi_t(a) \big). && \text{Q.E.D.}
 \end{aligned}
 $$
 
-We have just shown that the expected update of the gradient bandit algorithm is equal to the gradient of expected reward, and thus that the algorithm is an instance of stochastic gradient ascent. This assures us that the algorithm has robust convergence properties.
+**We have just shown that the expected update of the gradient bandit algorithm is equal to the gradient of expected reward, and thus that the algorithm is an instance of stochastic gradient ascent. This assures us that the algorithm has robust convergence properties.**
 
 Note that we did not require any properties of the reward baseline other than that it does not depend on the selected action. For example, we could have set it to zero, or to $1000$, and the algorithm would still be an instance of stochastic gradient ascent.
 
