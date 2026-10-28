@@ -1,0 +1,5942 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A personal wiki for notes, ideas, and projects.">
+      
+      
+      
+        <link rel="canonical" href="https://adi14041999.github.io/my_wiki/ai/reinforcement_learning/finite_markov_decision_processes/">
+      
+      
+        <link rel="prev" href="../multi_armed_bandits/">
+      
+      
+        <link rel="next" href="../../notes_from_ai_podcasts/nov_2025_mindscape_336_anil_ananthaswamy_on_the_mathematics_of_neural_nets_and_ai/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Finite Markov Decision Processes - My Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#finite-markov-decision-processes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="My Wiki" class="md-header__button md-logo" aria-label="My Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            My Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Finite Markov Decision Processes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="lime"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../primer_on_ai/history/" class="md-tabs__link">
+          
+  
+  
+  AI
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../math/foundational_math/tips_for_better_problem_solving/" class="md-tabs__link">
+          
+  
+  
+  Math
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../computer_languages/compilers/introduction_to_compilers/" class="md-tabs__link">
+          
+  
+  
+  Computer Languages
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../productivity/how_to_build_your_career_in_ai/three_steps_to_career_growth/" class="md-tabs__link">
+          
+  
+  
+  Productivity
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="My Wiki" class="md-nav__button md-logo" aria-label="My Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    My Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    AI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Primer on AI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Primer on AI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primer_on_ai/history/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    History
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primer_on_ai/solving_problems_by_searching/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solving Problems by Searching
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primer_on_ai/constraint_satisfaction_problems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Constraint Satisfaction Problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primer_on_ai/adversarial_search_and_games/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adversarial Search and Games
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primer_on_ai/logical_agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logical Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primer_on_ai/model_taxonomy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Taxonomy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primer_on_ai/introduction_to_machine_learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction to Machine Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primer_on_ai/spatializing_data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatializing Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primer_on_ai/vector_similarity_search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector Similarity Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primer_on_ai/model_evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../primer_on_ai/hyperparameter_tuning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hyperparameter Tuning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deep Learning for Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Deep Learning for Computer Vision
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/image_classification_with_linear_classifiers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Image Classification with Linear Classifiers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/regularization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Regularization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/optimization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Optimization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/backpropagation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backpropagation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/backpropagation_for_a_linear_layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backpropagation for a Linear Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/neural_networks_setting_up_the_architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Networks- Setting up the Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/neural_networks_setting_up_the_data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Networks- Setting up the Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/neural_networks_learning_and_evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Networks- Learning and Evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/putting_it_together_minimal_neural_network_case_study/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Putting it together- Minimal Neural Network Case Study
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/convolutional_neural_networks_architectures_convolution_pooling_layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Convolutional Neural Networks- Architectures, Convolution / Pooling Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/a_review_of_rnns_and_transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A review of RNNs and Transformers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/self_supervised_learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Self-Supervised Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_learning_for_computer_vision/a_review_of_generative_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A review of Generative Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Natural Language Processing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Natural Language Processing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/representing_words/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representing words
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/svd_based_methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVD based methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/distributional_semantics_and_word2vec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Distributional semantics and Word2vec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/language_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Language Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/recurrent_neural_networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recurrent Neural Networks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/gated_recurrent_units/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gated Recurrent Units (GRUs)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/long_short_term_memory_networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Long-Short Term Memory (LSTM) Networks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/seq2seq_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Seq2Seq Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/attention_mechanism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Attention Mechanism
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/how_large_language_models_work_a_visual_intro_to_transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How large language models work, a visual intro to transformers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/attention_in_transformers_visually_explained/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Attention in transformers, visually explained
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/the_basic_transformer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The basic Transformer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/decoder_only_transformers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decoder-only Transformers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/differences_between_the_basic_transformer_and_the_decoder_only_transformer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Differences between the basic Transformer and the Decoder-Only Transformer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../natural_language_processing/self_attention_and_transformers_a_mathematical_approach/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Self-Attention and Transformers, a mathematical approach
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deep Generative Models
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Deep Generative Models
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/autoregressive_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Autoregressive Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/variational_autoencoders/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Variational Autoencoders
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/normalizing_flow_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Normalizing flow models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/recap_at_this_point/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recap at this point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/generative_adversarial_networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generative Adversarial Networks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/energy_based_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Energy Based Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/score_based_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Score Based Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/score_based_generative_modeling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Score Based Generative Modeling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/evaluating_generative_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluating Generative Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/diffusion_models_from_an_image_generation_perspective/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diffusion Models from an image generation perspective
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deep_generative_models/score_based_diffusion_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Score Based Diffusion Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reinforcement Learning
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reinforcement Learning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi_armed_bandits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-armed Bandits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Finite Markov Decision Processes
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Finite Markov Decision Processes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a-primer-conditional-probability-and-conditional-expectation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A Primer: Conditional Probability and Conditional Expectation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="A Primer: Conditional Probability and Conditional Expectation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conditional-probability-shrink-the-world-then-re-scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conditional probability: shrink the world, then re-scale
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditional-expectation-the-average-inside-the-smaller-world" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conditional expectation: the average inside the smaller world
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cheat-sheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cheat sheet
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-agentenvironment-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Agent–Environment Interface
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#goals-and-rewards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Goals and Rewards
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#returns-and-episodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns and Episodes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unified-notation-for-episodic-and-continuing-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unified Notation for Episodic and Continuing Tasks
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes from AI podcasts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Notes from AI podcasts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/nov_2025_mindscape_336_anil_ananthaswamy_on_the_mathematics_of_neural_nets_and_ai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nov 2025. Mindscape 336 | Anil Ananthaswamy on the Mathematics of Neural Nets and AI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/nov_2020_charles_isbell_computing_interactive_ai_and_race_in_america_lex_fridman_podcast_no_135/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nov 2020. Charles Isbell- Computing, Interactive AI, and Race in America | Lex Fridman Podcast no. 135
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/feb_2020_andrew_ng_deep_learning_education_and_real_world_ai_lex_fridman_podcast_no_73/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feb 2020. Andrew Ng- Deep Learning, Education, and Real-World AI | Lex Fridman Podcast no. 73
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/jan_2020_daniel_kahneman_thinking_fast_and_slow_deep_learning_and_ai_lex_fridman_podcast_no_65/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jan 2020. Daniel Kahneman- Thinking Fast and Slow, Deep Learning, and AI | Lex Fridman Podcast no. 65
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/sep_2019_peter_norvig_artificial_intelligence_a_modern_approach_lex_fridman_podcast_no_42/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sep 2019. Peter Norvig- Artificial Intelligence- A Modern Approach | Lex Fridman Podcast no. 42
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/aug_2019_yann_lecun_deep_learning_convnets_and_self_supervised_learning_lex_fridman_podcast_no_36/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aug 2019. Yann LeCun- Deep Learning, ConvNets, and Self-Supervised Learning | Lex Fridman Podcast no. 36
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/aug_2019_jeremy_howard_fast_ai_deep_learning_courses_and_research_lex_fridman_podcast_no_35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aug 2019. Jeremy Howard- fast.ai Deep Learning Courses and Research | Lex Fridman Podcast no. 35
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/aug_2019_george_hotz_comma_ai_openpilot_and_autonomous_vehicles_lex_fridman_podcast_no_31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aug 2019. George Hotz- Comma.ai, OpenPilot, and Autonomous Vehicles | Lex Fridman Podcast no. 31
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/jul_2019_chris_urmson_self_driving_cars_at_aurora_google_cmu_and_darpa_lex_fridman_podcast_no_28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jul 2019. Chris Urmson- Self-Driving Cars at Aurora, Google, CMU, and DARPA | Lex Fridman Podcast no. 28
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/may_2019_chris_lattner_compilers_llvm_swift_tpu_and_ml_accelerators_lex_fridman_podcast_no_21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    May 2019. Chris Lattner- Compilers, LLVM, Swift, TPU, and ML Accelerators | Lex Fridman Podcast no. 21
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/apr_2019_ian_goodfellow_generative_adversarial_networks_gans_lex_fridman_podcast_no_19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apr 2019. Ian Goodfellow- Generative Adversarial Networks (GANs) | Lex Fridman Podcast no. 19
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/apr_2019_greg_brockman_open_ai_and_agi_lex_fridman_podcast_no_17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apr 2019. Greg Brockman- OpenAI and AGI | Lex Fridman Podcast no. 17
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/feb_2019_kyle_vogt_cruise_automation_lex_fridman_podcast_no_14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feb 2019. Kyle Vogt- Cruise Automation | Lex Fridman Podcast no. 14
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/jan_2019_tomaso_poggio_brains_minds_and_machines_lex_fridman_podcast_no_13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jan 2019. Tomaso Poggio- Brains, Minds, and Machines | Lex Fridman Podcast no. 13
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/dec_2018_pieter_abbeel_deep_reinforcement_learning_lex_fridman_podcast_no_10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dec 2018. Pieter Abbeel- Deep Reinforcement Learning | Lex Fridman Podcast no. 10
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/dec_2018_stuart_russell_long_term_future_of_artificial_intelligence_lex_fridman_podcast_no_9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dec 2018. Stuart Russell- Long-Term Future of Artificial Intelligence | Lex Fridman Podcast no. 9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/nov_2018_vladimir_vapnik_statistical_learning_lex_fridman_podcast_no_5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nov 2018. Vladimir Vapnik- Statistical Learning | Lex Fridman Podcast no. 5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/oct_2018_yoshua_bengio_deep_learning_lex_fridman_podcast_no_4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Oct 2018. Yoshua Bengio- Deep Learning | Lex Fridman Podcast no. 4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../notes_from_ai_podcasts/oct_2018_steven_pinker_ai_in_the_age_of_reason_lex_fridman_podcast_no_3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Oct 2018. Steven Pinker- AI in the Age of Reason | Lex Fridman Podcast no. 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Math
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Math
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Foundational Math
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Foundational Math
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/foundational_math/tips_for_better_problem_solving/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tips for better problem solving
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/foundational_math/the_quadratic_formula/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Quadratic Formula
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/foundational_math/trigonometry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigonometry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/foundational_math/complex_numbers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Complex Numbers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/foundational_math/eulers_formula/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Euler's Formula
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/foundational_math/logarithms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logarithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/foundational_math/the_power_tower/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Power Tower
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linear Algebra
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/vectors_vector_addition_and_scalar_multiplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vectors, vector addition, and scalar multiplication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/vector_geometry_in_mathbb_r_n_and_correlation_coefficients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector geometry in Rn and correlation coefficients
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/planes_in_r3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Planes in R3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/span_subspaces_and_dimension/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Span, subspaces, and dimension
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/basis_and_orthogonality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Basis and orthogonality
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/projections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Projections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/applications_of_projections_in_rn_orthogonal_bases_of_planes_and_linear_regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Applications of projections in Rn- orthogonal bases of planes and linear regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/linear_functions_matrices_and_the_derivative_matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear functions, matrices, and the derivative matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/linear_transformations_and_matrix_multiplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear transformations and matrix multiplication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/matrix_algebra/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Matrix algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/linear_algebra/applications_of_matrix_algebra_population_dynamics_and_gambling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Applications of matrix algebra- population dynamics and gambling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Probability
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/probability_and_counting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability and Counting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/story_proofs_and_axioms_of_probability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Story Proofs and Axioms of Probability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/conditional_probability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conditional Probability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/bayes_rule/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bayes' Rule
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/some_famous_problems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Some famous problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/random_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Random Variables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/probabilities_of_probabilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probabilities of Probabilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/expectation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Expectation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/indicator_random_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Indicator Random Variables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/poisson_distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Poisson Distribution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/continuous_distributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Continuous Distributions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/normal_distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Normal Distribution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/exponential_distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exponential Distribution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/joint_distributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Joint Distributions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/independence_of_random_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Independence of Random Variables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/conditional_distributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conditional Distributions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/multinomial_distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multinomial Distribution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/covariance_and_correlation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Covariance and Correlation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/transformations_of_random_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformations of Random Variables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/central_limit_theorem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Central Limit Theorem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/convolution_discrete/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Convolution (Discrete)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/convolution_continuous/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Convolution (Continuous)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/proving_the_central_limit_theorem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proving the Central Limit Theorem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/beta_distributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beta Distributions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/conditional_expectation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conditional Expectation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/jensens_inequality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jensen's inequality
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/multivariate_normal_distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multivariate Normal Distribution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/probability/markov_chains/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Markov Chains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multivariate Calculus
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Multivariate Calculus
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/multivariate_calculus/the_tl_dr_version_of_derivatives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TL;DR version of Derivatives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/multivariate_calculus/multivariable_functions_level_sets_and_contour_plots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multivariable functions, level sets, and contour plots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/multivariate_calculus/partial_derivatives_and_contour_plots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partial derivatives and contour plots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/multivariate_calculus/maxima_minima_and_critical_points/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maxima, minima, and critical points
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/multivariate_calculus/gradients_local_approximations_and_gradient_descent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gradients, local approximations, and gradient descent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../math/multivariate_calculus/constrained_optimization_via_lagrange_multipliers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Constrained optimization via Lagrange multipliers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Languages
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computer Languages
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compilers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Compilers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../computer_languages/compilers/introduction_to_compilers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction to Compilers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../computer_languages/python/numpy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NumPy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../computer_languages/python/pandas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pandas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../computer_languages/python/matplotlib/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Matplotlib
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Productivity
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Productivity
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to Build Your Career in AI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    How to Build Your Career in AI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../productivity/how_to_build_your_career_in_ai/three_steps_to_career_growth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Three Steps to Career Growth
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../productivity/how_to_build_your_career_in_ai/phase_1_learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 1- Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../productivity/how_to_build_your_career_in_ai/phase_2_projects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 2- Projects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../productivity/how_to_build_your_career_in_ai/phase_3_job/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 3- Job
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../productivity/how_to_build_your_career_in_ai/make_every_day_count/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Make Every Day Count
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="finite-markov-decision-processes">Finite Markov Decision Processes</h1>
+<h2 id="a-primer-conditional-probability-and-conditional-expectation">A Primer: Conditional Probability and Conditional Expectation</h2>
+<p>It is worth getting comfortable with two ideas: <strong>conditional probability</strong> and <strong>conditional expectation</strong>. You have actually met the second one already. See the definition of an action's value, <span class="arithmatex">\(q_*(a) = \mathbb{E}[R_t \mid A_t = a]\)</span>, in <a href="../multi_armed_bandits/#a-k-armed-bandit-problem">A k-armed Bandit Problem</a>.</p>
+<p>The math pages (<a href="../../../math/probability/probability_and_counting/">Probability</a> section of the math pages) write these as <span class="arithmatex">\(P(A \mid B)\)</span> and <span class="arithmatex">\(E[X \mid Y]\)</span>; here we follow the reinforcement learning convention <span class="arithmatex">\(\Pr\{A \mid B\}\)</span> and <span class="arithmatex">\(\mathbb{E}[X \mid Y]\)</span>. They mean the same thing.</p>
+<h3 id="conditional-probability-shrink-the-world-then-re-scale">Conditional probability: shrink the world, then re-scale</h3>
+<p>The whole idea fits in one sentence: <strong>to condition on <span class="arithmatex">\(B\)</span>, throw away every outcome where <span class="arithmatex">\(B\)</span> did not happen, and re-scale what is left so it adds up to <span class="arithmatex">\(1\)</span>.</strong></p>
+<p>Suppose a cleaning robot logs its battery level (high or low) on <span class="arithmatex">\(100\)</span> consecutive steps, and also what its battery level was on the step after. The counts are:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Next: high</th>
+<th>Next: low</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Now: high</strong></td>
+<td><span class="arithmatex">\(48\)</span></td>
+<td><span class="arithmatex">\(12\)</span></td>
+<td><span class="arithmatex">\(60\)</span></td>
+</tr>
+<tr>
+<td><strong>Now: low</strong></td>
+<td><span class="arithmatex">\(10\)</span></td>
+<td><span class="arithmatex">\(30\)</span></td>
+<td><span class="arithmatex">\(40\)</span></td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><span class="arithmatex">\(58\)</span></td>
+<td><span class="arithmatex">\(42\)</span></td>
+<td><span class="arithmatex">\(100\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><em>Without any condition</em>, the robot's battery is low next step on <span class="arithmatex">\(42\)</span> of the <span class="arithmatex">\(100\)</span> steps:</p>
+<div class="arithmatex">\[
+\Pr\{\text{next low}\} = \frac{42}{100} = 0.42.
+\]</div>
+<p><em>Given that the battery is high now</em>, we keep only the first row, <span class="arithmatex">\(60\)</span> steps, and ignore the rest. Of those <span class="arithmatex">\(60\)</span>, the next battery was low on <span class="arithmatex">\(12\)</span>:</p>
+<div class="arithmatex">\[
+\Pr\{\text{next low} \mid \text{now high}\} = \frac{12}{60} = 0.2.
+\]</div>
+<p>Similarly, <span class="arithmatex">\(\Pr\{\text{next low} \mid \text{now low}\} = \frac{30}{40} = 0.75\)</span>. Knowing the current battery level changes the odds a lot: from <span class="arithmatex">\(0.42\)</span> overall, to <span class="arithmatex">\(0.2\)</span> or <span class="arithmatex">\(0.75\)</span> depending on what we know.</p>
+<p>Dividing the counts by <span class="arithmatex">\(100\)</span> turns this into the general definition. "Keep only the row" is the intersection <span class="arithmatex">\(A \cap B\)</span>, and "re-scale" is dividing by <span class="arithmatex">\(\Pr\{B\}\)</span>:</p>
+<div class="arithmatex">\[
+\Pr\{A \mid B\} = \frac{\Pr\{A \cap B\}}{\Pr\{B\}}.
+\]</div>
+<p>Here <span class="arithmatex">\(A\)</span> is "next low" and <span class="arithmatex">\(B\)</span> is "now high". The intersection <span class="arithmatex">\(\text{next low} \cap \text{now high}\)</span> means both happened, so it is the single cell where the row "now high" meets the column "next low": <span class="arithmatex">\(12\)</span> of the <span class="arithmatex">\(100\)</span> steps. The condition "now high" is the whole first row: <span class="arithmatex">\(60\)</span> of the <span class="arithmatex">\(100\)</span> steps. So</p>
+<div class="arithmatex">\[
+\Pr\{\text{next low} \mid \text{now high}\} = \frac{\Pr\{\text{next low} \cap \text{now high}\}}{\Pr\{\text{now high}\}} = \frac{12/100}{60/100} = \frac{0.12}{0.60} = 0.2,
+\]</div>
+<p>the same answer as counting within the row directly, <span class="arithmatex">\(\frac{12}{60} = 0.2\)</span>.</p>
+<p>Three facts follow:</p>
+<ol>
+<li><strong>Given a condition, the probabilities of all outcomes add up to <span class="arithmatex">\(1\)</span>.</strong> <span class="arithmatex">\(\Pr\{\text{next high} \mid \text{now high}\} + \Pr\{\text{next low} \mid \text{now high}\} = 0.8 + 0.2 = 1\)</span>. Each row of the table, re-scaled, is a full probability distribution of its own, called a <strong>conditional distribution</strong>.</li>
+<li>
+<p><strong>Law of total probability: the overall probability is a weighted average of the conditional ones</strong>, weighted by how likely each condition is:</p>
+<div class="arithmatex">\[
+\Pr\{\text{next low}\} = \underbrace{0.2}_{\Pr\{\text{low} \mid \text{high}\}} \cdot \underbrace{0.6}_{\Pr\{\text{high}\}} + \underbrace{0.75}_{\Pr\{\text{low} \mid \text{low}\}} \cdot \underbrace{0.4}_{\Pr\{\text{low}\}} = 0.12 + 0.30 = 0.42. \;\checkmark
+\]</div>
+</li>
+<li>
+<p><strong>You can condition on several things at once.</strong> <span class="arithmatex">\(\Pr\{A \mid B, C\}\)</span> means: keep only the outcomes where <em>both</em> <span class="arithmatex">\(B\)</span> and <span class="arithmatex">\(C\)</span> happened, then re-scale.</p>
+</li>
+</ol>
+<p>The <strong>Markov property</strong> is a statement about conditioning too. Once you know the current state and action, also knowing the earlier history does not change the probabilities,</p>
+<div class="arithmatex">\[
+\Pr\{S_{t+1} = s' \mid S_t, A_t, S_{t-1}, A_{t-1}, \dots, S_0\} = \Pr\{S_{t+1} = s' \mid S_t, A_t\}.
+\]</div>
+<p>In other words, the future is <strong>conditionally independent</strong> of the past, given the present.</p>
+<h3 id="conditional-expectation-the-average-inside-the-smaller-world">Conditional expectation: the average inside the smaller world</h3>
+<p>Conditional expectation uses the same move. <strong>To compute <span class="arithmatex">\(\mathbb{E}[X \mid B]\)</span>, shrink the world to the outcomes where <span class="arithmatex">\(B\)</span> happened, and take the ordinary average of <span class="arithmatex">\(X\)</span> there:</strong></p>
+<div class="arithmatex">\[
+\mathbb{E}[X \mid B] = \sum_x x \cdot \Pr\{X = x \mid B\}.
+\]</div>
+<p>It is the plain expectation <span class="arithmatex">\(\mathbb{E}[X] = \sum_x x \cdot \Pr\{X = x\}\)</span>, with every probability replaced by its conditional version.</p>
+<p>Back to the robot. Suppose that on each step it also earns a reward <span class="arithmatex">\(R\)</span> that depends on its current battery:</p>
+<table>
+<thead>
+<tr>
+<th>Now</th>
+<th>Possible rewards</th>
+<th><span class="arithmatex">\(\mathbb{E}[R \mid \text{now}]\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>high</td>
+<td><span class="arithmatex">\(4\)</span> or <span class="arithmatex">\(2\)</span>, each with probability <span class="arithmatex">\(\tfrac{1}{2}\)</span></td>
+<td><span class="arithmatex">\(\tfrac{1}{2} \cdot 4 + \tfrac{1}{2} \cdot 2 = 3\)</span></td>
+</tr>
+<tr>
+<td>low</td>
+<td><span class="arithmatex">\(1\)</span> with probability <span class="arithmatex">\(\tfrac{3}{4}\)</span>, or <span class="arithmatex">\(-3\)</span> (it runs flat and must be rescued) with probability <span class="arithmatex">\(\tfrac{1}{4}\)</span></td>
+<td><span class="arithmatex">\(\tfrac{3}{4} \cdot 1 + \tfrac{1}{4} \cdot (-3) = 0\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>So <span class="arithmatex">\(\mathbb{E}[R \mid \text{now high}] = 3\)</span> and <span class="arithmatex">\(\mathbb{E}[R \mid \text{now low}] = 0\)</span>. Each conditional expectation is just <strong>a number: the average reward in that situation</strong>. That is exactly what a value is in reinforcement learning, and it is how <span class="arithmatex">\(q_*(a)\)</span> was defined in the <a href="../multi_armed_bandits/#a-k-armed-bandit-problem">bandit chapter</a>.</p>
+<p>When the condition is a random variable rather than a fixed event, as in <span class="arithmatex">\(\mathbb{E}[R \mid S]\)</span> with <span class="arithmatex">\(S\)</span> the current battery level, the result is a <em>function</em> of <span class="arithmatex">\(S\)</span>: it equals <span class="arithmatex">\(3\)</span> when <span class="arithmatex">\(S\)</span> is high and <span class="arithmatex">\(0\)</span> when <span class="arithmatex">\(S\)</span> is low. Because <span class="arithmatex">\(S\)</span> is random, <span class="arithmatex">\(\mathbb{E}[R \mid S]\)</span> is itself a random variable.</p>
+<p>Two properties to be thororugh with:</p>
+<ol>
+<li>
+<p><strong>Law of total expectation (Adam's law): the overall average is a weighted average of the conditional averages.</strong></p>
+<div class="arithmatex">\[
+\mathbb{E}[R] = \sum_s \mathbb{E}[R \mid S = s] \cdot \Pr\{S = s\} = \underbrace{3}_{\text{high}} \cdot 0.6 + \underbrace{0}_{\text{low}} \cdot 0.4 = 1.8.
+\]</div>
+<p>In compact form, <span class="arithmatex">\(\mathbb{E}\big[ \mathbb{E}[R \mid S] \big] = \mathbb{E}[R]\)</span>. As a check, computing directly from the overall reward distribution gives the same answer: <span class="arithmatex">\(4 \cdot 0.3 + 2 \cdot 0.3 + 1 \cdot 0.3 + (-3) \cdot 0.1 = 1.8\)</span>.</p>
+</li>
+<li>
+<p><strong>Taking out what's known.</strong> Inside <span class="arithmatex">\(\mathbb{E}[\,\cdot \mid S = s]\)</span>, anything that depends only on <span class="arithmatex">\(s\)</span> is a fixed number and can be pulled outside: <span class="arithmatex">\(\mathbb{E}[h(S) \, R \mid S = s] = h(s) \, \mathbb{E}[R \mid S = s]\)</span>. We used this in the gradient bandit derivation, where <span class="arithmatex">\(g(A_t)\)</span> came out of <span class="arithmatex">\(\mathbb{E}[\,\cdot \mid A_t = x]\)</span> as the number <span class="arithmatex">\(g(x)\)</span>.</p>
+</li>
+</ol>
+<h3 id="cheat-sheet">Cheat sheet</h3>
+<table>
+<thead>
+<tr>
+<th>Notation</th>
+<th>Read as</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(\Pr\{A \mid B\}\)</span></td>
+<td>probability of <span class="arithmatex">\(A\)</span> given <span class="arithmatex">\(B\)</span></td>
+<td>keep only outcomes where <span class="arithmatex">\(B\)</span> happened, re-scale, then ask how often <span class="arithmatex">\(A\)</span> happens</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\Pr\{A \mid B, C\}\)</span></td>
+<td>probability of <span class="arithmatex">\(A\)</span> given <span class="arithmatex">\(B\)</span> and <span class="arithmatex">\(C\)</span></td>
+<td>same, keeping only outcomes where both <span class="arithmatex">\(B\)</span> and <span class="arithmatex">\(C\)</span> happened</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\mathbb{E}[X \mid B]\)</span></td>
+<td>expected value of <span class="arithmatex">\(X\)</span> given <span class="arithmatex">\(B\)</span></td>
+<td>the average of <span class="arithmatex">\(X\)</span> over only the outcomes where <span class="arithmatex">\(B\)</span> happened (a number)</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\mathbb{E}[X \mid Y]\)</span></td>
+<td>expected value of <span class="arithmatex">\(X\)</span> given <span class="arithmatex">\(Y\)</span></td>
+<td>the function of <span class="arithmatex">\(Y\)</span> that gives <span class="arithmatex">\(\mathbb{E}[X \mid Y = y]\)</span> for each <span class="arithmatex">\(y\)</span> (a random variable)</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\sum_b \Pr\{A \mid B = b\} \Pr\{B = b\}\)</span></td>
+<td>law of total probability</td>
+<td>equals <span class="arithmatex">\(\Pr\{A\}\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\sum_y \mathbb{E}[X \mid Y = y] \Pr\{Y = y\}\)</span></td>
+<td>law of total expectation</td>
+<td>equals <span class="arithmatex">\(\mathbb{E}[X]\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>For the full treatment, with proofs and more examples, see the math pages:</p>
+<ul>
+<li><a href="../../../math/probability/conditional_probability/">Conditional Probability</a>: the <a href="../../../math/probability/conditional_probability/#definition-of-conditional-probability">definition</a>, the <a href="../../../math/probability/conditional_probability/#law-of-total-probability">law of total probability</a>, and <a href="../../../math/probability/conditional_probability/#conditional-independence">conditional independence</a>, which is the idea behind the Markov property.</li>
+<li><a href="../../../math/probability/conditional_distributions/">Conditional Distributions</a>: a whole distribution given a condition, like each re-scaled row of the table above.</li>
+<li><a href="../../../math/probability/conditional_expectation/">Conditional Expectation</a>: the <a href="../../../math/probability/conditional_expectation/#definition-of-conditional-expectation">definition</a> and the <a href="../../../math/probability/conditional_expectation/#general-properties">general properties</a>, including taking out what's known and iterated expectation (Adam's law).</li>
+<li><a href="../../../math/probability/markov_chains/">Markov Chains</a>: the <a href="../../../math/probability/markov_chains/#transition-matrix">transition matrix</a>, where every row is a conditional distribution of the next state given the current one.</li>
+</ul>
+<h2 id="the-agentenvironment-interface">The Agent–Environment Interface</h2>
+<p>MDPs are a classical formalization of <strong>sequential decision making</strong>, where actions influence not just immediate rewards, but also subsequent situations, or states, and through those future rewards. Thus MDPs involve <strong>delayed reward</strong> and the need to trade off immediate and delayed reward. Whereas in bandit problems we estimated the value <span class="arithmatex">\(q_*(a)\)</span> of each action <span class="arithmatex">\(a\)</span>, in MDPs we estimate the value <span class="arithmatex">\(q_*(s, a)\)</span> of each action <span class="arithmatex">\(a\)</span> in each state <span class="arithmatex">\(s\)</span>, or we estimate the value <span class="arithmatex">\(v_*(s)\)</span> of each state given optimal action selections.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Depends on</th>
+<th>Question it answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(q_*(a)\)</span></td>
+<td>action <span class="arithmatex">\(a\)</span></td>
+<td>How good is action <span class="arithmatex">\(a\)</span>? (bandits, where there is only one situation)</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(q_*(s, a)\)</span></td>
+<td>state <span class="arithmatex">\(s\)</span> and action <span class="arithmatex">\(a\)</span></td>
+<td>How good is taking action <span class="arithmatex">\(a\)</span> in state <span class="arithmatex">\(s\)</span>, and acting optimally afterwards?</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_*(s)\)</span></td>
+<td>state <span class="arithmatex">\(s\)</span></td>
+<td>How good is being in state <span class="arithmatex">\(s\)</span>, if we act optimally from here on?</td>
+</tr>
+</tbody>
+</table>
+<p>MDPs are meant to be a straightforward framing of the problem of learning from interaction to achieve a goal. The learner and decision maker is called the <strong>agent</strong>. The thing it interacts with, comprising everything outside the agent, is called the <strong>environment</strong>. These interact continually, the agent selecting actions and the environment responding to these actions and presenting new situations to the agent. The environment also gives rise to <strong>rewards</strong>, special numerical values that the agent seeks to maximize over time through its choice of actions.</p>
+<p><img alt="img" src="../mdp0.png" /></p>
+<p>More specifically, the agent and environment interact at each of a sequence of discrete time steps, <span class="arithmatex">\(t = 0, 1, 2, 3, \dots\)</span>. At each time step <span class="arithmatex">\(t\)</span>, the agent receives some representation of the environment’s <strong>state</strong>, <span class="arithmatex">\(S_t \in \mathcal{S}\)</span>, and on that basis selects an <strong>action</strong>, <span class="arithmatex">\(A_t \in \mathcal{A}(s)\)</span>. One time step later, in part as a consequence of its action, the agent receives a numerical <strong>reward</strong>, <span class="arithmatex">\(R_{t+1} \in \mathcal{R} \subset \mathbb{R}\)</span>, and finds itself in a new state, <span class="arithmatex">\(S_{t+1}\)</span>. The MDP and agent together thereby give rise to a sequence or <strong>trajectory</strong> that begins like this:</p>
+<div class="arithmatex">\[
+S_0, A_0, R_1, S_1, A_1, R_2, S_2, A_2, R_3, \dots
+\]</div>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(\mathcal{S}\)</span></td>
+<td>the set of all possible states</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\mathcal{A}(s)\)</span></td>
+<td>the set of actions available in state <span class="arithmatex">\(s\)</span> (it can differ from state to state)</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\mathcal{R} \subset \mathbb{R}\)</span></td>
+<td>the set of possible rewards, a subset of the real numbers</td>
+</tr>
+</tbody>
+</table>
+<p>In a <strong>finite MDP</strong>, the sets of states, actions, and rewards (<span class="arithmatex">\(\mathcal{S}\)</span>, <span class="arithmatex">\(\mathcal{A}\)</span>, and <span class="arithmatex">\(\mathcal{R}\)</span>) all have a finite number of elements. In this case, the random variables <span class="arithmatex">\(R_t\)</span> and <span class="arithmatex">\(S_t\)</span> have well defined discrete probability distributions dependent only on the preceding state and action. That is, for particular values of these random variables, <span class="arithmatex">\(s' \in \mathcal{S}\)</span> and <span class="arithmatex">\(r \in \mathcal{R}\)</span>, there is a probability of those values occurring at time <span class="arithmatex">\(t\)</span>, given particular values of the preceding state and action:</p>
+<div class="arithmatex">\[
+p(s', r \mid s, a) \doteq \Pr\{S_t = s', R_t = r \mid S_{t-1} = s, A_{t-1} = a\},
+\]</div>
+<p>for all <span class="arithmatex">\(s', s \in \mathcal{S}\)</span>, <span class="arithmatex">\(r \in \mathcal{R}\)</span>, and <span class="arithmatex">\(a \in \mathcal{A}(s)\)</span>. The function <span class="arithmatex">\(p\)</span> defines the <strong>dynamics</strong> of the MDP. The dot over the equals sign in the equation reminds us that it is a definition (in this case of the function <span class="arithmatex">\(p\)</span>) rather than a fact that follows from previous definitions. The dynamics function</p>
+<div class="arithmatex">\[
+p : \mathcal{S} \times \mathcal{R} \times \mathcal{S} \times \mathcal{A} \to [0, 1]
+\]</div>
+<p>is an ordinary deterministic function of four arguments.</p>
+<p>This is a <a href="#conditional-probability-shrink-the-world-then-re-scale">conditional probability</a> (keep only the moments when the agent was in state <span class="arithmatex">\(s\)</span> and took action <span class="arithmatex">\(a\)</span>, and ask how often the next state was <span class="arithmatex">\(s'\)</span> and the reward was <span class="arithmatex">\(r\)</span>). For each fixed <span class="arithmatex">\((s, a)\)</span>, the values <span class="arithmatex">\(p(s', r \mid s, a)\)</span> form a full probability distribution over the possible outcomes <span class="arithmatex">\((s', r)\)</span>.</p>
+<p><span class="arithmatex">\(p\)</span> specifies a probability distribution for each choice of <span class="arithmatex">\(s\)</span> and <span class="arithmatex">\(a\)</span>, that is, that</p>
+<div class="arithmatex">\[
+\sum_{s' \in \mathcal{S}} \sum_{r \in \mathcal{R}} p(s', r \mid s, a) = 1, \qquad \text{for all } s \in \mathcal{S}, \; a \in \mathcal{A}(s).
+\]</div>
+<p>In words: fix the current state <span class="arithmatex">\(s\)</span> and action <span class="arithmatex">\(a\)</span>. Every possible outcome is some combination of a next state <span class="arithmatex">\(s'\)</span> and a reward <span class="arithmatex">\(r\)</span>, and their probabilities, summed over all of these combinations, must add up to <span class="arithmatex">\(1\)</span>. This is the first fact from the primer: given a condition, the probabilities of all outcomes add up to <span class="arithmatex">\(1\)</span>.</p>
+<p>In a Markov decision process, the probabilities given by <span class="arithmatex">\(p\)</span> completely characterize the environment’s dynamics. That is, the probability of each possible value for <span class="arithmatex">\(S_t\)</span> and <span class="arithmatex">\(R_t\)</span> depends on the immediately preceding state and action, <span class="arithmatex">\(S_{t-1}\)</span> and <span class="arithmatex">\(A_{t-1}\)</span>, and, given them, not at all on earlier states and actions:</p>
+<div class="arithmatex">\[
+\Pr\{S_t = s', R_t = r \mid S_{t-1}, A_{t-1}, S_{t-2}, A_{t-2}, \dots, S_0, A_0\} = \Pr\{S_t = s', R_t = r \mid S_{t-1}, A_{t-1}\} = p(s', r \mid S_{t-1}, A_{t-1}).
+\]</div>
+<p>This is best viewed as a restriction not on the decision process, but on the state. The state must include information about all aspects of the past agent–environment interaction that make a difference for the future. If it does, then the state is said to have the <strong>Markov property</strong>.</p>
+<p>For example, the positions of all the pieces on a chess board are a Markov state: how the game reached that position makes no difference to what can happen next.</p>
+<p>From the four-argument dynamics function, <span class="arithmatex">\(p\)</span>, one can compute anything else one might want to know about the environment, such as the <strong>state-transition probabilities</strong> (which we denote, with a slight abuse of notation, as a three-argument function <span class="arithmatex">\(p : \mathcal{S} \times \mathcal{S} \times \mathcal{A} \to [0, 1]\)</span>),</p>
+<div class="arithmatex">\[
+p(s' \mid s, a) \doteq \Pr\{S_t = s' \mid S_{t-1} = s, A_{t-1} = a\} = \sum_{r \in \mathcal{R}} p(s', r \mid s, a).
+\]</div>
+<p>We can also compute the <strong>expected rewards</strong> for state–action pairs as a two-argument function <span class="arithmatex">\(r : \mathcal{S} \times \mathcal{A} \to \mathbb{R}\)</span>:</p>
+<div class="arithmatex">\[
+r(s, a) \doteq \mathbb{E}[R_t \mid S_{t-1} = s, A_{t-1} = a] = \sum_{r \in \mathcal{R}} r \sum_{s' \in \mathcal{S}} p(s', r \mid s, a),
+\]</div>
+<p>and the expected rewards for state–action–next-state triples as a three-argument function <span class="arithmatex">\(r : \mathcal{S} \times \mathcal{A} \times \mathcal{S} \to \mathbb{R}\)</span>,</p>
+<div class="arithmatex">\[
+r(s, a, s') \doteq \mathbb{E}[R_t \mid S_{t-1} = s, A_{t-1} = a, S_t = s'] = \sum_{r \in \mathcal{R}} r \, \frac{p(s', r \mid s, a)}{p(s' \mid s, a)}.
+\]</div>
+<p>Both are <a href="#conditional-expectation-the-average-inside-the-smaller-world">conditional expectations</a>: the average reward, over only the moments that match the condition. To see where the formulas come from, start from the definition <span class="arithmatex">\(\mathbb{E}[R_t \mid \text{condition}] = \sum_r r \cdot \Pr\{R_t = r \mid \text{condition}\}\)</span>, and find that conditional probability of the reward.</p>
+<p>For <span class="arithmatex">\(r(s, a)\)</span>, the reward <span class="arithmatex">\(r\)</span> can arrive together with any next state <span class="arithmatex">\(s'\)</span>, so we add up over all of them:</p>
+<div class="arithmatex">\[
+\Pr\{R_t = r \mid S_{t-1} = s, A_{t-1} = a\} = \sum_{s' \in \mathcal{S}} p(s', r \mid s, a).
+\]</div>
+<p>For <span class="arithmatex">\(r(s, a, s')\)</span>, we also know the next state. By the definition of conditional probability, we divide the probability of "this <span class="arithmatex">\(s'\)</span> and this <span class="arithmatex">\(r\)</span>" by the probability of "this <span class="arithmatex">\(s'\)</span>":</p>
+<div class="arithmatex">\[
+\Pr\{R_t = r \mid S_{t-1} = s, A_{t-1} = a, S_t = s'\} = \frac{\Pr\{S_t = s', R_t = r \mid S_{t-1} = s, A_{t-1} = a\}}{\Pr\{S_t = s' \mid S_{t-1} = s, A_{t-1} = a\}} = \frac{p(s', r \mid s, a)}{p(s' \mid s, a)}.
+\]</div>
+<p>Multiplying each by <span class="arithmatex">\(r\)</span> and summing over <span class="arithmatex">\(r\)</span> gives the two formulas above.</p>
+<p>The MDP framework is abstract and flexible and can be applied to many different problems in many different ways. For example, the time steps <span class="arithmatex">\(t = 0, 1, 2, \dots\)</span> need not refer to fixed intervals of real time; they can refer to arbitrary successive stages of decision making and acting. The actions <span class="arithmatex">\(A_t\)</span> can be low-level controls, such as the voltages applied to the motors of a robot arm, or high-level decisions, such as whether or not to have lunch or to go to graduate school. Similarly, the states <span class="arithmatex">\(S_t\)</span> can take a wide variety of forms. They can be completely determined by low-level sensations, such as direct sensor readings, or they can be more high-level and abstract, such as symbolic descriptions of objects in a room. In general, <strong>actions can be any decisions we want to learn how to make, and states can be anything we can know that might be useful in making them.</strong></p>
+<p>In particular, the boundary between agent and environment is typically not the same as the physical boundary of a robot’s or an animal’s body. Usually, the boundary is drawn closer to the agent than that. For example, the motors and mechanical linkages of a robot and its sensing hardware should usually be considered parts of the environment rather than parts of the agent. Similarly, if we apply the MDP framework to a person or animal, the muscles, skeleton, and sensory organs should be considered part of the environment. Rewards, too, presumably are computed inside the physical bodies of natural and artificial learning systems, but are considered external to the agent.</p>
+<p>The general rule we follow is that <strong>anything that cannot be changed arbitrarily by the agent is considered to be outside of it and thus part of its environment</strong>. We do not assume that everything in the environment is unknown to the agent. For example, the agent often knows quite a bit about how its rewards are computed as a function of its actions and the states in which they are taken. But we always consider the reward computation to be external to the agent. <strong>The agent–environment boundary represents the limit of the agent’s absolute control, not of its knowledge.</strong></p>
+<p>The MDP framework is a considerable abstraction of the problem of goal-directed learning from interaction. It proposes that whatever the details of the sensory, memory, and control apparatus, and whatever objective one is trying to achieve, any problem of learning goal-directed behavior can be reduced to three signals passing back and forth between an agent and its environment:</p>
+<ul>
+<li>one signal to represent the choices made by the agent (the <strong>actions</strong>, <span class="arithmatex">\(A_t\)</span>),</li>
+<li>one signal to represent the basis on which the choices are made (the <strong>states</strong>, <span class="arithmatex">\(S_t\)</span>), and</li>
+<li>one signal to define the agent’s goal (the <strong>rewards</strong>, <span class="arithmatex">\(R_{t+1}\)</span>).</li>
+</ul>
+<p>This framework may not be sufficient to represent all decision-learning problems usefully, but it has proved to be widely useful and applicable.</p>
+<p><strong>Example: Recycling Robot:</strong> A mobile robot has the job of collecting empty soda cans in an office environment. It has sensors for detecting cans, and an arm and gripper that can pick them up and place them in an onboard bin; it runs on a rechargeable battery. The robot’s control system has components for interpreting sensory information, for navigating, and for controlling the arm and gripper. High-level decisions about how to search for cans are made by a reinforcement learning agent based on the current charge level of the battery.</p>
+<p>To make a simple example, we assume that only two charge levels can be distinguished, comprising a small state set <span class="arithmatex">\(\mathcal{S} = \{\texttt{high}, \texttt{low}\}\)</span>. In each state, the agent can decide whether to (1) actively <span class="arithmatex">\(\texttt{search}\)</span> for a can for a certain period of time, (2) remain stationary and <span class="arithmatex">\(\texttt{wait}\)</span> for someone to bring it a can, or (3) head back to its home base to <span class="arithmatex">\(\texttt{recharge}\)</span> its battery. When the energy level is high, recharging would always be foolish, so we do not include it in the action set for this state. The action sets are then</p>
+<div class="arithmatex">\[
+\mathcal{A}(\texttt{high}) = \{\texttt{search}, \texttt{wait}\}, \qquad \mathcal{A}(\texttt{low}) = \{\texttt{search}, \texttt{wait}, \texttt{recharge}\}.
+\]</div>
+<p>The rewards are zero most of the time, but become positive when the robot secures an empty can, or large and negative if the battery runs all the way down. The best way to find cans is to actively search for them, but this runs down the robot’s battery, whereas waiting does not. Whenever the robot is searching, the possibility exists that its battery will become depleted. In this case the robot must shut down and wait to be rescued (producing a low reward).</p>
+<p>If the energy level is high, then a period of active search can always be completed without risk of depleting the battery. A period of searching that begins with a high energy level leaves the energy level high with probability <span class="arithmatex">\(\alpha\)</span> and reduces it to low with probability <span class="arithmatex">\(1 - \alpha\)</span>. On the other hand, a period of searching undertaken when the energy level is low leaves it low with probability <span class="arithmatex">\(\beta\)</span> and depletes the battery with probability <span class="arithmatex">\(1 - \beta\)</span>. In the latter case, the robot must be rescued, and the battery is then recharged back to high.</p>
+<p>Each can collected by the robot counts as a unit reward, whereas a reward of <span class="arithmatex">\(-3\)</span> results whenever the robot has to be rescued. Let <span class="arithmatex">\(r_{\texttt{search}}\)</span> and <span class="arithmatex">\(r_{\texttt{wait}}\)</span>, with <span class="arithmatex">\(r_{\texttt{search}} &gt; r_{\texttt{wait}}\)</span>, denote the expected number of cans the robot will collect (and hence the expected reward) while searching and while waiting respectively. Finally, suppose that no cans can be collected during a run home for recharging, and that no cans can be collected on a step in which the battery is depleted.</p>
+<p>This system is then a finite MDP, and we can write down the transition probabilities <span class="arithmatex">\(p(s' \mid s, a)\)</span> and the expected rewards <span class="arithmatex">\(r(s, a, s')\)</span>, with dynamics as indicated in the table:</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(s\)</span></th>
+<th><span class="arithmatex">\(a\)</span></th>
+<th><span class="arithmatex">\(s'\)</span></th>
+<th><span class="arithmatex">\(p(s' \mid s, a)\)</span></th>
+<th><span class="arithmatex">\(r(s, a, s')\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(\texttt{search}\)</span></td>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(\alpha\)</span></td>
+<td><span class="arithmatex">\(r_{\texttt{search}}\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(\texttt{search}\)</span></td>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(1 - \alpha\)</span></td>
+<td><span class="arithmatex">\(r_{\texttt{search}}\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(\texttt{search}\)</span></td>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(1 - \beta\)</span></td>
+<td><span class="arithmatex">\(-3\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(\texttt{search}\)</span></td>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(\beta\)</span></td>
+<td><span class="arithmatex">\(r_{\texttt{search}}\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(\texttt{wait}\)</span></td>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td><span class="arithmatex">\(r_{\texttt{wait}}\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(\texttt{wait}\)</span></td>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(-\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(\texttt{wait}\)</span></td>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(-\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(\texttt{wait}\)</span></td>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td><span class="arithmatex">\(r_{\texttt{wait}}\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(\texttt{recharge}\)</span></td>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(\texttt{recharge}\)</span></td>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(-\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Note that there is a row in the table for each possible combination of current state, <span class="arithmatex">\(s\)</span>, action, <span class="arithmatex">\(a \in \mathcal{A}(s)\)</span>, and next state, <span class="arithmatex">\(s'\)</span>. Some transitions have zero probability of occurring, so no expected reward is specified for them (<span class="arithmatex">\(-\)</span>). For each fixed <span class="arithmatex">\((s, a)\)</span>, the probabilities <span class="arithmatex">\(p(s' \mid s, a)\)</span> add up to <span class="arithmatex">\(1\)</span>, as they must.</p>
+<p><img alt="img" src="../recy.png" /></p>
+<h2 id="goals-and-rewards">Goals and Rewards</h2>
+<p>In reinforcement learning, the purpose or goal of the agent is formalized in terms of a special signal, called the <strong>reward</strong>, passing from the environment to the agent. At each time step, the reward is a simple number, <span class="arithmatex">\(R_t \in \mathbb{R}\)</span>. Informally, the agent’s goal is to maximize the total amount of reward it receives. This means maximizing not immediate reward, but cumulative reward in the long run:</p>
+<div class="arithmatex">\[
+\text{maximize} \quad \mathbb{E}\big[ R_{t+1} + R_{t+2} + R_{t+3} + \cdots \big] \qquad \text{rather than just} \quad \mathbb{E}\big[ R_{t+1} \big].
+\]</div>
+<p>We can clearly state this informal idea as the <strong>reward hypothesis</strong>:</p>
+<blockquote>
+<p>That all of what we mean by goals and purposes can be well thought of as the maximization of the expected value of the cumulative sum of a received scalar signal (called reward).</p>
+</blockquote>
+<p>The use of a reward signal to formalize the idea of a goal is one of the most distinctive features of reinforcement learning.</p>
+<h2 id="returns-and-episodes">Returns and Episodes</h2>
+<p>We have said that the agent’s goal is to maximize the cumulative reward it receives in the long run. How might this be defined formally? If the sequence of rewards received after time step <span class="arithmatex">\(t\)</span> is denoted <span class="arithmatex">\(R_{t+1}, R_{t+2}, R_{t+3}, \dots\)</span>, then what precise aspect of this sequence do we wish to maximize? In general, we seek to maximize the <strong>expected return</strong>, where the <strong>return</strong>, denoted <span class="arithmatex">\(G_t\)</span>, is defined as some specific function of the reward sequence. In the simplest case the return is the sum of the rewards:</p>
+<div class="arithmatex">\[
+G_t \doteq R_{t+1} + R_{t+2} + R_{t+3} + \cdots + R_T = \sum_{k=t+1}^{T} R_k,
+\]</div>
+<p>where <span class="arithmatex">\(T\)</span> is a final time step. This approach makes sense in applications in which there is a natural notion of final time step, that is, when the agent–environment interaction breaks naturally into subsequences, which we call <strong>episodes</strong>, such as plays of a game, trips through a maze, or any sort of repeated interaction. Each episode ends in a special state called the <strong>terminal state</strong>, followed by a reset to a standard starting state or to a sample from a standard distribution of starting states. Even if you think of episodes as ending in different ways, such as winning and losing a game, the next episode begins independently of how the previous one ended. Thus the episodes can all be considered to end in the same terminal state, with different rewards for the different outcomes.</p>
+<p>Tasks (task is the whole problem the agent is trying to solve; and an action is a single choice the agent makes at one time step) with episodes of this kind are called <strong>episodic tasks</strong>. In episodic tasks we sometimes need to distinguish the set of all nonterminal states, denoted <span class="arithmatex">\(\mathcal{S}\)</span>, from the set of all states plus the terminal state, denoted <span class="arithmatex">\(\mathcal{S}^+\)</span>:</p>
+<div class="arithmatex">\[
+\mathcal{S}^+ = \mathcal{S} \cup \{\text{terminal}\}.
+\]</div>
+<p>The time of termination, <span class="arithmatex">\(T\)</span>, is a random variable that normally varies from episode to episode. For example, one game of chess might end after <span class="arithmatex">\(T = 40\)</span> moves and the next after <span class="arithmatex">\(T = 63\)</span>.</p>
+<p>On the other hand, in many cases the agent–environment interaction does not break naturally into identifiable episodes, but goes on continually without limit. We call these <strong>continuing tasks</strong>. The return formulation above is problematic for continuing tasks because the final time step would be <span class="arithmatex">\(T = \infty\)</span>, and the return, which is what we are trying to maximize, could easily be infinite. For example, if the agent receives a reward of <span class="arithmatex">\(+1\)</span> on every step forever, then <span class="arithmatex">\(G_t = 1 + 1 + 1 + \cdots = \infty\)</span>, and every way of behaving that earns <span class="arithmatex">\(+1\)</span> per step looks equally (infinitely) good.</p>
+<p>The additional concept that we need is that of <strong>discounting</strong>. According to this approach, the agent tries to select actions so that the sum of the discounted rewards it receives over the future is maximized. In particular, it chooses <span class="arithmatex">\(A_t\)</span> to maximize the expected <strong>discounted return</strong>:</p>
+<div class="arithmatex">\[
+G_t \doteq R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots = \sum_{k=0}^{\infty} \gamma^k R_{t+k+1},
+\]</div>
+<p>where <span class="arithmatex">\(\gamma\)</span> is a parameter, <span class="arithmatex">\(0 \leq \gamma \leq 1\)</span>, called the <strong>discount rate</strong>.</p>
+<p>With the same reward of <span class="arithmatex">\(+1\)</span> on every step, the discounted return is now a finite geometric series. For example, with <span class="arithmatex">\(\gamma = 0.9\)</span>,</p>
+<div class="arithmatex">\[
+G_t = 1 + 0.9 + 0.9^2 + \cdots = \sum_{k=0}^{\infty} 0.9^k = \frac{1}{1 - 0.9} = 10.
+\]</div>
+<p>The discount rate determines the <strong>present value</strong> of future rewards: a reward received <span class="arithmatex">\(k\)</span> time steps in the future is worth only <span class="arithmatex">\(\gamma^{k-1}\)</span> times what it would be worth if it were received immediately. If <span class="arithmatex">\(\gamma = 0\)</span>, the agent is “myopic” in being concerned only with maximizing immediate rewards: its objective in this case is to learn how to choose <span class="arithmatex">\(A_t\)</span> so as to maximize only <span class="arithmatex">\(R_{t+1}\)</span>, since then <span class="arithmatex">\(G_t = R_{t+1}\)</span>.</p>
+<p>As <span class="arithmatex">\(\gamma\)</span> approaches <span class="arithmatex">\(1\)</span>, the return objective takes future rewards into account more strongly; the agent becomes more farsighted. Returns at successive time steps are related to each other in a way that is important for the theory and algorithms of reinforcement learning:</p>
+<div class="arithmatex">\[
+\begin{aligned}
+G_t &amp;\doteq R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \gamma^3 R_{t+4} + \cdots \\
+&amp;= R_{t+1} + \gamma \big( R_{t+2} + \gamma R_{t+3} + \gamma^2 R_{t+4} + \cdots \big) \\
+&amp;= R_{t+1} + \gamma G_{t+1}.
+\end{aligned}
+\]</div>
+<p>Note that although the discounted return is a sum of an infinite number of terms, it is still finite if the reward is nonzero and constant, if <span class="arithmatex">\(\gamma &lt; 1\)</span>. For example, if the reward is a constant <span class="arithmatex">\(+1\)</span>, then the return is</p>
+<div class="arithmatex">\[
+G_t = \sum_{k=0}^{\infty} \gamma^k = \frac{1}{1 - \gamma}.
+\]</div>
+<div class="admonition note">
+<p class="admonition-title">It’s a guarantee that the discounted return can’t blow up to infinity. It needs two conditions.</p>
+<p><strong>Bounded</strong> means the rewards never exceed some fixed size: there is a number <span class="arithmatex">\(R_{\max}\)</span> with <span class="arithmatex">\(|R_k| \leq R_{\max}\)</span> for every <span class="arithmatex">\(k\)</span>. The rewards can still vary; they just cannot grow without limit.</p>
+<p>Each term of the return is then at most <span class="arithmatex">\(\gamma^k R_{\max}\)</span> in size, so the return is at most a geometric series:</p>
+<div class="arithmatex">\[
+|G_t| \leq \sum_{k=0}^{\infty} \gamma^k R_{\max} = \frac{R_{\max}}{1 - \gamma},
+\]</div>
+<p>which is finite when <span class="arithmatex">\(\gamma &lt; 1\)</span>. For example, with rewards between <span class="arithmatex">\(-10\)</span> and <span class="arithmatex">\(10\)</span> and <span class="arithmatex">\(\gamma = 0.9\)</span>, the return always lies between <span class="arithmatex">\(-100\)</span> and <span class="arithmatex">\(100\)</span>.</p>
+<p>Both conditions are needed:</p>
+<ul>
+<li><strong>Without <span class="arithmatex">\(\gamma &lt; 1\)</span>:</strong> with <span class="arithmatex">\(\gamma = 1\)</span> and a reward of <span class="arithmatex">\(+1\)</span> on every step, <span class="arithmatex">\(G_t = 1 + 1 + 1 + \cdots = \infty\)</span>.</li>
+<li><strong>Without bounded rewards:</strong> with <span class="arithmatex">\(\gamma = 0.9\)</span> and rewards growing as <span class="arithmatex">\(1, \frac{1}{0.9}, \frac{1}{0.9^2}, \dots\)</span>, every discounted term equals <span class="arithmatex">\(1\)</span>, so again <span class="arithmatex">\(G_t = \infty\)</span>.</li>
+</ul>
+</div>
+<h2 id="unified-notation-for-episodic-and-continuing-tasks">Unified Notation for Episodic and Continuing Tasks</h2>
+<p>Rather than one long sequence of time steps, we need to consider a series of episodes, each of which consists of a finite sequence of time steps. We number the time steps of each episode starting anew from zero. Therefore, we have to refer not just to <span class="arithmatex">\(S_t\)</span>, the state representation at time <span class="arithmatex">\(t\)</span>, but to <span class="arithmatex">\(S_{t,i}\)</span>, the state representation at time <span class="arithmatex">\(t\)</span> of episode <span class="arithmatex">\(i\)</span> (and similarly for <span class="arithmatex">\(A_{t,i}\)</span>, <span class="arithmatex">\(R_{t,i}\)</span>, <span class="arithmatex">\(\pi_{t,i}\)</span>, <span class="arithmatex">\(T_i\)</span>, etc.).</p>
+<p>For example, if the first episode lasts <span class="arithmatex">\(T_1 = 3\)</span> steps and the second lasts <span class="arithmatex">\(T_2 = 2\)</span> steps, the states are</p>
+<div class="arithmatex">\[
+\underbrace{S_{0,1}, \; S_{1,1}, \; S_{2,1}, \; S_{3,1}}_{\text{episode } 1} \qquad \underbrace{S_{0,2}, \; S_{1,2}, \; S_{2,2}}_{\text{episode } 2}
+\]</div>
+<p>where the time step <span class="arithmatex">\(t\)</span> restarts at <span class="arithmatex">\(0\)</span> in each episode, and the last state of each episode is the terminal state.</p>
+<p>However, it turns out that when we discuss episodic tasks we almost never have to distinguish between different episodes. We are almost always considering a particular episode, or stating something that is true for all episodes. Accordingly, in practice we almost always abuse notation slightly by dropping the explicit reference to episode number. That is, we write <span class="arithmatex">\(S_t\)</span> to refer to <span class="arithmatex">\(S_{t,i}\)</span>, and so on.</p>
+<p>We need one other convention to obtain a single notation that covers both episodic and continuing tasks. We can write</p>
+<div class="arithmatex">\[
+G_t \doteq \sum_{k=t+1}^{T} \gamma^{k-t-1} R_k,
+\]</div>
+<p>including the possibility that <span class="arithmatex">\(T = \infty\)</span> or <span class="arithmatex">\(\gamma = 1\)</span> (but not both).</p>
+<p>This one formula covers both earlier definitions of the return:</p>
+<ul>
+<li><strong>Episodic task</strong> (<span class="arithmatex">\(T\)</span> finite, <span class="arithmatex">\(\gamma = 1\)</span>): <span class="arithmatex">\(G_t = R_{t+1} + R_{t+2} + \cdots + R_T\)</span>, the plain sum of rewards until the episode ends.</li>
+<li><strong>Continuing task</strong> (<span class="arithmatex">\(T = \infty\)</span>, <span class="arithmatex">\(\gamma &lt; 1\)</span>): <span class="arithmatex">\(G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots\)</span>, the discounted return. Substituting <span class="arithmatex">\(k = t + 1 + j\)</span> turns <span class="arithmatex">\(\gamma^{k-t-1} R_k\)</span> into <span class="arithmatex">\(\gamma^{j} R_{t+j+1}\)</span>, which is the earlier form <span class="arithmatex">\(\sum_{j=0}^{\infty} \gamma^j R_{t+j+1}\)</span>.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      &copy; 2025 <a href="https://github.com/adi14041999"  target="_blank" rel="noopener">Aditya Prabhu</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
