@@ -2519,6 +2519,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#optimality-and-approximation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optimality and Approximation
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -6334,6 +6345,7 @@ q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
 <th>Next state</th>
 <th>Probability</th>
 <th>Reward</th>
+<th>Sum for this (state, action)</th>
 </tr>
 </thead>
 <tbody>
@@ -6343,6 +6355,7 @@ q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
 <td><span class="arithmatex">\(\texttt{high}\)</span></td>
 <td><span class="arithmatex">\(0.8\)</span></td>
 <td><span class="arithmatex">\(2\)</span></td>
+<td><span class="arithmatex">\(0.8 + 0.2 = 1\)</span></td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(\texttt{high}\)</span></td>
@@ -6350,11 +6363,13 @@ q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
 <td><span class="arithmatex">\(\texttt{low}\)</span></td>
 <td><span class="arithmatex">\(0.2\)</span></td>
 <td><span class="arithmatex">\(2\)</span></td>
+<td></td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(\texttt{high}\)</span></td>
 <td><span class="arithmatex">\(\texttt{wait}\)</span></td>
 <td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
 <td><span class="arithmatex">\(1\)</span></td>
 <td><span class="arithmatex">\(1\)</span></td>
 </tr>
@@ -6364,6 +6379,7 @@ q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
 <td><span class="arithmatex">\(\texttt{low}\)</span></td>
 <td><span class="arithmatex">\(0.6\)</span></td>
 <td><span class="arithmatex">\(2\)</span></td>
+<td><span class="arithmatex">\(0.6 + 0.4 = 1\)</span></td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(\texttt{low}\)</span></td>
@@ -6371,11 +6387,13 @@ q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
 <td><span class="arithmatex">\(\texttt{high}\)</span> (rescued)</td>
 <td><span class="arithmatex">\(0.4\)</span></td>
 <td><span class="arithmatex">\(-3\)</span></td>
+<td></td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(\texttt{low}\)</span></td>
 <td><span class="arithmatex">\(\texttt{wait}\)</span></td>
 <td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
 <td><span class="arithmatex">\(1\)</span></td>
 <td><span class="arithmatex">\(1\)</span></td>
 </tr>
@@ -6385,9 +6403,11 @@ q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
 <td><span class="arithmatex">\(\texttt{high}\)</span></td>
 <td><span class="arithmatex">\(1\)</span></td>
 <td><span class="arithmatex">\(0\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
 </tr>
 </tbody>
 </table>
+<p>The probabilities are <span class="arithmatex">\(p(s' \mid s, a)\)</span>, the chance of each <strong>next state</strong> given the state <em>and</em> the action, so they add up to <span class="arithmatex">\(1\)</span> separately for each state–action pair, not for each state. How often each action is chosen is decided by the policy <span class="arithmatex">\(\pi(a \mid s)\)</span>, not by this table.</p>
 <p><strong>Step 1: the value of each action:</strong> Write <span class="arithmatex">\(h = v_*(\texttt{high})\)</span> and <span class="arithmatex">\(l = v_*(\texttt{low})\)</span> for the two unknown optimal values. Using <span class="arithmatex">\(q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \big[ r + \gamma \, v_*(s') \big]\)</span>, each action's value is the average, over its outcomes, of the reward plus <span class="arithmatex">\(0.9\)</span> times the value of where it lands:</p>
 <div class="arithmatex">\[
 \begin{aligned}
@@ -6503,6 +6523,7 @@ h = 2 + 0.72h + 0.162h \quad \Longrightarrow \quad 0.118h = 2 \quad \Longrightar
 </tbody>
 </table>
 <p>"<span class="arithmatex">\(\texttt{search}\)</span>, <span class="arithmatex">\(\texttt{recharge}\)</span>" is best in <strong>both</strong> states at once, as an optimal policy must be, and its values are exactly <span class="arithmatex">\(v_*\)</span>.</p>
+<h2 id="optimality-and-approximation">Optimality and Approximation</h2>
 <p>Explicitly solving the Bellman optimality equation provides one route to finding an optimal policy, and thus to solving the reinforcement learning problem. However, this solution is rarely directly useful. It is akin to an exhaustive search, looking ahead at all possibilities, computing their probabilities of occurrence and their desirabilities in terms of expected rewards. This solution relies on at least three assumptions that are rarely true in practice:</p>
 <ol>
 <li>the dynamics of the environment, <span class="arithmatex">\(p(s', r \mid s, a)\)</span>, are accurately known;</li>

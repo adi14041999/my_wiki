@@ -837,15 +837,17 @@ We now solve the recycling robot completely, from the dynamics to the optimal po
 
 The dynamics are then:
 
-| State | Action | Next state | Probability | Reward |
-|---|---|---|---|---|
-| $\texttt{high}$ | $\texttt{search}$ | $\texttt{high}$ | $0.8$ | $2$ |
-| $\texttt{high}$ | $\texttt{search}$ | $\texttt{low}$ | $0.2$ | $2$ |
-| $\texttt{high}$ | $\texttt{wait}$ | $\texttt{high}$ | $1$ | $1$ |
-| $\texttt{low}$ | $\texttt{search}$ | $\texttt{low}$ | $0.6$ | $2$ |
-| $\texttt{low}$ | $\texttt{search}$ | $\texttt{high}$ (rescued) | $0.4$ | $-3$ |
-| $\texttt{low}$ | $\texttt{wait}$ | $\texttt{low}$ | $1$ | $1$ |
-| $\texttt{low}$ | $\texttt{recharge}$ | $\texttt{high}$ | $1$ | $0$ |
+| State | Action | Next state | Probability | Reward | Sum for this (state, action) |
+|---|---|---|---|---|---|
+| $\texttt{high}$ | $\texttt{search}$ | $\texttt{high}$ | $0.8$ | $2$ | $0.8 + 0.2 = 1$ |
+| $\texttt{high}$ | $\texttt{search}$ | $\texttt{low}$ | $0.2$ | $2$ | |
+| $\texttt{high}$ | $\texttt{wait}$ | $\texttt{high}$ | $1$ | $1$ | $1$ |
+| $\texttt{low}$ | $\texttt{search}$ | $\texttt{low}$ | $0.6$ | $2$ | $0.6 + 0.4 = 1$ |
+| $\texttt{low}$ | $\texttt{search}$ | $\texttt{high}$ (rescued) | $0.4$ | $-3$ | |
+| $\texttt{low}$ | $\texttt{wait}$ | $\texttt{low}$ | $1$ | $1$ | $1$ |
+| $\texttt{low}$ | $\texttt{recharge}$ | $\texttt{high}$ | $1$ | $0$ | $1$ |
+
+The probabilities are $p(s' \mid s, a)$, the chance of each **next state** given the state *and* the action, so they add up to $1$ separately for each state–action pair, not for each state. How often each action is chosen is decided by the policy $\pi(a \mid s)$, not by this table.
 
 **Step 1: the value of each action:** Write $h = v_*(\texttt{high})$ and $l = v_*(\texttt{low})$ for the two unknown optimal values. Using $q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \big[ r + \gamma \, v_*(s') \big]$, each action's value is the average, over its outcomes, of the reward plus $0.9$ times the value of where it lands:
 
@@ -916,6 +918,8 @@ Note that in $\texttt{low}$, $\texttt{recharge}$ earns reward $0$ and $\texttt{w
 | $\texttt{wait}$, $\texttt{recharge}$ | $10.00$ | $9.00$ |
 
 "$\texttt{search}$, $\texttt{recharge}$" is best in **both** states at once, as an optimal policy must be, and its values are exactly $v_*$.
+
+## Optimality and Approximation
 
 Explicitly solving the Bellman optimality equation provides one route to finding an optimal policy, and thus to solving the reinforcement learning problem. However, this solution is rarely directly useful. It is akin to an exhaustive search, looking ahead at all possibilities, computing their probabilities of occurrence and their desirabilities in terms of expected rewards. This solution relies on at least three assumptions that are rarely true in practice:
 
