@@ -365,3 +365,574 @@ This one formula covers both earlier definitions of the return:
 
 - **Episodic task** ($T$ finite, $\gamma = 1$): $G_t = R_{t+1} + R_{t+2} + \cdots + R_T$, the plain sum of rewards until the episode ends.
 - **Continuing task** ($T = \infty$, $\gamma < 1$): $G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots$, the discounted return. Substituting $k = t + 1 + j$ turns $\gamma^{k-t-1} R_k$ into $\gamma^{j} R_{t+j+1}$, which is the earlier form $\sum_{j=0}^{\infty} \gamma^j R_{t+j+1}$.
+
+## Policies and Value Functions
+
+Almost all reinforcement learning algorithms involve estimating **value functions**: functions of states (or of state–action pairs) that estimate how good it is for the agent to be in a given state (or how good it is to perform a given action in a given state). The notion of “how good” here is defined in terms of future rewards that can be expected, or, to be precise, in terms of expected return.
+
+Formally, a **policy** is a mapping from states to probabilities of selecting each possible action. If the agent is following policy $\pi$ at time $t$, then $\pi(a \mid s)$ is the probability that $A_t = a$ if $S_t = s$:
+
+$$
+\pi(a \mid s) = \Pr\{A_t = a \mid S_t = s\}.
+$$
+
+Like $p$, $\pi$ is an ordinary function; the “$\mid$” in the middle of $\pi(a \mid s)$ merely reminds us that it defines a probability distribution over $a \in \mathcal{A}(s)$ for each $s \in \mathcal{S}$:
+
+$$
+\sum_{a \in \mathcal{A}(s)} \pi(a \mid s) = 1, \qquad \text{for all } s \in \mathcal{S}.
+$$
+
+For example, one possible policy for the recycling robot is:
+
+| $s$ | $\pi(\texttt{search} \mid s)$ | $\pi(\texttt{wait} \mid s)$ | $\pi(\texttt{recharge} \mid s)$ |
+|---|---|---|---|
+| $\texttt{high}$ | $0.9$ | $0.1$ | $-$ |
+| $\texttt{low}$ | $0.2$ | $0.3$ | $0.5$ |
+
+Each row is a probability distribution over the actions available in that state, so it adds up to $1$($\texttt{recharge}$ is not available in $\texttt{high}$).
+
+The **value function** of a state $s$ under a policy $\pi$, denoted $v_\pi(s)$, is the expected return when starting in $s$ and following $\pi$ thereafter. For MDPs, we can define $v_\pi$ formally by
+
+$$
+v_\pi(s) \doteq \mathbb{E}_\pi[G_t \mid S_t = s] = \mathbb{E}_\pi\left[ \sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \,\middle|\, S_t = s \right], \qquad \text{for all } s \in \mathcal{S},
+$$
+
+where $\mathbb{E}_\pi[\cdot]$ denotes the expected value of a random variable given that the agent follows policy $\pi$, and $t$ is any time step. Note that the value of the terminal state, if any, is always zero. We call the function $v_\pi$ the **state-value function for policy $\pi$**.
+
+Similarly, we define the value of taking action $a$ in state $s$ under a policy $\pi$, denoted $q_\pi(s, a)$, as the expected return starting from $s$, taking the action $a$, and thereafter following policy $\pi$:
+
+$$
+q_\pi(s, a) \doteq \mathbb{E}_\pi[G_t \mid S_t = s, A_t = a] = \mathbb{E}_\pi\left[ \sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \,\middle|\, S_t = s, A_t = a \right].
+$$
+
+We call $q_\pi$ the **action-value function for policy $\pi$**.
+
+Both are [conditional expectations](#conditional-expectation-the-average-inside-the-smaller-world): the average return, over only the moments that match the condition. $v_\pi(s)$ averages over everything that can happen from $s$, including which action is taken first, while $q_\pi(s, a)$ also fixes the first action to $a$. The two are linked by the [law of total expectation](#conditional-expectation-the-average-inside-the-smaller-world): the value of a state is the average of its action values, weighted by how likely the policy is to pick each action,
+
+$$
+v_\pi(s) = \sum_{a \in \mathcal{A}(s)} \pi(a \mid s) \, q_\pi(s, a).
+$$
+
+To derive this, start from the definition of $v_\pi(s)$ and split the outcomes by which action $A_t$ is taken first. For simplicity, treat the return $G_t$ as a discrete random variable, so that its expectation is a sum over its possible values $g$:
+
+To derive this, start from the definition of $v_\pi(s)$ and split the outcomes by which action $A_t$ is taken first. For simplicity, treat the return $G_t$ as a discrete random variable, so that its expectation is a sum over its possible values $g$:
+
+$$
+\begin{aligned}
+v_\pi(s) &= \mathbb{E}_\pi[G_t \mid S_t = s] \\
+&= \sum_g g \, \Pr\{G_t = g \mid S_t = s\} && \text{(definition of expectation)} \\
+&= \sum_g g \sum_{a} \Pr\{G_t = g, A_t = a \mid S_t = s\} && \text{(law of total probability over } a\text{)} \\
+&= \sum_g g \sum_{a} \Pr\{A_t = a \mid S_t = s\} \, \Pr\{G_t = g \mid S_t = s, A_t = a\} && \text{(multiplication rule)} \\
+&= \sum_g \sum_{a} g \, \Pr\{A_t = a \mid S_t = s\} \, \Pr\{G_t = g \mid S_t = s, A_t = a\} && \text{(move } g \text{ inside: it does not depend on } a\text{)} \\
+&= \sum_{a} \sum_g g \, \Pr\{A_t = a \mid S_t = s\} \, \Pr\{G_t = g \mid S_t = s, A_t = a\} && \text{(swap the order of the sums)} \\
+&= \sum_{a} \Pr\{A_t = a \mid S_t = s\} \sum_g g \, \Pr\{G_t = g \mid S_t = s, A_t = a\} && \text{(move } \Pr\{A_t = a \mid S_t = s\} \text{ out: it does not depend on } g\text{)} \\
+&= \sum_{a} \pi(a \mid s) \, \mathbb{E}_\pi[G_t \mid S_t = s, A_t = a] && \text{(definitions of } \pi \text{ and expectation)} \\
+&= \sum_{a} \pi(a \mid s) \, q_\pi(s, a). && \text{(definition of } q_\pi\text{)}
+\end{aligned}
+$$
+
+So **the value of a state is the policy-weighted average of its action values.** For example, if in some state $s$ the policy picks $\texttt{search}$ with probability $0.9$ and $\texttt{wait}$ with probability $0.1$, and $q_\pi(s, \texttt{search}) = 10$ while $q_\pi(s, \texttt{wait}) = 4$, then
+
+$$
+v_\pi(s) = 0.9 \cdot 10 + 0.1 \cdot 4 = 9.4.
+$$
+
+A fundamental property of value functions used throughout reinforcement learning and dynamic programming is that they satisfy recursive relationships similar to the one we established for the return, $G_t = R_{t+1} + \gamma G_{t+1}$. For any policy $\pi$ and any state $s$, the following consistency condition holds between the value of $s$ and the value of its possible successor states. We derive it in steps.
+
+**Step 1: use the recursion for the return:** By definition, and since $G_t = R_{t+1} + \gamma G_{t+1}$,
+
+$$
+v_\pi(s) \doteq \mathbb{E}_\pi[G_t \mid S_t = s] = \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} \mid S_t = s].
+$$
+
+**Step 2: split by what happens on the next step:** Starting from $S_t = s$, one step of interaction produces three random things: the action $A_t$, the next state $S_{t+1}$, and the reward $R_{t+1}$. By the [law of total expectation](#conditional-expectation-the-average-inside-the-smaller-world), we can average over every possible combination $(a, s', r)$, weighting each by its probability:
+
+$$
+v_\pi(s) = \sum_a \sum_{s'} \sum_r \underbrace{\Pr\{A_t = a, S_{t+1} = s', R_{t+1} = r \mid S_t = s\}}_{\text{how likely this combination is}} \; \underbrace{\mathbb{E}_\pi\big[ R_{t+1} + \gamma G_{t+1} \mid S_t = s, A_t = a, S_{t+1} = s', R_{t+1} = r \big]}_{\text{average return, given this combination}}.
+$$
+
+**Step 3: the probability of each combination:** By the multiplication rule, conditioned on $S_t = s$ throughout: first the agent picks $a$, then the environment responds with $(s', r)$:
+
+$$
+\Pr\{A_t = a, S_{t+1} = s', R_{t+1} = r \mid S_t = s\} = \underbrace{\Pr\{A_t = a \mid S_t = s\}}_{= \, \pi(a \mid s)} \cdot \underbrace{\Pr\{S_{t+1} = s', R_{t+1} = r \mid S_t = s, A_t = a\}}_{= \, p(s', r \mid s, a)}.
+$$
+
+The first factor is the policy, and the second is the dynamics of the MDP.
+
+**Step 4: the average return, given the combination:** By linearity, split the expectation into its two parts:
+
+$$
+\mathbb{E}_\pi\big[ R_{t+1} + \gamma G_{t+1} \mid \cdots \big] = \mathbb{E}_\pi\big[ R_{t+1} \mid \cdots \big] + \gamma \, \mathbb{E}_\pi\big[ G_{t+1} \mid \cdots \big],
+$$
+
+where "$\cdots$" stands for the full condition $S_t = s, A_t = a, S_{t+1} = s', R_{t+1} = r$.
+
+- **The reward part:** The condition includes $R_{t+1} = r$, so the reward is known and is just the number $r$: $\mathbb{E}_\pi[R_{t+1} \mid \cdots] = r$.
+- **The future part:** $G_{t+1} = R_{t+2} + \gamma R_{t+3} + \cdots$ only involves what happens from time $t + 1$ onward. By the **Markov property**, once we know the state $S_{t+1} = s'$, the earlier state, action and reward make no difference to what happens next, and the agent keeps choosing actions with $\pi$, which also looks only at the current state. So we can drop them from the condition:
+
+    $$
+    \mathbb{E}_\pi\big[ G_{t+1} \mid S_t = s, A_t = a, S_{t+1} = s', R_{t+1} = r \big] = \mathbb{E}_\pi\big[ G_{t+1} \mid S_{t+1} = s' \big] = v_\pi(s').
+    $$
+
+    The last equality is the definition of $v_\pi$, applied at time $t + 1$ instead of $t$. This is allowed because $v_\pi$ is defined the same way at every time step.
+
+Putting the two parts together, the average return given the combination is
+
+$$
+\mathbb{E}_\pi\big[ R_{t+1} + \gamma G_{t+1} \mid S_t = s, A_t = a, S_{t+1} = s', R_{t+1} = r \big] = r + \gamma \, v_\pi(s').
+$$
+
+**Step 5: substitute back in:** Putting Steps 3 and 4 into Step 2:
+
+$$
+\begin{aligned}
+v_\pi(s) &= \sum_a \sum_{s'} \sum_r \pi(a \mid s) \, p(s', r \mid s, a) \Big[ r + \gamma \, v_\pi(s') \Big] \\
+&= \sum_a \pi(a \mid s) \sum_{s'} \sum_r p(s', r \mid s, a) \Big[ r + \gamma \, v_\pi(s') \Big] && \text{(move } \pi(a \mid s) \text{ out: it does not depend on } s' \text{ or } r\text{)} \\
+&= \sum_a \pi(a \mid s) \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_\pi(s') \Big], \qquad \text{for all } s \in \mathcal{S}. && \text{(merge the two sums)}
+\end{aligned}
+$$
+
+Here it is implicit that the actions, $a$, are taken from the set $\mathcal{A}(s)$, that the next states, $s'$, are taken from the set $\mathcal{S}$ (or from $\mathcal{S}^+$ in the case of an episodic problem), and that the rewards, $r$, are taken from the set $\mathcal{R}$. Note also how in the last line we have merged the two sums, one over all the values of $s'$ and the other over all the values of $r$, into one sum over all the possible values of both. We use this kind of merged sum often to simplify formulas.
+
+Note how the final expression can be read easily as an expected value. It is really a sum over all values of the three variables, $a$, $s'$, and $r$. For each triple, we compute its probability, $\pi(a \mid s) \, p(s', r \mid s, a)$, weight the quantity in brackets by that probability, then sum over all possibilities to get an expected value.
+
+This equation is the **Bellman equation for $v_\pi$**. It expresses a relationship between the value of a state and the values of its successor states: the value of $s$ is the expected immediate reward, plus the discounted value of wherever we land next.
+
+It expresses a relationship between the value of a state and the values of its successor states. Think of looking ahead from a state to its possible successor states, as suggested by the diagram below.
+
+![img](bellman.png)
+
+**The Bellman equation averages over all the possibilities, weighting each by its probability of occurring. It states that the value of the start state must equal the (discounted) value of the expected next state, plus the reward expected along the way.**
+
+The value function $v_\pi$ is the **unique solution** to its Bellman equation.
+
+What this means is that the Bellman equation is not one equation but one equation *for each state*. If there are $|\mathcal{S}|$ states, we get $|\mathcal{S}|$ equations, and the unknowns are the $|\mathcal{S}|$ numbers $v_\pi(s)$. Each equation is linear in these unknowns, since the $v_\pi(s')$ appear only multiplied by fixed numbers $\gamma \, \pi(a \mid s) \, p(s', r \mid s, a)$. Saying that $v_\pi$ is the *unique* solution means that exactly one set of numbers satisfies all the equations at once, and that set is $v_\pi$.
+
+For example, take the recycling robot with $\alpha = 0.8$, $r_{\texttt{search}} = 2$, $\gamma = 0.9$, and the policy "always $\texttt{search}$ when $\texttt{high}$, always $\texttt{recharge}$ when $\texttt{low}$". The Bellman equation gives one equation per state:
+
+$$
+\begin{aligned}
+v_\pi(\texttt{high}) &= \underbrace{0.8 \big[ 2 + 0.9 \, v_\pi(\texttt{high}) \big]}_{\text{stays high}} + \underbrace{0.2 \big[ 2 + 0.9 \, v_\pi(\texttt{low}) \big]}_{\text{drops to low}} = 2 + 0.72 \, v_\pi(\texttt{high}) + 0.18 \, v_\pi(\texttt{low}), \\
+v_\pi(\texttt{low}) &= \underbrace{1 \cdot \big[ 0 + 0.9 \, v_\pi(\texttt{high}) \big]}_{\text{recharges to high}} = 0.9 \, v_\pi(\texttt{high}).
+\end{aligned}
+$$
+
+Two equations, two unknowns. Substituting the second into the first,
+
+$$
+v_\pi(\texttt{high}) = 2 + 0.72 \, v_\pi(\texttt{high}) + 0.162 \, v_\pi(\texttt{high}) \quad \Longrightarrow \quad v_\pi(\texttt{high}) = \frac{2}{1 - 0.882} \approx 16.95,
+$$
+
+and then $v_\pi(\texttt{low}) = 0.9 \cdot 16.95 \approx 15.25$. No other pair of numbers satisfies both equations, so these are the values of this policy.
+
+**Example: Gridworld:** The figure below (left) shows a rectangular gridworld representation of a simple finite MDP. The cells of the grid correspond to the states of the environment. At each cell, four actions are possible: $\texttt{north}$, $\texttt{south}$, $\texttt{east}$, and $\texttt{west}$, which deterministically cause the agent to move one cell in the respective direction on the grid. Actions that would take the agent off the grid leave its location unchanged, but also result in a reward of $-1$. Other actions result in a reward of $0$, except those that move the agent out of the special states $A$ and $B$. From state $A$, all four actions yield a reward of $+10$ and take the agent to $A'$. From state $B$, all actions yield a reward of $+5$ and take the agent to $B'$.
+{: #gridworld }
+
+| Move | Reward | Next state |
+|---|---|---|
+| out of $A$ (any action) | $+10$ | $A'$ |
+| out of $B$ (any action) | $+5$ | $B'$ |
+| off the edge of the grid | $-1$ | unchanged |
+| any other move | $0$ | the neighboring cell |
+
+![Gridworld: exceptional reward dynamics](gridworld_dynamics.png)
+![Gridworld: state-value function for the equiprobable random policy](gridworld_values.png)
+
+Suppose the agent selects all four actions with equal probability in all states, $\pi(a \mid s) = \frac{1}{4}$ for every $a$ and $s$. The figure above (right) shows the value function, $v_\pi$, for this policy, for the discounted reward case with $\gamma = 0.9$. This value function was computed by solving the system of linear equations given by the [Bellman equation for $v_\pi$](#policies-and-value-functions), one equation per cell. Notice the negative values near the lower edge; these are the result of the high probability of hitting the edge of the grid there under the random policy. State $A$ is the best state to be in under this policy. Note that $A$’s expected return is less than its immediate reward of $10$, because from $A$ the agent is taken to state $A'$ from which it is likely to run into the edge of the grid. State $B$, on the other hand, is valued more than its immediate reward of $5$, because from $B$ the agent is taken to $B'$ which has a positive value.
+
+## Optimal Policies and Optimal Value Functions
+
+For finite MDPs, we can precisely define an optimal policy in the following way. Value functions define a **partial ordering** over policies. A policy $\pi$ is defined to be better than or equal to a policy $\pi'$ if its expected return is greater than or equal to that of $\pi'$ for all states. In other words,
+
+$$
+\pi \geq \pi' \quad \text{if and only if} \quad v_\pi(s) \geq v_{\pi'}(s) \quad \text{for all } s \in \mathcal{S}.
+$$
+
+There is always at least one policy that is better than or equal to all other policies. This is an **optimal policy**. Although there may be more than one, we denote all the optimal policies by $\pi_*$. They share the same state-value function, called the **optimal state-value function**, denoted $v_*$, and defined as
+
+$$
+v_*(s) \doteq \max_\pi v_\pi(s),
+$$
+
+for all $s \in \mathcal{S}$.
+
+The ordering is only *partial* because two policies need not be comparable. For example, with two states, suppose
+
+| | $v(s_1)$ | $v(s_2)$ |
+|---|---|---|
+| policy $\pi_1$ | $5$ | $2$ |
+| policy $\pi_2$ | $3$ | $4$ |
+
+Then $\pi_1$ is better in $s_1$ but $\pi_2$ is better in $s_2$, so neither $\pi_1 \geq \pi_2$ nor $\pi_2 \geq \pi_1$. Neither is an optimal policy. What makes an optimal policy special is that it is at least as good as every other policy in *every* state at once.
+
+Optimal policies also share the same **optimal action-value function**, denoted $q_*$, and defined as
+
+$$
+q_*(s, a) \doteq \max_\pi q_\pi(s, a),
+$$
+
+for all $s \in \mathcal{S}$ and $a \in \mathcal{A}(s)$.
+
+In words, $q_*(s, a)$ is the best expected return achievable by any policy, if we start in state $s$ and take action $a$ first. The first action is fixed to $a$, even if $a$ is not the best choice.
+
+For the state–action pair $(s, a)$, this function gives the expected return for taking action $a$ in state $s$ and thereafter following an optimal policy. Thus, we can write $q_*$ in terms of $v_*$ as follows:
+
+$$
+q_*(s, a) = \mathbb{E}\big[ R_{t+1} + \gamma \, v_*(S_{t+1}) \mid S_t = s, A_t = a \big].
+$$
+
+To see why, we derive it in two stages: first for any policy $\pi$, then for the best one.
+
+**Stage 1: $q_\pi(s, a)$ for any policy $\pi$:** By definition, and since $G_t = R_{t+1} + \gamma G_{t+1}$,
+
+$$
+q_\pi(s, a) = \mathbb{E}_\pi[G_t \mid S_t = s, A_t = a] = \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} \mid S_t = s, A_t = a].
+$$
+
+The first action is already fixed to $a$, so on this step only the environment is random: it produces a next state $S_{t+1}$ and reward $R_{t+1}$. By the [law of total expectation](#conditional-expectation-the-average-inside-the-smaller-world), average over every possible $(s', r)$, weighting each by its probability $p(s', r \mid s, a)$:
+
+$$
+q_\pi(s, a) = \sum_{s', r} p(s', r \mid s, a) \; \mathbb{E}_\pi\big[ R_{t+1} + \gamma G_{t+1} \mid S_t = s, A_t = a, S_{t+1} = s', R_{t+1} = r \big].
+$$
+
+Inside the expectation, exactly as in the derivation of the Bellman equation for $v_\pi$:
+
+- the reward is known, $R_{t+1} = r$, so it contributes just $r$;
+- by the Markov property, once $S_{t+1} = s'$ is known, the future return $G_{t+1}$ does not depend on $s$, $a$ or $r$, so its expected value is $\mathbb{E}_\pi[G_{t+1} \mid S_{t+1} = s'] = v_\pi(s')$.
+
+So the expectation equals $r + \gamma \, v_\pi(s')$, and
+
+$$
+q_\pi(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_\pi(s') \Big].
+$$
+
+**Stage 2: take the best policy:** By definition, $q_*(s, a) = \max_\pi q_\pi(s, a)$, so
+
+$$
+q_*(s, a) = \max_\pi \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_\pi(s') \Big].
+$$
+
+*At most ($q_*(s, a)$ cannot do better):*
+
+For every policy $\pi$ and every next state $s'$, by the definition $v_*(s') = \max_{\pi'} v_{\pi'}(s')$,
+
+$$
+v_\pi(s') \leq v_*(s').
+$$
+
+In the Stage 1 formula, each $v_\pi(s')$ is multiplied by $\gamma \, p(s', r \mid s, a)$, which is never negative. Replacing each $v_\pi(s')$ with the larger $v_*(s')$ can therefore only make the sum bigger, never smaller:
+
+$$
+q_\pi(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_\pi(s') \Big] \leq \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big] \qquad \text{for every policy } \pi.
+$$
+
+$q_*(s, a)$ is the largest of the values $q_\pi(s, a)$, and every one of them is at most the right-hand side, so the largest is too:
+
+$$
+q_*(s, a) = \max_\pi q_\pi(s, a) \leq \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
+$$
+
+*At least ($q_*(s, a)$ cannot do worse):*
+
+Stage 1 works for any policy, so in particular for $\pi_*$:
+
+$$
+q_{\pi_*}(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_{\pi_*}(s') \Big].
+$$
+
+By definition, $\pi_*$ is at least as good as every other policy in every state, so $v_{\pi_*}(s') = v_*(s')$ for every next state $s'$. Substituting,
+
+$$
+q_{\pi_*}(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
+$$
+
+$q_*(s, a)$ is the largest $q_\pi(s, a)$ over all policies, so it is at least as large as $q_{\pi_*}(s, a)$ for this particular policy:
+
+$$
+q_*(s, a) \geq q_{\pi_*}(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
+$$
+
+Therefore it is exactly the maximum.
+
+Intuitively, the **Bellman optimality equation** expresses the fact that the value of a state under an optimal policy must equal the expected return for the best action from that state:
+
+$$
+\begin{aligned}
+v_*(s) &= \max_{a \in \mathcal{A}(s)} q_{\pi_*}(s, a) && \text{(1)} \\
+&= \max_a \mathbb{E}_{\pi_*}[G_t \mid S_t = s, A_t = a] && \text{(2)} \\
+&= \max_a \mathbb{E}_{\pi_*}[R_{t+1} + \gamma G_{t+1} \mid S_t = s, A_t = a] && \text{(3)} \\
+&= \max_a \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big]. && \text{(4)}
+\end{aligned}
+$$
+
+**Step (1): the value of a state is the value of its best action:** We show $v_*(s)$ is both at most and at least $\max_a q_{\pi_*}(s, a)$.
+
+- *At most:* An optimal policy is still a policy, so we can use the [earlier result](#policies-and-value-functions) that a state's value is the policy-weighted average of its action values:
+
+    $$
+    v_*(s) = v_{\pi_*}(s) = \sum_a \pi_*(a \mid s) \, q_{\pi_*}(s, a).
+    $$
+
+    The weights $\pi_*(a \mid s)$ are non-negative and add up to $1$, so this is a weighted average of the numbers $q_{\pi_*}(s, a)$. A weighted average can never be larger than the largest number being averaged, so
+
+    $$
+    v_*(s) \leq \max_a q_{\pi_*}(s, a).
+    $$
+
+- *At least:* Suppose instead that $v_*(s) < \max_a q_{\pi_*}(s, a)$, and let $a'$ be the action that achieves the maximum. Then "take $a'$ in $s$, and follow $\pi_*$ after that" would earn an expected return of $q_{\pi_*}(s, a') > v_*(s)$ from $s$: more than the best possible value of $s$. That is impossible, so
+
+    $$
+    v_*(s) \geq \max_a q_{\pi_*}(s, a).
+    $$
+
+Together, $v_*(s) = \max_a q_{\pi_*}(s, a)$.
+
+**Step (2): definition of $q_{\pi_*}$:** The action value of $\pi_*$ is the expected return after taking $a$ in $s$ and following $\pi_*$ afterwards: $q_{\pi_*}(s, a) = \mathbb{E}_{\pi_*}[G_t \mid S_t = s, A_t = a]$.
+
+**Step (3): the recursion for the return:** Substitute $G_t = R_{t+1} + \gamma G_{t+1}$ inside the expectation.
+
+**Step (4): this is Stage 1, applied to $\pi_*$:** The expectation inside the maximum is exactly what Stage 1 of the [derivation of $q_*$ in terms of $v_*$](#optimal-policies-and-optimal-value-functions) computes, for the particular policy $\pi = \pi_*$.
+
+Stage 1 gives $\sum_{s', r} p(s', r \mid s, a) \big[ r + \gamma \, v_{\pi_*}(s') \big]$. Since $\pi_*$ is optimal in every state, $v_{\pi_*}(s') = v_*(s')$ for every $s'$, which gives line (4).
+
+So the whole derivation is two results chained together:
+
+$$
+v_*(s) \overset{\text{Step (1)}}{=} \max_a q_*(s, a) \overset{\text{Stage 1}}{=} \max_a \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
+$$
+
+In words: **the best you can do from $s$ is to pick the action whose immediate reward plus discounted optimal future value is largest, on average.** Unlike the Bellman equation for $v_\pi$, there is no policy in this equation. The average over actions, $\sum_a \pi(a \mid s)$ in the Bellman equation, has been replaced by a maximum, $\max_a$.
+
+!!! note "What does $\max_a$ mean, precisely?"
+    $\max_a$ means: **for each action $a$ available in state $s$, compute the expression that follows; the result is the largest of those numbers.** Here the expression is
+
+    $$
+    f(a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big],
+    $$
+
+    and
+
+    $$
+    \max_{a \in \mathcal{A}(s)} f(a) = \text{the largest value of } f(a) \text{ over all actions } a \in \mathcal{A}(s).
+    $$
+
+    So $\max_a$ works in three steps:
+
+    1. **Fix the state $s$.** Only the actions allowed in $s$, those in $\mathcal{A}(s)$, are considered.
+    2. **For each action $a$, compute $f(a)$.** This is a full average over the next states and rewards $(s', r)$. The sum over $s'$ and $r$ is an *average*, not a maximum, because the environment chooses those, not the agent.
+    3. **Take the largest result.** That number is $v_*(s)$.
+
+    **$\max$ versus $\arg\max$:** $\max_a f(a)$ is a **number**: the best value. $\arg\max_a f(a)$ is an **action**: the one that achieves that value. The Bellman optimality equation uses $\max$, because $v_*(s)$ is a value. The action that achieves it, $\arg\max_a$, is what an optimal policy picks.
+
+    **Example:** Take the recycling robot with $\alpha = 0.8$, $\beta = 0.6$, $r_{\texttt{search}} = 2$, $r_{\texttt{wait}} = 1$ and $\gamma = 0.9$. Solving the Bellman optimality equations for these numbers gives $v_*(\texttt{high}) \approx 16.95$ and $v_*(\texttt{low}) \approx 15.25$. The actions available in $\texttt{high}$ are $\texttt{search}$ and $\texttt{wait}$:
+
+    $$
+    \begin{aligned}
+    f(\texttt{search}) &= 0.8 \big[ 2 + 0.9 \cdot 16.95 \big] + 0.2 \big[ 2 + 0.9 \cdot 15.25 \big] \approx 16.95, \\
+    f(\texttt{wait}) &= 1 \cdot \big[ 1 + 0.9 \cdot 16.95 \big] \approx 16.25.
+    \end{aligned}
+    $$
+
+    Then
+
+    $$
+    \max_a f(a) = \max\{16.95, \; 16.25\} = 16.95 = v_*(\texttt{high}), \qquad \arg\max_a f(a) = \texttt{search}.
+    $$
+
+    The maximum comes out equal to $v_*(\texttt{high})$, as the Bellman optimality equation requires.
+
+    **Comparison with the Bellman equation for $v_\pi$:** There, the actions were *averaged* with the policy's probabilities, $v_\pi(s) = \sum_a \pi(a \mid s) \, f_\pi(a)$. In the optimality equation they are *maximized* instead: rather than averaging over actions with some policy's probabilities, we simply take the best one. You can think of the maximum as a weighted average in which all the weight, probability $1$, goes on the best action and $0$ on every other action. The average then equals that best action's value.
+
+    The Bellman optimality equation for $v_*$ can be written in two equivalent forms, as an expectation or as an explicit sum:
+
+$$
+v_*(s) = \max_a \mathbb{E}\big[ R_{t+1} + \gamma \, v_*(S_{t+1}) \mid S_t = s, A_t = a \big] = \max_a \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
+$$
+
+The **Bellman optimality equation for $q_*$** is
+
+$$
+\begin{aligned}
+q_*(s, a) &= \mathbb{E}\Big[ R_{t+1} + \gamma \max_{a'} q_*(S_{t+1}, a') \,\Big|\, S_t = s, A_t = a \Big] \\
+&= \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \max_{a'} q_*(s', a') \Big].
+\end{aligned}
+$$
+
+It follows by combining two results we already have:
+
+1. the [value of an action in terms of the next state's value](#optimal-policies-and-optimal-value-functions):
+
+    $$
+    q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big];
+    $$
+
+2. Step (1) of the Bellman optimality equation for $v_*$, applied to the next state $s'$ instead of $s$:
+
+    $$
+    v_*(s') = \max_{a'} q_*(s', a').
+    $$
+
+Substituting the second into the first gives the equation for $q_*$. We write $a'$ for the action in the next state, to keep it separate from the first action $a$, which is fixed.
+
+The two optimality equations differ in where the maximum sits:
+
+- In the equation for $v_*$, the maximum is over the **first** action, and the next state is valued by $v_*$.
+- In the equation for $q_*$, the first action $a$ is already given, and the maximum is over the **next** action $a'$, inside the average over $(s', r)$. We first see where the environment takes us, and only then pick the best action from there.
+
+Once we know $v_*$, finding an optimal policy is easy. In each state $s$, look one step ahead and pick an action that achieves the maximum in the Bellman optimality equation:
+
+$$
+\pi_*(s) \in \arg\max_a \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
+$$
+
+If several actions tie for the maximum, any policy that only ever picks among them is optimal.
+
+Such a policy is called **greedy** with respect to $v_*$: it chooses actions by looking only one step ahead, at the immediate reward plus the value of the next state. Greedy choices are usually short-sighted, since a move that looks best now can rule out better options later. With $v_*$ this is not a problem, because $v_*(s')$ already includes all the reward that optimal play can collect from $s'$ onward. So **a one-step greedy search with $v_*$ gives long-term optimal behavior.**
+
+With $q_*$, choosing optimal actions is even easier. The agent does not need to look ahead at all: in each state $s$, it just picks an action with the largest $q_*(s, a)$:
+
+$$
+\pi_*(s) \in \arg\max_a q_*(s, a).
+$$
+
+This works because $q_*(s, a)$ already *is* the result of the one-step search:
+
+$$
+q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
+$$
+
+So $q_*$ stores the answer to every one-step search in advance. The trade-off:
+
+| Using | Need to know the dynamics $p$? | Must store |
+|---|---|---|
+| $v_*$ | yes, to look one step ahead | one value per state |
+| $q_*$ | **no** | one value per state–action pair |
+
+With $q_*$, the agent can act optimally without knowing anything about the environment's dynamics.
+
+!!! note "What does it mean that $q_*$ stores the one-step search in advance?"
+    Both $v_*$ and $q_*$ take a lot of computation to obtain in the first place. The difference is what the agent has to do **each time it chooses an action**, once it has them.
+
+    - **With $v_*$**, at every decision the agent must compute, for each action $a$,
+
+        $$
+        \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big],
+        $$
+
+        and then pick the largest. That means knowing the dynamics $p$ and adding up over every possible next state and reward, again at each decision.
+
+    - **With $q_*$**, those sums have already been done, and each one is stored as a single number $q_*(s, a)$. At decision time the agent just reads off the numbers for the actions in $s$ and picks the largest. There's no $p$ and no sum over outcomes.
+
+### Case Study: Optimal Policy for the Recycling Robot
+
+We now solve the recycling robot completely, from the dynamics to the optimal policy.
+
+**Setup:** The states are $\texttt{high}$ and $\texttt{low}$, with $\mathcal{A}(\texttt{high}) = \{\texttt{search}, \texttt{wait}\}$ and $\mathcal{A}(\texttt{low}) = \{\texttt{search}, \texttt{wait}, \texttt{recharge}\}$. We use
+
+- $\alpha = 0.8$: the probability that the battery stays high after searching from $\texttt{high}$,
+- $\beta = 0.6$: the probability that the battery survives (stays low) when searching from $\texttt{low}$,
+- $r_{\texttt{search}} = 2$ and $r_{\texttt{wait}} = 1$: the expected number of cans while searching and while waiting,
+- a reward of $-3$ when the robot runs flat and must be rescued, and $0$ for recharging,
+- discount rate $\gamma = 0.9$.
+
+The dynamics are then:
+
+| State | Action | Next state | Probability | Reward |
+|---|---|---|---|---|
+| $\texttt{high}$ | $\texttt{search}$ | $\texttt{high}$ | $0.8$ | $2$ |
+| $\texttt{high}$ | $\texttt{search}$ | $\texttt{low}$ | $0.2$ | $2$ |
+| $\texttt{high}$ | $\texttt{wait}$ | $\texttt{high}$ | $1$ | $1$ |
+| $\texttt{low}$ | $\texttt{search}$ | $\texttt{low}$ | $0.6$ | $2$ |
+| $\texttt{low}$ | $\texttt{search}$ | $\texttt{high}$ (rescued) | $0.4$ | $-3$ |
+| $\texttt{low}$ | $\texttt{wait}$ | $\texttt{low}$ | $1$ | $1$ |
+| $\texttt{low}$ | $\texttt{recharge}$ | $\texttt{high}$ | $1$ | $0$ |
+
+**Step 1: the value of each action:** Write $h = v_*(\texttt{high})$ and $l = v_*(\texttt{low})$ for the two unknown optimal values. Using $q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \big[ r + \gamma \, v_*(s') \big]$, each action's value is the average, over its outcomes, of the reward plus $0.9$ times the value of where it lands:
+
+$$
+\begin{aligned}
+q_*(\texttt{high}, \texttt{search}) &= 0.8\,(2 + 0.9h) + 0.2\,(2 + 0.9l) = 2 + 0.72h + 0.18l, \\
+q_*(\texttt{high}, \texttt{wait}) &= 1\,(1 + 0.9h) = 1 + 0.9h, \\
+q_*(\texttt{low}, \texttt{search}) &= 0.4\,(-3 + 0.9h) + 0.6\,(2 + 0.9l) = 0.36h + 0.54l, \\
+q_*(\texttt{low}, \texttt{wait}) &= 1\,(1 + 0.9l) = 1 + 0.9l, \\
+q_*(\texttt{low}, \texttt{recharge}) &= 1\,(0 + 0.9h) = 0.9h.
+\end{aligned}
+$$
+
+**Step 2: the Bellman optimality equations:** The value of each state is the value of its best action, $v_*(s) = \max_a q_*(s, a)$:
+
+$$
+\begin{aligned}
+h &= \max\{\, 2 + 0.72h + 0.18l, \;\; 1 + 0.9h \,\}, \\
+l &= \max\{\, 0.36h + 0.54l, \;\; 1 + 0.9l, \;\; 0.9h \,\}.
+\end{aligned}
+$$
+
+Because of the $\max$, these are not ordinary linear equations, so we cannot solve them directly.
+
+**Step 3: guess a policy and compute its values:** Searching looks good when the battery is high, and recharging looks safe when it is low, so we guess the policy "$\texttt{search}$ in $\texttt{high}$, $\texttt{recharge}$ in $\texttt{low}$". If these really are the best actions, each $\max$ picks that action's term, and the equations become linear:
+
+$$
+h = 2 + 0.72h + 0.18l, \qquad l = 0.9h.
+$$
+
+Substituting $l = 0.9h$ into the first equation,
+
+$$
+h = 2 + 0.72h + 0.162h \quad \Longrightarrow \quad 0.118h = 2 \quad \Longrightarrow \quad h \approx 16.95,
+$$
+
+and then $l = 0.9 \cdot 16.95 \approx 15.25$.
+
+**Step 4: check the guess:** Plug $h \approx 16.95$ and $l \approx 15.25$ into every action value from Step 1:
+
+| State | Action | $q_*(s, a)$ |
+|---|---|---|
+| $\texttt{high}$ | $\texttt{search}$ | $2 + 0.72(16.95) + 0.18(15.25) \approx \mathbf{16.95}$ |
+| $\texttt{high}$ | $\texttt{wait}$ | $1 + 0.9(16.95) \approx 16.25$ |
+| $\texttt{low}$ | $\texttt{search}$ | $0.36(16.95) + 0.54(15.25) \approx 14.34$ |
+| $\texttt{low}$ | $\texttt{wait}$ | $1 + 0.9(15.25) \approx 14.73$ |
+| $\texttt{low}$ | $\texttt{recharge}$ | $0.9(16.95) \approx \mathbf{15.25}$ |
+
+In $\texttt{high}$, the best action is $\texttt{search}$, and its value equals $h$. In $\texttt{low}$, the best is $\texttt{recharge}$, and its value equals $l$. So both $\max$ equations hold. Since the Bellman optimality equations have only one solution, we have found it.
+
+**Result:**
+
+- The optimal values are $v_*(\texttt{high}) \approx 16.95$ and $v_*(\texttt{low}) \approx 15.25$.
+- The optimal action values are the five numbers in the table above.
+- The optimal policy is: **$\texttt{search}$ when the battery is high, $\texttt{recharge}$ when it is low.** It can be read straight off $q_*$, by picking the action with the largest value in each state.
+
+Note that in $\texttt{low}$, $\texttt{recharge}$ earns reward $0$ and $\texttt{wait}$ earns $1$, yet $\texttt{recharge}$ is better ($15.25 > 14.73$), because of where it leads. The maximum in $v_*(s) = \max_a q_*(s, a)$ accounts for the future, not just the immediate reward.
+
+**Sanity check: all six policies:** There are $2 \times 3 = 6$ deterministic policies. Solving the ordinary Bellman equation for each one gives:
+
+| Policy ($\texttt{high}$, $\texttt{low}$) | $v_\pi(\texttt{high})$ | $v_\pi(\texttt{low})$ |
+|---|---|---|
+| $\texttt{search}$, $\texttt{search}$ | $14.38$ | $11.25$ |
+| $\texttt{search}$, $\texttt{wait}$ | $13.57$ | $10.00$ |
+| $\texttt{search}$, $\texttt{recharge}$ | $\mathbf{16.95}$ | $\mathbf{15.25}$ |
+| $\texttt{wait}$, $\texttt{search}$ | $10.00$ | $7.83$ |
+| $\texttt{wait}$, $\texttt{wait}$ | $10.00$ | $10.00$ |
+| $\texttt{wait}$, $\texttt{recharge}$ | $10.00$ | $9.00$ |
+
+"$\texttt{search}$, $\texttt{recharge}$" is best in **both** states at once, as an optimal policy must be, and its values are exactly $v_*$.
+
+Explicitly solving the Bellman optimality equation provides one route to finding an optimal policy, and thus to solving the reinforcement learning problem. However, this solution is rarely directly useful. It is akin to an exhaustive search, looking ahead at all possibilities, computing their probabilities of occurrence and their desirabilities in terms of expected rewards. This solution relies on at least three assumptions that are rarely true in practice:
+
+1. the dynamics of the environment, $p(s', r \mid s, a)$, are accurately known;
+2. computational resources are sufficient to complete the calculation; and
+3. the states have the Markov property.
+
+For the kinds of tasks in which we are interested, one is generally not able to implement this solution exactly because various combinations of these assumptions are violated. For example, although the first and third assumptions present no problems for the game of backgammon, the second is a major impediment. Because the game has about $10^{20}$ states, it would take thousands of years on today’s fastest computers to solve the Bellman equation for $v_*$, and the same is true for finding $q_*$. **In reinforcement learning one typically has to settle for approximate solutions.**
+
+The solved recycling robot example worked only because it satisfies all three assumptions:
+
+| Assumption | Recycling robot | Backgammon |
+|---|---|---|
+| Dynamics known | yes: we wrote down every $p(s', r \mid s, a)$ | yes: the rules and dice are known |
+| Enough computation | yes: $2$ equations in $2$ unknowns | **no**: about $10^{20}$ equations |
+| Markov states | yes, by assumption | yes: the board position is all that matters |
+
+Because a reinforcement learning agent learns **online** (while it is actually interacting with the environment), it naturally spends most of its learning effort on the states it visits often. It gets good at the situations that come up regularly, and does not waste effort on situations that rarely or never happen. Many states may matter very little in practice, simply because the agent almost never reaches them. This focus on the states that actually come up is one of the key things that sets reinforcement learning apart from other ways of approximately solving MDPs.
+
+In reinforcement learning we are very much concerned with cases in which optimal solutions cannot be found but must be approximated in some way.

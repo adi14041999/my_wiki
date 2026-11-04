@@ -2480,6 +2480,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#policies-and-value-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Policies and Value Functions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optimal-policies-and-optimal-value-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optimal Policies and Optimal Value Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Optimal Policies and Optimal Value Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#case-study-optimal-policy-for-the-recycling-robot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case Study: Optimal Policy for the Recycling Robot
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5865,6 +5904,641 @@ G_t \doteq \sum_{k=t+1}^{T} \gamma^{k-t-1} R_k,
 <li><strong>Episodic task</strong> (<span class="arithmatex">\(T\)</span> finite, <span class="arithmatex">\(\gamma = 1\)</span>): <span class="arithmatex">\(G_t = R_{t+1} + R_{t+2} + \cdots + R_T\)</span>, the plain sum of rewards until the episode ends.</li>
 <li><strong>Continuing task</strong> (<span class="arithmatex">\(T = \infty\)</span>, <span class="arithmatex">\(\gamma &lt; 1\)</span>): <span class="arithmatex">\(G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots\)</span>, the discounted return. Substituting <span class="arithmatex">\(k = t + 1 + j\)</span> turns <span class="arithmatex">\(\gamma^{k-t-1} R_k\)</span> into <span class="arithmatex">\(\gamma^{j} R_{t+j+1}\)</span>, which is the earlier form <span class="arithmatex">\(\sum_{j=0}^{\infty} \gamma^j R_{t+j+1}\)</span>.</li>
 </ul>
+<h2 id="policies-and-value-functions">Policies and Value Functions</h2>
+<p>Almost all reinforcement learning algorithms involve estimating <strong>value functions</strong>: functions of states (or of state–action pairs) that estimate how good it is for the agent to be in a given state (or how good it is to perform a given action in a given state). The notion of “how good” here is defined in terms of future rewards that can be expected, or, to be precise, in terms of expected return.</p>
+<p>Formally, a <strong>policy</strong> is a mapping from states to probabilities of selecting each possible action. If the agent is following policy <span class="arithmatex">\(\pi\)</span> at time <span class="arithmatex">\(t\)</span>, then <span class="arithmatex">\(\pi(a \mid s)\)</span> is the probability that <span class="arithmatex">\(A_t = a\)</span> if <span class="arithmatex">\(S_t = s\)</span>:</p>
+<div class="arithmatex">\[
+\pi(a \mid s) = \Pr\{A_t = a \mid S_t = s\}.
+\]</div>
+<p>Like <span class="arithmatex">\(p\)</span>, <span class="arithmatex">\(\pi\)</span> is an ordinary function; the “<span class="arithmatex">\(\mid\)</span>” in the middle of <span class="arithmatex">\(\pi(a \mid s)\)</span> merely reminds us that it defines a probability distribution over <span class="arithmatex">\(a \in \mathcal{A}(s)\)</span> for each <span class="arithmatex">\(s \in \mathcal{S}\)</span>:</p>
+<div class="arithmatex">\[
+\sum_{a \in \mathcal{A}(s)} \pi(a \mid s) = 1, \qquad \text{for all } s \in \mathcal{S}.
+\]</div>
+<p>For example, one possible policy for the recycling robot is:</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(s\)</span></th>
+<th><span class="arithmatex">\(\pi(\texttt{search} \mid s)\)</span></th>
+<th><span class="arithmatex">\(\pi(\texttt{wait} \mid s)\)</span></th>
+<th><span class="arithmatex">\(\pi(\texttt{recharge} \mid s)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(0.9\)</span></td>
+<td><span class="arithmatex">\(0.1\)</span></td>
+<td><span class="arithmatex">\(-\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(0.2\)</span></td>
+<td><span class="arithmatex">\(0.3\)</span></td>
+<td><span class="arithmatex">\(0.5\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Each row is a probability distribution over the actions available in that state, so it adds up to <span class="arithmatex">\(1\)</span>(<span class="arithmatex">\(\texttt{recharge}\)</span> is not available in <span class="arithmatex">\(\texttt{high}\)</span>).</p>
+<p>The <strong>value function</strong> of a state <span class="arithmatex">\(s\)</span> under a policy <span class="arithmatex">\(\pi\)</span>, denoted <span class="arithmatex">\(v_\pi(s)\)</span>, is the expected return when starting in <span class="arithmatex">\(s\)</span> and following <span class="arithmatex">\(\pi\)</span> thereafter. For MDPs, we can define <span class="arithmatex">\(v_\pi\)</span> formally by</p>
+<div class="arithmatex">\[
+v_\pi(s) \doteq \mathbb{E}_\pi[G_t \mid S_t = s] = \mathbb{E}_\pi\left[ \sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \,\middle|\, S_t = s \right], \qquad \text{for all } s \in \mathcal{S},
+\]</div>
+<p>where <span class="arithmatex">\(\mathbb{E}_\pi[\cdot]\)</span> denotes the expected value of a random variable given that the agent follows policy <span class="arithmatex">\(\pi\)</span>, and <span class="arithmatex">\(t\)</span> is any time step. Note that the value of the terminal state, if any, is always zero. We call the function <span class="arithmatex">\(v_\pi\)</span> the <strong>state-value function for policy <span class="arithmatex">\(\pi\)</span></strong>.</p>
+<p>Similarly, we define the value of taking action <span class="arithmatex">\(a\)</span> in state <span class="arithmatex">\(s\)</span> under a policy <span class="arithmatex">\(\pi\)</span>, denoted <span class="arithmatex">\(q_\pi(s, a)\)</span>, as the expected return starting from <span class="arithmatex">\(s\)</span>, taking the action <span class="arithmatex">\(a\)</span>, and thereafter following policy <span class="arithmatex">\(\pi\)</span>:</p>
+<div class="arithmatex">\[
+q_\pi(s, a) \doteq \mathbb{E}_\pi[G_t \mid S_t = s, A_t = a] = \mathbb{E}_\pi\left[ \sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \,\middle|\, S_t = s, A_t = a \right].
+\]</div>
+<p>We call <span class="arithmatex">\(q_\pi\)</span> the <strong>action-value function for policy <span class="arithmatex">\(\pi\)</span></strong>.</p>
+<p>Both are <a href="#conditional-expectation-the-average-inside-the-smaller-world">conditional expectations</a>: the average return, over only the moments that match the condition. <span class="arithmatex">\(v_\pi(s)\)</span> averages over everything that can happen from <span class="arithmatex">\(s\)</span>, including which action is taken first, while <span class="arithmatex">\(q_\pi(s, a)\)</span> also fixes the first action to <span class="arithmatex">\(a\)</span>. The two are linked by the <a href="#conditional-expectation-the-average-inside-the-smaller-world">law of total expectation</a>: the value of a state is the average of its action values, weighted by how likely the policy is to pick each action,</p>
+<div class="arithmatex">\[
+v_\pi(s) = \sum_{a \in \mathcal{A}(s)} \pi(a \mid s) \, q_\pi(s, a).
+\]</div>
+<p>To derive this, start from the definition of <span class="arithmatex">\(v_\pi(s)\)</span> and split the outcomes by which action <span class="arithmatex">\(A_t\)</span> is taken first. For simplicity, treat the return <span class="arithmatex">\(G_t\)</span> as a discrete random variable, so that its expectation is a sum over its possible values <span class="arithmatex">\(g\)</span>:</p>
+<p>To derive this, start from the definition of <span class="arithmatex">\(v_\pi(s)\)</span> and split the outcomes by which action <span class="arithmatex">\(A_t\)</span> is taken first. For simplicity, treat the return <span class="arithmatex">\(G_t\)</span> as a discrete random variable, so that its expectation is a sum over its possible values <span class="arithmatex">\(g\)</span>:</p>
+<div class="arithmatex">\[
+\begin{aligned}
+v_\pi(s) &amp;= \mathbb{E}_\pi[G_t \mid S_t = s] \\
+&amp;= \sum_g g \, \Pr\{G_t = g \mid S_t = s\} &amp;&amp; \text{(definition of expectation)} \\
+&amp;= \sum_g g \sum_{a} \Pr\{G_t = g, A_t = a \mid S_t = s\} &amp;&amp; \text{(law of total probability over } a\text{)} \\
+&amp;= \sum_g g \sum_{a} \Pr\{A_t = a \mid S_t = s\} \, \Pr\{G_t = g \mid S_t = s, A_t = a\} &amp;&amp; \text{(multiplication rule)} \\
+&amp;= \sum_g \sum_{a} g \, \Pr\{A_t = a \mid S_t = s\} \, \Pr\{G_t = g \mid S_t = s, A_t = a\} &amp;&amp; \text{(move } g \text{ inside: it does not depend on } a\text{)} \\
+&amp;= \sum_{a} \sum_g g \, \Pr\{A_t = a \mid S_t = s\} \, \Pr\{G_t = g \mid S_t = s, A_t = a\} &amp;&amp; \text{(swap the order of the sums)} \\
+&amp;= \sum_{a} \Pr\{A_t = a \mid S_t = s\} \sum_g g \, \Pr\{G_t = g \mid S_t = s, A_t = a\} &amp;&amp; \text{(move } \Pr\{A_t = a \mid S_t = s\} \text{ out: it does not depend on } g\text{)} \\
+&amp;= \sum_{a} \pi(a \mid s) \, \mathbb{E}_\pi[G_t \mid S_t = s, A_t = a] &amp;&amp; \text{(definitions of } \pi \text{ and expectation)} \\
+&amp;= \sum_{a} \pi(a \mid s) \, q_\pi(s, a). &amp;&amp; \text{(definition of } q_\pi\text{)}
+\end{aligned}
+\]</div>
+<p>So <strong>the value of a state is the policy-weighted average of its action values.</strong> For example, if in some state <span class="arithmatex">\(s\)</span> the policy picks <span class="arithmatex">\(\texttt{search}\)</span> with probability <span class="arithmatex">\(0.9\)</span> and <span class="arithmatex">\(\texttt{wait}\)</span> with probability <span class="arithmatex">\(0.1\)</span>, and <span class="arithmatex">\(q_\pi(s, \texttt{search}) = 10\)</span> while <span class="arithmatex">\(q_\pi(s, \texttt{wait}) = 4\)</span>, then</p>
+<div class="arithmatex">\[
+v_\pi(s) = 0.9 \cdot 10 + 0.1 \cdot 4 = 9.4.
+\]</div>
+<p>A fundamental property of value functions used throughout reinforcement learning and dynamic programming is that they satisfy recursive relationships similar to the one we established for the return, <span class="arithmatex">\(G_t = R_{t+1} + \gamma G_{t+1}\)</span>. For any policy <span class="arithmatex">\(\pi\)</span> and any state <span class="arithmatex">\(s\)</span>, the following consistency condition holds between the value of <span class="arithmatex">\(s\)</span> and the value of its possible successor states. We derive it in steps.</p>
+<p><strong>Step 1: use the recursion for the return:</strong> By definition, and since <span class="arithmatex">\(G_t = R_{t+1} + \gamma G_{t+1}\)</span>,</p>
+<div class="arithmatex">\[
+v_\pi(s) \doteq \mathbb{E}_\pi[G_t \mid S_t = s] = \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} \mid S_t = s].
+\]</div>
+<p><strong>Step 2: split by what happens on the next step:</strong> Starting from <span class="arithmatex">\(S_t = s\)</span>, one step of interaction produces three random things: the action <span class="arithmatex">\(A_t\)</span>, the next state <span class="arithmatex">\(S_{t+1}\)</span>, and the reward <span class="arithmatex">\(R_{t+1}\)</span>. By the <a href="#conditional-expectation-the-average-inside-the-smaller-world">law of total expectation</a>, we can average over every possible combination <span class="arithmatex">\((a, s', r)\)</span>, weighting each by its probability:</p>
+<div class="arithmatex">\[
+v_\pi(s) = \sum_a \sum_{s'} \sum_r \underbrace{\Pr\{A_t = a, S_{t+1} = s', R_{t+1} = r \mid S_t = s\}}_{\text{how likely this combination is}} \; \underbrace{\mathbb{E}_\pi\big[ R_{t+1} + \gamma G_{t+1} \mid S_t = s, A_t = a, S_{t+1} = s', R_{t+1} = r \big]}_{\text{average return, given this combination}}.
+\]</div>
+<p><strong>Step 3: the probability of each combination:</strong> By the multiplication rule, conditioned on <span class="arithmatex">\(S_t = s\)</span> throughout: first the agent picks <span class="arithmatex">\(a\)</span>, then the environment responds with <span class="arithmatex">\((s', r)\)</span>:</p>
+<div class="arithmatex">\[
+\Pr\{A_t = a, S_{t+1} = s', R_{t+1} = r \mid S_t = s\} = \underbrace{\Pr\{A_t = a \mid S_t = s\}}_{= \, \pi(a \mid s)} \cdot \underbrace{\Pr\{S_{t+1} = s', R_{t+1} = r \mid S_t = s, A_t = a\}}_{= \, p(s', r \mid s, a)}.
+\]</div>
+<p>The first factor is the policy, and the second is the dynamics of the MDP.</p>
+<p><strong>Step 4: the average return, given the combination:</strong> By linearity, split the expectation into its two parts:</p>
+<div class="arithmatex">\[
+\mathbb{E}_\pi\big[ R_{t+1} + \gamma G_{t+1} \mid \cdots \big] = \mathbb{E}_\pi\big[ R_{t+1} \mid \cdots \big] + \gamma \, \mathbb{E}_\pi\big[ G_{t+1} \mid \cdots \big],
+\]</div>
+<p>where "<span class="arithmatex">\(\cdots\)</span>" stands for the full condition <span class="arithmatex">\(S_t = s, A_t = a, S_{t+1} = s', R_{t+1} = r\)</span>.</p>
+<ul>
+<li><strong>The reward part:</strong> The condition includes <span class="arithmatex">\(R_{t+1} = r\)</span>, so the reward is known and is just the number <span class="arithmatex">\(r\)</span>: <span class="arithmatex">\(\mathbb{E}_\pi[R_{t+1} \mid \cdots] = r\)</span>.</li>
+<li>
+<p><strong>The future part:</strong> <span class="arithmatex">\(G_{t+1} = R_{t+2} + \gamma R_{t+3} + \cdots\)</span> only involves what happens from time <span class="arithmatex">\(t + 1\)</span> onward. By the <strong>Markov property</strong>, once we know the state <span class="arithmatex">\(S_{t+1} = s'\)</span>, the earlier state, action and reward make no difference to what happens next, and the agent keeps choosing actions with <span class="arithmatex">\(\pi\)</span>, which also looks only at the current state. So we can drop them from the condition:</p>
+<div class="arithmatex">\[
+\mathbb{E}_\pi\big[ G_{t+1} \mid S_t = s, A_t = a, S_{t+1} = s', R_{t+1} = r \big] = \mathbb{E}_\pi\big[ G_{t+1} \mid S_{t+1} = s' \big] = v_\pi(s').
+\]</div>
+<p>The last equality is the definition of <span class="arithmatex">\(v_\pi\)</span>, applied at time <span class="arithmatex">\(t + 1\)</span> instead of <span class="arithmatex">\(t\)</span>. This is allowed because <span class="arithmatex">\(v_\pi\)</span> is defined the same way at every time step.</p>
+</li>
+</ul>
+<p>Putting the two parts together, the average return given the combination is</p>
+<div class="arithmatex">\[
+\mathbb{E}_\pi\big[ R_{t+1} + \gamma G_{t+1} \mid S_t = s, A_t = a, S_{t+1} = s', R_{t+1} = r \big] = r + \gamma \, v_\pi(s').
+\]</div>
+<p><strong>Step 5: substitute back in:</strong> Putting Steps 3 and 4 into Step 2:</p>
+<div class="arithmatex">\[
+\begin{aligned}
+v_\pi(s) &amp;= \sum_a \sum_{s'} \sum_r \pi(a \mid s) \, p(s', r \mid s, a) \Big[ r + \gamma \, v_\pi(s') \Big] \\
+&amp;= \sum_a \pi(a \mid s) \sum_{s'} \sum_r p(s', r \mid s, a) \Big[ r + \gamma \, v_\pi(s') \Big] &amp;&amp; \text{(move } \pi(a \mid s) \text{ out: it does not depend on } s' \text{ or } r\text{)} \\
+&amp;= \sum_a \pi(a \mid s) \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_\pi(s') \Big], \qquad \text{for all } s \in \mathcal{S}. &amp;&amp; \text{(merge the two sums)}
+\end{aligned}
+\]</div>
+<p>Here it is implicit that the actions, <span class="arithmatex">\(a\)</span>, are taken from the set <span class="arithmatex">\(\mathcal{A}(s)\)</span>, that the next states, <span class="arithmatex">\(s'\)</span>, are taken from the set <span class="arithmatex">\(\mathcal{S}\)</span> (or from <span class="arithmatex">\(\mathcal{S}^+\)</span> in the case of an episodic problem), and that the rewards, <span class="arithmatex">\(r\)</span>, are taken from the set <span class="arithmatex">\(\mathcal{R}\)</span>. Note also how in the last line we have merged the two sums, one over all the values of <span class="arithmatex">\(s'\)</span> and the other over all the values of <span class="arithmatex">\(r\)</span>, into one sum over all the possible values of both. We use this kind of merged sum often to simplify formulas.</p>
+<p>Note how the final expression can be read easily as an expected value. It is really a sum over all values of the three variables, <span class="arithmatex">\(a\)</span>, <span class="arithmatex">\(s'\)</span>, and <span class="arithmatex">\(r\)</span>. For each triple, we compute its probability, <span class="arithmatex">\(\pi(a \mid s) \, p(s', r \mid s, a)\)</span>, weight the quantity in brackets by that probability, then sum over all possibilities to get an expected value.</p>
+<p>This equation is the <strong>Bellman equation for <span class="arithmatex">\(v_\pi\)</span></strong>. It expresses a relationship between the value of a state and the values of its successor states: the value of <span class="arithmatex">\(s\)</span> is the expected immediate reward, plus the discounted value of wherever we land next.</p>
+<p>It expresses a relationship between the value of a state and the values of its successor states. Think of looking ahead from a state to its possible successor states, as suggested by the diagram below.</p>
+<p><img alt="img" src="../bellman.png" /></p>
+<p><strong>The Bellman equation averages over all the possibilities, weighting each by its probability of occurring. It states that the value of the start state must equal the (discounted) value of the expected next state, plus the reward expected along the way.</strong></p>
+<p>The value function <span class="arithmatex">\(v_\pi\)</span> is the <strong>unique solution</strong> to its Bellman equation.</p>
+<p>What this means is that the Bellman equation is not one equation but one equation <em>for each state</em>. If there are <span class="arithmatex">\(|\mathcal{S}|\)</span> states, we get <span class="arithmatex">\(|\mathcal{S}|\)</span> equations, and the unknowns are the <span class="arithmatex">\(|\mathcal{S}|\)</span> numbers <span class="arithmatex">\(v_\pi(s)\)</span>. Each equation is linear in these unknowns, since the <span class="arithmatex">\(v_\pi(s')\)</span> appear only multiplied by fixed numbers <span class="arithmatex">\(\gamma \, \pi(a \mid s) \, p(s', r \mid s, a)\)</span>. Saying that <span class="arithmatex">\(v_\pi\)</span> is the <em>unique</em> solution means that exactly one set of numbers satisfies all the equations at once, and that set is <span class="arithmatex">\(v_\pi\)</span>.</p>
+<p>For example, take the recycling robot with <span class="arithmatex">\(\alpha = 0.8\)</span>, <span class="arithmatex">\(r_{\texttt{search}} = 2\)</span>, <span class="arithmatex">\(\gamma = 0.9\)</span>, and the policy "always <span class="arithmatex">\(\texttt{search}\)</span> when <span class="arithmatex">\(\texttt{high}\)</span>, always <span class="arithmatex">\(\texttt{recharge}\)</span> when <span class="arithmatex">\(\texttt{low}\)</span>". The Bellman equation gives one equation per state:</p>
+<div class="arithmatex">\[
+\begin{aligned}
+v_\pi(\texttt{high}) &amp;= \underbrace{0.8 \big[ 2 + 0.9 \, v_\pi(\texttt{high}) \big]}_{\text{stays high}} + \underbrace{0.2 \big[ 2 + 0.9 \, v_\pi(\texttt{low}) \big]}_{\text{drops to low}} = 2 + 0.72 \, v_\pi(\texttt{high}) + 0.18 \, v_\pi(\texttt{low}), \\
+v_\pi(\texttt{low}) &amp;= \underbrace{1 \cdot \big[ 0 + 0.9 \, v_\pi(\texttt{high}) \big]}_{\text{recharges to high}} = 0.9 \, v_\pi(\texttt{high}).
+\end{aligned}
+\]</div>
+<p>Two equations, two unknowns. Substituting the second into the first,</p>
+<div class="arithmatex">\[
+v_\pi(\texttt{high}) = 2 + 0.72 \, v_\pi(\texttt{high}) + 0.162 \, v_\pi(\texttt{high}) \quad \Longrightarrow \quad v_\pi(\texttt{high}) = \frac{2}{1 - 0.882} \approx 16.95,
+\]</div>
+<p>and then <span class="arithmatex">\(v_\pi(\texttt{low}) = 0.9 \cdot 16.95 \approx 15.25\)</span>. No other pair of numbers satisfies both equations, so these are the values of this policy.</p>
+<p id="gridworld"><strong>Example: Gridworld:</strong> The figure below (left) shows a rectangular gridworld representation of a simple finite MDP. The cells of the grid correspond to the states of the environment. At each cell, four actions are possible: <span class="arithmatex">\(\texttt{north}\)</span>, <span class="arithmatex">\(\texttt{south}\)</span>, <span class="arithmatex">\(\texttt{east}\)</span>, and <span class="arithmatex">\(\texttt{west}\)</span>, which deterministically cause the agent to move one cell in the respective direction on the grid. Actions that would take the agent off the grid leave its location unchanged, but also result in a reward of <span class="arithmatex">\(-1\)</span>. Other actions result in a reward of <span class="arithmatex">\(0\)</span>, except those that move the agent out of the special states <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span>. From state <span class="arithmatex">\(A\)</span>, all four actions yield a reward of <span class="arithmatex">\(+10\)</span> and take the agent to <span class="arithmatex">\(A'\)</span>. From state <span class="arithmatex">\(B\)</span>, all actions yield a reward of <span class="arithmatex">\(+5\)</span> and take the agent to <span class="arithmatex">\(B'\)</span>.</p>
+<table>
+<thead>
+<tr>
+<th>Move</th>
+<th>Reward</th>
+<th>Next state</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>out of <span class="arithmatex">\(A\)</span> (any action)</td>
+<td><span class="arithmatex">\(+10\)</span></td>
+<td><span class="arithmatex">\(A'\)</span></td>
+</tr>
+<tr>
+<td>out of <span class="arithmatex">\(B\)</span> (any action)</td>
+<td><span class="arithmatex">\(+5\)</span></td>
+<td><span class="arithmatex">\(B'\)</span></td>
+</tr>
+<tr>
+<td>off the edge of the grid</td>
+<td><span class="arithmatex">\(-1\)</span></td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td>any other move</td>
+<td><span class="arithmatex">\(0\)</span></td>
+<td>the neighboring cell</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Gridworld: exceptional reward dynamics" src="../gridworld_dynamics.png" />
+<img alt="Gridworld: state-value function for the equiprobable random policy" src="../gridworld_values.png" /></p>
+<p>Suppose the agent selects all four actions with equal probability in all states, <span class="arithmatex">\(\pi(a \mid s) = \frac{1}{4}\)</span> for every <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(s\)</span>. The figure above (right) shows the value function, <span class="arithmatex">\(v_\pi\)</span>, for this policy, for the discounted reward case with <span class="arithmatex">\(\gamma = 0.9\)</span>. This value function was computed by solving the system of linear equations given by the <a href="#policies-and-value-functions">Bellman equation for <span class="arithmatex">\(v_\pi\)</span></a>, one equation per cell. Notice the negative values near the lower edge; these are the result of the high probability of hitting the edge of the grid there under the random policy. State <span class="arithmatex">\(A\)</span> is the best state to be in under this policy. Note that <span class="arithmatex">\(A\)</span>’s expected return is less than its immediate reward of <span class="arithmatex">\(10\)</span>, because from <span class="arithmatex">\(A\)</span> the agent is taken to state <span class="arithmatex">\(A'\)</span> from which it is likely to run into the edge of the grid. State <span class="arithmatex">\(B\)</span>, on the other hand, is valued more than its immediate reward of <span class="arithmatex">\(5\)</span>, because from <span class="arithmatex">\(B\)</span> the agent is taken to <span class="arithmatex">\(B'\)</span> which has a positive value.</p>
+<h2 id="optimal-policies-and-optimal-value-functions">Optimal Policies and Optimal Value Functions</h2>
+<p>For finite MDPs, we can precisely define an optimal policy in the following way. Value functions define a <strong>partial ordering</strong> over policies. A policy <span class="arithmatex">\(\pi\)</span> is defined to be better than or equal to a policy <span class="arithmatex">\(\pi'\)</span> if its expected return is greater than or equal to that of <span class="arithmatex">\(\pi'\)</span> for all states. In other words,</p>
+<div class="arithmatex">\[
+\pi \geq \pi' \quad \text{if and only if} \quad v_\pi(s) \geq v_{\pi'}(s) \quad \text{for all } s \in \mathcal{S}.
+\]</div>
+<p>There is always at least one policy that is better than or equal to all other policies. This is an <strong>optimal policy</strong>. Although there may be more than one, we denote all the optimal policies by <span class="arithmatex">\(\pi_*\)</span>. They share the same state-value function, called the <strong>optimal state-value function</strong>, denoted <span class="arithmatex">\(v_*\)</span>, and defined as</p>
+<div class="arithmatex">\[
+v_*(s) \doteq \max_\pi v_\pi(s),
+\]</div>
+<p>for all <span class="arithmatex">\(s \in \mathcal{S}\)</span>.</p>
+<p>The ordering is only <em>partial</em> because two policies need not be comparable. For example, with two states, suppose</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><span class="arithmatex">\(v(s_1)\)</span></th>
+<th><span class="arithmatex">\(v(s_2)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>policy <span class="arithmatex">\(\pi_1\)</span></td>
+<td><span class="arithmatex">\(5\)</span></td>
+<td><span class="arithmatex">\(2\)</span></td>
+</tr>
+<tr>
+<td>policy <span class="arithmatex">\(\pi_2\)</span></td>
+<td><span class="arithmatex">\(3\)</span></td>
+<td><span class="arithmatex">\(4\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Then <span class="arithmatex">\(\pi_1\)</span> is better in <span class="arithmatex">\(s_1\)</span> but <span class="arithmatex">\(\pi_2\)</span> is better in <span class="arithmatex">\(s_2\)</span>, so neither <span class="arithmatex">\(\pi_1 \geq \pi_2\)</span> nor <span class="arithmatex">\(\pi_2 \geq \pi_1\)</span>. Neither is an optimal policy. What makes an optimal policy special is that it is at least as good as every other policy in <em>every</em> state at once.</p>
+<p>Optimal policies also share the same <strong>optimal action-value function</strong>, denoted <span class="arithmatex">\(q_*\)</span>, and defined as</p>
+<div class="arithmatex">\[
+q_*(s, a) \doteq \max_\pi q_\pi(s, a),
+\]</div>
+<p>for all <span class="arithmatex">\(s \in \mathcal{S}\)</span> and <span class="arithmatex">\(a \in \mathcal{A}(s)\)</span>.</p>
+<p>In words, <span class="arithmatex">\(q_*(s, a)\)</span> is the best expected return achievable by any policy, if we start in state <span class="arithmatex">\(s\)</span> and take action <span class="arithmatex">\(a\)</span> first. The first action is fixed to <span class="arithmatex">\(a\)</span>, even if <span class="arithmatex">\(a\)</span> is not the best choice.</p>
+<p>For the state–action pair <span class="arithmatex">\((s, a)\)</span>, this function gives the expected return for taking action <span class="arithmatex">\(a\)</span> in state <span class="arithmatex">\(s\)</span> and thereafter following an optimal policy. Thus, we can write <span class="arithmatex">\(q_*\)</span> in terms of <span class="arithmatex">\(v_*\)</span> as follows:</p>
+<div class="arithmatex">\[
+q_*(s, a) = \mathbb{E}\big[ R_{t+1} + \gamma \, v_*(S_{t+1}) \mid S_t = s, A_t = a \big].
+\]</div>
+<p>To see why, we derive it in two stages: first for any policy <span class="arithmatex">\(\pi\)</span>, then for the best one.</p>
+<p><strong>Stage 1: <span class="arithmatex">\(q_\pi(s, a)\)</span> for any policy <span class="arithmatex">\(\pi\)</span>:</strong> By definition, and since <span class="arithmatex">\(G_t = R_{t+1} + \gamma G_{t+1}\)</span>,</p>
+<div class="arithmatex">\[
+q_\pi(s, a) = \mathbb{E}_\pi[G_t \mid S_t = s, A_t = a] = \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} \mid S_t = s, A_t = a].
+\]</div>
+<p>The first action is already fixed to <span class="arithmatex">\(a\)</span>, so on this step only the environment is random: it produces a next state <span class="arithmatex">\(S_{t+1}\)</span> and reward <span class="arithmatex">\(R_{t+1}\)</span>. By the <a href="#conditional-expectation-the-average-inside-the-smaller-world">law of total expectation</a>, average over every possible <span class="arithmatex">\((s', r)\)</span>, weighting each by its probability <span class="arithmatex">\(p(s', r \mid s, a)\)</span>:</p>
+<div class="arithmatex">\[
+q_\pi(s, a) = \sum_{s', r} p(s', r \mid s, a) \; \mathbb{E}_\pi\big[ R_{t+1} + \gamma G_{t+1} \mid S_t = s, A_t = a, S_{t+1} = s', R_{t+1} = r \big].
+\]</div>
+<p>Inside the expectation, exactly as in the derivation of the Bellman equation for <span class="arithmatex">\(v_\pi\)</span>:</p>
+<ul>
+<li>the reward is known, <span class="arithmatex">\(R_{t+1} = r\)</span>, so it contributes just <span class="arithmatex">\(r\)</span>;</li>
+<li>by the Markov property, once <span class="arithmatex">\(S_{t+1} = s'\)</span> is known, the future return <span class="arithmatex">\(G_{t+1}\)</span> does not depend on <span class="arithmatex">\(s\)</span>, <span class="arithmatex">\(a\)</span> or <span class="arithmatex">\(r\)</span>, so its expected value is <span class="arithmatex">\(\mathbb{E}_\pi[G_{t+1} \mid S_{t+1} = s'] = v_\pi(s')\)</span>.</li>
+</ul>
+<p>So the expectation equals <span class="arithmatex">\(r + \gamma \, v_\pi(s')\)</span>, and</p>
+<div class="arithmatex">\[
+q_\pi(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_\pi(s') \Big].
+\]</div>
+<p><strong>Stage 2: take the best policy:</strong> By definition, <span class="arithmatex">\(q_*(s, a) = \max_\pi q_\pi(s, a)\)</span>, so</p>
+<div class="arithmatex">\[
+q_*(s, a) = \max_\pi \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_\pi(s') \Big].
+\]</div>
+<p><em>At most (<span class="arithmatex">\(q_*(s, a)\)</span> cannot do better):</em></p>
+<p>For every policy <span class="arithmatex">\(\pi\)</span> and every next state <span class="arithmatex">\(s'\)</span>, by the definition <span class="arithmatex">\(v_*(s') = \max_{\pi'} v_{\pi'}(s')\)</span>,</p>
+<div class="arithmatex">\[
+v_\pi(s') \leq v_*(s').
+\]</div>
+<p>In the Stage 1 formula, each <span class="arithmatex">\(v_\pi(s')\)</span> is multiplied by <span class="arithmatex">\(\gamma \, p(s', r \mid s, a)\)</span>, which is never negative. Replacing each <span class="arithmatex">\(v_\pi(s')\)</span> with the larger <span class="arithmatex">\(v_*(s')\)</span> can therefore only make the sum bigger, never smaller:</p>
+<div class="arithmatex">\[
+q_\pi(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_\pi(s') \Big] \leq \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big] \qquad \text{for every policy } \pi.
+\]</div>
+<p><span class="arithmatex">\(q_*(s, a)\)</span> is the largest of the values <span class="arithmatex">\(q_\pi(s, a)\)</span>, and every one of them is at most the right-hand side, so the largest is too:</p>
+<div class="arithmatex">\[
+q_*(s, a) = \max_\pi q_\pi(s, a) \leq \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
+\]</div>
+<p><em>At least (<span class="arithmatex">\(q_*(s, a)\)</span> cannot do worse):</em></p>
+<p>Stage 1 works for any policy, so in particular for <span class="arithmatex">\(\pi_*\)</span>:</p>
+<div class="arithmatex">\[
+q_{\pi_*}(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_{\pi_*}(s') \Big].
+\]</div>
+<p>By definition, <span class="arithmatex">\(\pi_*\)</span> is at least as good as every other policy in every state, so <span class="arithmatex">\(v_{\pi_*}(s') = v_*(s')\)</span> for every next state <span class="arithmatex">\(s'\)</span>. Substituting,</p>
+<div class="arithmatex">\[
+q_{\pi_*}(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
+\]</div>
+<p><span class="arithmatex">\(q_*(s, a)\)</span> is the largest <span class="arithmatex">\(q_\pi(s, a)\)</span> over all policies, so it is at least as large as <span class="arithmatex">\(q_{\pi_*}(s, a)\)</span> for this particular policy:</p>
+<div class="arithmatex">\[
+q_*(s, a) \geq q_{\pi_*}(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
+\]</div>
+<p>Therefore it is exactly the maximum.</p>
+<p>Intuitively, the <strong>Bellman optimality equation</strong> expresses the fact that the value of a state under an optimal policy must equal the expected return for the best action from that state:</p>
+<div class="arithmatex">\[
+\begin{aligned}
+v_*(s) &amp;= \max_{a \in \mathcal{A}(s)} q_{\pi_*}(s, a) &amp;&amp; \text{(1)} \\
+&amp;= \max_a \mathbb{E}_{\pi_*}[G_t \mid S_t = s, A_t = a] &amp;&amp; \text{(2)} \\
+&amp;= \max_a \mathbb{E}_{\pi_*}[R_{t+1} + \gamma G_{t+1} \mid S_t = s, A_t = a] &amp;&amp; \text{(3)} \\
+&amp;= \max_a \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big]. &amp;&amp; \text{(4)}
+\end{aligned}
+\]</div>
+<p><strong>Step (1): the value of a state is the value of its best action:</strong> We show <span class="arithmatex">\(v_*(s)\)</span> is both at most and at least <span class="arithmatex">\(\max_a q_{\pi_*}(s, a)\)</span>.</p>
+<ul>
+<li>
+<p><em>At most:</em> An optimal policy is still a policy, so we can use the <a href="#policies-and-value-functions">earlier result</a> that a state's value is the policy-weighted average of its action values:</p>
+<div class="arithmatex">\[
+v_*(s) = v_{\pi_*}(s) = \sum_a \pi_*(a \mid s) \, q_{\pi_*}(s, a).
+\]</div>
+<p>The weights <span class="arithmatex">\(\pi_*(a \mid s)\)</span> are non-negative and add up to <span class="arithmatex">\(1\)</span>, so this is a weighted average of the numbers <span class="arithmatex">\(q_{\pi_*}(s, a)\)</span>. A weighted average can never be larger than the largest number being averaged, so</p>
+<div class="arithmatex">\[
+v_*(s) \leq \max_a q_{\pi_*}(s, a).
+\]</div>
+</li>
+<li>
+<p><em>At least:</em> Suppose instead that <span class="arithmatex">\(v_*(s) &lt; \max_a q_{\pi_*}(s, a)\)</span>, and let <span class="arithmatex">\(a'\)</span> be the action that achieves the maximum. Then "take <span class="arithmatex">\(a'\)</span> in <span class="arithmatex">\(s\)</span>, and follow <span class="arithmatex">\(\pi_*\)</span> after that" would earn an expected return of <span class="arithmatex">\(q_{\pi_*}(s, a') &gt; v_*(s)\)</span> from <span class="arithmatex">\(s\)</span>: more than the best possible value of <span class="arithmatex">\(s\)</span>. That is impossible, so</p>
+<div class="arithmatex">\[
+v_*(s) \geq \max_a q_{\pi_*}(s, a).
+\]</div>
+</li>
+</ul>
+<p>Together, <span class="arithmatex">\(v_*(s) = \max_a q_{\pi_*}(s, a)\)</span>.</p>
+<p><strong>Step (2): definition of <span class="arithmatex">\(q_{\pi_*}\)</span>:</strong> The action value of <span class="arithmatex">\(\pi_*\)</span> is the expected return after taking <span class="arithmatex">\(a\)</span> in <span class="arithmatex">\(s\)</span> and following <span class="arithmatex">\(\pi_*\)</span> afterwards: <span class="arithmatex">\(q_{\pi_*}(s, a) = \mathbb{E}_{\pi_*}[G_t \mid S_t = s, A_t = a]\)</span>.</p>
+<p><strong>Step (3): the recursion for the return:</strong> Substitute <span class="arithmatex">\(G_t = R_{t+1} + \gamma G_{t+1}\)</span> inside the expectation.</p>
+<p><strong>Step (4): this is Stage 1, applied to <span class="arithmatex">\(\pi_*\)</span>:</strong> The expectation inside the maximum is exactly what Stage 1 of the <a href="#optimal-policies-and-optimal-value-functions">derivation of <span class="arithmatex">\(q_*\)</span> in terms of <span class="arithmatex">\(v_*\)</span></a> computes, for the particular policy <span class="arithmatex">\(\pi = \pi_*\)</span>.</p>
+<p>Stage 1 gives <span class="arithmatex">\(\sum_{s', r} p(s', r \mid s, a) \big[ r + \gamma \, v_{\pi_*}(s') \big]\)</span>. Since <span class="arithmatex">\(\pi_*\)</span> is optimal in every state, <span class="arithmatex">\(v_{\pi_*}(s') = v_*(s')\)</span> for every <span class="arithmatex">\(s'\)</span>, which gives line (4).</p>
+<p>So the whole derivation is two results chained together:</p>
+<div class="arithmatex">\[
+v_*(s) \overset{\text{Step (1)}}{=} \max_a q_*(s, a) \overset{\text{Stage 1}}{=} \max_a \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
+\]</div>
+<p>In words: <strong>the best you can do from <span class="arithmatex">\(s\)</span> is to pick the action whose immediate reward plus discounted optimal future value is largest, on average.</strong> Unlike the Bellman equation for <span class="arithmatex">\(v_\pi\)</span>, there is no policy in this equation. The average over actions, <span class="arithmatex">\(\sum_a \pi(a \mid s)\)</span> in the Bellman equation, has been replaced by a maximum, <span class="arithmatex">\(\max_a\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">What does <span class="arithmatex">\(\max_a\)</span> mean, precisely?</p>
+<p><span class="arithmatex">\(\max_a\)</span> means: <strong>for each action <span class="arithmatex">\(a\)</span> available in state <span class="arithmatex">\(s\)</span>, compute the expression that follows; the result is the largest of those numbers.</strong> Here the expression is</p>
+<div class="arithmatex">\[
+f(a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big],
+\]</div>
+<p>and</p>
+<div class="arithmatex">\[
+\max_{a \in \mathcal{A}(s)} f(a) = \text{the largest value of } f(a) \text{ over all actions } a \in \mathcal{A}(s).
+\]</div>
+<p>So <span class="arithmatex">\(\max_a\)</span> works in three steps:</p>
+<ol>
+<li><strong>Fix the state <span class="arithmatex">\(s\)</span>.</strong> Only the actions allowed in <span class="arithmatex">\(s\)</span>, those in <span class="arithmatex">\(\mathcal{A}(s)\)</span>, are considered.</li>
+<li><strong>For each action <span class="arithmatex">\(a\)</span>, compute <span class="arithmatex">\(f(a)\)</span>.</strong> This is a full average over the next states and rewards <span class="arithmatex">\((s', r)\)</span>. The sum over <span class="arithmatex">\(s'\)</span> and <span class="arithmatex">\(r\)</span> is an <em>average</em>, not a maximum, because the environment chooses those, not the agent.</li>
+<li><strong>Take the largest result.</strong> That number is <span class="arithmatex">\(v_*(s)\)</span>.</li>
+</ol>
+<p><strong><span class="arithmatex">\(\max\)</span> versus <span class="arithmatex">\(\arg\max\)</span>:</strong> <span class="arithmatex">\(\max_a f(a)\)</span> is a <strong>number</strong>: the best value. <span class="arithmatex">\(\arg\max_a f(a)\)</span> is an <strong>action</strong>: the one that achieves that value. The Bellman optimality equation uses <span class="arithmatex">\(\max\)</span>, because <span class="arithmatex">\(v_*(s)\)</span> is a value. The action that achieves it, <span class="arithmatex">\(\arg\max_a\)</span>, is what an optimal policy picks.</p>
+<p><strong>Example:</strong> Take the recycling robot with <span class="arithmatex">\(\alpha = 0.8\)</span>, <span class="arithmatex">\(\beta = 0.6\)</span>, <span class="arithmatex">\(r_{\texttt{search}} = 2\)</span>, <span class="arithmatex">\(r_{\texttt{wait}} = 1\)</span> and <span class="arithmatex">\(\gamma = 0.9\)</span>. Solving the Bellman optimality equations for these numbers gives <span class="arithmatex">\(v_*(\texttt{high}) \approx 16.95\)</span> and <span class="arithmatex">\(v_*(\texttt{low}) \approx 15.25\)</span>. The actions available in <span class="arithmatex">\(\texttt{high}\)</span> are <span class="arithmatex">\(\texttt{search}\)</span> and <span class="arithmatex">\(\texttt{wait}\)</span>:</p>
+<div class="arithmatex">\[
+\begin{aligned}
+f(\texttt{search}) &amp;= 0.8 \big[ 2 + 0.9 \cdot 16.95 \big] + 0.2 \big[ 2 + 0.9 \cdot 15.25 \big] \approx 16.95, \\
+f(\texttt{wait}) &amp;= 1 \cdot \big[ 1 + 0.9 \cdot 16.95 \big] \approx 16.25.
+\end{aligned}
+\]</div>
+<p>Then</p>
+<div class="arithmatex">\[
+\max_a f(a) = \max\{16.95, \; 16.25\} = 16.95 = v_*(\texttt{high}), \qquad \arg\max_a f(a) = \texttt{search}.
+\]</div>
+<p>The maximum comes out equal to <span class="arithmatex">\(v_*(\texttt{high})\)</span>, as the Bellman optimality equation requires.</p>
+<p><strong>Comparison with the Bellman equation for <span class="arithmatex">\(v_\pi\)</span>:</strong> There, the actions were <em>averaged</em> with the policy's probabilities, <span class="arithmatex">\(v_\pi(s) = \sum_a \pi(a \mid s) \, f_\pi(a)\)</span>. In the optimality equation they are <em>maximized</em> instead: rather than averaging over actions with some policy's probabilities, we simply take the best one. You can think of the maximum as a weighted average in which all the weight, probability <span class="arithmatex">\(1\)</span>, goes on the best action and <span class="arithmatex">\(0\)</span> on every other action. The average then equals that best action's value.</p>
+<p>The Bellman optimality equation for <span class="arithmatex">\(v_*\)</span> can be written in two equivalent forms, as an expectation or as an explicit sum:</p>
+</div>
+<div class="arithmatex">\[
+v_*(s) = \max_a \mathbb{E}\big[ R_{t+1} + \gamma \, v_*(S_{t+1}) \mid S_t = s, A_t = a \big] = \max_a \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
+\]</div>
+<p>The <strong>Bellman optimality equation for <span class="arithmatex">\(q_*\)</span></strong> is</p>
+<div class="arithmatex">\[
+\begin{aligned}
+q_*(s, a) &amp;= \mathbb{E}\Big[ R_{t+1} + \gamma \max_{a'} q_*(S_{t+1}, a') \,\Big|\, S_t = s, A_t = a \Big] \\
+&amp;= \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \max_{a'} q_*(s', a') \Big].
+\end{aligned}
+\]</div>
+<p>It follows by combining two results we already have:</p>
+<ol>
+<li>
+<p>the <a href="#optimal-policies-and-optimal-value-functions">value of an action in terms of the next state's value</a>:</p>
+<div class="arithmatex">\[
+q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big];
+\]</div>
+</li>
+<li>
+<p>Step (1) of the Bellman optimality equation for <span class="arithmatex">\(v_*\)</span>, applied to the next state <span class="arithmatex">\(s'\)</span> instead of <span class="arithmatex">\(s\)</span>:</p>
+<div class="arithmatex">\[
+v_*(s') = \max_{a'} q_*(s', a').
+\]</div>
+</li>
+</ol>
+<p>Substituting the second into the first gives the equation for <span class="arithmatex">\(q_*\)</span>. We write <span class="arithmatex">\(a'\)</span> for the action in the next state, to keep it separate from the first action <span class="arithmatex">\(a\)</span>, which is fixed.</p>
+<p>The two optimality equations differ in where the maximum sits:</p>
+<ul>
+<li>In the equation for <span class="arithmatex">\(v_*\)</span>, the maximum is over the <strong>first</strong> action, and the next state is valued by <span class="arithmatex">\(v_*\)</span>.</li>
+<li>In the equation for <span class="arithmatex">\(q_*\)</span>, the first action <span class="arithmatex">\(a\)</span> is already given, and the maximum is over the <strong>next</strong> action <span class="arithmatex">\(a'\)</span>, inside the average over <span class="arithmatex">\((s', r)\)</span>. We first see where the environment takes us, and only then pick the best action from there.</li>
+</ul>
+<p>Once we know <span class="arithmatex">\(v_*\)</span>, finding an optimal policy is easy. In each state <span class="arithmatex">\(s\)</span>, look one step ahead and pick an action that achieves the maximum in the Bellman optimality equation:</p>
+<div class="arithmatex">\[
+\pi_*(s) \in \arg\max_a \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
+\]</div>
+<p>If several actions tie for the maximum, any policy that only ever picks among them is optimal.</p>
+<p>Such a policy is called <strong>greedy</strong> with respect to <span class="arithmatex">\(v_*\)</span>: it chooses actions by looking only one step ahead, at the immediate reward plus the value of the next state. Greedy choices are usually short-sighted, since a move that looks best now can rule out better options later. With <span class="arithmatex">\(v_*\)</span> this is not a problem, because <span class="arithmatex">\(v_*(s')\)</span> already includes all the reward that optimal play can collect from <span class="arithmatex">\(s'\)</span> onward. So <strong>a one-step greedy search with <span class="arithmatex">\(v_*\)</span> gives long-term optimal behavior.</strong></p>
+<p>With <span class="arithmatex">\(q_*\)</span>, choosing optimal actions is even easier. The agent does not need to look ahead at all: in each state <span class="arithmatex">\(s\)</span>, it just picks an action with the largest <span class="arithmatex">\(q_*(s, a)\)</span>:</p>
+<div class="arithmatex">\[
+\pi_*(s) \in \arg\max_a q_*(s, a).
+\]</div>
+<p>This works because <span class="arithmatex">\(q_*(s, a)\)</span> already <em>is</em> the result of the one-step search:</p>
+<div class="arithmatex">\[
+q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
+\]</div>
+<p>So <span class="arithmatex">\(q_*\)</span> stores the answer to every one-step search in advance. The trade-off:</p>
+<table>
+<thead>
+<tr>
+<th>Using</th>
+<th>Need to know the dynamics <span class="arithmatex">\(p\)</span>?</th>
+<th>Must store</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(v_*\)</span></td>
+<td>yes, to look one step ahead</td>
+<td>one value per state</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(q_*\)</span></td>
+<td><strong>no</strong></td>
+<td>one value per state–action pair</td>
+</tr>
+</tbody>
+</table>
+<p>With <span class="arithmatex">\(q_*\)</span>, the agent can act optimally without knowing anything about the environment's dynamics.</p>
+<div class="admonition note">
+<p class="admonition-title">What does it mean that <span class="arithmatex">\(q_*\)</span> stores the one-step search in advance?</p>
+<p>Both <span class="arithmatex">\(v_*\)</span> and <span class="arithmatex">\(q_*\)</span> take a lot of computation to obtain in the first place. The difference is what the agent has to do <strong>each time it chooses an action</strong>, once it has them.</p>
+<ul>
+<li>
+<p><strong>With <span class="arithmatex">\(v_*\)</span></strong>, at every decision the agent must compute, for each action <span class="arithmatex">\(a\)</span>,</p>
+<div class="arithmatex">\[
+\sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big],
+\]</div>
+<p>and then pick the largest. That means knowing the dynamics <span class="arithmatex">\(p\)</span> and adding up over every possible next state and reward, again at each decision.</p>
+</li>
+<li>
+<p><strong>With <span class="arithmatex">\(q_*\)</span></strong>, those sums have already been done, and each one is stored as a single number <span class="arithmatex">\(q_*(s, a)\)</span>. At decision time the agent just reads off the numbers for the actions in <span class="arithmatex">\(s\)</span> and picks the largest. There's no <span class="arithmatex">\(p\)</span> and no sum over outcomes.</p>
+</li>
+</ul>
+</div>
+<h3 id="case-study-optimal-policy-for-the-recycling-robot">Case Study: Optimal Policy for the Recycling Robot</h3>
+<p>We now solve the recycling robot completely, from the dynamics to the optimal policy.</p>
+<p><strong>Setup:</strong> The states are <span class="arithmatex">\(\texttt{high}\)</span> and <span class="arithmatex">\(\texttt{low}\)</span>, with <span class="arithmatex">\(\mathcal{A}(\texttt{high}) = \{\texttt{search}, \texttt{wait}\}\)</span> and <span class="arithmatex">\(\mathcal{A}(\texttt{low}) = \{\texttt{search}, \texttt{wait}, \texttt{recharge}\}\)</span>. We use</p>
+<ul>
+<li><span class="arithmatex">\(\alpha = 0.8\)</span>: the probability that the battery stays high after searching from <span class="arithmatex">\(\texttt{high}\)</span>,</li>
+<li><span class="arithmatex">\(\beta = 0.6\)</span>: the probability that the battery survives (stays low) when searching from <span class="arithmatex">\(\texttt{low}\)</span>,</li>
+<li><span class="arithmatex">\(r_{\texttt{search}} = 2\)</span> and <span class="arithmatex">\(r_{\texttt{wait}} = 1\)</span>: the expected number of cans while searching and while waiting,</li>
+<li>a reward of <span class="arithmatex">\(-3\)</span> when the robot runs flat and must be rescued, and <span class="arithmatex">\(0\)</span> for recharging,</li>
+<li>discount rate <span class="arithmatex">\(\gamma = 0.9\)</span>.</li>
+</ul>
+<p>The dynamics are then:</p>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Action</th>
+<th>Next state</th>
+<th>Probability</th>
+<th>Reward</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(\texttt{search}\)</span></td>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(0.8\)</span></td>
+<td><span class="arithmatex">\(2\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(\texttt{search}\)</span></td>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(0.2\)</span></td>
+<td><span class="arithmatex">\(2\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(\texttt{wait}\)</span></td>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(\texttt{search}\)</span></td>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(0.6\)</span></td>
+<td><span class="arithmatex">\(2\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(\texttt{search}\)</span></td>
+<td><span class="arithmatex">\(\texttt{high}\)</span> (rescued)</td>
+<td><span class="arithmatex">\(0.4\)</span></td>
+<td><span class="arithmatex">\(-3\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(\texttt{wait}\)</span></td>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(\texttt{recharge}\)</span></td>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(1\)</span></td>
+<td><span class="arithmatex">\(0\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Step 1: the value of each action:</strong> Write <span class="arithmatex">\(h = v_*(\texttt{high})\)</span> and <span class="arithmatex">\(l = v_*(\texttt{low})\)</span> for the two unknown optimal values. Using <span class="arithmatex">\(q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \big[ r + \gamma \, v_*(s') \big]\)</span>, each action's value is the average, over its outcomes, of the reward plus <span class="arithmatex">\(0.9\)</span> times the value of where it lands:</p>
+<div class="arithmatex">\[
+\begin{aligned}
+q_*(\texttt{high}, \texttt{search}) &amp;= 0.8\,(2 + 0.9h) + 0.2\,(2 + 0.9l) = 2 + 0.72h + 0.18l, \\
+q_*(\texttt{high}, \texttt{wait}) &amp;= 1\,(1 + 0.9h) = 1 + 0.9h, \\
+q_*(\texttt{low}, \texttt{search}) &amp;= 0.4\,(-3 + 0.9h) + 0.6\,(2 + 0.9l) = 0.36h + 0.54l, \\
+q_*(\texttt{low}, \texttt{wait}) &amp;= 1\,(1 + 0.9l) = 1 + 0.9l, \\
+q_*(\texttt{low}, \texttt{recharge}) &amp;= 1\,(0 + 0.9h) = 0.9h.
+\end{aligned}
+\]</div>
+<p><strong>Step 2: the Bellman optimality equations:</strong> The value of each state is the value of its best action, <span class="arithmatex">\(v_*(s) = \max_a q_*(s, a)\)</span>:</p>
+<div class="arithmatex">\[
+\begin{aligned}
+h &amp;= \max\{\, 2 + 0.72h + 0.18l, \;\; 1 + 0.9h \,\}, \\
+l &amp;= \max\{\, 0.36h + 0.54l, \;\; 1 + 0.9l, \;\; 0.9h \,\}.
+\end{aligned}
+\]</div>
+<p>Because of the <span class="arithmatex">\(\max\)</span>, these are not ordinary linear equations, so we cannot solve them directly.</p>
+<p><strong>Step 3: guess a policy and compute its values:</strong> Searching looks good when the battery is high, and recharging looks safe when it is low, so we guess the policy "<span class="arithmatex">\(\texttt{search}\)</span> in <span class="arithmatex">\(\texttt{high}\)</span>, <span class="arithmatex">\(\texttt{recharge}\)</span> in <span class="arithmatex">\(\texttt{low}\)</span>". If these really are the best actions, each <span class="arithmatex">\(\max\)</span> picks that action's term, and the equations become linear:</p>
+<div class="arithmatex">\[
+h = 2 + 0.72h + 0.18l, \qquad l = 0.9h.
+\]</div>
+<p>Substituting <span class="arithmatex">\(l = 0.9h\)</span> into the first equation,</p>
+<div class="arithmatex">\[
+h = 2 + 0.72h + 0.162h \quad \Longrightarrow \quad 0.118h = 2 \quad \Longrightarrow \quad h \approx 16.95,
+\]</div>
+<p>and then <span class="arithmatex">\(l = 0.9 \cdot 16.95 \approx 15.25\)</span>.</p>
+<p><strong>Step 4: check the guess:</strong> Plug <span class="arithmatex">\(h \approx 16.95\)</span> and <span class="arithmatex">\(l \approx 15.25\)</span> into every action value from Step 1:</p>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Action</th>
+<th><span class="arithmatex">\(q_*(s, a)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(\texttt{search}\)</span></td>
+<td><span class="arithmatex">\(2 + 0.72(16.95) + 0.18(15.25) \approx \mathbf{16.95}\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{high}\)</span></td>
+<td><span class="arithmatex">\(\texttt{wait}\)</span></td>
+<td><span class="arithmatex">\(1 + 0.9(16.95) \approx 16.25\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(\texttt{search}\)</span></td>
+<td><span class="arithmatex">\(0.36(16.95) + 0.54(15.25) \approx 14.34\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(\texttt{wait}\)</span></td>
+<td><span class="arithmatex">\(1 + 0.9(15.25) \approx 14.73\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{low}\)</span></td>
+<td><span class="arithmatex">\(\texttt{recharge}\)</span></td>
+<td><span class="arithmatex">\(0.9(16.95) \approx \mathbf{15.25}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>In <span class="arithmatex">\(\texttt{high}\)</span>, the best action is <span class="arithmatex">\(\texttt{search}\)</span>, and its value equals <span class="arithmatex">\(h\)</span>. In <span class="arithmatex">\(\texttt{low}\)</span>, the best is <span class="arithmatex">\(\texttt{recharge}\)</span>, and its value equals <span class="arithmatex">\(l\)</span>. So both <span class="arithmatex">\(\max\)</span> equations hold. Since the Bellman optimality equations have only one solution, we have found it.</p>
+<p><strong>Result:</strong></p>
+<ul>
+<li>The optimal values are <span class="arithmatex">\(v_*(\texttt{high}) \approx 16.95\)</span> and <span class="arithmatex">\(v_*(\texttt{low}) \approx 15.25\)</span>.</li>
+<li>The optimal action values are the five numbers in the table above.</li>
+<li>The optimal policy is: <strong><span class="arithmatex">\(\texttt{search}\)</span> when the battery is high, <span class="arithmatex">\(\texttt{recharge}\)</span> when it is low.</strong> It can be read straight off <span class="arithmatex">\(q_*\)</span>, by picking the action with the largest value in each state.</li>
+</ul>
+<p>Note that in <span class="arithmatex">\(\texttt{low}\)</span>, <span class="arithmatex">\(\texttt{recharge}\)</span> earns reward <span class="arithmatex">\(0\)</span> and <span class="arithmatex">\(\texttt{wait}\)</span> earns <span class="arithmatex">\(1\)</span>, yet <span class="arithmatex">\(\texttt{recharge}\)</span> is better (<span class="arithmatex">\(15.25 &gt; 14.73\)</span>), because of where it leads. The maximum in <span class="arithmatex">\(v_*(s) = \max_a q_*(s, a)\)</span> accounts for the future, not just the immediate reward.</p>
+<p><strong>Sanity check: all six policies:</strong> There are <span class="arithmatex">\(2 \times 3 = 6\)</span> deterministic policies. Solving the ordinary Bellman equation for each one gives:</p>
+<table>
+<thead>
+<tr>
+<th>Policy (<span class="arithmatex">\(\texttt{high}\)</span>, <span class="arithmatex">\(\texttt{low}\)</span>)</th>
+<th><span class="arithmatex">\(v_\pi(\texttt{high})\)</span></th>
+<th><span class="arithmatex">\(v_\pi(\texttt{low})\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(\texttt{search}\)</span>, <span class="arithmatex">\(\texttt{search}\)</span></td>
+<td><span class="arithmatex">\(14.38\)</span></td>
+<td><span class="arithmatex">\(11.25\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{search}\)</span>, <span class="arithmatex">\(\texttt{wait}\)</span></td>
+<td><span class="arithmatex">\(13.57\)</span></td>
+<td><span class="arithmatex">\(10.00\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{search}\)</span>, <span class="arithmatex">\(\texttt{recharge}\)</span></td>
+<td><span class="arithmatex">\(\mathbf{16.95}\)</span></td>
+<td><span class="arithmatex">\(\mathbf{15.25}\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{wait}\)</span>, <span class="arithmatex">\(\texttt{search}\)</span></td>
+<td><span class="arithmatex">\(10.00\)</span></td>
+<td><span class="arithmatex">\(7.83\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{wait}\)</span>, <span class="arithmatex">\(\texttt{wait}\)</span></td>
+<td><span class="arithmatex">\(10.00\)</span></td>
+<td><span class="arithmatex">\(10.00\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\texttt{wait}\)</span>, <span class="arithmatex">\(\texttt{recharge}\)</span></td>
+<td><span class="arithmatex">\(10.00\)</span></td>
+<td><span class="arithmatex">\(9.00\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>"<span class="arithmatex">\(\texttt{search}\)</span>, <span class="arithmatex">\(\texttt{recharge}\)</span>" is best in <strong>both</strong> states at once, as an optimal policy must be, and its values are exactly <span class="arithmatex">\(v_*\)</span>.</p>
+<p>Explicitly solving the Bellman optimality equation provides one route to finding an optimal policy, and thus to solving the reinforcement learning problem. However, this solution is rarely directly useful. It is akin to an exhaustive search, looking ahead at all possibilities, computing their probabilities of occurrence and their desirabilities in terms of expected rewards. This solution relies on at least three assumptions that are rarely true in practice:</p>
+<ol>
+<li>the dynamics of the environment, <span class="arithmatex">\(p(s', r \mid s, a)\)</span>, are accurately known;</li>
+<li>computational resources are sufficient to complete the calculation; and</li>
+<li>the states have the Markov property.</li>
+</ol>
+<p>For the kinds of tasks in which we are interested, one is generally not able to implement this solution exactly because various combinations of these assumptions are violated. For example, although the first and third assumptions present no problems for the game of backgammon, the second is a major impediment. Because the game has about <span class="arithmatex">\(10^{20}\)</span> states, it would take thousands of years on today’s fastest computers to solve the Bellman equation for <span class="arithmatex">\(v_*\)</span>, and the same is true for finding <span class="arithmatex">\(q_*\)</span>. <strong>In reinforcement learning one typically has to settle for approximate solutions.</strong></p>
+<p>The solved recycling robot example worked only because it satisfies all three assumptions:</p>
+<table>
+<thead>
+<tr>
+<th>Assumption</th>
+<th>Recycling robot</th>
+<th>Backgammon</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dynamics known</td>
+<td>yes: we wrote down every <span class="arithmatex">\(p(s', r \mid s, a)\)</span></td>
+<td>yes: the rules and dice are known</td>
+</tr>
+<tr>
+<td>Enough computation</td>
+<td>yes: <span class="arithmatex">\(2\)</span> equations in <span class="arithmatex">\(2\)</span> unknowns</td>
+<td><strong>no</strong>: about <span class="arithmatex">\(10^{20}\)</span> equations</td>
+</tr>
+<tr>
+<td>Markov states</td>
+<td>yes, by assumption</td>
+<td>yes: the board position is all that matters</td>
+</tr>
+</tbody>
+</table>
+<p>Because a reinforcement learning agent learns <strong>online</strong> (while it is actually interacting with the environment), it naturally spends most of its learning effort on the states it visits often. It gets good at the situations that come up regularly, and does not waste effort on situations that rarely or never happen. Many states may matter very little in practice, simply because the agent almost never reaches them. This focus on the states that actually come up is one of the key things that sets reinforcement learning apart from other ways of approximately solving MDPs.</p>
+<p>In reinforcement learning we are very much concerned with cases in which optimal solutions cannot be found but must be approximated in some way.</p>
 
 
 
