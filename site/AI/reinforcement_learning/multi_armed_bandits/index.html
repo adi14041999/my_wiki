@@ -5412,10 +5412,7 @@
 
 <h1 id="multi-armed-bandits">Multi-armed Bandits</h1>
 <h2 id="a-k-armed-bandit-problem">A k-armed Bandit Problem</h2>
-<p>Consider the following learning problem. You are faced repeatedly with a choice among <span class="arithmatex">\(k\)</span> different options, or actions, <span class="arithmatex">\(a \in \{1, 2, \dots, k\}\)</span>. On each time step <span class="arithmatex">\(t\)</span> you select an action <span class="arithmatex">\(A_t\)</span>, and after each choice you receive a numerical reward <span class="arithmatex">\(R_t\)</span> chosen from a stationary probability distribution that depends on the action you selected:</p>
-<div class="arithmatex">\[
-R_t \sim p(r \mid A_t), \qquad \text{where } p(r \mid a) \text{ does not change over time.}
-\]</div>
+<p>Consider the following learning problem. You are faced repeatedly with a choice among <span class="arithmatex">\(k\)</span> different options, or actions, <span class="arithmatex">\(a \in \{1, 2, \dots, k\}\)</span>. On each time step <span class="arithmatex">\(t\)</span> you select an action <span class="arithmatex">\(A_t\)</span>, and after each choice you receive a numerical reward <span class="arithmatex">\(R_t\)</span> chosen from a stationary probability distribution that depends on the action you selected.</p>
 <p>Your objective is to maximize the expected total reward over some time period, for example, over <span class="arithmatex">\(T = 1000\)</span> action selections, or time steps:</p>
 <div class="arithmatex">\[
 \max \; \mathbb{E}\left[ \sum_{t=1}^{T} R_t \right].
@@ -5425,6 +5422,44 @@ R_t \sim p(r \mid A_t), \qquad \text{where } p(r \mid a) \text{ does not change 
 <div class="arithmatex">\[
 q_*(a) \doteq \mathbb{E}\left[ R_t \mid A_t = a \right].
 \]</div>
+<div class="admonition note">
+<p class="admonition-title">What does the <span class="arithmatex">\(*\)</span> in <span class="arithmatex">\(q_*(a)\)</span> mean?</p>
+<p>The star marks the <strong>true</strong> value of an action, as opposed to the agent's <strong>estimate</strong> of it:</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>What it is</th>
+<th>Known to the agent?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(q_*(a) = \mathbb{E}[R_t \mid A_t = a]\)</span></td>
+<td>the true mean reward of action <span class="arithmatex">\(a\)</span>, fixed by the environment</td>
+<td>no</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(Q_t(a)\)</span></td>
+<td>the agent's estimate of <span class="arithmatex">\(q_*(a)\)</span> at time <span class="arithmatex">\(t\)</span>, built from the rewards seen so far</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<p><span class="arithmatex">\(q_*(a)\)</span> is not random and does not change over time; it is a single number per arm. The rewards <span class="arithmatex">\(R_t\)</span> are random, and <span class="arithmatex">\(Q_t(a)\)</span> changes as more rewards come in, ideally getting closer to <span class="arithmatex">\(q_*(a)\)</span>.</p>
+<p>The same star appears again in <a href="../finite_markov_decision_processes/#optimal-policies-and-optimal-value-functions">Finite Markov Decision Processes</a>, with a related meaning. There, an action's value depends on what you do <em>afterwards</em>, so there are two notations:</p>
+<ul>
+<li><span class="arithmatex">\(q_\pi(s, a)\)</span>: the value of taking action <span class="arithmatex">\(a\)</span> in state <span class="arithmatex">\(s\)</span>, if you then keep playing in one particular way, called <span class="arithmatex">\(\pi\)</span>;</li>
+<li><span class="arithmatex">\(q_*(s, a)\)</span>: the value of taking action <span class="arithmatex">\(a\)</span> in state <span class="arithmatex">\(s\)</span>, if you then play <strong>as well as possible</strong>.
+<span class="arithmatex">\(q_*(s, a)\)</span> is the expected discounted return if you start in state <span class="arithmatex">\(s\)</span>, take action <span class="arithmatex">\(a\)</span> once, and then follow the optimal policy <span class="arithmatex">\(\pi_*\)</span> from the next step onward.
+Step by step:</li>
+<li><strong>Start in state <span class="arithmatex">\(s\)</span>.</strong></li>
+<li><strong>Take action <span class="arithmatex">\(a\)</span>, once, on the first step only.</strong> It does not have to be a good action.</li>
+<li>Figure out what the optimal policy is.</li>
+<li><strong>From the next step on, follow the optimal policy <span class="arithmatex">\(\pi_*\)</span></strong> at every remaining time step.</li>
+</ul>
+<p>In a bandit, there is no afterwards: you pull an arm, get a reward, and that's it. An arm's value is simply its average reward, whatever you do next. That's why the bandit chapter only needs one symbol, <span class="arithmatex">\(q_*(a)\)</span>: the true value and the best achievable value are the same number.</p>
+</div>
 <p>If you knew the value of each action, then it would be trivial to solve the <span class="arithmatex">\(k\)</span>-armed bandit problem: you would always select the action with highest value, <span class="arithmatex">\(A_t = \arg\max_a q_*(a)\)</span>. We assume that you do not know the action values with certainty, although you may have estimates. We denote the estimated value of action <span class="arithmatex">\(a\)</span> at time step <span class="arithmatex">\(t\)</span> as <span class="arithmatex">\(Q_t(a)\)</span>. We would like <span class="arithmatex">\(Q_t(a)\)</span> to be close to <span class="arithmatex">\(q_*(a)\)</span>:</p>
 <div class="arithmatex">\[
 Q_t(a) \approx q_*(a).

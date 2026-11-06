@@ -14,7 +14,7 @@ Let's look at some examples.
 
 1. A master chess player makes a move. The choice is informed both by planning (anticipating possible replies and counterreplies) and by immediate, intuitive judgments of the desirability of particular positions and moves.
 
-2. Agazelle calf struggles to its feet minutes after being born. Half an hour later it is running at 20 miles per hour.
+2. A gazelle calf struggles to its feet minutes after being born. Half an hour later it is running at 20 miles per hour.
 
 3. A mobile robot decides whether it should enter a new room in search of more trash to collect or start trying to find its way back to its battery recharging station. It makes its decision based on the current charge level of its battery and how quickly and easily it has been able to find the recharger in the past.
 
@@ -29,6 +29,8 @@ The knowledge the agent brings to the task (either from previous experience with
 Beyond the agent and the environment, one can identify four main subelements of a reinforcement learning system: a **policy**, a **reward signal**, a **value function**, and, optionally, a **model of the environment**.
 
 A **policy** defines the learning agent’s way of behaving at a given time. Roughly speaking, a policy is a mapping from perceived states of the environment to actions to be taken when in those states, $\pi: \mathcal{S} \to \mathcal{A}$, where $\mathcal{S}$ is the set of states and $\mathcal{A}$ the set of actions. In some cases the policy may be a simple function or lookup table, whereas in others it may involve extensive computation such as a search process. The policy is the core of a reinforcement learning agent in the sense that it alone is sufficient to determine behavior. In general, policies may be stochastic, specifying probabilities for each action: $\pi(a \mid s)$ is the probability of taking action $a$ in state $s$, with $\sum_{a} \pi(a \mid s) = 1$.
+
+A policy is **deterministic** if in each state it always picks the same action for a given state, e.g. $\pi(a = \text{move} \mid s = \text{high}) = 1$, $\pi(a = \text{recharge} \mid s = \text{low}) = 1$, and **stochastic** if it picks randomly according to fixed probabilities for a given state, e.g. $\pi(a = \text{move} \mid s = \text{high}) = 0.9$ and $\pi(a = \text{stay} \mid s = \text{high}) = 0.1$. A deterministic policy is just the special case of a stochastic one where every probability for an action at a given state is $0$ or $1$.
 
 On each time step, the environment sends to the reinforcement learning agent a single number called the **reward**, $R_t \in \mathbb{R}$. The agent’s sole objective is to maximize the total reward it receives over the long run, $R_1 + R_2 + R_3 + \cdots = \sum_{t} R_t$. The reward signal thus defines what are the good and bad events for the agent. In a biological system, we might think of rewards as analogous to the experiences of pleasure or pain. The reward signal is the primary basis for altering the policy; if an action selected by the policy is followed by low reward, then the policy may be changed to select some other action in that situation in the future. In general, reward signals may be stochastic functions of the state of the environment and the actions taken, i.e. $R_{t+1}$ is drawn from a distribution that depends on $S_t$ and $A_t$.
 

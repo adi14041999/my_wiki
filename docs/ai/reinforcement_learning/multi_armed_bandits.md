@@ -2,11 +2,7 @@
 
 ## A k-armed Bandit Problem
 
-Consider the following learning problem. You are faced repeatedly with a choice among $k$ different options, or actions, $a \in \{1, 2, \dots, k\}$. On each time step $t$ you select an action $A_t$, and after each choice you receive a numerical reward $R_t$ chosen from a stationary probability distribution that depends on the action you selected:
-
-$$
-R_t \sim p(r \mid A_t), \qquad \text{where } p(r \mid a) \text{ does not change over time.}
-$$
+Consider the following learning problem. You are faced repeatedly with a choice among $k$ different options, or actions, $a \in \{1, 2, \dots, k\}$. On each time step $t$ you select an action $A_t$, and after each choice you receive a numerical reward $R_t$ chosen from a stationary probability distribution that depends on the action you selected.
 
 Your objective is to maximize the expected total reward over some time period, for example, over $T = 1000$ action selections, or time steps:
 
@@ -21,6 +17,29 @@ In our $k$-armed bandit problem, each of the $k$ actions has an expected or mean
 $$
 q_*(a) \doteq \mathbb{E}\left[ R_t \mid A_t = a \right].
 $$
+
+!!! note "What does the $*$ in $q_*(a)$ mean?"
+    The star marks the **true** value of an action, as opposed to the agent's **estimate** of it:
+
+    | Symbol | What it is | Known to the agent? |
+    |---|---|---|
+    | $q_*(a) = \mathbb{E}[R_t \mid A_t = a]$ | the true mean reward of action $a$, fixed by the environment | no |
+    | $Q_t(a)$ | the agent's estimate of $q_*(a)$ at time $t$, built from the rewards seen so far | yes |
+
+    $q_*(a)$ is not random and does not change over time; it is a single number per arm. The rewards $R_t$ are random, and $Q_t(a)$ changes as more rewards come in, ideally getting closer to $q_*(a)$.
+
+    The same star appears again in [Finite Markov Decision Processes](finite_markov_decision_processes.md#optimal-policies-and-optimal-value-functions), with a related meaning. There, an action's value depends on what you do *afterwards*, so there are two notations:
+
+    - $q_\pi(s, a)$: the value of taking action $a$ in state $s$, if you then keep playing in one particular way, called $\pi$;
+    - $q_*(s, a)$: the value of taking action $a$ in state $s$, if you then play **as well as possible**.
+    $q_*(s, a)$ is the expected discounted return if you start in state $s$, take action $a$ once, and then follow the optimal policy $\pi_*$ from the next step onward.
+    Step by step:
+    1. **Start in state $s$.**
+    2. **Take action $a$, once, on the first step only.** It does not have to be a good action.
+    3. Figure out what the optimal policy is.
+    4. **From the next step on, follow the optimal policy $\pi_*$** at every remaining time step.
+   
+    In a bandit, there is no afterwards: you pull an arm, get a reward, and that's it. An arm's value is simply its average reward, whatever you do next. That's why the bandit chapter only needs one symbol, $q_*(a)$: the true value and the best achievable value are the same number.
 
 If you knew the value of each action, then it would be trivial to solve the $k$-armed bandit problem: you would always select the action with highest value, $A_t = \arg\max_a q_*(a)$. We assume that you do not know the action values with certainty, although you may have estimates. We denote the estimated value of action $a$ at time step $t$ as $Q_t(a)$. We would like $Q_t(a)$ to be close to $q_*(a)$:
 
