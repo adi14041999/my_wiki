@@ -5707,6 +5707,38 @@ H_{t+1}^{\text{exact}}(a) \doteq H_t(a) + \alpha \frac{\partial \, \mathbb{E}[R_
 <div class="arithmatex">\[
 \mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x),
 \]</div>
+<div class="admonition note">
+<p class="admonition-title">Deriving <span class="arithmatex">\(\mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x)\)</span> from <span class="arithmatex">\(q_*(a) = \mathbb{E}[R_t \mid A_t = a]\)</span></p>
+<p>To keep the sums simple, treat the reward <span class="arithmatex">\(R_t\)</span> as discrete, taking values <span class="arithmatex">\(r\)</span>.</p>
+<p><strong>Step 1: definition of expectation:</strong></p>
+<div class="arithmatex">\[
+\mathbb{E}[R_t] = \sum_r r \cdot \Pr\{R_t = r\}.
+\]</div>
+<p><strong>Step 2: split by which action was taken (law of total probability):</strong> Every reward comes from some action <span class="arithmatex">\(x\)</span>, so</p>
+<div class="arithmatex">\[
+\Pr\{R_t = r\} = \sum_x \Pr\{R_t = r, A_t = x\}.
+\]</div>
+<p><strong>Step 3: multiplication rule:</strong> First an action is chosen, then a reward is drawn for it:</p>
+<div class="arithmatex">\[
+\Pr\{R_t = r, A_t = x\} = \Pr\{A_t = x\} \cdot \Pr\{R_t = r \mid A_t = x\} = \pi_t(x) \cdot \Pr\{R_t = r \mid A_t = x\}.
+\]</div>
+<p><strong>Step 4: substitute and swap the order of the sums:</strong></p>
+<div class="arithmatex">\[
+\begin{aligned}
+\mathbb{E}[R_t] &amp;= \sum_r r \sum_x \pi_t(x) \Pr\{R_t = r \mid A_t = x\} \\
+&amp;= \sum_x \pi_t(x) \sum_r r \Pr\{R_t = r \mid A_t = x\}.
+\end{aligned}
+\]</div>
+<p>Here <span class="arithmatex">\(r\)</span> moves inside the sum over <span class="arithmatex">\(x\)</span>, the two sums trade places (they add up the same terms in a different order), and <span class="arithmatex">\(\pi_t(x)\)</span> comes out of the inner sum because it does not depend on <span class="arithmatex">\(r\)</span>.</p>
+<p><strong>Step 5: recognize the inner sum:</strong> It is the average reward when action <span class="arithmatex">\(x\)</span> is taken:</p>
+<div class="arithmatex">\[
+\sum_r r \Pr\{R_t = r \mid A_t = x\} = \mathbb{E}[R_t \mid A_t = x] = q_*(x).
+\]</div>
+<p><strong>Result:</strong></p>
+<div class="arithmatex">\[
+\mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x).
+\]</div>
+</div>
 <p><strong>The measure of the increment’s effect is the partial derivative of this performance measure with respect to the action preference.</strong> Of course, it is not possible to implement gradient ascent exactly in our case because by assumption we do not know the <span class="arithmatex">\(q_*(x)\)</span>.</p>
 <p>Recall that <span class="arithmatex">\(q_*(x) = \mathbb{E}[R_t \mid A_t = x]\)</span> is the true mean reward of action <span class="arithmatex">\(x\)</span>: a fixed real number for each action, set by the environment and unknown to the agent. Unlike the reward <span class="arithmatex">\(R_t\)</span> it is not random, and unlike <span class="arithmatex">\(\pi_t(x)\)</span> it does not change with <span class="arithmatex">\(t\)</span>. So <span class="arithmatex">\(\mathbb{E}[R_t]\)</span> is the average of these true values, weighted by how often the agent currently selects each action.</p>
 <p>Any single update of the gradient bandit algorithm,</p>

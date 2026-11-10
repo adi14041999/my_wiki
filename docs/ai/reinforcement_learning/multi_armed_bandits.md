@@ -316,6 +316,50 @@ $$
 \mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x),
 $$
 
+!!! note "Deriving $\mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x)$ from $q_*(a) = \mathbb{E}[R_t \mid A_t = a]$"
+    To keep the sums simple, treat the reward $R_t$ as discrete, taking values $r$.
+
+    **Step 1: definition of expectation:**
+
+    $$
+    \mathbb{E}[R_t] = \sum_r r \cdot \Pr\{R_t = r\}.
+    $$
+
+    **Step 2: split by which action was taken (law of total probability):** Every reward comes from some action $x$, so
+
+    $$
+    \Pr\{R_t = r\} = \sum_x \Pr\{R_t = r, A_t = x\}.
+    $$
+
+    **Step 3: multiplication rule:** First an action is chosen, then a reward is drawn for it:
+
+    $$
+    \Pr\{R_t = r, A_t = x\} = \Pr\{A_t = x\} \cdot \Pr\{R_t = r \mid A_t = x\} = \pi_t(x) \cdot \Pr\{R_t = r \mid A_t = x\}.
+    $$
+
+    **Step 4: substitute and swap the order of the sums:**
+
+    $$
+    \begin{aligned}
+    \mathbb{E}[R_t] &= \sum_r r \sum_x \pi_t(x) \Pr\{R_t = r \mid A_t = x\} \\
+    &= \sum_x \pi_t(x) \sum_r r \Pr\{R_t = r \mid A_t = x\}.
+    \end{aligned}
+    $$
+
+    Here $r$ moves inside the sum over $x$, the two sums trade places (they add up the same terms in a different order), and $\pi_t(x)$ comes out of the inner sum because it does not depend on $r$.
+
+    **Step 5: recognize the inner sum:** It is the average reward when action $x$ is taken:
+
+    $$
+    \sum_r r \Pr\{R_t = r \mid A_t = x\} = \mathbb{E}[R_t \mid A_t = x] = q_*(x).
+    $$
+
+    **Result:**
+
+    $$
+    \mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x).
+    $$
+
 **The measure of the increment’s effect is the partial derivative of this performance measure with respect to the action preference.** Of course, it is not possible to implement gradient ascent exactly in our case because by assumption we do not know the $q_*(x)$.
 
 Recall that $q_*(x) = \mathbb{E}[R_t \mid A_t = x]$ is the true mean reward of action $x$: a fixed real number for each action, set by the environment and unknown to the agent. Unlike the reward $R_t$ it is not random, and unlike $\pi_t(x)$ it does not change with $t$. So $\mathbb{E}[R_t]$ is the average of these true values, weighted by how often the agent currently selects each action.
