@@ -796,12 +796,6 @@ In words: **the best you can do from $s$ is to pick the action whose immediate r
 
     **Comparison with the Bellman equation for $v_\pi$:** There, the actions were *averaged* with the policy's probabilities, $v_\pi(s) = \sum_a \pi(a \mid s) \, f_\pi(a)$. In the optimality equation they are *maximized* instead: rather than averaging over actions with some policy's probabilities, we simply take the best one. You can think of the maximum as a weighted average in which all the weight, probability $1$, goes on the best action and $0$ on every other action. The average then equals that best action's value.
 
-    The Bellman optimality equation for $v_*$ can be written in two equivalent forms, as an expectation or as an explicit sum:
-
-$$
-v_*(s) = \max_a \mathbb{E}\big[ R_{t+1} + \gamma \, v_*(S_{t+1}) \mid S_t = s, A_t = a \big] = \max_a \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
-$$
-
 The **Bellman optimality equation for $q_*$** is
 
 $$
@@ -827,55 +821,6 @@ It follows by combining two results we already have:
 
 Substituting the second into the first gives the equation for $q_*$. We write $a'$ for the action in the next state, to keep it separate from the first action $a$, which is fixed.
 
-The two optimality equations differ in where the maximum sits:
-
-- In the equation for $v_*$, the maximum is over the **first** action, and the next state is valued by $v_*$.
-- In the equation for $q_*$, the first action $a$ is already given, and the maximum is over the **next** action $a'$, inside the average over $(s', r)$. We first see where the environment takes us, and only then pick the best action from there.
-
-Once we know $v_*$, finding an optimal policy is easy. In each state $s$, look one step ahead and pick an action that achieves the maximum in the Bellman optimality equation:
-
-$$
-\pi_*(s) \in \arg\max_a \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
-$$
-
-If several actions tie for the maximum, any policy that only ever picks among them is optimal.
-
-Such a policy is called **greedy** with respect to $v_*$: it chooses actions by looking only one step ahead, at the immediate reward plus the value of the next state. Greedy choices are usually short-sighted, since a move that looks best now can rule out better options later. With $v_*$ this is not a problem, because $v_*(s')$ already includes all the reward that optimal play can collect from $s'$ onward. So **a one-step greedy search with $v_*$ gives long-term optimal behavior.**
-
-With $q_*$, choosing optimal actions is even easier. The agent does not need to look ahead at all: in each state $s$, it just picks an action with the largest $q_*(s, a)$:
-
-$$
-\pi_*(s) \in \arg\max_a q_*(s, a).
-$$
-
-This works because $q_*(s, a)$ already *is* the result of the one-step search:
-
-$$
-q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
-$$
-
-So $q_*$ stores the answer to every one-step search in advance. The trade-off:
-
-| Using | Need to know the dynamics $p$? | Must store |
-|---|---|---|
-| $v_*$ | yes, to look one step ahead | one value per state |
-| $q_*$ | **no** | one value per state–action pair |
-
-With $q_*$, the agent can act optimally without knowing anything about the environment's dynamics.
-
-!!! note "What does it mean that $q_*$ stores the one-step search in advance?"
-    Both $v_*$ and $q_*$ take a lot of computation to obtain in the first place. The difference is what the agent has to do **each time it chooses an action**, once it has them.
-
-    - **With $v_*$**, at every decision the agent must compute, for each action $a$,
-
-        $$
-        \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big],
-        $$
-
-        and then pick the largest. That means knowing the dynamics $p$ and adding up over every possible next state and reward, again at each decision.
-
-    - **With $q_*$**, those sums have already been done, and each one is stored as a single number $q_*(s, a)$. At decision time the agent just reads off the numbers for the actions in $s$ and picks the largest. There's no $p$ and no sum over outcomes.
-
 ### Case Study: Optimal Policy for the Recycling Robot
 
 We now solve the recycling robot completely, from the dynamics to the optimal policy.
@@ -890,15 +835,15 @@ We now solve the recycling robot completely, from the dynamics to the optimal po
 
 The dynamics are then:
 
-| State | Action | Next state | Probability | Reward | Sum for this (state, action) |
-|---|---|---|---|---|---|
-| $\texttt{high}$ | $\texttt{search}$ | $\texttt{high}$ | $0.8$ | $2$ | $0.8 + 0.2 = 1$ |
-| $\texttt{high}$ | $\texttt{search}$ | $\texttt{low}$ | $0.2$ | $2$ | |
-| $\texttt{high}$ | $\texttt{wait}$ | $\texttt{high}$ | $1$ | $1$ | $1$ |
-| $\texttt{low}$ | $\texttt{search}$ | $\texttt{low}$ | $0.6$ | $2$ | $0.6 + 0.4 = 1$ |
-| $\texttt{low}$ | $\texttt{search}$ | $\texttt{high}$ (rescued) | $0.4$ | $-3$ | |
-| $\texttt{low}$ | $\texttt{wait}$ | $\texttt{low}$ | $1$ | $1$ | $1$ |
-| $\texttt{low}$ | $\texttt{recharge}$ | $\texttt{high}$ | $1$ | $0$ | $1$ |
+| State | Action | Next state | Probability | Reward |
+|---|---|---|---|---|
+| $\texttt{high}$ | $\texttt{search}$ | $\texttt{high}$ | $0.8$ | $2$ | 
+| $\texttt{high}$ | $\texttt{search}$ | $\texttt{low}$ | $0.2$ | $2$ | 
+| $\texttt{high}$ | $\texttt{wait}$ | $\texttt{high}$ | $1$ | $1$ | 
+| $\texttt{low}$ | $\texttt{search}$ | $\texttt{low}$ | $0.6$ | $2$ | 
+| $\texttt{low}$ | $\texttt{search}$ | $\texttt{high}$ (rescued) | $0.4$ | $-3$ | 
+| $\texttt{low}$ | $\texttt{wait}$ | $\texttt{low}$ | $1$ | $1$ | 
+| $\texttt{low}$ | $\texttt{recharge}$ | $\texttt{high}$ | $1$ | $0$ |
 
 The probabilities are $p(s' \mid s, a)$, the chance of each **next state** given the state *and* the action, so they add up to $1$ separately for each state–action pair, not for each state. How often each action is chosen is decided by the policy $\pi(a \mid s)$, not by this table.
 
@@ -990,6 +935,6 @@ The solved recycling robot example worked only because it satisfies all three as
 | Enough computation | yes: $2$ equations in $2$ unknowns | **no**: about $10^{20}$ equations |
 | Markov states | yes, by assumption | yes: the board position is all that matters |
 
-Because a reinforcement learning agent learns **online** (while it is actually interacting with the environment), it naturally spends most of its learning effort on the states it visits often. It gets good at the situations that come up regularly, and does not waste effort on situations that rarely or never happen. Many states may matter very little in practice, simply because the agent almost never reaches them. This focus on the states that actually come up is one of the key things that sets reinforcement learning apart from other ways of approximately solving MDPs.
+Because a reinforcement learning agent learns **online** (while it is actually interacting with the environment), it naturally spends most of its learning effort on the states it visits often. It gets good at the situations that come up regularly, and does not waste effort on situations that rarely or never happen. Many states may matter very little in practice, simply because the agent almost never reaches them.
 
 In reinforcement learning we are very much concerned with cases in which optimal solutions cannot be found but must be approximated in some way.

@@ -6349,11 +6349,7 @@ f(\texttt{wait}) &amp;= 1 \cdot \big[ 1 + 0.9 \cdot 16.95 \big] \approx 16.25.
 \]</div>
 <p>The maximum comes out equal to <span class="arithmatex">\(v_*(\texttt{high})\)</span>, as the Bellman optimality equation requires.</p>
 <p><strong>Comparison with the Bellman equation for <span class="arithmatex">\(v_\pi\)</span>:</strong> There, the actions were <em>averaged</em> with the policy's probabilities, <span class="arithmatex">\(v_\pi(s) = \sum_a \pi(a \mid s) \, f_\pi(a)\)</span>. In the optimality equation they are <em>maximized</em> instead: rather than averaging over actions with some policy's probabilities, we simply take the best one. You can think of the maximum as a weighted average in which all the weight, probability <span class="arithmatex">\(1\)</span>, goes on the best action and <span class="arithmatex">\(0\)</span> on every other action. The average then equals that best action's value.</p>
-<p>The Bellman optimality equation for <span class="arithmatex">\(v_*\)</span> can be written in two equivalent forms, as an expectation or as an explicit sum:</p>
 </div>
-<div class="arithmatex">\[
-v_*(s) = \max_a \mathbb{E}\big[ R_{t+1} + \gamma \, v_*(S_{t+1}) \mid S_t = s, A_t = a \big] = \max_a \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
-\]</div>
 <p>The <strong>Bellman optimality equation for <span class="arithmatex">\(q_*\)</span></strong> is</p>
 <div class="arithmatex">\[
 \begin{aligned}
@@ -6377,64 +6373,6 @@ v_*(s') = \max_{a'} q_*(s', a').
 </li>
 </ol>
 <p>Substituting the second into the first gives the equation for <span class="arithmatex">\(q_*\)</span>. We write <span class="arithmatex">\(a'\)</span> for the action in the next state, to keep it separate from the first action <span class="arithmatex">\(a\)</span>, which is fixed.</p>
-<p>The two optimality equations differ in where the maximum sits:</p>
-<ul>
-<li>In the equation for <span class="arithmatex">\(v_*\)</span>, the maximum is over the <strong>first</strong> action, and the next state is valued by <span class="arithmatex">\(v_*\)</span>.</li>
-<li>In the equation for <span class="arithmatex">\(q_*\)</span>, the first action <span class="arithmatex">\(a\)</span> is already given, and the maximum is over the <strong>next</strong> action <span class="arithmatex">\(a'\)</span>, inside the average over <span class="arithmatex">\((s', r)\)</span>. We first see where the environment takes us, and only then pick the best action from there.</li>
-</ul>
-<p>Once we know <span class="arithmatex">\(v_*\)</span>, finding an optimal policy is easy. In each state <span class="arithmatex">\(s\)</span>, look one step ahead and pick an action that achieves the maximum in the Bellman optimality equation:</p>
-<div class="arithmatex">\[
-\pi_*(s) \in \arg\max_a \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
-\]</div>
-<p>If several actions tie for the maximum, any policy that only ever picks among them is optimal.</p>
-<p>Such a policy is called <strong>greedy</strong> with respect to <span class="arithmatex">\(v_*\)</span>: it chooses actions by looking only one step ahead, at the immediate reward plus the value of the next state. Greedy choices are usually short-sighted, since a move that looks best now can rule out better options later. With <span class="arithmatex">\(v_*\)</span> this is not a problem, because <span class="arithmatex">\(v_*(s')\)</span> already includes all the reward that optimal play can collect from <span class="arithmatex">\(s'\)</span> onward. So <strong>a one-step greedy search with <span class="arithmatex">\(v_*\)</span> gives long-term optimal behavior.</strong></p>
-<p>With <span class="arithmatex">\(q_*\)</span>, choosing optimal actions is even easier. The agent does not need to look ahead at all: in each state <span class="arithmatex">\(s\)</span>, it just picks an action with the largest <span class="arithmatex">\(q_*(s, a)\)</span>:</p>
-<div class="arithmatex">\[
-\pi_*(s) \in \arg\max_a q_*(s, a).
-\]</div>
-<p>This works because <span class="arithmatex">\(q_*(s, a)\)</span> already <em>is</em> the result of the one-step search:</p>
-<div class="arithmatex">\[
-q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
-\]</div>
-<p>So <span class="arithmatex">\(q_*\)</span> stores the answer to every one-step search in advance. The trade-off:</p>
-<table>
-<thead>
-<tr>
-<th>Using</th>
-<th>Need to know the dynamics <span class="arithmatex">\(p\)</span>?</th>
-<th>Must store</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><span class="arithmatex">\(v_*\)</span></td>
-<td>yes, to look one step ahead</td>
-<td>one value per state</td>
-</tr>
-<tr>
-<td><span class="arithmatex">\(q_*\)</span></td>
-<td><strong>no</strong></td>
-<td>one value per state–action pair</td>
-</tr>
-</tbody>
-</table>
-<p>With <span class="arithmatex">\(q_*\)</span>, the agent can act optimally without knowing anything about the environment's dynamics.</p>
-<div class="admonition note">
-<p class="admonition-title">What does it mean that <span class="arithmatex">\(q_*\)</span> stores the one-step search in advance?</p>
-<p>Both <span class="arithmatex">\(v_*\)</span> and <span class="arithmatex">\(q_*\)</span> take a lot of computation to obtain in the first place. The difference is what the agent has to do <strong>each time it chooses an action</strong>, once it has them.</p>
-<ul>
-<li>
-<p><strong>With <span class="arithmatex">\(v_*\)</span></strong>, at every decision the agent must compute, for each action <span class="arithmatex">\(a\)</span>,</p>
-<div class="arithmatex">\[
-\sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big],
-\]</div>
-<p>and then pick the largest. That means knowing the dynamics <span class="arithmatex">\(p\)</span> and adding up over every possible next state and reward, again at each decision.</p>
-</li>
-<li>
-<p><strong>With <span class="arithmatex">\(q_*\)</span></strong>, those sums have already been done, and each one is stored as a single number <span class="arithmatex">\(q_*(s, a)\)</span>. At decision time the agent just reads off the numbers for the actions in <span class="arithmatex">\(s\)</span> and picks the largest. There's no <span class="arithmatex">\(p\)</span> and no sum over outcomes.</p>
-</li>
-</ul>
-</div>
 <h3 id="case-study-optimal-policy-for-the-recycling-robot">Case Study: Optimal Policy for the Recycling Robot</h3>
 <p>We now solve the recycling robot completely, from the dynamics to the optimal policy.</p>
 <p><strong>Setup:</strong> The states are <span class="arithmatex">\(\texttt{high}\)</span> and <span class="arithmatex">\(\texttt{low}\)</span>, with <span class="arithmatex">\(\mathcal{A}(\texttt{high}) = \{\texttt{search}, \texttt{wait}\}\)</span> and <span class="arithmatex">\(\mathcal{A}(\texttt{low}) = \{\texttt{search}, \texttt{wait}, \texttt{recharge}\}\)</span>. We use</p>
@@ -6454,7 +6392,6 @@ q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
 <th>Next state</th>
 <th>Probability</th>
 <th>Reward</th>
-<th>Sum for this (state, action)</th>
 </tr>
 </thead>
 <tbody>
@@ -6464,7 +6401,6 @@ q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
 <td><span class="arithmatex">\(\texttt{high}\)</span></td>
 <td><span class="arithmatex">\(0.8\)</span></td>
 <td><span class="arithmatex">\(2\)</span></td>
-<td><span class="arithmatex">\(0.8 + 0.2 = 1\)</span></td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(\texttt{high}\)</span></td>
@@ -6472,13 +6408,11 @@ q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
 <td><span class="arithmatex">\(\texttt{low}\)</span></td>
 <td><span class="arithmatex">\(0.2\)</span></td>
 <td><span class="arithmatex">\(2\)</span></td>
-<td></td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(\texttt{high}\)</span></td>
 <td><span class="arithmatex">\(\texttt{wait}\)</span></td>
 <td><span class="arithmatex">\(\texttt{high}\)</span></td>
-<td><span class="arithmatex">\(1\)</span></td>
 <td><span class="arithmatex">\(1\)</span></td>
 <td><span class="arithmatex">\(1\)</span></td>
 </tr>
@@ -6488,7 +6422,6 @@ q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
 <td><span class="arithmatex">\(\texttt{low}\)</span></td>
 <td><span class="arithmatex">\(0.6\)</span></td>
 <td><span class="arithmatex">\(2\)</span></td>
-<td><span class="arithmatex">\(0.6 + 0.4 = 1\)</span></td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(\texttt{low}\)</span></td>
@@ -6496,13 +6429,11 @@ q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
 <td><span class="arithmatex">\(\texttt{high}\)</span> (rescued)</td>
 <td><span class="arithmatex">\(0.4\)</span></td>
 <td><span class="arithmatex">\(-3\)</span></td>
-<td></td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(\texttt{low}\)</span></td>
 <td><span class="arithmatex">\(\texttt{wait}\)</span></td>
 <td><span class="arithmatex">\(\texttt{low}\)</span></td>
-<td><span class="arithmatex">\(1\)</span></td>
 <td><span class="arithmatex">\(1\)</span></td>
 <td><span class="arithmatex">\(1\)</span></td>
 </tr>
@@ -6512,7 +6443,6 @@ q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \Big[ r + \gamma \, v_*(s') \Big].
 <td><span class="arithmatex">\(\texttt{high}\)</span></td>
 <td><span class="arithmatex">\(1\)</span></td>
 <td><span class="arithmatex">\(0\)</span></td>
-<td><span class="arithmatex">\(1\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -6667,7 +6597,7 @@ h = 2 + 0.72h + 0.162h \quad \Longrightarrow \quad 0.118h = 2 \quad \Longrightar
 </tr>
 </tbody>
 </table>
-<p>Because a reinforcement learning agent learns <strong>online</strong> (while it is actually interacting with the environment), it naturally spends most of its learning effort on the states it visits often. It gets good at the situations that come up regularly, and does not waste effort on situations that rarely or never happen. Many states may matter very little in practice, simply because the agent almost never reaches them. This focus on the states that actually come up is one of the key things that sets reinforcement learning apart from other ways of approximately solving MDPs.</p>
+<p>Because a reinforcement learning agent learns <strong>online</strong> (while it is actually interacting with the environment), it naturally spends most of its learning effort on the states it visits often. It gets good at the situations that come up regularly, and does not waste effort on situations that rarely or never happen. Many states may matter very little in practice, simply because the agent almost never reaches them.</p>
 <p>In reinforcement learning we are very much concerned with cases in which optimal solutions cannot be found but must be approximated in some way.</p>
 
 
