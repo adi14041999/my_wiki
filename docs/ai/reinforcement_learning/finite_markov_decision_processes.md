@@ -136,6 +136,29 @@ $$
 S_0, A_0, R_1, S_1, A_1, R_2, S_2, A_2, R_3, \dots
 $$
 
+!!! note "Why is the reward $R_t$ in the bandit chapter but $R_{t+1}$ here?"
+    It is only a difference in how the time steps are numbered. Both describe the same order of events: the agent takes an action, then receives its reward.
+
+    In the [bandit chapter](multi_armed_bandits.md#a-k-armed-bandit-problem), the reward for action $A_t$ is called $R_t$, with the same index:
+
+    $$
+    A_1, R_1, \; A_2, R_2, \; A_3, R_3, \dots \qquad q_*(a) = \mathbb{E}[R_t \mid A_t = a].
+    $$
+
+    In an MDP, the action triggers **two** responses from the environment: a reward *and* a next state. They arrive together, so they get the same index, $t + 1$:
+
+    $$
+    \underbrace{S_t, A_t}_{\text{agent acts}} \;\longrightarrow\; \underbrace{R_{t+1}, S_{t+1}}_{\text{environment responds}}
+    $$
+
+    A bandit has no next state, so there is nothing for the reward to line up with, and the simpler "same index" naming is used.
+
+    | | Bandit | MDP |
+    |---|---|---|
+    | reward for action $A_t$ | $R_t$ | $R_{t+1}$ |
+    | expected reward of an action | $q_*(a) = \mathbb{E}[R_t \mid A_t = a]$ | $r(s, a) = \mathbb{E}[R_{t+1} \mid S_t = s, A_t = a]$ |
+    | next state | none | $S_{t+1}$, arriving together with $R_{t+1}$ |
+
 | Symbol | Meaning |
 |---|---|
 | $\mathcal{S}$ | the set of all possible states |
@@ -407,29 +430,59 @@ $$
 
 We call $q_\pi$ the **action-value function for policy $\pi$**.
 
+!!! note "Comparing $q_*(a)$ from bandits, $r(s, a)$ and $q_\pi(s, a)$"
+    All three are "the value of an action", but they look ahead different distances:
+
+    | | Definition | Looks at | Needs a policy? |
+    |---|---|---|---|
+    | $q_*(a)$, [bandit](multi_armed_bandits.md#a-k-armed-bandit-problem) | $\mathbb{E}[R_t \mid A_t = a]$ | the one reward from action $a$ | no |
+    | $r(s, a)$, MDP | $\mathbb{E}[R_{t+1} \mid S_t = s, A_t = a]$ | the one immediate reward from action $a$ in state $s$ | no |
+    | $q_\pi(s, a)$, MDP | $\mathbb{E}_\pi[G_t \mid S_t = s, A_t = a]$ | all future rewards, discounted | **yes**: $\pi$ is followed after the first action |
+
+    **$r(s, a)$ is the MDP version of the bandit's $q_*(a)$.** Both average only the reward that comes right after the action, so neither depends on what the agent does next. The only difference is that $r(s, a)$ also depends on the state.
+
+    **$q_\pi(s, a)$ also counts everything that happens afterwards.** In an MDP, the action changes the next state, and the reward from then on depends on how the agent keeps playing. That is why $q_\pi$ needs a policy $\pi$ for "afterwards", and why it can differ from one policy to another.
+
 Both are [conditional expectations](#conditional-expectation-the-average-inside-the-smaller-world): the average return, over only the moments that match the condition. $v_\pi(s)$ averages over everything that can happen from $s$, including which action is taken first, while $q_\pi(s, a)$ also fixes the first action to $a$. The two are linked by the [law of total expectation](#conditional-expectation-the-average-inside-the-smaller-world): the value of a state is the average of its action values, weighted by how likely the policy is to pick each action,
 
 $$
 v_\pi(s) = \sum_{a \in \mathcal{A}(s)} \pi(a \mid s) \, q_\pi(s, a).
 $$
 
-To derive this, start from the definition of $v_\pi(s)$ and split the outcomes by which action $A_t$ is taken first. For simplicity, treat the return $G_t$ as a discrete random variable, so that its expectation is a sum over its possible values $g$:
-
-To derive this, start from the definition of $v_\pi(s)$ and split the outcomes by which action $A_t$ is taken first. For simplicity, treat the return $G_t$ as a discrete random variable, so that its expectation is a sum over its possible values $g$:
+**Short derivation, using the law of total expectation:** We need the law with everything also conditioned on the current state. For random variables $X$ and $Y$ and a condition $C$,
 
 $$
-\begin{aligned}
-v_\pi(s) &= \mathbb{E}_\pi[G_t \mid S_t = s] \\
-&= \sum_g g \, \Pr\{G_t = g \mid S_t = s\} && \text{(definition of expectation)} \\
-&= \sum_g g \sum_{a} \Pr\{G_t = g, A_t = a \mid S_t = s\} && \text{(law of total probability over } a\text{)} \\
-&= \sum_g g \sum_{a} \Pr\{A_t = a \mid S_t = s\} \, \Pr\{G_t = g \mid S_t = s, A_t = a\} && \text{(multiplication rule)} \\
-&= \sum_g \sum_{a} g \, \Pr\{A_t = a \mid S_t = s\} \, \Pr\{G_t = g \mid S_t = s, A_t = a\} && \text{(move } g \text{ inside: it does not depend on } a\text{)} \\
-&= \sum_{a} \sum_g g \, \Pr\{A_t = a \mid S_t = s\} \, \Pr\{G_t = g \mid S_t = s, A_t = a\} && \text{(swap the order of the sums)} \\
-&= \sum_{a} \Pr\{A_t = a \mid S_t = s\} \sum_g g \, \Pr\{G_t = g \mid S_t = s, A_t = a\} && \text{(move } \Pr\{A_t = a \mid S_t = s\} \text{ out: it does not depend on } g\text{)} \\
-&= \sum_{a} \pi(a \mid s) \, \mathbb{E}_\pi[G_t \mid S_t = s, A_t = a] && \text{(definitions of } \pi \text{ and expectation)} \\
-&= \sum_{a} \pi(a \mid s) \, q_\pi(s, a). && \text{(definition of } q_\pi\text{)}
-\end{aligned}
+\mathbb{E}[X \mid C] = \sum_y \Pr\{Y = y \mid C\} \, \mathbb{E}[X \mid Y = y, C].
 $$
+
+This is the same [law of total expectation](#conditional-expectation-the-average-inside-the-smaller-world), applied inside the smaller world where $C$ holds.
+
+Take $X = G_t$ (the return), $Y = A_t$ (the first action), and $C$ to be $S_t = s$ (the current state):
+
+$$
+\mathbb{E}_\pi[G_t \mid S_t = s] = \sum_a \Pr\{A_t = a \mid S_t = s\} \, \mathbb{E}_\pi[G_t \mid S_t = s, A_t = a].
+$$
+
+Each piece is something already defined:
+
+- $\mathbb{E}_\pi[G_t \mid S_t = s] = v_\pi(s)$, by the definition of the state-value function;
+- $\Pr\{A_t = a \mid S_t = s\} = \pi(a \mid s)$, since the policy is what chooses the action in state $s$;
+- $\mathbb{E}_\pi[G_t \mid S_t = s, A_t = a] = q_\pi(s, a)$, by the definition of the action-value function.
+
+Substituting all three gives
+
+$$
+v_\pi(s) = \sum_{a \in \mathcal{A}(s)} \pi(a \mid s) \, q_\pi(s, a).
+$$
+
+!!! note "Connection to the bandit chapter"
+    This is the same argument as the [bandit result](multi_armed_bandits.md#the-bandit-gradient-algorithm-as-stochastic-gradient-ascent) $\mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x)$, with two changes:
+
+    | | Bandit | MDP |
+    |---|---|---|
+    | condition | none (there is only one situation) | $S_t = s$ |
+    | quantity being averaged | immediate reward $R_t$ | full return $G_t$ |
+    | result | $\mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x)$ | $v_\pi(s) = \sum_a \pi(a \mid s) \, q_\pi(s, a)$ |
 
 So **the value of a state is the policy-weighted average of its action values.** For example, if in some state $s$ the policy picks $\texttt{search}$ with probability $0.9$ and $\texttt{wait}$ with probability $0.1$, and $q_\pi(s, \texttt{search}) = 10$ while $q_\pi(s, \texttt{wait}) = 4$, then
 
@@ -506,7 +559,7 @@ It expresses a relationship between the value of a state and the values of its s
 
 The value function $v_\pi$ is the **unique solution** to its Bellman equation.
 
-What this means is that the Bellman equation is not one equation but one equation *for each state*. If there are $|\mathcal{S}|$ states, we get $|\mathcal{S}|$ equations, and the unknowns are the $|\mathcal{S}|$ numbers $v_\pi(s)$. Each equation is linear in these unknowns, since the $v_\pi(s')$ appear only multiplied by fixed numbers $\gamma \, \pi(a \mid s) \, p(s', r \mid s, a)$. Saying that $v_\pi$ is the *unique* solution means that exactly one set of numbers satisfies all the equations at once, and that set is $v_\pi$.
+What this means is that **the Bellman equation is not one equation but one equation for each state**. If there are $|\mathcal{S}|$ states, we get $|\mathcal{S}|$ equations, and the unknowns are the $|\mathcal{S}|$ numbers $v_\pi(s)$. Each equation is linear in these unknowns, since the $v_\pi(s')$ appear only multiplied by fixed numbers $\gamma \, \pi(a \mid s) \, p(s', r \mid s, a)$. Saying that $v_\pi$ is the *unique* solution means that exactly one set of numbers satisfies all the equations at once, and that set is $v_\pi$.
 
 For example, take the recycling robot with $\alpha = 0.8$, $r_{\texttt{search}} = 2$, $\gamma = 0.9$, and the policy "always $\texttt{search}$ when $\texttt{high}$, always $\texttt{recharge}$ when $\texttt{low}$". The Bellman equation gives one equation per state:
 

@@ -5670,6 +5670,45 @@
 <div class="arithmatex">\[
 S_0, A_0, R_1, S_1, A_1, R_2, S_2, A_2, R_3, \dots
 \]</div>
+<div class="admonition note">
+<p class="admonition-title">Why is the reward <span class="arithmatex">\(R_t\)</span> in the bandit chapter but <span class="arithmatex">\(R_{t+1}\)</span> here?</p>
+<p>It is only a difference in how the time steps are numbered. Both describe the same order of events: the agent takes an action, then receives its reward.</p>
+<p>In the <a href="../multi_armed_bandits/#a-k-armed-bandit-problem">bandit chapter</a>, the reward for action <span class="arithmatex">\(A_t\)</span> is called <span class="arithmatex">\(R_t\)</span>, with the same index:</p>
+<div class="arithmatex">\[
+A_1, R_1, \; A_2, R_2, \; A_3, R_3, \dots \qquad q_*(a) = \mathbb{E}[R_t \mid A_t = a].
+\]</div>
+<p>In an MDP, the action triggers <strong>two</strong> responses from the environment: a reward <em>and</em> a next state. They arrive together, so they get the same index, <span class="arithmatex">\(t + 1\)</span>:</p>
+<div class="arithmatex">\[
+\underbrace{S_t, A_t}_{\text{agent acts}} \;\longrightarrow\; \underbrace{R_{t+1}, S_{t+1}}_{\text{environment responds}}
+\]</div>
+<p>A bandit has no next state, so there is nothing for the reward to line up with, and the simpler "same index" naming is used.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Bandit</th>
+<th>MDP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>reward for action <span class="arithmatex">\(A_t\)</span></td>
+<td><span class="arithmatex">\(R_t\)</span></td>
+<td><span class="arithmatex">\(R_{t+1}\)</span></td>
+</tr>
+<tr>
+<td>expected reward of an action</td>
+<td><span class="arithmatex">\(q_*(a) = \mathbb{E}[R_t \mid A_t = a]\)</span></td>
+<td><span class="arithmatex">\(r(s, a) = \mathbb{E}[R_{t+1} \mid S_t = s, A_t = a]\)</span></td>
+</tr>
+<tr>
+<td>next state</td>
+<td>none</td>
+<td><span class="arithmatex">\(S_{t+1}\)</span>, arriving together with <span class="arithmatex">\(R_{t+1}\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
 <table>
 <thead>
 <tr>
@@ -5961,25 +6000,95 @@ v_\pi(s) \doteq \mathbb{E}_\pi[G_t \mid S_t = s] = \mathbb{E}_\pi\left[ \sum_{k=
 q_\pi(s, a) \doteq \mathbb{E}_\pi[G_t \mid S_t = s, A_t = a] = \mathbb{E}_\pi\left[ \sum_{k=0}^{\infty} \gamma^k R_{t+k+1} \,\middle|\, S_t = s, A_t = a \right].
 \]</div>
 <p>We call <span class="arithmatex">\(q_\pi\)</span> the <strong>action-value function for policy <span class="arithmatex">\(\pi\)</span></strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Comparing <span class="arithmatex">\(q_*(a)\)</span> from bandits, <span class="arithmatex">\(r(s, a)\)</span> and <span class="arithmatex">\(q_\pi(s, a)\)</span></p>
+<p>All three are "the value of an action", but they look ahead different distances:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Definition</th>
+<th>Looks at</th>
+<th>Needs a policy?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(q_*(a)\)</span>, <a href="../multi_armed_bandits/#a-k-armed-bandit-problem">bandit</a></td>
+<td><span class="arithmatex">\(\mathbb{E}[R_t \mid A_t = a]\)</span></td>
+<td>the one reward from action <span class="arithmatex">\(a\)</span></td>
+<td>no</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(r(s, a)\)</span>, MDP</td>
+<td><span class="arithmatex">\(\mathbb{E}[R_{t+1} \mid S_t = s, A_t = a]\)</span></td>
+<td>the one immediate reward from action <span class="arithmatex">\(a\)</span> in state <span class="arithmatex">\(s\)</span></td>
+<td>no</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(q_\pi(s, a)\)</span>, MDP</td>
+<td><span class="arithmatex">\(\mathbb{E}_\pi[G_t \mid S_t = s, A_t = a]\)</span></td>
+<td>all future rewards, discounted</td>
+<td><strong>yes</strong>: <span class="arithmatex">\(\pi\)</span> is followed after the first action</td>
+</tr>
+</tbody>
+</table>
+<p><strong><span class="arithmatex">\(r(s, a)\)</span> is the MDP version of the bandit's <span class="arithmatex">\(q_*(a)\)</span>.</strong> Both average only the reward that comes right after the action, so neither depends on what the agent does next. The only difference is that <span class="arithmatex">\(r(s, a)\)</span> also depends on the state.</p>
+<p><strong><span class="arithmatex">\(q_\pi(s, a)\)</span> also counts everything that happens afterwards.</strong> In an MDP, the action changes the next state, and the reward from then on depends on how the agent keeps playing. That is why <span class="arithmatex">\(q_\pi\)</span> needs a policy <span class="arithmatex">\(\pi\)</span> for "afterwards", and why it can differ from one policy to another.</p>
+</div>
 <p>Both are <a href="#conditional-expectation-the-average-inside-the-smaller-world">conditional expectations</a>: the average return, over only the moments that match the condition. <span class="arithmatex">\(v_\pi(s)\)</span> averages over everything that can happen from <span class="arithmatex">\(s\)</span>, including which action is taken first, while <span class="arithmatex">\(q_\pi(s, a)\)</span> also fixes the first action to <span class="arithmatex">\(a\)</span>. The two are linked by the <a href="#conditional-expectation-the-average-inside-the-smaller-world">law of total expectation</a>: the value of a state is the average of its action values, weighted by how likely the policy is to pick each action,</p>
 <div class="arithmatex">\[
 v_\pi(s) = \sum_{a \in \mathcal{A}(s)} \pi(a \mid s) \, q_\pi(s, a).
 \]</div>
-<p>To derive this, start from the definition of <span class="arithmatex">\(v_\pi(s)\)</span> and split the outcomes by which action <span class="arithmatex">\(A_t\)</span> is taken first. For simplicity, treat the return <span class="arithmatex">\(G_t\)</span> as a discrete random variable, so that its expectation is a sum over its possible values <span class="arithmatex">\(g\)</span>:</p>
-<p>To derive this, start from the definition of <span class="arithmatex">\(v_\pi(s)\)</span> and split the outcomes by which action <span class="arithmatex">\(A_t\)</span> is taken first. For simplicity, treat the return <span class="arithmatex">\(G_t\)</span> as a discrete random variable, so that its expectation is a sum over its possible values <span class="arithmatex">\(g\)</span>:</p>
+<p><strong>Short derivation, using the law of total expectation:</strong> We need the law with everything also conditioned on the current state. For random variables <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> and a condition <span class="arithmatex">\(C\)</span>,</p>
 <div class="arithmatex">\[
-\begin{aligned}
-v_\pi(s) &amp;= \mathbb{E}_\pi[G_t \mid S_t = s] \\
-&amp;= \sum_g g \, \Pr\{G_t = g \mid S_t = s\} &amp;&amp; \text{(definition of expectation)} \\
-&amp;= \sum_g g \sum_{a} \Pr\{G_t = g, A_t = a \mid S_t = s\} &amp;&amp; \text{(law of total probability over } a\text{)} \\
-&amp;= \sum_g g \sum_{a} \Pr\{A_t = a \mid S_t = s\} \, \Pr\{G_t = g \mid S_t = s, A_t = a\} &amp;&amp; \text{(multiplication rule)} \\
-&amp;= \sum_g \sum_{a} g \, \Pr\{A_t = a \mid S_t = s\} \, \Pr\{G_t = g \mid S_t = s, A_t = a\} &amp;&amp; \text{(move } g \text{ inside: it does not depend on } a\text{)} \\
-&amp;= \sum_{a} \sum_g g \, \Pr\{A_t = a \mid S_t = s\} \, \Pr\{G_t = g \mid S_t = s, A_t = a\} &amp;&amp; \text{(swap the order of the sums)} \\
-&amp;= \sum_{a} \Pr\{A_t = a \mid S_t = s\} \sum_g g \, \Pr\{G_t = g \mid S_t = s, A_t = a\} &amp;&amp; \text{(move } \Pr\{A_t = a \mid S_t = s\} \text{ out: it does not depend on } g\text{)} \\
-&amp;= \sum_{a} \pi(a \mid s) \, \mathbb{E}_\pi[G_t \mid S_t = s, A_t = a] &amp;&amp; \text{(definitions of } \pi \text{ and expectation)} \\
-&amp;= \sum_{a} \pi(a \mid s) \, q_\pi(s, a). &amp;&amp; \text{(definition of } q_\pi\text{)}
-\end{aligned}
+\mathbb{E}[X \mid C] = \sum_y \Pr\{Y = y \mid C\} \, \mathbb{E}[X \mid Y = y, C].
 \]</div>
+<p>This is the same <a href="#conditional-expectation-the-average-inside-the-smaller-world">law of total expectation</a>, applied inside the smaller world where <span class="arithmatex">\(C\)</span> holds.</p>
+<p>Take <span class="arithmatex">\(X = G_t\)</span> (the return), <span class="arithmatex">\(Y = A_t\)</span> (the first action), and <span class="arithmatex">\(C\)</span> to be <span class="arithmatex">\(S_t = s\)</span> (the current state):</p>
+<div class="arithmatex">\[
+\mathbb{E}_\pi[G_t \mid S_t = s] = \sum_a \Pr\{A_t = a \mid S_t = s\} \, \mathbb{E}_\pi[G_t \mid S_t = s, A_t = a].
+\]</div>
+<p>Each piece is something already defined:</p>
+<ul>
+<li><span class="arithmatex">\(\mathbb{E}_\pi[G_t \mid S_t = s] = v_\pi(s)\)</span>, by the definition of the state-value function;</li>
+<li><span class="arithmatex">\(\Pr\{A_t = a \mid S_t = s\} = \pi(a \mid s)\)</span>, since the policy is what chooses the action in state <span class="arithmatex">\(s\)</span>;</li>
+<li><span class="arithmatex">\(\mathbb{E}_\pi[G_t \mid S_t = s, A_t = a] = q_\pi(s, a)\)</span>, by the definition of the action-value function.</li>
+</ul>
+<p>Substituting all three gives</p>
+<div class="arithmatex">\[
+v_\pi(s) = \sum_{a \in \mathcal{A}(s)} \pi(a \mid s) \, q_\pi(s, a).
+\]</div>
+<div class="admonition note">
+<p class="admonition-title">Connection to the bandit chapter</p>
+<p>This is the same argument as the <a href="../multi_armed_bandits/#the-bandit-gradient-algorithm-as-stochastic-gradient-ascent">bandit result</a> <span class="arithmatex">\(\mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x)\)</span>, with two changes:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Bandit</th>
+<th>MDP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>condition</td>
+<td>none (there is only one situation)</td>
+<td><span class="arithmatex">\(S_t = s\)</span></td>
+</tr>
+<tr>
+<td>quantity being averaged</td>
+<td>immediate reward <span class="arithmatex">\(R_t\)</span></td>
+<td>full return <span class="arithmatex">\(G_t\)</span></td>
+</tr>
+<tr>
+<td>result</td>
+<td><span class="arithmatex">\(\mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x)\)</span></td>
+<td><span class="arithmatex">\(v_\pi(s) = \sum_a \pi(a \mid s) \, q_\pi(s, a)\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>So <strong>the value of a state is the policy-weighted average of its action values.</strong> For example, if in some state <span class="arithmatex">\(s\)</span> the policy picks <span class="arithmatex">\(\texttt{search}\)</span> with probability <span class="arithmatex">\(0.9\)</span> and <span class="arithmatex">\(\texttt{wait}\)</span> with probability <span class="arithmatex">\(0.1\)</span>, and <span class="arithmatex">\(q_\pi(s, \texttt{search}) = 10\)</span> while <span class="arithmatex">\(q_\pi(s, \texttt{wait}) = 4\)</span>, then</p>
 <div class="arithmatex">\[
 v_\pi(s) = 0.9 \cdot 10 + 0.1 \cdot 4 = 9.4.
@@ -6032,7 +6141,7 @@ v_\pi(s) &amp;= \sum_a \sum_{s'} \sum_r \pi(a \mid s) \, p(s', r \mid s, a) \Big
 <p><img alt="img" src="../bellman.png" /></p>
 <p><strong>The Bellman equation averages over all the possibilities, weighting each by its probability of occurring. It states that the value of the start state must equal the (discounted) value of the expected next state, plus the reward expected along the way.</strong></p>
 <p>The value function <span class="arithmatex">\(v_\pi\)</span> is the <strong>unique solution</strong> to its Bellman equation.</p>
-<p>What this means is that the Bellman equation is not one equation but one equation <em>for each state</em>. If there are <span class="arithmatex">\(|\mathcal{S}|\)</span> states, we get <span class="arithmatex">\(|\mathcal{S}|\)</span> equations, and the unknowns are the <span class="arithmatex">\(|\mathcal{S}|\)</span> numbers <span class="arithmatex">\(v_\pi(s)\)</span>. Each equation is linear in these unknowns, since the <span class="arithmatex">\(v_\pi(s')\)</span> appear only multiplied by fixed numbers <span class="arithmatex">\(\gamma \, \pi(a \mid s) \, p(s', r \mid s, a)\)</span>. Saying that <span class="arithmatex">\(v_\pi\)</span> is the <em>unique</em> solution means that exactly one set of numbers satisfies all the equations at once, and that set is <span class="arithmatex">\(v_\pi\)</span>.</p>
+<p>What this means is that <strong>the Bellman equation is not one equation but one equation for each state</strong>. If there are <span class="arithmatex">\(|\mathcal{S}|\)</span> states, we get <span class="arithmatex">\(|\mathcal{S}|\)</span> equations, and the unknowns are the <span class="arithmatex">\(|\mathcal{S}|\)</span> numbers <span class="arithmatex">\(v_\pi(s)\)</span>. Each equation is linear in these unknowns, since the <span class="arithmatex">\(v_\pi(s')\)</span> appear only multiplied by fixed numbers <span class="arithmatex">\(\gamma \, \pi(a \mid s) \, p(s', r \mid s, a)\)</span>. Saying that <span class="arithmatex">\(v_\pi\)</span> is the <em>unique</em> solution means that exactly one set of numbers satisfies all the equations at once, and that set is <span class="arithmatex">\(v_\pi\)</span>.</p>
 <p>For example, take the recycling robot with <span class="arithmatex">\(\alpha = 0.8\)</span>, <span class="arithmatex">\(r_{\texttt{search}} = 2\)</span>, <span class="arithmatex">\(\gamma = 0.9\)</span>, and the policy "always <span class="arithmatex">\(\texttt{search}\)</span> when <span class="arithmatex">\(\texttt{high}\)</span>, always <span class="arithmatex">\(\texttt{recharge}\)</span> when <span class="arithmatex">\(\texttt{low}\)</span>". The Bellman equation gives one equation per state:</p>
 <div class="arithmatex">\[
 \begin{aligned}

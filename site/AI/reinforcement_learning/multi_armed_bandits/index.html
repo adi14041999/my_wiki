@@ -5709,32 +5709,21 @@ H_{t+1}^{\text{exact}}(a) \doteq H_t(a) + \alpha \frac{\partial \, \mathbb{E}[R_
 \]</div>
 <div class="admonition note">
 <p class="admonition-title">Deriving <span class="arithmatex">\(\mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x)\)</span> from <span class="arithmatex">\(q_*(a) = \mathbb{E}[R_t \mid A_t = a]\)</span></p>
-<p>To keep the sums simple, treat the reward <span class="arithmatex">\(R_t\)</span> as discrete, taking values <span class="arithmatex">\(r\)</span>.</p>
-<p><strong>Step 1: definition of expectation:</strong></p>
+<p><strong>The law of total expectation:</strong> For any random variable <span class="arithmatex">\(X\)</span> and any discrete random variable <span class="arithmatex">\(Y\)</span>,</p>
 <div class="arithmatex">\[
-\mathbb{E}[R_t] = \sum_r r \cdot \Pr\{R_t = r\}.
+\mathbb{E}[X] = \sum_y \Pr\{Y = y\} \, \mathbb{E}[X \mid Y = y].
 \]</div>
-<p><strong>Step 2: split by which action was taken (law of total probability):</strong> Every reward comes from some action <span class="arithmatex">\(x\)</span>, so</p>
+<p>In words, to find the overall average of <span class="arithmatex">\(X\)</span>, split the outcomes into groups by the value of <span class="arithmatex">\(Y\)</span>, find the average of <span class="arithmatex">\(X\)</span> within each group, and then combine those group averages, weighting each by how likely that group is. See <a href="../../../math/probability/conditional_expectation/#general-properties">Conditional Expectation</a>, where it appears as iterated expectation, or Adam's law, <span class="arithmatex">\(\mathbb{E}\big[\mathbb{E}[X \mid Y]\big] = \mathbb{E}[X]\)</span>.</p>
+<p><strong>Applying it:</strong> Take <span class="arithmatex">\(X = R_t\)</span>, the reward, and <span class="arithmatex">\(Y = A_t\)</span>, the action, so that the groups are "the steps on which action <span class="arithmatex">\(x\)</span> was taken":</p>
 <div class="arithmatex">\[
-\Pr\{R_t = r\} = \sum_x \Pr\{R_t = r, A_t = x\}.
+\mathbb{E}[R_t] = \sum_x \Pr\{A_t = x\} \, \mathbb{E}[R_t \mid A_t = x].
 \]</div>
-<p><strong>Step 3: multiplication rule:</strong> First an action is chosen, then a reward is drawn for it:</p>
-<div class="arithmatex">\[
-\Pr\{R_t = r, A_t = x\} = \Pr\{A_t = x\} \cdot \Pr\{R_t = r \mid A_t = x\} = \pi_t(x) \cdot \Pr\{R_t = r \mid A_t = x\}.
-\]</div>
-<p><strong>Step 4: substitute and swap the order of the sums:</strong></p>
-<div class="arithmatex">\[
-\begin{aligned}
-\mathbb{E}[R_t] &amp;= \sum_r r \sum_x \pi_t(x) \Pr\{R_t = r \mid A_t = x\} \\
-&amp;= \sum_x \pi_t(x) \sum_r r \Pr\{R_t = r \mid A_t = x\}.
-\end{aligned}
-\]</div>
-<p>Here <span class="arithmatex">\(r\)</span> moves inside the sum over <span class="arithmatex">\(x\)</span>, the two sums trade places (they add up the same terms in a different order), and <span class="arithmatex">\(\pi_t(x)\)</span> comes out of the inner sum because it does not depend on <span class="arithmatex">\(r\)</span>.</p>
-<p><strong>Step 5: recognize the inner sum:</strong> It is the average reward when action <span class="arithmatex">\(x\)</span> is taken:</p>
-<div class="arithmatex">\[
-\sum_r r \Pr\{R_t = r \mid A_t = x\} = \mathbb{E}[R_t \mid A_t = x] = q_*(x).
-\]</div>
-<p><strong>Result:</strong></p>
+<p>Now substitute the two pieces:</p>
+<ul>
+<li><span class="arithmatex">\(\Pr\{A_t = x\} = \pi_t(x)\)</span>, the probability that the policy selects action <span class="arithmatex">\(x\)</span>;</li>
+<li><span class="arithmatex">\(\mathbb{E}[R_t \mid A_t = x] = q_*(x)\)</span>, by the definition of the true value of action <span class="arithmatex">\(x\)</span>.</li>
+</ul>
+<p>This gives</p>
 <div class="arithmatex">\[
 \mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x).
 \]</div>

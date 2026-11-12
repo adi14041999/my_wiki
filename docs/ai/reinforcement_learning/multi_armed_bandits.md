@@ -317,44 +317,26 @@ $$
 $$
 
 !!! note "Deriving $\mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x)$ from $q_*(a) = \mathbb{E}[R_t \mid A_t = a]$"
-    To keep the sums simple, treat the reward $R_t$ as discrete, taking values $r$.
-
-    **Step 1: definition of expectation:**
+    **The law of total expectation:** For any random variable $X$ and any discrete random variable $Y$,
 
     $$
-    \mathbb{E}[R_t] = \sum_r r \cdot \Pr\{R_t = r\}.
+    \mathbb{E}[X] = \sum_y \Pr\{Y = y\} \, \mathbb{E}[X \mid Y = y].
     $$
 
-    **Step 2: split by which action was taken (law of total probability):** Every reward comes from some action $x$, so
+    In words, to find the overall average of $X$, split the outcomes into groups by the value of $Y$, find the average of $X$ within each group, and then combine those group averages, weighting each by how likely that group is. See [Conditional Expectation](../../math/probability/conditional_expectation.md#general-properties), where it appears as iterated expectation, or Adam's law, $\mathbb{E}\big[\mathbb{E}[X \mid Y]\big] = \mathbb{E}[X]$.
+
+    **Applying it:** Take $X = R_t$, the reward, and $Y = A_t$, the action, so that the groups are "the steps on which action $x$ was taken":
 
     $$
-    \Pr\{R_t = r\} = \sum_x \Pr\{R_t = r, A_t = x\}.
+    \mathbb{E}[R_t] = \sum_x \Pr\{A_t = x\} \, \mathbb{E}[R_t \mid A_t = x].
     $$
 
-    **Step 3: multiplication rule:** First an action is chosen, then a reward is drawn for it:
+    Now substitute the two pieces:
 
-    $$
-    \Pr\{R_t = r, A_t = x\} = \Pr\{A_t = x\} \cdot \Pr\{R_t = r \mid A_t = x\} = \pi_t(x) \cdot \Pr\{R_t = r \mid A_t = x\}.
-    $$
+    - $\Pr\{A_t = x\} = \pi_t(x)$, the probability that the policy selects action $x$;
+    - $\mathbb{E}[R_t \mid A_t = x] = q_*(x)$, by the definition of the true value of action $x$.
 
-    **Step 4: substitute and swap the order of the sums:**
-
-    $$
-    \begin{aligned}
-    \mathbb{E}[R_t] &= \sum_r r \sum_x \pi_t(x) \Pr\{R_t = r \mid A_t = x\} \\
-    &= \sum_x \pi_t(x) \sum_r r \Pr\{R_t = r \mid A_t = x\}.
-    \end{aligned}
-    $$
-
-    Here $r$ moves inside the sum over $x$, the two sums trade places (they add up the same terms in a different order), and $\pi_t(x)$ comes out of the inner sum because it does not depend on $r$.
-
-    **Step 5: recognize the inner sum:** It is the average reward when action $x$ is taken:
-
-    $$
-    \sum_r r \Pr\{R_t = r \mid A_t = x\} = \mathbb{E}[R_t \mid A_t = x] = q_*(x).
-    $$
-
-    **Result:**
+    This gives
 
     $$
     \mathbb{E}[R_t] = \sum_x \pi_t(x) \, q_*(x).
