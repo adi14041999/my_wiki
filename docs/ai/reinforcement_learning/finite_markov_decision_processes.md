@@ -821,6 +821,19 @@ It follows by combining two results we already have:
 
 Substituting the second into the first gives the equation for $q_*$. We write $a'$ for the action in the next state, to keep it separate from the first action $a$, which is fixed.
 
+!!! note "Taking the max over policies vs taking the max over actions"
+    Two kinds of maximum appear in this chapter, and they compare different things:
+
+    | | $\max_\pi$ | $\max_a$ |
+    |---|---|---|
+    | Compares | whole **policies**, i.e. complete rules for what to do in every state, at every future step | single **actions**, available in one state, right now |
+    | How many candidates | every possible policy (very many) | the actions in $\mathcal{A}(s)$ (a few) |
+    | Where it appears | the definitions: $v_*(s) = \max_\pi v_\pi(s)$ and $q_*(s, a) = \max_\pi q_\pi(s, a)$ | the Bellman optimality equation: $v_*(s) = \max_a q_*(s, a)$ |
+
+    **$\max_\pi$ is about whole plans.** To compute $v_*(s) = \max_\pi v_\pi(s)$ directly, you would list every policy, work out how well each one does from $s$, and keep the best. This is the *definition* of optimal value, but not a practical way to compute it.
+
+    **$\max_a$ is a one-step choice.** $\max_a q_*(s, a)$ only compares the few actions available in $s$. It can do this because each $q_*(s, a)$ already assumes the best possible behaviour after the first action, so the whole future is already built into each number.
+
 ### Case Study: Optimal Policy for the Recycling Robot
 
 We now solve the recycling robot completely, from the dynamics to the optimal policy.
@@ -916,6 +929,20 @@ Note that in $\texttt{low}$, $\texttt{recharge}$ earns reward $0$ and $\texttt{w
 | $\texttt{wait}$, $\texttt{recharge}$ | $10.00$ | $9.00$ |
 
 "$\texttt{search}$, $\texttt{recharge}$" is best in **both** states at once, as an optimal policy must be, and its values are exactly $v_*$.
+
+!!! note "Planning: solving an MDP when the model is known"
+    Under the following assumptions, finding good behaviour becomes a **planning** problem:
+
+    1. **Finite states and actions:** The sets $\mathcal{S}$ and $\mathcal{A}(s)$ are finite, so values can be stored as a table, with one number per state or per state–action pair.
+    2. **A known model of the world:** We are given both parts of the model:
+        - the *dynamics*: how the environment moves between states, $p(s' \mid s, a)$;
+        - the *reward*: what each step pays, $r(s, a)$ or $r(s, a, s')$.
+
+        Together these are the four-argument function $p(s', r \mid s, a)$.
+    3. **Evaluate a given policy:** For a fixed policy $\pi$, compute how good it is: its value function $v_\pi(s)$ (or $q_\pi(s, a)$), by solving the Bellman equation for $v_\pi$. This is called *policy evaluation*.
+    4. **Compute the best policy:** Find $v_*$ (or $q_*$) by solving the Bellman optimality equation, then act greedily: $\pi_*(s) \in \arg\max_a q_*(s, a)$. This is called *control*.
+
+    Because everything about the environment is known in advance, all of this can be worked out by calculation alone, before the agent takes a single real step. That is what makes it an **AI planning problem**, rather than a learning problem. The solved recycling robot example is exactly this kind of planning: the states and actions are finite, $p$ is fully known, and we evaluated policies and computed the optimal one by hand.
 
 ## Optimality and Approximation
 

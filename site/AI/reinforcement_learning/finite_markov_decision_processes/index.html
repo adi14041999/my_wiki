@@ -6373,6 +6373,38 @@ v_*(s') = \max_{a'} q_*(s', a').
 </li>
 </ol>
 <p>Substituting the second into the first gives the equation for <span class="arithmatex">\(q_*\)</span>. We write <span class="arithmatex">\(a'\)</span> for the action in the next state, to keep it separate from the first action <span class="arithmatex">\(a\)</span>, which is fixed.</p>
+<div class="admonition note">
+<p class="admonition-title">Taking the max over policies vs taking the max over actions</p>
+<p>Two kinds of maximum appear in this chapter, and they compare different things:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><span class="arithmatex">\(\max_\pi\)</span></th>
+<th><span class="arithmatex">\(\max_a\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compares</td>
+<td>whole <strong>policies</strong>, i.e. complete rules for what to do in every state, at every future step</td>
+<td>single <strong>actions</strong>, available in one state, right now</td>
+</tr>
+<tr>
+<td>How many candidates</td>
+<td>every possible policy (very many)</td>
+<td>the actions in <span class="arithmatex">\(\mathcal{A}(s)\)</span> (a few)</td>
+</tr>
+<tr>
+<td>Where it appears</td>
+<td>the definitions: <span class="arithmatex">\(v_*(s) = \max_\pi v_\pi(s)\)</span> and <span class="arithmatex">\(q_*(s, a) = \max_\pi q_\pi(s, a)\)</span></td>
+<td>the Bellman optimality equation: <span class="arithmatex">\(v_*(s) = \max_a q_*(s, a)\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong><span class="arithmatex">\(\max_\pi\)</span> is about whole plans.</strong> To compute <span class="arithmatex">\(v_*(s) = \max_\pi v_\pi(s)\)</span> directly, you would list every policy, work out how well each one does from <span class="arithmatex">\(s\)</span>, and keep the best. This is the <em>definition</em> of optimal value, but not a practical way to compute it.</p>
+<p><strong><span class="arithmatex">\(\max_a\)</span> is a one-step choice.</strong> <span class="arithmatex">\(\max_a q_*(s, a)\)</span> only compares the few actions available in <span class="arithmatex">\(s\)</span>. It can do this because each <span class="arithmatex">\(q_*(s, a)\)</span> already assumes the best possible behaviour after the first action, so the whole future is already built into each number.</p>
+</div>
 <h3 id="case-study-optimal-policy-for-the-recycling-robot">Case Study: Optimal Policy for the Recycling Robot</h3>
 <p>We now solve the recycling robot completely, from the dynamics to the optimal policy.</p>
 <p><strong>Setup:</strong> The states are <span class="arithmatex">\(\texttt{high}\)</span> and <span class="arithmatex">\(\texttt{low}\)</span>, with <span class="arithmatex">\(\mathcal{A}(\texttt{high}) = \{\texttt{search}, \texttt{wait}\}\)</span> and <span class="arithmatex">\(\mathcal{A}(\texttt{low}) = \{\texttt{search}, \texttt{wait}, \texttt{recharge}\}\)</span>. We use</p>
@@ -6562,6 +6594,26 @@ h = 2 + 0.72h + 0.162h \quad \Longrightarrow \quad 0.118h = 2 \quad \Longrightar
 </tbody>
 </table>
 <p>"<span class="arithmatex">\(\texttt{search}\)</span>, <span class="arithmatex">\(\texttt{recharge}\)</span>" is best in <strong>both</strong> states at once, as an optimal policy must be, and its values are exactly <span class="arithmatex">\(v_*\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Planning: solving an MDP when the model is known</p>
+<p>Under the following assumptions, finding good behaviour becomes a <strong>planning</strong> problem:</p>
+<ol>
+<li><strong>Finite states and actions:</strong> The sets <span class="arithmatex">\(\mathcal{S}\)</span> and <span class="arithmatex">\(\mathcal{A}(s)\)</span> are finite, so values can be stored as a table, with one number per state or per state–action pair.</li>
+<li>
+<ul>
+<li>the <em>dynamics</em>: how the environment moves between states, <span class="arithmatex">\(p(s' \mid s, a)\)</span>;</li>
+<li>the <em>reward</em>: what each step pays, <span class="arithmatex">\(r(s, a)\)</span> or <span class="arithmatex">\(r(s, a, s')\)</span>.</li>
+</ul>
+<p><strong>A known model of the world:</strong> We are given both parts of the model:</p>
+<p>Together these are the four-argument function <span class="arithmatex">\(p(s', r \mid s, a)\)</span>.</p>
+</li>
+<li>
+<p><strong>Evaluate a given policy:</strong> For a fixed policy <span class="arithmatex">\(\pi\)</span>, compute how good it is: its value function <span class="arithmatex">\(v_\pi(s)\)</span> (or <span class="arithmatex">\(q_\pi(s, a)\)</span>), by solving the Bellman equation for <span class="arithmatex">\(v_\pi\)</span>. This is called <em>policy evaluation</em>.</p>
+</li>
+<li><strong>Compute the best policy:</strong> Find <span class="arithmatex">\(v_*\)</span> (or <span class="arithmatex">\(q_*\)</span>) by solving the Bellman optimality equation, then act greedily: <span class="arithmatex">\(\pi_*(s) \in \arg\max_a q_*(s, a)\)</span>. This is called <em>control</em>.</li>
+</ol>
+<p>Because everything about the environment is known in advance, all of this can be worked out by calculation alone, before the agent takes a single real step. That is what makes it an <strong>AI planning problem</strong>, rather than a learning problem. The solved recycling robot example is exactly this kind of planning: the states and actions are finite, <span class="arithmatex">\(p\)</span> is fully known, and we evaluated policies and computed the optimal one by hand.</p>
+</div>
 <h2 id="optimality-and-approximation">Optimality and Approximation</h2>
 <p>Explicitly solving the Bellman optimality equation provides one route to finding an optimal policy, and thus to solving the reinforcement learning problem. However, this solution is rarely directly useful. It is akin to an exhaustive search, looking ahead at all possibilities, computing their probabilities of occurrence and their desirabilities in terms of expected rewards. This solution relies on at least three assumptions that are rarely true in practice:</p>
 <ol>
