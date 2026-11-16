@@ -16,7 +16,7 @@
         <link rel="prev" href="../multi_armed_bandits/">
       
       
-        <link rel="next" href="../../notes_from_ai_podcasts/nov_2025_mindscape_336_anil_ananthaswamy_on_the_mathematics_of_neural_nets_and_ai/">
+        <link rel="next" href="../temporal_difference_learning/">
       
       
         
@@ -2534,6 +2534,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../temporal_difference_learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Temporal-Difference Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -6594,6 +6622,28 @@ h = 2 + 0.72h + 0.162h \quad \Longrightarrow \quad 0.118h = 2 \quad \Longrightar
 </tbody>
 </table>
 <p>"<span class="arithmatex">\(\texttt{search}\)</span>, <span class="arithmatex">\(\texttt{recharge}\)</span>" is best in <strong>both</strong> states at once, as an optimal policy must be, and its values are exactly <span class="arithmatex">\(v_*\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">In an infinite-horizon MDP, there is always a deterministic optimal policy</p>
+<p>For a finite MDP with an infinite horizon (a continuing task), there is always an optimal policy that is:</p>
+<ul>
+<li><strong>deterministic</strong>: in each state it always picks one particular action, with probability <span class="arithmatex">\(1\)</span>; it never needs to randomize;</li>
+<li><strong>stationary</strong>: the action depends only on the current state <span class="arithmatex">\(s\)</span>, not on the time step <span class="arithmatex">\(t\)</span>.</li>
+</ul>
+<p>So an optimal policy can always be written as a simple lookup table (one action per state).</p>
+<p><strong>Why deterministic is enough:</strong> Once we have <span class="arithmatex">\(q_*\)</span>, the value of following a policy <span class="arithmatex">\(\pi\)</span> in state <span class="arithmatex">\(s\)</span> (and acting optimally afterwards) is a weighted average of the action values,</p>
+<div class="arithmatex">\[
+\sum_a \pi(a \mid s) \, q_*(s, a) \;\leq\; \max_a q_*(s, a),
+\]</div>
+<p>and a weighted average can never beat its largest term. Putting all the probability on the best action reaches that maximum exactly. Mixing in any other action can only lower the average, or at best keep it the same if that action ties for best. So randomizing never helps, and the greedy choice</p>
+<div class="arithmatex">\[
+\pi_*(s) = \arg\max_a q_*(s, a)
+\]</div>
+<p>is already optimal.</p>
+<p><strong>Why stationary is enough:</strong> With an infinite horizon there is no deadline: from any state, the future looks exactly the same whether we are at step <span class="arithmatex">\(10\)</span> or step <span class="arithmatex">\(10{,}000\)</span>. So the best action in a state cannot depend on the time, only on the state. With a <em>finite</em> horizon this changes: with a few steps left, a risky action might be worth taking that would not be worth it with many steps left, so the best policy may depend on the time remaining.</p>
+<p><strong>"There exists", not "every":</strong> If two actions tie for the maximum in some state, any policy that randomizes between them is optimal too. <strong>Thus, there may be more than one optimal policy</strong>.</p>
+<p><strong>Why this matters:</strong> It means we only ever need to search over deterministic policies, and a finite MDP has finitely many of them: one choice of action per state, so <span class="arithmatex">\(\prod_{s} |\mathcal{A}(s)|\)</span> (<span class="arithmatex">\(|\mathcal{A}|^{|\mathcal{S}|}\)</span> when every state has <span class="arithmatex">\(|\mathcal{A}|\)</span> actions) in total. For the recycling robot that is <span class="arithmatex">\(2 \times 3 = 6\)</span>, which is why the we only had to check six policies, and the optimal one, "<span class="arithmatex">\(\texttt{search}\)</span> when <span class="arithmatex">\(\texttt{high}\)</span>, <span class="arithmatex">\(\texttt{recharge}\)</span> when <span class="arithmatex">\(\texttt{low}\)</span>", is deterministic.</p>
+<p><strong>When randomness is needed:</strong> Stochastic policies remain useful in other settings: while <em>learning</em> (e.g. <span class="arithmatex">\(\varepsilon\)</span>-greedy, to keep exploring), in games against an opponent who can exploit predictability (e.g. rock–paper–scissors), and when the state does not have the Markov property, so the agent cannot fully tell situations apart.</p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Planning: solving an MDP when the model is known</p>
 <p>Under the following assumptions, finding good behaviour becomes a <strong>planning</strong> problem:</p>

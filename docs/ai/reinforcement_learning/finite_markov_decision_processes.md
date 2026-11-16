@@ -930,6 +930,36 @@ Note that in $\texttt{low}$, $\texttt{recharge}$ earns reward $0$ and $\texttt{w
 
 "$\texttt{search}$, $\texttt{recharge}$" is best in **both** states at once, as an optimal policy must be, and its values are exactly $v_*$.
 
+!!! note "In an infinite-horizon MDP, there is always a deterministic optimal policy"
+    For a finite MDP with an infinite horizon (a continuing task), there is always an optimal policy that is:
+
+    - **deterministic**: in each state it always picks one particular action, with probability $1$; it never needs to randomize;
+    - **stationary**: the action depends only on the current state $s$, not on the time step $t$.
+
+    So an optimal policy can always be written as a simple lookup table (one action per state).
+
+    **Why deterministic is enough:** Once we have $q_*$, the value of following a policy $\pi$ in state $s$ (and acting optimally afterwards) is a weighted average of the action values,
+
+    $$
+    \sum_a \pi(a \mid s) \, q_*(s, a) \;\leq\; \max_a q_*(s, a),
+    $$
+
+    and a weighted average can never beat its largest term. Putting all the probability on the best action reaches that maximum exactly. Mixing in any other action can only lower the average, or at best keep it the same if that action ties for best. So randomizing never helps, and the greedy choice
+
+    $$
+    \pi_*(s) = \arg\max_a q_*(s, a)
+    $$
+
+    is already optimal.
+
+    **Why stationary is enough:** With an infinite horizon there is no deadline: from any state, the future looks exactly the same whether we are at step $10$ or step $10{,}000$. So the best action in a state cannot depend on the time, only on the state. With a *finite* horizon this changes: with a few steps left, a risky action might be worth taking that would not be worth it with many steps left, so the best policy may depend on the time remaining.
+
+    **"There exists", not "every":** If two actions tie for the maximum in some state, any policy that randomizes between them is optimal too. **Thus, there may be more than one optimal policy**.
+
+    **Why this matters:** It means we only ever need to search over deterministic policies, and a finite MDP has finitely many of them: one choice of action per state, so $\prod_{s} |\mathcal{A}(s)|$ ($|\mathcal{A}|^{|\mathcal{S}|}$ when every state has $|\mathcal{A}|$ actions) in total. For the recycling robot that is $2 \times 3 = 6$, which is why the we only had to check six policies, and the optimal one, "$\texttt{search}$ when $\texttt{high}$, $\texttt{recharge}$ when $\texttt{low}$", is deterministic.
+
+    **When randomness is needed:** Stochastic policies remain useful in other settings: while *learning* (e.g. $\varepsilon$-greedy, to keep exploring), in games against an opponent who can exploit predictability (e.g. rock–paper–scissors), and when the state does not have the Markov property, so the agent cannot fully tell situations apart.
+
 !!! note "Planning: solving an MDP when the model is known"
     Under the following assumptions, finding good behaviour becomes a **planning** problem:
 
