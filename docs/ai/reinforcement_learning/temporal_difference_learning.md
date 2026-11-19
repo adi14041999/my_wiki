@@ -121,29 +121,9 @@ The box below specifies TD(0) completely in procedural form.
         - $S \leftarrow S'$
     - **until** $S$ is terminal
 
-Because TD(0) bases its update in part on an existing estimate, we say that it is a **bootstrapping** method, like DP. To see how the three targets relate, recall from [Finite Markov Decision Processes](finite_markov_decision_processes.md#policies-and-value-functions) that
+Because TD(0) bases its update in part on an existing estimate, we say that it is a **bootstrapping** method, like DP.
 
-$$
-\begin{aligned}
-v_\pi(s) &\doteq \mathbb{E}_\pi[G_t \mid S_t = s] && (\text{MC}) \\
-&= \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} \mid S_t = s] \\
-&= \mathbb{E}_\pi[R_{t+1} + \gamma \, v_\pi(S_{t+1}) \mid S_t = s]. && (\text{DP})
-\end{aligned}
-$$
-
-Roughly speaking, Monte Carlo methods use an estimate of line $(\text{MC})$ as a target, whereas DP methods use an estimate of line $(\text{DP})$ as a target.
-
-The Monte Carlo target is an estimate because the expected value in $(\text{MC})$ is not known; a sample return is used in place of the real expected return. The DP target is an estimate not because of the expected values, which are assumed to be completely provided by a model of the environment, but because $v_\pi(S_{t+1})$ is not known and the current estimate, $V(S_{t+1})$, is used instead. The TD target is an estimate for both reasons: it samples the expected values in $(\text{DP})$ and it uses the current estimate $V$ instead of the true $v_\pi$.
-
-| Target | Replaces the expectation with a sample? | Replaces $v_\pi$ with the estimate $V$? |
-|---|---|---|
-| MC: $G_t$ | **yes**: one observed return | no: no value function in the target |
-| DP: $\sum_a \pi(a \mid s) \sum_{s', r} p(s', r \mid s, a) \big[ r + \gamma V(s') \big]$ | no: the model gives the exact average | **yes** |
-| TD: $R_{t+1} + \gamma V(S_{t+1})$ | **yes**: one observed step | **yes** |
-
-Thus, TD methods combine the **sampling** of Monte Carlo with the **bootstrapping** of DP. As we shall see, with care and imagination this can take us a long way toward obtaining the advantages of both Monte Carlo and DP methods.
-
-Finally, note that the quantity in brackets in the TD(0) update is a sort of error, measuring the difference between the estimated value of $S_t$ and the better estimate $R_{t+1} + \gamma V(S_{t+1})$. This quantity, called the **TD error**, arises in various forms throughout reinforcement learning:
+Finally, note that the quantity in brackets in the TD(0) update is a sort of error. This quantity, called the **TD error**, arises in various forms throughout reinforcement learning:
 
 $$
 \delta_t \doteq R_{t+1} + \gamma V(S_{t+1}) - V(S_t).
@@ -173,11 +153,11 @@ Each day as you drive home from work, you try to predict how long it will take t
 
 The rewards in this example are the elapsed times on each leg of the journey. We are not discounting ($\gamma = 1$), and thus the return for each state is the actual time to go from that state. The value of each state is the expected time to go. The second column of numbers gives the current estimated value $V(S_t)$ for each state encountered.
 
-A simple way to view the operation of Monte Carlo methods is to plot the predicted total time (the last column) over the sequence, as in the figure below (left). The arrows show the changes in predictions recommended by the constant-$\alpha$ MC method, for $\alpha = 1$. These are exactly the errors between the estimated value (predicted time to go) in each state and the actual return (actual time to go). For example, when you exited the highway you thought it would take only 15 minutes more to get home, but in fact it took 23 minutes. The constant-$\alpha$ MC update applies at this point and determines an increment in the estimate of time to go after exiting the highway. The error, $G_t - V(S_t)$, at this time is eight minutes. Suppose the step-size parameter, $\alpha$, is $1/2$. Then the predicted time to go after exiting the highway would be revised upward by four minutes as a result of this experience. This is probably too large a change in this case; the truck was probably just an unlucky break. In any event, the change can only be made **off-line**, that is, after you have reached home. Only at this point do you know any of the actual returns.
+A simple way to view the operation of Monte Carlo methods is to plot the predicted total time (the last column) over the sequence, as in the figure below (left). The arrows show the changes in predictions recommended by the constant-$\alpha$ MC method, for $\alpha = 1$. These are exactly the errors between the estimated value (predicted time to go) in each state and the actual return (actual time to go).
 
-Is it necessary to wait until the final outcome is known before learning can begin? Suppose on another day you again estimate when leaving your office that it will take 30 minutes to drive home, but then you become stuck in a massive traffic jam. Twenty-five minutes after leaving the office you are still bumper-to-bumper on the highway. You now estimate that it will take another 25 minutes to get home, for a total of 50 minutes. As you wait in traffic, you already know that your initial estimate of 30 minutes was too optimistic. Must you wait until you get home before increasing your estimate for the initial state? According to the Monte Carlo approach you must, because you don’t yet know the true return.
+Suppose on another day you again estimate when leaving your office that it will take 30 minutes to drive home, but then you become stuck in a massive traffic jam. 25 minutes after leaving the office you are still bumper-to-bumper on the highway. You now estimate that it will take another 25 minutes to get home, for a total of 50 minutes. As you wait in traffic, you already know that your initial estimate of 30 minutes was too optimistic. Must you wait until you get home before increasing your estimate for the initial state? According to the Monte Carlo approach you must, because you don’t yet know the true return.
 
-According to a TD approach, on the other hand, you would learn immediately, shifting your initial estimate from 30 minutes toward 50. In fact, each estimate would be shifted toward the estimate that immediately follows it. Returning to our first day of driving, the figure below (right) shows the changes in the predictions recommended by the TD(0) rule (these are the changes made by the rule if $\alpha = 1$). Each error is proportional to the change over time of the prediction, that is, to the **temporal differences** in predictions.
+According to a TD approach, on the other hand, you would learn immediately, shifting your initial estimate from 30 minutes toward 50. In fact, each estimate would be shifted toward the estimate that immediately follows it. Returning to our first day of driving, the figure below (right) shows the changes in the predictions recommended by the TD(0) rule (these are the changes made by the rule if $\alpha = 1$).
 
 ![Driving home: changes recommended by Monte Carlo (left) and TD (right)](drive.png)
 
@@ -191,13 +171,13 @@ The arrows in the two figures are these errors, for the first day of driving:
 | secondary road, behind truck | $10$ | $13$ | $13 - 10 = 3$ | $10 + 3 - 10 = 3$ |
 | entering home street | $3$ | $3$ | $3 - 3 = 0$ | $3 + 0 - 3 = 0$ |
 
-Every MC error is positive, because the trip took longer than each prediction. The TD errors can have either sign, because each one only compares a prediction with the very next one. For example, the TD error at "reach car" is $-5$: by the time you exited the highway, the outlook had improved. Each TD error equals the change in the predicted total time from one row to the next, e.g. $40 - 30 = 10$ and $35 - 40 = -5$.
+Every MC error is positive, because the trip took longer than each prediction. The TD errors can have either sign, because each one only compares a prediction with the very next one. For example, the TD error at "reach car" is $-5$: by the time you exited the highway, the outlook had improved.
 
 ## Sarsa: On-policy TD Control
 
 We now use TD prediction for the **control** problem: not just evaluating a policy, but finding a good one. The first step is to learn an action-value function rather than a state-value function, because with $q_\pi(s, a)$ the agent can choose actions without a model, by picking the action with the largest value.
 
-For an **on-policy** method we must estimate $q_\pi(s, a)$ for the current behavior policy $\pi$ and for all states $s$ and actions $a$. "On-policy" means the values being learned are those of the very policy the agent is using to act, exploration included. This can be done using essentially the same TD method described above for learning $v_\pi$.
+For an **on-policy** method we must **estimate $q_\pi(s, a)$ for the current behavior policy $\pi$** and for all states $s$ and actions $a$. "On-policy" means the values being learned are those of the very policy the agent is using to act, exploration included. This can be done using essentially the same TD method described above for learning $v_\pi$.
 
 Recall that an episode consists of an alternating sequence of states and state–action pairs:
 
@@ -221,15 +201,9 @@ Compared with TD(0) for $v_\pi$, the only change is that every $V(\text{state})$
 | Target | $R_{t+1} + \gamma V(S_{t+1})$ | $R_{t+1} + \gamma Q(S_{t+1}, A_{t+1})$ |
 | Needs before updating | $S_t, R_{t+1}, S_{t+1}$ | $S_t, A_t, R_{t+1}, S_{t+1}, A_{t+1}$ |
 
-This update is done after every transition from a nonterminal state $S_t$. If $S_{t+1}$ is terminal, then $Q(S_{t+1}, A_{t+1})$ is defined as zero. This rule uses every element of the quintuple of events, $(S_t, A_t, R_{t+1}, S_{t+1}, A_{t+1})$, that make up a transition from one state–action pair to the next. This quintuple gives rise to the name **Sarsa** for the algorithm:
+It is straightforward to design an on-policy control algorithm based on the Sarsa prediction method. As in all on-policy methods, we continually estimate $q_\pi$ for the behavior policy $\pi$, and at the same time change $\pi$.
 
-$$
-\underbrace{S_t}_{\textbf{S}}, \; \underbrace{A_t}_{\textbf{A}}, \; \underbrace{R_{t+1}}_{\textbf{R}}, \; \underbrace{S_{t+1}}_{\textbf{S}}, \; \underbrace{A_{t+1}}_{\textbf{A}}
-$$
-
-It is straightforward to design an on-policy control algorithm based on the Sarsa prediction method. As in all on-policy methods, we continually estimate $q_\pi$ for the behavior policy $\pi$, and at the same time change $\pi$ toward greediness with respect to $q_\pi$.
-
-!!! note "Sarsa (on-policy TD control) for estimating $Q \approx q_*$"
+!!! note "Sarsa (on-policy TD control)"
     **Algorithm parameters:** step size $\alpha \in (0, 1]$, small $\varepsilon > 0$
 
     **Initialize** $Q(s, a)$, for all $s \in \mathcal{S}^+$, $a \in \mathcal{A}(s)$, arbitrarily except that $Q(\text{terminal}, \cdot) = 0$
@@ -246,6 +220,18 @@ It is straightforward to design an on-policy control algorithm based on the Sars
     - **until** $S$ is terminal
 
 The policy here is not fixed in advance: it is "$\varepsilon$-greedy with respect to the current $Q$". Every update changes $Q$, so the policy can change from one step to the next, as discussed for [learning online](finite_markov_decision_processes.md#optimality-and-approximation). Evaluation and improvement happen together, one step at a time: each update makes $Q$ a better estimate of the current policy's values, and acting $\varepsilon$-greedily on the new $Q$ shifts the policy toward the actions that now look best.
+
+!!! note "How the policy changes in Sarsa"
+    In Sarsa there is no separate policy stored anywhere. The policy is **defined by the current $Q$ table**: "in state $s$, pick the action with the largest $Q(s, a)$ with probability $1 - \varepsilon$, otherwise pick a random action". Each Sarsa update changes $Q$, so the policy changes along with it, automatically, with no separate "improve the policy" step.
+
+    The cycle on every step:
+
+    1. **Act** with the current policy, $\varepsilon$-greedy on the current $Q$.
+    2. **Update** one entry of $Q$ using the Sarsa target.
+    3. If that changes which action has the largest $Q$ in that state, **the policy in that state has changed**.
+    4. The next step acts with the new policy.
+
+    So evaluation (updating $Q$) and improvement (acting greedily on $Q$) are interleaved, one step at a time.
 
 ### Case Study: Windy Gridworld 
 
@@ -275,11 +261,10 @@ The only difference from [Sarsa](#sarsa-on-policy-td-control) is the target:
 |---|---|---|
 | Target | $R_{t+1} + \gamma \, Q(S_{t+1}, A_{t+1})$ | $R_{t+1} + \gamma \max_a Q(S_{t+1}, a)$ |
 | Next action in the target | the action the agent **actually takes** next, $A_{t+1}$ (which may be exploratory) | the **best** action according to $Q$, whether or not the agent takes it |
-| Learns the values of | the policy being followed ($\varepsilon$-greedy, exploration included) | the greedy policy, i.e. it approximates $q_*$ directly |
 
 This target is a sample of the right-hand side of the [Bellman optimality equation for $q_*$](finite_markov_decision_processes.md#optimal-policies-and-optimal-value-functions), $q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \big[ r + \gamma \max_{a'} q_*(s', a') \big]$: the observed $R_{t+1}$ and $S_{t+1}$ replace the average over $p$, and the current estimate $Q$ replaces $q_*$.
 
-That is what **off-policy** means here: the agent can *behave* one way, e.g. $\varepsilon$-greedy, to keep visiting every state–action pair, while *learning* the values of a different policy, the greedy one. Sarsa, by contrast, learns the values of exactly the policy it follows.
+That is what **off-policy** means here: the agent can *behave* one way, e.g. $\varepsilon$-greedy, to keep visiting every state–action pair, while *learning* the values of a different policy, the optimum one. Sarsa, by contrast, learns the values of exactly the policy it follows.
 
 Under this assumption and a variant of the usual stochastic approximation conditions on the sequence of step-size parameters, $Q$ has been shown to **converge with probability $1$ to $q_*$**. The Q-learning algorithm is shown below in procedural form.
 
@@ -302,18 +287,30 @@ Under this assumption and a variant of the usual stochastic approximation condit
 
 This gridworld example compares Sarsa and Q-learning, highlighting the difference between on-policy (Sarsa) and off-policy (Q-learning) methods. Consider the gridworld shown below. This is a standard undiscounted ($\gamma = 1$), episodic task, with start and goal states, and the usual actions causing movement $\texttt{up}$, $\texttt{down}$, $\texttt{right}$, and $\texttt{left}$. Reward is $-1$ on all transitions except those into the region marked “The Cliff.” Stepping into this region incurs a reward of $-100$ and sends the agent instantly back to the start.
 
-The graph below shows the performance of the Sarsa and Q-learning methods with $\varepsilon$-greedy action selection, $\varepsilon = 0.1$. After an initial transient, Q-learning learns values for the optimal policy, that which travels right along the edge of the cliff. Unfortunately, this results in its occasionally falling off the cliff because of the $\varepsilon$-greedy action selection. Sarsa, on the other hand, takes the action selection into account and learns the longer but safer path through the upper part of the grid. Although Q-learning actually learns the values of the optimal policy, its **online performance** is worse than that of Sarsa, which learns the roundabout policy. Of course, if $\varepsilon$ were gradually reduced, then both methods would asymptotically converge to the optimal policy.
+The graph below shows the performance of the Sarsa and Q-learning methods with $\varepsilon$-greedy action selection, $\varepsilon = 0.1$. After an initial transient, Q-learning learns values for the optimal policy, that which travels right along the edge of the cliff. Unfortunately, this results in its occasionally falling off the cliff because of the $\varepsilon$-greedy action selection. Sarsa, on the other hand, takes the action selection into account and learns the longer but safer path through the upper part of the grid.
 
 ![Cliff walking: sum of rewards during each episode, for Sarsa and Q-learning](cliffw.png)
 
-The difference comes straight from the two targets:
+!!! note "Why does Q-learning learn the better policy but earn less reward?"
+    **Why Q-learning learns the better policy but scores worse:** Q-learning is off-policy. Its $Q$ describes a *perfect greedy* agent. Once learned, with exploration turned off, it would walk the edge to the goal in the minimum number of steps. But during training it doesn't act greedily; it acts $\varepsilon$-greedily, *along the edge*. Every so often a random $\texttt{down}$ sends it into the cliff, and that $-100$ wipes out whatever it saved by taking the short path.
 
-| | Sarsa | Q-learning |
-|---|---|---|
-| Target uses | $Q(S_{t+1}, A_{t+1})$, the action actually taken next | $\max_a Q(S_{t+1}, a)$, the best action |
-| Next to the cliff, it assumes | sometimes the next action will be random and might step off | the next action will always be the best one |
-| So a cell next to the cliff looks | risky (its value includes the chance of a $-100$) | safe |
-| Path learned | safer path, away from the edge | optimal path, along the edge |
-| Reward per episode while still exploring | higher | lower (it keeps falling off) |
+    **Why Sarsa learns the worse policy but scores better:** Sarsa is on-policy. Its $Q$ describes *itself*, random steps included, so it knows that walking the edge is dangerous for an agent that sometimes slips. It takes a longer path a few rows up, a few more $-1$ steps per episode, where random steps can't drop it off the cliff. Its episodes are a bit longer but almost never include $-100$.
 
-With $\varepsilon = 0.1$ and four actions, each step along the edge has probability $\varepsilon \cdot \frac{1}{4} = 0.025$ of being a random move *down*, into the cliff. Over a dozen or so steps along the edge, that adds up to a noticeable chance of a $-100$ on many episodes. Sarsa's values include this risk, because they are the values of the $\varepsilon$-greedy policy it actually follows. Q-learning's values describe the greedy policy, which never steps off, so they ignore the risk, even though the agent that is actually acting does take it.
+!!! note "Fixed vs decreasing $\varepsilon$"
+
+    **Case 1: train with a fixed $\varepsilon = 0.1$, then switch exploration off and act greedily.** Only Q-learning is optimal.
+
+    - **Q-learning:** its $Q$ approximates $q_*$, the values of a perfect greedy agent. Acting greedily on it gives the **optimal** edge path, 13 steps. With no more random steps, it never falls.
+    - **Sarsa:** its $Q$ approximates the values of the $\varepsilon$-greedy policy it was following. Those values still contain the risk of slipping off the edge, so greedy on *its* $Q$ still prefers the **safe, longer path**. Switching exploration off afterwards doesn't change what it learned. It is now taking a detour to avoid a danger that no longer exists, so it isn't optimal.
+
+    | Trained with fixed $\varepsilon$, then act greedily | Path | Optimal? |
+    |---|---|---|
+    | Q-learning | edge path (13 steps) | yes |
+    | Sarsa | safer path (longer) | no |
+
+    **Case 2: reduce $\varepsilon$ gradually toward $0$ during training.** Both are optimal. As $\varepsilon$ shrinks, Sarsa's policy gets closer to greedy. Its $Q$ is the value of its own policy, so it gradually stops pricing in the risk. In the limit its $Q$ converges to $q_*$, and its greedy policy becomes the edge path, just like Q-learning's.
+
+!!! note "Why not train with $\varepsilon = 0$?"
+    With $\varepsilon = 0$ the agent may never discover the best actions in the first place. Exploration is how it finds out what is good; you reduce it once it has found out.
+
+    **What goes wrong with $\varepsilon = 0$:** A purely greedy agent always picks the action that *currently* looks best. Actions that look bad early on are never tried again, so their estimates are never corrected, even if they are actually the best. It is the same problem as in the [Greedy Play exercise](introduction.md#exercises).

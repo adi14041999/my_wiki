@@ -5669,44 +5669,8 @@ V(S_t) \leftarrow V(S_t) + \alpha \Big[ R_{t+1} + \gamma V(S_{t+1}) - V(S_t) \Bi
 <li><strong>until</strong> <span class="arithmatex">\(S\)</span> is terminal</li>
 </ul>
 </div>
-<p>Because TD(0) bases its update in part on an existing estimate, we say that it is a <strong>bootstrapping</strong> method, like DP. To see how the three targets relate, recall from <a href="../finite_markov_decision_processes/#policies-and-value-functions">Finite Markov Decision Processes</a> that</p>
-<div class="arithmatex">\[
-\begin{aligned}
-v_\pi(s) &amp;\doteq \mathbb{E}_\pi[G_t \mid S_t = s] &amp;&amp; (\text{MC}) \\
-&amp;= \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} \mid S_t = s] \\
-&amp;= \mathbb{E}_\pi[R_{t+1} + \gamma \, v_\pi(S_{t+1}) \mid S_t = s]. &amp;&amp; (\text{DP})
-\end{aligned}
-\]</div>
-<p>Roughly speaking, Monte Carlo methods use an estimate of line <span class="arithmatex">\((\text{MC})\)</span> as a target, whereas DP methods use an estimate of line <span class="arithmatex">\((\text{DP})\)</span> as a target.</p>
-<p>The Monte Carlo target is an estimate because the expected value in <span class="arithmatex">\((\text{MC})\)</span> is not known; a sample return is used in place of the real expected return. The DP target is an estimate not because of the expected values, which are assumed to be completely provided by a model of the environment, but because <span class="arithmatex">\(v_\pi(S_{t+1})\)</span> is not known and the current estimate, <span class="arithmatex">\(V(S_{t+1})\)</span>, is used instead. The TD target is an estimate for both reasons: it samples the expected values in <span class="arithmatex">\((\text{DP})\)</span> and it uses the current estimate <span class="arithmatex">\(V\)</span> instead of the true <span class="arithmatex">\(v_\pi\)</span>.</p>
-<table>
-<thead>
-<tr>
-<th>Target</th>
-<th>Replaces the expectation with a sample?</th>
-<th>Replaces <span class="arithmatex">\(v_\pi\)</span> with the estimate <span class="arithmatex">\(V\)</span>?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>MC: <span class="arithmatex">\(G_t\)</span></td>
-<td><strong>yes</strong>: one observed return</td>
-<td>no: no value function in the target</td>
-</tr>
-<tr>
-<td>DP: <span class="arithmatex">\(\sum_a \pi(a \mid s) \sum_{s', r} p(s', r \mid s, a) \big[ r + \gamma V(s') \big]\)</span></td>
-<td>no: the model gives the exact average</td>
-<td><strong>yes</strong></td>
-</tr>
-<tr>
-<td>TD: <span class="arithmatex">\(R_{t+1} + \gamma V(S_{t+1})\)</span></td>
-<td><strong>yes</strong>: one observed step</td>
-<td><strong>yes</strong></td>
-</tr>
-</tbody>
-</table>
-<p>Thus, TD methods combine the <strong>sampling</strong> of Monte Carlo with the <strong>bootstrapping</strong> of DP. As we shall see, with care and imagination this can take us a long way toward obtaining the advantages of both Monte Carlo and DP methods.</p>
-<p>Finally, note that the quantity in brackets in the TD(0) update is a sort of error, measuring the difference between the estimated value of <span class="arithmatex">\(S_t\)</span> and the better estimate <span class="arithmatex">\(R_{t+1} + \gamma V(S_{t+1})\)</span>. This quantity, called the <strong>TD error</strong>, arises in various forms throughout reinforcement learning:</p>
+<p>Because TD(0) bases its update in part on an existing estimate, we say that it is a <strong>bootstrapping</strong> method, like DP.</p>
+<p>Finally, note that the quantity in brackets in the TD(0) update is a sort of error. This quantity, called the <strong>TD error</strong>, arises in various forms throughout reinforcement learning:</p>
 <div class="arithmatex">\[
 \delta_t \doteq R_{t+1} + \gamma V(S_{t+1}) - V(S_t).
 \]</div>
@@ -5766,9 +5730,9 @@ V(S_t) \leftarrow V(S_t) + \alpha \, \delta_t.
 </tbody>
 </table>
 <p>The rewards in this example are the elapsed times on each leg of the journey. We are not discounting (<span class="arithmatex">\(\gamma = 1\)</span>), and thus the return for each state is the actual time to go from that state. The value of each state is the expected time to go. The second column of numbers gives the current estimated value <span class="arithmatex">\(V(S_t)\)</span> for each state encountered.</p>
-<p>A simple way to view the operation of Monte Carlo methods is to plot the predicted total time (the last column) over the sequence, as in the figure below (left). The arrows show the changes in predictions recommended by the constant-<span class="arithmatex">\(\alpha\)</span> MC method, for <span class="arithmatex">\(\alpha = 1\)</span>. These are exactly the errors between the estimated value (predicted time to go) in each state and the actual return (actual time to go). For example, when you exited the highway you thought it would take only 15 minutes more to get home, but in fact it took 23 minutes. The constant-<span class="arithmatex">\(\alpha\)</span> MC update applies at this point and determines an increment in the estimate of time to go after exiting the highway. The error, <span class="arithmatex">\(G_t - V(S_t)\)</span>, at this time is eight minutes. Suppose the step-size parameter, <span class="arithmatex">\(\alpha\)</span>, is <span class="arithmatex">\(1/2\)</span>. Then the predicted time to go after exiting the highway would be revised upward by four minutes as a result of this experience. This is probably too large a change in this case; the truck was probably just an unlucky break. In any event, the change can only be made <strong>off-line</strong>, that is, after you have reached home. Only at this point do you know any of the actual returns.</p>
-<p>Is it necessary to wait until the final outcome is known before learning can begin? Suppose on another day you again estimate when leaving your office that it will take 30 minutes to drive home, but then you become stuck in a massive traffic jam. Twenty-five minutes after leaving the office you are still bumper-to-bumper on the highway. You now estimate that it will take another 25 minutes to get home, for a total of 50 minutes. As you wait in traffic, you already know that your initial estimate of 30 minutes was too optimistic. Must you wait until you get home before increasing your estimate for the initial state? According to the Monte Carlo approach you must, because you don’t yet know the true return.</p>
-<p>According to a TD approach, on the other hand, you would learn immediately, shifting your initial estimate from 30 minutes toward 50. In fact, each estimate would be shifted toward the estimate that immediately follows it. Returning to our first day of driving, the figure below (right) shows the changes in the predictions recommended by the TD(0) rule (these are the changes made by the rule if <span class="arithmatex">\(\alpha = 1\)</span>). Each error is proportional to the change over time of the prediction, that is, to the <strong>temporal differences</strong> in predictions.</p>
+<p>A simple way to view the operation of Monte Carlo methods is to plot the predicted total time (the last column) over the sequence, as in the figure below (left). The arrows show the changes in predictions recommended by the constant-<span class="arithmatex">\(\alpha\)</span> MC method, for <span class="arithmatex">\(\alpha = 1\)</span>. These are exactly the errors between the estimated value (predicted time to go) in each state and the actual return (actual time to go).</p>
+<p>Suppose on another day you again estimate when leaving your office that it will take 30 minutes to drive home, but then you become stuck in a massive traffic jam. 25 minutes after leaving the office you are still bumper-to-bumper on the highway. You now estimate that it will take another 25 minutes to get home, for a total of 50 minutes. As you wait in traffic, you already know that your initial estimate of 30 minutes was too optimistic. Must you wait until you get home before increasing your estimate for the initial state? According to the Monte Carlo approach you must, because you don’t yet know the true return.</p>
+<p>According to a TD approach, on the other hand, you would learn immediately, shifting your initial estimate from 30 minutes toward 50. In fact, each estimate would be shifted toward the estimate that immediately follows it. Returning to our first day of driving, the figure below (right) shows the changes in the predictions recommended by the TD(0) rule (these are the changes made by the rule if <span class="arithmatex">\(\alpha = 1\)</span>).</p>
 <p><img alt="Driving home: changes recommended by Monte Carlo (left) and TD (right)" src="../drive.png" /></p>
 <p>The arrows in the two figures are these errors, for the first day of driving:</p>
 <table>
@@ -5819,10 +5783,10 @@ V(S_t) \leftarrow V(S_t) + \alpha \, \delta_t.
 </tr>
 </tbody>
 </table>
-<p>Every MC error is positive, because the trip took longer than each prediction. The TD errors can have either sign, because each one only compares a prediction with the very next one. For example, the TD error at "reach car" is <span class="arithmatex">\(-5\)</span>: by the time you exited the highway, the outlook had improved. Each TD error equals the change in the predicted total time from one row to the next, e.g. <span class="arithmatex">\(40 - 30 = 10\)</span> and <span class="arithmatex">\(35 - 40 = -5\)</span>.</p>
+<p>Every MC error is positive, because the trip took longer than each prediction. The TD errors can have either sign, because each one only compares a prediction with the very next one. For example, the TD error at "reach car" is <span class="arithmatex">\(-5\)</span>: by the time you exited the highway, the outlook had improved.</p>
 <h2 id="sarsa-on-policy-td-control">Sarsa: On-policy TD Control</h2>
 <p>We now use TD prediction for the <strong>control</strong> problem: not just evaluating a policy, but finding a good one. The first step is to learn an action-value function rather than a state-value function, because with <span class="arithmatex">\(q_\pi(s, a)\)</span> the agent can choose actions without a model, by picking the action with the largest value.</p>
-<p>For an <strong>on-policy</strong> method we must estimate <span class="arithmatex">\(q_\pi(s, a)\)</span> for the current behavior policy <span class="arithmatex">\(\pi\)</span> and for all states <span class="arithmatex">\(s\)</span> and actions <span class="arithmatex">\(a\)</span>. "On-policy" means the values being learned are those of the very policy the agent is using to act, exploration included. This can be done using essentially the same TD method described above for learning <span class="arithmatex">\(v_\pi\)</span>.</p>
+<p>For an <strong>on-policy</strong> method we must <strong>estimate <span class="arithmatex">\(q_\pi(s, a)\)</span> for the current behavior policy <span class="arithmatex">\(\pi\)</span></strong> and for all states <span class="arithmatex">\(s\)</span> and actions <span class="arithmatex">\(a\)</span>. "On-policy" means the values being learned are those of the very policy the agent is using to act, exploration included. This can be done using essentially the same TD method described above for learning <span class="arithmatex">\(v_\pi\)</span>.</p>
 <p>Recall that an episode consists of an alternating sequence of states and state–action pairs:</p>
 <div class="arithmatex">\[
 \cdots \; S_t, A_t \;\xrightarrow{\;R_{t+1}\;}\; S_{t+1}, A_{t+1} \;\xrightarrow{\;R_{t+2}\;}\; S_{t+2}, A_{t+2} \;\xrightarrow{\;R_{t+3}\;}\; \cdots
@@ -5859,13 +5823,9 @@ Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha \Big[ R_{t+1} + \gamma \, Q(S_{t+1},
 </tr>
 </tbody>
 </table>
-<p>This update is done after every transition from a nonterminal state <span class="arithmatex">\(S_t\)</span>. If <span class="arithmatex">\(S_{t+1}\)</span> is terminal, then <span class="arithmatex">\(Q(S_{t+1}, A_{t+1})\)</span> is defined as zero. This rule uses every element of the quintuple of events, <span class="arithmatex">\((S_t, A_t, R_{t+1}, S_{t+1}, A_{t+1})\)</span>, that make up a transition from one state–action pair to the next. This quintuple gives rise to the name <strong>Sarsa</strong> for the algorithm:</p>
-<div class="arithmatex">\[
-\underbrace{S_t}_{\textbf{S}}, \; \underbrace{A_t}_{\textbf{A}}, \; \underbrace{R_{t+1}}_{\textbf{R}}, \; \underbrace{S_{t+1}}_{\textbf{S}}, \; \underbrace{A_{t+1}}_{\textbf{A}}
-\]</div>
-<p>It is straightforward to design an on-policy control algorithm based on the Sarsa prediction method. As in all on-policy methods, we continually estimate <span class="arithmatex">\(q_\pi\)</span> for the behavior policy <span class="arithmatex">\(\pi\)</span>, and at the same time change <span class="arithmatex">\(\pi\)</span> toward greediness with respect to <span class="arithmatex">\(q_\pi\)</span>.</p>
+<p>It is straightforward to design an on-policy control algorithm based on the Sarsa prediction method. As in all on-policy methods, we continually estimate <span class="arithmatex">\(q_\pi\)</span> for the behavior policy <span class="arithmatex">\(\pi\)</span>, and at the same time change <span class="arithmatex">\(\pi\)</span>.</p>
 <div class="admonition note">
-<p class="admonition-title">Sarsa (on-policy TD control) for estimating <span class="arithmatex">\(Q \approx q_*\)</span></p>
+<p class="admonition-title">Sarsa (on-policy TD control)</p>
 <p><strong>Algorithm parameters:</strong> step size <span class="arithmatex">\(\alpha \in (0, 1]\)</span>, small <span class="arithmatex">\(\varepsilon &gt; 0\)</span></p>
 <p><strong>Initialize</strong> <span class="arithmatex">\(Q(s, a)\)</span>, for all <span class="arithmatex">\(s \in \mathcal{S}^+\)</span>, <span class="arithmatex">\(a \in \mathcal{A}(s)\)</span>, arbitrarily except that <span class="arithmatex">\(Q(\text{terminal}, \cdot) = 0\)</span></p>
 <p><strong>Loop for each episode:</strong></p>
@@ -5883,6 +5843,18 @@ Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha \Big[ R_{t+1} + \gamma \, Q(S_{t+1},
 </ul>
 </div>
 <p>The policy here is not fixed in advance: it is "<span class="arithmatex">\(\varepsilon\)</span>-greedy with respect to the current <span class="arithmatex">\(Q\)</span>". Every update changes <span class="arithmatex">\(Q\)</span>, so the policy can change from one step to the next, as discussed for <a href="../finite_markov_decision_processes/#optimality-and-approximation">learning online</a>. Evaluation and improvement happen together, one step at a time: each update makes <span class="arithmatex">\(Q\)</span> a better estimate of the current policy's values, and acting <span class="arithmatex">\(\varepsilon\)</span>-greedily on the new <span class="arithmatex">\(Q\)</span> shifts the policy toward the actions that now look best.</p>
+<div class="admonition note">
+<p class="admonition-title">How the policy changes in Sarsa</p>
+<p>In Sarsa there is no separate policy stored anywhere. The policy is <strong>defined by the current <span class="arithmatex">\(Q\)</span> table</strong>: "in state <span class="arithmatex">\(s\)</span>, pick the action with the largest <span class="arithmatex">\(Q(s, a)\)</span> with probability <span class="arithmatex">\(1 - \varepsilon\)</span>, otherwise pick a random action". Each Sarsa update changes <span class="arithmatex">\(Q\)</span>, so the policy changes along with it, automatically, with no separate "improve the policy" step.</p>
+<p>The cycle on every step:</p>
+<ol>
+<li><strong>Act</strong> with the current policy, <span class="arithmatex">\(\varepsilon\)</span>-greedy on the current <span class="arithmatex">\(Q\)</span>.</li>
+<li><strong>Update</strong> one entry of <span class="arithmatex">\(Q\)</span> using the Sarsa target.</li>
+<li>If that changes which action has the largest <span class="arithmatex">\(Q\)</span> in that state, <strong>the policy in that state has changed</strong>.</li>
+<li>The next step acts with the new policy.</li>
+</ol>
+<p>So evaluation (updating <span class="arithmatex">\(Q\)</span>) and improvement (acting greedily on <span class="arithmatex">\(Q\)</span>) are interleaved, one step at a time.</p>
+</div>
 <h3 id="case-study-windy-gridworld">Case Study: Windy Gridworld</h3>
 <p>Shown in the figure below is a standard gridworld, with start and goal states, but with one difference: there is a crosswind running upward through the middle of the grid. The actions are the standard four, <span class="arithmatex">\(\texttt{up}\)</span>, <span class="arithmatex">\(\texttt{down}\)</span>, <span class="arithmatex">\(\texttt{right}\)</span>, and <span class="arithmatex">\(\texttt{left}\)</span>, but in the middle region the resultant next states are shifted upward by a “wind,” the strength of which varies from column to column. The strength of the wind is given below each column, in number of cells shifted upward. For example, if you are one cell to the right of the goal, then the action <span class="arithmatex">\(\texttt{left}\)</span> takes you to the cell just above the goal. This is an undiscounted episodic task (<span class="arithmatex">\(\gamma = 1\)</span>), with constant rewards of <span class="arithmatex">\(-1\)</span> until the goal state is reached.</p>
 <p>Because every step costs <span class="arithmatex">\(-1\)</span>, the return from any state is minus the number of steps it takes to reach the goal. Maximizing the return therefore means <strong>reaching the goal in as few steps as possible</strong>.</p>
@@ -5915,15 +5887,10 @@ Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha \Big[ R_{t+1} + \gamma \max_a Q(S_{t
 <td>the action the agent <strong>actually takes</strong> next, <span class="arithmatex">\(A_{t+1}\)</span> (which may be exploratory)</td>
 <td>the <strong>best</strong> action according to <span class="arithmatex">\(Q\)</span>, whether or not the agent takes it</td>
 </tr>
-<tr>
-<td>Learns the values of</td>
-<td>the policy being followed (<span class="arithmatex">\(\varepsilon\)</span>-greedy, exploration included)</td>
-<td>the greedy policy, i.e. it approximates <span class="arithmatex">\(q_*\)</span> directly</td>
-</tr>
 </tbody>
 </table>
 <p>This target is a sample of the right-hand side of the <a href="../finite_markov_decision_processes/#optimal-policies-and-optimal-value-functions">Bellman optimality equation for <span class="arithmatex">\(q_*\)</span></a>, <span class="arithmatex">\(q_*(s, a) = \sum_{s', r} p(s', r \mid s, a) \big[ r + \gamma \max_{a'} q_*(s', a') \big]\)</span>: the observed <span class="arithmatex">\(R_{t+1}\)</span> and <span class="arithmatex">\(S_{t+1}\)</span> replace the average over <span class="arithmatex">\(p\)</span>, and the current estimate <span class="arithmatex">\(Q\)</span> replaces <span class="arithmatex">\(q_*\)</span>.</p>
-<p>That is what <strong>off-policy</strong> means here: the agent can <em>behave</em> one way, e.g. <span class="arithmatex">\(\varepsilon\)</span>-greedy, to keep visiting every state–action pair, while <em>learning</em> the values of a different policy, the greedy one. Sarsa, by contrast, learns the values of exactly the policy it follows.</p>
+<p>That is what <strong>off-policy</strong> means here: the agent can <em>behave</em> one way, e.g. <span class="arithmatex">\(\varepsilon\)</span>-greedy, to keep visiting every state–action pair, while <em>learning</em> the values of a different policy, the optimum one. Sarsa, by contrast, learns the values of exactly the policy it follows.</p>
 <p>Under this assumption and a variant of the usual stochastic approximation conditions on the sequence of step-size parameters, <span class="arithmatex">\(Q\)</span> has been shown to <strong>converge with probability <span class="arithmatex">\(1\)</span> to <span class="arithmatex">\(q_*\)</span></strong>. The Q-learning algorithm is shown below in procedural form.</p>
 <div class="admonition note">
 <p class="admonition-title">Q-learning (off-policy TD control) for estimating <span class="arithmatex">\(\pi \approx \pi_*\)</span></p>
@@ -5944,46 +5911,48 @@ Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha \Big[ R_{t+1} + \gamma \max_a Q(S_{t
 </div>
 <h3 id="case-study-cliff-walking">Case Study: Cliff Walking</h3>
 <p>This gridworld example compares Sarsa and Q-learning, highlighting the difference between on-policy (Sarsa) and off-policy (Q-learning) methods. Consider the gridworld shown below. This is a standard undiscounted (<span class="arithmatex">\(\gamma = 1\)</span>), episodic task, with start and goal states, and the usual actions causing movement <span class="arithmatex">\(\texttt{up}\)</span>, <span class="arithmatex">\(\texttt{down}\)</span>, <span class="arithmatex">\(\texttt{right}\)</span>, and <span class="arithmatex">\(\texttt{left}\)</span>. Reward is <span class="arithmatex">\(-1\)</span> on all transitions except those into the region marked “The Cliff.” Stepping into this region incurs a reward of <span class="arithmatex">\(-100\)</span> and sends the agent instantly back to the start.</p>
-<p>The graph below shows the performance of the Sarsa and Q-learning methods with <span class="arithmatex">\(\varepsilon\)</span>-greedy action selection, <span class="arithmatex">\(\varepsilon = 0.1\)</span>. After an initial transient, Q-learning learns values for the optimal policy, that which travels right along the edge of the cliff. Unfortunately, this results in its occasionally falling off the cliff because of the <span class="arithmatex">\(\varepsilon\)</span>-greedy action selection. Sarsa, on the other hand, takes the action selection into account and learns the longer but safer path through the upper part of the grid. Although Q-learning actually learns the values of the optimal policy, its <strong>online performance</strong> is worse than that of Sarsa, which learns the roundabout policy. Of course, if <span class="arithmatex">\(\varepsilon\)</span> were gradually reduced, then both methods would asymptotically converge to the optimal policy.</p>
+<p>The graph below shows the performance of the Sarsa and Q-learning methods with <span class="arithmatex">\(\varepsilon\)</span>-greedy action selection, <span class="arithmatex">\(\varepsilon = 0.1\)</span>. After an initial transient, Q-learning learns values for the optimal policy, that which travels right along the edge of the cliff. Unfortunately, this results in its occasionally falling off the cliff because of the <span class="arithmatex">\(\varepsilon\)</span>-greedy action selection. Sarsa, on the other hand, takes the action selection into account and learns the longer but safer path through the upper part of the grid.</p>
 <p><img alt="Cliff walking: sum of rewards during each episode, for Sarsa and Q-learning" src="../cliffw.png" /></p>
-<p>The difference comes straight from the two targets:</p>
+<div class="admonition note">
+<p class="admonition-title">Why does Q-learning learn the better policy but earn less reward?</p>
+<p><strong>Why Q-learning learns the better policy but scores worse:</strong> Q-learning is off-policy. Its <span class="arithmatex">\(Q\)</span> describes a <em>perfect greedy</em> agent. Once learned, with exploration turned off, it would walk the edge to the goal in the minimum number of steps. But during training it doesn't act greedily; it acts <span class="arithmatex">\(\varepsilon\)</span>-greedily, <em>along the edge</em>. Every so often a random <span class="arithmatex">\(\texttt{down}\)</span> sends it into the cliff, and that <span class="arithmatex">\(-100\)</span> wipes out whatever it saved by taking the short path.</p>
+<p><strong>Why Sarsa learns the worse policy but scores better:</strong> Sarsa is on-policy. Its <span class="arithmatex">\(Q\)</span> describes <em>itself</em>, random steps included, so it knows that walking the edge is dangerous for an agent that sometimes slips. It takes a longer path a few rows up, a few more <span class="arithmatex">\(-1\)</span> steps per episode, where random steps can't drop it off the cliff. Its episodes are a bit longer but almost never include <span class="arithmatex">\(-100\)</span>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Fixed vs decreasing <span class="arithmatex">\(\varepsilon\)</span></p>
+<p><strong>Case 1: train with a fixed <span class="arithmatex">\(\varepsilon = 0.1\)</span>, then switch exploration off and act greedily.</strong> Only Q-learning is optimal.</p>
+<ul>
+<li><strong>Q-learning:</strong> its <span class="arithmatex">\(Q\)</span> approximates <span class="arithmatex">\(q_*\)</span>, the values of a perfect greedy agent. Acting greedily on it gives the <strong>optimal</strong> edge path, 13 steps. With no more random steps, it never falls.</li>
+<li><strong>Sarsa:</strong> its <span class="arithmatex">\(Q\)</span> approximates the values of the <span class="arithmatex">\(\varepsilon\)</span>-greedy policy it was following. Those values still contain the risk of slipping off the edge, so greedy on <em>its</em> <span class="arithmatex">\(Q\)</span> still prefers the <strong>safe, longer path</strong>. Switching exploration off afterwards doesn't change what it learned. It is now taking a detour to avoid a danger that no longer exists, so it isn't optimal.</li>
+</ul>
 <table>
 <thead>
 <tr>
-<th></th>
-<th>Sarsa</th>
-<th>Q-learning</th>
+<th>Trained with fixed <span class="arithmatex">\(\varepsilon\)</span>, then act greedily</th>
+<th>Path</th>
+<th>Optimal?</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Target uses</td>
-<td><span class="arithmatex">\(Q(S_{t+1}, A_{t+1})\)</span>, the action actually taken next</td>
-<td><span class="arithmatex">\(\max_a Q(S_{t+1}, a)\)</span>, the best action</td>
+<td>Q-learning</td>
+<td>edge path (13 steps)</td>
+<td>yes</td>
 </tr>
 <tr>
-<td>Next to the cliff, it assumes</td>
-<td>sometimes the next action will be random and might step off</td>
-<td>the next action will always be the best one</td>
-</tr>
-<tr>
-<td>So a cell next to the cliff looks</td>
-<td>risky (its value includes the chance of a <span class="arithmatex">\(-100\)</span>)</td>
-<td>safe</td>
-</tr>
-<tr>
-<td>Path learned</td>
-<td>safer path, away from the edge</td>
-<td>optimal path, along the edge</td>
-</tr>
-<tr>
-<td>Reward per episode while still exploring</td>
-<td>higher</td>
-<td>lower (it keeps falling off)</td>
+<td>Sarsa</td>
+<td>safer path (longer)</td>
+<td>no</td>
 </tr>
 </tbody>
 </table>
-<p>With <span class="arithmatex">\(\varepsilon = 0.1\)</span> and four actions, each step along the edge has probability <span class="arithmatex">\(\varepsilon \cdot \frac{1}{4} = 0.025\)</span> of being a random move <em>down</em>, into the cliff. Over a dozen or so steps along the edge, that adds up to a noticeable chance of a <span class="arithmatex">\(-100\)</span> on many episodes. Sarsa's values include this risk, because they are the values of the <span class="arithmatex">\(\varepsilon\)</span>-greedy policy it actually follows. Q-learning's values describe the greedy policy, which never steps off, so they ignore the risk, even though the agent that is actually acting does take it.</p>
+<p><strong>Case 2: reduce <span class="arithmatex">\(\varepsilon\)</span> gradually toward <span class="arithmatex">\(0\)</span> during training.</strong> Both are optimal. As <span class="arithmatex">\(\varepsilon\)</span> shrinks, Sarsa's policy gets closer to greedy. Its <span class="arithmatex">\(Q\)</span> is the value of its own policy, so it gradually stops pricing in the risk. In the limit its <span class="arithmatex">\(Q\)</span> converges to <span class="arithmatex">\(q_*\)</span>, and its greedy policy becomes the edge path, just like Q-learning's.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Why not train with <span class="arithmatex">\(\varepsilon = 0\)</span>?</p>
+<p>With <span class="arithmatex">\(\varepsilon = 0\)</span> the agent may never discover the best actions in the first place. Exploration is how it finds out what is good; you reduce it once it has found out.</p>
+<p><strong>What goes wrong with <span class="arithmatex">\(\varepsilon = 0\)</span>:</strong> A purely greedy agent always picks the action that <em>currently</em> looks best. Actions that look bad early on are never tried again, so their estimates are never corrected, even if they are actually the best. It is the same problem as in the <a href="../introduction/#exercises">Greedy Play exercise</a>.</p>
+</div>
 
 
 
